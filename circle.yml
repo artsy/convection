@@ -1,0 +1,11 @@
+deployment:
+  staging:
+    branch: master
+    owner: artsy
+    heroku:
+      appname: convection-staging
+  production:
+    branch: release
+    owner: artsy
+    heroku:
+      appname: convection-production
