@@ -1,0 +1,22 @@
+Documentation:
+  Enabled: false
+
+AllCops:
+  TargetRubyVersion: 2.4
+  Exclude:
+    - tmp/**/*
+    - vendor/**/*
+    - bin/**/*
+    - Gemfile
+
+LineLength:
+  Exclude:
+    - config/environments/*
+    - config/initializers/*
+  Max: 120
+
+Style/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
