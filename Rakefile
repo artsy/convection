@@ -11,5 +11,10 @@ if Rails.env.development? || Rails.env.test?
     task.options = %w(--display-cop-names --rails)
   end
 
+  RSpec::Core::RakeTask.new(:spec) do |t|
+    test_output = File.join(ENV.fetch('CIRCLE_TEST_REPORTS', 'tmp'), 'rspec', 'junit.xml')
+    t.rspec_opts = %W(-f JUnit -o #{test_output})
+  end
+
   task default: [:rubocop, :spec]
 end
