@@ -25,3 +25,7 @@ end
 group :development do
   gem 'rubocop', require: false
 end
+
+group :test do
+  gem 'yarjuf' # formatting for test reports on CircleCI
+end
