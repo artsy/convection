@@ -4,6 +4,7 @@ Documentation:
 AllCops:
   TargetRubyVersion: 2.4
   Exclude:
+    - db/**/*
     - tmp/**/*
     - vendor/**/*
     - bin/**/*
