@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 Rails.application.routes.draw do
-  root 'application#index'
-
   namespace :api do
     post '/submissions', to: 'submissions#create'
   end

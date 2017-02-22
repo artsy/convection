@@ -4,7 +4,7 @@ end
 
 Convection.config = OpenStruct.new(
   authentication_token: ENV['AUTHENTICATION_TOKEN'] || 'replace-me',
-  contact_phone_number: ENV['CONTACT_PHONE_NUMBER'] || '123-456-1358',
+  contact_phone_number: ENV['CONTACT_PHONE_NUMBER'] || '+1 (646) 712-8154',
   gravity_api_url: ENV['GRAVITY_API_URL'] || 'https://stagingapi.artsy.net/api',
   gravity_xapp_token: ENV['GRAVITY_XAPP_TOKEN'] || 'replace-me',
   sidekiq_username: ENV['SIDEKIQ_USERNAME'] || 'admin',

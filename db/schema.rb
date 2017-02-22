@@ -26,7 +26,6 @@ ActiveRecord::Schema.define(version: 20170221184930) do
   create_table "submissions", force: :cascade do |t|
     t.string   "user_id"
     t.boolean  "qualified"
-    t.datetime "delivered_at"
     t.string   "artist_id"
     t.string   "title"
     t.string   "medium"

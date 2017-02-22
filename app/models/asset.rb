@@ -1,6 +1,6 @@
 class Asset < ActiveRecord::Base
-  VALID_ASSETS = ['image'].freeze
-  belongs_to :submission, dependent: :destroy
+  VALID_TYPES = ['image'].freeze
+  belongs_to :submission
 
-  validates :asset_type, inclusion: { in: VALID_ASSETS }
+  validates :asset_type, inclusion: { in: VALID_TYPES }
 end

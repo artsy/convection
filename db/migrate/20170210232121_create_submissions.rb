@@ -3,7 +3,6 @@ class CreateSubmissions < ActiveRecord::Migration[5.0]
     create_table :submissions do |t|
       t.string :user_id, index: true
       t.boolean :qualified
-      t.datetime :delivered_at
       t.string :artist_id
       t.string :title
       t.string :medium

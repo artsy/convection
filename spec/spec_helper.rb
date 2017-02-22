@@ -46,21 +46,6 @@ RSpec.configure do |config|
   config.order = :random
 
   config.expect_with :rspec do |c|
-    c.syntax = [:should, :expect]
-  end
-
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:deletion) # clean suite now up-front
-  end
-
-  config.before(:each) do
-    DatabaseCleaner.strategy = :truncation
-    DatabaseCleaner.start
-    Rails.cache.clear
-  end
-
-  config.after(:each) do
-    DatabaseCleaner.clean # cleans tracked records
+    c.syntax = [:expect]
   end
 end
