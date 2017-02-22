@@ -1,7 +1,7 @@
 class CreateSubmissions < ActiveRecord::Migration[5.0]
   def change
     create_table :submissions do |t|
-      t.integer :user_id, index: true
+      t.string :user_id, index: true
       t.boolean :qualified
       t.datetime :delivered_at
       t.string :artist_id

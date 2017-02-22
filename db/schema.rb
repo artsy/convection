@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20170221184930) do
   end
 
   create_table "submissions", force: :cascade do |t|
-    t.integer  "user_id"
+    t.string   "user_id"
     t.boolean  "qualified"
     t.datetime "delivered_at"
     t.string   "artist_id"

@@ -1,0 +1,29 @@
+<p>Artist:<br /><%= @artist.name %></p>
+
+<p>Title:<br /><%= @submission.title %></p>
+
+<p>Category:<br /><%= @submission.category %></p>
+
+<p>Medium:<br /><%= @submission.medium %></p>
+
+<p>Year:<br /><%= @submission.year %></p>
+
+<p>Signed?:<br /><%= @submission.signature %></p>
+
+<% if @submission.provenance %>
+<p>Provenance:<br /><%= @submission.provenance %></p>
+<% end %>
+
+<p>Location:<br /><%= @submission.formatted_location %></p>
+
+<% if @submission.formatted_dimensions %>
+<p>Dimensions:<br /><%= @submission.formatted_dimensions %></p>
+<% end %>
+
+<p>Please direct any questions to specialist@artsy.net or call one of our specialists at <%= Convection.config.contact_phone_number %>.</p>
+
+<p>Thank you,<br />
+Artsy Collector Relations Team</p>
+
+<br />
+<p>Note: Our partners include Sotheby's, Phillips, Bonhams, Doyle, Heritage Auctions, RAGO Fine Arts, Fine Art Auctions Miami, Koller Auctions, Julien's Auctions and Gagosian Gallery.</p>
