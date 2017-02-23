@@ -11,8 +11,12 @@ gem 'pg', '~> 0.15'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 
-# Use Puma as the app server
-gem 'puma', '~> 3.0'
+gem 'puma', '~> 3.0' # Use Puma as the app server
+
+gem 'sidekiq' # for sending emails in the background
+gem 'rails_param', github: 'nicolasblanco/rails_param' # validate and coerce API parameters (use unreleased Rails 5 support)
+gem 'hyperclient' # consume Gravity's v2 API
+gem 'premailer-rails' # generate text parts from HTML automatically
 
 # Use jquery as the JavaScript library
 # gem 'jquery-rails'
@@ -28,4 +32,5 @@ end
 
 group :test do
   gem 'yarjuf' # formatting for test reports on CircleCI
+  gem 'webmock' # mock or forbid external network requests
 end
