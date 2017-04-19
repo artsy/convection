@@ -1,5 +1,6 @@
 module Api
   class SubmissionsController < BaseController
+    skip_before_action :verify_authenticity_token
     skip_before_action :require_artsy_authentication
     before_action :require_authorized_user
 
