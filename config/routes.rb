@@ -3,9 +3,7 @@ Rails.application.routes.draw do
   root to: 'submissions#index'
 
   namespace :api do
-    post '/submissions', to: 'submissions#create'
-    put '/submissions', to: 'submissions#update'
-    get '/submissions', to: 'submissions#show'
+    resources :submissions, only: [:create, :update, :show]
   end
   mount ArtsyAuth::Engine => '/'
 

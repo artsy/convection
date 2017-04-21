@@ -6,7 +6,7 @@ module AuthenticationHelpers
   end
 
   def require_authorized_submission
-    submission = Submission.find(params[:submission_id])
+    submission = Submission.find(params[:id])
     error!('Unauthorized', 401) unless current_user && current_user == submission.user_id
   end
 

@@ -8,33 +8,26 @@ describe 'Update Submission', type: :request do
 
   describe 'PUT /submissions' do
     it 'rejects unauthorized requests' do
-      put '/api/submissions', params: {
-        submission_id: 'foo'
-      }, headers: { 'Authorization' => 'Bearer foo.bar.baz' }
+      put '/api/submissions/foo', headers: { 'Authorization' => 'Bearer foo.bar.baz' }
       expect(response.status).to eq 401
     end
 
     it 'returns an error if it cannot find the submission' do
       Submission.create!(artist_id: 'andy-warhol', user_id: 'buster-bluth')
-      put '/api/submissions', params: {
-        submission_id: 'bloop'
-      }, headers: headers
+      put '/api/submissions/foo', headers: headers
       expect(response.status).to eq 404
       expect(JSON.parse(response.body)['error']).to eq 'Submission Not Found'
     end
 
     it "rejects requests for someone else's submission" do
       submission = Submission.create!(artist_id: 'andy-warhol', user_id: 'buster-bluth')
-      put '/api/submissions', params: {
-        submission_id: submission.id
-      }, headers: headers
+      put "/api/submissions/#{submission.id}", headers: headers
       expect(response.status).to eq 401
     end
 
     it 'accepts requests for your own submission' do
       submission = Submission.create!(artist_id: 'andy-warhol', user_id: 'userid')
-      put '/api/submissions', params: {
-        submission_id: submission.id,
+      put "/api/submissions/#{submission.id}", params: {
         artist_id: 'kara-walker'
       }, headers: headers
       expect(response.status).to eq 201

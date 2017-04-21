@@ -10,7 +10,7 @@ module Api
     end
 
     def show
-      submission = Submission.find(params[:submission_id])
+      submission = Submission.find(params[:id])
       render json: submission.to_json, status: 200
     end
 
@@ -23,7 +23,7 @@ module Api
     end
 
     def update
-      submission = Submission.find(params[:submission_id])
+      submission = Submission.find(params[:id])
       submission.update_attributes(submission_params(params))
       render json: submission.to_json, status: 201
     end
