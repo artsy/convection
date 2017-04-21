@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 Rails.application.routes.draw do
+  root to: 'submissions#index'
+
   namespace :api do
     post '/submissions', to: 'submissions#create'
   end
   mount ArtsyAuth::Engine => '/'
-
-  get '/admin', to: 'admin#index'
 
   require 'sidekiq/web'
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|

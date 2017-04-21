@@ -16,7 +16,7 @@ describe 'Create Submission', type: :request do
 
     it 'rejects submissions without an artist_id' do
       post '/api/submissions', params: {}, headers: headers
-      expect(response.status).to eq 404
+      expect(response.status).to eq 400
       expect(JSON.parse(response.body)['error']).to eq 'Parameter is required'
     end
 

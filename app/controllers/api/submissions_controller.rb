@@ -7,7 +7,7 @@ module Api
     def create
       param! :artist_id, String, required: true
 
-      create_params = submission_params(params).merge!(user_id: current_user)
+      create_params = submission_params(params).merge(user_id: current_user)
       submission = SubmissionService.create_submission(create_params)
       render json: submission.to_json, status: 201
     end
