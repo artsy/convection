@@ -3,12 +3,28 @@ module Api
     skip_before_action :verify_authenticity_token
     skip_before_action :require_artsy_authentication
     before_action :require_authorized_user
+    before_action :require_authorized_submission, only: [:show, :update]
+
+    rescue_from ActiveRecord::RecordNotFound do |_e|
+      error!('Submission Not Found', 404)
+    end
+
+    def show
+      submission = Submission.find(params[:id])
+      render json: submission.to_json, status: 200
+    end
 
     def create
       param! :artist_id, String, required: true
 
       create_params = submission_params(params).merge(user_id: current_user)
       submission = SubmissionService.create_submission(create_params)
+      render json: submission.to_json, status: 201
+    end
+
+    def update
+      submission = Submission.find(params[:id])
+      submission.update_attributes(submission_params(params))
       render json: submission.to_json, status: 201
     end
 

@@ -5,6 +5,11 @@ module AuthenticationHelpers
     error!('Unauthorized', 401) unless current_app && current_user
   end
 
+  def require_authorized_submission
+    submission = Submission.find(params[:id])
+    error!('Unauthorized', 401) unless current_user && current_user == submission.user_id
+  end
+
   private
 
   # For now, require that signature is valid by verifying payload w/ secret.
@@ -13,7 +18,7 @@ module AuthenticationHelpers
   # If it has both 'aud' and 'sub', then it is user-scoped, with the user_id in 'sub'.
   # All authorization middleware should grant access as appropriate.
   def jwt_payload
-    @jwt_payload ||= env['JWT_PAYLOAD']
+    @jwt_payload ||= request.env['JWT_PAYLOAD']
   end
 
   def current_app
