@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 
   namespace :api do
     post '/submissions', to: 'submissions#create'
+    put '/submissions', to: 'submissions#update'
+    get '/submissions', to: 'submissions#show'
   end
   mount ArtsyAuth::Engine => '/'
 
