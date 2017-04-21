@@ -1,10 +1,14 @@
 module Api
   class SubmissionsController < BaseController
+    skip_before_action :verify_authenticity_token
+    skip_before_action :require_artsy_authentication
+    before_action :require_authorized_user
+
     def create
-      param! :user_id, String, required: true
       param! :artist_id, String, required: true
 
-      submission = SubmissionService.create_submission(submission_params(params))
+      create_params = submission_params(params).merge(user_id: current_user)
+      submission = SubmissionService.create_submission(create_params)
       render json: submission.to_json, status: 201
     end
 
@@ -12,7 +16,6 @@ module Api
 
     def submission_params(params)
       params.permit(
-        :user_id,
         :artist_id,
         :title,
         :medium,

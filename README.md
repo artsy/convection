@@ -21,3 +21,15 @@ Convection is the application that powers our consignments workflow, enabling us
 ### Development notes
 
 Configuration is provided via environment variables. [Foreman](https://github.com/ddollar/foreman) and a `.env` file are recommended. See `config/initializers/_config.rb` for a list of available properties and their defaults.
+
+### Creating a Submission
+Generate a valid JWT token in a Convection console:
+```ruby
+payload =  { aud: 'app', sub: '<valid user id>' }
+token = JWT.encode payload, Convection.config.jwt_secret, 'HS256'
+```
+
+Use `curl` to generate a submission with an artist_id (emails will appear in mailtrap)
+```
+curl -H 'Authorization: Bearer <token>' -H 'Accept: application/json' -d 'artist_id=5059d82a1fc9fa00020008ff' https://convection-staging.artsy.net/api/submissions
+```

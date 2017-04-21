@@ -5,8 +5,12 @@ end
 Convection.config = OpenStruct.new(
   authentication_token: ENV['AUTHENTICATION_TOKEN'] || 'replace-me',
   contact_phone_number: ENV['CONTACT_PHONE_NUMBER'] || '+1 (646) 712-8154',
-  gravity_api_url: ENV['GRAVITY_API_URL'] || 'https://stagingapi.artsy.net/api',
+  gravity_api_url: "#{ENV['GRAVITY_URL'] || 'https://stagingapi.artsy.net'}/api",
+  gravity_app_id: ENV['GRAVITY_APP_ID'] || 'replace-me',
+  gravity_app_secret: ENV['GRAVITY_APP_SECRET'] || 'replace-me',
   gravity_xapp_token: ENV['GRAVITY_XAPP_TOKEN'] || 'replace-me',
+  gravity_url: ENV['GRAVITY_URL'] || 'https://stagingapi.artsy.net',
+  jwt_secret: ENV['JWT_SECRET'] || 'replace-me',
   sidekiq_username: ENV['SIDEKIQ_USERNAME'] || 'admin',
   sidekiq_password: ENV['SIDEKIQ_PASSWORD'] || 'replace-me',
   smtp_address: ENV['SMTP_ADDRESS'],

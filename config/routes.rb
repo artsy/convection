@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 Rails.application.routes.draw do
+  root to: 'submissions#index'
+
   namespace :api do
     post '/submissions', to: 'submissions#create'
   end
+  mount ArtsyAuth::Engine => '/'
 
   require 'sidekiq/web'
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|
@@ -12,5 +15,6 @@ Rails.application.routes.draw do
     ActiveSupport::SecurityUtils.secure_compare(username, Convection.config.sidekiq_username) &
       ActiveSupport::SecurityUtils.secure_compare(password, Convection.config.sidekiq_password)
   end
+
   mount Sidekiq::Web => '/admin/sidekiq'
 end

@@ -10,6 +10,7 @@ gem 'pg', '~> 0.15'
 # gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
+gem 'artsy-auth'
 
 gem 'puma', '~> 3.0' # Use Puma as the app server
 
