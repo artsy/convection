@@ -1,5 +1,3 @@
 class SubmissionsController < ApplicationController
-  def index
-    render :index
-  end
+  def index; end
 end

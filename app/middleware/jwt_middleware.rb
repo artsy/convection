@@ -8,9 +8,9 @@ class JwtMiddleware
       token = parse_header env['HTTP_AUTHORIZATION']
 
       begin
-        env['JWT_PAYLOAD'], _headers = JWT.decode(token, Convection.config.jwt_secret)
-      rescue
-        Rails.logger.info "Unable to parse JWT: #{token}"
+        env['JWT_PAYLOAD'], _headers = JWT.decode(token, Convection.config.jwt_secret, 'HS256')
+      rescue JWT::DecodeError
+        Rails.logger.info "Unable to verify JWT: #{token}"
       end
     end
     @app.call env
