@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170221184930) do
+ActiveRecord::Schema.define(version: 20170503151447) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 20170221184930) do
   create_table "assets", force: :cascade do |t|
     t.string  "asset_type"
     t.string  "gemini_token"
-    t.string  "image_urls"
+    t.jsonb   "image_urls",    default: {}
     t.integer "submission_id"
     t.index ["submission_id"], name: "index_assets_on_submission_id", using: :btree
   end

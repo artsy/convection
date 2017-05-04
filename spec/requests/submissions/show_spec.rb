@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'support/api_helper'
 require 'support/gravity_helper'
 
 describe 'Show Submission', type: :request do
