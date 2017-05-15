@@ -17,7 +17,7 @@ module Api
     end
 
     def update
-      @submission.update_attributes(submission_params(params))
+      @submission.update_attributes!(submission_params(params))
       render json: @submission.to_json, status: 201
     end
 

@@ -8,6 +8,6 @@ class Asset < ActiveRecord::Base
     version = params[:image_url].keys.first
     url = params[:image_url].values.first
     return self unless version && url
-    Asset.where(id: id).update_all("image_urls = jsonb_set(image_urls, '{#{version}}', '\"#{url}\"')") # rubocop:disable Rails/SkipsModelValidations
+    Asset.where(id: id).update_all(['image_urls = jsonb_set(image_urls, ?, ?)', "{#{version}}", "\"#{url}\""]) # rubocop:disable Rails/SkipsModelValidations
   end
 end

@@ -16,7 +16,7 @@ module Api
       param! :gemini_token, String, required: true
       param! :submission_id, String, required: true
 
-      asset = @submission.assets.create(asset_params)
+      asset = @submission.assets.create!(asset_params)
       render json: asset.to_json, status: 201
     end
 
