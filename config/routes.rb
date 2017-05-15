@@ -4,7 +4,10 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :submissions, only: [:create, :update, :show]
+    resources :assets, only: [:create, :show]
+    post '/callbacks/gemini', to: 'callbacks#gemini'
   end
+
   mount ArtsyAuth::Engine => '/'
 
   require 'sidekiq/web'

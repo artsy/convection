@@ -15,6 +15,7 @@ LineLength:
     - config/environments/*
     - config/initializers/*
   Max: 120
+  IgnoreCopDirectives: true
 
 Style/AlignParameters:
   EnforcedStyle: with_fixed_indentation

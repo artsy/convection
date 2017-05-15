@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'support/api_helper'
 require 'support/gravity_helper'
 
 describe 'Show Submission', type: :request do
@@ -16,7 +15,7 @@ describe 'Show Submission', type: :request do
       Submission.create!(artist_id: 'andy-warhol', user_id: 'buster-bluth')
       get '/api/submissions/foo', headers: headers
       expect(response.status).to eq 404
-      expect(JSON.parse(response.body)['error']).to eq 'Submission Not Found'
+      expect(JSON.parse(response.body)['error']).to eq 'Not Found'
     end
 
     it "rejects requests for someone else's submission" do
