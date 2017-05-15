@@ -10,7 +10,7 @@ describe 'Gemini Callback', type: :request do
 
   describe 'POST /gemini' do
     it 'rejects unauthorized callbacks' do
-      post '/api/gemini', params: {
+      post '/api/callbacks/gemini', params: {
         access_token: 'wrong-token',
         token: 'gemini',
         image_url: { square: 'https://new-image.jpg' },
@@ -20,7 +20,7 @@ describe 'Gemini Callback', type: :request do
     end
 
     it 'rejects callbacks without an image_url' do
-      post '/api/gemini', params: {
+      post '/api/callbacks/gemini', params: {
         access_token: 'auth-token',
         token: 'gemini',
         'metadata' => { submission_id: submission.id }
@@ -29,7 +29,7 @@ describe 'Gemini Callback', type: :request do
     end
 
     it 'rejects callbacks if there is no matching asset' do
-      post '/api/gemini', params: {
+      post '/api/callbacks/gemini', params: {
         access_token: 'auth-token',
         token: 'gemini',
         image_url: { square: 'https://new-image.jpg' },
@@ -42,14 +42,14 @@ describe 'Gemini Callback', type: :request do
 
     it 'updates the asset to have the right image url' do
       submission.assets.create!(asset_type: 'image', gemini_token: 'gemini')
-      post '/api/gemini', params: {
+      post '/api/callbacks/gemini', params: {
         access_token: 'auth-token',
         token: 'gemini',
         image_url: { square: 'https://new-image.jpg' },
         metadata: { submission_id: submission.id }
       }
 
-      expect(response.status).to eq 201
+      expect(response.status).to eq 200
       expect(JSON.parse(response.body)['submission_id']).to eq(submission.id)
     end
   end

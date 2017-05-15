@@ -11,10 +11,6 @@ module AuthenticationHelpers
     error!('Unauthorized', 401) unless current_user && current_user == submission.user_id
   end
 
-  def require_authenticated_request
-    error!('Unauthorized', 401) unless params[:access_token] == Convection.config.authentication_token
-  end
-
   private
 
   # For now, require that signature is valid by verifying payload w/ secret.

@@ -1,7 +1,5 @@
 module Api
   class CallbacksController < BaseController
-    skip_before_action :verify_authenticity_token
-    skip_before_action :require_artsy_authentication
     before_action :require_authenticated_request
 
     def gemini
@@ -16,7 +14,7 @@ module Api
       error!('Asset Not Found', 404) && return unless asset
       error!('Token Does Not Match', 400) && return unless asset.gemini_token == gemini_params[:token]
       asset.update_image_urls!(gemini_params)
-      render json: asset.to_json, status: 201
+      render json: asset.to_json, status: 200
     end
 
     private
@@ -28,6 +26,10 @@ module Api
         image_url: [:square],
         metadata: [:submission_id]
       )
+    end
+
+    def require_authenticated_request
+      error!('Unauthorized', 401) unless params[:access_token] == Convection.config.authentication_token
     end
   end
 end

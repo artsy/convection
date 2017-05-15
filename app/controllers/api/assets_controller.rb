@@ -1,7 +1,5 @@
 module Api
   class AssetsController < BaseController
-    skip_before_action :verify_authenticity_token
-    skip_before_action :require_artsy_authentication
     before_action :require_authorized_user
     before_action :require_authorized_submission
 
@@ -23,9 +21,9 @@ module Api
 
     def asset_params
       params.permit(
+        :asset_type,
         :gemini_token,
-        :submission_id,
-        :submission_type
+        :submission_id
       )
     end
   end

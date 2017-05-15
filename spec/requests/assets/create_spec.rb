@@ -28,11 +28,15 @@ describe 'Create Asset', type: :request do
 
     it 'creates an asset' do
       post '/api/assets', params: {
+        asset_type: 'image',
         submission_id: submission.id,
         gemini_token: 'gemini-token'
       }, headers: headers
-
       expect(response.status).to eq 201
+      body = JSON.parse(response.body)
+      expect(body['asset_type']).to eq('image')
+      expect(body['submission_id']).to eq(submission.id)
+      expect(body['image_urls']).to eq({})
     end
   end
 end
