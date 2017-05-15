@@ -5,7 +5,7 @@ describe 'Gemini Callback', type: :request do
   let(:submission) { Submission.create!(artist_id: 'andy-warhol', user_id: 'userid') }
 
   before do
-    allow(Convection.config).to receive(:authentication_token).and_return('auth-token')
+    allow(Convection.config).to receive(:access_token).and_return('auth-token')
   end
 
   describe 'POST /gemini' do
@@ -37,7 +37,7 @@ describe 'Gemini Callback', type: :request do
       }
 
       expect(response.status).to eq 404
-      expect(JSON.parse(response.body)['error']).to eq 'Asset Not Found'
+      expect(JSON.parse(response.body)['error']).to eq 'Not Found'
     end
 
     it 'updates the asset to have the right image url' do

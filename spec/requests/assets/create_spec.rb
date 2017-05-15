@@ -28,7 +28,6 @@ describe 'Create Asset', type: :request do
 
     it 'creates an asset' do
       post '/api/assets', params: {
-        asset_type: 'image',
         submission_id: submission.id,
         gemini_token: 'gemini-token'
       }, headers: headers

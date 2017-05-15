@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class ApplicationController < ArtsyAuth::ApplicationController
-  include ErrorHelpers
+  NotAuthorized = Class.new(StandardError)
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.

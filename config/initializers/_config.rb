@@ -3,7 +3,7 @@ module Convection
 end
 
 Convection.config = OpenStruct.new(
-  authentication_token: ENV['AUTHENTICATION_TOKEN'] || 'replace-me',
+  access_token: ENV['ACCESS_TOKEN'] || 'replace-me',
   contact_phone_number: ENV['CONTACT_PHONE_NUMBER'] || '+1 (646) 712-8154',
   gravity_api_url: "#{ENV['GRAVITY_URL'] || 'https://stagingapi.artsy.net'}/api",
   gravity_app_id: ENV['GRAVITY_APP_ID'] || 'replace-me',
