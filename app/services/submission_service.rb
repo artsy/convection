@@ -1,10 +1,25 @@
 class SubmissionService
+  Error = Class.new(StandardError)
+
   class << self
-    def create_submission(params)
-      submission = Submission.create!(params)
-      delay.deliver_submission_receipt(submission.id)
-      delay.deliver_submission(submission.id)
-      submission
+    def update_submission(submission, params)
+      if params[:status] == 'submitted'
+        if submission.status == 'submitted'
+           raise Error.new('Already submitted.')
+        else
+          params.delete(:status)
+          submission.update_attributes!(params)
+          if submission.can_submit?
+            submission.update_attributes!(status: 'submitted')
+            delay.deliver_submission_receipt(submission.id)
+            delay.deliver_submission(submission.id)
+          else
+            raise Error.new('Cannot submit.')
+          end
+        end
+      else
+        submission.update_attributes!(params)
+      end
     end
 
     def deliver_submission_receipt(submission_id)
