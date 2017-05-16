@@ -1,5 +1,5 @@
 class Submission < ActiveRecord::Base
-  VALID_STATUSES = ['draft', 'submitted', 'qualified'].freeze
+  VALID_STATUSES = %w(draft submitted qualified).freeze
 
   has_many :assets, dependent: :destroy
   validates :status, inclusion: { in: VALID_STATUSES }
@@ -17,11 +17,24 @@ class Submission < ActiveRecord::Base
   end
 
   def can_submit?
-    user_id.present? && artist_id.present? && title.present? && medium.present? &&
-    year.present? && height.present? && width.present? && dimensions_metric.present? && location_city.present?
+    %w( artist_id
+        dimensions_metric
+        height
+        location_city
+        medium
+        title
+        user_id
+        width
+        year ).all? { |attr| self[attr].present? }
   end
 
   def set_status
     self.status ||= 'draft'
+  end
+
+  def as_json(_options = {})
+    super(
+      include: [:assets]
+    )
   end
 end

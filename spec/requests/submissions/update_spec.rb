@@ -81,21 +81,7 @@ describe 'Update Submission', type: :request do
         }, headers: headers
 
         expect(response.status).to eq 404
-        expect(JSON.parse(response.body)['error']).to eq('Cannot submit.')
-      end
-
-      it 'returns an error if you try to submit after you have already submitted' do
-        submission = Submission.create!(
-          artist_id: 'andy-warhol',
-          user_id: 'userid',
-          status: 'submitted'
-        )
-        put "/api/submissions/#{submission.id}", params: {
-          status: 'submitted'
-        }, headers: headers
-
-        expect(response.status).to eq 404
-        expect(JSON.parse(response.body)['error']).to eq('Already submitted.')
+        expect(JSON.parse(response.body)['error']).to eq('Missing fields for submission.')
       end
     end
   end

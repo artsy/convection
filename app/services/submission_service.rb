@@ -4,22 +4,19 @@ class SubmissionService
   class << self
     def update_submission(submission, params)
       if params[:status] == 'submitted'
-        if submission.status == 'submitted'
-           raise Error.new('Already submitted.')
-        else
-          params.delete(:status)
-          submission.update_attributes!(params)
-          if submission.can_submit?
-            submission.update_attributes!(status: 'submitted')
-            delay.deliver_submission_receipt(submission.id)
-            delay.deliver_submission(submission.id)
-          else
-            raise Error.new('Cannot submit.')
-          end
-        end
+        params.delete(:status)
+        submission.update_attributes!(params)
+        raise Error, 'Missing fields for submission.' unless submission.can_submit?
+        submission.update_attributes!(status: 'submitted')
+        notify(submission)
       else
         submission.update_attributes!(params)
       end
+    end
+
+    def notify(submission)
+      delay.deliver_submission_receipt(submission.id)
+      delay.deliver_submission(submission.id)
     end
 
     def deliver_submission_receipt(submission_id)
