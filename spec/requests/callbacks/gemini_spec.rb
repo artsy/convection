@@ -51,6 +51,7 @@ describe 'Gemini Callback', type: :request do
 
       expect(response.status).to eq 200
       expect(JSON.parse(response.body)['submission_id']).to eq(submission.id)
+      expect(JSON.parse(response.body)['image_urls']).to eq('square' => 'https://new-image.jpg')
     end
   end
 end

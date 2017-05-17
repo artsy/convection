@@ -1,6 +1,19 @@
 require 'rails_helper'
 
 describe Submission do
+  context 'state' do
+    it 'correctly sets the initial state to draft' do
+      submission = Submission.create!(artist_id: 'andy-warhol')
+      expect(submission.state).to eq 'draft'
+    end
+
+    it 'allows only certain states' do
+      expect(Submission.new(state: 'blah')).not_to be_valid
+      expect(Submission.new(state: 'qualified')).to be_valid
+      expect(Submission.new(state: 'submitted')).to be_valid
+    end
+  end
+
   context 'formatted_location' do
     it 'correctly formats location fields' do
       submission = Submission.create!(

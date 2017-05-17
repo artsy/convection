@@ -15,6 +15,10 @@ module Api
       render json: { error: 'Unauthorized' }, status: 401
     end
 
+    rescue_from SubmissionService::ParamError do |ex|
+      render json: { error: ex.message }, status: 400
+    end
+
     def set_submission
       submission_id = params[:id] || params[:submission_id]
       @submission = Submission.find(submission_id)
