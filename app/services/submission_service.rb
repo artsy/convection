@@ -8,7 +8,7 @@ class SubmissionService
         submission.update_attributes!(params)
         raise Error, 'Missing fields for submission.' unless submission.can_submit?
         submission.update_attributes!(status: 'submitted')
-        notify(submission)
+        notify(submission) unless submission.receipt_sent_at
       else
         submission.update_attributes!(params)
       end
@@ -17,6 +17,7 @@ class SubmissionService
     def notify(submission)
       delay.deliver_submission_receipt(submission.id)
       delay.deliver_submission(submission.id)
+      submission.update_attributes!(receipt_sent_at: Time.now.utc)
     end
 
     def deliver_submission_receipt(submission_id)

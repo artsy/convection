@@ -35,40 +35,55 @@ describe 'Update Submission', type: :request do
       expect(body['artist_id']).to eq 'kara-walker'
     end
 
-    describe 'submitting your submission' do
-      it 'sends a receipt when your status is updated to submitted' do
-        stub_gravity_root
-        stub_gravity_user
-        stub_gravity_user_detail(email: 'michael@bluth.com')
-        stub_gravity_artist
+    describe 'submitting' do
+      describe 'with a valid submission' do
+        before do
+          @submission = Submission.create!(
+            artist_id: 'artistid',
+            user_id: 'userid',
+            title: 'My Artwork',
+            medium: 'painting',
+            year: '1992',
+            height: '12',
+            width: '14',
+            dimensions_metric: 'in',
+            location_city: 'New York'
+          )
+        end
 
-        submission = Submission.create!(
-          artist_id: 'artistid',
-          user_id: 'userid',
-          title: 'My Artwork',
-          medium: 'painting',
-          year: '1992',
-          height: '12',
-          width: '14',
-          dimensions_metric: 'in',
-          location_city: 'New York'
-        )
-        put "/api/submissions/#{submission.id}", params: {
-          status: 'submitted'
-        }, headers: headers
+        it 'sends a receipt when your status is updated to submitted' do
+          stub_gravity_root
+          stub_gravity_user
+          stub_gravity_user_detail(email: 'michael@bluth.com')
+          stub_gravity_artist
 
-        expect(response.status).to eq 201
-        emails = ActionMailer::Base.deliveries
-        expect(emails.length).to eq 2
-        admin_email = emails.detect { |e| e.to.include?('specialist@artsy.net') }
-        admin_copy = 'We have received the following submission from: Jon Jonson'
-        expect(admin_email.html_part.body.to_s).to include(admin_copy)
-        expect(admin_email.text_part.body.to_s).to include(admin_copy)
+          put "/api/submissions/#{@submission.id}", params: {
+            status: 'submitted'
+          }, headers: headers
 
-        user_email = emails.detect { |e| e.to.include?('michael@bluth.com') }
-        user_copy = 'Thank you for submitting a consignment with Artsy.'
-        expect(user_email.html_part.body.to_s).to include(user_copy)
-        expect(user_email.text_part.body.to_s).to include(user_copy)
+          expect(response.status).to eq 201
+          expect(@submission.reload.receipt_sent_at).to_not be_nil
+          emails = ActionMailer::Base.deliveries
+          expect(emails.length).to eq 2
+          admin_email = emails.detect { |e| e.to.include?('specialist@artsy.net') }
+          admin_copy = 'We have received the following submission from: Jon Jonson'
+          expect(admin_email.html_part.body.to_s).to include(admin_copy)
+          expect(admin_email.text_part.body.to_s).to include(admin_copy)
+
+          user_email = emails.detect { |e| e.to.include?('michael@bluth.com') }
+          user_copy = 'Thank you for submitting a consignment with Artsy.'
+          expect(user_email.html_part.body.to_s).to include(user_copy)
+          expect(user_email.text_part.body.to_s).to include(user_copy)
+        end
+
+        it 'does not resend notifications' do
+          @submission.update_attributes!(receipt_sent_at: Time.now.utc)
+
+          put "/api/submissions/#{@submission.id}", params: {
+            status: 'submitted'
+          }, headers: headers
+          expect(ActionMailer::Base.deliveries.length).to eq 0
+        end
       end
 
       it 'returns an error if you try to submit without all of the relevant fields' do
