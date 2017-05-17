@@ -3,11 +3,10 @@ class SubmissionService
 
   class << self
     def update_submission(submission, params)
-      if params[:status] == 'submitted'
-        params.delete(:status)
-        submission.update_attributes!(params)
+      if params[:state] == 'submitted'
+        submission.assign_attributes(params)
         raise Error, 'Missing fields for submission.' unless submission.can_submit?
-        submission.update_attributes!(status: 'submitted')
+        submission.save!
         notify(submission) unless submission.receipt_sent_at
       else
         submission.update_attributes!(params)
@@ -16,7 +15,7 @@ class SubmissionService
 
     def notify(submission)
       delay.deliver_submission_receipt(submission.id)
-      delay.deliver_submission(submission.id)
+      delay.deliver_submission_notification(submission.id)
       submission.update_attributes!(receipt_sent_at: Time.now.utc)
     end
 
@@ -36,7 +35,7 @@ class SubmissionService
       ).deliver_now
     end
 
-    def deliver_submission(submission_id)
+    def deliver_submission_notification(submission_id)
       submission = Submission.find(submission_id)
       raise 'Submission not found.' unless submission
       user = Gravity.client.user(id: submission.user_id)._get

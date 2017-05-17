@@ -51,14 +51,14 @@ describe 'Update Submission', type: :request do
           )
         end
 
-        it 'sends a receipt when your status is updated to submitted' do
+        it 'sends a receipt when your state is updated to submitted' do
           stub_gravity_root
           stub_gravity_user
           stub_gravity_user_detail(email: 'michael@bluth.com')
           stub_gravity_artist
 
           put "/api/submissions/#{@submission.id}", params: {
-            status: 'submitted'
+            state: 'submitted'
           }, headers: headers
 
           expect(response.status).to eq 201
@@ -80,7 +80,7 @@ describe 'Update Submission', type: :request do
           @submission.update_attributes!(receipt_sent_at: Time.now.utc)
 
           put "/api/submissions/#{@submission.id}", params: {
-            status: 'submitted'
+            state: 'submitted'
           }, headers: headers
           expect(ActionMailer::Base.deliveries.length).to eq 0
         end
@@ -92,11 +92,13 @@ describe 'Update Submission', type: :request do
           user_id: 'userid'
         )
         put "/api/submissions/#{submission.id}", params: {
-          status: 'submitted'
+          artist_id: 'kara-walker',
+          state: 'submitted'
         }, headers: headers
 
         expect(response.status).to eq 404
         expect(JSON.parse(response.body)['error']).to eq('Missing fields for submission.')
+        expect(submission.reload.artist_id).to eq 'andy-warhol'
       end
     end
   end

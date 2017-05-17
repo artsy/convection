@@ -1,10 +1,21 @@
 class Submission < ActiveRecord::Base
-  VALID_STATUSES = %w(draft submitted qualified).freeze
+  VALID_STATES = %w(draft submitted qualified).freeze
+  REQUIRED_FIELDS_FOR_SUBMISSION = %w(
+    artist_id
+    dimensions_metric
+    height
+    location_city
+    medium
+    title
+    user_id
+    width
+    year
+  ).freeze
 
   has_many :assets, dependent: :destroy
-  validates :status, inclusion: { in: VALID_STATUSES }
+  validates :state, inclusion: { in: VALID_STATES }
 
-  after_initialize :set_status
+  before_validation :set_state, on: :create
 
   def formatted_location
     [location_city, location_state, location_country].select(&:present?).join(', ')
@@ -17,24 +28,10 @@ class Submission < ActiveRecord::Base
   end
 
   def can_submit?
-    %w( artist_id
-        dimensions_metric
-        height
-        location_city
-        medium
-        title
-        user_id
-        width
-        year ).all? { |attr| self[attr].present? }
+    REQUIRED_FIELDS_FOR_SUBMISSION.all? { |attr| self[attr].present? }
   end
 
-  def set_status
-    self.status ||= 'draft'
-  end
-
-  def as_json(_options = {})
-    super(
-      include: [:assets]
-    )
+  def set_state
+    self.state ||= 'draft'
   end
 end

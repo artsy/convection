@@ -67,17 +67,17 @@ describe 'Submission Flow', type: :request do
 
       # update the submission status and notify
       put "/api/submissions/#{submission.id}", params: {
-        status: 'submitted'
+        state: 'submitted'
       }, headers: headers
       expect(response.status).to eq 201
-      expect(submission.reload.status).to eq 'submitted'
+      expect(submission.reload.state).to eq 'submitted'
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 2
 
       # GET to retrieve the image url for the submission
-      get "/api/submissions/#{submission.id}", headers: headers
+      get '/api/assets', params: { submission_id: submission.id }, headers: headers
       expect(response.status).to eq 200
-      expect(JSON.parse(response.body)['assets'].map { |a| a['gemini_token'] })
+      expect(JSON.parse(response.body).map { |a| a['gemini_token'] })
         .to include('gemini-token', 'gemini-token2')
     end
   end

@@ -1,34 +1,16 @@
 require 'rails_helper'
 
 describe Submission do
-  context 'status' do
-    it 'correctly sets the initial status to draft' do
+  context 'state' do
+    it 'correctly sets the initial state to draft' do
       submission = Submission.create!(artist_id: 'andy-warhol')
-      expect(submission.status).to eq 'draft'
+      expect(submission.state).to eq 'draft'
     end
 
-    it 'allows only certain statuses' do
-      expect(Submission.new(status: 'blah')).not_to be_valid
-      expect(Submission.new(status: 'qualified')).to be_valid
-      expect(Submission.new(status: 'submitted')).to be_valid
-    end
-  end
-
-  context 'as_json' do
-    let(:submission) { Submission.create!(artist_id: 'andy-warhol', user_id: 'user-id') }
-    it 'returns avaiable data' do
-      json = submission.as_json
-      expect(json['id']).to eq submission.id
-      expect(json['artist_id']).to eq 'andy-warhol'
-      expect(json['assets']).to eq([])
-    end
-
-    it 'returns assets if they exist' do
-      submission.assets.create!(gemini_token: 'gemini-token', asset_type: 'image')
-      submission.assets.create!(gemini_token: 'gemini-token2', asset_type: 'image')
-      json = submission.as_json
-      expect(json['id']).to eq submission.id
-      expect(json['assets'].map { |a| a['gemini_token'] }).to include('gemini-token', 'gemini-token2')
+    it 'allows only certain states' do
+      expect(Submission.new(state: 'blah')).not_to be_valid
+      expect(Submission.new(state: 'qualified')).to be_valid
+      expect(Submission.new(state: 'submitted')).to be_valid
     end
   end
 

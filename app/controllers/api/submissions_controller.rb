@@ -39,7 +39,7 @@ module Api
         :medium,
         :provenance,
         :signature,
-        :status,
+        :state,
         :title,
         :width,
         :year

@@ -20,14 +20,12 @@ describe 'Create Submission', type: :request do
     end
 
     it 'creates a submission and sends an email' do
-      submissions_count = Submission.count
-      post '/api/submissions', params: {
-        title: 'my sartwork',
-        artist_id: 'artistid'
-      }, headers: headers
-
-      expect(response.status).to eq 201
-      expect(Submission.count).to eq(submissions_count + 1)
+      expect do
+        post '/api/submissions', params: {
+          title: 'my sartwork',
+          artist_id: 'artistid'
+        }, headers: headers
+      end.to change { Submission.count }.by(1)
     end
   end
 end
