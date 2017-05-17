@@ -1,19 +1,17 @@
 class SubmissionService
-  Error = Class.new(StandardError)
+  ParamError = Class.new(StandardError)
 
   class << self
     def update_submission(submission, params)
-      if params[:state] == 'submitted'
-        submission.assign_attributes(params)
-        raise Error, 'Missing fields for submission.' unless submission.can_submit?
-        submission.save!
-        notify(submission) unless submission.receipt_sent_at
-      else
-        submission.update_attributes!(params)
-      end
+      submission.assign_attributes(params)
+      submitting = submission.state_changed? && submission.state == 'submitted'
+      raise ParamError, 'Missing fields for submission.' if submitting && !submission.can_submit?
+      submission.save!
+      notify(submission) if submitting
     end
 
     def notify(submission)
+      return if submission.receipt_sent_at
       delay.deliver_submission_receipt(submission.id)
       delay.deliver_submission_notification(submission.id)
       submission.update_attributes!(receipt_sent_at: Time.now.utc)

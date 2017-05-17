@@ -15,8 +15,8 @@ module Api
       render json: { error: 'Unauthorized' }, status: 401
     end
 
-    rescue_from SubmissionService::Error do |ex|
-      render json: { error: ex.message }, status: 404
+    rescue_from SubmissionService::ParamError do |ex|
+      render json: { error: ex.message }, status: 400
     end
 
     def set_submission

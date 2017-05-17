@@ -96,7 +96,7 @@ describe 'Update Submission', type: :request do
           state: 'submitted'
         }, headers: headers
 
-        expect(response.status).to eq 404
+        expect(response.status).to eq 400
         expect(JSON.parse(response.body)['error']).to eq('Missing fields for submission.')
         expect(submission.reload.artist_id).to eq 'andy-warhol'
       end
