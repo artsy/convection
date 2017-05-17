@@ -22,5 +22,12 @@ module Convection
 
     # include JWT middleware
     config.middleware.use 'JwtMiddleware'
+
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins '*'
+        resource '*', headers: :any, methods: [:get, :post, :put, :options]
+      end
+    end
   end
 end

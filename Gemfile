@@ -12,6 +12,8 @@ gem 'pg', '~> 0.15'
 gem 'uglifier', '>= 1.3.0'
 gem 'artsy-auth'
 
+gem 'rack-cors' # to allow cross-origin requests
+
 gem 'puma', '~> 3.0' # Use Puma as the app server
 
 gem 'sidekiq' # for sending emails in the background
