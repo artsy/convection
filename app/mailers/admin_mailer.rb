@@ -1,6 +1,4 @@
 class AdminMailer < ApplicationMailer
-  ADMIN_EMAILS = ['specialist@artsy.net'].freeze
-
   def submission(submission:, user:, user_detail:, artist:)
     @submission = submission
     @user = user
@@ -10,6 +8,6 @@ class AdminMailer < ApplicationMailer
     smtpapi category: ['submission'], unique_args: {
       submission_id: submission.id
     }
-    mail to: ADMIN_EMAILS, bcc: [], subject: 'Submission'
+    mail to: Convection.config.admin_email_address, bcc: [], subject: 'Submission'
   end
 end

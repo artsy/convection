@@ -52,6 +52,7 @@ describe 'Update Submission', type: :request do
         end
 
         it 'sends a receipt when your state is updated to submitted' do
+          allow(Convection.config).to receive(:admin_email_address).and_return('lucille@bluth.com')
           stub_gravity_root
           stub_gravity_user
           stub_gravity_user_detail(email: 'michael@bluth.com')
@@ -65,7 +66,7 @@ describe 'Update Submission', type: :request do
           expect(@submission.reload.receipt_sent_at).to_not be_nil
           emails = ActionMailer::Base.deliveries
           expect(emails.length).to eq 2
-          admin_email = emails.detect { |e| e.to.include?('specialist@artsy.net') }
+          admin_email = emails.detect { |e| e.to.include?('lucille@bluth.com') }
           admin_copy = 'We have received the following submission from: Jon Jonson'
           expect(admin_email.html_part.body.to_s).to include(admin_copy)
           expect(admin_email.text_part.body.to_s).to include(admin_copy)
