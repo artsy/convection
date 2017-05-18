@@ -19,12 +19,26 @@ describe 'Create Submission', type: :request do
       expect(JSON.parse(response.body)['error']).to eq 'Parameter is required'
     end
 
-    it 'creates a submission and sends an email' do
+    it 'creates a submission' do
       expect do
         post '/api/submissions', params: {
           title: 'my sartwork',
           artist_id: 'artistid'
         }, headers: headers
+      end.to change { Submission.count }.by(1)
+    end
+
+    it 'creates a submission with edition fields' do
+      expect do
+        post '/api/submissions', params: {
+          title: 'my sartwork',
+          artist_id: 'artistid',
+          edition: true,
+          edition_size: 100,
+          edition_number: '23a'
+        }, headers: headers
+
+        expect(JSON.parse(response.body)['edition_size']).to eq 100
       end.to change { Submission.count }.by(1)
     end
   end

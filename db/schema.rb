@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170516194441) do
+ActiveRecord::Schema.define(version: 20170518124302) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,6 +48,8 @@ ActiveRecord::Schema.define(version: 20170516194441) do
     t.boolean  "edition"
     t.string   "state"
     t.datetime "receipt_sent_at"
+    t.string   "edition_number"
+    t.integer  "edition_size"
     t.index ["user_id"], name: "index_submissions_on_user_id", using: :btree
   end
 
