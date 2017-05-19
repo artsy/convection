@@ -14,7 +14,7 @@ describe 'Gemini Callback', type: :request do
         access_token: 'wrong-token',
         token: 'gemini',
         image_url: { square: 'https://new-image.jpg' },
-        metadata: { submission_id: submission.id }
+        metadata: { id: submission.id, _type: 'Consignment' }
       }
       expect(response.status).to eq 401
     end
@@ -23,7 +23,7 @@ describe 'Gemini Callback', type: :request do
       post '/api/callbacks/gemini', params: {
         access_token: 'auth-token',
         token: 'gemini',
-        'metadata' => { submission_id: submission.id }
+        'metadata' => { id: submission.id, _type: 'Consignment' }
       }
       expect(response.status).to eq 400
     end
@@ -33,7 +33,7 @@ describe 'Gemini Callback', type: :request do
         access_token: 'auth-token',
         token: 'gemini',
         image_url: { square: 'https://new-image.jpg' },
-        metadata: { submission_id: submission.id }
+        metadata: { id: submission.id, _type: 'Consignment' }
       }
 
       expect(response.status).to eq 404
@@ -46,7 +46,7 @@ describe 'Gemini Callback', type: :request do
         access_token: 'auth-token',
         token: 'gemini',
         image_url: { square: 'https://new-image.jpg' },
-        metadata: { submission_id: submission.id }
+        metadata: { id: submission.id, _type: 'Consignment' }
       }
 
       expect(response.status).to eq 200

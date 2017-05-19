@@ -46,14 +46,14 @@ describe 'Submission Flow', type: :request do
         access_token: 'auth-token',
         token: 'gemini-token',
         image_url: { square: 'https://new-image.jpg' },
-        metadata: { submission_id: submission.id }
+        metadata: { id: submission.id }
       }
 
       post '/api/callbacks/gemini', params: {
         access_token: 'auth-token',
         token: 'gemini-token2',
         image_url: { square: 'https://another-image.jpg' },
-        metadata: { submission_id: submission.id }
+        metadata: { id: submission.id }
       }
       expect(submission.assets.detect { |a| a.gemini_token == 'gemini-token' }.reload.image_urls)
         .to eq('square' => 'https://new-image.jpg')

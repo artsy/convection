@@ -8,7 +8,7 @@ module Api
       param! :metadata, Hash, required: true
       param! :token, String, required: true
 
-      submission = Submission.find(gemini_params[:metadata][:submission_id])
+      submission = Submission.find(gemini_params[:metadata][:id])
       asset = submission.assets.detect { |a| a.gemini_token == gemini_params[:token] }
 
       raise ActiveRecord::RecordNotFound unless asset && asset.gemini_token == gemini_params[:token]
@@ -23,7 +23,7 @@ module Api
         :access_token,
         :token,
         image_url: [:square],
-        metadata: [:submission_id]
+        metadata: [:id, :_type]
       )
     end
 
