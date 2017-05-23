@@ -1,7 +1,26 @@
 class Submission < ActiveRecord::Base
   VALID_STATES = %w(draft submitted qualified).freeze
+  VALID_DIMENSION_METRICS = %w(in cm).freeze
+  VALID_CATEGORIES = [
+    'Painting',
+    'Sculpture',
+    'Photography',
+    'Print',
+    'Drawing, Collage or other Work on Paper',
+    'Mixed Media',
+    'Performance Art',
+    'Installation',
+    'Video/Film/Animation',
+    'Architecture',
+    'Fashion Design and Wearable Art',
+    'Jewelry',
+    'Design/Decorative Art',
+    'Textile Arts',
+    'Other'
+  ].freeze
   REQUIRED_FIELDS_FOR_SUBMISSION = %w(
     artist_id
+    category
     dimensions_metric
     height
     location_city
@@ -14,6 +33,8 @@ class Submission < ActiveRecord::Base
 
   has_many :assets, dependent: :destroy
   validates :state, inclusion: { in: VALID_STATES }
+  validates :category, inclusion: { in: VALID_CATEGORIES }, allow_nil: true
+  validates :dimensions_metric, inclusion: { in: VALID_DIMENSION_METRICS }, allow_nil: true
 
   before_validation :set_state, on: :create
 
@@ -33,5 +54,10 @@ class Submission < ActiveRecord::Base
 
   def set_state
     self.state ||= 'draft'
+  end
+
+  def finished_processing_images_for_email?
+    return true unless assets.any?
+    assets.all? { |asset| asset.image_urls['medium_rectangle'].present? }
   end
 end

@@ -21,7 +21,8 @@ describe 'Submission Flow', type: :request do
         height: '12',
         width: '14',
         dimensions_metric: 'in',
-        location_city: 'New York'
+        location_city: 'New York',
+        category: 'Painting'
       }, headers: headers
 
       expect(response.status).to eq 201
@@ -45,20 +46,20 @@ describe 'Submission Flow', type: :request do
       post '/api/callbacks/gemini', params: {
         access_token: 'auth-token',
         token: 'gemini-token',
-        image_url: { square: 'https://new-image.jpg' },
+        image_url: { medium_rectangle: 'https://new-image.jpg' },
         metadata: { id: submission.id }
       }
 
       post '/api/callbacks/gemini', params: {
         access_token: 'auth-token',
         token: 'gemini-token2',
-        image_url: { square: 'https://another-image.jpg' },
+        image_url: { medium_rectangle: 'https://another-image.jpg' },
         metadata: { id: submission.id }
       }
       expect(submission.assets.detect { |a| a.gemini_token == 'gemini-token' }.reload.image_urls)
-        .to eq('square' => 'https://new-image.jpg')
+        .to eq('medium_rectangle' => 'https://new-image.jpg')
       expect(submission.assets.detect { |a| a.gemini_token == 'gemini-token2' }.reload.image_urls)
-        .to eq('square' => 'https://another-image.jpg')
+        .to eq('medium_rectangle' => 'https://another-image.jpg')
 
       stub_gravity_root
       stub_gravity_user
@@ -73,6 +74,7 @@ describe 'Submission Flow', type: :request do
       expect(submission.reload.state).to eq 'submitted'
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 2
+      expect(emails.first.html_part.body).to include('https://new-image.jpg')
 
       # GET to retrieve the image url for the submission
       get '/api/assets', params: { submission_id: submission.id }, headers: headers

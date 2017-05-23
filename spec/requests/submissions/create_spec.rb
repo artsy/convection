@@ -35,7 +35,8 @@ describe 'Create Submission', type: :request do
           artist_id: 'artistid',
           edition: true,
           edition_size: 100,
-          edition_number: '23a'
+          edition_number: '23a',
+          category: 'Painting'
         }, headers: headers
 
         expect(JSON.parse(response.body)['edition_size']).to eq 100

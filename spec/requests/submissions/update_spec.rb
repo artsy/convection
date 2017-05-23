@@ -47,7 +47,8 @@ describe 'Update Submission', type: :request do
             height: '12',
             width: '14',
             dimensions_metric: 'in',
-            location_city: 'New York'
+            location_city: 'New York',
+            category: 'Painting'
           )
         end
 
