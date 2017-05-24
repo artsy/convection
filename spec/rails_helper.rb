@@ -56,6 +56,7 @@ RSpec.configure do |config|
 
   config.before(:each) do
     Sidekiq::Worker.clear_all
+    ActionMailer::Base.deliveries.clear
   end
 
   config.around(type: :request) do |ex|

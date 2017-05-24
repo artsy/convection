@@ -12,6 +12,7 @@ Convection.config = OpenStruct.new(
   gravity_xapp_token: ENV['GRAVITY_XAPP_TOKEN'] || 'replace-me',
   gravity_url: ENV['GRAVITY_URL'] || 'https://stagingapi.artsy.net',
   jwt_secret: ENV['JWT_SECRET'] || 'replace-me',
+  processing_grace_seconds: ENV['PROCESSING_GRACE_SECONDS'] || 600,
   sidekiq_username: ENV['SIDEKIQ_USERNAME'] || 'admin',
   sidekiq_password: ENV['SIDEKIQ_PASSWORD'] || 'replace-me',
   smtp_address: ENV['SMTP_ADDRESS'],

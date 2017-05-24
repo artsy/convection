@@ -20,10 +20,8 @@
 <p>Dimensions:<br /><%= @submission.formatted_dimensions %></p>
 <% end %>
 
-<% if @submission.assets.any? %>
-  <% @submission.assets.each do |asset| %>
-    <img src="<%= asset.image_urls['medium_rectangle'] %>" />
-  <% end %>
+<% @submission.processed_images.each do |image| %>
+  <%= image_tag image.image_urls['medium_rectangle'] %>
 <% end %>
 
 <p>
