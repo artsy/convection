@@ -64,6 +64,35 @@ describe Submission do
     end
   end
 
+  context 'processed_images' do
+    let(:submission) { Submission.create(category: 'Painting') }
+
+    it 'returns an empty array if there are no images' do
+      expect(submission.processed_images).to eq []
+    end
+
+    it 'returns an empty array if there are no processed images' do
+      submission.assets.create!(
+        asset_type: 'image',
+        gemini_token: 'gemini1'
+      )
+      expect(submission.processed_images).to eq []
+    end
+
+    it 'returns only the processed images' do
+      asset1 = submission.assets.create!(
+        asset_type: 'image',
+        gemini_token: 'gemini1',
+        image_urls: { medium_rectangle: 'https://image.jpg' }
+      )
+      submission.assets.create!(
+        asset_type: 'image',
+        gemini_token: 'gemini2'
+      )
+      expect(submission.processed_images).to eq [asset1]
+    end
+  end
+
   context 'finished_processing_images_for_email?' do
     let(:submission) { Submission.create(category: 'Painting') }
 
