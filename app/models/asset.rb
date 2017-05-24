@@ -1,8 +1,10 @@
 class Asset < ActiveRecord::Base
-  VALID_TYPES = ['image'].freeze
+  TYPES = ['image'].freeze
   belongs_to :submission
 
-  validates :asset_type, inclusion: { in: VALID_TYPES }
+  validates :asset_type, inclusion: { in: TYPES }
+
+  scope :images, -> { where(asset_type: 'image') }
 
   def update_image_urls!(params = {})
     version = params[:image_url].keys.first

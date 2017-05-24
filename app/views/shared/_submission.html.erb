@@ -20,6 +20,10 @@
 <p>Dimensions:<br /><%= @submission.formatted_dimensions %></p>
 <% end %>
 
+<% @submission.processed_images.each do |image| %>
+  <%= image_tag image.image_urls['medium_rectangle'] %>
+<% end %>
+
 <p>
   Please direct any questions to <%= mail_to('specialist@artsy.net') %> or call one of our specialists at
   <%= link_to Convection.config.contact_phone_number, "tel:#{Convection.config.contact_phone_number}" %>.

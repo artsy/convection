@@ -19,7 +19,7 @@ class SubmissionService
 
     def deliver_submission_receipt(submission_id)
       submission = Submission.find(submission_id)
-      raise 'Submission not found.' unless submission
+      raise 'Still processing images.' unless submission.ready?
       user = Gravity.client.user(id: submission.user_id)._get
       user_detail = user.user_detail._get
       raise 'User lacks email.' if user_detail.email.blank?
@@ -35,7 +35,7 @@ class SubmissionService
 
     def deliver_submission_notification(submission_id)
       submission = Submission.find(submission_id)
-      raise 'Submission not found.' unless submission
+      raise 'Still processing images.' unless submission.ready?
       user = Gravity.client.user(id: submission.user_id)._get
       user_detail = user.user_detail._get
       artist = Gravity.client.artist(id: submission.artist_id)._get

@@ -1,7 +1,26 @@
 class Submission < ActiveRecord::Base
-  VALID_STATES = %w(draft submitted qualified).freeze
+  STATES = %w(draft submitted qualified).freeze
+  DIMENSION_METRICS = %w(in cm).freeze
+  CATEGORIES = [
+    'Painting',
+    'Sculpture',
+    'Photography',
+    'Print',
+    'Drawing, Collage or other Work on Paper',
+    'Mixed Media',
+    'Performance Art',
+    'Installation',
+    'Video/Film/Animation',
+    'Architecture',
+    'Fashion Design and Wearable Art',
+    'Jewelry',
+    'Design/Decorative Art',
+    'Textile Arts',
+    'Other'
+  ].freeze
   REQUIRED_FIELDS_FOR_SUBMISSION = %w(
     artist_id
+    category
     dimensions_metric
     height
     location_city
@@ -13,7 +32,9 @@ class Submission < ActiveRecord::Base
   ).freeze
 
   has_many :assets, dependent: :destroy
-  validates :state, inclusion: { in: VALID_STATES }
+  validates :state, inclusion: { in: STATES }
+  validates :category, inclusion: { in: CATEGORIES }, allow_nil: true
+  validates :dimensions_metric, inclusion: { in: DIMENSION_METRICS }, allow_nil: true
 
   before_validation :set_state, on: :create
 
@@ -33,5 +54,17 @@ class Submission < ActiveRecord::Base
 
   def set_state
     self.state ||= 'draft'
+  end
+
+  def finished_processing_images_for_email?
+    processed_images.length == assets.images.length
+  end
+
+  def processed_images
+    assets.images.select { |image| image.image_urls['medium_rectangle'].present? }
+  end
+
+  def ready?
+    finished_processing_images_for_email? || Time.now.utc > receipt_sent_at + Convection.config.processing_grace_seconds
   end
 end
