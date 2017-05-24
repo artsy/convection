@@ -57,15 +57,11 @@ class Submission < ActiveRecord::Base
   end
 
   def finished_processing_images_for_email?
-    processed_images.length == images.length
+    processed_images.length == assets.images.length
   end
 
   def processed_images
-    images.select { |image| image.image_urls['medium_rectangle'].present? }
-  end
-
-  def images
-    assets.where(asset_type: 'image')
+    assets.images.select { |image| image.image_urls['medium_rectangle'].present? }
   end
 
   def ready?
