@@ -36,4 +36,5 @@ end
 group :test do
   gem 'yarjuf' # formatting for test reports on CircleCI
   gem 'webmock' # mock or forbid external network requests
+  gem 'timecop'
 end

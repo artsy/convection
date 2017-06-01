@@ -12,9 +12,37 @@ class SubmissionService
 
     def notify(submission)
       return if submission.receipt_sent_at
-      delay.deliver_submission_receipt(submission.id)
       delay.deliver_submission_notification(submission.id)
-      submission.update_attributes!(receipt_sent_at: Time.now.utc)
+      if submission.assets.count > 0
+        delay.deliver_submission_receipt(submission.id)
+        submission.update_attributes!(receipt_sent_at: Time.now.utc)
+      else
+        return if reminders_sent_count >= 2
+        delay.deliver_submission_reminder(submission.id)
+        submission.update_attributes!(reminders_sent_count: submission.reminders_sent_count + 1)
+      end
+    end
+
+    def deliver_submission_reminder(submission_id)
+      submission = Submission.find(submission_id)
+      return if submission.receipt_sent_at || submission.assets.count > 0
+      user = Gravity.client.user(id: submission.user_id)._get
+      user_detail = user.user_detail._get
+      raise 'User lacks email.' if user_detail.email.blank?
+
+      if reminders_sent_count > 0
+        UserMailer.first_submission_reminder(
+          submission: submission,
+          user: user,
+          user_detail: user_detail
+        ).deliver_now
+      else
+        UserMailer.second_submission_reminder(
+          submission: submission,
+          user: user,
+          user_detail: user_detail
+        ).deliver_now
+      end
     end
 
     def deliver_submission_receipt(submission_id)
