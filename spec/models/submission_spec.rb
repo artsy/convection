@@ -83,7 +83,7 @@ describe Submission do
       asset1 = submission.assets.create!(
         asset_type: 'image',
         gemini_token: 'gemini1',
-        image_urls: { medium_rectangle: 'https://image.jpg' }
+        image_urls: { medium: 'https://image.jpg' }
       )
       submission.assets.create!(
         asset_type: 'image',
@@ -100,30 +100,30 @@ describe Submission do
       expect(submission.finished_processing_images_for_email?).to eq true
     end
 
-    it 'returns true if all of the assets have a medium_rectangle url' do
+    it 'returns true if all of the assets have a medium url' do
       submission.assets.create!(
         asset_type: 'image',
         gemini_token: 'gemini1',
-        image_urls: { medium_rectangle: 'https://image.jpg' }
+        image_urls: { medium: 'https://image.jpg' }
       )
       submission.assets.create!(
         asset_type: 'image',
         gemini_token: 'gemini2',
-        image_urls: { medium_rectangle: 'https://image2.jpg' }
+        image_urls: { medium: 'https://image2.jpg' }
       )
       expect(submission.finished_processing_images_for_email?).to eq true
     end
 
-    it 'returns false if only some of the images have a medium_rectangle url' do
+    it 'returns false if only some of the images have a medium url' do
       submission.assets.create!(
         asset_type: 'image',
         gemini_token: 'gemini1',
-        image_urls: { medium_rectangle: 'https://image.jpg' }
+        image_urls: { medium: 'https://image.jpg' }
       )
       submission.assets.create!(
         asset_type: 'image',
         gemini_token: 'gemini2',
-        image_urls: { medium_rectangle: 'https://image2.jpg' }
+        image_urls: { medium: 'https://image2.jpg' }
       )
       submission.assets.create!(
         asset_type: 'image',
@@ -133,7 +133,7 @@ describe Submission do
       expect(submission.finished_processing_images_for_email?).to eq false
     end
 
-    it 'returns false if none of the images have a medium_rectangle url' do
+    it 'returns false if none of the images have a medium url' do
       submission.assets.create!(
         asset_type: 'image',
         gemini_token: 'gemini1',

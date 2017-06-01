@@ -61,7 +61,7 @@ class Submission < ActiveRecord::Base
   end
 
   def processed_images
-    assets.images.select { |image| image.image_urls['medium_rectangle'].present? }
+    assets.images.select { |image| image.image_urls['medium'].present? }
   end
 
   def ready?

@@ -22,7 +22,7 @@ module Api
       params.permit(
         :access_token,
         :token,
-        image_url: [:large_rectangle, :medium_rectangle, :square, :thumbnail],
+        image_url: [:square, :large, :medium, :thumbnail],
         metadata: [:id, :_type]
       )
     end
