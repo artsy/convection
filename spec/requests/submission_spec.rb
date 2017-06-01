@@ -46,20 +46,20 @@ describe 'Submission Flow', type: :request do
       post '/api/callbacks/gemini', params: {
         access_token: 'auth-token',
         token: 'gemini-token',
-        image_url: { medium_rectangle: 'https://new-image.jpg' },
+        image_url: { medium: 'https://new-image.jpg' },
         metadata: { id: submission.id }
       }
 
       post '/api/callbacks/gemini', params: {
         access_token: 'auth-token',
         token: 'gemini-token2',
-        image_url: { medium_rectangle: 'https://another-image.jpg' },
+        image_url: { medium: 'https://another-image.jpg' },
         metadata: { id: submission.id }
       }
       expect(submission.assets.detect { |a| a.gemini_token == 'gemini-token' }.reload.image_urls)
-        .to eq('medium_rectangle' => 'https://new-image.jpg')
+        .to eq('medium' => 'https://new-image.jpg')
       expect(submission.assets.detect { |a| a.gemini_token == 'gemini-token2' }.reload.image_urls)
-        .to eq('medium_rectangle' => 'https://another-image.jpg')
+        .to eq('medium' => 'https://another-image.jpg')
 
       stub_gravity_root
       stub_gravity_user
