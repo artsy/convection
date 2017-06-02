@@ -30,6 +30,8 @@ require 'sidekiq/testing'
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
+Sidekiq::Testing.inline!
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -57,9 +59,5 @@ RSpec.configure do |config|
   config.before(:each) do
     Sidekiq::Worker.clear_all
     ActionMailer::Base.deliveries.clear
-  end
-
-  config.around(type: :request) do |ex|
-    Sidekiq::Testing.inline! { ex.run }
   end
 end

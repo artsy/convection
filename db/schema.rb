@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170518124302) do
+ActiveRecord::Schema.define(version: 20170602140738) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,13 +43,15 @@ ActiveRecord::Schema.define(version: 20170518124302) do
     t.string   "location_country"
     t.date     "deadline_to_sell"
     t.text     "additional_info"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
     t.boolean  "edition"
     t.string   "state"
     t.datetime "receipt_sent_at"
     t.string   "edition_number"
     t.integer  "edition_size"
+    t.integer  "reminders_sent_count",     default: 0
+    t.datetime "admin_receipt_sent_at"
     t.index ["user_id"], name: "index_submissions_on_user_id", using: :btree
   end
 
