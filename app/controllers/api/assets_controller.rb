@@ -24,6 +24,7 @@ module Api
       param! :submission_id, String, required: true
 
       asset = @submission.assets.create!(asset_params)
+      SubmissionService.notify_user(@submission.id) if @submission.submitted?
       render json: asset.to_json, status: 201
     end
 

@@ -1,1 +1,41 @@
-We're missing photos of your work
+<%= stylesheet_link_tag 'emails', media: 'all' %>
+
+<table class='bordered-email' align='center'>
+  <tr>
+    <td>
+      <table class='email-content' align='center'>
+        <tr>
+          <td class='artsy-logo'>
+            <%= image_tag(image_url('artsy-logo.jpg'), id: 'artsy-logo') %>
+          </td>
+        </tr>
+        <tr>
+          <td class='email-title'>
+            We're missing photos of your work
+          </td>
+        </tr>
+        <tr>
+          <td class='email-main-photo'>
+            <%= image_tag(image_url('artsy-take-photo.jpg'), id: 'artsy-logo') %>
+          </td>
+        </tr>
+        <tr>
+          <td class='email-sub-title'>
+            Upload photos of your work to complete your consignment submission
+          </td>
+        </tr>
+        <tr>
+          <td class='upload-photo-button'>
+            <%= link_to('Upload Photos', "#{Convection.config.artsy_url}/consign2/submission/#{@submission.id}/upload") %>
+          </td>
+        </tr>
+        <tr>
+          <td class='email-footer-text'>
+            Please direct any questions to <%= mail_to('specialist@artsy.net') %> or call one of our specialists at
+            <%= link_to Convection.config.contact_phone_number, "tel:#{Convection.config.contact_phone_number}" %>.
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>

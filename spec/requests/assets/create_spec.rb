@@ -37,5 +37,20 @@ describe 'Create Asset', type: :request do
       expect(body['submission_id']).to eq(submission.id)
       expect(body['image_urls']).to eq({})
     end
+
+    it 'creates an asset and attempts to send a notification' do
+      stub_gravity_root
+      stub_gravity_user
+      stub_gravity_user_detail(email: 'michael@bluth.com')
+      stub_gravity_artist
+
+      submission.update_attributes!(state: 'submitted')
+      expect do
+        post '/api/assets', params: {
+          submission_id: submission.id,
+          gemini_token: 'gemini-token'
+        }, headers: headers
+      end.to raise_error('Still processing images.')
+    end
   end
 end

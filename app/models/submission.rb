@@ -31,6 +31,8 @@ class Submission < ActiveRecord::Base
     year
   ).freeze
 
+  delegate :images, to: :assets
+
   has_many :assets, dependent: :destroy
   validates :state, inclusion: { in: STATES }
   validates :category, inclusion: { in: CATEGORIES }, allow_nil: true
@@ -57,14 +59,19 @@ class Submission < ActiveRecord::Base
   end
 
   def finished_processing_images_for_email?
-    processed_images.length == assets.images.length
+    processed_images.length == images.length
   end
 
   def processed_images
-    assets.images.select { |image| image.image_urls['medium'].present? }
+    images.select { |image| image.image_urls['square'].present? }
   end
 
   def ready?
-    finished_processing_images_for_email? || Time.now.utc > receipt_sent_at + Convection.config.processing_grace_seconds
+    finished_processing_images_for_email? ||
+      receipt_sent_at && (Time.now.utc > receipt_sent_at + Convection.config.processing_grace_seconds)
+  end
+
+  def submitted?
+    state == 'submitted'
   end
 end

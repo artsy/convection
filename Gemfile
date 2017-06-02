@@ -7,7 +7,7 @@ gem 'rails', '~> 5.0.0', '>= 5.0.0.1'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.15'
 # Use SCSS for stylesheets
-# gem 'sass-rails', '~> 5.0'
+gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 gem 'artsy-auth'
@@ -36,5 +36,4 @@ end
 group :test do
   gem 'yarjuf' # formatting for test reports on CircleCI
   gem 'webmock' # mock or forbid external network requests
-  gem 'timecop'
 end

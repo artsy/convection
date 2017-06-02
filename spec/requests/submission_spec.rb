@@ -10,7 +10,7 @@ describe 'Submission Flow', type: :request do
   end
 
   describe 'Creating a submission without a photo initially' do
-    before do
+    it 'sends an initial reminder and a delayed reminder' do
       # first create the submission
       post '/api/submissions', params: {
         artist_id: 'artistid',
@@ -40,75 +40,15 @@ describe 'Submission Flow', type: :request do
       }, headers: headers
       expect(response.status).to eq 201
       expect(@submission.reload.state).to eq 'submitted'
-    end
 
-    it 'sends an initial reminder email to users' do
-      emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 2
-      expect(emails.first.html_part.body).to include("We're missing photos of your work")
-    end
-
-    it 'sends a follow-up reminder after 1 day' do
-      Timecop.travel(1.day.from_now)
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 3
+      expect(emails.first.to).to eq(['consign@artsy.net'])
+      expect(emails[1].html_part.body).to include("We're missing photos of your work")
+      expect(emails[1].to).to eq(['michael@bluth.com'])
+      # sidekiq flushes everything at once
       expect(emails.last.html_part.body).to include('Complete your consignment submission')
-      expect(emails.last.to_email).to eq('user@example.com')
-    end
-
-    it 'sends a thank you email if they upload a photo after the second reminder' do
-      Timecop.travel(1.day.from_now)
-      emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 3
-      expect(emails.last.html_part.body).to include('Complete your consignment submission')
-      expect(emails.last.to_email).to eq('user@example.com')
-
-      post '/api/assets', params: {
-        submission_id: @submission.id,
-        gemini_token: 'gemini-token'
-      }, headers: headers
-
-      expect(@submission.assets.count).to eq 1
-      expect(@submission.assets.map(&:image_urls).uniq).to eq([{}])
-
-      emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 4
-      expect(emails.last.html_part.body).to include('Thank you for submitting')
-      expect(emails.last.to_email).to eq('user@example.com')
-
-      expect do
-        Timecop.travel(1.day.from_now)
-      end.to_not change(ActionMailer::Base.deliveries.count)
-
-      # it doesn't send an additional email if they upload another photo
-      expect do
-        post '/api/assets', params: {
-          submission_id: @submission.id,
-          gemini_token: 'gemini-token'
-        }, headers: headers
-      end.to_not change(ActionMailer::Base.deliveries.count)
-      expect(@submission.assets.count).to eq 2
-    end
-
-    describe 'If the user uploads a photo before the second reminder' do
-      it 'sends them a thank you email but no follow-up reminder' do
-        post '/api/assets', params: {
-          submission_id: @submission.id,
-          gemini_token: 'gemini-token'
-        }, headers: headers
-
-        expect(@submission.assets.count).to eq 1
-        expect(@submission.assets.map(&:image_urls).uniq).to eq([{}])
-
-        emails = ActionMailer::Base.deliveries
-        expect(emails.length).to eq 3
-        expect(emails.last.html_part.body).to include('Thank you for submitting')
-        expect(emails.last.to_email).to eq('user@example.com')
-
-        expect do
-          Timecop.travel(1.day.from_now)
-        end.to_not change(ActionMailer::Base.deliveries.count)
-      end
+      expect(emails.last.to).to eq(['michael@bluth.com'])
     end
   end
 
@@ -149,20 +89,20 @@ describe 'Submission Flow', type: :request do
       post '/api/callbacks/gemini', params: {
         access_token: 'auth-token',
         token: 'gemini-token',
-        image_url: { medium: 'https://new-image.jpg' },
+        image_url: { square: 'https://new-image.jpg' },
         metadata: { id: submission.id }
       }
 
       post '/api/callbacks/gemini', params: {
         access_token: 'auth-token',
         token: 'gemini-token2',
-        image_url: { medium: 'https://another-image.jpg' },
+        image_url: { square: 'https://another-image.jpg' },
         metadata: { id: submission.id }
       }
       expect(submission.assets.detect { |a| a.gemini_token == 'gemini-token' }.reload.image_urls)
-        .to eq('medium' => 'https://new-image.jpg')
+        .to eq('square' => 'https://new-image.jpg')
       expect(submission.assets.detect { |a| a.gemini_token == 'gemini-token2' }.reload.image_urls)
-        .to eq('medium' => 'https://another-image.jpg')
+        .to eq('square' => 'https://another-image.jpg')
 
       stub_gravity_root
       stub_gravity_user

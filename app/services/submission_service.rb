@@ -7,42 +7,52 @@ class SubmissionService
       submitting = submission.state_changed? && submission.state == 'submitted'
       raise ParamError, 'Missing fields for submission.' if submitting && !submission.can_submit?
       submission.save!
-      notify(submission) if submitting
+      return unless submitting
+      notify_admin(submission.id)
+      notify_user(submission.id)
+      delay_until(1.day.from_now).notify_user(submission.id)
     end
 
-    def notify(submission)
-      return if submission.receipt_sent_at
+    def notify_admin(submission_id)
+      submission = Submission.find(submission_id)
+      return if submission.admin_receipt_sent_at
       delay.deliver_submission_notification(submission.id)
-      if submission.assets.count > 0
+      submission.update_attributes!(admin_receipt_sent_at: Time.now.utc)
+    end
+
+    def notify_user(submission_id)
+      submission = Submission.find(submission_id)
+      return if submission.receipt_sent_at
+      if submission.images.count.positive?
         delay.deliver_submission_receipt(submission.id)
         submission.update_attributes!(receipt_sent_at: Time.now.utc)
       else
-        return if reminders_sent_count >= 2
-        delay.deliver_submission_reminder(submission.id)
-        submission.update_attributes!(reminders_sent_count: submission.reminders_sent_count + 1)
+        return if submission.reminders_sent_count >= 2
+        delay.deliver_upload_reminder(submission.id)
       end
     end
 
-    def deliver_submission_reminder(submission_id)
+    def deliver_upload_reminder(submission_id)
       submission = Submission.find(submission_id)
-      return if submission.receipt_sent_at || submission.assets.count > 0
+      return if submission.receipt_sent_at || submission.images.count.positive?
       user = Gravity.client.user(id: submission.user_id)._get
       user_detail = user.user_detail._get
       raise 'User lacks email.' if user_detail.email.blank?
 
-      if reminders_sent_count > 0
-        UserMailer.first_submission_reminder(
+      if submission.reminders_sent_count.positive?
+        UserMailer.second_upload_reminder(
           submission: submission,
           user: user,
           user_detail: user_detail
         ).deliver_now
       else
-        UserMailer.second_submission_reminder(
+        UserMailer.first_upload_reminder(
           submission: submission,
           user: user,
           user_detail: user_detail
         ).deliver_now
       end
+      submission.increment!(:reminders_sent_count) # rubocop:disable Rails/SkipsModelValidations
     end
 
     def deliver_submission_receipt(submission_id)

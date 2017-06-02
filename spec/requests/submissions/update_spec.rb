@@ -59,6 +59,8 @@ describe 'Update Submission', type: :request do
           stub_gravity_user_detail(email: 'michael@bluth.com')
           stub_gravity_artist
 
+          @submission.assets.create!(asset_type: 'image', image_urls: { square: 'https://square.jpg' })
+
           put "/api/submissions/#{@submission.id}", params: {
             state: 'submitted'
           }, headers: headers
@@ -73,13 +75,14 @@ describe 'Update Submission', type: :request do
           expect(admin_email.text_part.body.to_s).to include(admin_copy)
 
           user_email = emails.detect { |e| e.to.include?('michael@bluth.com') }
-          user_copy = 'Thank you for submitting a consignment with Artsy.'
+          user_copy = 'Thank you for submitting your work to our consignments network'
           expect(user_email.html_part.body.to_s).to include(user_copy)
           expect(user_email.text_part.body.to_s).to include(user_copy)
         end
 
         it 'does not resend notifications' do
           @submission.update_attributes!(receipt_sent_at: Time.now.utc)
+          @submission.update_attributes!(admin_receipt_sent_at: Time.now.utc)
 
           put "/api/submissions/#{@submission.id}", params: {
             state: 'submitted'
