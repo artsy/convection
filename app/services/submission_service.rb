@@ -10,7 +10,7 @@ class SubmissionService
       return unless submitting
       notify_admin(submission.id)
       notify_user(submission.id)
-      delay_until(1.day.from_now).notify_user(submission.id)
+      delay_until(1.day.from_now).notify_user(submission.id) unless submission.images.count.positive?
     end
 
     def notify_admin(submission_id)

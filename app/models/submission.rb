@@ -18,16 +18,13 @@ class Submission < ActiveRecord::Base
     'Textile Arts',
     'Other'
   ].freeze
+
   REQUIRED_FIELDS_FOR_SUBMISSION = %w(
     artist_id
     category
-    dimensions_metric
-    height
     location_city
-    medium
     title
     user_id
-    width
     year
   ).freeze
 

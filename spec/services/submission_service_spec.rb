@@ -24,6 +24,27 @@ describe SubmissionService do
     stub_gravity_artist
   end
 
+  context 'update_submission' do
+    it 'sends no emails of the submission is not being submitted' do
+      SubmissionService.update_submission(submission, state: 'draft')
+      emails = ActionMailer::Base.deliveries
+      expect(emails.length).to eq 0
+    end
+
+    it 'sends a reminder if the submission has no images' do
+      SubmissionService.update_submission(submission, state: 'submitted')
+      emails = ActionMailer::Base.deliveries
+      expect(emails.length).to eq 3
+    end
+
+    it 'sends no reminders if the submission has images' do
+      submission.assets.create!(asset_type: 'image', image_urls: { square: 'http://square.jpg' })
+      SubmissionService.update_submission(submission, state: 'submitted')
+      emails = ActionMailer::Base.deliveries
+      expect(emails.length).to eq 2
+    end
+  end
+
   context 'notify_user' do
     describe 'with assets' do
       before do
