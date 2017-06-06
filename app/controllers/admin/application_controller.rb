@@ -7,9 +7,15 @@
 module Admin
   class ApplicationController < Administrate::ApplicationController
     before_action :authenticate_admin
+    before_filter :default_params
 
     def authenticate_admin
       # TODO Add authentication logic here.
+    end
+
+    def default_params
+      params[:order] ||= "created_at"
+      params[:direction] ||= "desc"
     end
 
     # Override this value to specify the number of elements to display at a time

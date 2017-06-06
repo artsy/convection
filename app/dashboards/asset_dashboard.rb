@@ -11,7 +11,6 @@ class AssetDashboard < Administrate::BaseDashboard
     submission: Field::BelongsTo,
     id: Field::Number,
     asset_type: Field::String,
-    gemini_token: Field::String,
     image_urls: Field::String.with_options(searchable: false),
   }.freeze
 
@@ -24,7 +23,6 @@ class AssetDashboard < Administrate::BaseDashboard
     :submission,
     :id,
     :asset_type,
-    :gemini_token,
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -33,7 +31,6 @@ class AssetDashboard < Administrate::BaseDashboard
     :submission,
     :id,
     :asset_type,
-    :gemini_token,
     :image_urls,
   ].freeze
 
@@ -43,7 +40,6 @@ class AssetDashboard < Administrate::BaseDashboard
   FORM_ATTRIBUTES = [
     :submission,
     :asset_type,
-    :gemini_token,
     :image_urls,
   ].freeze
 

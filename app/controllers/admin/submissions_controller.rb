@@ -10,6 +10,18 @@ module Admin
     #     per(10)
     # end
 
+    def show
+      submission = Submission.find(params[:id])
+      user = Gravity.client.user(id: submission.user_id)._get
+      artist = Gravity.client.artist(id: submission.artist_id)
+      render locals: {
+        page: Administrate::Page::Show.new(dashboard, requested_resource),
+        artist_name: artist.name,
+        user_name: user.name,
+        user_email: user.user_detail.email
+      }
+    end
+
     # Define a custom finder by overriding the `find_resource` method:
     # def find_resource(param)
     #   Submission.find_by!(slug: param)
