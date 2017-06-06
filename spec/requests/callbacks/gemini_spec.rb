@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'support/gravity_helper'
 
-describe 'Gemini Callback', type: :request do
+describe 'Gemini Callback' do
   let(:submission) { Submission.create!(artist_id: 'andy-warhol', user_id: 'userid') }
 
   before do
