@@ -1,5 +1,12 @@
 # frozen_string_literal: true
 Rails.application.routes.draw do
+  namespace :admin do
+    resources :assets
+    resources :submissions
+
+    root to: "assets#index"
+  end
+
   get 'system/up'
 
   root to: 'submissions#index'
