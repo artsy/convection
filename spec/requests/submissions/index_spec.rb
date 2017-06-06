@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'Submission Index', type: :request do
+describe 'Submission Index' do
   describe 'GET /' do
     it 'returns the basic index page' do
       allow_any_instance_of(ApplicationController).to(

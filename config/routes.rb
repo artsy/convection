@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 Rails.application.routes.draw do
+  get 'system/up'
+
   root to: 'submissions#index'
 
   namespace :api do

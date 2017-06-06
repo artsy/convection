@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'support/gravity_helper'
 
-describe 'Create Asset', type: :request do
+describe 'Create Asset' do
   let(:jwt_token) { JWT.encode({ aud: 'gravity', sub: 'userid' }, Convection.config.jwt_secret) }
   let(:headers) { { 'Authorization' => "Bearer #{jwt_token}" } }
   let(:submission) { Submission.create!(artist_id: 'andy-warhol', user_id: 'userid') }
