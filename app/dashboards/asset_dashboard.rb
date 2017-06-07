@@ -1,4 +1,4 @@
-require "administrate/base_dashboard"
+require 'administrate/base_dashboard'
 
 class AssetDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
@@ -11,7 +11,7 @@ class AssetDashboard < Administrate::BaseDashboard
     submission: Field::BelongsTo,
     id: Field::Number,
     asset_type: Field::String,
-    image_urls: Field::String.with_options(searchable: false),
+    image_urls: Field::String.with_options(searchable: false)
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -22,7 +22,7 @@ class AssetDashboard < Administrate::BaseDashboard
   COLLECTION_ATTRIBUTES = [
     :submission,
     :id,
-    :asset_type,
+    :asset_type
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -31,7 +31,7 @@ class AssetDashboard < Administrate::BaseDashboard
     :submission,
     :id,
     :asset_type,
-    :image_urls,
+    :image_urls
   ].freeze
 
   # FORM_ATTRIBUTES
@@ -40,7 +40,7 @@ class AssetDashboard < Administrate::BaseDashboard
   FORM_ATTRIBUTES = [
     :submission,
     :asset_type,
-    :image_urls,
+    :image_urls
   ].freeze
 
   # Overwrite this method to customize how assets are displayed

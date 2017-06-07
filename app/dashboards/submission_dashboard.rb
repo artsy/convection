@@ -1,4 +1,4 @@
-require "administrate/base_dashboard"
+require 'administrate/base_dashboard'
 
 class SubmissionDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
@@ -36,7 +36,7 @@ class SubmissionDashboard < Administrate::BaseDashboard
     edition_number: Field::String,
     edition_size: Field::Number,
     reminders_sent_count: Field::Number,
-    admin_receipt_sent_at: Field::DateTime,
+    admin_receipt_sent_at: Field::DateTime
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -48,7 +48,7 @@ class SubmissionDashboard < Administrate::BaseDashboard
     :id,
     :created_at,
     :user_id,
-    :state,
+    :state
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -82,7 +82,7 @@ class SubmissionDashboard < Administrate::BaseDashboard
     :edition_number,
     :edition_size,
     :reminders_sent_count,
-    :admin_receipt_sent_at,
+    :admin_receipt_sent_at
   ].freeze
 
   # FORM_ATTRIBUTES
@@ -112,7 +112,7 @@ class SubmissionDashboard < Administrate::BaseDashboard
     :edition,
     :state,
     :edition_number,
-    :edition_size,
+    :edition_size
   ].freeze
 
   # Overwrite this method to customize how submissions are displayed

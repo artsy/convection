@@ -4,7 +4,7 @@ Rails.application.routes.draw do
     resources :assets
     resources :submissions
 
-    root to: "assets#index"
+    root to: 'assets#index'
   end
 
   get 'system/up'
