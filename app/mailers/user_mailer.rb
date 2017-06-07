@@ -19,7 +19,7 @@ class UserMailer < ApplicationMailer
     smtpapi category: ['first_upload_reminder'], unique_args: {
       submission_id: submission.id
     }
-    mail to: user_detail.email, subject: 'Submission Receipt'
+    mail to: user_detail.email, subject: "You're Almost Done"
   end
 
   def second_upload_reminder(submission:, user:, user_detail:)
@@ -28,6 +28,17 @@ class UserMailer < ApplicationMailer
     @user_detail = user_detail
 
     smtpapi category: ['second_upload_reminder'], unique_args: {
+      submission_id: submission.id
+    }
+    mail to: user_detail.email, subject: "You're Almost Done"
+  end
+
+  def third_upload_reminder(submission:, user:, user_detail:)
+    @submission = submission
+    @user = user
+    @user_detail = user_detail
+
+    smtpapi category: ['third_upload_reminder'], unique_args: {
       submission_id: submission.id
     }
     mail to: user_detail.email, subject: 'Submission Receipt'

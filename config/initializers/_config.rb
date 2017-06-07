@@ -15,11 +15,13 @@ Convection.config = OpenStruct.new(
   gravity_url: ENV['GRAVITY_URL'] || 'https://stagingapi.artsy.net',
   jwt_secret: ENV['JWT_SECRET'] || 'replace-me',
   processing_grace_seconds: ENV['PROCESSING_GRACE_SECONDS'] || 600,
+  second_reminder_days_after: ENV['SECOND_REMINDER_DAYS_AFTER'] || 1,
   sidekiq_username: ENV['SIDEKIQ_USERNAME'] || 'admin',
   sidekiq_password: ENV['SIDEKIQ_PASSWORD'] || 'replace-me',
   smtp_address: ENV['SMTP_ADDRESS'],
   smtp_domain: 'artsy.net',
   smtp_password: ENV['SMTP_PASSWORD'],
   smtp_port: ENV['SMTP_PORT'],
-  smtp_user: ENV['SMTP_USER']
+  smtp_user: ENV['SMTP_USER'],
+  third_reminder_days_after: ENV['THIRD_REMINDER_DAYS_AFTER'] || 7
 )
