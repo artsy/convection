@@ -6,22 +6,19 @@
 # you're free to overwrite the RESTful controller actions.
 module Admin
   class ApplicationController < Administrate::ApplicationController
-    before_action :authenticate_admin
+    include ArtsyAuth::Authenticated
+
     before_filter :default_params
 
-    def authenticate_admin
-      # TODO Add authentication logic here.
-    end
+    private
 
     def default_params
       params[:order] ||= "created_at"
       params[:direction] ||= "desc"
     end
 
-    # Override this value to specify the number of elements to display at a time
-    # on index pages. Defaults to 20.
-    # def records_per_page
-    #   params[:per_page] || 20
-    # end
+    def authorized_artsy_token?(token)
+      ArtsyAdminAuth.valid?(token)
+    end
   end
 end

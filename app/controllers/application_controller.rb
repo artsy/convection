@@ -1,5 +1,7 @@
 # frozen_string_literal: true
-class ApplicationController < ArtsyAuth::ApplicationController
+class ApplicationController < ActionController::Base
+  include ArtsyAuth::Authenticated
+
   NotAuthorized = Class.new(StandardError)
 
   # Prevent CSRF attacks by raising an exception.
@@ -8,7 +10,6 @@ class ApplicationController < ArtsyAuth::ApplicationController
 
   # override application to decode token and allow only users with `admin` role
   def authorized_artsy_token?(token)
-    decoded_token, _headers = JWT.decode(token, Convection.config.jwt_secret)
-    decoded_token['roles'].include? 'admin'
+    ArtsyAdminAuth.valid?(token)
   end
 end
