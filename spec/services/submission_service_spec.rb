@@ -34,7 +34,7 @@ describe SubmissionService do
     it 'sends a reminder if the submission has no images' do
       SubmissionService.update_submission(submission, state: 'submitted')
       emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 3
+      expect(emails.length).to eq 4
     end
 
     it 'sends no reminders if the submission has images' do
@@ -73,7 +73,7 @@ describe SubmissionService do
         SubmissionService.notify_user(submission)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
-        expect(emails.first.html_part.body).to include("We're missing photos of your work")
+        expect(emails.first.html_part.body).to include('Complete your consignment submission')
         expect(emails.first.to).to eq(['michael@bluth.com'])
         expect(submission.reload.receipt_sent_at).to be nil
         expect(submission.reload.reminders_sent_count).to eq 1
@@ -84,7 +84,7 @@ describe SubmissionService do
         SubmissionService.notify_user(submission)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
-        expect(emails.first.html_part.body).to include('Complete your consignment submission')
+        expect(emails.first.html_part.body).to include("We're missing photos of your work")
         expect(emails.first.to).to eq(['michael@bluth.com'])
         expect(submission.reload.receipt_sent_at).to be nil
         expect(submission.reload.reminders_sent_count).to eq 2
@@ -97,8 +97,8 @@ describe SubmissionService do
         expect(emails.length).to eq 0
       end
 
-      it 'does not send a reminder if two reminders have already been sent' do
-        submission.update_attributes!(reminders_sent_count: 2)
+      it 'does not send a reminder if three reminders have already been sent' do
+        submission.update_attributes!(reminders_sent_count: 3)
         SubmissionService.notify_user(submission)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 0

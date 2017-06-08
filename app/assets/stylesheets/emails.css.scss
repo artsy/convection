@@ -2,13 +2,29 @@ table.bordered-email {
   width: 100%;
   padding: 30px;
   font-family: serif;
-  max-width: 660px;
   text-align: center;
-  border: 1px solid gray;
+  border: 1px solid #999999;
+  max-width: 600px;
+  border-collapse: separate;
+  table-layout: fixed;
 
-  .artsy-logo {
-    max-width: 130px;
-    width: 130px;
+  @media (max-width: 450px) {
+    padding: 10px !important;
+  }
+
+  td {
+    font-family: TimesNewRoman, 'Times New Roman', Times, serif;
+  }
+
+  .artsy-logo img {
+    max-width: 120px;
+    width: 120px;
+  }
+
+  .consignments-label {
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 2.1px;
   }
 
   .email-title {
@@ -17,26 +33,37 @@ table.bordered-email {
     padding-bottom: 20px;
   }
 
-  .email-main-photo {
+  .email-main-photo img {
     max-width: 600px;
+    width: 100%;
+  }
+
+  table.medium-width-table {
+    max-width: 500px;
+    width: 100%;
+    border-collapse: separate;
+    table-layout: fixed;
   }
 
   .email-sub-title {
     font-size: 25px;
-    padding-bottom: 20px;
+    padding-bottom: 42px;
     padding-top: 20px;
-    max-width: 400px;
   }
 
   table.checklist {
     text-align: center;
     padding-top: 20px;
     padding-bottom: 20px;
+    border-collapse: separate;
+    table-layout: fixed;
 
     .checklist-row {
       padding-top: 10px;
       padding-bottom: 10px;
       text-align: left;
+      height: 60px;
+      max-height: 60px;
     }
 
     .checklist-item {
@@ -47,6 +74,16 @@ table.bordered-email {
     .check {
       max-width: 40px;
       width: 40px;
+    }
+
+    .purple-check img {
+      width: 34px;
+      max-width: 34px;
+    }
+
+    .empty-check img {
+      width: 34px;
+      max-width: 34px;
     }
 
     .checklist-item-completed {
@@ -69,7 +106,8 @@ table.bordered-email {
     text-transform: uppercase;
     font-family: sans-serif;
     padding-bottom: 10px;
-    color: gray;
+    font-size: 14px;
+    color: #cccccc;
   }
 
   .artist-name {
@@ -80,17 +118,6 @@ table.bordered-email {
     font-size: 17px;
   }
 
-  table.padded-section {
-    padding-bottom: 20px;
-  }
-
-  table.bordered-section {
-    border-top: 1px solid gray;
-    border-bottom: 1px solid gray;
-    padding-top: 20px;
-    padding-bottom: 20px;
-  }
-
   .upload-photo-button {
     width: 100%;
     max-width: 600px;
@@ -98,6 +125,7 @@ table.bordered-email {
     font-family: sans-serif;
     text-transform: uppercase;
     height: 50px;
+    font-size: 14px;
 
     a {
       text-decoration: none;
@@ -105,8 +133,81 @@ table.bordered-email {
     }
   }
 
+  table.email-footer {
+    max-width: 500px;
+    width: 100%;
+    border-collapse: separate;
+    table-layout: fixed;
+  }
+
   .email-footer-text {
-    padding-top: 20px;
-    font-size: 12px;
+    padding-top: 23px;
+    font-size: 16px;
+
+    a {
+      color: black;
+    }
+  }
+
+  .submission-id {
+    color: #999999;
+    font-size: 16px;
+    padding-top: 8px;
+  }
+
+  table.whats-next {
+    width: 95%;
+    max-width: 95%;
+    background-color: #f8f8f8;
+    padding: 10px;
+    border-collapse: separate;
+    table-layout: fixed;
+  }
+
+  table.whats-next-checklist {
+    text-align: left;
+    max-width: 400px;
+    width: 100%;
+    border-collapse: separate;
+    table-layout: fixed;
+
+    .checklist-item {
+      font-size: 20px;
+      line-height: 1.1;
+    }
+
+    .checklist-icon {
+      width: 70px;
+      max-width: 70px;
+
+      img {
+        height: 50px;
+        max-height: 50px;
+      }
+    }
+
+    .checklist-row {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      text-align: left;
+      height: 90px;
+      max-height: 90px;
+    }
+  }
+
+  table.response-info-table {
+    padding-top: 34px;
+    padding-bottom: 34px;
+    width: 100%;
+    border-collapse: separate;
+    table-layout: fixed;
+  }
+
+  .response-info {
+    line-height: 1.62;
+
+    a {
+      color: black;
+    }
   }
 }

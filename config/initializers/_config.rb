@@ -7,6 +7,7 @@ Convection.config = OpenStruct.new(
   admin_email_address: ENV['ADMIN_EMAIL_ADDRESS'] || 'consign@artsy.net',
   artsy_url: ENV['ARTSY_URL'] || 'https://staging.artsy.net',
   cloudfront_url: ENV['CLOUDFRONT_URL'],
+  contact_email: ENV['CONTACT_EMAIL'] || 'specialist@artsy.net',
   contact_phone_number: ENV['CONTACT_PHONE_NUMBER'] || '+1 (646) 712-8154',
   gravity_api_url: "#{ENV['GRAVITY_URL'] || 'https://stagingapi.artsy.net'}/api",
   gravity_app_id: ENV['GRAVITY_APP_ID'] || 'replace-me',

@@ -10,10 +10,9 @@ class SubmissionService
       return unless submitting
       notify_admin(submission.id)
       notify_user(submission.id)
-      unless submission.images.positive?
-        delay_until(Convection.config.second_reminder_days_after.from_now).notify_user(submission.id)
-        delay_until(Convection.config.third_reminder_days_after.from_now).notify_user(submission.id)
-      end
+      return if submission.images.count.positive?
+      delay_until(Convection.config.second_reminder_days_after.days.from_now).notify_user(submission.id)
+      delay_until(Convection.config.third_reminder_days_after.days.from_now).notify_user(submission.id)
     end
 
     def notify_admin(submission_id)
