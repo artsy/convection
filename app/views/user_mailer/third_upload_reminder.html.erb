@@ -5,26 +5,26 @@
     <td>
       <table class='email-content' align='center'>
         <%= render partial: 'shared/email_header' %>
-        <tr>
-          <td class='email-title'>
-            We're missing photos of your work
-          </td>
-        </tr>
+        <td>
+          <table class='medium-width-table' align='center'>
+            <tr>
+              <td class='email-title'>
+                We’re unable to submit your work to our partner network without a photo
+              </td>
+            </tr>
+          </table>
+        </td>
         <tr>
           <td class='email-main-photo'>
             <%= image_tag(image_url('artsy-take-photo.jpg'), id: 'artsy-take-photo') %>
           </td>
         </tr>
         <tr>
-          <td>
-            <table class='medium-width-table' align='center'>
-              <tr>
-                <td class='email-sub-title'>
-                  Upload photos of your work to complete your consignment submission
-                </td>
-              </tr>
-            </table>
+        <tr>
+          <td class='email-sub-title'>
+            Upload photos of your work to complete your consignments submission.
           </td>
+        </tr>
         </tr>
         <tr>
           <td class='upload-photo-button'>

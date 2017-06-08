@@ -10,7 +10,9 @@ class SubmissionService
       return unless submitting
       notify_admin(submission.id)
       notify_user(submission.id)
-      delay_until(1.day.from_now).notify_user(submission.id) unless submission.images.count.positive?
+      return if submission.images.count.positive?
+      delay_until(Convection.config.second_reminder_days_after.days.from_now).notify_user(submission.id)
+      delay_until(Convection.config.third_reminder_days_after.days.from_now).notify_user(submission.id)
     end
 
     def notify_admin(submission_id)
@@ -27,7 +29,7 @@ class SubmissionService
         delay.deliver_submission_receipt(submission.id)
         submission.update_attributes!(receipt_sent_at: Time.now.utc)
       else
-        return if submission.reminders_sent_count >= 2
+        return if submission.reminders_sent_count >= 3
         delay.deliver_upload_reminder(submission.id)
       end
     end
@@ -39,18 +41,18 @@ class SubmissionService
       user_detail = user.user_detail._get
       raise 'User lacks email.' if user_detail.email.blank?
 
-      if submission.reminders_sent_count.positive?
-        UserMailer.second_upload_reminder(
-          submission: submission,
-          user: user,
-          user_detail: user_detail
-        ).deliver_now
+      email_args = {
+        submission: submission,
+        user: user,
+        user_detail: user_detail
+      }
+
+      if submission.reminders_sent_count == 1
+        UserMailer.second_upload_reminder(email_args).deliver_now
+      elsif submission.reminders_sent_count == 2
+        UserMailer.third_upload_reminder(email_args).deliver_now
       else
-        UserMailer.first_upload_reminder(
-          submission: submission,
-          user: user,
-          user_detail: user_detail
-        ).deliver_now
+        UserMailer.first_upload_reminder(email_args).deliver_now
       end
       submission.increment!(:reminders_sent_count) # rubocop:disable Rails/SkipsModelValidations
     end

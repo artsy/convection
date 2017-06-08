@@ -42,12 +42,14 @@ describe 'Submission Flow' do
       expect(@submission.reload.state).to eq 'submitted'
 
       emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 3
+      expect(emails.length).to eq 4
       expect(emails.first.to).to eq(['consign@artsy.net'])
-      expect(emails[1].html_part.body).to include("We're missing photos of your work")
+      expect(emails[1].subject).to include("You're Almost Done")
       expect(emails[1].to).to eq(['michael@bluth.com'])
       # sidekiq flushes everything at once
-      expect(emails.last.html_part.body).to include('Complete your consignment submission')
+      expect(emails[2].subject).to include("You're Almost Done")
+      expect(emails[2].to).to eq(['michael@bluth.com'])
+      expect(emails.last.subject).to include('Last chance to complete your consignment')
       expect(emails.last.to).to eq(['michael@bluth.com'])
     end
   end

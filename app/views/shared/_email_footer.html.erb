@@ -1,0 +1,15 @@
+<td>
+  <table class='email-footer' align='center'>
+    <tr>
+      <td class='email-footer-text'>
+        Please direct any questions to <%= mail_to(Convection.config.contact_email) %> or call
+        <%= link_to Convection.config.contact_phone_number, "tel:#{Convection.config.contact_phone_number}" %>.
+      </td>
+    </tr>
+    <tr>
+      <td class='submission-id'>
+        <%= "Submission ##{@submission.id}" %>
+      </td>
+    </tr>
+  </table>
+</td>

@@ -7,6 +7,7 @@ Convection.config = OpenStruct.new(
   admin_email_address: ENV['ADMIN_EMAIL_ADDRESS'] || 'consign@artsy.net',
   artsy_url: ENV['ARTSY_URL'] || 'https://staging.artsy.net',
   cloudfront_url: ENV['CLOUDFRONT_URL'],
+  contact_email: ENV['CONTACT_EMAIL'] || 'specialist@artsy.net',
   contact_phone_number: ENV['CONTACT_PHONE_NUMBER'] || '+1 (646) 712-8154',
   gravity_api_url: "#{ENV['GRAVITY_URL'] || 'https://stagingapi.artsy.net'}/api",
   gravity_app_id: ENV['GRAVITY_APP_ID'] || 'replace-me',
@@ -15,11 +16,13 @@ Convection.config = OpenStruct.new(
   gravity_url: ENV['GRAVITY_URL'] || 'https://stagingapi.artsy.net',
   jwt_secret: ENV['JWT_SECRET'] || 'replace-me',
   processing_grace_seconds: ENV['PROCESSING_GRACE_SECONDS'] || 600,
+  second_reminder_days_after: ENV['SECOND_REMINDER_DAYS_AFTER'] || 1,
   sidekiq_username: ENV['SIDEKIQ_USERNAME'] || 'admin',
   sidekiq_password: ENV['SIDEKIQ_PASSWORD'] || 'replace-me',
   smtp_address: ENV['SMTP_ADDRESS'],
   smtp_domain: 'artsy.net',
   smtp_password: ENV['SMTP_PASSWORD'],
   smtp_port: ENV['SMTP_PORT'],
-  smtp_user: ENV['SMTP_USER']
+  smtp_user: ENV['SMTP_USER'],
+  third_reminder_days_after: ENV['THIRD_REMINDER_DAYS_AFTER'] || 7
 )
