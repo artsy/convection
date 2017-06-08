@@ -1,8 +1,15 @@
 # frozen_string_literal: true
 Rails.application.routes.draw do
+  namespace :admin do
+    resources :assets
+    resources :submissions
+
+    root to: 'submissions#index'
+  end
+
   get 'system/up'
 
-  root to: 'submissions#index'
+  root to: redirect('/admin')
 
   namespace :api do
     resources :submissions, only: [:create, :update, :show]

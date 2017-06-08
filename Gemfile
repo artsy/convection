@@ -22,6 +22,7 @@ gem 'hyperclient' # consume Gravity's v2 API
 gem 'premailer-rails' # generate text parts from HTML automatically
 
 gem 'newrelic_rpm' # for monitoring
+gem 'administrate' # for an admin-only interface
 
 # Use jquery as the JavaScript library
 # gem 'jquery-rails'
