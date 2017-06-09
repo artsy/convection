@@ -1,3 +1,5 @@
+<p>Submission ID:<br /><%= @submission.id %></p>
+
 <p>Artist:<br /><%= @artist.name %></p>
 
 <p>Title:<br /><%= @submission.title %></p>
@@ -23,14 +25,3 @@
 <% @submission.processed_images.each do |image| %>
   <%= image_tag image.image_urls['square'] %>
 <% end %>
-
-<p>
-  Please direct any questions to <%= mail_to('specialist@artsy.net') %> or call one of our specialists at
-  <%= link_to Convection.config.contact_phone_number, "tel:#{Convection.config.contact_phone_number}" %>.
-</p>
-
-<p>Thank you,<br />
-Artsy Collector Relations Team</p>
-
-<br />
-<p>Note: Our partners include Sotheby's, Phillips, Bonhams, Doyle, Heritage Auctions, RAGO Fine Arts, Fine Art Auctions Miami, Koller Auctions, Julien's Auctions and Gagosian Gallery.</p>

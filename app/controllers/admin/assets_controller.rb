@@ -1,21 +1,12 @@
 module Admin
   class AssetsController < Admin::ApplicationController
-    # To customize the behavior of this controller,
-    # you can overwrite any of the RESTful actions. For example:
-    #
-    # def index
-    #   super
-    #   @resources = Asset.
-    #     page(params[:page]).
-    #     per(10)
-    # end
-
-    # Define a custom finder by overriding the `find_resource` method:
-    # def find_resource(param)
-    #   Asset.find_by!(slug: param)
-    # end
-
-    # See https://administrate-prototype.herokuapp.com/customizing_controller_actions
-    # for more information
+    def show
+      asset = Asset.find(params[:id])
+      original = asset.original_image
+      render locals: {
+        page: Administrate::Page::Show.new(dashboard, requested_resource),
+        original: original
+      }
+    end
   end
 end

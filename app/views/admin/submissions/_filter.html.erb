@@ -1,0 +1,31 @@
+<form class="filter_form">
+  <div class='filter_form__row'>
+    <div class='filter_form__item'>
+      <div class='filter_form__label'>
+        Qualified
+      </div>
+      <select name='submission[qualified]' id='submission_qualified'>
+        <% ['new', 'qualified', 'rejected'].each do |item| %>
+          <option value=<%= item %> <%= 'selected' if qualified_filter == item %>>
+            <%= item %>
+          </option>
+        <% end %>
+      </select>
+    </div>
+    <div class='filter_form__item'>
+      <div class='filter_form__label'>
+        Submission State
+      </div>
+      <select name='submission[state]' id='submission_state'>
+        <% Submission::STATES.each do |item| %>
+          <option value=<%= item %> <%= 'selected' if state_filter == item %>>
+            <%= item %>
+          </option>
+        <% end %>
+      </select>
+    </div>
+    <div class='filter_form__item'>
+      <input type="submit" value="Filter" class='filter_form__button' />
+    </div>
+  </div>
+</form>

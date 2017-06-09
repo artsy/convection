@@ -1,0 +1,10 @@
+.filter_form__row {
+  margin: 10px;
+  display: flex;
+  align-items: flex-end;
+
+  .filter_form__item {
+    min-width: 250px;
+    padding-right: 20px;
+  }
+}

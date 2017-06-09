@@ -40,4 +40,29 @@ describe Asset do
       expect(asset.reload.image_urls).to eq('round' => 'https://round-image.jpg')
     end
   end
+
+  describe '#original_image' do
+    let(:asset) { Asset.create!(asset_type: 'image') }
+
+    before do
+      allow(Convection.config).to receive(:gemini_app).and_return('https://media-test.artsy.net')
+      allow(Convection.config).to receive(:gemini_account_key).and_return('convection-test')
+    end
+
+    it 'does nothing if there is no gemini_token' do
+      expect { asset.original_image }.to_not raise_error
+    end
+
+    it 'returns an image location' do
+      asset.update_attributes!(gemini_token: 'foo')
+      stub_request(:get, 'https://media-test.artsy.net/original.json?token=foo').to_return(status: 302)
+      expect { asset.original_image }.to_not raise_error
+    end
+
+    it 'raises an exception if the response is not successful' do
+      asset.update_attributes!(gemini_token: 'foo')
+      stub_request(:get, 'https://media-test.artsy.net/original.json?token=foo').to_return(status: 400, body: 'ruh roh')
+      expect { asset.original_image }.to raise_error { |e| expect(e.message).to eq('400: ruh roh') }
+    end
+  end
 end
