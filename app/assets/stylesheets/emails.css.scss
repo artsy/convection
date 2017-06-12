@@ -119,18 +119,17 @@ table.bordered-email {
   }
 
   .upload-photo-button {
-    width: 100%;
-    max-width: 600px;
     background-color: black;
     font-family: sans-serif;
     text-transform: uppercase;
     height: 50px;
     font-size: 14px;
-
-    a {
-      text-decoration: none;
-      color: white;
-    }
+    text-decoration: none;
+    color: white;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 31%;
+    padding-right: 31%;
   }
 
   table.email-footer {

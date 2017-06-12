@@ -1,4 +1,6 @@
 class UserMailer < ApplicationMailer
+  helper :url
+
   def submission_receipt(submission:, user:, user_detail:, artist:)
     @submission = submission
     @user = user
@@ -15,6 +17,7 @@ class UserMailer < ApplicationMailer
     @submission = submission
     @user = user
     @user_detail = user_detail
+    @utm_params = utm_params(source: 'drip-consignment-reminder-e01', campaign: 'consignment-complete')
 
     smtpapi category: ['first_upload_reminder'], unique_args: {
       submission_id: submission.id
@@ -26,6 +29,7 @@ class UserMailer < ApplicationMailer
     @submission = submission
     @user = user
     @user_detail = user_detail
+    @utm_params = utm_params(source: 'drip-consignment-reminder-e02', campaign: 'consignment-complete')
 
     smtpapi category: ['second_upload_reminder'], unique_args: {
       submission_id: submission.id
@@ -37,6 +41,7 @@ class UserMailer < ApplicationMailer
     @submission = submission
     @user = user
     @user_detail = user_detail
+    @utm_params = utm_params(source: 'drip-consignment-reminder-e03', campaign: 'consignment-complete')
 
     smtpapi category: ['third_upload_reminder'], unique_args: {
       submission_id: submission.id

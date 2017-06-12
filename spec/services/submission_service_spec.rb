@@ -74,6 +74,8 @@ describe SubmissionService do
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.html_part.body).to include('Complete your consignment submission')
+        expect(emails.first.html_part.body).to include('utm_campaign=consignment-complete')
+        expect(emails.first.html_part.body).to include('utm_source=drip-consignment-reminder-e01')
         expect(emails.first.to).to eq(['michael@bluth.com'])
         expect(submission.reload.receipt_sent_at).to be nil
         expect(submission.reload.reminders_sent_count).to eq 1
@@ -85,9 +87,26 @@ describe SubmissionService do
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.html_part.body).to include("We're missing photos of your work")
+        expect(emails.first.html_part.body).to include('utm_campaign=consignment-complete')
+        expect(emails.first.html_part.body).to include('utm_source=drip-consignment-reminder-e02')
         expect(emails.first.to).to eq(['michael@bluth.com'])
         expect(submission.reload.receipt_sent_at).to be nil
         expect(submission.reload.reminders_sent_count).to eq 2
+      end
+
+      it 'sends the third reminder if two reminders have ben sent' do
+        submission.update_attributes!(reminders_sent_count: 2)
+        SubmissionService.notify_user(submission)
+        emails = ActionMailer::Base.deliveries
+        expect(emails.length).to eq 1
+        expect(emails.first.html_part.body).to include(
+          'We’re unable to submit your work to our partner network without a photo'
+        )
+        expect(emails.first.html_part.body).to include('utm_campaign=consignment-complete')
+        expect(emails.first.html_part.body).to include('utm_source=drip-consignment-reminder-e03')
+        expect(emails.first.to).to eq(['michael@bluth.com'])
+        expect(submission.reload.receipt_sent_at).to be nil
+        expect(submission.reload.reminders_sent_count).to eq 3
       end
 
       it 'does not send a reminder if a receipt has already been sent' do
