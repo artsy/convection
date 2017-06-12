@@ -8,10 +8,6 @@ table.bordered-email {
   border-collapse: separate;
   table-layout: fixed;
 
-  @media (max-width: 450px) {
-    padding: 10px !important;
-  }
-
   td {
     font-family: TimesNewRoman, 'Times New Roman', Times, serif;
   }
@@ -141,7 +137,7 @@ table.bordered-email {
 
   .email-footer-text {
     padding-top: 23px;
-    font-size: 16px;
+    font-size: 15px;
 
     a {
       color: black;
@@ -207,6 +203,30 @@ table.bordered-email {
 
     a {
       color: black;
+    }
+  }
+}
+
+@media (max-width: 450px) {
+  table.bordered-email {
+    padding: 10px !important;
+    border: none !important;
+
+    .email-title {
+      font-size: 26px !important;
+    }
+
+    .email-sub-title {
+      font-size: 20px !important;
+    }
+
+    .checklist-item {
+      font-size: 20px !important;
+    }
+
+    .upload-photo-button {
+      padding-left: 25% !important;
+      padding-right: 25% !important;
     }
   }
 }

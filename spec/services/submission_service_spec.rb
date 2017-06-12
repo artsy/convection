@@ -99,9 +99,7 @@ describe SubmissionService do
         SubmissionService.notify_user(submission)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
-        expect(emails.first.html_part.body).to include(
-          'We’re unable to submit your work to our partner network without a photo'
-        )
+        expect(emails.first.html_part.body).to include('We’re unable to complete your submission')
         expect(emails.first.html_part.body).to include('utm_campaign=consignment-complete')
         expect(emails.first.html_part.body).to include('utm_source=drip-consignment-reminder-e03')
         expect(emails.first.to).to eq(['michael@bluth.com'])
