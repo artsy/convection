@@ -42,8 +42,8 @@
           </td>
         </tr>
         <tr>
-          <td class='upload-photo-button'>
-            <%= link_to('Upload Photos', "#{Convection.config.artsy_url}/consign2/submission/#{@submission.id}/upload") %>
+          <td>
+            <%= link_to('Upload Photos', upload_photo_url(@submission.id, @utm_params), class: 'upload-photo-button') %>
           </td>
         </tr>
         <%= render partial: 'shared/email_footer' %>
