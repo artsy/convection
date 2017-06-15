@@ -25,8 +25,7 @@ class UserMailerPreview < ActionMailer::Preview
         images: [],
         title: 'My Favorite Artwork',
         year: 1992,
-        category: 'Painting',
-        medium: 'Oil on linen',
+        formatted_category: 'Painting, Oil on linen',
         formatted_dimensions: '1x2 in'
       ),
       artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol'),

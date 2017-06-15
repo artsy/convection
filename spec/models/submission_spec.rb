@@ -64,6 +64,48 @@ describe Submission do
     end
   end
 
+  context 'formatted_category' do
+    it 'correctly formats category and medium fields if both are present' do
+      submission = Submission.create(
+        category: 'Painting',
+        medium: 'Oil on linen'
+      )
+      expect(submission.formatted_category).to eq 'Painting, Oil on linen'
+    end
+
+    it 'correctly formats category and medium fields if category is nil' do
+      submission = Submission.create(
+        category: nil,
+        medium: 'Oil on linen'
+      )
+      expect(submission.formatted_category).to eq 'Oil on linen'
+    end
+
+    it 'correctly formats category and medium fields if medium is nil' do
+      submission = Submission.create(
+        category: 'Painting',
+        medium: nil
+      )
+      expect(submission.formatted_category).to eq 'Painting'
+    end
+
+    it 'correctly formats category and medium fields if category is empty' do
+      submission = Submission.create(
+        category: '',
+        medium: 'Oil on linen'
+      )
+      expect(submission.formatted_category).to eq 'Oil on linen'
+    end
+
+    it 'correctly formats category and medium fields if medium is empty' do
+      submission = Submission.create(
+        category: 'Painting',
+        medium: ''
+      )
+      expect(submission.formatted_category).to eq 'Painting'
+    end
+  end
+
   context 'processed_images' do
     let(:submission) { Submission.create(category: 'Painting') }
 
