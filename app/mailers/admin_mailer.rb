@@ -1,4 +1,6 @@
 class AdminMailer < ApplicationMailer
+  helper :submissions
+
   def submission(submission:, user:, user_detail:, artist:)
     @submission = submission
     @user = user

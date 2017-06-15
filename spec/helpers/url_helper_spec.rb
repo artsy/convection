@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'support/gravity_helper'
 
 describe UrlHelper, type: :helper do
   before do
