@@ -37,16 +37,6 @@ class Submission < ActiveRecord::Base
 
   before_validation :set_state, on: :create
 
-  def formatted_location
-    [location_city, location_state, location_country].select(&:present?).join(', ')
-  end
-
-  def formatted_dimensions
-    values = [height, width, depth].select(&:present?)
-    return if values.empty?
-    "#{values.join(' x ')} #{dimensions_metric.try(:downcase)}"
-  end
-
   def can_submit?
     REQUIRED_FIELDS_FOR_SUBMISSION.all? { |attr| self[attr].present? }
   end

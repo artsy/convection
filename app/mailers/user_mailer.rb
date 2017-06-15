@@ -1,5 +1,5 @@
 class UserMailer < ApplicationMailer
-  helper :url
+  helper :url, :submissions
 
   def submission_receipt(submission:, user:, user_detail:, artist:)
     @submission = submission

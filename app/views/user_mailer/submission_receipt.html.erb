@@ -43,12 +43,12 @@
               </tr>
               <tr>
                 <td class='artwork-category-medium'>
-                  <%= "#{@submission.category}, #{@submission.medium}" %>
+                  <%= formatted_category(@submission) %>
                 </td>
               </tr>
               <tr>
                 <td class='dimensions'>
-                  <%= @submission.formatted_dimensions %>
+                  <%= formatted_dimensions(@submission) %>
                 </td>
               </tr>
             </table>

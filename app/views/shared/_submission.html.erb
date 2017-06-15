@@ -16,10 +16,10 @@
   <p>Provenance:<br /><%= @submission.provenance %></p>
 <% end %>
 
-<p>Location:<br /><%= @submission.formatted_location %></p>
+<p>Location:<br /><%= formatted_location(@submission) %></p>
 
-<% if @submission.formatted_dimensions %>
-  <p>Dimensions:<br /><%= @submission.formatted_dimensions %></p>
+<% if formatted_dimensions(@submission) %>
+  <p>Dimensions:<br /><%= formatted_dimensions(@submission) %></p>
 <% end %>
 
 <% @submission.processed_images.each do |image| %>
