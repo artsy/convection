@@ -10,7 +10,9 @@ class UserMailer < ApplicationMailer
     smtpapi category: ['submission_receipt'], unique_args: {
       submission_id: submission.id
     }
-    mail to: user_detail.email, subject: 'Submission Receipt', bcc: Convection.config.admin_email_address
+    mail(to: user_detail.email,
+         subject: "Consignment Submission Confirmation ##{@submission.id}",
+         bcc: Convection.config.admin_email_address)
   end
 
   def first_upload_reminder(submission:, user:, user_detail:)
