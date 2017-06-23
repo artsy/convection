@@ -31,10 +31,12 @@ gem 'watt', watt_gem_spec # artsy bootstrap
 gem 'bootstrap-sass'
 gem 'bourbon'
 gem 'neat'
+gem 'coffee-rails'
+
+gem 'kaminari' # for pagination
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
-gem 'underscore-rails'
 gem 'haml-rails'
 
 group :development, :test do
@@ -49,4 +51,6 @@ end
 group :test do
   gem 'yarjuf' # formatting for test reports on CircleCI
   gem 'webmock' # mock or forbid external network requests
+  gem 'capybara', '~> 2.8' # for view tests
+  gem 'rails-controller-testing'
 end

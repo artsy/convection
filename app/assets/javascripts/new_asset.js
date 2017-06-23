@@ -33,7 +33,7 @@ $(document).ready(() => {
   var geminiOptions = {
     geminiApp: 'https://media.artsy.net',
     acl: 'private',
-    s3Key: 'AKIAIYU72SSZR4W7WQXA',
+    s3Key: '',
     templateKey: 'convection-staging',
     geminiKey: 'convection-staging',
     metadata: {

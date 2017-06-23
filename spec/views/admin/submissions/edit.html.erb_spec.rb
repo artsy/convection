@@ -1,0 +1,42 @@
+require 'rails_helper'
+require 'support/gravity_helper'
+
+describe 'admin/submissions/edit.html.erb', type: :feature do
+  context 'always' do
+    before do
+      allow_any_instance_of(Admin::SubmissionsController).to receive(:require_artsy_authentication)
+      @submission = Submission.create!(
+        title: 'my artwork',
+        artist_id: 'artistid',
+        edition: true,
+        edition_size: 100,
+        edition_number: '23a',
+        category: 'Painting',
+        user_id: 'userid'
+      )
+      page.visit "/admin/submissions/#{@submission.id}/edit"
+    end
+
+    it 'displays the page title and content' do
+      expect(page).to have_content("Submission ##{@submission.id}")
+      expect(page.find('#submission_title').value).to eq('my artwork')
+      expect(page).to_not have_content('Gob Bluth')
+      expect(page).to_not have_content('Jon Jonson')
+      expect(page).to_not have_content('user@example.com')
+      expect(page).to have_content('Painting')
+    end
+
+    it 'lets you update the submission title and redirects back to the show page' do
+      stub_gravity_root
+      stub_gravity_user
+      stub_gravity_user_detail
+      stub_gravity_artist
+
+      fill_in('submission_title', with: 'my new artwork title')
+      find_button('Edit Submission').click
+      expect(@submission.reload.title).to eq('my new artwork title')
+      expect(page).to have_content('Gob Bluth')
+      expect(page).to have_content('Add Asset')
+    end
+  end
+end

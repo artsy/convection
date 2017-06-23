@@ -12,8 +12,8 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require underscore
+//= require watt/underscore
 //= require watt/jquery-ui-1.10.3.custom.js
 //= require jquery.fileupload.js
-//= require gemini_sarah
+//= require gemini/gemini_upload
 //= require new_asset

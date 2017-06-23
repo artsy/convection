@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class ApplicationController < ActionController::Base
   include ArtsyAuth::Authenticated
+  helper Watt::Engine.helpers
 
   NotAuthorized = Class.new(StandardError)
 

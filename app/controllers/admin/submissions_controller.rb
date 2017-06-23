@@ -3,16 +3,15 @@ module Admin
     before_action :set_submission, only: [:show, :edit, :update]
     before_action :set_user, only: [:show]
     before_action :set_artist, only: [:show]
+    before_action :set_pagination_params, only: [:index]
 
     def index
-      @submissions = Submission.order(id: :desc).limit(10)
+      @submissions = Submission.order(id: :desc).page(@page).per(@size)
     end
 
-    def show
-    end
+    def show; end
 
-    def edit
-    end
+    def edit; end
 
     def update
       if @submission.update_attributes!(submission_params)
@@ -29,19 +28,20 @@ module Admin
     end
 
     def set_user
-      begin
-        user = Gravity.client.user(id: @submission.user_id)._get
-        @user_name = user.name
-        @user_email = user.user_detail.email
-      rescue Faraday::ResourceNotFound
-      end
+      user = Gravity.client.user(id: @submission.user_id)._get
+      @user_name = user.name
+      @user_email = user.user_detail.email
+    rescue Faraday::ResourceNotFound
     end
 
     def set_artist
-      begin
-        @artist = Gravity.client.artist(id: @submission.artist_id) if @submission.artist_id
-      rescue Faraday::ResourceNotFound
-      end
+      @artist = Gravity.client.artist(id: @submission.artist_id) if @submission.artist_id
+    rescue Faraday::ResourceNotFound
+    end
+
+    def set_pagination_params
+      @page = (params[:page] || 1).to_i
+      @size = (params[:size] || 10).to_i
     end
 
     def submission_params
