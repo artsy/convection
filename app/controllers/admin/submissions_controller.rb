@@ -32,11 +32,13 @@ module Admin
       @user_name = user.name
       @user_email = user.user_detail.email
     rescue Faraday::ResourceNotFound
+      @user_name = @user_email = nil
     end
 
     def set_artist
       @artist = Gravity.client.artist(id: @submission.artist_id) if @submission.artist_id
     rescue Faraday::ResourceNotFound
+      @artist = nil
     end
 
     def set_pagination_params

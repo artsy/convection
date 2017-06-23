@@ -30,14 +30,15 @@ function geminiOnProgressUpdate (e, data) {
 }
 
 $(document).ready(() => {
+  var submissionId = $('#submission_id').val()
   var geminiOptions = {
-    geminiApp: 'https://media.artsy.net',
+    geminiApp: '<%= Convection.config.gemini_app %>',
     acl: 'private',
-    s3Key: '',
-    templateKey: 'convection-staging',
-    geminiKey: 'convection-staging',
+    s3Key: '<%= Convection.config.gemini_s3_key %>',
+    templateKey: '<%= Convection.config.gemini_account_key %>',
+    geminiKey: '<%= Convection.config.gemini_account_key %>',
     metadata: {
-      id: 'submission id',
+      id: submissionId,
       _type: 'Consignment'
     },
     onFail: onFailedGeminiUpload,

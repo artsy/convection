@@ -28,16 +28,16 @@ gem 'gemini_upload-rails', gemini_gem_spec # for admins to upload images
 
 watt_gem_spec = { git: 'https://github.com/artsy/watt.git', branch: 'master' }
 gem 'watt', watt_gem_spec # artsy bootstrap
-gem 'bootstrap-sass'
-gem 'bourbon'
-gem 'neat'
-gem 'coffee-rails'
+gem 'bootstrap-sass' # required for watt
+gem 'bourbon' # required for watt
+gem 'neat' # required for watt
+gem 'coffee-rails' # required for watt
 
 gem 'kaminari' # for pagination
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
-gem 'haml-rails'
+gem 'haml-rails' # required for watt layouts
 
 group :development, :test do
   gem 'pry-byebug'

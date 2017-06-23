@@ -27,6 +27,7 @@
                 <%= link_to 'Select File', '', class: 'btn btn-small btn-secondary', id: 'select-gemini-file', remote: true %>
               </div>
               <%= hidden_field_tag :gemini_tokens, '' %>
+              <%= hidden_field_tag :submission_id, @submission.id %>
             </div>
           </div>
 
