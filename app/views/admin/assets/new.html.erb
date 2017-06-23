@@ -1,0 +1,54 @@
+<div class='page-title'>
+  <h2>New Asset for Submission #<%= @submission.id %></h2>
+</div>
+
+<div class='container triple-padding-top'>
+  <%= form_tag(multiple_admin_submission_assets_path, method: :post) do |f| %>
+    <div class='row'>
+      <div class='col-sm-12'>
+        <div class='unit'>
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
+                Asset Type
+              </label>
+              <div class='col-sm-10'>
+                <%= select_tag :asset_type, options_for_select(Asset::TYPES), class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class='row double-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
+                Assets
+              </label>
+              <div class='col-sm-10'>
+                <%= link_to 'Select File', '', class: 'btn btn-small btn-secondary', id: 'select-gemini-file', remote: true %>
+              </div>
+              <%= hidden_field_tag :gemini_tokens, '' %>
+            </div>
+          </div>
+
+          <div class='row single-padding-top'>
+            <div class='col-sm-2'>
+            </div>
+            <div class='col-sm-10'>
+              <div id='uploading_files'></div>
+              <div id='uploading_failed'></div>
+            </div>
+          </div>
+
+          <div class='row triple-padding-top'>
+            <div class='col-sm-12'>
+              <%= submit_tag 'Create Assets', class: 'btn btn-primary btn-full-width' %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <div id='gemini-upload'>
+    <%= render partial: 'gemini_form', locals: { accept: 'image/jpeg,image/png' } %>
+  </div>
+</div>

@@ -1,49 +1,124 @@
-<% content_for(:title) { "#{t("administrate.actions.show")} #{page.page_title}" } %>
+<div class='page-title'>
+  <h2>Submission #<%= @submission.id %></h2>
+</div>
 
-<header class="main-content__header" role="banner">
-  <h1 class="main-content__page-title">
-    <%= content_for(:title) %>
-  </h1>
-
-  <div>
-    <%= link_to(
-      "#{t("administrate.actions.edit")} #{page.page_title}",
-      [:edit, namespace, page.resource],
-      class: "button",
-    ) if valid_action? :edit %>
+<div class='row triple-padding-top'>
+  <div class='row col-sm-12'>
+    <div class='col-sm-6'>
+      <%= link_to 'Edit Submission', edit_admin_submission_path(@submission), class: 'btn btn-primary btn-full-width' %>
+    </div>
+    <div class='col-sm-6'>
+      <%= link_to 'Add Asset', new_admin_submission_asset_path(@submission), class: 'btn btn-primary btn-full-width' %>
+    </div>
   </div>
-</header>
+</div>
 
-<section class="main-content__body">
-  <dl>
-    <dt class="attribute-label">
-      Artist Name
-    </dt>
-    <dd class="attribute-data attribute-data--artist-name">
-      <%= artist_name %>
-    </dd>
-    <dt class="attribute-label">
-      User Name
-    </dt>
-    <dd class="attribute-data attribute-data--artist-name">
-      <%= user_name %>
-    </dd>
-    <dt class="attribute-label">
-      User Email
-    </dt>
-    <dd class="attribute-data attribute-data--artist-name">
-      <%= user_email %>
-    </dd>
-    <% page.attributes.each do |attribute| %>
-      <dt class="attribute-label">
-      <%= t(
-        "helpers.label.#{resource_name}.#{attribute.name}",
-        default: attribute.name.titleize,
-      ) %>
-      </dt>
+<div class='col-sm-12'>
+  <div class='attributes-container row triple-padding-top'>
+    <div class='row'>
+      <div class='col-sm-2'>
+        <div class='bold-label'>Title</div>
+      </div>
+      <div class='col-sm-10'>
+        <%= @submission.title %>
+      </div>
+    </div>
 
-      <dd class="attribute-data attribute-data--<%=attribute.html_class%>"
-          ><%= render_field attribute %></dd>
-    <% end %>
-  </dl>
-</section>
+    <div class='row double-padding-top'>
+      <div class='col-sm-2'>
+        <div class='bold-label'>Year</div>
+      </div>
+      <div class='col-sm-10'>
+        <%= @submission.year %>
+      </div>
+    </div>
+
+    <div class='row double-padding-top'>
+      <div class='col-sm-2'>
+        <div class='bold-label'>Artist Name</div>
+      </div>
+      <div class='col-sm-10'>
+        <%= @artist.try(:name) %>
+      </div>
+    </div>
+
+    <div class='row double-padding-top'>
+      <div class='col-sm-2'>
+        <div class='bold-label'>User Name</div>
+      </div>
+      <div class='col-sm-10'>
+        <%= @user_name %>
+      </div>
+    </div>
+
+    <div class='row double-padding-top'>
+      <div class='col-sm-2'>
+        <div class='bold-label'>User Email</div>
+      </div>
+      <div class='col-sm-10'>
+        <%= @user_email %>
+      </div>
+    </div>
+
+    <div class='row double-padding-top'>
+      <div class='col-sm-2'>
+        <div class='bold-label'>Location</div>
+      </div>
+      <div class='col-sm-10'>
+        <%= formatted_location(@submission) %>
+      </div>
+    </div>
+
+    <div class='row double-padding-top'>
+      <div class='col-sm-2'>
+        <div class='bold-label'>Dimensions</div>
+      </div>
+      <div class='col-sm-10'>
+        <%= formatted_dimensions(@submission) %>
+      </div>
+    </div>
+
+    <div class='row double-padding-top'>
+      <div class='col-sm-2'>
+        <div class='bold-label'>Category/Medium</div>
+      </div>
+      <div class='col-sm-10'>
+        <%= formatted_category(@submission) %>
+      </div>
+    </div>
+
+    <div class='row double-padding-top'>
+      <div class='col-sm-2'>
+        <div class='bold-label'>Signature?</div>
+      </div>
+      <div class='col-sm-10'>
+        <%= @submission.signature %>
+      </div>
+    </div>
+
+    <div class='row double-padding-top'>
+      <div class='col-sm-2'>
+        <div class='bold-label'>Certificate of authenticity?</div>
+      </div>
+      <div class='col-sm-10'>
+        <%= @submission.authenticity_certificate %>
+      </div>
+    </div>
+
+    <div class='row double-padding-top'>
+      <div class='col-sm-2'>
+        <div class='bold-label'>Assets count</div>
+      </div>
+      <div class='col-sm-10'>
+        <p>
+          <%= @submission.assets.count %>
+        </p>
+        <div class='list-group'>
+          <% @submission.assets.each do |asset| %>
+            <%= render partial: 'admin/assets/asset_row', locals: { asset: asset } %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

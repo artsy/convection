@@ -1,0 +1,192 @@
+<div class='container'>
+  <%= form_for(@submission, url: admin_submission_path) do |f| %>
+    <div class='row'>
+      <div class='col-sm-12'>
+        <div class='unit'>
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
+                Title
+              </label>
+              <div class='col-sm-10'>
+                <%= f.text_field :title, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
+                Category
+              </label>
+              <div class='col-sm-10'>
+                <%= f.select :category, Submission::CATEGORIES, {}, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+                <label class='col-sm-2 control-label bold-label'>
+                  Medium
+                </label>
+                <div class='col-sm-10'>
+                  <%= f.text_field :medium, class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
+                Year
+              </label>
+              <div class='col-sm-10'>
+                <%= f.text_field :year, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
+                Height
+              </label>
+              <div class='col-sm-10'>
+                <%= f.text_field :height, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
+                Width
+              </label>
+              <div class='col-sm-10'>
+                <%= f.text_field :width, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
+                Depth
+              </label>
+              <div class='col-sm-10'>
+                <%= f.text_field :depth, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
+                Units
+              </label>
+              <div class='col-sm-10'>
+                <%= f.select :dimensions_metric, Submission::DIMENSION_METRICS, {}, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
+                Edition Size
+              </label>
+              <div class='col-sm-10'>
+                <%= f.text_field :edition_size, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
+                Edition Number
+              </label>
+              <div class='col-sm-10'>
+                <%= f.text_field :edition_number, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
+                Signature
+              </label>
+              <div class='col-sm-10'>
+                <%= f.check_box :signature, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
+                Certificate of authenticity?
+              </label>
+              <div class='col-sm-10'>
+                <%= f.check_box :authenticity_certificate, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
+                Provenance
+              </label>
+              <div class='col-sm-10'>
+                <%= f.text_field :provenance, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
+                Location City
+              </label>
+              <div class='col-sm-10'>
+                <%= f.text_field :location_city, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
+                Location State
+              </label>
+              <div class='col-sm-10'>
+                <%= f.text_field :location_state, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
+                Location Country
+              </label>
+              <div class='col-sm-10'>
+                <%= f.text_field :location_country, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class='row triple-padding-top'>
+            <div class='col-sm-12'>
+              <%= f.submit 'Edit Submission', class: 'btn btn-primary btn-full-width' %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

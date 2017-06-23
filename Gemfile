@@ -22,10 +22,20 @@ gem 'hyperclient' # consume Gravity's v2 API
 gem 'premailer-rails' # generate text parts from HTML automatically
 
 gem 'newrelic_rpm' # for monitoring
-gem 'administrate' # for an admin-only interface
+
+gemini_gem_spec = { git: 'https://github.com/artsy/gemini_upload-rails.git', branch: 'master' }
+gem 'gemini_upload-rails', gemini_gem_spec # for admins to upload images
+
+watt_gem_spec = { git: 'https://github.com/artsy/watt.git', branch: 'master' }
+gem 'watt', watt_gem_spec # artsy bootstrap
+gem 'bootstrap-sass'
+gem 'bourbon'
+gem 'neat'
 
 # Use jquery as the JavaScript library
-# gem 'jquery-rails'
+gem 'jquery-rails'
+gem 'underscore-rails'
+gem 'haml-rails'
 
 group :development, :test do
   gem 'pry-byebug'

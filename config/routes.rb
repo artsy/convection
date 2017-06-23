@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 Rails.application.routes.draw do
   namespace :admin do
-    resources :assets
-    resources :submissions
+    resources :submissions do
+      resources :assets do
+        post :multiple, on: :collection
+      end
+    end
 
     root to: 'submissions#index'
   end
