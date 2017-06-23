@@ -22,10 +22,22 @@ gem 'hyperclient' # consume Gravity's v2 API
 gem 'premailer-rails' # generate text parts from HTML automatically
 
 gem 'newrelic_rpm' # for monitoring
-gem 'administrate' # for an admin-only interface
+
+gemini_gem_spec = { git: 'https://github.com/artsy/gemini_upload-rails.git', branch: 'master' }
+gem 'gemini_upload-rails', gemini_gem_spec # for admins to upload images
+
+watt_gem_spec = { git: 'https://github.com/artsy/watt.git', branch: 'master' }
+gem 'watt', watt_gem_spec # artsy bootstrap
+gem 'bootstrap-sass' # required for watt
+gem 'bourbon' # required for watt
+gem 'neat' # required for watt
+gem 'coffee-rails' # required for watt
+
+gem 'kaminari' # for pagination
 
 # Use jquery as the JavaScript library
-# gem 'jquery-rails'
+gem 'jquery-rails'
+gem 'haml-rails' # required for watt layouts
 
 group :development, :test do
   gem 'pry-byebug'
@@ -39,4 +51,6 @@ end
 group :test do
   gem 'yarjuf' # formatting for test reports on CircleCI
   gem 'webmock' # mock or forbid external network requests
+  gem 'capybara', '~> 2.8' # for view tests
+  gem 'rails-controller-testing'
 end

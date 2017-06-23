@@ -8,6 +8,8 @@ require 'spec_helper'
 require 'webmock/rspec'
 require 'rspec/rails'
 require 'sidekiq/testing'
+require 'capybara/rails'
+require 'capybara/rspec'
 
 # Add additional requires below this line. Rails is not loaded until this point!
 

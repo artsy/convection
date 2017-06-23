@@ -1,44 +1,71 @@
 module Admin
-  class SubmissionsController < Admin::ApplicationController
-    def show
-      submission = Submission.find(params[:id])
-      user = Gravity.client.user(id: submission.user_id)._get
-      artist = Gravity.client.artist(id: submission.artist_id)
-      render locals: {
-        page: Administrate::Page::Show.new(dashboard, requested_resource),
-        artist_name: artist.name,
-        user_name: user.name,
-        user_email: user.user_detail.email
-      }
-    end
+  class SubmissionsController < ApplicationController
+    before_action :set_submission, only: [:show, :edit, :update]
+    before_action :set_user, only: [:show]
+    before_action :set_artist, only: [:show]
+    before_action :set_pagination_params, only: [:index]
 
     def index
-      resources = Submission.all
-      resources = order.apply(resources)
-      resources = resources.page(params[:page]).per(records_per_page)
+      @submissions = Submission.order(id: :desc).page(@page).per(@size)
+    end
 
-      qualified_filter = 'new'
-      if params[:submission] && params[:submission][:qualified]
-        qualified_filter = params[:submission][:qualified]
-        resources = resources.where(qualified: true) if qualified_filter == 'qualified'
-        resources = resources.where(qualified: false) if qualified_filter == 'rejected'
+    def show; end
+
+    def edit; end
+
+    def update
+      if @submission.update_attributes!(submission_params)
+        redirect_to admin_submission_path(@submission)
+      else
+        render 'edit'
       end
+    end
 
-      state_filter = 'submitted'
-      if params[:submission] && params[:submission][:state]
-        state_filter = params[:submission][:state]
-        resources = resources.where(state: state_filter)
-      end
+    private
 
-      page = Administrate::Page::Collection.new(dashboard, order: order)
+    def set_submission
+      @submission = Submission.find(params[:id])
+    end
 
-      render locals: {
-        qualified_filter: qualified_filter,
-        state_filter: state_filter,
-        resources:       resources,
-        page:            page,
-        show_search_bar: false
-      }
+    def set_user
+      user = Gravity.client.user(id: @submission.user_id)._get
+      @user_name = user.name
+      @user_email = user.user_detail.email
+    rescue Faraday::ResourceNotFound
+      @user_name = @user_email = nil
+    end
+
+    def set_artist
+      @artist = Gravity.client.artist(id: @submission.artist_id) if @submission.artist_id
+    rescue Faraday::ResourceNotFound
+      @artist = nil
+    end
+
+    def set_pagination_params
+      @page = (params[:page] || 1).to_i
+      @size = (params[:size] || 10).to_i
+    end
+
+    def submission_params
+      params.require(:submission).permit(
+        :authenticity_certificate,
+        :category,
+        :depth,
+        :dimensions_metric,
+        :edition_number,
+        :edition_size,
+        :height,
+        :location_city,
+        :location_country,
+        :location_state,
+        :medium,
+        :provenance,
+        :signature,
+        :state,
+        :title,
+        :width,
+        :year
+      )
     end
   end
 end
