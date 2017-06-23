@@ -24,6 +24,8 @@ gem 'premailer-rails' # generate text parts from HTML automatically
 gem 'newrelic_rpm' # for monitoring
 gem 'administrate' # for an admin-only interface
 
+gem 'artsy-eventservice' # for posting events to artsy event stream
+
 # Use jquery as the JavaScript library
 # gem 'jquery-rails'
 

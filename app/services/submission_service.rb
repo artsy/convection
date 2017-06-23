@@ -80,6 +80,8 @@ class SubmissionService
       user_detail = user.user_detail._get
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
+      NotificaitonService.delay.post_submission_event(submission_id, SubmissionEvent::SUBMITTED)
+
       AdminMailer.submission(
         submission: submission,
         user: user,
