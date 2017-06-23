@@ -1,2 +1,8 @@
 <%= stylesheet_link_tag 'application', media: 'all' %>
 <%= javascript_include_tag 'application' %>
+<script>
+  window.GEMINI_APP = '<%= Convection.config.gemini_app %>'
+  window.GEMINI_S3_KEY = '<%= Convection.config.gemini_s3_key %>'
+  window.GEMINI_ACCOUNT_KEY = '<%= Convection.config.gemini_account_key %>'
+</script>
+
