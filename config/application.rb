@@ -15,9 +15,9 @@ module Convection
     # -- all .rb files in that directory are automatically loaded.
     config.paths.add 'app', glob: '**/*.rb'
 
-    config.autoload_paths += %W(#{config.root}/lib #{Rails.root}/app/events #{Rails.root}/app/services)
+    config.autoload_paths += %W(#{config.root}/lib #{Rails.root.join('app', 'events')} #{Rails.root.join('app', 'services')})
 
-    config.eager_load_paths += %W(#{config.root}/lib app/events #{Rails.root}/app/services)
+    config.eager_load_paths += %W(#{config.root}/lib #{Rails.root.join('app', 'events')} #{Rails.root.join('app', 'services')})
 
     # include JWT middleware
     config.middleware.use ::JwtMiddleware

@@ -54,7 +54,7 @@ class SubmissionService
       else
         UserMailer.first_upload_reminder(email_args).deliver_now
       end
-      submission.increment!(:reminders_sent_count)
+      submission.increment!(:reminders_sent_count) # rubocop:disable Rails/SkipsModelValidations
     end
 
     def deliver_submission_receipt(submission_id)
