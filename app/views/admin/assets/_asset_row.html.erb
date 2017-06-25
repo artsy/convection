@@ -1,0 +1,16 @@
+<div class='row'>
+  <a class='list-group-item' href=<%= admin_submission_asset_path(asset.submission, asset) %>>
+    <span class='list-group-item-content'>
+      <span class='list-group-item-label'>
+        <%= "#{asset.asset_type} ##{asset.id}" %>
+      </span>
+    </span>
+    <% if asset.asset_type == 'image' && asset.image_urls['thumbnail'].present? %>
+      <span class='list-group-item-content'>
+        <span class='asset-thumb'>
+          <%= image_tag asset.image_urls['square'] %>
+        </span>
+      </span>
+    <% end %>
+  </a>
+</div>

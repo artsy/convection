@@ -1,23 +1,27 @@
-<% content_for(:title) do %>
-  <%= display_resource_name(page.resource_name) %>
-<% end %>
+<div class='page-title'>
+  <h2>Submissions</h2>
+</div>
 
-<header class="main-content__header" role="banner">
-  <h1 class="main-content__page-title" id="page-title">
-    <%= content_for(:title) %>
-  </h1>
-
-  <div>
-    <%= link_to(
-      "#{t("administrate.actions.new")} #{page.resource_name.titleize.downcase}",
-      [:new, namespace, page.resource_path],
-      class: "button",
-    ) if valid_action? :new %>
+<div class='container'>
+  <div class='row triple-padding-top'>
+    <div class='col-md-12'>
+      <div class='list-group'>
+        <% @submissions.each do |submission| %>
+          <div class='list-group-item'>
+            <span class='list-group-item-content'>
+              <span class='list-group-item-label'>
+                <%= link_to "Submission #{submission.id}", admin_submission_path(submission) %>
+              </span>
+              <span class='list-group-item-info'><%= submission.title %></span>
+              <span class='list-group-item-info'><%= submission.user_id %></span>
+            </span>
+            <span class='actions'>
+              <%= link_to 'Edit', edit_admin_submission_path(submission), class: 'btn btn-tiny' %>
+            </span>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
-</header>
-
-<section class="main-content__body main-content__body--flush">
-  <%= render 'filter', qualified_filter: qualified_filter, state_filter: state_filter %>
-  <%= render "collection", collection_presenter: page, resources: resources %>
-  <%= paginate resources %>
-</section>
+  <%= render partial: 'shared/watt/paginator', locals: { total_items_count: @submissions.total_count, items_count: @submissions.length, per_page: @size, current_page: @page, base_url: admin_submissions_url } %>
+</div>

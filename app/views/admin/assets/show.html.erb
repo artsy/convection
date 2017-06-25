@@ -1,45 +1,54 @@
-<% content_for(:title) { "#{t("administrate.actions.show")} #{page.page_title}" } %>
+<div class='page-title'>
+  <h2>Asset #<%= @asset.id %></h2>
+</div>
 
-<header class="main-content__header" role="banner">
-  <h1 class="main-content__page-title">
-    <%= content_for(:title) %>
-  </h1>
+<div class='col-sm-12'>
+  <div class='attributes-container row triple-padding-top'>
+    <div class='row'>
+      <div class='col-sm-2'>
+        <div class='bold-label'>Submission</div>
+      </div>
+      <div class='col-sm-10'>
+        <%= link_to "Submission ##{@submission.id}", admin_submission_path(@submission) %>
+      </div>
+    </div>
 
-  <div>
-    <%= link_to(
-      "#{t("administrate.actions.edit")} #{page.page_title}",
-      [:edit, namespace, page.resource],
-      class: "button",
-    ) if valid_action? :edit %>
+    <div class='row double-padding-top'>
+      <div class='col-sm-2'>
+        <div class='bold-label'>Asset Type</div>
+      </div>
+      <div class='col-sm-10'>
+        <%= @asset.asset_type %>
+      </div>
+    </div>
+
+    <div class='row double-padding-top'>
+      <div class='col-sm-2'>
+        <div class='bold-label'>Image Urls</div>
+      </div>
+      <div class='col-sm-10'>
+        <%= @asset.image_urls %>
+      </div>
+    </div>
+
+    <div class='row double-padding-top'>
+      <div class='col-sm-2'>
+        <div class='bold-label'>Square image</div>
+      </div>
+      <% if @asset.image_urls['square'] %>
+        <%= image_tag @asset.image_urls['square'] %>
+      <% end %>
+    </div>
+
+    <div class='row double-padding-top'>
+      <div class='col-sm-2'>
+        <div class='bold-label'>Original image</div>
+      </div>
+      <% if @original_image %>
+        <div class='col-sm-10'>
+          <%= link_to 'View Original', @original_image, class: 'btn btn-secondary btn-tiny' %>
+        </div>
+      <% end %>
+    </div>
   </div>
-</header>
-
-<section class="main-content__body">
-  <dl>
-    <% page.attributes.each do |attribute| %>
-      <dt class="attribute-label">
-      <%= t(
-        "helpers.label.#{resource_name}.#{attribute.name}",
-        default: attribute.name.titleize,
-      ) %>
-      </dt>
-
-      <dd class="attribute-data attribute-data--<%=attribute.html_class%>"
-          ><%= render_field attribute %></dd>
-    <% end %>
-    <dt class="attribute-label">
-      Square Image
-    </dt>
-    <% if page.resource.image_urls['square'] %>
-      <dd class="attribute-data attribute-data--artist-name">
-        <%= image_tag(image_url(page.resource.image_urls['square'])) %>
-      </dd>
-    <% end %>
-    <dt class="attribute-label">
-      Original Image
-    </dt>
-    <dd class="attribute-data attribute-data--original-image">
-      <%= link_to 'view original', original %>
-    </dd>
-  </dl>
-</section>
+</div>
