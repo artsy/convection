@@ -3,8 +3,8 @@ Artsy::EventService.configure do |config|
   config.event_stream_enabled = true
   config.rabbitmq_url = ENV['RABBITMQ_URL']
   config.tls = true
-  config.tls_ca_certificate = Base64.decode64(ENV['RABBITMQ_CA_CERT'])
-  config.tls_cert = Base64.decode64(ENV['RABBITMQ_CLIENT_CERT'])
-  config.tls_key = Base64.decode64(ENV['RABBITMQ_CLIENT_KEY'])
+  config.tls_ca_certificate = Base64.decode64(ENV['RABBITMQ_CA_CERT'] || '')
+  config.tls_cert = Base64.decode64(ENV['RABBITMQ_CLIENT_CERT'] || '')
+  config.tls_key = Base64.decode64(ENV['RABBITMQ_CLIENT_KEY'] || '')
   config.verify_peer = false
 end

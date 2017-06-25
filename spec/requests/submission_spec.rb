@@ -7,6 +7,7 @@ describe 'Submission Flow' do
 
   before do
     allow(Convection.config).to receive(:access_token).and_return('auth-token')
+    expect(NotificationService).to receive(:post_submission_event).once
   end
 
   describe 'Creating a submission without a photo initially' do

@@ -54,7 +54,7 @@ class SubmissionService
       else
         UserMailer.first_upload_reminder(email_args).deliver_now
       end
-      submission.increment!(:reminders_sent_count) # rubocop:disable Rails/SkipsModelValidations
+      submission.increment!(:reminders_sent_count)
     end
 
     def deliver_submission_receipt(submission_id)
@@ -80,7 +80,7 @@ class SubmissionService
       user_detail = user.user_detail._get
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
-      NotificaitonService.delay.post_submission_event(submission_id, SubmissionEvent::SUBMITTED)
+      NotificationService.delay.post_submission_event(submission_id, SubmissionEvent::SUBMITTED)
 
       AdminMailer.submission(
         submission: submission,
