@@ -35,11 +35,11 @@ gem 'coffee-rails' # required for watt
 
 gem 'kaminari' # for pagination
 
-gem 'artsy-eventservice' # for posting events to artsy event stream
-
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 gem 'haml-rails' # required for watt layouts
+
+gem 'artsy-eventservice' # for posting events to artsy event stream
 
 group :development, :test do
   gem 'pry-byebug'
