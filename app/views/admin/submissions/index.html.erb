@@ -13,6 +13,7 @@
                 <%= link_to "Submission #{submission.id}", admin_submission_path(submission) %>
               </span>
               <span class='list-group-item-info'><%= submission.title %></span>
+              <span class='list-group-item-info'><%= submission.state %></span>
               <span class='list-group-item-info'><%= submission.user_id %></span>
             </span>
             <span class='actions'>
