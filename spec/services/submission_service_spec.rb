@@ -32,12 +32,14 @@ describe SubmissionService do
     end
 
     it 'sends a reminder if the submission has no images' do
+      expect(NotificationService).to receive(:post_submission_event).once.with(submission.id, 'submitted')
       SubmissionService.update_submission(submission, state: 'submitted')
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 4
     end
 
     it 'sends no reminders if the submission has images' do
+      expect(NotificationService).to receive(:post_submission_event).once.with(submission.id, 'submitted')
       submission.assets.create!(asset_type: 'image', image_urls: { square: 'http://square.jpg' })
       SubmissionService.update_submission(submission, state: 'submitted')
       emails = ActionMailer::Base.deliveries
@@ -52,7 +54,7 @@ describe SubmissionService do
       end
 
       it 'sends a receipt' do
-        SubmissionService.notify_user(submission)
+        SubmissionService.notify_user(submission.id)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.html_part.body).to include('Thank you for submitting your work to our consignments network')
@@ -63,14 +65,14 @@ describe SubmissionService do
       it 'does not send a receipt if one has already been sent' do
         submission.update_attributes!(receipt_sent_at: Time.now.utc)
         expect do
-          SubmissionService.notify_user(submission)
+          SubmissionService.notify_user(submission.id)
         end.to_not change { ActionMailer::Base.deliveries.count }
       end
     end
 
     describe 'without assets' do
       it 'sends the first reminder if no reminders have been sent yet' do
-        SubmissionService.notify_user(submission)
+        SubmissionService.notify_user(submission.id)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.html_part.body).to include('Complete your consignment submission')
@@ -83,7 +85,7 @@ describe SubmissionService do
 
       it 'sends the second reminder if one reminder has been sent' do
         submission.update_attributes!(reminders_sent_count: 1)
-        SubmissionService.notify_user(submission)
+        SubmissionService.notify_user(submission.id)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.html_part.body).to include("We're missing photos of your work")
@@ -96,7 +98,7 @@ describe SubmissionService do
 
       it 'sends the third reminder if two reminders have ben sent' do
         submission.update_attributes!(reminders_sent_count: 2)
-        SubmissionService.notify_user(submission)
+        SubmissionService.notify_user(submission.id)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.html_part.body).to include('We’re unable to complete your submission')
@@ -109,14 +111,14 @@ describe SubmissionService do
 
       it 'does not send a reminder if a receipt has already been sent' do
         submission.update_attributes!(reminders_sent_count: 1, receipt_sent_at: Time.now.utc)
-        SubmissionService.notify_user(submission)
+        SubmissionService.notify_user(submission.id)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 0
       end
 
       it 'does not send a reminder if three reminders have already been sent' do
         submission.update_attributes!(reminders_sent_count: 3)
-        SubmissionService.notify_user(submission)
+        SubmissionService.notify_user(submission.id)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 0
       end
@@ -125,7 +127,8 @@ describe SubmissionService do
 
   context 'notify_admin' do
     it 'sends an email if one has not been sent' do
-      SubmissionService.notify_admin(submission)
+      expect(NotificationService).to receive(:post_submission_event).once.with(submission.id, 'submitted')
+      SubmissionService.notify_admin(submission.id)
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
       expect(emails.first.html_part.body).to include('My Artwork')
@@ -136,7 +139,7 @@ describe SubmissionService do
     it 'does not send an email if one has already been sent' do
       submission.update_attributes!(admin_receipt_sent_at: Time.now.utc)
       expect do
-        SubmissionService.notify_admin(submission)
+        SubmissionService.notify_admin(submission.id)
       end.to_not change { ActionMailer::Base.deliveries.count }
     end
   end
@@ -200,7 +203,6 @@ describe SubmissionService do
       stub_gravity_user
       stub_gravity_user_detail(email: 'michael@bluth.com')
       stub_gravity_artist
-
       submission = Submission.create!(
         title: 'My Artwork',
         receipt_sent_at: Time.now.utc - 20.minutes,

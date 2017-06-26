@@ -19,6 +19,7 @@ class SubmissionService
       submission = Submission.find(submission_id)
       return if submission.admin_receipt_sent_at
       delay.deliver_submission_notification(submission.id)
+      NotificationService.delay.post_submission_event(submission_id, SubmissionEvent::SUBMITTED)
       submission.update_attributes!(admin_receipt_sent_at: Time.now.utc)
     end
 

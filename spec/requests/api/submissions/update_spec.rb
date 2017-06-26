@@ -53,6 +53,7 @@ describe 'Update Submission' do
         end
 
         it 'sends a receipt when your state is updated to submitted' do
+          expect(NotificationService).to receive(:post_submission_event).once
           allow(Convection.config).to receive(:admin_email_address).and_return('lucille@bluth.com')
           stub_gravity_root
           stub_gravity_user

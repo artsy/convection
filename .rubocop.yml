@@ -10,6 +10,9 @@ AllCops:
     - bin/**/*
     - Gemfile
 
+Rails/FilePath:
+  Exclude:
+    - config/application.rb
 LineLength:
   Exclude:
     - config/environments/*

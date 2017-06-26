@@ -39,6 +39,8 @@ gem 'kaminari' # for pagination
 gem 'jquery-rails'
 gem 'haml-rails' # required for watt layouts
 
+gem 'artsy-eventservice' # for posting events to artsy event stream
+
 group :development, :test do
   gem 'pry-byebug'
   gem 'rspec-rails'
