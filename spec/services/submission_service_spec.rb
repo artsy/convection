@@ -209,7 +209,6 @@ describe SubmissionService do
         artist_id: 'artistid',
         user_id: 'userid'
       )
-      expect(NotificationService).to receive(:post_submission_event).once.with(submission.id, 'submitted')
       submission.assets.create!(asset_type: 'image')
       SubmissionService.deliver_submission_notification(submission.id)
       emails = ActionMailer::Base.deliveries
