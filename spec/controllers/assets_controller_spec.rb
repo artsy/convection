@@ -12,6 +12,37 @@ describe Admin::AssetsController, type: :controller do
       @submission = Submission.create!(artist_id: 'artistid', user_id: 'userid')
     end
 
+    context 'fetching an asset' do
+      it 'renders the show page if the asset exists' do
+        asset = @submission.assets.create(asset_type: 'image')
+        get :show, params: {
+          submission_id: @submission.id,
+          id: asset.id
+        }
+        expect(response).to render_template(:show)
+      end
+
+      it 'returns a 404 if the asset does not exist' do
+        expect do
+          get :show, params: {
+            submission_id: @submission.id,
+            id: 'foo'
+          }
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it 'renders a flash error if the original image cannot be found' do
+        asset = @submission.assets.create(asset_type: 'image')
+        expect_any_instance_of(Asset).to receive(:original_image).and_raise(Asset::GeminiHttpException)
+        get :show, params: {
+          submission_id: @submission.id,
+          id: asset.id
+        }
+        expect(response).to render_template(:show)
+        expect(assigns(:asset)['original_image']).to be_nil
+      end
+    end
+
     context 'creating assets for a submission' do
       it 'correctly adds the assets for a single token' do
         expect do

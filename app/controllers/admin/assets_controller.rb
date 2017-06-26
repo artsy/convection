@@ -5,6 +5,9 @@ module Admin
 
     def show
       @original_image = @asset.original_image
+    rescue Asset::GeminiHttpException
+      @original_image = nil
+      flash.now[:error] = 'Error fetching Gemini image'
     end
 
     def new
@@ -27,7 +30,7 @@ module Admin
     end
 
     def set_asset
-      @asset = Asset.find(params[:id])
+      @asset = @submission.assets.find(params[:id])
     end
   end
 end

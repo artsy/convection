@@ -12,8 +12,10 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require bootstrap
 //= require watt/underscore
 //= require watt/jquery-ui-1.10.3.custom.js
+//= require watt/flash
 //= require jquery.fileupload.js
 //= require gemini/gemini_upload
 //= require new_asset
