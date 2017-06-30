@@ -12,22 +12,22 @@ describe 'Show Asset' do
     end
 
     it 'returns an error if it cannot find the asset' do
-      Asset.create!(asset_type: 'image', gemini_token: 'gemini')
+      Fabricate(:image)
       get '/api/assets/foo', headers: headers
       expect(response.status).to eq 404
       expect(JSON.parse(response.body)['error']).to eq 'Not Found'
     end
 
     it "rejects requests for someone else's submission" do
-      submission = Submission.create!(artist_id: 'andy-warhol', user_id: 'buster-bluth')
-      asset = Asset.create!(asset_type: 'image', gemini_token: 'gemini', submission_id: submission.id)
+      submission = Fabricate(:submission, artist_id: 'andy-warhol', user_id: 'buster-bluth')
+      asset = Fabricate(:image, submission: submission)
       get "/api/assets/#{asset.id}", headers: headers
       expect(response.status).to eq 401
     end
 
     it 'accepts requests for your own submission' do
-      submission = Submission.create!(artist_id: 'andy-warhol', user_id: 'userid')
-      asset = Asset.create!(asset_type: 'image', gemini_token: 'gemini', submission_id: submission.id)
+      submission = Fabricate(:submission, artist_id: 'andy-warhol', user_id: 'userid')
+      asset = Fabricate(:image, submission: submission)
       get "/api/assets/#{asset.id}", headers: headers
       expect(response.status).to eq 200
       body = JSON.parse(response.body)

@@ -10,7 +10,7 @@ describe Asset do
   end
 
   describe '#update_image_urls!' do
-    let(:asset) { Asset.create!(asset_type: 'image') }
+    let(:asset) { Fabricate(:unprocessed_image) }
 
     it 'adds a new image version url' do
       params = { image_url: { square: 'https://square-image.jpg' } }
@@ -42,7 +42,7 @@ describe Asset do
   end
 
   describe '#original_image' do
-    let(:asset) { Asset.create!(asset_type: 'image') }
+    let(:asset) { Fabricate(:image, gemini_token: nil) }
 
     before do
       allow(Convection.config).to receive(:gemini_app).and_return('https://media-test.artsy.net')

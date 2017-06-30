@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe SubmissionEvent do
   let(:submission) do
-    Submission.create!(
+    Fabricate(:submission,
       artist_id: 'artistid',
       user_id: 'userid',
       title: 'My Artwork',
@@ -16,8 +16,7 @@ describe SubmissionEvent do
       location_city: 'New York',
       location_state: 'NY',
       location_country: 'US',
-      category: 'Painting'
-    )
+      category: 'Painting')
   end
   let(:event) { SubmissionEvent.new(model: submission, action: 'submitted') }
   describe '#object' do

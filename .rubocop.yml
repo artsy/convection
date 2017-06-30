@@ -37,3 +37,6 @@ Metrics/MethodLength:
 
 Metrics/CyclomaticComplexity:
   Max: 8
+
+Rails/SkipsModelValidations:
+  Enabled: false

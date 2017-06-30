@@ -3,18 +3,7 @@ require 'support/gravity_helper'
 
 describe SubmissionService do
   let(:submission) do
-    Submission.create!(
-      artist_id: 'artistid',
-      user_id: 'userid',
-      title: 'My Artwork',
-      medium: 'painting',
-      year: '1992',
-      height: '12',
-      width: '14',
-      dimensions_metric: 'in',
-      location_city: 'New York',
-      category: 'Painting'
-    )
+    Fabricate(:submission, artist_id: 'artistid', user_id: 'userid', title: 'My Artwork')
   end
 
   before do
@@ -40,7 +29,7 @@ describe SubmissionService do
 
     it 'sends no reminders if the submission has images' do
       expect(NotificationService).to receive(:post_submission_event).once.with(submission.id, 'submitted')
-      submission.assets.create!(asset_type: 'image', image_urls: { square: 'http://square.jpg' })
+      Fabricate(:image, submission: submission)
       SubmissionService.update_submission(submission, state: 'submitted')
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 2
@@ -50,7 +39,7 @@ describe SubmissionService do
   context 'notify_user' do
     describe 'with assets' do
       before do
-        submission.assets.create!(asset_type: 'image', image_urls: { square: 'http://square.jpg' })
+        Fabricate(:image, submission: submission)
       end
 
       it 'sends a receipt' do
@@ -152,8 +141,8 @@ describe SubmissionService do
     end
 
     it 'raises an exception if all of the images have not been processed' do
-      submission = Submission.create!(title: 'My Artwork', receipt_sent_at: Time.now.utc)
-      submission.assets.create!(asset_type: 'image')
+      submission.update_attributes!(receipt_sent_at: Time.now.utc)
+      Fabricate(:unprocessed_image, submission: submission)
       expect do
         SubmissionService.deliver_submission_receipt(submission.id)
       end.to raise_error('Still processing images.')
@@ -167,13 +156,8 @@ describe SubmissionService do
       stub_gravity_user_detail(email: 'michael@bluth.com')
       stub_gravity_artist
 
-      submission = Submission.create!(
-        title: 'My Artwork',
-        receipt_sent_at: Time.now.utc - 20.minutes,
-        artist_id: 'artistid',
-        user_id: 'userid'
-      )
-      submission.assets.create!(asset_type: 'image')
+      submission.update_attributes!(receipt_sent_at: Time.now.utc - 20.minutes)
+      Fabricate(:unprocessed_image, submission: submission)
       SubmissionService.deliver_submission_receipt(submission.id)
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
@@ -189,8 +173,8 @@ describe SubmissionService do
     end
 
     it 'raises an exception if all of the images have not been processed' do
-      submission = Submission.create!(title: 'My Artwork', receipt_sent_at: Time.now.utc)
-      submission.assets.create!(asset_type: 'image')
+      submission.update_attributes!(receipt_sent_at: Time.now.utc)
+      Fabricate(:unprocessed_image, submission: submission)
       expect do
         SubmissionService.deliver_submission_notification(submission.id)
       end.to raise_error('Still processing images.')
@@ -203,13 +187,8 @@ describe SubmissionService do
       stub_gravity_user
       stub_gravity_user_detail(email: 'michael@bluth.com')
       stub_gravity_artist
-      submission = Submission.create!(
-        title: 'My Artwork',
-        receipt_sent_at: Time.now.utc - 20.minutes,
-        artist_id: 'artistid',
-        user_id: 'userid'
-      )
-      submission.assets.create!(asset_type: 'image')
+      submission.update_attributes!(receipt_sent_at: Time.now.utc - 20.minutes)
+      Fabricate(:unprocessed_image, submission: submission)
       SubmissionService.deliver_submission_notification(submission.id)
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1

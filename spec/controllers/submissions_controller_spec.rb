@@ -7,7 +7,7 @@ describe Admin::SubmissionsController, type: :controller do
     end
     context 'filtering the index view' do
       before do
-        5.times { Submission.create! }
+        5.times { Fabricate(:submission) }
       end
       it 'returns the first two submissions on the first page' do
         get :index, params: { page: 1, size: 2 }

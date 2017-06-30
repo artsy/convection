@@ -10,15 +10,14 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       stub_gravity_user_detail
       stub_gravity_artist
 
-      @submission = Submission.create!(
+      @submission = Fabricate(:submission,
         title: 'my sartwork',
         artist_id: 'artistid',
         edition: true,
         edition_size: 100,
         edition_number: '23a',
         category: 'Painting',
-        user_id: 'userid'
-      )
+        user_id: 'userid')
       page.visit "/admin/submissions/#{@submission.id}"
     end
 
@@ -33,7 +32,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
     context 'with assets' do
       before do
         4.times do
-          @submission.assets.create!(asset_type: 'image')
+          Fabricate(:image, submission: @submission, gemini_token: nil)
         end
         page.visit "/admin/submissions/#{@submission.id}"
       end

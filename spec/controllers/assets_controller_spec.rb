@@ -9,12 +9,12 @@ describe Admin::AssetsController, type: :controller do
       stub_gravity_user
       stub_gravity_user_detail
       stub_gravity_artist
-      @submission = Submission.create!(artist_id: 'artistid', user_id: 'userid')
+      @submission = Fabricate(:submission, artist_id: 'artistid', user_id: 'userid')
     end
 
     context 'fetching an asset' do
       it 'renders the show page if the asset exists' do
-        asset = @submission.assets.create(asset_type: 'image')
+        asset = Fabricate(:image, submission: @submission, gemini_token: nil)
         get :show, params: {
           submission_id: @submission.id,
           id: asset.id
@@ -32,7 +32,7 @@ describe Admin::AssetsController, type: :controller do
       end
 
       it 'renders a flash error if the original image cannot be found' do
-        asset = @submission.assets.create(asset_type: 'image')
+        asset = Fabricate(:image, submission: @submission)
         expect_any_instance_of(Asset).to receive(:original_image).and_raise(Asset::GeminiHttpException)
         get :show, params: {
           submission_id: @submission.id,
