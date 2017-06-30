@@ -4,7 +4,7 @@ require 'support/gravity_helper'
 describe 'Assets Index' do
   let(:jwt_token) { JWT.encode({ aud: 'gravity', sub: 'userid' }, Convection.config.jwt_secret) }
   let(:headers) { { 'Authorization' => "Bearer #{jwt_token}" } }
-  let(:submission) { Submission.create!(artist_id: 'andy-warhol', user_id: 'userid') }
+  let(:submission) { Fabricate(:submission, artist_id: 'andy-warhol', user_id: 'userid') }
 
   describe 'GET /assets' do
     it 'rejects unauthorized requests' do
@@ -20,16 +20,15 @@ describe 'Assets Index' do
     end
 
     it "rejects requests for someone else's submission" do
-      submission = Submission.create!(artist_id: 'andy-warhol', user_id: 'buster-bluth')
+      submission = Fabricate(:submission, artist_id: 'andy-warhol', user_id: 'buster-bluth')
       asset = submission.assets.create!(asset_type: 'image', gemini_token: 'gemini', submission_id: submission.id)
       get "/api/assets/#{asset.id}", headers: headers
       expect(response.status).to eq 401
     end
 
     it 'returns the assets for a given submission' do
-      submission.assets.create!(asset_type: 'image', gemini_token: 'foo')
-      submission.assets.create!(asset_type: 'image', gemini_token: 'boo')
-
+      Fabricate(:image, submission: submission, gemini_token: 'foo')
+      Fabricate(:image, submission: submission, gemini_token: 'boo')
       get '/api/assets', params: {
         submission_id: submission.id
       }, headers: headers
@@ -40,10 +39,7 @@ describe 'Assets Index' do
     end
 
     it 'returns only 10 assets for a given submission' do
-      12.times do |index|
-        submission.assets.create!(asset_type: 'image', gemini_token: "foo#{index}")
-      end
-
+      12.times { Fabricate(:image, submission: submission) }
       expect(submission.assets.count).to eq 12
 
       get '/api/assets', params: {

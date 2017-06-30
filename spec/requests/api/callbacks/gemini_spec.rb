@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'support/gravity_helper'
 
 describe 'Gemini Callback' do
-  let(:submission) { Submission.create!(artist_id: 'andy-warhol', user_id: 'userid') }
+  let(:submission) { Fabricate(:submission, artist_id: 'andy-warhol', user_id: 'userid') }
 
   before do
     allow(Convection.config).to receive(:access_token).and_return('auth-token')
@@ -41,7 +41,7 @@ describe 'Gemini Callback' do
     end
 
     it 'updates the asset to have the right image url' do
-      submission.assets.create!(asset_type: 'image', gemini_token: 'gemini')
+      Fabricate(:unprocessed_image, submission: submission, gemini_token: 'gemini')
       post '/api/callbacks/gemini', params: {
         access_token: 'auth-token',
         token: 'gemini',

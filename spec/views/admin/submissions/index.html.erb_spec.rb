@@ -15,9 +15,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
 
     context 'with submissions' do
       before do
-        3.times do |index|
-          Submission.create!(title: "Artwork #{index}", user_id: 'userid', artist_id: 'artistid')
-        end
+        3.times { Fabricate(:submission, user_id: 'userid', artist_id: 'artistid') }
         page.visit '/'
       end
 

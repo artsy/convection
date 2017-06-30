@@ -12,20 +12,20 @@ describe 'Update Submission' do
     end
 
     it 'returns an error if it cannot find the submission' do
-      Submission.create!(artist_id: 'andy-warhol', user_id: 'buster-bluth')
+      Fabricate(:submission, user_id: 'buster-bluth')
       put '/api/submissions/foo', headers: headers
       expect(response.status).to eq 404
       expect(JSON.parse(response.body)['error']).to eq 'Not Found'
     end
 
     it "rejects requests for someone else's submission" do
-      submission = Submission.create!(artist_id: 'andy-warhol', user_id: 'buster-bluth')
+      submission = Fabricate(:submission, user_id: 'buster-bluth')
       put "/api/submissions/#{submission.id}", headers: headers
       expect(response.status).to eq 401
     end
 
     it 'accepts requests for your own submission' do
-      submission = Submission.create!(artist_id: 'andy-warhol', user_id: 'userid')
+      submission = Fabricate(:submission, artist_id: 'andy-warhol', user_id: 'userid')
       put "/api/submissions/#{submission.id}", params: {
         artist_id: 'kara-walker'
       }, headers: headers
@@ -38,18 +38,7 @@ describe 'Update Submission' do
     describe 'submitting' do
       describe 'with a valid submission' do
         before do
-          @submission = Submission.create!(
-            artist_id: 'artistid',
-            user_id: 'userid',
-            title: 'My Artwork',
-            medium: 'painting',
-            year: '1992',
-            height: '12',
-            width: '14',
-            dimensions_metric: 'in',
-            location_city: 'New York',
-            category: 'Painting'
-          )
+          @submission = Fabricate(:submission, user_id: 'userid', artist_id: 'artistid')
         end
 
         it 'sends a receipt when your state is updated to submitted' do
@@ -60,7 +49,7 @@ describe 'Update Submission' do
           stub_gravity_user_detail(email: 'michael@bluth.com')
           stub_gravity_artist
 
-          @submission.assets.create!(asset_type: 'image', image_urls: { square: 'https://square.jpg' })
+          Fabricate(:image, submission: @submission)
 
           put "/api/submissions/#{@submission.id}", params: {
             state: 'submitted'
@@ -93,10 +82,10 @@ describe 'Update Submission' do
       end
 
       it 'returns an error if you try to submit without all of the relevant fields' do
-        submission = Submission.create!(
+        submission = Fabricate(:submission,
           artist_id: 'andy-warhol',
-          user_id: 'userid'
-        )
+          user_id: 'userid',
+          title: nil)
         put "/api/submissions/#{submission.id}", params: {
           artist_id: 'kara-walker',
           state: 'submitted'

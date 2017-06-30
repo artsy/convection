@@ -12,20 +12,20 @@ describe 'Show Submission' do
     end
 
     it 'returns an error if it cannot find the submission' do
-      Submission.create!(artist_id: 'andy-warhol', user_id: 'buster-bluth')
+      Fabricate(:submission, user_id: 'buster-bluth')
       get '/api/submissions/foo', headers: headers
       expect(response.status).to eq 404
       expect(JSON.parse(response.body)['error']).to eq 'Not Found'
     end
 
     it "rejects requests for someone else's submission" do
-      submission = Submission.create!(artist_id: 'andy-warhol', user_id: 'buster-bluth')
+      submission = Fabricate(:submission, user_id: 'buster-bluth')
       get "/api/submissions/#{submission.id}", headers: headers
       expect(response.status).to eq 401
     end
 
     it 'accepts requests for your own submission' do
-      submission = Submission.create!(artist_id: 'andy-warhol', user_id: 'userid')
+      submission = Fabricate(:submission, user_id: 'userid')
       get "/api/submissions/#{submission.id}", headers: headers
       expect(response.status).to eq 200
       body = JSON.parse(response.body)

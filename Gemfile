@@ -55,4 +55,6 @@ group :test do
   gem 'webmock' # mock or forbid external network requests
   gem 'capybara', '~> 2.8' # for view tests
   gem 'rails-controller-testing'
+  gem 'fabrication'
+  gem 'database_cleaner'
 end

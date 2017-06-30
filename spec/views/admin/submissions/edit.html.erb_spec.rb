@@ -5,15 +5,14 @@ describe 'admin/submissions/edit.html.erb', type: :feature do
   context 'always' do
     before do
       allow_any_instance_of(Admin::SubmissionsController).to receive(:require_artsy_authentication)
-      @submission = Submission.create!(
+      @submission = Fabricate(:submission,
         title: 'my artwork',
         artist_id: 'artistid',
         edition: true,
         edition_size: 100,
         edition_number: '23a',
         category: 'Painting',
-        user_id: 'userid'
-      )
+        user_id: 'userid')
       page.visit "/admin/submissions/#{@submission.id}/edit"
     end
 

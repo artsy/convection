@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe NotificationService do
   let(:submission) do
-    Submission.create!(
+    Fabricate(:submission,
       artist_id: 'artistid',
       user_id: 'userid',
       title: 'My Artwork',
@@ -12,8 +12,7 @@ describe NotificationService do
       width: '14',
       dimensions_metric: 'in',
       location_city: 'New York',
-      category: 'Painting'
-    )
+      category: 'Painting')
   end
 
   describe '#post_submission_event' do
