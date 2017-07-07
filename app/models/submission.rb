@@ -61,4 +61,30 @@ class Submission < ActiveRecord::Base
   def submitted?
     state == 'submitted'
   end
+
+  def artist
+    Gravity.client.artist(id: artist_id) if artist_id
+  rescue Faraday::ResourceNotFound
+    nil
+  end
+
+  def artist_name
+    artist.try(:name)
+  end
+
+  def user
+    Gravity.client.user(id: user_id) if user_id
+  rescue Faraday::ResourceNotFound
+    nil
+  end
+
+  def user_name
+    user.try(:name)
+  end
+
+  def user_email
+    user.try(:user_detail).try(:email)
+  rescue Faraday::ResourceNotFound
+    nil
+  end
 end

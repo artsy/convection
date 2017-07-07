@@ -1,8 +1,32 @@
 <div class='container'>
-  <%= form_for(@submission, url: admin_submission_path) do |f| %>
+  <%= form_for(@submission, url: @submission.persisted? ? admin_submission_path : admin_submissions_path) do |f| %>
     <div class='row'>
       <div class='col-sm-12'>
         <div class='unit'>
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
+                Artist
+              </label>
+              <div class='col-sm-10' id='artist_selections_form'>
+                <%= f.text_field :artist_name, class: 'form-control', id: 'artist_search' %>
+                <%= f.hidden_field :artist_id %>
+              </div>
+            </div>
+          </div>
+
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
+                User
+              </label>
+              <div class='col-sm-10' id='user_selections_form'>
+                <%= f.text_field :user_name, class: 'form-control', id: 'user_search' %>
+                <%= f.hidden_field :user_id %>
+              </div>
+            </div>
+          </div>
+
           <div class='row single-padding-top'>
             <div class='col-sm-12'>
               <label class='col-sm-2 control-label bold-label'>
@@ -182,7 +206,7 @@
 
           <div class='row triple-padding-top'>
             <div class='col-sm-12'>
-              <%= f.submit 'Edit Submission', class: 'btn btn-primary btn-full-width' %>
+              <%= f.submit @submission.persisted? ? 'Save' : 'Create', class: 'btn btn-primary btn-full-width' %>
             </div>
           </div>
         </div>

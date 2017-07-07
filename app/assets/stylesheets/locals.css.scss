@@ -1,11 +1,18 @@
 // Watt
 @import "watt/base";
+@import 'watt/autocomplete';
 
 .bold-label {
   font-family: $sans-serif;
   font-weight: bold;
   font-size: 12px;
   text-transform: uppercase;
+}
+
+#user_selections_form {
+  li {
+    padding: 15px;
+  }
 }
 
 #gemini-input {

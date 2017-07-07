@@ -9,6 +9,19 @@ module Admin
       @submissions = Submission.order(id: :desc).page(@page).per(@size)
     end
 
+    def new
+      @submission = Submission.new
+    end
+
+    def create
+      @submission = Submission.new(submission_params)
+      if @submission.save
+        redirect_to admin_submission_path(@submission)
+      else
+        render 'new'
+      end
+    end
+
     def show; end
 
     def edit; end
@@ -21,6 +34,26 @@ module Admin
       end
     end
 
+    def match_artist
+      if params[:term]
+        @term = params[:term]
+        @artists = Gravity.client.artists(term: @term).artists
+      end
+      respond_to do |format|
+        format.json { render json: @artists || [] }
+      end
+    end
+
+    def match_user
+      if params[:term]
+        @term = params[:term]
+        @users = Gravity.client.users(term: @term).users
+      end
+      respond_to do |format|
+        format.json { render json: @users || [] }
+      end
+    end
+
     private
 
     def set_submission
@@ -28,17 +61,12 @@ module Admin
     end
 
     def set_user
-      user = Gravity.client.user(id: @submission.user_id)._get
-      @user_name = user.name
-      @user_email = user.user_detail.email
-    rescue Faraday::ResourceNotFound
-      @user_name = @user_email = nil
+      @user_name = @submission.user_name
+      @user_email = @submission.user_email
     end
 
     def set_artist
-      @artist = Gravity.client.artist(id: @submission.artist_id) if @submission.artist_id
-    rescue Faraday::ResourceNotFound
-      @artist = nil
+      @artist = @submission.artist if @submission.artist_id
     end
 
     def set_pagination_params
@@ -48,6 +76,7 @@ module Admin
 
     def submission_params
       params.require(:submission).permit(
+        :artist_id,
         :authenticity_certificate,
         :category,
         :depth,
@@ -63,6 +92,7 @@ module Admin
         :signature,
         :state,
         :title,
+        :user_id,
         :width,
         :year
       )
