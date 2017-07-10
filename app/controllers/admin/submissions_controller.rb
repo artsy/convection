@@ -2,7 +2,7 @@ module Admin
   class SubmissionsController < ApplicationController
     before_action :set_submission, only: [:show, :edit, :update]
     before_action :set_user, only: [:show]
-    before_action :set_artist, only: [:show]
+    before_action :set_artist_name, only: [:show]
     before_action :set_pagination_params, only: [:index]
 
     def index
@@ -65,8 +65,8 @@ module Admin
       @user_email = @submission.user_email
     end
 
-    def set_artist
-      @artist = @submission.artist if @submission.artist_id
+    def set_artist_name
+      @artist_name = @submission.artist_name if @submission.artist_id
     end
 
     def set_pagination_params

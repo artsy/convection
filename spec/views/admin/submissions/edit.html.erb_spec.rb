@@ -13,6 +13,11 @@ describe 'admin/submissions/edit.html.erb', type: :feature do
         edition_number: '23a',
         category: 'Painting',
         user_id: 'userid')
+
+      stub_gravity_root
+      stub_gravity_user
+      stub_gravity_user_detail
+      stub_gravity_artist
       page.visit "/admin/submissions/#{@submission.id}/edit"
     end
 
@@ -26,13 +31,8 @@ describe 'admin/submissions/edit.html.erb', type: :feature do
     end
 
     it 'lets you update the submission title and redirects back to the show page' do
-      stub_gravity_root
-      stub_gravity_user
-      stub_gravity_user_detail
-      stub_gravity_artist
-
       fill_in('submission_title', with: 'my new artwork title')
-      find_button('Edit Submission').click
+      find_button('Save').click
       expect(@submission.reload.title).to eq('my new artwork title')
       expect(page).to have_content('Gob Bluth')
       expect(page).to have_content('Add Asset')

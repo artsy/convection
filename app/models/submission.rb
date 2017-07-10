@@ -63,7 +63,7 @@ class Submission < ActiveRecord::Base
   end
 
   def artist
-    Gravity.client.artist(id: artist_id) if artist_id
+    Gravity.client.artist(id: artist_id)._get if artist_id
   rescue Faraday::ResourceNotFound
     nil
   end
@@ -73,7 +73,7 @@ class Submission < ActiveRecord::Base
   end
 
   def user
-    Gravity.client.user(id: user_id) if user_id
+    Gravity.client.user(id: user_id)._get if user_id
   rescue Faraday::ResourceNotFound
     nil
   end

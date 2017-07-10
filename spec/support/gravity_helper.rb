@@ -38,11 +38,12 @@ def stub_gravity_artist(opts = {})
 end
 
 def stub_gravity_user(opts = {})
+  id = opts[:id] || 'userid'
   body = {
-    id: 'userid',
+    id: id,
     name: 'Jon Jonson',
     _links: {
-      user_detail: { href: "#{Convection.config.gravity_api_url}/user_details/userid" }
+      user_detail: { href: "#{Convection.config.gravity_api_url}/user_details/#{id}" }
     }
   }.deep_merge(opts)
   stub_gravity_request("/users/#{body[:id]}", body)

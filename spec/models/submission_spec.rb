@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'support/gravity_helper'
 
 describe Submission do
   let(:submission) { Fabricate(:submission) }
@@ -68,6 +69,55 @@ describe Submission do
     it 'returns false if none of the images have a square url' do
       2.times { Fabricate(:unprocessed_image, submission: submission) }
       expect(submission.finished_processing_images_for_email?).to eq false
+    end
+  end
+
+  context 'artist' do
+    it 'returns nil if it cannot find the object' do
+      stub_gravity_root
+      stub_request(:get, "#{Convection.config.gravity_api_url}/artists/#{submission.artist_id}")
+        .to_raise(Faraday::ResourceNotFound)
+      expect(submission.artist).to be_nil
+      expect(submission.artist_name).to be_nil
+    end
+    it 'returns the object if it can find it' do
+      stub_gravity_root
+      stub_gravity_artist(id: submission.artist_id, name: 'Andy Warhol')
+      expect(submission.artist_name).to eq 'Andy Warhol'
+    end
+  end
+
+  context 'user' do
+    it 'returns nil if it cannot find the object' do
+      stub_gravity_root
+      stub_request(:get, "#{Convection.config.gravity_api_url}/users/#{submission.user_id}")
+        .to_raise(Faraday::ResourceNotFound)
+      expect(submission.user).to be_nil
+      expect(submission.user_name).to be_nil
+      expect(submission.user_email).to be_nil
+    end
+    it 'returns the object if it can find it' do
+      stub_gravity_root
+      stub_gravity_user(id: submission.user_id, name: 'Buster Bluth')
+      expect(submission.user_name).to eq 'Buster Bluth'
+    end
+  end
+
+  context 'user detail' do
+    it 'returns nil if it cannot find the object' do
+      stub_gravity_root
+      stub_gravity_user(id: submission.user_id, name: 'Buster Bluth')
+      stub_request(:get, "#{Convection.config.gravity_api_url}/user_details/#{submission.user_id}")
+        .to_raise(Faraday::ResourceNotFound)
+      expect(submission.user_name).to eq 'Buster Bluth'
+      expect(submission.user_email).to be_nil
+    end
+    it 'returns the object if it can find it' do
+      stub_gravity_root
+      stub_gravity_user(id: submission.user_id, name: 'Buster Bluth')
+      stub_gravity_user_detail(id: submission.user_id, email: 'buster@bluth.com')
+      expect(submission.user_name).to eq 'Buster Bluth'
+      expect(submission.user_email).to eq 'buster@bluth.com'
     end
   end
 end
