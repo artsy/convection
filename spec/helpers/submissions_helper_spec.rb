@@ -35,6 +35,22 @@ describe SubmissionsHelper, type: :helper do
     end
   end
 
+  context 'formatted_editions' do
+    it 'it correctly formats the editions fields' do
+      submission = Fabricate(:submission,
+        edition_size: 200,
+        edition_number: '10a')
+      expect(helper.formatted_editions(submission)).to eq '10a/200'
+    end
+
+    it 'returns nil if there is no edition_number' do
+      submission = Fabricate(:submission,
+        edition_size: 200,
+        edition_number: nil)
+      expect(helper.formatted_editions(submission)).to eq nil
+    end
+  end
+
   context 'formatted_category' do
     it 'correctly formats category and medium fields if both are present' do
       submission = Fabricate(:submission,

@@ -54,7 +54,7 @@ class Submission < ActiveRecord::Base
   end
 
   def thumbnail
-    thumbnail_image = images.detect { |image| image.image_urls['thumbnail'].present? }
+    thumbnail_image = images.select { |image| image.image_urls['thumbnail'].present? }.first
     return thumbnail_image.image_urls['thumbnail'] if thumbnail_image
   end
 

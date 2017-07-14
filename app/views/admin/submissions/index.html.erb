@@ -16,7 +16,7 @@
     <div class='col-md-12'>
       <div class='list-group'>
         <% @submissions.each do |submission| %>
-          <div class='list-group-item list-item--submission'>
+          <div class='list-group-item list-item--submission' data-id=<%= submission.id %>>
             <div class='list-group-item-info list-group-item-info--id'>
               <%= submission.id %>
             </div>
