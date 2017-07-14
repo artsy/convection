@@ -87,8 +87,8 @@ class Submission < ActiveRecord::Base
     user.try(:name)
   end
 
-  def user_email
-    user.try(:user_detail).try(:email)
+  def user_detail
+    user.try(:user_detail)
   rescue Faraday::ResourceNotFound
     nil
   end

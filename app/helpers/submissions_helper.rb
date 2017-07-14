@@ -12,4 +12,8 @@ module SubmissionsHelper
   def formatted_category(submission)
     [submission.category, submission.medium].select(&:present?).join(', ')
   end
+
+  def formatted_editions(submission)
+    submission.edition_number.present? ? "#{submission.edition_number}/#{submission.edition_size}" : nil
+  end
 end
