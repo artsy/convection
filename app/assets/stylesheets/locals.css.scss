@@ -20,5 +20,23 @@
 .asset-thumb {
   img {
     width: 60px;
+    max-height: 60px;
+  }
+}
+
+.list-item--submission {
+  display: flex;
+  justify-content: space-between;
+
+  .list-group-item-info {
+    margin-left: 10px;
+  }
+
+  .list-group-item-info--id {
+    max-width: 80px;
+  }
+
+  .list-group-item-info {
+    flex: 1;
   }
 }
