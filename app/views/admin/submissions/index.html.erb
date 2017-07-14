@@ -16,18 +16,30 @@
     <div class='col-md-12'>
       <div class='list-group'>
         <% @submissions.each do |submission| %>
-          <div class='list-group-item'>
-            <span class='list-group-item-content'>
-              <span class='list-group-item-label'>
-                <%= link_to "Submission #{submission.id}", admin_submission_path(submission) %>
-              </span>
-              <span class='list-group-item-info'><%= submission.title %></span>
-              <span class='list-group-item-info'><%= submission.state %></span>
-              <span class='list-group-item-info'><%= submission.user_id %></span>
-            </span>
-            <span class='actions'>
-              <%= link_to 'Edit', edit_admin_submission_path(submission), class: 'btn btn-tiny' %>
-            </span>
+          <div class='list-group-item list-item--submission' data-id=<%= submission.id %>>
+            <div class='list-group-item-info list-group-item-info--id'>
+              <%= submission.id %>
+            </div>
+            <div class='list-group-item-info asset-thumb'>
+              <% if submission.thumbnail.present? %>
+                <%= image_tag submission.thumbnail %>
+              <% end %>
+            </div>
+            <div class='list-group-item-info'>
+              <%= submission.created_at.strftime('%m/%d/%Y') %>
+            </div>
+            <div class='list-group-item-info'>
+              <%= submission.artist_name %>
+            </div>
+            <div class='list-group-item-info'>
+              <%= submission.category %>
+            </div>
+            <div class='list-group-item-info'>
+              <%= submission.state %>
+            </div>
+            <div class='actions'>
+              <%= link_to 'View', admin_submission_path(submission), class: 'btn btn-tiny' %>
+            </div>
           </div>
         <% end %>
       </div>

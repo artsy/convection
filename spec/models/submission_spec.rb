@@ -94,7 +94,6 @@ describe Submission do
         .to_raise(Faraday::ResourceNotFound)
       expect(submission.user).to be_nil
       expect(submission.user_name).to be_nil
-      expect(submission.user_email).to be_nil
     end
     it 'returns the object if it can find it' do
       stub_gravity_root
@@ -110,14 +109,27 @@ describe Submission do
       stub_request(:get, "#{Convection.config.gravity_api_url}/user_details/#{submission.user_id}")
         .to_raise(Faraday::ResourceNotFound)
       expect(submission.user_name).to eq 'Buster Bluth'
-      expect(submission.user_email).to be_nil
     end
     it 'returns the object if it can find it' do
       stub_gravity_root
       stub_gravity_user(id: submission.user_id, name: 'Buster Bluth')
       stub_gravity_user_detail(id: submission.user_id, email: 'buster@bluth.com')
       expect(submission.user_name).to eq 'Buster Bluth'
-      expect(submission.user_email).to eq 'buster@bluth.com'
+    end
+  end
+
+  context 'thumbnail' do
+    it 'returns nil if there is no thumbnail image' do
+      Fabricate(:unprocessed_image, submission: submission)
+      expect(submission.thumbnail).to eq nil
+    end
+    it 'returns nil if there are no assets' do
+      expect(submission.thumbnail).to eq nil
+    end
+    it 'returns the first image with a thumbnail url' do
+      Fabricate(:image, submission: submission, image_urls: { 'thumbnail' => 'https://thumb.jpg' })
+      Fabricate(:image, submission: submission, image_urls: { 'thumbnail' => 'https://thumb3.jpg' })
+      expect(submission.thumbnail).to eq 'https://thumb.jpg'
     end
   end
 end

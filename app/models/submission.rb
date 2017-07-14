@@ -53,6 +53,11 @@ class Submission < ActiveRecord::Base
     images.select { |image| image.image_urls['square'].present? }
   end
 
+  def thumbnail
+    thumbnail_image = images.select { |image| image.image_urls['thumbnail'].present? }.first
+    return thumbnail_image.image_urls['thumbnail'] if thumbnail_image
+  end
+
   def ready?
     finished_processing_images_for_email? ||
       receipt_sent_at && (Time.now.utc > receipt_sent_at + Convection.config.processing_grace_seconds)
@@ -82,8 +87,8 @@ class Submission < ActiveRecord::Base
     user.try(:name)
   end
 
-  def user_email
-    user.try(:user_detail).try(:email)
+  def user_detail
+    user.try(:user_detail)
   rescue Faraday::ResourceNotFound
     nil
   end

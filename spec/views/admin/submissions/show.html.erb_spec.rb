@@ -38,7 +38,6 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       end
 
       it 'displays all of the assets' do
-        expect(page).to have_content('Assets count')
         expect(page).to have_selector('.list-group-item', count: 4)
       end
 
