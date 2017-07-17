@@ -157,16 +157,24 @@
       <div class='row double-padding-top'>
         <div class='bold-label'>Internal Approval</div>
       </div>
-      <% if @submission.reviewed? %>
+      <% if @submission.unreviewed? %>
         <div class='row single-padding-top'>
-          <%= reviewer_byline(@submission) %>
+          <%= link_to('Approve',
+                      admin_submission_path(@submission, submission: { state: 'approved' }),
+                      method: :put,
+                      class: 'btn btn-secondary btn-approve btn-small btn-full-width',
+                      data: { confirm: 'An email will be sent to the consignor, letting them know that their submission will be sent to our partner network. This action cannot be undone.' }) %>
+        </div>
+        <div class='row single-padding-top'>
+          <%= link_to('Reject',
+                      admin_submission_path(@submission, submission: { state: 'rejected' }),
+                      method: :put,
+                      class: 'btn btn-secondary btn-delete btn-small btn-full-width',
+                      data: { confirm: 'An email will be sent to the consignor, letting them know that we are not accepting their submission. This action cannot be undone.' }) %>
         </div>
       <% else %>
         <div class='row single-padding-top'>
-          <%= link_to 'Approve', admin_submission_path(@submission, submission: { state: 'approved' }), method: :put, class: 'btn btn-secondary btn-approve btn-small btn-full-width' %>
-        </div>
-        <div class='row single-padding-top'>
-          <%= link_to 'Reject', admin_submission_path(@submission, submission: { state: 'rejected' }), method: :put, class: 'btn btn-secondary btn-delete btn-small btn-full-width' %>
+          <%= reviewer_byline(@submission) %>
         </div>
       <% end %>
     </div>

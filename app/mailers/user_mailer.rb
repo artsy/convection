@@ -60,7 +60,7 @@ class UserMailer < ApplicationMailer
     smtpapi category: ['submission_approved'], unique_args: {
       submission_id: submission.id
     }
-    to = 'sarah@artsymail.com' # TODO user_detail.email
+    to = 'sarah@artsymail.com' # TODO: user_detail.email
     mail(to: to,
          subject: "Consignment Submission ##{@submission.id}",
          bcc: Convection.config.admin_email_address)
@@ -75,7 +75,7 @@ class UserMailer < ApplicationMailer
     smtpapi category: ['submission_rejected'], unique_args: {
       submission_id: submission.id
     }
-    to = 'sarah@artsymail.com' # TODO user_detail.email
+    to = 'sarah@artsymail.com' # TODO: user_detail.email
     mail(to: to,
          subject: "Consignment Submission ##{@submission.id}",
          bcc: Convection.config.admin_email_address)

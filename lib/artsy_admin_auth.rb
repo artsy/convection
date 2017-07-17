@@ -3,7 +3,7 @@ class ArtsyAdminAuth
     def decode_token(token)
       return nil if token.blank?
       decoded_token, _headers = JWT.decode(token, Convection.config.jwt_secret)
-      return decoded_token
+      decoded_token
     end
 
     def valid?(token)

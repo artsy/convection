@@ -75,8 +75,8 @@ class Submission < ActiveRecord::Base
       receipt_sent_at && (Time.now.utc > receipt_sent_at + Convection.config.processing_grace_seconds)
   end
 
-  def reviewed?
-    approved? || rejected?
+  def unreviewed?
+    draft? || submitted?
   end
 
   def reviewed_by_user

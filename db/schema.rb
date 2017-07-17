@@ -53,7 +53,9 @@ ActiveRecord::Schema.define(version: 20170717153030) do
     t.integer  "reminders_sent_count",     default: 0
     t.datetime "admin_receipt_sent_at"
     t.string   "approved_by"
+    t.datetime "approved_at"
     t.string   "rejected_by"
+    t.datetime "rejected_at"
     t.index ["user_id"], name: "index_submissions_on_user_id", using: :btree
   end
 

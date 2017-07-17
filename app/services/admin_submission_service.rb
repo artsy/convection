@@ -2,14 +2,16 @@ class AdminSubmissionService
   class << self
     def update_submission(submission, params, current_user)
       submission.assign_attributes(params)
-      approved = submission.state_changed? && submission.state == 'approved'
-      rejected = submission.state_changed? && submission.state == 'rejected'
+      update_submission_state(submission, current_user) if submission.state_changed?
       submission.save!
-      if approved
-        submission.update_attributes!(approved_by: current_user)
+    end
+
+    def update_submission_state(submission, current_user)
+      if submission.approved?
+        submission.update_attributes!(approved_by: current_user, approved_at: Time.now.utc)
         delay.deliver_approval_notification(submission.id)
-      elsif rejected
-        submission.update_attributes!(rejected_by: current_user)
+      elsif submission.rejected?
+        submission.update_attributes!(rejected_by: current_user, rejected_at: Time.now.utc)
         delay.deliver_rejection_notification(submission.id)
       end
     end

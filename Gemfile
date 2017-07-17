@@ -57,4 +57,5 @@ group :test do
   gem 'rails-controller-testing'
   gem 'fabrication'
   gem 'database_cleaner'
+  gem 'rack_session_access'
 end
