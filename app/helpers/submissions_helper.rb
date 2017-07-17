@@ -16,4 +16,12 @@ module SubmissionsHelper
   def formatted_editions(submission)
     submission.edition_number.present? ? "#{submission.edition_number}/#{submission.edition_size}" : nil
   end
+
+  def reviewer_byline(submission)
+    if submission.approved?
+      "Approved by #{submission.reviewed_by_user.try(:name)}"
+    elsif submission.rejected?
+      "Rejected by #{submission.reviewed_by_user.try(:name)}"
+    end
+  end
 end

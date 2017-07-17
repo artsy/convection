@@ -2,6 +2,7 @@ module Api
   class BaseController < ApplicationController
     skip_before_action :verify_authenticity_token
     skip_before_action :require_artsy_authentication
+    skip_before_action :set_current_user
 
     rescue_from RailsParam::Param::InvalidParameterError do |ex|
       render json: { error: ex.message, param: ex.param }, status: :bad_request
