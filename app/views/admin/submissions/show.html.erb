@@ -157,7 +157,7 @@
       <div class='row double-padding-top'>
         <div class='bold-label'>Internal Approval</div>
       </div>
-      <% if @submission.unreviewed? %>
+      <% if @submission.submitted? %>
         <div class='row single-padding-top'>
           <%= link_to('Approve',
                       admin_submission_path(@submission, submission: { state: 'approved' }),

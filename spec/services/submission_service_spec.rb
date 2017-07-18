@@ -34,6 +34,51 @@ describe SubmissionService do
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 2
     end
+
+    it 'sends no emails if the state is not being changed' do
+      SubmissionService.update_submission(submission, { title: 'Updated Artwork Title', state: 'draft' }, 'userid')
+      emails = ActionMailer::Base.deliveries
+      expect(emails.length).to eq 0
+      expect(submission.title).to eq 'Updated Artwork Title'
+      expect(submission.rejected_by).to be_nil
+      expect(submission.rejected_at).to be_nil
+      expect(submission.approved_by).to be_nil
+      expect(submission.approved_at).to be_nil
+    end
+
+    it 'sends no emails if the state is not being changed to approved or rejected' do
+      SubmissionService.update_submission(submission, { state: 'draft' }, 'userid')
+      emails = ActionMailer::Base.deliveries
+      expect(emails.length).to eq 0
+      expect(submission.rejected_by).to be_nil
+      expect(submission.rejected_at).to be_nil
+      expect(submission.approved_by).to be_nil
+      expect(submission.approved_at).to be_nil
+    end
+
+    it 'sends an approval notification if the submission state is changed to approved' do
+      SubmissionService.update_submission(submission, { state: 'approved' }, 'userid')
+      emails = ActionMailer::Base.deliveries
+      expect(emails.length).to eq 1
+      expect(emails.first.html_part.body).to include('Your submission has been approved!')
+      expect(submission.state).to eq 'approved'
+      expect(submission.approved_by).to eq 'userid'
+      expect(submission.approved_at).to_not be_nil
+      expect(submission.rejected_by).to be_nil
+      expect(submission.rejected_at).to be_nil
+    end
+
+    it 'sends a rejection notification if the submission state is changed to rejected' do
+      SubmissionService.update_submission(submission, { state: 'rejected' }, 'userid')
+      emails = ActionMailer::Base.deliveries
+      expect(emails.length).to eq 1
+      expect(emails.first.html_part.body).to include('So sorry your submission has been rejected.')
+      expect(submission.state).to eq 'rejected'
+      expect(submission.rejected_by).to eq 'userid'
+      expect(submission.rejected_at).to_not be_nil
+      expect(submission.approved_by).to be_nil
+      expect(submission.approved_at).to be_nil
+    end
   end
 
   context 'notify_user' do

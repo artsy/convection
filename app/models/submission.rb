@@ -75,10 +75,6 @@ class Submission < ActiveRecord::Base
       receipt_sent_at && (Time.now.utc > receipt_sent_at + Convection.config.processing_grace_seconds)
   end
 
-  def unreviewed?
-    draft? || submitted?
-  end
-
   def reviewed_by_user
     admin_user_id = approved_by || rejected_by
     Gravity.client.user(id: admin_user_id)._get if admin_user_id
