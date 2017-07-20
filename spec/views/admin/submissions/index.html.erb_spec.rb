@@ -36,7 +36,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
           click_link('View')
         end
         expect(page).to have_content("Submission ##{submission.id}")
-        expect(page).to have_content('Edit Submission')
+        expect(page).to have_content('Edit')
         expect(page).to have_content('Add Asset')
         expect(page).to have_content('Jon Jonson')
       end

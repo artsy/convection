@@ -25,7 +25,7 @@ module Admin
     def edit; end
 
     def update
-      if @submission.update_attributes!(submission_params)
+      if SubmissionService.update_submission(@submission, submission_params, @current_user)
         redirect_to admin_submission_path(@submission)
       else
         render 'edit'

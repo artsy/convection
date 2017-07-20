@@ -30,7 +30,7 @@ Metrics/BlockLength:
   Enabled: false
 
 Metrics/AbcSize:
-  Max: 36
+  Max: 39
 
 Metrics/MethodLength:
   Max: 30
@@ -40,3 +40,6 @@ Metrics/CyclomaticComplexity:
 
 Rails/SkipsModelValidations:
   Enabled: false
+
+Metrics/ClassLength:
+  Max: 124

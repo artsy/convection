@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'support/gravity_helper'
 
 describe SubmissionsHelper, type: :helper do
   context 'formatted_location' do
@@ -85,6 +86,29 @@ describe SubmissionsHelper, type: :helper do
         category: 'Painting',
         medium: '')
       expect(helper.formatted_category(submission)).to eq 'Painting'
+    end
+  end
+
+  context 'reviewer_byline' do
+    it 'shows the correct label for an approved submission' do
+      stub_gravity_root
+      stub_gravity_user
+      submission = Fabricate(:submission, state: 'approved', approved_by: 'userid')
+      expect(helper.reviewer_byline(submission)).to eq 'Approved by Jon Jonson'
+    end
+    it 'shows the correct label for a rejected submissions' do
+      stub_gravity_root
+      stub_gravity_user
+      submission = Fabricate(:submission, state: 'rejected', rejected_by: 'userid')
+      expect(helper.reviewer_byline(submission)).to eq 'Rejected by Jon Jonson'
+    end
+    it 'shows the correct label for an approved submission with no user' do
+      submission = Fabricate(:submission, state: 'approved')
+      expect(helper.reviewer_byline(submission)).to eq 'Approved by '
+    end
+    it 'shows the correct label for a rejected submission with no user' do
+      submission = Fabricate(:submission, state: 'rejected')
+      expect(helper.reviewer_byline(submission)).to eq 'Rejected by '
     end
   end
 end

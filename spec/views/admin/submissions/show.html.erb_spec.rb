@@ -1,5 +1,6 @@
 require 'rails_helper'
 require 'support/gravity_helper'
+require 'support/jwt_helper'
 
 describe 'admin/submissions/show.html.erb', type: :feature do
   context 'always' do
@@ -17,7 +18,10 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         edition_size: 100,
         edition_number: '23a',
         category: 'Painting',
-        user_id: 'userid')
+        user_id: 'userid',
+        state: 'submitted')
+
+      stub_jwt_header('userid')
       page.visit "/admin/submissions/#{@submission.id}"
     end
 
@@ -27,6 +31,43 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       expect(page).to have_content('Jon Jonson')
       expect(page).to have_content('user@example.com')
       expect(page).to have_content('Painting')
+    end
+
+    it 'displays the reviewer byline if the submission has been approved' do
+      @submission.update_attributes!(state: 'approved', approved_by: 'userid', approved_at: Time.now.utc)
+      page.visit "/admin/submissions/#{@submission.id}"
+      expect(page).to have_content 'Approved by Jon Jonson'
+    end
+
+    it 'displays the reviewer byline if the submission has been rejected' do
+      @submission.update_attributes!(state: 'rejected', rejected_by: 'userid', rejected_at: Time.now.utc)
+      page.visit "/admin/submissions/#{@submission.id}"
+      expect(page).to have_content 'Rejected by Jon Jonson'
+    end
+
+    context 'unreviewed submission' do
+      it 'displays buttons to approve/reject if the submission is not yet reviewed' do
+        expect(page).to have_content('Approve')
+        expect(page).to have_content('Reject')
+      end
+
+      it 'approves a submission when the Approve button is clicked' do
+        click_link 'Approve'
+        emails = ActionMailer::Base.deliveries
+        expect(emails.length).to eq 1
+        expect(emails.first.html_part.body).to include('Your submission has been approved!')
+        expect(page).to have_content 'Approved by Jon Jonson'
+        expect(page).to_not have_content 'Reject'
+      end
+
+      it 'rejects a submission when the Approve button is clicked' do
+        click_link 'Reject'
+        emails = ActionMailer::Base.deliveries
+        expect(emails.length).to eq 1
+        expect(emails.first.html_part.body).to include('So sorry your submission has been rejected.')
+        expect(page).to have_content 'Rejected by Jon Jonson'
+        expect(page).to_not have_content 'Approve'
+      end
     end
 
     context 'with assets' do

@@ -1,5 +1,10 @@
 class Submission < ActiveRecord::Base
-  STATES = %w(draft submitted qualified).freeze
+  STATES = %w(
+    draft
+    submitted
+    approved
+    rejected
+  ).freeze
   DIMENSION_METRICS = %w(in cm).freeze
   CATEGORIES = [
     'Painting',
@@ -58,13 +63,23 @@ class Submission < ActiveRecord::Base
     return thumbnail_image.image_urls['thumbnail'] if thumbnail_image
   end
 
+  # defines methods submitted?, approved?, etc. for each possible submission state
+  STATES.each do |method|
+    define_method "#{method}?".to_sym do
+      state == method
+    end
+  end
+
   def ready?
     finished_processing_images_for_email? ||
       receipt_sent_at && (Time.now.utc > receipt_sent_at + Convection.config.processing_grace_seconds)
   end
 
-  def submitted?
-    state == 'submitted'
+  def reviewed_by_user
+    admin_user_id = approved_by || rejected_by
+    Gravity.client.user(id: admin_user_id)._get if admin_user_id
+  rescue Faraday::ResourceNotFound
+    nil
   end
 
   def artist

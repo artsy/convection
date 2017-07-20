@@ -50,4 +50,32 @@ class UserMailer < ApplicationMailer
     }
     mail to: user_detail.email, subject: 'Last chance to complete your consignment'
   end
+
+  def submission_approved(submission:, user:, user_detail:, artist:)
+    @submission = submission
+    @user = user
+    @user_detail = user_detail
+    @artist = artist
+
+    smtpapi category: ['submission_approved'], unique_args: {
+      submission_id: submission.id
+    }
+    mail(to: Convection.config.debug_email_address,
+         subject: "Consignment Submission ##{@submission.id}",
+         bcc: Convection.config.admin_email_address)
+  end
+
+  def submission_rejected(submission:, user:, user_detail:, artist:)
+    @submission = submission
+    @user = user
+    @user_detail = user_detail
+    @artist = artist
+
+    smtpapi category: ['submission_rejected'], unique_args: {
+      submission_id: submission.id
+    }
+    mail(to: Convection.config.debug_email_address,
+         subject: "Consignment Submission ##{@submission.id}",
+         bcc: Convection.config.admin_email_address)
+  end
 end

@@ -11,7 +11,7 @@ describe Submission do
 
     it 'allows only certain states' do
       expect(Submission.new(state: 'blah')).not_to be_valid
-      expect(Submission.new(state: 'qualified')).to be_valid
+      expect(Submission.new(state: 'approved')).to be_valid
       expect(Submission.new(state: 'submitted')).to be_valid
     end
   end
@@ -128,7 +128,6 @@ describe Submission do
     end
     it 'returns the first image with a thumbnail url' do
       Fabricate(:image, submission: submission, image_urls: { 'thumbnail' => 'https://thumb.jpg' })
-      Fabricate(:image, submission: submission, image_urls: { 'thumbnail' => 'https://thumb3.jpg' })
       expect(submission.thumbnail).to eq 'https://thumb.jpg'
     end
   end

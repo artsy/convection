@@ -2,17 +2,37 @@ class SubmissionService
   ParamError = Class.new(StandardError)
 
   class << self
-    def update_submission(submission, params)
+    def update_submission(submission, params, current_user = nil)
       submission.assign_attributes(params)
-      submitting = submission.state_changed? && submission.state == 'submitted'
-      raise ParamError, 'Missing fields for submission.' if submitting && !submission.can_submit?
+      update_submission_state(submission, current_user) if submission.state_changed?
       submission.save!
-      return unless submitting
+    end
+
+    def update_submission_state(submission, current_user)
+      case submission.state
+      when 'submitted' then submit!(submission)
+      when 'approved' then approve!(submission, current_user)
+      when 'rejected' then reject!(submission, current_user)
+      end
+    end
+
+    def submit!(submission)
+      raise ParamError, 'Missing fields for submission.' unless submission.can_submit?
       notify_admin(submission.id)
       notify_user(submission.id)
       return if submission.images.count.positive?
       delay_until(Convection.config.second_reminder_days_after.days.from_now).notify_user(submission.id)
       delay_until(Convection.config.third_reminder_days_after.days.from_now).notify_user(submission.id)
+    end
+
+    def approve!(submission, current_user)
+      submission.update_attributes!(approved_by: current_user, approved_at: Time.now.utc)
+      delay.deliver_approval_notification(submission.id)
+    end
+
+    def reject!(submission, current_user)
+      submission.update_attributes!(rejected_by: current_user, rejected_at: Time.now.utc)
+      delay.deliver_rejection_notification(submission.id)
     end
 
     def notify_admin(submission_id)
@@ -82,6 +102,34 @@ class SubmissionService
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
       AdminMailer.submission(
+        submission: submission,
+        user: user,
+        user_detail: user_detail,
+        artist: artist
+      ).deliver_now
+    end
+
+    def deliver_approval_notification(submission_id)
+      submission = Submission.find(submission_id)
+      user = Gravity.client.user(id: submission.user_id)._get
+      user_detail = user.user_detail._get
+      artist = Gravity.client.artist(id: submission.artist_id)._get
+
+      UserMailer.submission_approved(
+        submission: submission,
+        user: user,
+        user_detail: user_detail,
+        artist: artist
+      ).deliver_now
+    end
+
+    def deliver_rejection_notification(submission_id)
+      submission = Submission.find(submission_id)
+      user = Gravity.client.user(id: submission.user_id)._get
+      user_detail = user.user_detail._get
+      artist = Gravity.client.artist(id: submission.artist_id)._get
+
+      UserMailer.submission_rejected(
         submission: submission,
         user: user,
         user_detail: user_detail,

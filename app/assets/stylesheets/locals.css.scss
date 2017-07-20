@@ -13,6 +13,14 @@
   color: #999999;
 }
 
+.btn-approve {
+  color: #0EDA83;
+
+  &:visited {
+    color: #0EDA83;
+  }
+}
+
 #gemini-input {
   display: none;
 }
