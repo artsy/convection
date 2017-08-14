@@ -1,5 +1,5 @@
 require 'net/http'
-class Asset < ActiveRecord::Base
+class Asset < ApplicationRecord
   GeminiHttpException = Class.new(StandardError)
 
   TYPES = ['image'].freeze

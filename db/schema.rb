@@ -24,10 +24,9 @@ ActiveRecord::Schema.define(version: 20170814141232) do
   end
 
   create_table "partners", force: :cascade do |t|
-    t.string   "external_partner_id",                null: false
-    t.boolean  "enabled",             default: true
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.string   "external_partner_id", null: false
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
     t.index ["external_partner_id"], name: "index_partners_on_external_partner_id", unique: true, using: :btree
   end
 
