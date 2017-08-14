@@ -58,11 +58,6 @@ module Admin
       @submission = Submission.find(params[:id])
     end
 
-    def set_pagination_params
-      @page = (params[:page] || 1).to_i
-      @size = (params[:size] || 10).to_i
-    end
-
     def submission_params
       params.require(:submission).permit(
         :artist_id,

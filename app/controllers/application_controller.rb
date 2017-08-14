@@ -19,4 +19,9 @@ class ApplicationController < ActionController::Base
   def set_current_user
     @current_user = ArtsyAdminAuth.decode_user(session[:access_token])
   end
+
+  def set_pagination_params
+    @page = (params[:page] || 1).to_i
+    @size = (params[:size] || 10).to_i
+  end
 end

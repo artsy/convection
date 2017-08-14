@@ -6,7 +6,7 @@ Rails.application.routes.draw do
         post :multiple, on: :collection
       end
     end
-
+    resources :partners, only: :index
     root to: 'submissions#index'
   end
   get '/match_artist', to: 'admin/submissions#match_artist'
