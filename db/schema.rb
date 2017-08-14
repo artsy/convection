@@ -24,10 +24,10 @@ ActiveRecord::Schema.define(version: 20170814141232) do
   end
 
   create_table "partners", force: :cascade do |t|
-    t.string   "external_partner_id"
-    t.boolean  "enabled"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
+    t.string   "external_partner_id",                null: false
+    t.boolean  "enabled",             default: true
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
   end
 
   create_table "submissions", force: :cascade do |t|
