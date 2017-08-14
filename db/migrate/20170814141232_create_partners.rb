@@ -6,5 +6,6 @@ class CreatePartners < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
+    add_index :partners, [:external_partner_id], unique: true
   end
 end
