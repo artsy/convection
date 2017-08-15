@@ -10,6 +10,9 @@ AllCops:
     - bin/**/*
     - Gemfile
 
+Style/Lambda:
+  Enabled: false
+
 Rails/FilePath:
   Exclude:
     - config/application.rb
