@@ -26,6 +26,9 @@ gem 'newrelic_rpm' # for monitoring
 gemini_gem_spec = { git: 'https://github.com/artsy/gemini_upload-rails.git', branch: 'master' }
 gem 'gemini_upload-rails', gemini_gem_spec # for admins to upload images
 
+
+gem 'graphql'
+
 watt_gem_spec = { git: 'https://github.com/artsy/watt.git', branch: 'master' }
 gem 'watt', watt_gem_spec # artsy bootstrap
 gem 'bootstrap-sass' # required for watt

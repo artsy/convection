@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     resources :submissions, only: [:create, :update, :show]
     resources :assets, only: [:create, :show, :index]
     post '/callbacks/gemini', to: 'callbacks#gemini'
+    post '/graphql', to: 'graphql#execute'
   end
 
   mount ArtsyAuth::Engine => '/'
