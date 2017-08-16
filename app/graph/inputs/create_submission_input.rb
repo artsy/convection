@@ -10,14 +10,14 @@ module Inputs
     argument :dimensions_metric, types.String
     argument :edition, types.String
     argument :edition_number, types.String
-    argument :edition_size, types.String
+    argument :edition_size, types.Int
     argument :height, types.String
     argument :location_city, types.String
     argument :location_country, types.String
     argument :location_state, types.String
     argument :medium, types.String
     argument :provenance, types.String
-    argument :signature, types.String
+    argument :signature, types.Boolean
     argument :state, types.String
     argument :title, types.String
     argument :width, types.String

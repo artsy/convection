@@ -14,14 +14,14 @@ module Types
     field :dimensions_metric, types.String
     field :edition, types.String
     field :edition_number, types.String
-    field :edition_size, types.String
+    field :edition_size, types.Int
     field :height, types.String
     field :location_city, types.String
     field :location_country, types.String
     field :location_state, types.String
     field :medium, types.String
     field :provenance, types.String
-    field :signature, types.String
+    field :signature, types.Boolean
     field :state, types.String
     field :title, types.String
     field :width, types.String

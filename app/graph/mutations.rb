@@ -14,8 +14,9 @@ module Mutations
       description 'Create a submission'
       argument :submission, Inputs::UpdateSubmissionInput
       resolve ->(_obj, args, _context) {
-        submission = Submission.find(args[:submission][:id]) || GraphQL::ExecutionError.new('Unknown submission')
-        SubmissionService.update_submission(submission, args[:submission].to_h.with_indifferent_access.except(:id))
+        submission = Submission.find_by(id: args[:submission][:id]) ||
+                     raise(GraphQL::ExecutionError, 'Submission Not Found')
+        SubmissionService.update_submission(submission, args[:submission].to_h.except(:id))
         submission.reload
       }
     end
