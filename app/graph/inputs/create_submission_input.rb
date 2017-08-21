@@ -3,7 +3,7 @@ module Inputs
     name('CreateSubmission')
     argument :additional_info, types.String
     argument :artist_id, !types.String
-    argument :authenticity_certificate, types.String
+    argument :authenticity_certificate, types.Boolean
     argument :category, types.String
     argument :deadline_to_sell, Types::DateType
     argument :depth, types.String

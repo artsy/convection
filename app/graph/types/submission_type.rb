@@ -7,7 +7,7 @@ module Types
     field :additional_info, types.String
     field :user_id, !types.String
     field :artist_id, !types.String
-    field :authenticity_certificate, types.String
+    field :authenticity_certificate, types.Boolean
     field :category, types.String
     field :deadline_to_sell, Types::DateType
     field :depth, types.String
