@@ -3,7 +3,7 @@ module Types
     name 'Date'
     description 'Date type'
 
-    coerce_input ->(value) { Date.new(value) }
-    coerce_result ->(value) { value.to_f }
+    coerce_input ->(value, _ctx) { Date.new(value) }
+    coerce_result ->(value, _ctx) { value.to_f }
   end
 end

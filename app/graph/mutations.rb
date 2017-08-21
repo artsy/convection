@@ -6,7 +6,7 @@ module Mutations
       description 'Create a submission'
       argument :submission, Inputs::CreateSubmissionInput
       resolve ->(_obj, args, context) {
-        Submission.create!(args[:submission].to_h.with_indifferent_access.merge(user_id: context[:current_user]))
+        Submission.create!(args[:submission].to_h.merge(user_id: context[:current_user]))
       }
     end
 

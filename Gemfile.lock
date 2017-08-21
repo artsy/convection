@@ -117,7 +117,7 @@ GEM
     futuroscope (0.1.11)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
-    graphql (1.4.4)
+    graphql (1.6.7)
     haml (5.0.1)
       temple (>= 0.8.0)
       tilt
@@ -371,4 +371,4 @@ RUBY VERSION
    ruby 2.4.0p0
 
 BUNDLED WITH
-   1.15.1
+   1.15.3
