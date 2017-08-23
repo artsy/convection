@@ -16,6 +16,23 @@ describe Submission do
     end
   end
 
+  context 'scopes' do
+    describe 'completed' do
+      it 'returns the number of non-draft submissions' do
+        Fabricate(:submission, state: 'approved')
+        Fabricate(:submission, state: 'rejected')
+        Fabricate(:submission, state: 'draft')
+        Fabricate(:submission, state: 'submitted')
+        expect(Submission.completed.count).to eq(3)
+      end
+
+      it 'returns 0 if there are only draft submissions' do
+        Fabricate(:submission)
+        expect(Submission.completed.count).to eq(0)
+      end
+    end
+  end
+
   context 'category' do
     it 'allows only certain categories' do
       expect(Submission.new(category: nil)).to be_valid
