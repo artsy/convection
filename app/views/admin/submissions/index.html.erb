@@ -2,18 +2,30 @@
   <h2>Submissions</h2>
 </div>
 
-<div class='row triple-padding-top'>
-  <div class='row col-sm-12'>
-    <div class='col-sm-12'>
-      <%= link_to 'New Submission', new_admin_submission_path, class: 'btn btn-primary btn-full-width' %>
-    </div>
-  </div>
-</div>
-
-
 <div class='container'>
   <div class='row triple-padding-top'>
-    <div class='col-md-12'>
+    <div class='col-md-2'>
+      <div class='flex-label'>
+        <div class='left'><%= link_to 'All', admin_submissions_path %></div>
+        <div class='right'><%= @submissions_count %></div>
+      </div>
+      <div class='flex-label'>
+        <div class='left'><%= link_to 'Unreviewed', admin_submissions_path(state: 'submitted') %></div>
+        <div class='right'><%= @unreviewed_count %></div>
+      </div>
+      <div class='flex-label'>
+        <div class='left'><%= link_to 'Approved', admin_submissions_path(state: 'approved') %></div>
+        <div class='right'><%= @approved_count %></div>
+      </div>
+      <div class='flex-label'>
+        <div class='left'><%= link_to 'Rejected', admin_submissions_path(state: 'rejected') %></div>
+        <div class='right'><%= @rejected_count %></div>
+      </div>
+      <div class='row double-padding-top'>
+        <%= link_to 'New', new_admin_submission_path, class: 'btn btn-tiny btn-full-width' %>
+      </div>
+    </div>
+    <div class='col-md-10'>
       <div class='list-group'>
         <% @submissions.each do |submission| %>
           <div class='list-group-item list-item--submission' data-id=<%= submission.id %>>
@@ -45,5 +57,5 @@
       </div>
     </div>
   </div>
-  <%= render partial: 'shared/watt/paginator', locals: { total_items_count: @submissions.total_count, items_count: @submissions.length, per_page: @size, current_page: @page, base_url: admin_submissions_url } %>
+  <%= render partial: 'shared/watt/paginator', locals: { total_items_count: @submissions.total_count, items_count: @submissions.length, per_page: @size, current_page: @page, base_url: admin_submissions_url(@filters) } %>
 </div>

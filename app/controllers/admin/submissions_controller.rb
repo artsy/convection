@@ -4,7 +4,14 @@ module Admin
     before_action :set_pagination_params, only: [:index]
 
     def index
-      @submissions = Submission.order(id: :desc).page(@page).per(@size)
+      @submissions_count = Submission.completed.count
+      @unreviewed_count = Submission.where(state: 'submitted').count
+      @approved_count = Submission.where(state: 'approved').count
+      @rejected_count = Submission.where(state: 'rejected').count
+      @filters = { state: params[:state] }
+
+      @submissions = params[:state] ? Submission.where(state: params[:state]) : Submission.completed
+      @submissions = @submissions.order(id: :desc).page(@page).per(@size)
     end
 
     def new
