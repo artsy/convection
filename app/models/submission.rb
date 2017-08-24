@@ -4,6 +4,7 @@ class Submission < ApplicationRecord
     submitted
     approved
     rejected
+    visible
   ).freeze
   DIMENSION_METRICS = %w(in cm).freeze
   CATEGORIES = [
@@ -36,6 +37,8 @@ class Submission < ApplicationRecord
   delegate :images, to: :assets
 
   has_many :assets, dependent: :destroy
+  has_many :partner_submissions
+
   validates :state, inclusion: { in: STATES }
   validates :category, inclusion: { in: CATEGORIES }, allow_nil: true
   validates :dimensions_metric, inclusion: { in: DIMENSION_METRICS }, allow_nil: true

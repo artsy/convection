@@ -5,10 +5,14 @@ deployment:
   staging:
     branch: master
     owner: artsy
-    heroku:
-      appname: convection-staging
+    commands:
+      - git push git@heroku.com:convection-staging.git $CIRCLE_SHA1:refs/heads/master
+      - heroku run --exit-code rake db:migrate --app convection-staging
+      - heroku restart --app convection-staging
   production:
     branch: release
     owner: artsy
-    heroku:
-      appname: convection-production
+    commands:
+      - git push git@heroku.com:convection-production.git $CIRCLE_SHA1:refs/heads/master
+      - heroku run --exit-code rake db:migrate --app convection-production
+      - heroku restart --app convection-production

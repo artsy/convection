@@ -24,4 +24,8 @@ module SubmissionsHelper
       "Rejected by #{submission.reviewed_by_user.try(:name)}"
     end
   end
+
+  def formatted_date(date)
+    date.strftime('%-m/%-d/%Y')
+  end
 end

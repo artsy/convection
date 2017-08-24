@@ -8,6 +8,7 @@ module Admin
       @unreviewed_count = Submission.where(state: 'submitted').count
       @approved_count = Submission.where(state: 'approved').count
       @rejected_count = Submission.where(state: 'rejected').count
+      @visible_count = Submission.where(state: 'visible').count
       @filters = { state: params[:state] }
 
       @submissions = params[:state] ? Submission.where(state: params[:state]) : Submission.completed
@@ -27,7 +28,9 @@ module Admin
       end
     end
 
-    def show; end
+    def show
+      @partner_submissions = @submission.partner_submissions
+    end
 
     def edit; end
 

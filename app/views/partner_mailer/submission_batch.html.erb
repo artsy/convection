@@ -1,0 +1,124 @@
+<%= stylesheet_link_tag 'emails', media: 'all' %>
+
+<table class='bordered-email' align='center'>
+  <tr>
+    <td>
+      <table class='email-content submission-batch-email' align='center'>
+        <%= render partial: 'shared/email_header' %>
+        <tr>
+          <td class='email-title'>
+            New works available from Artsy collectors
+          </td>
+        </tr>
+        <tr>
+          <td class='email-sub-title'>
+            In order to guarantee availability of the work please reply with your offers within 48hrs.
+          </td>
+        </tr>
+        <tr>
+          <td class='email-sub-title-gray'>
+            Submissions as of <%= Time.now.utc.strftime('%B %-d, %Y') %>
+          </td>
+        </tr>
+        <tr>
+          <table>
+            <% @submissions.each do |submission| %>
+              <tr>
+                <% if submission.processed_images.length > 0 %>
+                  <td class='submission-image'>
+                    <%= image_tag(submission.processed_images.first.image_urls['square'], id: 'first-image') %>
+                  </td>
+                <% else %>
+                  <td class='submission-image'>
+                    <%= image_tag(image_url('missing_image.png'), id: 'first-image') %>
+                  </td>
+                <% end %>
+                <td>
+                  <table class='submission-batch-metadata'>
+                    <tr>
+                      <td class='gray'>
+                        <%= submission.id %>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class='bold'>
+                        <%= submission.artist_name %>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <i><%= submission.title %></i><span><%= ", #{submission.year}" %></span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <%= submission.category %>, <%= formatted_dimensions(submission) %>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class='small-padding-top'>
+                        <%= formatted_location(submission) %>
+                      </td>
+                    </tr>
+                    <% if submission.provenance.present? %>
+                      <tr>
+                        <td>
+                          <i><%= submission.provenance.truncate(50) %></i>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </table>
+                </td>
+              </tr>
+            <% end %>
+          </table>
+        </tr>
+        <tr>
+          <td>
+            <table class='submission-batch-todo'>
+              <tr>
+                <td class='email-sub-title'>
+                  If interested in the listed works please include the following information in your offer:
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <ul>
+                    <li>
+                      Sale Name/Date
+                    </li>
+                    <li>
+                      Low/High Estimate
+                    </li>
+                    <li>
+                      Seller Commission
+                    </li>
+                    <li>
+                      Insurance/Shipping Costs
+                    </li>
+                    <li>
+                      Marketing/Promotional Costs
+                    </li>
+                    <li>
+                      Note to consignor
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td class='email-sub-title'>
+                  Please respond directly to this email if you have any questions,
+                </td>
+              </tr>
+              <tr>
+                <td class='email-sub-title'>
+                  The specialist team
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>

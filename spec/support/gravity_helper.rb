@@ -4,6 +4,14 @@ GRAVITY_ROOT = {
       href: "#{Convection.config.gravity_api_url}/artists/{id}",
       templated: true
     },
+    partner: {
+      href: "#{Convection.config.gravity_api_url}/partners/{id}",
+      templated: true
+    },
+    partner_contacts: {
+      href: "#{Convection.config.gravity_api_url}/partner_contacts?partner_id={partner_id}&communication_id={communication_id}",
+      templated: true
+    },
     user: {
       href: "#{Convection.config.gravity_api_url}/users/{id}",
       templated: true
@@ -59,4 +67,32 @@ def stub_gravity_user_detail(opts = {})
     paddle_number: 1234
   }.deep_merge(opts)
   stub_gravity_request("/user_details/#{body[:id]}", body)
+end
+
+def stub_gravity_partner(opts = {})
+  id = opts[:id] || 'partnerid'
+  body = {
+    id: id,
+    name: 'Phillips Auctions'
+  }.deep_merge(opts)
+  stub_gravity_request("/partners/#{body[:id]}", body)
+end
+
+def stub_gravity_partner_contacts(opts = {})
+  communication_id = opts[:partner_communication_id] || 'comm1'
+  partner_id = opts[:partner_id] || 'partnerid'
+  contact = {
+    id: 'partnercontact1',
+    email: 'contact@partner.com',
+    partner_id: partner_id
+  }.deep_merge(opts)
+  contact_items = opts.key?(:override_body) ? opts[:override_body] : [contact]
+  body = {
+    total_count: nil,
+    next: "#{Convection.config.gravity_api_url}/partner_contacts?cursor=next-cursor",
+    _embedded: {
+      partner_contacts: contact_items
+    }
+  }
+  stub_gravity_request("/partner_contacts?partner_id=#{partner_id}&communication_id=#{communication_id}", body)
 end

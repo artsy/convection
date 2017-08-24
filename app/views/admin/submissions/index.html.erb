@@ -18,6 +18,10 @@
         <div class='right'><%= @approved_count %></div>
       </div>
       <div class='flex-label'>
+        <div class='left'><%= link_to 'Visible', admin_submissions_path(state: 'visible') %></div>
+        <div class='right'><%= @visible_count %></div>
+      </div>
+      <div class='flex-label'>
         <div class='left'><%= link_to 'Rejected', admin_submissions_path(state: 'rejected') %></div>
         <div class='right'><%= @rejected_count %></div>
       </div>

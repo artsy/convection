@@ -45,6 +45,23 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       expect(page).to have_content 'Rejected by Jon Jonson'
     end
 
+    it 'displays the partners that a submission has been shown to' do
+      allow(Convection.config).to receive(:consignment_communication_id).and_return('comm1')
+      @submission.update_attributes!(state: 'approved')
+      partner1 = Fabricate(:partner, external_partner_id: 'partnerid')
+      partner2 = Fabricate(:partner, external_partner_id: 'phillips')
+      stub_gravity_partner(id: 'partnerid')
+      stub_gravity_partner(id: 'phillips')
+      stub_gravity_partner_contacts(partner_id: 'partnerid')
+      stub_gravity_partner_contacts(partner_id: 'phillips')
+      PartnerSubmissionService.daily_batch
+      page.visit "/admin/submissions/#{@submission.id}"
+
+      expect(page).to have_content('Partner Interest')
+      expect(page).to have_content("#{partner1.id} received on")
+      expect(page).to have_content("#{partner2.id} received on")
+    end
+
     context 'unreviewed submission' do
       it 'displays buttons to approve/reject if the submission is not yet reviewed' do
         expect(page).to have_content('Approve')
