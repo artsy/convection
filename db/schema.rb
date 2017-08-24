@@ -24,19 +24,20 @@ ActiveRecord::Schema.define(version: 20170823171400) do
   end
 
   create_table "partner_submissions", force: :cascade do |t|
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
     t.integer  "submission_id"
     t.integer  "partner_id"
+    t.datetime "notified_at"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.index ["partner_id"], name: "index_partner_submissions_on_partner_id", using: :btree
     t.index ["submission_id"], name: "index_partner_submissions_on_submission_id", using: :btree
   end
 
   create_table "partners", force: :cascade do |t|
-    t.string   "external_partner_id", null: false
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
-    t.index ["external_partner_id"], name: "index_partners_on_external_partner_id", unique: true, using: :btree
+    t.string   "gravity_partner_id", null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.index ["gravity_partner_id"], name: "index_partners_on_gravity_partner_id", unique: true, using: :btree
   end
 
   create_table "submissions", force: :cascade do |t|

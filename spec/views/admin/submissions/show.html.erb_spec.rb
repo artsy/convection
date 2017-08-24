@@ -45,11 +45,24 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       expect(page).to have_content 'Rejected by Jon Jonson'
     end
 
+    it 'does not display partners who have not been notified' do
+      allow(Convection.config).to receive(:consignment_communication_id).and_return('comm1')
+      partner1 = Fabricate(:partner, gravity_partner_id: 'partnerid')
+      partner2 = Fabricate(:partner, gravity_partner_id: 'phillips')
+      SubmissionService.update_submission(@submission, state: 'approved')
+      expect(@submission.partner_submissions.count).to eq 2
+      page.visit "/admin/submissions/#{@submission.id}"
+
+      expect(page).to have_content('Partner Interest')
+      expect(page).to_not have_content("#{partner1.id} notified on")
+      expect(page).to_not have_content("#{partner2.id} notified on")
+    end
+
     it 'displays the partners that a submission has been shown to' do
       allow(Convection.config).to receive(:consignment_communication_id).and_return('comm1')
-      @submission.update_attributes!(state: 'approved')
-      partner1 = Fabricate(:partner, external_partner_id: 'partnerid')
-      partner2 = Fabricate(:partner, external_partner_id: 'phillips')
+      partner1 = Fabricate(:partner, gravity_partner_id: 'partnerid')
+      partner2 = Fabricate(:partner, gravity_partner_id: 'phillips')
+      SubmissionService.update_submission(@submission, state: 'approved')
       stub_gravity_partner(id: 'partnerid')
       stub_gravity_partner(id: 'phillips')
       stub_gravity_partner_contacts(partner_id: 'partnerid')
@@ -58,8 +71,8 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       page.visit "/admin/submissions/#{@submission.id}"
 
       expect(page).to have_content('Partner Interest')
-      expect(page).to have_content("#{partner1.id} received on")
-      expect(page).to have_content("#{partner2.id} received on")
+      expect(page).to have_content("#{partner1.id} notified on")
+      expect(page).to have_content("#{partner2.id} notified on")
     end
 
     context 'unreviewed submission' do

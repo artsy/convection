@@ -179,9 +179,9 @@
       <% end %>
       <div class='row double-padding-top'>
         <div class='bold-label'>Partner Interest</div>
-        <% @partner_submissions.each do |ps| %>
+        <% @notified_partner_submissions.each do |ps| %>
           <p>
-            <%= ps.partner_id %> received on <%= formatted_date(ps.created_at) %>
+            <%= ps.partner_id %> notified on <%= formatted_date(ps.notified_at) %>
           </p>
         <% end %>
       </div>

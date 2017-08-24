@@ -4,7 +4,6 @@ class Submission < ApplicationRecord
     submitted
     approved
     rejected
-    visible
   ).freeze
   DIMENSION_METRICS = %w(in cm).freeze
   CATEGORIES = [

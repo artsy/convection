@@ -4,11 +4,8 @@ module Admin
     before_action :set_pagination_params, only: [:index]
 
     def index
-      @submissions_count = Submission.completed.count
-      @unreviewed_count = Submission.where(state: 'submitted').count
-      @approved_count = Submission.where(state: 'approved').count
-      @rejected_count = Submission.where(state: 'rejected').count
-      @visible_count = Submission.where(state: 'visible').count
+      @counts = Submission.group(:state).count
+      @completed_submissions_count = Submission.completed.count
       @filters = { state: params[:state] }
 
       @submissions = params[:state] ? Submission.where(state: params[:state]) : Submission.completed
@@ -29,7 +26,7 @@ module Admin
     end
 
     def show
-      @partner_submissions = @submission.partner_submissions
+      @notified_partner_submissions = @submission.partner_submissions.where.not(notified_at: nil)
     end
 
     def edit; end
