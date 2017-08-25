@@ -68,6 +68,18 @@ describe SubmissionService do
       expect(submission.rejected_at).to be_nil
     end
 
+    it 'generates partner submissions on an approval' do
+      partner1 = Fabricate(:partner, gravity_partner_id: 'partner1')
+      partner2 = Fabricate(:partner, gravity_partner_id: 'partner2')
+
+      SubmissionService.update_submission(submission, { state: 'approved' }, 'userid')
+      expect(ActionMailer::Base.deliveries.length).to eq 1
+      expect(partner1.partner_submissions.length).to eq 1
+      expect(partner2.partner_submissions.length).to eq 1
+      expect(partner1.partner_submissions.first.notified_at).to be_nil
+      expect(partner2.partner_submissions.first.notified_at).to be_nil
+    end
+
     it 'sends a rejection notification if the submission state is changed to rejected' do
       SubmissionService.update_submission(submission, { state: 'rejected' }, 'userid')
       emails = ActionMailer::Base.deliveries

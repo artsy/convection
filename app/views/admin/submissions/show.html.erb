@@ -177,6 +177,14 @@
           <%= reviewer_byline(@submission) %>
         </div>
       <% end %>
+      <div class='row double-padding-top'>
+        <div class='bold-label'>Partner Interest</div>
+        <% @notified_partner_submissions.each do |ps| %>
+          <p>
+            <%= ps.partner_id %> notified on <%= formatted_date(ps.notified_at) %>
+          </p>
+        <% end %>
+      </div>
     </div>
     <div class='col-sm-3'>
       <div class='attributes-container triple-padding-top'>

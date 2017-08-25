@@ -7,19 +7,19 @@
     <div class='col-md-2'>
       <div class='flex-label'>
         <div class='left'><%= link_to 'All', admin_submissions_path %></div>
-        <div class='right'><%= @submissions_count %></div>
+        <div class='right'><%= @completed_submissions_count %></div>
       </div>
       <div class='flex-label'>
         <div class='left'><%= link_to 'Unreviewed', admin_submissions_path(state: 'submitted') %></div>
-        <div class='right'><%= @unreviewed_count %></div>
+        <div class='right'><%= @counts['submitted'] || 0 %></div>
       </div>
       <div class='flex-label'>
         <div class='left'><%= link_to 'Approved', admin_submissions_path(state: 'approved') %></div>
-        <div class='right'><%= @approved_count %></div>
+        <div class='right'><%= @counts['approved'] || 0 %></div>
       </div>
       <div class='flex-label'>
         <div class='left'><%= link_to 'Rejected', admin_submissions_path(state: 'rejected') %></div>
-        <div class='right'><%= @rejected_count %></div>
+        <div class='right'><%= @counts['rejected'] || 0 %></div>
       </div>
       <div class='row double-padding-top'>
         <%= link_to 'New', new_admin_submission_path, class: 'btn btn-tiny btn-full-width' %>

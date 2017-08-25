@@ -28,6 +28,7 @@ class SubmissionService
     def approve!(submission, current_user)
       submission.update_attributes!(approved_by: current_user, approved_at: Time.now.utc)
       delay.deliver_approval_notification(submission.id)
+      PartnerSubmissionService.delay.generate_for_all_partners(submission.id)
     end
 
     def reject!(submission, current_user)
