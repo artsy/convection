@@ -43,7 +43,7 @@ describe PartnerSubmissionService do
     end
   end
 
-  describe '#daily_batch' do
+  describe '#daily_digest' do
     before do
       stub_gravity_partner(name: 'Juliens Auctions')
       allow(Convection.config).to receive(:consignment_communication_id).and_return('comm1')
@@ -52,7 +52,7 @@ describe PartnerSubmissionService do
     it 'does not send any emails if there are no partner submissions' do
       Fabricate(:partner, gravity_partner_id: 'partnerid')
       Fabricate(:submission, state: 'approved')
-      PartnerSubmissionService.daily_batch
+      PartnerSubmissionService.daily_digest
       expect(PartnerSubmission.count).to eq 0
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 0
@@ -60,7 +60,7 @@ describe PartnerSubmissionService do
 
     it 'does not send any emails if there are no partners' do
       Fabricate(:submission, state: 'approved')
-      PartnerSubmissionService.daily_batch
+      PartnerSubmissionService.daily_digest
       expect(PartnerSubmission.count).to eq 0
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 0
@@ -102,7 +102,7 @@ describe PartnerSubmissionService do
         end
 
         it 'skips sending to partner if there are no partner contacts' do
-          PartnerSubmissionService.daily_batch
+          PartnerSubmissionService.daily_digest
           emails = ActionMailer::Base.deliveries
           expect(emails.length).to eq 0
           expect(PartnerSubmission.all.map(&:notified_at).compact).to eq []
@@ -114,25 +114,25 @@ describe PartnerSubmissionService do
           stub_gravity_partner_contacts
         end
 
-        it 'sends an email batch to a single partner with only approved submissions' do
-          PartnerSubmissionService.daily_batch
+        it 'sends an email digest to a single partner with only approved submissions' do
+          PartnerSubmissionService.daily_digest
 
           emails = ActionMailer::Base.deliveries
           expect(emails.length).to eq 1
           email = emails.first
-          expect(email.subject).to include('Artsy Submission Batch for: Juliens Auctions')
+          expect(email.subject).to include('Artsy Submission Digest for: Juliens Auctions')
           expect(email.html_part.body).to include('<i>First approved artwork</i><span>, 1992</span>')
           expect(email.html_part.body).to include('<i>Second approved artwork</i><span>, 1993</span>')
           expect(email.html_part.body).to include('<i>Third approved artwork</i><span>, 1997</span>')
           expect(@partner.partner_submissions.map(&:notified_at).compact.length).to eq 3
         end
 
-        it 'sends an email batch to multiple partners' do
+        it 'sends an email digest to multiple partners' do
           partner2 = Fabricate(:partner, gravity_partner_id: 'phillips')
           PartnerSubmissionService.generate_for_new_partner(partner2)
           stub_gravity_partner(name: 'Phillips Auctions', id: 'phillips')
           stub_gravity_partner_contacts(partner_id: 'phillips')
-          PartnerSubmissionService.daily_batch
+          PartnerSubmissionService.daily_digest
 
           expect(@approved1.partner_submissions.count).to eq 2
           expect(@approved2.partner_submissions.count).to eq 2
@@ -152,7 +152,7 @@ describe PartnerSubmissionService do
           contactless_partner = Fabricate(:partner, gravity_partner_id: 'phillips')
           stub_gravity_partner(name: 'Phillips Auctions', id: 'phillips')
           stub_gravity_partner_contacts(partner_id: 'phillips', override_body: [])
-          PartnerSubmissionService.daily_batch
+          PartnerSubmissionService.daily_digest
 
           expect(@approved1.partner_submissions.count).to eq 1
           expect(@approved2.partner_submissions.count).to eq 1
@@ -163,7 +163,7 @@ describe PartnerSubmissionService do
           emails = ActionMailer::Base.deliveries
           expect(emails.length).to eq 1
           email = emails.first
-          expect(email.subject).to include('Artsy Submission Batch for: Juliens Auctions')
+          expect(email.subject).to include('Artsy Submission Digest for: Juliens Auctions')
           expect(email.html_part.body).to include('<i>First approved artwork</i><span>, 1992</span>')
           expect(email.html_part.body).to include('<i>Second approved artwork</i><span>, 1993</span>')
           expect(email.html_part.body).to include('<i>Third approved artwork</i><span>, 1997</span>')

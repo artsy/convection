@@ -1,6 +1,6 @@
 class PartnerMailerPreview < ActionMailer::Preview
-  def submission_batch
-    PartnerMailer.submission_batch(submission_batch_mail_params)
+  def submission_digest
+    PartnerMailer.submission_digest(submission_digest_mail_params)
   end
 
   private
@@ -25,7 +25,7 @@ class PartnerMailerPreview < ActionMailer::Preview
     )
   end
 
-  def submission_batch_mail_params
+  def submission_digest_mail_params
     {
       submissions: [
         submission_params,

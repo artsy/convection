@@ -67,7 +67,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       stub_gravity_partner(id: 'phillips')
       stub_gravity_partner_contacts(partner_id: 'partnerid')
       stub_gravity_partner_contacts(partner_id: 'phillips')
-      PartnerSubmissionService.daily_batch
+      PartnerSubmissionService.daily_digest
       page.visit "/admin/submissions/#{@submission.id}"
 
       expect(page).to have_content('Partner Interest')
