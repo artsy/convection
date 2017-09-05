@@ -2,16 +2,16 @@ module Inputs
   module SubmissionInput
     Create = GraphQL::InputObjectType.define do
       name('CreateSubmission')
-      SubmissionInput.args(self)
+      SubmissionInput.shared_args(self)
     end
 
     Update = GraphQL::InputObjectType.define do
       name('UpdateSubmission')
       argument :id, !types.ID
-      SubmissionInput.args(self)
+      SubmissionInput.shared_args(self)
     end
 
-    def self.args(object_type)
+    def self.shared_args(object_type)
       object_type.argument :additional_info, object_type.types.String
       object_type.argument :artist_id, !object_type.types.String
       object_type.argument :authenticity_certificate, object_type.types.Boolean
