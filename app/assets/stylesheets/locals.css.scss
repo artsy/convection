@@ -41,6 +41,22 @@
   }
 }
 
+.list-group--asset-images {
+  display: flex;
+
+  .list-group-item--primary-asset-image {
+    border: 2px solid #0EDA83;
+  }
+}
+
+.medium-square-image {
+  img {
+    width: 150px;
+    padding: 5px;
+    margin: 5px;
+  }
+}
+
 .list-item--submission {
   display: flex;
   justify-content: space-between;

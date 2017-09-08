@@ -35,6 +35,7 @@ class Submission < ApplicationRecord
 
   delegate :images, to: :assets
 
+  has_one :primary_asset, class_name: 'Asset', dependent: :nullify
   has_many :assets, dependent: :destroy
   has_many :partner_submissions
 
