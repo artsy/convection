@@ -35,7 +35,6 @@ class Submission < ApplicationRecord
 
   delegate :images, to: :assets
 
-  has_one :primary_asset, class_name: 'Asset', dependent: :nullify
   has_many :assets, dependent: :destroy
   has_many :partner_submissions
 
@@ -61,6 +60,11 @@ class Submission < ApplicationRecord
 
   def processed_images
     images.select { |image| image.image_urls['square'].present? }
+  end
+
+  def primary_image
+    return unless primary_asset_id.present?
+    assets.find(primary_asset_id)
   end
 
   def thumbnail

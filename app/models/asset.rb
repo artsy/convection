@@ -27,4 +27,9 @@ class Asset < ApplicationRecord
     raise GeminiHttpException, "#{response.code}: #{response.body}" unless response.code == '302'
     response['location']
   end
+
+  def is_primary_image?
+    return unless asset_type == 'image'
+    id == submission.primary_asset_id
+  end
 end

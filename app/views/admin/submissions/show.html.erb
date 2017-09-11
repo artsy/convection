@@ -141,15 +141,15 @@
             <p>
               <%= link_to 'Add Asset', new_admin_submission_asset_path(@submission), class: 'btn btn-small btn-secondary' %>
             </p>
-            <%= @submission.to_json %>
             <div class='list-group list-group--asset-images'>
               <% @submission.assets.each do |asset| %>
-                <%= "ASSET ID: #{asset.id}" %>
-                <%= "PRIMARY ASSET ID: #{@submission.primary_asset_id}" %>
                 <% if asset.asset_type == 'image' && asset.image_urls['square'].present? %>
-                  <a class='medium-square-image <%= asset.id == @submission.primary_asset.id ? 'list-group-item--primary-asset-image' : '' %>' href=<%= admin_submission_asset_path(asset.submission, asset) %>>
+                  <a class='medium-square-image <%= asset.is_primary_image? ? 'list-group-item--primary-asset-image' : 'list-group-item--asset-image' %>' href=<%= admin_submission_asset_path(asset.submission, asset) %>>
                     <%= image_tag asset.image_urls['square'] %>
                   </a>
+                  <div>
+                    <%= asset.is_primary_image? ? 'PRIMARY' : '' %>
+                  </div>
                 <% end %>
               <% end %>
             </div>
