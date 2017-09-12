@@ -14,13 +14,13 @@
         </div>
       <% end %>
       <div class='asset-controls'>
-        <% if asset.id == asset.submission.primary_asset_id %>
-          <div class='bold-label primary-asset-label'>
+        <% if asset.id == asset.submission.primary_image_id %>
+          <div class='bold-label primary-image-label'>
             PRIMARY
           </div>
         <% else %>
-          <div class='make-primary-asset'>
-            <%= link_to 'Make primary', admin_submission_path(submission: { primary_asset_id: asset.id }), method: :put, class: 'btn btn-tiny' %>
+          <div class='make-primary-image'>
+            <%= link_to 'Make primary', admin_submission_path(submission: { primary_image_id: asset.id }), method: :put, class: 'btn btn-tiny' %>
           </div>
         <% end %>
       <% end %>

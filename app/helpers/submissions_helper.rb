@@ -30,8 +30,8 @@ module SubmissionsHelper
   end
 
   def preferred_image(submission)
-    if submission.primary_processed_image.present?
-      submission.primary_processed_image.image_urls['square']
+    if submission.primary_image.present?
+      submission.primary_image.image_urls['square']
     else
       submission.processed_images.first.image_urls['square']
     end

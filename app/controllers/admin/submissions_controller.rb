@@ -79,7 +79,7 @@ module Admin
         :location_country,
         :location_state,
         :medium,
-        :primary_asset_id,
+        :primary_image_id,
         :provenance,
         :signature,
         :state,

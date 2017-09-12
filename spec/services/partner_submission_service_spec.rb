@@ -140,7 +140,7 @@ describe PartnerSubmissionService do
         it 'sends a digest with the primary image' do
           Fabricate(:image, submission: @approved1)
           second_image = Fabricate(:image, submission: @approved1)
-          @approved1.update_attributes!(primary_asset_id: second_image.id)
+          @approved1.update_attributes!(primary_image_id: second_image.id)
           PartnerSubmissionService.daily_digest
 
           emails = ActionMailer::Base.deliveries
