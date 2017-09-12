@@ -28,4 +28,12 @@ module SubmissionsHelper
   def formatted_date(date)
     date.strftime('%-m/%-d/%Y')
   end
+
+  def preferred_image(submission)
+    if submission.primary_processed_image.present?
+      submission.primary_processed_image.image_urls['square']
+    else
+      submission.processed_images.first.image_urls['square']
+    end
+  end
 end

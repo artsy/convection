@@ -62,9 +62,9 @@ class Submission < ApplicationRecord
     images.select { |image| image.image_urls['square'].present? }
   end
 
-  def primary_image
+  def primary_processed_image
     return unless primary_asset_id.present?
-    assets.find(primary_asset_id)
+    processed_images.detect { |image| image.id == primary_asset_id }
   end
 
   def thumbnail

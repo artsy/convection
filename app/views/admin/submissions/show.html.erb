@@ -143,14 +143,7 @@
             </p>
             <div class='list-group list-group--asset-images'>
               <% @submission.assets.each do |asset| %>
-                <% if asset.asset_type == 'image' && asset.image_urls['square'].present? %>
-                  <a class='medium-square-image <%= asset.is_primary_image? ? 'list-group-item--primary-asset-image' : 'list-group-item--asset-image' %>' href=<%= admin_submission_asset_path(asset.submission, asset) %>>
-                    <%= image_tag asset.image_urls['square'] %>
-                  </a>
-                  <div>
-                    <%= asset.is_primary_image? ? 'PRIMARY' : '' %>
-                  </div>
-                <% end %>
+                <%= render partial: 'admin/assets/asset_row', locals: { asset: asset } %>
               <% end %>
             </div>
           </div>

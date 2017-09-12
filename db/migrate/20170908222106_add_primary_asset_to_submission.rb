@@ -1,5 +1,5 @@
 class AddPrimaryAssetToSubmission < ActiveRecord::Migration[5.0]
   def change
-    add_reference :submissions, :primary_asset, foreign_key: { to_table: :assets }
+    add_column :submissions, :primary_asset_id, :integer
   end
 end

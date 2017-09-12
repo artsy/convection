@@ -42,16 +42,15 @@
 }
 
 .list-group--asset-images {
-  display: flex;
-
-  .list-group-item--primary-asset-image {
-    border: 2px solid #0EDA83;
-    margin: 5px;
+  .asset-thumb {
+    img {
+      width: 100px;
+      max-height: 100px;
+    }
   }
 
-  .list-group-item--asset-image {
-    border: 1px solid black;
-    margin: 5px;
+  .list-group-item--asset {
+    display: flex;
   }
 }
 

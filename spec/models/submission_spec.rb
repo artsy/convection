@@ -67,6 +67,27 @@ describe Submission do
     end
   end
 
+  context 'primary_processed_image' do
+    it 'returns nil if there is no primary_asset_id' do
+      expect(submission.primary_asset_id).to eq nil
+      expect(submission.primary_processed_image).to eq nil
+    end
+
+    it 'returns nil if there is a primary_asset_id but the image is not processed' do
+      unprocessed_image = Fabricate(:unprocessed_image, submission: submission)
+      submission.update_attributes!(primary_asset_id: unprocessed_image.id)
+      expect(submission.primary_asset_id).to eq unprocessed_image.id
+      expect(submission.primary_processed_image).to eq nil
+    end
+
+    it 'returns the primary processed image' do
+      processed_image = Fabricate(:image, submission: submission)
+      submission.update_attributes!(primary_asset_id: processed_image.id)
+      expect(submission.primary_asset_id).to eq processed_image.id
+      expect(submission.primary_processed_image).to eq processed_image
+    end
+  end
+
   context 'finished_processing_images_for_email?' do
     it 'returns true if there are no assets' do
       expect(submission.finished_processing_images_for_email?).to eq true

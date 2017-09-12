@@ -119,6 +119,37 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         expect(page).to have_content("Submission ##{@submission.id}")
         expect(page).to_not have_content('View Original')
       end
+
+      it 'displays make primary if there are no primary assets' do
+        expect(page).to_not have_selector('.primary-asset-label')
+        expect(page).to have_selector('.make-primary-asset', count: 4)
+      end
+
+      it 'displays the primary asset label and respects changing it' do
+        primary_asset = @submission.assets.first
+        @submission.update_attributes!(primary_asset_id: primary_asset.id)
+        page.visit "/admin/submissions/#{@submission.id}"
+        within("div#submission-asset-#{primary_asset.id}") do
+          expect(page).to have_selector('.primary-asset-label', count: 1)
+          expect(page).to_not have_selector('.make-primary-asset')
+        end
+        expect(page).to have_selector('.make-primary-asset', count: 3)
+
+        # clicking make primary changes the primary asset
+        new_primary_asset = @submission.assets.last
+        page.visit "/admin/submissions/#{@submission.id}"
+        within("div#submission-asset-#{new_primary_asset.id}") do
+          expect(page).to_not have_selector('.primary-asset-label')
+          click_link('Make primary')
+        end
+        expect(page).to have_selector('.make-primary-asset', count: 3)
+        within("div#submission-asset-#{primary_asset.id}") do
+          expect(page).to_not have_selector('.primary-asset-label')
+        end
+        within("div#submission-asset-#{new_primary_asset.id}") do
+          expect(page).to have_selector('.primary-asset-label')
+        end
+      end
     end
   end
 end
