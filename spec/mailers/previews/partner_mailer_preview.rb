@@ -32,8 +32,7 @@ class PartnerMailerPreview < ActionMailer::Preview
         submission_params,
         submission_params
       ],
-      partner_name: 'Phillips',
-      partner_emails: ['consign@phillips.com']
+      partner_name: 'Phillips'
     }
   end
 end

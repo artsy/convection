@@ -41,6 +41,27 @@
   }
 }
 
+.list-group--asset-images {
+  .asset-thumb {
+    img {
+      width: 100px;
+      max-height: 100px;
+    }
+  }
+
+  .list-group-item--asset {
+    display: flex;
+  }
+}
+
+.medium-square-image {
+  img {
+    width: 150px;
+    padding: 5px;
+    margin: 5px;
+  }
+}
+
 .list-item--submission {
   display: flex;
   justify-content: space-between;

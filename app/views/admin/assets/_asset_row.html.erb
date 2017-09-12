@@ -1,16 +1,29 @@
 <div class='row'>
-  <a class='list-group-item' href=<%= admin_submission_asset_path(asset.submission, asset) %>>
-    <span class='list-group-item-content'>
-      <span class='list-group-item-label'>
-        <%= "#{asset.asset_type} ##{asset.id}" %>
-      </span>
-    </span>
-    <% if asset.asset_type == 'image' && asset.image_urls['thumbnail'].present? %>
-      <span class='list-group-item-content'>
-        <span class='asset-thumb'>
-          <%= image_tag asset.image_urls['square'] %>
-        </span>
-      </span>
-    <% end %>
-  </a>
+  <div class='list-group-item list-group-item--asset' id=<%= "submission-asset-#{asset.id}" %>>
+    <div class='list-group-item-content'>
+      <div class='list-group-item-label'>
+        <%= link_to "#{asset.asset_type} ##{asset.id}", admin_submission_asset_path(asset.submission, asset) %>
+      </div>
+    </div>
+    <% if asset.asset_type == 'image' %>
+      <% if asset.image_urls['thumbnail'].present? %>
+        <div class='list-group-item-content'>
+          <div class='asset-thumb'>
+            <%= image_tag asset.image_urls['square'] %>
+          </div>
+        </div>
+      <% end %>
+      <div class='asset-controls'>
+        <% if asset.id == asset.submission.primary_image_id %>
+          <div class='bold-label primary-image-label'>
+            PRIMARY
+          </div>
+        <% else %>
+          <div class='make-primary-image'>
+            <%= link_to 'Make primary', admin_submission_path(submission: { primary_image_id: asset.id }), method: :put, class: 'btn btn-tiny' %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
 </div>

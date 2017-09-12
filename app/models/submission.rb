@@ -37,10 +37,12 @@ class Submission < ApplicationRecord
 
   has_many :assets, dependent: :destroy
   has_many :partner_submissions
+  belongs_to :primary_image, class_name: 'Asset'
 
   validates :state, inclusion: { in: STATES }
   validates :category, inclusion: { in: CATEGORIES }, allow_nil: true
   validates :dimensions_metric, inclusion: { in: DIMENSION_METRICS }, allow_nil: true
+  validate :validate_primary_image
 
   before_validation :set_state, on: :create
 
@@ -110,5 +112,10 @@ class Submission < ApplicationRecord
     user.try(:user_detail)
   rescue Faraday::ResourceNotFound
     nil
+  end
+
+  def validate_primary_image
+    return unless primary_image.present?
+    errors.add(:primary_image, 'Primary image must have asset_type=image') unless primary_image.asset_type == 'image'
   end
 end

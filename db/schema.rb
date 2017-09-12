@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170823171400) do
+ActiveRecord::Schema.define(version: 20170908222106) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,10 +73,13 @@ ActiveRecord::Schema.define(version: 20170823171400) do
     t.datetime "approved_at"
     t.string   "rejected_by"
     t.datetime "rejected_at"
+    t.integer  "primary_image_id"
+    t.index ["primary_image_id"], name: "index_submissions_on_primary_image_id", using: :btree
     t.index ["user_id"], name: "index_submissions_on_user_id", using: :btree
   end
 
   add_foreign_key "assets", "submissions"
   add_foreign_key "partner_submissions", "partners"
   add_foreign_key "partner_submissions", "submissions"
+  add_foreign_key "submissions", "assets", column: "primary_image_id"
 end

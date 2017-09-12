@@ -141,7 +141,7 @@
             <p>
               <%= link_to 'Add Asset', new_admin_submission_asset_path(@submission), class: 'btn btn-small btn-secondary' %>
             </p>
-            <div class='list-group'>
+            <div class='list-group list-group--asset-images'>
               <% @submission.assets.each do |asset| %>
                 <%= render partial: 'admin/assets/asset_row', locals: { asset: asset } %>
               <% end %>

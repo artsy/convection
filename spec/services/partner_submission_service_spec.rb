@@ -127,6 +127,27 @@ describe PartnerSubmissionService do
           expect(@partner.partner_submissions.map(&:notified_at).compact.length).to eq 3
         end
 
+        it 'sends a digest with the first processed image' do
+          first_image = Fabricate(:image, submission: @approved1)
+          Fabricate(:image, submission: @approved1)
+          PartnerSubmissionService.daily_digest
+
+          emails = ActionMailer::Base.deliveries
+          expect(emails.length).to eq 1
+          expect(emails.first.html_part.body).to include(first_image.image_urls['square'])
+        end
+
+        it 'sends a digest with the primary image' do
+          Fabricate(:image, submission: @approved1)
+          second_image = Fabricate(:image, submission: @approved1)
+          @approved1.update_attributes!(primary_image_id: second_image.id)
+          PartnerSubmissionService.daily_digest
+
+          emails = ActionMailer::Base.deliveries
+          expect(emails.length).to eq 1
+          expect(emails.first.html_part.body).to include(second_image.image_urls['square'])
+        end
+
         it 'sends an email digest to multiple partners' do
           partner2 = Fabricate(:partner, gravity_partner_id: 'phillips')
           PartnerSubmissionService.generate_for_new_partner(partner2)
