@@ -16,5 +16,10 @@ if Rails.env.development? || Rails.env.test?
     t.rspec_opts = %W(-f JUnit -o #{test_output})
   end
 
+  task 'print_schema' => :environment do
+    require 'graphql/schema/printer'
+    puts GraphQL::Schema::Printer.new(RootSchema).print_schema
+  end
+
   task default: [:rubocop, :spec]
 end

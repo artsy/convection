@@ -64,6 +64,10 @@ class Submission < ApplicationRecord
     images.select { |image| image.image_urls['square'].present? }
   end
 
+  def large_images
+    images.select { |image| image.image_urls['large'].present? }
+  end
+
   def thumbnail
     thumbnail_image = images.select { |image| image.image_urls['thumbnail'].present? }.first
     return thumbnail_image.image_urls['thumbnail'] if thumbnail_image
