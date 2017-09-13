@@ -29,13 +29,42 @@ describe Admin::PartnersController, type: :controller do
       before do
         gravql_stub
       end
-      it 'returns the first two partners on the first page' do
-        get :index, params: { page: 1, size: 2 }
-        expect(assigns(:partners).count).to eq 2
+      context 'with successful partner details request' do
+        it 'returns the first two partners on the first page' do
+          get :index, params: { page: 1, size: 2 }
+          expect(assigns(:partners).count).to eq 2
+        end
+        it 'paginates correctly' do
+          get :index, params: { page: 3, size: 2 }
+          expect(assigns(:partners).count).to eq 1
+        end
       end
-      it 'paginates correctly' do
-        get :index, params: { page: 3, size: 2 }
-        expect(assigns(:partners).count).to eq 1
+
+      context 'with errors in partner details response' do
+        let(:gravql_partners_response) do
+          {
+            data: {
+              partners: partners.map { |p, idx| { id: p.gravity_partner_id, given_name: "p_#{idx}" } }
+            },
+            errors: [
+              {
+                message: "Can't access subscription_state",
+                locations: [
+                  {
+                    line: 6,
+                    column: 5
+                  }
+                ],
+                path: ['partners', 0, 'subscription_state']
+              }
+            ]
+          }
+        end
+
+        it 'renders flash error' do
+          get :index, params: { page: 1, size: 2 }
+          expect(flash[:error]).to eq 'Error fetching some partner details.'
+        end
       end
     end
   end

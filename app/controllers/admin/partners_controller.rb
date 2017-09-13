@@ -5,7 +5,7 @@ module Admin
     PARTNERS_DETAILS_QUERY = %|
       query partnersDetails($ids: [ID]!){
         partners(ids: $ids){
-          id,
+          id
           given_name
         }
       }
@@ -16,8 +16,9 @@ module Admin
       partners_details_response = Gravql::Schema.execute(
         query: PARTNERS_DETAILS_QUERY,
         variables: { ids: [@partners.first.gravity_partner_id] }
-      )[:data][:partners]
-      @partner_details = partners_details_response.map { |pd| [pd[:id], pd] }.to_h
+      )
+      flash.now[:error] = 'Error fetching some partner details.' if partners_details_response[:errors].present?
+      @partner_details = partners_details_response[:data][:partners].map { |pd| [pd[:id], pd] }.to_h
     end
   end
 end
