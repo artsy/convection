@@ -34,10 +34,10 @@ ActiveRecord::Schema.define(version: 20170908222106) do
   end
 
   create_table "partners", force: :cascade do |t|
-    t.string   "gravity_partner_id"
-    t.boolean  "enabled"
+    t.string   "gravity_partner_id", null: false
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+    t.index ["gravity_partner_id"], name: "index_partners_on_gravity_partner_id", unique: true, using: :btree
   end
 
   create_table "submissions", force: :cascade do |t|
