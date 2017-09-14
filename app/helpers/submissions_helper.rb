@@ -36,4 +36,8 @@ module SubmissionsHelper
       submission.processed_images.first.image_urls['square']
     end
   end
+
+  def formatted_current_time
+    Time.now.in_time_zone('Eastern Time (US & Canada)').strftime('%l:%M %Z %B %-d, %Y')
+  end
 end

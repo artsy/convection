@@ -148,6 +148,22 @@ describe PartnerSubmissionService do
           expect(emails.first.html_part.body).to include(second_image.image_urls['square'])
         end
 
+        it 'includes links to additional images' do
+          first_image = Fabricate(:image, submission: @approved1)
+          Fabricate(:image, submission: @approved1, image_urls: { 'large' => 'http://foo1.jpg' })
+          Fabricate(:image, submission: @approved1, image_urls: { 'large' => 'http://foo2.jpg' })
+          Fabricate(:image, submission: @approved1, image_urls: { 'large' => 'http://foo3.jpg' })
+          PartnerSubmissionService.daily_digest
+
+          emails = ActionMailer::Base.deliveries
+          expect(emails.length).to eq 1
+          email_body = emails.first.html_part.body
+          expect(email_body).to include(first_image.image_urls['square'])
+          expect(email_body).to include('<a href="https://image-large.jpg" style="color: #000001;">Image 1</a>')
+          expect(email_body).to include('<a href="https://image-large.jpg" style="color: #000001;">Image 1</a>')
+          expect(email_body).to include('<a href="https://image-large.jpg" style="color: #000001;">Image 1</a>')
+        end
+
         it 'sends an email digest to multiple partners' do
           partner2 = Fabricate(:partner, gravity_partner_id: 'phillips')
           PartnerSubmissionService.generate_for_new_partner(partner2)

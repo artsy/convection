@@ -6,78 +6,108 @@
       <table class='email-content submission-batch-email' align='center'>
         <%= render partial: 'shared/email_header' %>
         <tr>
-          <td class='email-title'>
+          <td class='email-title sans-serif'>
             New works available from Artsy collectors
           </td>
         </tr>
         <tr>
-          <td class='email-sub-title'>
+          <td class='email-sub-title sans-serif'>
             In order to guarantee availability of the work please reply with your offers within 48hrs.
           </td>
         </tr>
         <tr>
           <td class='email-sub-title-gray'>
-            Submissions as of <%= Time.now.utc.strftime('%B %-d, %Y') %>
+            Submissions as of <%= formatted_current_time %>
           </td>
         </tr>
         <tr>
-          <table>
-            <% @submissions.each do |submission| %>
-              <tr>
-                <% if submission.processed_images.length > 0 %>
-                  <td class='submission-image'>
-                    <%= image_tag(preferred_image(submission), id: 'first-image') %>
-                  </td>
-                <% else %>
-                  <td class='submission-image'>
-                    <%= image_tag(image_url('missing_image.png'), id: 'first-image') %>
-                  </td>
-                <% end %>
-                <td>
-                  <table class='submission-batch-metadata'>
-                    <tr>
-                      <td class='gray'>
-                        <%= submission.id %>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class='bold'>
-                        <%= submission.artist_name %>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <i><%= submission.title %></i><span><%= ", #{submission.year}" %></span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <%= submission.category %>, <%= formatted_dimensions(submission) %>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class='small-padding-top'>
-                        <%= formatted_location(submission) %>
-                      </td>
-                    </tr>
-                    <% if submission.provenance.present? %>
+          <td>
+            <table>
+              <% @submissions.each do |submission| %>
+                <tr class='submission-image-row-mobile'>
+                  <% if submission.processed_images.length > 0 %>
+                    <td class='submission-image-mobile'>
+                      <%= image_tag(preferred_image(submission)) %>
+                    </td>
+                  <% else %>
+                    <td class='submission-image-mobile'>
+                      <%= image_tag(image_url('missing_image.png')) %>
+                    </td>
+                  <% end %>
+                </tr>
+                <tr>
+                  <% if submission.processed_images.length > 0 %>
+                    <td class='submission-image'>
+                      <%= image_tag(preferred_image(submission)) %>
+                    </td>
+                  <% else %>
+                    <td class='submission-image'>
+                      <%= image_tag(image_url('missing_image.png')) %>
+                    </td>
+                  <% end %>
+                  <td>
+                    <table class='submission-batch-metadata'>
                       <tr>
-                        <td>
-                          <i><%= submission.provenance.truncate(50) %></i>
+                        <td class='gray'>
+                          <%= submission.id %>
                         </td>
                       </tr>
-                    <% end %>
-                  </table>
-                </td>
-              </tr>
-            <% end %>
-          </table>
+                      <tr>
+                        <td class='bold'>
+                          <%= submission.artist_name %>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <i><%= submission.title %></i><span><%= ", #{submission.year}" %></span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <%= submission.category %>, <%= formatted_dimensions(submission) %>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class='small-padding-top'>
+                          <%= formatted_location(submission) %>
+                        </td>
+                      </tr>
+                      <% if submission.provenance.present? %>
+                        <tr>
+                          <td>
+                            <i><%= submission.provenance.truncate(50) %></i>
+                          </td>
+                        </tr>
+                      <% end %>
+                      <tr>
+                        <td>
+                          <table class='image-links-table'>
+                            <% submission.large_images.each_slice(4) do |batch| %>
+                              <tr>
+                                <% batch.each_with_index do |image, index| %>
+                                  <% if image.image_urls['large'].present? %>
+                                    <td>
+                                      <%= link_to "Image #{submission.large_images.find_index(image) + 1}", image.image_urls['large'] %>
+                                    </td>
+                                  <% end %>
+                                <% end %>
+                              </tr>
+                            <% end %>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              <% end %>
+            </table>
+          </td>
         </tr>
         <tr>
           <td>
-            <table class='submission-batch-todo'>
+            <table class='submission-batch-todo sans-serif'>
               <tr>
-                <td class='email-sub-title'>
+                <td class='email-sub-title sans-serif'>
                   If interested in the listed works please include the following information in your offer:
                 </td>
               </tr>
@@ -111,7 +141,7 @@
                 </td>
               </tr>
               <tr>
-                <td class='email-sub-title'>
+                <td class='email-sub-title gray'>
                   The specialist team
                 </td>
               </tr>

@@ -1,3 +1,5 @@
+$sans-serif: HelveticaNeue, Helvetica, 'Helvetica', sans-serif;
+
 table.bordered-email {
   width: 100%;
   padding: 30px;
@@ -27,6 +29,10 @@ table.bordered-email {
     font-size: 40px;
     padding-top: 20px;
     padding-bottom: 20px;
+  }
+
+  .sans-serif {
+    font-family: $sans-serif;
   }
 
   .email-main-photo img {
@@ -220,19 +226,20 @@ table.bordered-email {
 
   table.submission-batch-email {
     text-align: left;
+    max-width: 660px;
 
     .email-title {
       padding-bottom: 0px;
     }
 
     .email-sub-title {
-      padding-top: 0px;
+      padding-top: 15px;
       padding-bottom: 20px;
       font-size: 20px;
     }
 
     .email-sub-title-gray {
-      font-size: 18px;
+      font-size: 16px;
       color: gray;
       font-family: sans-serif;
       padding-bottom: 20px;
@@ -243,6 +250,10 @@ table.bordered-email {
         width: 150px;
         max-width: 150px;
       }
+    }
+
+    .submission-image-row-mobile {
+      display: none;
     }
 
     .submission-batch-metadata {
@@ -256,6 +267,26 @@ table.bordered-email {
 
     table.submission-batch-todo {
       text-align: left;
+
+      .email-sub-title {
+        padding-bottom: 0px;
+      }
+
+      td {
+        font-family: $sans-serif;
+      }
+    }
+
+    table.image-links-table {
+      text-align: left;
+
+      a {
+        color: #000001;
+      }
+
+      td:first-child {
+        padding-left: 0px;
+      }
     }
   }
 }
@@ -280,6 +311,34 @@ table.bordered-email {
     .upload-photo-button {
       padding-left: 25% !important;
       padding-right: 25% !important;
+    }
+
+    table.submission-batch-email {
+      td {
+        padding-left: 0px !important;
+      }
+
+      .email-sub-title {
+        font-size: 16px !important;
+      }
+
+      .email-sub-title-gray {
+        font-size: 14px !important;
+      }
+
+      .submission-image {
+        display: none !important;
+      }
+
+      .submission-image-row-mobile {
+        display: block !important;
+
+        .submission-image-mobile {
+          img {
+            max-width: 230px;
+          }
+        }
+      }
     }
   }
 }
