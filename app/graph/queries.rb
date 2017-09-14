@@ -1,6 +1,6 @@
 module Queries
   Root = GraphQL::ObjectType.define do
-    name 'Root Query'
+    name 'Query'
     description 'Query root for this schema'
     field :submission, types[Types::SubmissionType] do
       description 'Find Submissions'
