@@ -10,6 +10,49 @@ describe 'Submission Flow' do
     expect(NotificationService).to receive(:post_submission_event).once
   end
 
+  it 'Completes a submission from Tokyo' do
+    # first create the submission, without a location_city
+    post '/api/submissions', params: {
+      artist_id: 'artistid',
+      user_id: 'userid',
+      title: 'My Artwork',
+      medium: 'painting',
+      year: '1992',
+      height: '12',
+      width: '14',
+      dimensions_metric: 'in',
+      location_state: 'Tokyo',
+      location_country: 'Japan',
+      category: 'Painting'
+    }, headers: headers
+
+    expect(response.status).to eq 201
+    submission = Submission.find(JSON.parse(response.body)['id'])
+    expect(submission.assets.count).to eq 0
+
+    stub_gravity_root
+    stub_gravity_user
+    stub_gravity_user_detail(email: 'michael@bluth.com')
+    stub_gravity_artist
+
+    put "/api/submissions/#{submission.id}", params: {
+      state: 'submitted'
+    }, headers: headers
+    expect(response.status).to eq 201
+    expect(submission.reload.state).to eq 'submitted'
+
+    emails = ActionMailer::Base.deliveries
+    expect(emails.length).to eq 4
+    expect(emails.first.to).to eq(['consign@artsy.net'])
+    expect(emails[1].subject).to include("You're Almost Done")
+    expect(emails[1].to).to eq(['michael@bluth.com'])
+    # sidekiq flushes everything at once
+    expect(emails[2].subject).to include("You're Almost Done")
+    expect(emails[2].to).to eq(['michael@bluth.com'])
+    expect(emails.last.subject).to include('Last chance to complete your consignment')
+    expect(emails.last.to).to eq(['michael@bluth.com'])
+  end
+
   describe 'Creating a submission without a photo initially' do
     it 'sends an initial reminder and a delayed reminder' do
       # first create the submission
