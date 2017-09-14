@@ -27,7 +27,6 @@ class Submission < ApplicationRecord
   REQUIRED_FIELDS_FOR_SUBMISSION = %w(
     artist_id
     category
-    location_city
     title
     user_id
     year
@@ -69,8 +68,9 @@ class Submission < ApplicationRecord
   end
 
   def thumbnail
-    thumbnail_image = images.select { |image| image.image_urls['thumbnail'].present? }.first
-    return thumbnail_image.image_urls['thumbnail'] if thumbnail_image
+    return primary_image.image_urls['thumbnail'] if primary_image && primary_image.image_urls['thumbnail'].present?
+    thumbnail_image = images.detect { |image| image.image_urls['thumbnail'].present? }
+    thumbnail_image.image_urls['thumbnail'] if thumbnail_image
   end
 
   # defines methods submitted?, approved?, etc. for each possible submission state
