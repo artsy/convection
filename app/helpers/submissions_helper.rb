@@ -6,7 +6,7 @@ module SubmissionsHelper
   def formatted_dimensions(submission)
     values = [submission.height, submission.width, submission.depth].select(&:present?)
     return if values.empty?
-    "#{values.join(' x ')} #{submission.dimensions_metric.try(:downcase)}"
+    "#{values.join('x')}#{submission.dimensions_metric.try(:downcase)}"
   end
 
   def formatted_category(submission)

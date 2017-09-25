@@ -1,34 +1,62 @@
 $sans-serif: HelveticaNeue, Helvetica, 'Helvetica', sans-serif;
+$serif: TimesNewRoman, 'Times New Roman', Times, serif;
+
+table {
+  border-collapse: collapse;
+}
 
 table.bordered-email {
   width: 100%;
-  padding: 30px;
   font-family: serif;
   text-align: center;
-  border: 1px solid #999999;
   max-width: 600px;
-  border-collapse: separate;
   table-layout: fixed;
 
   td {
-    font-family: TimesNewRoman, 'Times New Roman', Times, serif;
+    font-family: $sans-serif;
   }
 
-  .artsy-logo img {
-    max-width: 120px;
-    width: 120px;
+
+  table.first-upload-reminder-email, table.second-upload-reminder-email, table.third-upload-reminder-email {
+    border-collapse: collapse;
+  }
+
+  table.padded-email {
+    margin: 20px;
+    margin-bottom: 40px;
+    border-collapse: collapse;
+  }
+
+  table.consignments-header-table {
+    width: 100%;
+  }
+
+  table.receipt-email {
+    border-collapse: collapse;
+  }
+
+  .artsy-logo {
+    text-align: left;
+    img {
+      max-width: 120px;
+      width: 120px;
+    }
   }
 
   .consignments-label {
     text-transform: uppercase;
-    font-size: 12px;
+    font-size: 14px;
     letter-spacing: 2.1px;
+    text-align: right;
+    font-family: $serif;
   }
 
   .email-title {
     font-size: 40px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 30px;
+    padding-bottom: 10px;
+    text-align: left;
+    font-family: $sans-serif;
   }
 
   .sans-serif {
@@ -59,18 +87,31 @@ table.bordered-email {
     table-layout: fixed;
   }
 
+  table.full-width-table {
+    width: 100%;
+  }
+
   .email-sub-title {
-    font-size: 25px;
-    padding-bottom: 42px;
-    padding-top: 20px;
+    font-size: 20px;
+    padding-bottom: 40px;
+    text-align: left;
+  }
+
+  table.submission-info {
+    width: 100%;
+    text-align: left;
+    padding: 30px;
+    border: 1px solid #E5E5E5;
+    border-collapse: separate;
   }
 
   table.checklist {
     text-align: center;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding: 20px 40px;
     border-collapse: separate;
     table-layout: fixed;
+    border: 1px solid #E5E5E5;
+    margin-bottom: 40px;
 
     .checklist-row {
       padding-top: 10px;
@@ -81,7 +122,8 @@ table.bordered-email {
     }
 
     .checklist-item {
-      font-size: 25px;
+      font-size: 16px;
+      text-transform: uppercase;
       padding-left: 10px;
     }
 
@@ -109,7 +151,13 @@ table.bordered-email {
     }
   }
 
+  .upload-photo-wrapper {
+    padding-top: 40px;
+  }
+
   .submission-image {
+    width: 215px;
+
     img {
       width: 195px;
       max-width: 195px;
@@ -117,64 +165,119 @@ table.bordered-email {
   }
 
   .num-uploaded-images {
-    text-transform: uppercase;
-    font-family: sans-serif;
     padding-bottom: 10px;
-    font-size: 14px;
-    color: #cccccc;
   }
 
   .artist-name {
-    font-size: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: $sans-serif;
   }
 
   .artwork-title, .artwork-category-medium, .dimensions {
-    font-size: 17px;
+    font-size: 16px;
+  }
+
+  .artwork-location {
+    padding-top: 20px;
   }
 
   .upload-photo-button {
     background-color: black;
-    font-family: sans-serif;
-    text-transform: uppercase;
-    height: 50px;
-    font-size: 14px;
-    text-decoration: none;
-    color: white;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    padding-left: 31%;
-    padding-right: 31%;
+    line-height: 45px;
+
+    a {
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      text-transform: uppercase;
+      display: block;
+    }
   }
 
   table.email-footer {
-    max-width: 500px;
     width: 100%;
     border-collapse: separate;
     table-layout: fixed;
-  }
+    text-align: left;
+    padding: 20px;
+    background-color: black;
+    color: white;
 
-  .email-footer-text {
-    padding-top: 23px;
-    font-size: 15px;
+    td {
+      font-size: 16px;
+    }
+
+    p {
+      margin: 0px;
+    }
+
+    .small-margin-bottom {
+      margin-bottom: 10px;
+    }
+
+    table.footer-icon-group {
+      margin-bottom: 30px;
+
+      .footer-icon {
+        width: 40px;
+
+        img {
+          height: 20px;
+          max-height: 20px;
+        }
+      }
+
+      .footer-icon-facebook {
+        width: 30px;
+      }
+    }
 
     a {
-      color: black;
+      color: white;
+      text-decoration: none;
+    }
+
+    .small-info-row {
+      td {
+        font-size: 13px;
+      }
+    }
+
+    table.footer-contact {
+      border-collapse: collapse;
+      margin-top: 10px;
+      margin-bottom: 40px;
+
+      .collector-links {
+        border-right: 1px solid white;
+        padding-right: 20px;
+      }
+
+      .specialist-contacts {
+        padding-left: 20px;
+      }
     }
   }
 
   .submission-id {
     color: #999999;
-    font-size: 16px;
-    padding-top: 8px;
+    font-size: 14px;
+    text-align: left;
+    padding-bottom: 10px;
+    padding-left: 20px;
   }
 
   table.whats-next {
-    width: 95%;
-    max-width: 95%;
     background-color: #f8f8f8;
-    padding: 10px;
+    padding: 20px;
     border-collapse: separate;
     table-layout: fixed;
+    width: 100%;
+
+    .email-title {
+      text-align: center;
+    }
   }
 
   table.whats-next-checklist {
@@ -208,20 +311,15 @@ table.bordered-email {
     }
   }
 
-  table.response-info-table {
-    padding-top: 34px;
-    padding-bottom: 34px;
-    width: 100%;
-    border-collapse: separate;
-    table-layout: fixed;
-  }
-
   .response-info {
     line-height: 1.62;
+    padding-top: 34px;
+    padding-bottom: 34px;
+    text-align: left;
+  }
 
-    a {
-      color: black;
-    }
+  .full-width-button {
+    width: 100%;
   }
 
   table.submission-batch-email {
@@ -293,24 +391,62 @@ table.bordered-email {
 
 @media (max-width: 450px) {
   table.bordered-email {
-    padding: 10px !important;
     border: none !important;
+
+    .consignments-label {
+      font-size: 12px !important;
+    }
 
     .email-title {
       font-size: 26px !important;
     }
 
     .email-sub-title {
-      font-size: 20px !important;
+      font-size: 14px !important;
     }
 
     .checklist-item {
-      font-size: 20px !important;
+      font-size: 14px !important;
     }
 
-    .upload-photo-button {
-      padding-left: 25% !important;
-      padding-right: 25% !important;
+    table.padded-email, table.receipt-email {
+      padding: 10px 10px 60px 10px !important;
+    }
+
+    table.footer-contact {
+      .footer-contact-row {
+        display: table-cell !important;
+
+        .collector-links {
+          border-right: none !important;
+        }
+
+        .specialist-contacts {
+          padding-left: 0px !important;
+          padding-top: 20px;
+        }
+
+        td {
+          display: block;
+        }
+      }
+    }
+
+    table.submission-info {
+      padding: 10px !important;
+
+      td {
+        font-size: 14px !important;
+      }
+
+      .submission-image {
+        width: 85px !important;
+        vertical-align: top;
+        img {
+          width: 78px !important;
+          max-width: 78px !important;
+        }
+      }
     }
 
     table.submission-batch-email {

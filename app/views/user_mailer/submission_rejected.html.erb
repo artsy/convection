@@ -1,1 +1,27 @@
-So sorry your submission has been rejected.
+<%= stylesheet_link_tag 'emails', media: 'all' %>
+
+<table class='padded-email'>
+  <tr>
+    <td>
+      <table class='email-content' align='left'>
+        <tr>
+          <td>
+            <%= render partial: 'shared/email_header' %>
+          </td>
+        </tr>
+        <tr>
+          <td class='email-sub-title'>
+            <p>Dear <%= @user.name %>,</p>
+            <p>After careful review we've determined that we will not be able to offer your consignment to our partner network.</p>
+            <p>Sincerely,<br />Collector Relations Team</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <%= render partial: 'shared/submission_block', locals: { submission: @submission } %>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>

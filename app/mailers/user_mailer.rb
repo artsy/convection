@@ -6,6 +6,7 @@ class UserMailer < ApplicationMailer
     @user = user
     @user_detail = user_detail
     @artist = artist
+    @utm_params = utm_params(source: '', campaign: 'consignment-complete')
 
     smtpapi category: ['submission_receipt'], unique_args: {
       submission_id: submission.id
@@ -56,6 +57,7 @@ class UserMailer < ApplicationMailer
     @user = user
     @user_detail = user_detail
     @artist = artist
+    @utm_params = utm_params(source: '', campaign: 'consignment-complete')
 
     smtpapi category: ['submission_approved'], unique_args: {
       submission_id: submission.id
@@ -70,6 +72,7 @@ class UserMailer < ApplicationMailer
     @user = user
     @user_detail = user_detail
     @artist = artist
+    @utm_params = utm_params(source: '', campaign: 'consignment-complete')
 
     smtpapi category: ['submission_rejected'], unique_args: {
       submission_id: submission.id

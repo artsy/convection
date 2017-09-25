@@ -1,5 +1,5 @@
 class PartnerMailer < ApplicationMailer
-  helper :submissions
+  helper :url, :submissions
 
   def submission_digest(submissions:, partner_name:)
     @submissions = submissions
