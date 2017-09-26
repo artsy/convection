@@ -18,6 +18,14 @@ describe SubmissionsHelper, type: :helper do
         location_country: '')
       expect(helper.formatted_location(submission)).to be_blank
     end
+
+    it 'works if the location has no city' do
+      submission = Fabricate(:submission,
+        location_city: '',
+        location_state: 'Tokyo',
+        location_country: 'Japan')
+      expect(helper.formatted_location(submission)).to eq('Tokyo, Japan')
+    end
   end
 
   context 'formatted_dimensions' do
@@ -27,7 +35,7 @@ describe SubmissionsHelper, type: :helper do
         height: '12',
         depth: '1.75',
         dimensions_metric: 'in')
-      expect(helper.formatted_dimensions(submission)).to eq '12 x 10 x 1.75 in'
+      expect(helper.formatted_dimensions(submission)).to eq '12x10x1.75in'
     end
 
     it 'returns empty string when dimension values are nil' do

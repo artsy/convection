@@ -1,15 +1,59 @@
-<td>
-  <table class='email-footer' align='center'>
-    <tr>
-      <td class='email-footer-text'>
-        Please direct any questions to <%= mail_to(Convection.config.contact_email_address) %> or call
-        <%= link_to Convection.config.contact_phone_number, "tel:#{Convection.config.contact_phone_number}" %>.
-      </td>
-    </tr>
-    <tr>
-      <td class='submission-id'>
-        <%= "Submission ##{@submission.id}" %>
-      </td>
-    </tr>
-  </table>
-</td>
+<table class='email-footer' align='center'>
+  <tr>
+    <td>
+      <table class='footer-icon-group'>
+        <tr>
+          <td class='footer-icon'>
+            <%= link_to image_tag(image_url('twitter.png'), id: 'twitter'), 'https://twitter.com/artsy' %>
+          </td>
+          <td class='footer-icon footer-icon-facebook'>
+            <%= link_to image_tag(image_url('facebook.png'), id: 'facebook'), 'https://facebook.com/artsy' %>
+          </td class='footer-icon'>
+          <td>
+            <%= link_to image_tag(image_url('instagram.png'), id: 'instagram'), 'https://instagram.com/artsy' %>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td class='bold'>
+      Need Help?
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table class='footer-contact'>
+        <tr class='footer-contact-row'>
+          <td class='collector-links'>
+            <p class='small-margin-bottom'>
+              <%= link_to 'How to bid on Artsy', artsy_formatted_url('how-auctions-work', @utm_params) %>
+            </p>
+            <p class='small-margin-bottom'>
+              <%= link_to 'Collector FAQ', artsy_formatted_url('about/collecting', @utm_params) %>
+            </p>
+            <p>
+            <%= mail_to('support@artsy.net', 'Artsy Support') %>
+            </p>
+          </td>
+          <td class='specialist-contacts'>
+            <p class='small-margin-bottom'>
+              Contact our team of specialists:
+            </p>
+            <p class='small-margin-bottom'>
+              <%= mail_to(Convection.config.contact_email_address) %>
+            </p>
+            <p>
+              <%= link_to Convection.config.contact_phone_number, "tel:#{Convection.config.contact_phone_number}" %>
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr class='small-info-row'>
+    <td>
+      Artsy · 401 Broadway · 26th Floor · New York, NY · 10013
+    </td>
+  </tr>
+</table>

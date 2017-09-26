@@ -15,6 +15,14 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.third_upload_reminder(reminder_mail_params)
   end
 
+  def submission_approved
+    UserMailer.submission_approved(receipt_mail_params)
+  end
+
+  def submission_rejected
+    UserMailer.submission_rejected(receipt_mail_params)
+  end
+
   private
 
   def receipt_mail_params
@@ -29,7 +37,10 @@ class UserMailerPreview < ActionMailer::Preview
         width: 14,
         dimensions_metric: 'in',
         category: 'Painting',
-        medium: 'Oil on linen'
+        medium: 'Oil on linen',
+        location_city: 'New York',
+        location_state: 'NY',
+        location_country: 'USA'
       ),
       artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol'),
       user_detail: OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com'),

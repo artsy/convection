@@ -85,7 +85,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         click_link 'Approve'
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
-        expect(emails.first.html_part.body).to include('Your submission has been approved!')
+        expect(emails.first.html_part.body).to include('Great news, your work has been approved for consignment')
         expect(page).to have_content 'Approved by Jon Jonson'
         expect(page).to_not have_content 'Reject'
       end
@@ -94,7 +94,9 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         click_link 'Reject'
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
-        expect(emails.first.html_part.body).to include('So sorry your submission has been rejected.')
+        expect(emails.first.html_part.body).to include(
+          'we will not be able to offer your consignment to our partner network.'
+        )
         expect(page).to have_content 'Rejected by Jon Jonson'
         expect(page).to_not have_content 'Approve'
       end

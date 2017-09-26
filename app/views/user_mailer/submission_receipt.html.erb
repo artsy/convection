@@ -1,112 +1,66 @@
 <%= stylesheet_link_tag 'emails', media: 'all' %>
 
-<%= stylesheet_link_tag 'emails', media: 'all' %>
-
-<table class='bordered-email' align='center'>
+<table class='receipt-email'>
   <tr>
     <td>
-      <table class='email-content' align='center'>
-        <%= render partial: 'shared/email_header' %>
-        <tr>
-          <td class='email-title'>
-            Thank you for submitting your work to our consignments network
-          </td>
-        </tr>
+      <table class='padded-email'>
         <tr>
           <td>
-            <table class='submission-info' align='center'>
+            <table class='email-content' align='center'>
               <tr>
-                <% if @submission.processed_images.length > 0 %>
-                  <td class='submission-image'>
-                    <%= image_tag(@submission.processed_images.first.image_urls['square'], id: 'first-image') %>
-                  </td>
-                <% else %>
-                  <td class='submission-image'>
-                    <%= image_tag(image_url('missing_image.png'), id: 'first-image') %>
-                  </td>
-                <% end %>
-              </tr>
-              <tr>
-                <td class='num-uploaded-images'>
-                  <%= "#{pluralize(@submission.images.count, 'image')} uploaded" %>
+                <td>
+                  <%= render partial: 'shared/email_header' %>
                 </td>
               </tr>
-              <tr>
-                <td class='artist-name'>
-                  <%= @artist.name %>
-                </td>
-              </tr>
-              <tr>
-                <td class='artwork-title'>
-                  <i><%= @submission.title %></i><span><%= ", #{@submission.year}" %></span>
-                </td>
-              </tr>
-              <tr>
-                <td class='artwork-category-medium'>
-                  <%= formatted_category(@submission) %>
-                </td>
-              </tr>
-              <tr>
-                <td class='dimensions'>
-                  <%= formatted_dimensions(@submission) %>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <table class='medium-width-table response-info-table' align='center'>
-              <tr>
-                <td class='response-info'>
-                  Our current response time ranges 2-3 weeks. Please direct any questions to <%= mail_to(Convection.config.contact_email_address) %>
-                  or call <%= link_to Convection.config.contact_phone_number, "tel:#{Convection.config.contact_phone_number}" %>.
-                </td>
-              </tr>
-              <tr>
-                <td class='submission-id'>
-                  <%= "Submission ##{@submission.id}" %>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <table class='whats-next' align='center'>
               <tr>
                 <td class='email-title'>
-                  What's Next
+                  Thank you for submitting your work to our consignments network
                 </td>
               </tr>
               <tr>
                 <td>
-                  <table class='whats-next-checklist' align='center'>
-                    <tr class='checklist-row'>
-                      <td class='checklist-icon'>
-                        <%= image_tag(image_url('private.png'), id: 'private') %>
-                      </td>
-                      <td class='checklist-item'>
-                        Privately review estimates from our partner network.
-                      </td>
-                    </tr>
-                    <tr class='checklist-row'>
-                      <td class='checklist-icon'>
-                        <%= image_tag(image_url('select.png'), id: 'select') %>
-                      </td>
-                      <td class='checklist-item'>
-                        Select the offer that is best for you.
-                      </td>
-                    </tr>
-                    <tr class='checklist-row'>
-                      <td class='checklist-icon'>
-                        <%= image_tag(image_url('intro.png'), id: 'intro') %>
-                      </td>
-                      <td class='checklist-item'>
-                        We will introduce you to the partner.
-                      </td>
-                    </tr>
-                  </table>
+                  <%= render partial: 'shared/submission_block', locals: { submission: @submission } %>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table class='whats-next' align='center'>
+        <tr>
+          <td class='email-title'>
+            What's Next
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class='whats-next-checklist' align='center'>
+              <tr class='checklist-row'>
+                <td class='checklist-icon'>
+                  <%= image_tag(image_url('private.png'), id: 'private') %>
+                </td>
+                <td class='checklist-item'>
+                  Privately review estimates from our partner network.
+                </td>
+              </tr>
+              <tr class='checklist-row'>
+                <td class='checklist-icon'>
+                  <%= image_tag(image_url('select.png'), id: 'select') %>
+                </td>
+                <td class='checklist-item'>
+                  Select the offer that is best for you.
+                </td>
+              </tr>
+              <tr class='checklist-row'>
+                <td class='checklist-icon'>
+                  <%= image_tag(image_url('intro.png'), id: 'intro') %>
+                </td>
+                <td class='checklist-item'>
+                  We will introduce you to the partner.
                 </td>
               </tr>
             </table>
@@ -116,3 +70,4 @@
     </td>
   </tr>
 </table>
+
