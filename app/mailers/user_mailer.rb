@@ -63,7 +63,7 @@ class UserMailer < ApplicationMailer
       submission_id: submission.id
     }
     mail(to: Convection.config.debug_email_address,
-         subject: "Consignment Submission ##{@submission.id}",
+         subject: 'Your consignment has been approved',
          bcc: Convection.config.admin_email_address)
   end
 
@@ -78,7 +78,7 @@ class UserMailer < ApplicationMailer
       submission_id: submission.id
     }
     mail(to: Convection.config.debug_email_address,
-         subject: "Consignment Submission ##{@submission.id}",
+         subject: 'An important update about your consignment submission',
          bcc: Convection.config.admin_email_address)
   end
 end

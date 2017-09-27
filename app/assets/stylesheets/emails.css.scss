@@ -268,6 +268,12 @@ table.bordered-email {
     padding-left: 20px;
   }
 
+  .submission-block-id {
+    color: #999999;
+    font-size: 14px;
+    text-align: left;
+  }
+
   table.whats-next {
     background-color: #f8f8f8;
     padding: 20px;
@@ -326,6 +332,10 @@ table.bordered-email {
     text-align: left;
     max-width: 660px;
 
+    td.submission-batch-right {
+      width: 100%;
+    }
+
     .email-title {
       padding-bottom: 0px;
     }
@@ -340,10 +350,11 @@ table.bordered-email {
       font-size: 16px;
       color: gray;
       font-family: sans-serif;
-      padding-bottom: 20px;
+      padding-bottom: 16px;
     }
 
     .submission-image {
+      margin-bottom: 15px;
       img {
         width: 150px;
         max-width: 150px;
@@ -355,6 +366,8 @@ table.bordered-email {
     }
 
     .submission-batch-metadata {
+      width: 100%;
+
       td {
         text-align: left;
         padding-left: 20px;
@@ -373,10 +386,15 @@ table.bordered-email {
       td {
         font-family: $sans-serif;
       }
+
+      li {
+        padding-bottom: 5px;
+      }
     }
 
     table.image-links-table {
       text-align: left;
+      margin-bottom: 15px;
 
       a {
         color: #000001;
@@ -410,7 +428,7 @@ table.bordered-email {
     }
 
     table.padded-email, table.receipt-email {
-      padding: 10px 10px 60px 10px !important;
+      margin: 10px 10px 60px 10px !important;
     }
 
     table.footer-contact {
@@ -464,6 +482,12 @@ table.bordered-email {
 
       .submission-image {
         display: none !important;
+      }
+
+      table.image-links-table {
+        td {
+          padding-right: 7px !important;
+        }
       }
 
       .submission-image-row-mobile {

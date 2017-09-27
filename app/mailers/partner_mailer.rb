@@ -6,7 +6,12 @@ class PartnerMailer < ApplicationMailer
     smtpapi category: ['submission_digest'], unique_args: {
       partner_name: partner_name
     }
+
+    current_date = Time.now.utc.strftime('%B %-d')
     # TODO: to will go to all of the partner emails... separately? or together?
-    mail to: Convection.config.debug_email_address, subject: "Artsy Submission Digest for: #{partner_name}"
+    mail(
+      to: Convection.config.debug_email_address,
+      subject: "New Artsy Consignments #{current_date}: #{@submissions.count} works"
+    )
   end
 end
