@@ -78,3 +78,9 @@
     flex: 1;
   }
 }
+
+.list-item--partner {
+  .list-group-item-links {
+    margin-left: 20px;
+  }
+}

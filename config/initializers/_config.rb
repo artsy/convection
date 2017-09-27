@@ -30,5 +30,6 @@ Convection.config = OpenStruct.new(
   smtp_password: ENV['SMTP_PASSWORD'],
   smtp_port: ENV['SMTP_PORT'],
   smtp_user: ENV['SMTP_USER'],
-  third_reminder_days_after: (ENV['THIRD_REMINDER_DAYS_AFTER'] || 7).to_i
+  third_reminder_days_after: (ENV['THIRD_REMINDER_DAYS_AFTER'] || 7).to_i,
+  vibrations_url: ENV['VIBRATIONS_URL'] || 'https://admin-partners-staging.artsy.net'
 )

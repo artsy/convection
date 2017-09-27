@@ -8,11 +8,11 @@
       <div class='list-group'>
         <% @partners.each do |partner| %>
           <div class='list-group-item list-item--partner' data-id=<%= partner[:id] %>>
-            <div class='list-group-item-info list-group-item-info--id'>
-              <%= partner[:id] %>
-            </div>
             <div class='list-group-item-info'>
               <%= @partner_details[partner.gravity_partner_id][:given_name] %>
+            </div>
+            <div class='list-group-item-info list-group-item-links'>
+              <%= link_to 'Edit partner contacts', "#{Convection.config.vibrations_url}/contacts?partner_id=#{partner.gravity_partner_id}", class: 'btn btn-secondary btn-tiny' %>
             </div>
           </div>
         <% end %>

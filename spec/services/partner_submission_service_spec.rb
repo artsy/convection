@@ -7,6 +7,7 @@ describe PartnerSubmissionService do
     stub_gravity_user
     stub_gravity_user_detail
     stub_gravity_artist
+    allow(Time).to receive(:now).and_return(DateTime.new(2017, 9, 27).in_time_zone('UTC')) # stub time for email subject lines
   end
 
   describe '#generate_for_new_partner' do
@@ -120,7 +121,7 @@ describe PartnerSubmissionService do
           emails = ActionMailer::Base.deliveries
           expect(emails.length).to eq 1
           email = emails.first
-          expect(email.subject).to include('Artsy Submission Digest for: Juliens Auctions')
+          expect(email.subject).to include('New Artsy Consignments September 27: 3 works')
           expect(email.html_part.body).to include('<i>First approved artwork</i><span>, 1992</span>')
           expect(email.html_part.body).to include('<i>Second approved artwork</i><span>, 1993</span>')
           expect(email.html_part.body).to include('<i>Third approved artwork</i><span>, 1997</span>')
@@ -200,7 +201,7 @@ describe PartnerSubmissionService do
           emails = ActionMailer::Base.deliveries
           expect(emails.length).to eq 1
           email = emails.first
-          expect(email.subject).to include('Artsy Submission Digest for: Juliens Auctions')
+          expect(email.subject).to include('New Artsy Consignments September 27: 3 works')
           expect(email.html_part.body).to include('<i>First approved artwork</i><span>, 1992</span>')
           expect(email.html_part.body).to include('<i>Second approved artwork</i><span>, 1993</span>')
           expect(email.html_part.body).to include('<i>Third approved artwork</i><span>, 1997</span>')

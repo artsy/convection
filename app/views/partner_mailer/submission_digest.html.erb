@@ -49,7 +49,7 @@
                       <%= image_tag(image_url('missing_image.png')) %>
                     </td>
                   <% end %>
-                  <td>
+                  <td class='submission-batch-right'>
                     <table class='submission-batch-metadata'>
                       <tr>
                         <td class='gray'>
@@ -86,7 +86,7 @@
                       <tr>
                         <td>
                           <table class='image-links-table'>
-                            <% submission.large_images.each_slice(4) do |batch| %>
+                            <% submission.large_images.each_slice(5) do |batch| %>
                               <tr>
                                 <% batch.each_with_index do |image, index| %>
                                   <% if image.image_urls['large'].present? %>
