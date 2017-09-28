@@ -13,7 +13,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
 
     it 'displays the page title' do
       expect(page).to have_content('Submissions')
-      expect(page).not_to have_selector('list-group-item')
+      expect(page).not_to have_selector('.list-group-item')
     end
 
     it 'displays zeros for the counts' do

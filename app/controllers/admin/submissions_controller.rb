@@ -17,7 +17,7 @@ module Admin
     end
 
     def create
-      @submission = Submission.new(submission_params)
+      @submission = Submission.new(submission_params.merge(state: 'submitted'))
       if @submission.save
         redirect_to admin_submission_path(@submission)
       else
@@ -27,6 +27,14 @@ module Admin
 
     def show
       @notified_partner_submissions = @submission.partner_submissions.where.not(notified_at: nil)
+      partners = @notified_partner_submissions.map(&:partner)
+      return unless partners && !partners.empty?
+      partners_details_response = Gravql::Schema.execute(
+        query: GravqlQueries::PARTNER_DETAILS_QUERY,
+        variables: { ids: partners.pluck(:gravity_partner_id) }
+      )
+      flash.now[:error] = 'Error fetching some partner details.' if partners_details_response[:errors].present?
+      @partner_details = partners_details_response[:data][:partners].map { |pd| [pd[:id], pd] }.to_h
     end
 
     def edit; end

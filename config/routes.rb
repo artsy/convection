@@ -6,7 +6,11 @@ Rails.application.routes.draw do
         post :multiple, on: :collection
       end
     end
-    resources :partners, only: :index
+    resources :partners, only: :index do
+      resources :submissions, only: :index, controller: 'partner_submissions' do
+        get :digest, on: :collection
+      end
+    end
     root to: 'submissions#index'
   end
   get '/match_artist', to: 'admin/submissions#match_artist'
