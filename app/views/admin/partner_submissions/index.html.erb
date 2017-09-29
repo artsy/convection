@@ -1,0 +1,16 @@
+<div class='page-title'>
+<h2>Submissions for <%= @partner_details[:given_name] %> included in next digest</h2>
+</div>
+
+<div class='container'>
+  <div class='row triple-padding-top'>
+    <div class='col-md-12'>
+      <div class='list-group'>
+        <% @partner_submissions.each do |ps| %>
+          <%= render partial: 'admin/submissions/submission_row', locals: { submission: ps.submission } %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <%= render partial: 'shared/watt/paginator', locals: { total_items_count: @partner_submissions.total_count, items_count: @partner_submissions.length, per_page: @size, current_page: @page, base_url: admin_partner_submissions_url(@filters) } %>
+</div>

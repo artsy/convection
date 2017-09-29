@@ -7,9 +7,7 @@ Rails.application.routes.draw do
       end
     end
     resources :partners, only: :index do
-      resources :submissions, only: :index, controller: 'partner_submissions' do
-        get :digest, on: :collection
-      end
+      resources :submissions, only: :index, controller: 'partner_submissions'
     end
     root to: 'submissions#index'
   end
