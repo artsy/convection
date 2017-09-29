@@ -1,0 +1,25 @@
+<div class='list-group-item list-item--submission' data-id=<%= submission.id %>>
+  <div class='list-group-item-info list-group-item-info--id'>
+    <%= submission.id %>
+  </div>
+  <div class='list-group-item-info asset-thumb'>
+    <% if submission.thumbnail.present? %>
+      <%= image_tag submission.thumbnail %>
+    <% end %>
+  </div>
+  <div class='list-group-item-info'>
+    <%= submission.created_at.strftime('%m/%d/%Y') %>
+  </div>
+  <div class='list-group-item-info'>
+    <%= submission.artist_name %>
+  </div>
+  <div class='list-group-item-info'>
+    <%= submission.category %>
+  </div>
+  <div class='list-group-item-info'>
+    <%= submission.state %>
+  </div>
+  <div class='actions'>
+    <%= link_to 'View', admin_submission_path(submission), class: 'btn btn-tiny' %>
+  </div>
+</div>

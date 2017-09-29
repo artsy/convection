@@ -3,6 +3,10 @@ require 'support/gravity_helper'
 require 'support/jwt_helper'
 
 describe 'admin/submissions/show.html.erb', type: :feature do
+  before do
+    allow(Convection.config).to receive(:gravity_xapp_token).and_return('xapp_token')
+  end
+
   context 'always' do
     before do
       allow_any_instance_of(ApplicationController).to receive(:require_artsy_authentication)
@@ -62,6 +66,22 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       allow(Convection.config).to receive(:consignment_communication_id).and_return('comm1')
       partner1 = Fabricate(:partner, gravity_partner_id: 'partnerid')
       partner2 = Fabricate(:partner, gravity_partner_id: 'phillips')
+      gravql_partners_response = {
+        data: {
+          partners: [
+            { id: partner1.gravity_partner_id, given_name: 'Partner 1' },
+            { id: partner2.gravity_partner_id, given_name: 'Phillips' }
+          ]
+        }
+      }
+      stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
+        .to_return(body: gravql_partners_response.to_json)
+        .with(
+          headers: {
+            'X-XAPP-TOKEN' => 'xapp_token',
+            'Content-Type' => 'application/json'
+          }
+        )
       SubmissionService.update_submission(@submission, state: 'approved')
       stub_gravity_partner(id: 'partnerid')
       stub_gravity_partner(id: 'phillips')
@@ -71,8 +91,8 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       page.visit "/admin/submissions/#{@submission.id}"
 
       expect(page).to have_content('Partner Interest')
-      expect(page).to have_content("#{partner1.id} notified on")
-      expect(page).to have_content("#{partner2.id} notified on")
+      expect(page).to have_content('Partner 1 notified on')
+      expect(page).to have_content('Phillips notified on')
     end
 
     context 'unreviewed submission' do

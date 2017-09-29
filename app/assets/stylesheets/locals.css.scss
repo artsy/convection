@@ -80,6 +80,14 @@
 }
 
 .list-item--partner {
+  display: flex;
+  justify-content: space-between;
+
+  .list-item--partner--name {
+    font-weight: bold;
+    font-size: 20px;
+  }
+
   .list-group-item-links {
     margin-left: 20px;
   }
