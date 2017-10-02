@@ -41,7 +41,7 @@ class PartnerMailerPreview < ActionMailer::Preview
         submission_params,
         submission_params
       ],
-      partner_name: 'Phillips'
+      partner: OpenStruct.new(name: 'Phillips', type: 'Auction')
     }
   end
 end

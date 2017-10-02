@@ -7,7 +7,11 @@ describe PartnerSubmissionService do
     stub_gravity_user
     stub_gravity_user_detail
     stub_gravity_artist
+    stub_gravity_partner_communications
+    stub_gravity_partner_contacts
     allow(Time).to receive(:now).and_return(DateTime.new(2017, 9, 27).in_time_zone('UTC')) # stub time for email subject lines
+    allow(Convection.config).to receive(:auction_offer_form_url).and_return('https://google.com/auction')
+    allow(Convection.config).to receive(:gallery_offer_form_url).and_return('https://google.com/gallery')
   end
 
   describe '#generate_for_new_partner' do
@@ -19,6 +23,7 @@ describe PartnerSubmissionService do
       expect(partner.partner_submissions.count).to eq 1
       expect(PartnerSubmission.where(submission: submission, partner: partner).count).to eq 1
     end
+
     it 'generates new partner submissions' do
       partner = Fabricate(:partner)
       submission = Fabricate(:submission, state: 'submitted', user_id: 'userid', artist_id: 'artistid')
@@ -47,7 +52,6 @@ describe PartnerSubmissionService do
   describe '#daily_digest' do
     before do
       stub_gravity_partner(name: 'Juliens Auctions')
-      allow(Convection.config).to receive(:consignment_communication_id).and_return('comm1')
     end
 
     it 'does not send any emails if there are no partner submissions' do
@@ -125,6 +129,7 @@ describe PartnerSubmissionService do
           expect(email.html_part.body).to include('<i>First approved artwork</i><span>, 1992</span>')
           expect(email.html_part.body).to include('<i>Second approved artwork</i><span>, 1993</span>')
           expect(email.html_part.body).to include('<i>Third approved artwork</i><span>, 1997</span>')
+          expect(email.html_part.body).to include('https://google.com/auction')
           expect(@partner.partner_submissions.map(&:notified_at).compact.length).to eq 3
         end
 

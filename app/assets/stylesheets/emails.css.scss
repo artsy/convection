@@ -182,9 +182,10 @@ table.bordered-email {
     padding-top: 20px;
   }
 
-  .upload-photo-button {
+  .upload-photo-button, .submit-proposal-button {
     background-color: black;
     line-height: 45px;
+    text-align: center;
 
     a {
       color: white;
@@ -376,20 +377,9 @@ table.bordered-email {
       }
     }
 
-    table.submission-batch-todo {
-      text-align: left;
-
-      .email-sub-title {
-        padding-bottom: 0px;
-      }
-
-      td {
-        font-family: $sans-serif;
-      }
-
-      li {
-        padding-bottom: 5px;
-      }
+    .full-width-button {
+      margin-top: 20px;
+      margin-bottom: 20px;
     }
 
     table.image-links-table {

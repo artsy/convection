@@ -10,6 +10,8 @@ describe 'admin/submissions/show.html.erb', type: :feature do
   context 'always' do
     before do
       allow_any_instance_of(ApplicationController).to receive(:require_artsy_authentication)
+      allow(Convection.config).to receive(:auction_offer_form_url).and_return('https://google.com/auction')
+      allow(Convection.config).to receive(:gallery_offer_form_url).and_return('https://google.com/gallery')
       stub_gravity_root
       stub_gravity_user
       stub_gravity_user_detail
@@ -50,7 +52,6 @@ describe 'admin/submissions/show.html.erb', type: :feature do
     end
 
     it 'does not display partners who have not been notified' do
-      allow(Convection.config).to receive(:consignment_communication_id).and_return('comm1')
       partner1 = Fabricate(:partner, gravity_partner_id: 'partnerid')
       partner2 = Fabricate(:partner, gravity_partner_id: 'phillips')
       SubmissionService.update_submission(@submission, state: 'approved')
@@ -63,7 +64,8 @@ describe 'admin/submissions/show.html.erb', type: :feature do
     end
 
     it 'displays the partners that a submission has been shown to' do
-      allow(Convection.config).to receive(:consignment_communication_id).and_return('comm1')
+      stub_gravity_partner_communications
+      stub_gravity_partner_contacts
       partner1 = Fabricate(:partner, gravity_partner_id: 'partnerid')
       partner2 = Fabricate(:partner, gravity_partner_id: 'phillips')
       gravql_partners_response = {

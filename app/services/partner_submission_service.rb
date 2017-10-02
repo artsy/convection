@@ -13,18 +13,21 @@ class PartnerSubmissionService
       return if submissions.empty?
 
       gravity_partner_id = partner.gravity_partner_id
-      partner_name = Gravity.client.partner(id: gravity_partner_id).name
+      partner = Gravity.client.partner(id: gravity_partner_id)._get
+      partner_communication = Gravity.client.partner_communications(
+        name: Convection.config.consignment_communication_name
+      ).first
       partner_contacts = Gravity.fetch_all(
-        Gravity.client,
+        partner_communication,
         :partner_contacts,
-        partner_id: gravity_partner_id, communication_id: Convection.config.consignment_communication_id
+        partner_id: gravity_partner_id
       )
       return unless partner_contacts.any?
       # partner_emails = partner_contacts.map(&:email)
 
       PartnerMailer.submission_digest(
         submissions: submissions,
-        partner_name: partner_name
+        partner: partner
         # partner_emails: partner_emails
       ).deliver_now
 
