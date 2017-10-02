@@ -8,6 +8,10 @@ module UrlHelper
     utm_url("#{Convection.config.artsy_url}/#{path}", utm_params)
   end
 
+  def offer_url(partner_type)
+    partner_type == 'Gallery' ? Convection.config.gallery_offer_form_url : Convection.config.auction_offer_form_url
+  end
+
   private
 
   def utm_url(url, utm_params)

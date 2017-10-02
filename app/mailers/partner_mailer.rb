@@ -1,10 +1,11 @@
 class PartnerMailer < ApplicationMailer
   helper :url, :submissions
 
-  def submission_digest(submissions:, partner_name:)
+  def submission_digest(submissions:, partner:)
     @submissions = submissions
+    @partner_type = partner.type
     smtpapi category: ['submission_digest'], unique_args: {
-      partner_name: partner_name
+      partner_name: partner.name
     }
 
     current_date = Time.now.utc.strftime('%B %-d')
