@@ -60,7 +60,9 @@ describe SubmissionService do
       SubmissionService.update_submission(submission, { state: 'approved' }, 'userid')
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
-      expect(emails.first.html_part.body).to include('Great news, your work has been approved for consignment')
+      expect(emails.first.html_part.body).to include(
+        'Your work is currently being reviewed for consignment by our network of trusted partners'
+      )
       expect(submission.state).to eq 'approved'
       expect(submission.approved_by).to eq 'userid'
       expect(submission.approved_at).to_not be_nil
@@ -85,7 +87,7 @@ describe SubmissionService do
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
       expect(emails.first.html_part.body).to include(
-        'we will not be able to offer your consignment to our partner network.'
+        'they do not have a market for this work at the moment'
       )
       expect(submission.state).to eq 'rejected'
       expect(submission.rejected_by).to eq 'userid'
