@@ -30,11 +30,7 @@ module SubmissionsHelper
   end
 
   def preferred_image(submission)
-    if submission.primary_image.present?
-      submission.primary_image.image_urls['square']
-    else
-      submission.processed_images.first.image_urls['square']
-    end
+    (submission.primary_image.presence || submission.processed_images.first).image_urls['square']
   end
 
   def formatted_current_time
