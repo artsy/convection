@@ -68,9 +68,7 @@ class Submission < ApplicationRecord
   end
 
   def thumbnail
-    return primary_image.image_urls['thumbnail'] if primary_image && primary_image.image_urls['thumbnail'].present?
-    thumbnail_image = images.detect { |image| image.image_urls['thumbnail'].present? }
-    thumbnail_image.image_urls['thumbnail'] if thumbnail_image
+    [primary_image, images].flatten.map { |image| image && image.image_urls['thumbnail'] }.compact.first
   end
 
   # defines methods submitted?, approved?, etc. for each possible submission state
