@@ -66,6 +66,7 @@ table.bordered-email {
   .email-main-photo img {
     max-width: 600px;
     width: 100%;
+    margin-bottom: 20px;
   }
 
   .gray {
@@ -97,6 +98,10 @@ table.bordered-email {
     text-align: left;
   }
 
+  .email-sub-title-bottom {
+    padding-bottom: 30px;
+  }
+
   table.submission-info {
     width: 100%;
     text-align: left;
@@ -105,50 +110,10 @@ table.bordered-email {
     border-collapse: separate;
   }
 
-  table.checklist {
-    text-align: center;
-    padding: 20px 40px;
-    border-collapse: separate;
-    table-layout: fixed;
-    border: 1px solid #E5E5E5;
+  img#missing-photo {
+    width: 370px;
+    max-width: 370px;
     margin-bottom: 40px;
-
-    .checklist-row {
-      padding-top: 10px;
-      padding-bottom: 10px;
-      text-align: left;
-      height: 60px;
-      max-height: 60px;
-    }
-
-    .checklist-item {
-      font-size: 16px;
-      text-transform: uppercase;
-      padding-left: 10px;
-    }
-
-    .check {
-      max-width: 40px;
-      width: 40px;
-    }
-
-    .purple-check img {
-      width: 34px;
-      max-width: 34px;
-    }
-
-    .empty-check img {
-      width: 34px;
-      max-width: 34px;
-    }
-
-    .checklist-item-completed {
-      color: #6E1FFF;
-    }
-
-    .checklist-item-incomplete {
-      color: gray;
-    }
   }
 
   .upload-photo-wrapper {
@@ -419,6 +384,10 @@ table.bordered-email {
 
     table.padded-email, table.receipt-email {
       margin: 10px 10px 60px 10px !important;
+    }
+
+    img#missing-photo {
+      width: 100% !important;
     }
 
     table.footer-contact {
