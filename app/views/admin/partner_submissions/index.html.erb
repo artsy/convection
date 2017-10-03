@@ -6,9 +6,7 @@
   <div class='row triple-padding-top'>
     <div class='col-md-12'>
       <div class='list-group'>
-        <% @partner_submissions.each do |ps| %>
-          <%= render partial: 'admin/submissions/submission_row', locals: { submission: ps.submission } %>
-        <% end %>
+        <%= render @partner_submissions.map(&:submission) %>
       </div>
     </div>
   </div>
