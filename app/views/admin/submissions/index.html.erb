@@ -27,9 +27,7 @@
     </div>
     <div class='col-md-10'>
       <div class='list-group'>
-        <% @submissions.each do |submission| %>
-          <%= render partial: 'submission_row', locals: { submission: submission } %>
-        <% end %>
+        <%= render @submissions %>
       </div>
     </div>
   </div>
