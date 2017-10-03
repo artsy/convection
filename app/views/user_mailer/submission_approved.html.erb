@@ -6,7 +6,7 @@
       <table class='email-content' align='left'>
         <tr>
           <td>
-            <%= render partial: 'shared/email_header' %>
+            <%= render 'shared/email_header' %>
           </td>
         </tr>
         <tr>
@@ -21,7 +21,7 @@
         </tr>
         <tr>
           <td>
-            <%= render partial: 'shared/submission_block', locals: { submission: @submission } %>
+            <%= render 'shared/submission_block', submission: @submission %>
           </td>
         </tr>
       </table>

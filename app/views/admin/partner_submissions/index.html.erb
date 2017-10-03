@@ -12,5 +12,5 @@
       </div>
     </div>
   </div>
-  <%= render partial: 'shared/watt/paginator', locals: { total_items_count: @partner_submissions.total_count, items_count: @partner_submissions.length, per_page: @size, current_page: @page, base_url: admin_partner_submissions_url(@filters) } %>
+  <%= render 'shared/watt/paginator', total_items_count: @partner_submissions.total_count, items_count: @partner_submissions.length, per_page: @size, current_page: @page, base_url: admin_partner_submissions_url(@filters) %>
 </div>
