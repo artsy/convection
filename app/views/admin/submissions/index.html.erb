@@ -31,5 +31,5 @@
       </div>
     </div>
   </div>
-  <%= render partial: 'shared/watt/paginator', locals: { total_items_count: @submissions.total_count, items_count: @submissions.length, per_page: @size, current_page: @page, base_url: admin_submissions_url(@filters) } %>
+  <%= render 'shared/watt/paginator', total_items_count: @submissions.total_count, items_count: @submissions.length, per_page: @size, current_page: @page, base_url: admin_submissions_url(@filters) %>
 </div>
