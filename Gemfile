@@ -43,7 +43,6 @@ gem 'jquery-rails'
 gem 'haml-rails' # required for watt layouts
 
 gem 'artsy-eventservice' # for posting events to artsy event stream
-gem 'typhoeus'
 
 group :development, :test do
   gem 'pry-byebug'
