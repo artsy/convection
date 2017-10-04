@@ -1,0 +1,84 @@
+<table class='submission-digest-block' align='center'>
+  <tr>
+    <td class='two-column'>
+      <div class="column first-column">
+        <table width="100%">
+          <tr>
+            <td class="inner">
+              <table class="contents">
+                <tr>
+                  <td>
+                    <% if submission.processed_images.length > 0 %>
+                      <%= image_tag(submission.processed_images.first.image_urls['square'], id: 'first-image') %>
+                    <% else %>
+                      <%= image_tag(image_url('missing_image.png'), id: 'first-image') %>
+                    <% end %>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="column second-column">
+        <table width="100%">
+          <tr>
+            <td class="inner">
+              <table class='submission-batch-metadata'>
+                <tr>
+                  <td class='gray'>
+                    <%= submission.id %>
+                  </td>
+                </tr>
+                <tr>
+                  <td class='bold'>
+                    <%= submission.artist_name %>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <i><%= submission.title %></i><span><%= ", #{submission.year}" %></span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <%= submission.category %>, <%= formatted_dimensions(submission) %>
+                  </td>
+                </tr>
+                <tr>
+                  <td class='small-padding-top'>
+                    <%= formatted_location(submission) %>
+                  </td>
+                </tr>
+                <% if submission.provenance.present? %>
+                  <tr>
+                    <td>
+                      <i><%= submission.provenance.truncate(50) %></i>
+                    </td>
+                  </tr>
+                <% end %>
+                <tr>
+                  <td>
+                    <table class='image-links-table'>
+                      <% submission.large_images.each_slice(5) do |batch| %>
+                        <tr>
+                          <% batch.each_with_index do |image, index| %>
+                            <% if image.image_urls['large'].present? %>
+                              <td class='image-link'>
+                                <%= link_to "Image #{submission.large_images.find_index(image) + 1}", image.image_urls['large'] %>
+                              </td>
+                            <% end %>
+                          <% end %>
+                        </tr>
+                      <% end %>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </td>
+  </tr>
+</table>

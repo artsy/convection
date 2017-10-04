@@ -5,6 +5,44 @@ table {
   border-collapse: collapse;
 }
 
+.two-column {
+  text-align: center;
+  font-size: 0;
+}
+
+.two-column .column {
+  width: 100%;
+  display: inline-block;
+  vertical-align: top;
+
+  td {
+    font-size: 16px;
+  }
+}
+
+.two-column .first-column {
+  max-width: 150px;
+}
+
+.two-column .second-column {
+  max-width: 190px;
+}
+
+.contents {
+  width: 100%;
+}
+
+.two-column .contents {
+  font-size: 14px;
+  text-align: left;
+}
+
+.two-column img {
+  width: 100%;
+  max-width: 190px;
+  height: auto;
+}
+
 table.bordered-email {
   width: 100%;
   font-family: serif;
@@ -22,7 +60,7 @@ table.bordered-email {
   }
 
   table.padded-email {
-    margin: 20px;
+    margin-top: 20px;
     margin-bottom: 40px;
     border-collapse: collapse;
   }
@@ -101,22 +139,21 @@ table.bordered-email {
   .email-sub-title-bottom {
     padding-bottom: 30px;
   }
-  
+
   table.submission-info {
-    text-align: left;
-    padding: 10px !important;
+    width: 100%;
+    padding-top: 20px;
+    border-collapse: separate;
 
-    td {
-      font-size: 14px !important;
-    }
+    .two-column {
+      text-align: left;
 
-    .submission-image {
-      width: 85px;
-      max-width: 85px;
-      vertical-align: top;
-      img {
-        width: 78px;
-        max-width: 78px;
+      .first-column {
+        padding-right: 20px;
+      }
+
+      .second-column {
+        max-width: 225px;
       }
     }
   }
@@ -215,16 +252,28 @@ table.bordered-email {
 
     table.footer-contact {
       border-collapse: collapse;
-      margin-top: 10px;
       margin-bottom: 40px;
+      width: 100%;
+      max-width: 450px;
+
+      .two-column {
+        text-align: left;
+
+        .first-column {
+          padding-right: 10px;
+          max-width: 140px;
+        }
+      }
 
       .collector-links {
         border-right: 1px solid white;
         padding-right: 20px;
+        margin-right: 20px;
+        padding-top: 20px;
       }
 
       .specialist-contacts {
-        padding-left: 20px;
+        padding-top: 20px;
       }
     }
   }
@@ -322,26 +371,44 @@ table.bordered-email {
       padding-bottom: 16px;
     }
 
-    .submission-image {
-      margin-bottom: 15px;
-      img {
-        width: 150px;
-        max-width: 150px;
-      }
-    }
-
-    .submission-image-row-mobile {
-      display: none;
-    }
-
-    .submission-batch-metadata {
+    .submission-digest-block {
       width: 100%;
+      max-width: 600px;
 
-      td {
+      .two-column {
         text-align: left;
-        padding-left: 20px;
-        font-family: sans-serif;
-        font-size: 14px;
+
+        .first-column {
+          max-width: 150px;
+          padding-right: 20px;
+        }
+
+        .second-column {
+          max-width: 300px;
+        }
+      }
+
+      .submission-image {
+        margin-bottom: 15px;
+        img {
+          width: 150px;
+          max-width: 150px;
+        }
+      }
+
+      .submission-batch-metadata {
+        width: 100%;
+
+        .image-link {
+          padding-right: 5px;
+        }
+
+        td {
+          text-align: left;
+          // padding-left: 20px;
+          font-family: sans-serif;
+          font-size: 14px;
+        }
       }
     }
 
@@ -365,24 +432,6 @@ table.bordered-email {
   }
 }
 
-@media screen and (min-width: 451px) and (max-width: 1080px) {
-  table.submission-info {
-    width: 100% !important;
-    padding: 30px !important;
-    border: 1px solid #E5E5E5 !important;
-    border-collapse: separate !important;
-
-    .submission-image {
-      width: 215px !important;
-
-      img {
-        width: 195px !important;
-        max-width: 195px !important;
-      }
-    }
-  }
-}
-
 @media screen and (max-width: 450px) {
   table.bordered-email {
     .consignments-label {
@@ -400,82 +449,27 @@ table.bordered-email {
     .checklist-item {
       font-size: 14px !important;
     }
-
-    table.padded-email {
-      margin: 10px 10px 60px 10px !important;
-    }
-
-    img#missing-photo {
-      width: 100% !important;
-    }
+  }
 
     table.submission-info {
-      padding: 10px !important;
-
       td {
         font-size: 14px !important;
       }
 
-      .submission-image {
-        width: 85px !important;
-        max-width: 85px !important;
-        vertical-align: top !important;
+      .first-column {
+        width: 100% !important;
+        max-width: none !important;
         img {
-          width: 78px !important;
-          max-width: 78px !important;
+          width: 100% !important;
+          max-width: none !important;
         }
       }
     }
 
-    table.submission-batch-email {
-      td {
-        padding-left: 0px !important;
-      }
-
-      .email-sub-title {
-        font-size: 16px !important;
-      }
-
-      .email-sub-title-gray {
-        font-size: 14px !important;
-      }
-
-      .submission-image {
-        display: none !important;
-      }
-
-      table.image-links-table {
-        td {
-          padding-right: 7px !important;
-        }
-      }
-
-      .submission-image-row-mobile {
-        display: block !important;
-
-        .submission-image-mobile {
-          img {
-            max-width: 230px;
-          }
-        }
-      }
-    }
-  }
   table.footer-contact {
     .footer-contact-row {
-      display: table-cell !important;
-
       .collector-links {
         border-right: none !important;
-      }
-
-      .specialist-contacts {
-        padding-left: 0px !important;
-        padding-top: 20px;
-      }
-
-      td {
-        display: block !important;
       }
     }
   }

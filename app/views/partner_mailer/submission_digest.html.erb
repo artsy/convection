@@ -26,85 +26,13 @@
         </tr>
         <tr>
           <td>
-            <table>
-              <% @submissions.each do |submission| %>
-                <tr class='submission-image-row-mobile'>
-                  <% if submission.processed_images.length > 0 %>
-                    <td class='submission-image-mobile'>
-                      <%= image_tag(preferred_image(submission)) %>
-                    </td>
-                  <% else %>
-                    <td class='submission-image-mobile'>
-                      <%= image_tag(image_url('missing_image.png')) %>
-                    </td>
-                  <% end %>
-                </tr>
-                <tr>
-                  <% if submission.processed_images.length > 0 %>
-                    <td class='submission-image'>
-                      <%= image_tag(preferred_image(submission)) %>
-                    </td>
-                  <% else %>
-                    <td class='submission-image'>
-                      <%= image_tag(image_url('missing_image.png')) %>
-                    </td>
-                  <% end %>
-                  <td class='submission-batch-right'>
-                    <table class='submission-batch-metadata'>
-                      <tr>
-                        <td class='gray'>
-                          <%= submission.id %>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class='bold'>
-                          <%= submission.artist_name %>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <i><%= submission.title %></i><span><%= ", #{submission.year}" %></span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <%= submission.category %>, <%= formatted_dimensions(submission) %>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class='small-padding-top'>
-                          <%= formatted_location(submission) %>
-                        </td>
-                      </tr>
-                      <% if submission.provenance.present? %>
-                        <tr>
-                          <td>
-                            <i><%= submission.provenance.truncate(50) %></i>
-                          </td>
-                        </tr>
-                      <% end %>
-                      <tr>
-                        <td>
-                          <table class='image-links-table'>
-                            <% submission.large_images.each_slice(5) do |batch| %>
-                              <tr>
-                                <% batch.each_with_index do |image, index| %>
-                                  <% if image.image_urls['large'].present? %>
-                                    <td>
-                                      <%= link_to "Image #{submission.large_images.find_index(image) + 1}", image.image_urls['large'] %>
-                                    </td>
-                                  <% end %>
-                                <% end %>
-                              </tr>
-                            <% end %>
-                          </table>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              <% end %>
-            </table>
+            <% @submissions.each do |submission| %>
+              <tr>
+                <td>
+                  <%= render 'shared/submission_digest_block', submission: submission %>
+                </td>
+              </tr>
+            <% end %>
           </td>
         </tr>
         <tr>
