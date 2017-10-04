@@ -1,6 +1,11 @@
 $sans-serif: HelveticaNeue, Helvetica, 'Helvetica', sans-serif;
 $serif: TimesNewRoman, 'Times New Roman', Times, serif;
 
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
 table {
   border-collapse: collapse;
 }
