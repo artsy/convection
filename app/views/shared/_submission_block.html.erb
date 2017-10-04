@@ -1,47 +1,65 @@
 <table class='submission-info' align='center'>
   <tr>
-    <% if @submission.processed_images.length > 0 %>
-      <td class='submission-image'>
-        <%= image_tag(@submission.processed_images.first.image_urls['square'], id: 'first-image') %>
-      </td>
-    <% else %>
-      <td class='submission-image'>
-        <%= image_tag(image_url('missing_image.png'), id: 'first-image') %>
-      </td>
-    <% end %>
-    <td>
-      <table>
-        <tr>
-          <td class='artist-name'>
-            <%= @artist.name %>
-          </td>
-        </tr>
-        <tr>
-          <td class='artwork-title'>
-            <i><%= @submission.title %></i><span><%= ", #{@submission.year}" %></span>
-          </td>
-        </tr>
-        <tr>
-          <td class='artwork-category-medium'>
-            <%= formatted_category(@submission) %>, <%= formatted_dimensions(submission) %>
-          </td>
-        </tr>
-        <tr>
-          <td class='artwork-location'>
-            <%= formatted_location(@submission) %>
-          </td>
-        </tr>
-        <tr>
-          <td class='num-uploaded-images'>
-            <%= "#{pluralize(@submission.images.count, 'photo')} uploaded" %>
-          </td>
-        </tr>
-        <tr>
-          <td class='submission-block-id'>
-            <%= "Submission ##{@submission.id}" %>
-          </td>
-        </tr>
-      </table>
+    <td class='two-column'> 
+      <div class="column first-column">
+        <table width="100%">
+          <tr>
+            <td class="inner">
+              <table class="contents">
+                <tr>
+                  <td>
+                    <% if @submission.processed_images.length > 0 %>
+                      <%= image_tag(@submission.processed_images.first.image_urls['square'], id: 'first-image') %>
+                    <% else %>
+                      <%= image_tag(image_url('missing_image.png'), id: 'first-image') %>
+                    <% end %>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="column second-column">
+        <table width="100%">
+          <tr>
+            <td class="inner">
+              <table class='submission-metadata info'>
+                <tr>
+                  <td class='artist-name'>
+                    <%= @artist.name %>
+                  </td>
+                </tr>
+                <tr>
+                  <td class='artwork-title'>
+                    <i><%= @submission.title %></i><span><%= ", #{@submission.year}" %></span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class='artwork-category-medium'>
+                    <%= formatted_category(@submission) %>, <%= formatted_dimensions(submission) %>
+                  </td>
+                </tr>
+                <tr>
+                  <td class='artwork-location'>
+                    <%= formatted_location(@submission) %>
+                  </td>
+                </tr>
+                <tr>
+                  <td class='num-uploaded-images'>
+                    <%= "#{pluralize(@submission.images.count, 'photo')} uploaded" %>
+                  </td>
+                </tr>
+                <tr>
+                  <td class='submission-block-id'>
+                    <%= "Submission ##{@submission.id}" %>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>
     </td>
   </tr>
 </table>

@@ -23,29 +23,55 @@
   </tr>
   <tr>
     <td>
-      <table class='footer-contact'>
+      <table class='footer-contact' align='left'>
         <tr class='footer-contact-row'>
-          <td class='collector-links'>
-            <p class='small-margin-bottom'>
-              <%= link_to 'How to bid on Artsy', artsy_formatted_url('how-auctions-work', @utm_params) %>
-            </p>
-            <p class='small-margin-bottom'>
-              <%= link_to 'Collector FAQ', artsy_formatted_url('about/collecting', @utm_params) %>
-            </p>
-            <p>
-            <%= mail_to('support@artsy.net', 'Artsy Support') %>
-            </p>
-          </td>
-          <td class='specialist-contacts'>
-            <p class='small-margin-bottom'>
-              Contact our team of specialists:
-            </p>
-            <p class='small-margin-bottom'>
-              <%= mail_to(Convection.config.contact_email_address) %>
-            </p>
-            <p>
-              <%= link_to Convection.config.contact_phone_number, "tel:#{Convection.config.contact_phone_number}" %>
-            </p>
+          <td class='two-column'> 
+            <div class="column first-column">
+              <table width="100%">
+                <tr>
+                  <td class="inner">
+                    <table class="contents">
+                      <tr>
+                        <td class='collector-links'>
+                          <p class='small-margin-bottom'>
+                            <%= link_to 'How to bid on Artsy', artsy_formatted_url('how-auctions-work', @utm_params) %>
+                          </p>
+                          <p class='small-margin-bottom'>
+                            <%= link_to 'Collector FAQ', artsy_formatted_url('about/collecting', @utm_params) %>
+                          </p>
+                          <p>
+                          <%= mail_to('support@artsy.net', 'Artsy Support') %>
+                          </p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="column second-column">
+              <table width="100%">
+                <tr>
+                  <td class="inner">
+                    <table class="contents">
+                      <tr>
+                        <td class='specialist-contacts'>
+                          <p class='small-margin-bottom'>
+                            Contact our team of specialists:
+                          </p>
+                          <p class='small-margin-bottom'>
+                            <%= mail_to(Convection.config.contact_email_address) %>
+                          </p>
+                          <p>
+                            <%= link_to Convection.config.contact_phone_number, "tel:#{Convection.config.contact_phone_number}" %>
+                          </p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </div>
           </td>
         </tr>
       </table>
