@@ -38,8 +38,8 @@ table.bordered-email {
   .artsy-logo {
     text-align: left;
     img {
-      max-width: 120px;
-      width: 120px;
+      max-width: 100px;
+      width: 100px;
     }
   }
 
@@ -101,32 +101,34 @@ table.bordered-email {
   .email-sub-title-bottom {
     padding-bottom: 30px;
   }
-
+  
   table.submission-info {
-    width: 100%;
     text-align: left;
-    padding: 30px;
-    border: 1px solid #E5E5E5;
-    border-collapse: separate;
+    padding: 10px !important;
+
+    td {
+      font-size: 14px !important;
+    }
+
+    .submission-image {
+      width: 85px;
+      max-width: 85px;
+      vertical-align: top;
+      img {
+        width: 78px;
+        max-width: 78px;
+      }
+    }
   }
 
   img#missing-photo {
-    width: 370px;
+    width: 100%;
     max-width: 370px;
     margin-bottom: 40px;
   }
 
   .upload-photo-wrapper {
     padding-top: 40px;
-  }
-
-  .submission-image {
-    width: 215px;
-
-    img {
-      width: 195px;
-      max-width: 195px;
-    }
   }
 
   .num-uploaded-images {
@@ -149,7 +151,8 @@ table.bordered-email {
 
   .upload-photo-button, .submit-proposal-button {
     background-color: black;
-    line-height: 45px;
+    padding-top: 15px;
+    padding-bottom: 15px;
     text-align: center;
 
     a {
@@ -362,10 +365,26 @@ table.bordered-email {
   }
 }
 
-@media (max-width: 450px) {
-  table.bordered-email {
-    border: none !important;
+@media screen and (min-width: 451px) and (max-width: 1080px) {
+  table.submission-info {
+    width: 100% !important;
+    padding: 30px !important;
+    border: 1px solid #E5E5E5 !important;
+    border-collapse: separate !important;
 
+    .submission-image {
+      width: 215px !important;
+
+      img {
+        width: 195px !important;
+        max-width: 195px !important;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 450px) {
+  table.bordered-email {
     .consignments-label {
       font-size: 12px !important;
     }
@@ -382,31 +401,12 @@ table.bordered-email {
       font-size: 14px !important;
     }
 
-    table.padded-email, table.receipt-email {
+    table.padded-email {
       margin: 10px 10px 60px 10px !important;
     }
 
     img#missing-photo {
       width: 100% !important;
-    }
-
-    table.footer-contact {
-      .footer-contact-row {
-        display: table-cell !important;
-
-        .collector-links {
-          border-right: none !important;
-        }
-
-        .specialist-contacts {
-          padding-left: 0px !important;
-          padding-top: 20px;
-        }
-
-        td {
-          display: block;
-        }
-      }
     }
 
     table.submission-info {
@@ -418,7 +418,8 @@ table.bordered-email {
 
       .submission-image {
         width: 85px !important;
-        vertical-align: top;
+        max-width: 85px !important;
+        vertical-align: top !important;
         img {
           width: 78px !important;
           max-width: 78px !important;
@@ -457,6 +458,24 @@ table.bordered-email {
             max-width: 230px;
           }
         }
+      }
+    }
+  }
+  table.footer-contact {
+    .footer-contact-row {
+      display: table-cell !important;
+
+      .collector-links {
+        border-right: none !important;
+      }
+
+      .specialist-contacts {
+        padding-left: 0px !important;
+        padding-top: 20px;
+      }
+
+      td {
+        display: block !important;
       }
     }
   }
