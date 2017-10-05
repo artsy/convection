@@ -257,18 +257,26 @@ table.bordered-email {
       }
     }
 
+    .column-outer-table {
+      margin-top: 20px;
+    }
+
     table.footer-contact {
       border-collapse: collapse;
       margin-bottom: 40px;
       width: 100%;
-      max-width: 450px;
+      max-width: 500px;
 
       .two-column {
         text-align: left;
 
         .first-column {
           padding-right: 10px;
-          max-width: 140px;
+          max-width: 200px;
+        }
+
+        .second-column {
+          max-width: 250px;
         }
       }
 
@@ -276,11 +284,6 @@ table.bordered-email {
         border-right: 1px solid white;
         padding-right: 20px;
         margin-right: 20px;
-        padding-top: 20px;
-      }
-
-      .specialist-contacts {
-        padding-top: 20px;
       }
     }
   }
