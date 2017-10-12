@@ -38,31 +38,35 @@
         <tr>
           <td>
             <table class='submission-batch-todo sans-serif'>
-              <tr>
-                <td>
-                  <% if @partner_type == 'Auction' %>
-                    <table class='full-width-button'>
-                      <tr>
-                          <td class='submit-proposal-button'>
-                            <%= link_to('Submit Proposal', offer_form_url) %>
-                          </td>
-                      </tr>
-                    </table>
-                  <% end %>
-                </td>
-              </tr>
-              <tr>
-                <td class='email-sub-title'>
-                  <% if @partner_type == 'Gallery' %>
+              <% if @partner_type == 'Auction' %>
+                <tr>
+                  <td class='email-sub-title'>
+                    Please click below to send one proposal per submission and respond directly to this email if you have any questions.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                      <table class='full-width-button'>
+                        <tr>
+                            <td class='submit-proposal-button'>
+                              <%= link_to('Submit Proposal', offer_form_url) %>
+                            </td>
+                        </tr>
+                      </table>
+
+                  </td>
+                </tr>
+              <% else %>
+                <tr>
+                  <td class='email-sub-title'>
                     Please respond directly to this email with your proposal, or if you have any questions.
-                  <% else %>
-                    Please respond directly to this email if you have any questions,
-                  <% end %>
-                </td>
-              </tr>
+                  </td>
+                </tr>
+              <% end %>
+
               <tr>
                 <td class='email-sub-title gray'>
-                  The Consignments Team
+                  Sincerely,<br />The Consignments Team
                 </td>
               </tr>
             </table>
