@@ -11,7 +11,6 @@ describe 'admin/submissions/show.html.erb', type: :feature do
     before do
       allow_any_instance_of(ApplicationController).to receive(:require_artsy_authentication)
       allow(Convection.config).to receive(:auction_offer_form_url).and_return('https://google.com/auction')
-      allow(Convection.config).to receive(:gallery_offer_form_url).and_return('https://google.com/gallery')
       stub_gravity_root
       stub_gravity_user
       stub_gravity_user_detail
@@ -93,8 +92,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       page.visit "/admin/submissions/#{@submission.id}"
 
       expect(page).to have_content('Partner Interest')
-      expect(page).to have_content('Partner 1 notified on')
-      expect(page).to have_content('Phillips notified on')
+      expect(page).to have_content('2 partners notified on')
     end
 
     context 'unreviewed submission' do

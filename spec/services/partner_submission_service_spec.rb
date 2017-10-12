@@ -11,7 +11,6 @@ describe PartnerSubmissionService do
     stub_gravity_partner_contacts
     allow(Time).to receive(:now).and_return(DateTime.new(2017, 9, 27).in_time_zone('UTC')) # stub time for email subject lines
     allow(Convection.config).to receive(:auction_offer_form_url).and_return('https://google.com/auction')
-    allow(Convection.config).to receive(:gallery_offer_form_url).and_return('https://google.com/gallery')
   end
 
   describe '#generate_for_new_partner' do
@@ -207,6 +206,28 @@ describe PartnerSubmissionService do
           expect(emails.length).to eq 1
           email = emails.first
           expect(email.subject).to include('New Artsy Consignments September 27: 3 works')
+          expect(email.html_part.body).to include('<i>First approved artwork</i><span>, 1992</span>')
+          expect(email.html_part.body).to include('<i>Second approved artwork</i><span>, 1993</span>')
+          expect(email.html_part.body).to include('<i>Third approved artwork</i><span>, 1997</span>')
+        end
+
+        it 'sends to a gallery partner' do
+          gallery_partner = Fabricate(:partner, gravity_partner_id: 'gagosian')
+          stub_gravity_partner(name: 'Gagosian Gallery', id: 'gagosian', type: 'Gallery')
+          stub_gravity_partner_contacts(partner_id: 'gagosian', override_body: [])
+          PartnerSubmissionService.generate_for_new_partner(gallery_partner)
+          PartnerSubmissionService.deliver_digest(gallery_partner.id)
+
+          expect(gallery_partner.partner_submissions.count).to eq 3
+
+          emails = ActionMailer::Base.deliveries
+          expect(emails.length).to eq 1
+          email = emails.first
+          expect(email.subject).to include('New Artsy Consignments September 27: 3 works')
+          expect(email.html_part.body).to_not include('Submit Proposal')
+          expect(email.html_part.body).to include(
+            'Please respond directly to this email with your proposal, or if you have any questions'
+          )
           expect(email.html_part.body).to include('<i>First approved artwork</i><span>, 1992</span>')
           expect(email.html_part.body).to include('<i>Second approved artwork</i><span>, 1993</span>')
           expect(email.html_part.body).to include('<i>Third approved artwork</i><span>, 1997</span>')

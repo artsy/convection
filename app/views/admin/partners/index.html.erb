@@ -13,7 +13,7 @@
                 <%= @partner_details[partner.gravity_partner_id][:given_name] %>
               </p>
               <p>
-                <%= link_to 'View next digest contents', admin_partner_submissions_path(partner_id: partner.id, notified_at: nil) %>
+                <%= link_to 'View next digest contents', admin_partner_submissions_path(partner_id: partner.id, notified_at: '') %>
               </p>
             </div>
             <div class='list-group-item-info list-group-item-links'>

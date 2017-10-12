@@ -213,7 +213,9 @@ table.bordered-email {
     border-collapse: separate;
     table-layout: fixed;
     text-align: left;
-    padding: 20px;
+    padding-top: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
     background-color: black;
     color: white;
 
@@ -234,7 +236,7 @@ table.bordered-email {
 
       .footer-icon {
         width: 40px;
-
+        padding-left: 20px;
         img {
           height: 20px;
           max-height: 20px;
@@ -244,6 +246,10 @@ table.bordered-email {
       .footer-icon-facebook {
         width: 30px;
       }
+    }
+
+    .need-help {
+      padding-left: 20px;
     }
 
     a {
@@ -276,7 +282,14 @@ table.bordered-email {
         }
 
         .second-column {
-          max-width: 250px;
+          max-width: 255px;
+        }
+      }
+
+      .specialist-contacts {
+        padding-left: 20px;
+        p {
+          color: white;
         }
       }
 
@@ -284,6 +297,13 @@ table.bordered-email {
         border-right: 1px solid white;
         padding-right: 20px;
         margin-right: 20px;
+        padding-left: 20px;
+      }
+    }
+
+    .address-row {
+      td {
+        padding-left: 20px;
       }
     }
   }
@@ -468,7 +488,7 @@ table.bordered-email {
 
       .first-column {
         width: 100% !important;
-        max-width: none !important;
+        max-width: 230px !important;
         img {
           width: 100% !important;
           max-width: none !important;

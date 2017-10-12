@@ -1,6 +1,12 @@
 class PartnerMailerPreview < ActionMailer::Preview
-  def submission_digest
-    PartnerMailer.submission_digest(submission_digest_mail_params)
+  def submission_digest_auction
+    params = submission_digest_mail_params.merge(partner: OpenStruct.new(name: 'Phillips', type: 'Auction'))
+    PartnerMailer.submission_digest(params)
+  end
+
+  def submission_digest_gallery
+    params = submission_digest_mail_params.merge(partner: OpenStruct.new(name: 'Gagosian', type: 'Gallery'))
+    PartnerMailer.submission_digest(params)
   end
 
   private
@@ -40,8 +46,7 @@ class PartnerMailerPreview < ActionMailer::Preview
         submission_params,
         submission_params,
         submission_params
-      ],
-      partner: OpenStruct.new(name: 'Phillips', type: 'Auction')
+      ]
     }
   end
 end
