@@ -40,18 +40,24 @@
             <table class='submission-batch-todo sans-serif'>
               <tr>
                 <td>
-                  <table class='full-width-button'>
-                    <tr>
-                        <td class='submit-proposal-button'>
-                          <%= link_to('Submit Proposal', offer_url(@partner_type)) %>
-                        </td>
-                    </tr>
-                  </table>
+                  <% if @partner_type == 'Auction' %>
+                    <table class='full-width-button'>
+                      <tr>
+                          <td class='submit-proposal-button'>
+                            <%= link_to('Submit Proposal', offer_form_url) %>
+                          </td>
+                      </tr>
+                    </table>
+                  <% end %>
                 </td>
               </tr>
               <tr>
                 <td class='email-sub-title'>
-                  Please respond directly to this email if you have any questions,
+                  <% if @partner_type == 'Gallery' %>
+                    Please respond directly to this email with your proposal, or if you have any questions.
+                  <% else %>
+                    Please respond directly to this email if you have any questions,
+                  <% end %>
                 </td>
               </tr>
               <tr>

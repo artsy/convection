@@ -15,18 +15,13 @@ describe UrlHelper, type: :helper do
     end
   end
 
-  describe '#offer_url' do
+  describe '#offer_form_url' do
     before do
       allow(Convection.config).to receive(:auction_offer_form_url).and_return('https://google.com/auction')
-      allow(Convection.config).to receive(:gallery_offer_form_url).and_return('https://google.com/gallery')
-    end
-
-    it 'returns the correct url for a gallery' do
-      expect(helper.offer_url('Gallery')).to eq('https://google.com/gallery')
     end
 
     it 'returns the correct url for an auction' do
-      expect(helper.offer_url('Auction')).to eq('https://google.com/auction')
+      expect(helper.offer_form_url).to eq('https://google.com/auction')
     end
   end
 end

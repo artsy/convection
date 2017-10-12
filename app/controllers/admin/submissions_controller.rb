@@ -26,15 +26,8 @@ module Admin
     end
 
     def show
-      @notified_partner_submissions = @submission.partner_submissions.where.not(notified_at: nil)
-      partners = @notified_partner_submissions.map(&:partner)
-      return unless partners && !partners.empty?
-      partners_details_response = Gravql::Schema.execute(
-        query: GravqlQueries::PARTNER_DETAILS_QUERY,
-        variables: { ids: partners.pluck(:gravity_partner_id) }
-      )
-      flash.now[:error] = 'Error fetching some partner details.' if partners_details_response[:errors].present?
-      @partner_details = partners_details_response[:data][:partners].map { |pd| [pd[:id], pd] }.to_h
+      notified_partner_submissions = @submission.partner_submissions.where.not(notified_at: nil)
+      @partner_submissions_count = notified_partner_submissions.group_by_day.count
     end
 
     def edit; end

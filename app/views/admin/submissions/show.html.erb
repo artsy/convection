@@ -177,10 +177,9 @@
       <% end %>
       <div class='row double-padding-top'>
         <div class='bold-label'>Partner Interest</div>
-        <% @notified_partner_submissions.each do |ps| %>
-          <p>
-            <%= @partner_details[ps.partner.gravity_partner_id].try(:[], :given_name) %> notified on <%= formatted_date(ps.notified_at) %>
-          </p>
+
+        <% @partner_submissions_count.each do |date, count| %>
+          <%= "#{count} partners notified on #{date.strftime('%Y-%m-%d')}" %>
         <% end %>
       </div>
     </div>
