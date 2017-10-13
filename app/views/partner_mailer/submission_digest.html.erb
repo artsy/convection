@@ -40,7 +40,7 @@
             <table class='submission-batch-todo sans-serif'>
               <% if @partner_type == 'Auction' %>
                 <tr>
-                  <td class='email-sub-title'>
+                  <td class='email-sub-title email-sub-title--extra-padding-bottom'>
                     Please click below to send one proposal per submission and respond directly to this email if you have any questions.
                   </td>
                 </tr>
@@ -65,7 +65,7 @@
               <% end %>
 
               <tr>
-                <td class='email-sub-title gray'>
+                <td class="email-sub-title gray <%= @partner_type == 'Auction' ? 'email-sub-title--extra-padding-top' : ''%>">
                   Sincerely,<br />The Consignments Team
                 </td>
               </tr>

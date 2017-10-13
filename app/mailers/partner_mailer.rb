@@ -4,6 +4,7 @@ class PartnerMailer < ApplicationMailer
   def submission_digest(submissions:, partner:)
     @submissions = submissions
     @partner_type = partner.type
+    @utm_params = utm_params(source: 'consignment-partner-digest', campaign: 'consignment-complete')
     smtpapi category: ['submission_digest'], unique_args: {
       partner_name: partner.name
     }
