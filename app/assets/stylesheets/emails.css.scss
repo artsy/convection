@@ -294,7 +294,7 @@ table.bordered-email {
       }
 
       .collector-links {
-        border-right: 1px solid white;
+        border-right: 1px solid #666666;
         padding-right: 20px;
         margin-right: 20px;
         padding-left: 20px;
@@ -394,6 +394,14 @@ table.bordered-email {
       font-size: 20px;
     }
 
+    .email-sub-title--extra-padding-top {
+      padding-top: 35px;
+    }
+
+    .email-sub-title--extra-padding-bottom {
+      padding-bottom: 35px;
+    }
+
     .email-sub-title-gray {
       font-size: 16px;
       color: gray;
@@ -435,16 +443,10 @@ table.bordered-email {
 
         td {
           text-align: left;
-          // padding-left: 20px;
           font-family: sans-serif;
           font-size: 14px;
         }
       }
-    }
-
-    .full-width-button {
-      margin-top: 20px;
-      margin-bottom: 20px;
     }
 
     table.image-links-table {
@@ -462,7 +464,15 @@ table.bordered-email {
   }
 }
 
-@media screen and (max-width: 450px) {
+@media all and (min-width: 480px) {
+  .footer-contact-row {
+    .collector-links {
+      border-right: 1px solid #666666 !important;
+    }
+  }
+}
+
+@media all and (max-width: 480px) {
   table.bordered-email {
     .consignments-label {
       font-size: 12px !important;
@@ -499,7 +509,7 @@ table.bordered-email {
   table.footer-contact {
     .footer-contact-row {
       .collector-links {
-        border-right: none !important;
+        border-right: 0px !important;
       }
     }
   }
