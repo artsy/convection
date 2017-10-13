@@ -2,7 +2,7 @@ class PartnerSubmissionService
   class << self
     def daily_digest
       Partner.all.each do |partner|
-        delay.deliver_digest(partner.id)
+        deliver_digest(partner.id)
       end
     end
 
@@ -10,7 +10,11 @@ class PartnerSubmissionService
       partner = Partner.find(partner_id)
       partner_submissions = partner.partner_submissions.where(notified_at: nil)
       submissions = Submission.find(partner_submissions.pluck(:submission_id))
-      return if submissions.empty?
+
+      if submissions.empty?
+        $stderr.puts("Skipping digest for #{partner_id}... no submissions.")
+        return
+      end
 
       gravity_partner_id = partner.gravity_partner_id
       partner = Gravity.client.partner(id: gravity_partner_id)._get
@@ -22,9 +26,14 @@ class PartnerSubmissionService
         :partner_contacts,
         partner_id: gravity_partner_id
       )
-      return unless partner_contacts.any?
+
+      if !partner_contacts.any?
+        $stderr.puts("Skipping digest for #{partner_id}... no partner contacts.")
+        return
+      end
       # partner_emails = partner_contacts.map(&:email)
 
+      $stderr.puts("Sending digest of #{submissions.count} submissions to #{partner_contacts.count} contacts for partner #{partner_id} (#{partner.gravity_partner_id}).")
       PartnerMailer.submission_digest(
         submissions: submissions,
         partner: partner
