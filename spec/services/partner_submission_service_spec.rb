@@ -125,6 +125,7 @@ describe PartnerSubmissionService do
           expect(emails.length).to eq 1
           email = emails.first
           expect(email.subject).to include('New Artsy Consignments September 27: 3 works')
+          expect(email.bcc).to eq(['consignments-archive@artsymail.com'])
           expect(email.html_part.body).to include('<i>First approved artwork</i><span>, 1992</span>')
           expect(email.html_part.body).to include('<i>Second approved artwork</i><span>, 1993</span>')
           expect(email.html_part.body).to include('<i>Third approved artwork</i><span>, 1997</span>')

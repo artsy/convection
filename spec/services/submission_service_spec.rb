@@ -60,6 +60,7 @@ describe SubmissionService do
       SubmissionService.update_submission(submission, { state: 'approved' }, 'userid')
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
+      expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
       expect(emails.first.html_part.body).to include(
         'Your work is currently being reviewed for consignment by our network of trusted partners'
       )
@@ -86,6 +87,7 @@ describe SubmissionService do
       SubmissionService.update_submission(submission, { state: 'rejected' }, 'userid')
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
+      expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
       expect(emails.first.html_part.body).to include(
         'they do not have a market for this work at the moment'
       )
@@ -125,6 +127,7 @@ describe SubmissionService do
         SubmissionService.notify_user(submission.id)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
+        expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
         expect(emails.first.html_part.body).to include('Complete your consignment submission')
         expect(emails.first.html_part.body).to include('utm_campaign=consignment-complete')
         expect(emails.first.html_part.body).to include('utm_source=drip-consignment-reminder-e01')
@@ -138,6 +141,7 @@ describe SubmissionService do
         SubmissionService.notify_user(submission.id)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
+        expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
         expect(emails.first.html_part.body).to include("We're missing photos of your work")
         expect(emails.first.html_part.body).to include('utm_campaign=consignment-complete')
         expect(emails.first.html_part.body).to include('utm_source=drip-consignment-reminder-e02')
@@ -151,6 +155,7 @@ describe SubmissionService do
         SubmissionService.notify_user(submission.id)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
+        expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
         expect(emails.first.html_part.body).to include("We're unable to complete your submission")
         expect(emails.first.html_part.body).to include('utm_campaign=consignment-complete')
         expect(emails.first.html_part.body).to include('utm_source=drip-consignment-reminder-e03')
@@ -222,6 +227,7 @@ describe SubmissionService do
       SubmissionService.deliver_submission_receipt(submission.id)
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
+      expect(emails.first.bcc).to include('consignments-archive@artsymail.com', 'lucille@bluth.com')
       expect(emails.first.html_part.body).to include('Thank you for submitting your work to our consignments network')
     end
   end
