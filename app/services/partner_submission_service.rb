@@ -10,10 +10,14 @@ class PartnerSubmissionService
       partner = Partner.find(partner_id)
       partner_submissions = partner.partner_submissions.where(notified_at: nil)
       submissions = Submission.find(partner_submissions.pluck(:submission_id))
-      return if submissions.empty?
+
+      if submissions.empty?
+        Rails.logger.info "Skipping digest for #{partner_id}... no submissions."
+        return
+      end
 
       gravity_partner_id = partner.gravity_partner_id
-      partner = Gravity.client.partner(id: gravity_partner_id)._get
+      gravity_partner = Gravity.client.partner(id: gravity_partner_id)._get
       partner_communication = Gravity.client.partner_communications(
         name: Convection.config.consignment_communication_name
       ).first
@@ -22,12 +26,19 @@ class PartnerSubmissionService
         :partner_contacts,
         partner_id: gravity_partner_id
       )
-      return unless partner_contacts.any?
+
+      unless partner_contacts.any?
+        Rails.logger.info "Skipping digest for #{partner_id}... no partner contacts."
+        return
+      end
       # partner_emails = partner_contacts.map(&:email)
 
+      Rails.logger.info(
+        "Sending digest of #{submissions.count} submissions to partner #{partner_id} (#{partner.gravity_partner_id})."
+      )
       PartnerMailer.submission_digest(
         submissions: submissions,
-        partner: partner
+        partner: gravity_partner
         # partner_emails: partner_emails
       ).deliver_now
 
