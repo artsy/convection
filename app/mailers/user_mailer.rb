@@ -13,7 +13,7 @@ class UserMailer < ApplicationMailer
     }
     mail(to: user_detail.email,
          subject: "Consignment Submission Confirmation ##{@submission.id}",
-         bcc: Convection.config.admin_email_address)
+         bcc: [Convection.config.admin_email_address, Convection.config.bcc_email_address])
   end
 
   def first_upload_reminder(submission:, user:, user_detail:)
@@ -63,8 +63,7 @@ class UserMailer < ApplicationMailer
       submission_id: submission.id
     }
     mail(to: Convection.config.debug_email_address,
-         subject: 'Your consignment has been approved',
-         bcc: Convection.config.admin_email_address)
+         subject: 'Your consignment has been approved')
   end
 
   def submission_rejected(submission:, user:, user_detail:, artist:)
@@ -78,7 +77,6 @@ class UserMailer < ApplicationMailer
       submission_id: submission.id
     }
     mail(to: Convection.config.debug_email_address,
-         subject: 'An important update about your consignment submission',
-         bcc: Convection.config.admin_email_address)
+         subject: 'An important update about your consignment submission')
   end
 end
