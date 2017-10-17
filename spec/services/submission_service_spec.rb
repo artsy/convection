@@ -61,6 +61,7 @@ describe SubmissionService do
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
       expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
+      expect(emails.first.to).to eq(['michael@bluth.com'])
       expect(emails.first.html_part.body).to include(
         'Your work is currently being reviewed for consignment by our network of trusted partners'
       )
@@ -88,6 +89,7 @@ describe SubmissionService do
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
       expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
+      expect(emails.first.to).to eq(['michael@bluth.com'])
       expect(emails.first.html_part.body).to include(
         'they do not have a market for this work at the moment'
       )

@@ -62,7 +62,7 @@ class UserMailer < ApplicationMailer
     smtpapi category: ['submission_approved'], unique_args: {
       submission_id: submission.id
     }
-    mail(to: Convection.config.debug_email_address,
+    mail(to: user_detail.email,
          subject: 'Your consignment has been approved')
   end
 
@@ -76,7 +76,7 @@ class UserMailer < ApplicationMailer
     smtpapi category: ['submission_rejected'], unique_args: {
       submission_id: submission.id
     }
-    mail(to: Convection.config.debug_email_address,
+    mail(to: user_detail.email,
          subject: 'An important update about your consignment submission')
   end
 end
