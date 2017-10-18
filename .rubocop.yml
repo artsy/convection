@@ -20,7 +20,7 @@ LineLength:
   Exclude:
     - config/environments/*
     - config/initializers/*
-  Max: 128
+  Max: 139
   IgnoreCopDirectives: true
 
 Style/AlignParameters:
@@ -36,7 +36,7 @@ Metrics/AbcSize:
   Max: 62
 
 Metrics/MethodLength:
-  Max: 30
+  Max: 33
 
 Metrics/CyclomaticComplexity:
   Max: 8
