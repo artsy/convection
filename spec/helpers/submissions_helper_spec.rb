@@ -97,6 +97,65 @@ describe SubmissionsHelper, type: :helper do
     end
   end
 
+  context 'formatted_medium_metadata' do
+    let(:submission) do
+      Fabricate(
+        :submission,
+        medium: 'Oil on linen',
+        edition_number: '10a',
+        edition_size: 100,
+        height: 10,
+        width: 10,
+        depth: 15,
+        dimensions_metric: 'cm'
+      )
+    end
+    it 'displays the correct text when all info is present' do
+      expect(helper.formatted_medium_metadata(submission)).to eq 'Oil on linen, 10x10x15cm, Edition 10a/100'
+    end
+    it 'truncates the medium correctly' do
+      submission.update_attributes!(
+        medium: 'Since the late 1990s, KAWS has produced art toys to be circulated as global commodities. '\
+                'By engaging directly with branding, production, and distribution, his toys compel their '\
+                'collectors to consider what the commodity status of art objects is today. Seen here, the '\
+                "\"Accomplice” characters from KAWS are appropriately branded with the artist's trademark \"X\" "\
+                "to replace each of the figure's original eyes. The black example is from an edition of 500 "\
+                'and the pink example is from an edition of 1000'
+      )
+      expect(helper.formatted_medium_metadata(submission)).to eq(
+        'Since the late 1990s, KAWS has produced art toys to be circulated as global commodities. By engag..., 10x10x15cm, Edition 10a/100'
+      )
+    end
+    it 'displays the correct text when there is no medium' do
+      submission.update_attributes!(medium: nil)
+      expect(helper.formatted_medium_metadata(submission)).to eq '10x10x15cm, Edition 10a/100'
+    end
+    it 'displays the correct text when there is no edition number/size' do
+      submission.update_attributes!(edition_number: nil, edition_size: nil)
+      expect(helper.formatted_medium_metadata(submission)).to eq 'Oil on linen, 10x10x15cm'
+    end
+    it 'displays the correct text when there are no dimensions' do
+      submission.update_attributes!(height: nil, width: nil, depth: nil)
+      expect(helper.formatted_medium_metadata(submission)).to eq 'Oil on linen, Edition 10a/100'
+    end
+    it 'displays the correct text when there is only a medium' do
+      submission.update_attributes!(height: nil, width: nil, depth: nil, edition_number: nil, edition_size: nil)
+      expect(helper.formatted_medium_metadata(submission)).to eq 'Oil on linen'
+    end
+    it 'displays the correct text when there is only an edition number/size' do
+      submission.update_attributes!(height: nil, width: nil, depth: nil, medium: nil)
+      expect(helper.formatted_medium_metadata(submission)).to eq 'Edition 10a/100'
+    end
+    it 'displays the correct text when there are only dimensions' do
+      submission.update_attributes!(medium: nil, edition_number: nil, edition_size: nil)
+      expect(helper.formatted_medium_metadata(submission)).to eq '10x10x15cm'
+    end
+    it 'displays the correct text when there is no info' do
+      submission.update_attributes!(medium: nil, edition_number: nil, edition_size: nil, height: nil, width: nil, depth: nil)
+      expect(helper.formatted_medium_metadata(submission)).to eq ''
+    end
+  end
+
   context 'reviewer_byline' do
     it 'shows the correct label for an approved submission' do
       stub_gravity_root

@@ -42,7 +42,7 @@
                 </tr>
                 <tr>
                   <td>
-                    <%= submission.medium %>, <%= formatted_dimensions(submission) %>
+                    <%= formatted_medium_metadata(submission) %>
                   </td>
                 </tr>
                 <tr>
@@ -53,7 +53,7 @@
                 <% if submission.provenance.present? %>
                   <tr>
                     <td>
-                      <i><%= submission.provenance.truncate(50) %></i>
+                      <i><%= submission.provenance.truncate(45) %></i>
                     </td>
                   </tr>
                 <% end %>

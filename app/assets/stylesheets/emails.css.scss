@@ -273,6 +273,10 @@ table.bordered-email {
       width: 100%;
       max-width: 500px;
 
+      table.contents--left {
+        border-right: 1px solid #666666;
+      }
+
       .two-column {
         text-align: left;
 
@@ -294,7 +298,6 @@ table.bordered-email {
       }
 
       .collector-links {
-        border-right: 1px solid #666666;
         padding-right: 20px;
         margin-right: 20px;
         padding-left: 20px;
@@ -465,10 +468,8 @@ table.bordered-email {
 }
 
 @media all and (min-width: 480px) {
-  .footer-contact-row {
-    .collector-links {
-      border-right: 1px solid #666666 !important;
-    }
+  table.contents--left {
+    border-right: 1px solid #666666 !important;
   }
 }
 
@@ -507,10 +508,8 @@ table.bordered-email {
     }
 
   table.footer-contact {
-    .footer-contact-row {
-      .collector-links {
-        border-right: 0px !important;
-      }
+    table.contents--left {
+      border-right: 0px !important;
     }
   }
 }

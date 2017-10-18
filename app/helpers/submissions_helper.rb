@@ -17,6 +17,15 @@ module SubmissionsHelper
     submission.edition_number.present? ? "#{submission.edition_number}/#{submission.edition_size}" : nil
   end
 
+  def formatted_medium_metadata(submission)
+    edition_text = formatted_editions(submission).present? ? "Edition #{formatted_editions(submission)}" : nil
+    [
+      submission.medium.try(:truncate, 100),
+      formatted_dimensions(submission),
+      edition_text
+    ].compact.join(', ')
+  end
+
   def reviewer_byline(submission)
     if submission.approved?
       "Approved by #{submission.reviewed_by_user.try(:name)}"

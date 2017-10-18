@@ -14,6 +14,8 @@ class PartnerMailer < ApplicationMailer
     mail(
       to: Convection.config.debug_email_address,
       subject: "New Artsy Consignments #{current_date}: #{@submissions.count} works"
-    )
+    ) do |format|
+      format.html { render layout: 'mailer_no_footer' }
+    end
   end
 end
