@@ -114,10 +114,6 @@ describe PartnerSubmissionService do
       end
 
       context 'with some partner contacts' do
-        before do
-          stub_gravity_partner_contacts
-        end
-
         it 'sends an email digest to a single partner with only approved submissions' do
           PartnerSubmissionService.daily_digest
 
@@ -131,6 +127,20 @@ describe PartnerSubmissionService do
           expect(email.html_part.body).to include('<i>Third approved artwork</i><span>, 1997</span>')
           expect(email.html_part.body).to include('https://google.com/auction')
           expect(@partner.partner_submissions.map(&:notified_at).compact.length).to eq 3
+        end
+
+        it 'sends an email digest to multiple partner contacts with only approved submissions' do
+          stub_gravity_partner_contacts(
+            override_body: [
+              { email: 'contact1@partner.com' },
+              { email: 'contact2@partner.com' }
+            ]
+          )
+          PartnerSubmissionService.daily_digest
+
+          emails = ActionMailer::Base.deliveries
+          expect(emails.length).to eq 2
+          expect(emails.map(&:to)).to include(['contact1@partner.com'], ['contact2@partner.com'])
         end
 
         it 'sends a digest with the first processed image' do

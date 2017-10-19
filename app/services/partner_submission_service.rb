@@ -31,19 +31,29 @@ class PartnerSubmissionService
         Rails.logger.info "Skipping digest for #{partner_id}... no partner contacts."
         return
       end
-      # partner_emails = partner_contacts.map(&:email)
 
       Rails.logger.info(
         "Sending digest of #{submissions.count} submissions to partner #{partner_id} (#{partner.gravity_partner_id})."
       )
-      PartnerMailer.submission_digest(
-        submissions: submissions,
-        partner: gravity_partner
-        # partner_emails: partner_emails
-      ).deliver_now
+
+      submission_ids = submissions.pluck(:id)
+      partner_contacts.map(&:email).each do |email|
+        delay.deliver_partner_contact_email(submission_ids, gravity_partner.name, gravity_partner.type, email)
+      end
 
       notified_at = Time.now.utc
       partner_submissions.each { |ps| ps.update_attributes!(notified_at: notified_at) }
+    end
+
+    def deliver_partner_contact_email(submission_ids, partner_name, partner_type, email)
+      submissions = Submission.find(submission_ids)
+      return if submissions.empty?
+      PartnerMailer.submission_digest(
+        submissions: submissions,
+        partner_name: partner_name,
+        partner_type: partner_type,
+        email: email
+      ).deliver_now
     end
 
     def generate_for_all_partners(submission_id)
