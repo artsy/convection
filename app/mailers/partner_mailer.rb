@@ -1,18 +1,17 @@
 class PartnerMailer < ApplicationMailer
   helper :url, :submissions
 
-  def submission_digest(submissions:, partner:)
+  def submission_digest(submissions:, partner_name:, partner_type:, email:)
     @submissions = submissions
-    @partner_type = partner.type
+    @partner_type = partner_type
     @utm_params = utm_params(source: 'consignment-partner-digest', campaign: 'consignment-complete')
     smtpapi category: ['submission_digest'], unique_args: {
-      partner_name: partner.name
+      partner_name: partner_name
     }
 
     current_date = Time.now.utc.strftime('%B %-d')
-    # TODO: to will go to all of the partner emails... separately? or together?
     mail(
-      to: Convection.config.debug_email_address,
+      to: email,
       subject: "New Artsy Consignments #{current_date}: #{@submissions.count} works"
     ) do |format|
       format.html { render layout: 'mailer_no_footer' }
