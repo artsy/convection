@@ -5,11 +5,13 @@ Fabricator(:image, from: :asset) do
   asset_type 'image'
   gemini_token { Fabricate.sequence(:gemini_token) { |i| "gemini-#{i}" } }
   image_urls do
-    {
-      square: 'https://image-square.jpg',
-      thumbnail: 'https://image-thumb.jpg',
-      large: 'https://image-large.jpg'
-    }
+    Fabricate.sequence(:gemini_token) do |i|
+      {
+        square: "https://image-square-#{i}.jpg",
+        thumbnail: "https://image-thumb-#{i}.jpg",
+        large: "https://image-large-#{i}.jpg"
+      }
+    end
   end
 end
 
