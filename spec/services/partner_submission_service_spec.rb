@@ -175,9 +175,9 @@ describe PartnerSubmissionService do
           expect(emails.length).to eq 1
           email_body = emails.first.html_part.body
           expect(email_body).to include(first_image.image_urls['square'])
-          expect(email_body).to include('<a href="https://image-large.jpg" style="color: #000001;">Image 1</a>')
-          expect(email_body).to include('<a href="https://image-large.jpg" style="color: #000001;">Image 1</a>')
-          expect(email_body).to include('<a href="https://image-large.jpg" style="color: #000001;">Image 1</a>')
+          expect(email_body).to include('<a href="http://foo1.jpg" style="color: #000001;">Image 2</a>')
+          expect(email_body).to include('<a href="http://foo2.jpg" style="color: #000001;">Image 3</a>')
+          expect(email_body).to include('<a href="http://foo3.jpg" style="color: #000001;">Image 4</a>')
         end
 
         it 'sends an email digest to multiple partners' do
