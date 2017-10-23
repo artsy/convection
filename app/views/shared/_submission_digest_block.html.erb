@@ -9,9 +9,9 @@
                 <tr>
                   <td>
                     <% if submission.processed_images.length > 0 %>
-                      <%= image_tag(submission.processed_images.first.image_urls['square'], id: 'first-image') %>
+                      <%= image_tag(preferred_image(submission), id: "submission-image-#{submission.id}") %>
                     <% else %>
-                      <%= image_tag(image_url('missing_image.png'), id: 'first-image') %>
+                      <%= image_tag(image_url('missing_image.png'), id: "submission-image-#{submission.id}") %>
                     <% end %>
                   </td>
                 </tr>

@@ -155,7 +155,11 @@ describe PartnerSubmissionService do
 
         it 'sends a digest with the primary image' do
           Fabricate(:image, submission: @approved1)
-          second_image = Fabricate(:image, submission: @approved1)
+          second_image = Fabricate(:image, submission: @approved1, image_urls: {
+                                     square: 'https://primary-square.jpg',
+                                     thumbnail: 'https://primary-thumb.jpg',
+                                     large: 'https://primary-large.jpg'
+                                   })
           @approved1.update_attributes!(primary_image_id: second_image.id)
           PartnerSubmissionService.daily_digest
 
