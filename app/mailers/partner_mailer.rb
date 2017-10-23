@@ -12,6 +12,7 @@ class PartnerMailer < ApplicationMailer
     current_date = Time.now.utc.strftime('%B %-d')
     mail(
       to: email,
+      from: Convection.config.admin_email_address,
       subject: "New Artsy Consignments #{current_date}: #{@submissions.count} works"
     ) do |format|
       format.html { render layout: 'mailer_no_footer' }
