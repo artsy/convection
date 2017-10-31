@@ -5,9 +5,24 @@ describe 'admin/submissions/index.html.erb', type: :feature do
   context 'always' do
     before do
       stub_gravity_root
-      stub_gravity_artist
 
       allow_any_instance_of(Admin::SubmissionsController).to receive(:require_artsy_authentication)
+      allow(Convection.config).to receive(:gravity_xapp_token).and_return('xapp_token')
+      gravql_artists_response = {
+        data: {
+          artists: [
+            { id: 'artist1', name: 'Andy Warhol' }
+          ]
+        }
+      }
+      stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
+        .to_return(body: gravql_artists_response.to_json)
+        .with(
+          headers: {
+            'X-XAPP-TOKEN' => 'xapp_token',
+            'Content-Type' => 'application/json'
+          }
+        )
       page.visit '/'
     end
 
@@ -37,6 +52,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
       it 'lets you click a submission' do
         stub_gravity_user
         stub_gravity_user_detail
+        stub_gravity_artist
 
         submission = Submission.order(id: :desc).first
         within(:css, ".list-item--submission[data-id='#{submission.id}']") do
@@ -66,10 +82,36 @@ describe 'admin/submissions/index.html.erb', type: :feature do
     context 'with a variety of submissions' do
       before do
         3.times { Fabricate(:submission, user_id: 'userid', artist_id: 'artistid', state: 'submitted') }
-        Fabricate(:submission, user_id: 'userid', artist_id: 'artistid', state: 'approved')
-        Fabricate(:submission, user_id: 'userid', artist_id: 'artistid', state: 'rejected')
-        Fabricate(:submission, user_id: 'userid', artist_id: 'artistid', state: 'draft')
+        Fabricate(:submission, user_id: 'userid', artist_id: 'artistid2', state: 'approved')
+        Fabricate(:submission, user_id: 'userid', artist_id: 'artistid4', state: 'rejected')
+        Fabricate(:submission, user_id: 'userid', artist_id: 'artistid4', state: 'draft')
+
+        gravql_artists_response = {
+          data: {
+            artists: [
+              { id: 'artistid', name: 'Andy Warhol' },
+              { id: 'artistid2', name: 'Kara Walker' },
+              { id: 'artistid3', name: 'Chuck Close' },
+              { id: 'artistid4', name: 'Lucille Bluth' }
+            ]
+          }
+        }
+        stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
+          .to_return(body: gravql_artists_response.to_json)
+          .with(
+            headers: {
+              'X-XAPP-TOKEN' => 'xapp_token',
+              'Content-Type' => 'application/json'
+            }
+          )
         page.visit '/'
+      end
+
+      it 'shows the correct artist names' do
+        expect(page).to have_content('Andy Warhol', count: 3)
+        expect(page).to have_content('Kara Walker', count: 1)
+        expect(page).to_not have_content('Chuck Close')
+        expect(page).to have_content('Lucille Bluth', count: 1)
       end
 
       it 'shows the correct numbers' do
