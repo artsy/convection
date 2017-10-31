@@ -11,7 +11,7 @@
     <%= submission.created_at.strftime('%m/%d/%Y') %>
   </div>
   <div class='list-group-item-info'>
-    <%= submission.artist_name %>
+    <%= artist_details[submission.artist_id] %>
   </div>
   <div class='list-group-item-info'>
     <%= submission.category %>

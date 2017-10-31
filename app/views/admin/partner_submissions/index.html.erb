@@ -1,12 +1,12 @@
 <div class='page-title'>
-<h2>Submissions for <%= @partner_details[:given_name] %> included in next digest</h2>
+<h2>Submissions for <%= @partner_details.values.first[:given_name] %> included in next digest</h2>
 </div>
 
 <div class='container'>
   <div class='row triple-padding-top'>
     <div class='col-md-12'>
       <div class='list-group'>
-        <%= render @partner_submissions.map(&:submission) %>
+        <%= render @partner_submissions.map(&:submission), artist_details: @artist_details %>
       </div>
     </div>
   </div>
