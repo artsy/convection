@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'support/gravity_helper'
 
 describe 'admin/partner_submissions/digest.html.erb', type: :feature do
   context 'always' do
@@ -10,18 +9,29 @@ describe 'admin/partner_submissions/digest.html.erb', type: :feature do
       gravql_partners_response = {
         data: {
           partners: [
-            { id: 'partner1', given_name: 'Wright' }
+            { id: 'partnerid', given_name: 'Wright' }
           ]
         }
       }
       stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
-        .to_return(body: gravql_partners_response.to_json)
-        .with(
-          headers: {
-            'X-XAPP-TOKEN' => 'xapp_token',
-            'Content-Type' => 'application/json'
-          }
-        )
+        .with do |request|
+          parsed = JSON.parse(request.body)
+          parsed['variables']['ids'] == 'partnerid' && parsed['query'].include?('partnersDetails')
+        end.to_return(body: gravql_partners_response.to_json)
+
+      gravql_artists_response = {
+        data: {
+          artists: [
+            { id: 'artist1', name: 'Andy Warhol' }
+          ]
+        }
+      }
+      stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
+        .with do |request|
+          parsed = JSON.parse(request.body)
+          parsed['variables']['ids'] == [] && parsed['query'].include?('artistsDetails')
+        end.to_return(body: gravql_artists_response.to_json)
+
       page.visit "/admin/partners/#{@partner.id}/submissions?notified_at="
     end
 
@@ -38,8 +48,18 @@ describe 'admin/partner_submissions/digest.html.erb', type: :feature do
         Fabricate(:partner_submission, partner: @partner, submission: @submission)
         Fabricate(:partner_submission, partner: @partner, submission: @already_notified_submission, notified_at: Time.now.utc)
 
-        stub_gravity_root
-        stub_gravity_artist
+        gravql_artists_response = {
+          data: {
+            artists: [
+              { id: 'artist1', name: 'Andy Warhol' }
+            ]
+          }
+        }
+        stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
+          .with do |request|
+            parsed = JSON.parse(request.body)
+            parsed['variables']['ids'] == ['artistid'] && parsed['query'].include?('artistsDetails')
+          end.to_return(body: gravql_artists_response.to_json)
       end
 
       it 'displays partner_submissions with no notified_at' do

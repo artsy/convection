@@ -1,5 +1,7 @@
 module Admin
   class SubmissionsController < ApplicationController
+    include GraphqlHelper
+
     before_action :set_submission, only: [:show, :edit, :update]
     before_action :set_pagination_params, only: [:index]
 
@@ -10,6 +12,7 @@ module Admin
 
       @submissions = params[:state] ? Submission.where(state: params[:state]) : Submission.completed
       @submissions = @submissions.order(id: :desc).page(@page).per(@size)
+      @artist_details = artists_query(@submissions.map(&:artist_id))
     end
 
     def new
