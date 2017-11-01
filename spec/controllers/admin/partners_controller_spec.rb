@@ -21,10 +21,12 @@ describe Admin::PartnersController, type: :controller do
           }
         )
     end
+
     before do
       allow(Convection.config).to receive_messages(gravity_xapp_token: xapp_token, gravity_api_url: 'http://gravity.biz/api')
       allow_any_instance_of(Admin::PartnersController).to receive(:require_artsy_authentication)
     end
+
     describe '#index' do
       before do
         gravql_stub
@@ -37,6 +39,32 @@ describe Admin::PartnersController, type: :controller do
         it 'paginates correctly' do
           get :index, params: { page: 3, size: 2 }
           expect(assigns(:partners).count).to eq 1
+        end
+        it 'returns an alphabetized list of details' do
+          gravql_partners_response = {
+            data: {
+              partners: [
+                { id: partners[0].gravity_partner_id, given_name: 'Zenith' },
+                { id: partners[1].gravity_partner_id, given_name: 'apples' },
+                { id: partners[2].gravity_partner_id, given_name: 'Bananas' },
+                { id: partners[3].gravity_partner_id, given_name: 'Leaf' },
+                { id: partners[4].gravity_partner_id, given_name: 'cups' }
+              ]
+            }
+          }
+          stub_request(:post, 'http://gravity.biz/api/graphql')
+            .to_return(body: gravql_partners_response.to_json)
+            .with(
+              headers: {
+                'X-XAPP-TOKEN' => xapp_token,
+                'Content-Type' => 'application/json'
+              }
+            )
+
+          get :index
+          expect(
+            assigns(:partner_details).map(&:last).pluck(:given_name)
+          ).to eq(%w(apples Bananas cups Leaf Zenith))
         end
       end
 

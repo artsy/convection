@@ -6,18 +6,18 @@
   <div class='row triple-padding-top'>
     <div class='col-md-12'>
       <div class='list-group'>
-        <% @partners.each do |partner| %>
-          <div class='list-group-item list-item--partner' data-id=<%= partner[:id] %>>
+        <% @partner_details.each do |gravity_partner_id, details| %>
+          <div class='list-group-item list-item--partner' data-id=<%= details[:partner_id] %>>
             <div class='list-group-item-info'>
               <p class='list-item--partner--name'>
-                <%= @partner_details[partner.gravity_partner_id][:given_name] %>
+                <%= details[:given_name] %>
               </p>
               <p>
-                <%= link_to 'View next digest contents', admin_partner_submissions_path(partner_id: partner.id, notified_at: '') %>
+                <%= link_to 'View next digest contents', admin_partner_submissions_path(partner_id: details[:partner_id], notified_at: '') %>
               </p>
             </div>
             <div class='list-group-item-info list-group-item-links'>
-              <%= link_to 'Edit partner contacts', "#{Convection.config.vibrations_url}/contacts?partner_id=#{partner.gravity_partner_id}", class: 'btn btn-secondary btn-tiny' %>
+              <%= link_to 'Edit partner contacts', "#{Convection.config.vibrations_url}/contacts?partner_id=#{gravity_partner_id}", class: 'btn btn-secondary btn-tiny' %>
             </div>
           </div>
         <% end %>
