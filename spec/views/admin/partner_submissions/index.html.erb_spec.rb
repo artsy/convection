@@ -5,19 +5,7 @@ describe 'admin/partner_submissions/digest.html.erb', type: :feature do
     before do
       allow_any_instance_of(ApplicationController).to receive(:require_artsy_authentication)
       allow(Convection.config).to receive(:gravity_xapp_token).and_return('xapp_token')
-      @partner = Fabricate(:partner, gravity_partner_id: 'partnerid')
-      gravql_partners_response = {
-        data: {
-          partners: [
-            { id: 'partnerid', given_name: 'Wright' }
-          ]
-        }
-      }
-      stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
-        .with do |request|
-          parsed = JSON.parse(request.body)
-          parsed['variables']['ids'] == 'partnerid' && parsed['query'].include?('partnersDetails')
-        end.to_return(body: gravql_partners_response.to_json)
+      @partner = Fabricate(:partner, gravity_partner_id: 'partnerid', name: 'Wright')
 
       gravql_artists_response = {
         data: {
