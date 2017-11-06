@@ -10,7 +10,7 @@
           <div class='list-group-item list-item--partner' data-id=<%= partner[:id] %>>
             <div class='list-group-item-info'>
               <p class='list-item--partner--name'>
-                <%= @partner_details[partner.gravity_partner_id][:given_name] %>
+                <%= partner.name %>
               </p>
               <p>
                 <%= link_to 'View next digest contents', admin_partner_submissions_path(partner_id: partner.id, notified_at: '') %>

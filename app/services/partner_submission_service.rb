@@ -38,7 +38,7 @@ class PartnerSubmissionService
 
       submission_ids = submissions.pluck(:id)
       partner_contacts.map(&:email).each do |email|
-        delay.deliver_partner_contact_email(submission_ids, gravity_partner.name, gravity_partner.type, email)
+        delay.deliver_partner_contact_email(submission_ids, partner.name, gravity_partner.type, email)
       end
 
       notified_at = Time.now.utc
