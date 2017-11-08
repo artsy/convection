@@ -1,36 +1,82 @@
-# Convection
+# Convection [![CircleCI][badge]][circleci]
 
-Convection is the application that powers our consignments workflow, enabling users to submit works to consign through Artsy partners. For now, it encapsulates logic from [rothko-api](https://github.com/artsy/rothko-api) and [rothko-web-public](https://github.com/artsy/rothko-web-public).
+Convection is the application that powers our consignments workflow, enabling
+users to submit works to consign through Artsy partners. For now, it
+encapsulates logic from [rothko-api] and [rothko-web-public].
 
-[![CircleCI](https://circleci.com/gh/artsy/convection.svg?style=svg&circle-token=cf452a49d5399e749ebbb85a0843d6111b79c9aa)](https://circleci.com/gh/artsy/convection)
 
-* __State:__ early production
-* __Staging:__ [https://convection-staging.artsy.net](https://convection-staging.artsy.net) | [convection-staging on Heroku](https://dashboard.heroku.com/apps/convection-staging/resources)
-* __Production:__ [https://convection.artsy.net](https://convection.artsy.net) | [convection-production on Heroku](https://dashboard.heroku.com/apps/convection-production/resources)
-* __Github:__ [https://github.com/artsy/convection](https://github.com/artsy/convection)
-* __CI:__ [CircleCI](https://circleci.com/gh/artsy/convection)
-* __Point people:__ [sweir27](https://github.com/sweir27)
-* __Branching/Deploys:__ PRs merged to `master` are automatically built and deployed to staging. PRs from `master` to `release` are automatically deployed to production. [Deploy to production](https://github.com/artsy/convection/compare/release...master?expand=1).
+* State: production
+* Production: [https://convection.artsy.net][production] | [Heroku][production_heroku]
+* Staging: [https://convection-staging.artsy.net][staging] | [Heroku][staging_heroku]
+* GitHub: [https://github.com/artsy/convection](https://github.com/artsy/convection)
+* Point People: [@sweir27]
 
-### Set up
+## Setup
 
-    bundle # install dependencies
-    bundle exec rake # run rubocop and tests
-    cp .env.example .env # create local file for configuration, edit it (can use values from `heroku config --app convection-staging`)
-    foreman start # run local rails server
+* Fork the project to your GitHub account
 
-### Development notes
+* Clone your fork:
+  ```
+  $ git clone git@github.com:your-github-username/convection.git
+  ```
 
-Configuration is provided via environment variables. [Foreman](https://github.com/ddollar/foreman) and a `.env` file are recommended. See `config/initializers/_config.rb` for a list of available properties and their defaults.
+* Read and run setup script:
+  ```
+  $ cat bin/setup
+  $ bin/setup
+  ```
 
-### Creating a Submission
+## Tests
+
+Once setup, you can run the tests like this:
+
+```
+$ bundle exec rake spec
+```
+
+Note: the default rake task is setup to run tests and RuboCop.
+
+## Starting Server
+
+Foreman is used to manage the server configuration, so starting a server is as
+easy as:
+
+```
+$ foreman start
+```
+
+See the Procfile for more.
+
+## Deploying
+
+PRs merged to the `master` branch are automatically deployed to staging.
+Production is automatically deployed upon merges to `release`. Create such a PR
+with [`deploy_pr`][deploy_pr] or [this handy link][deploy].
+
+## Creating a Submission
+
 Generate a valid JWT token in a Convection console:
+
 ```ruby
 payload =  { aud: 'app', sub: '<valid user id>' }
 token = JWT.encode payload, Convection.config.jwt_secret, 'HS256'
 ```
 
-Use `curl` to generate a submission with an artist_id (emails will appear in mailtrap)
+Use `curl` to generate a submission with an `artist_id` (emails will appear in
+mailtrap).
+
 ```
 curl -H 'Authorization: Bearer <token>' -H 'Accept: application/json' -d 'artist_id=5059d82a1fc9fa00020008ff' https://convection-staging.artsy.net/api/submissions
 ```
+
+[badge]: https://circleci.com/gh/artsy/convection.svg?style=svg&circle-token=cf452a49d5399e749ebbb85a0843d6111b79c9aa
+[circleci]: https://circleci.com/gh/artsy/convection
+[rothko-api]: https://github.com/artsy/rothko-api
+[rothko-web-public]: https://github.com/artsy/rothko-web-public
+[production]: https://convection.artsy.net
+[production_heroku]: https://dashboard.heroku.com/apps/convection-production
+[staging]: https://convection-staging.artsy.net
+[staging_heroku]: https://dashboard.heroku.com/apps/convection-staging
+[@sweir27]: https://github.com/sweir27
+[deploy_pr]: https://github.com/jonallured/deploy_pr
+[deploy]: https://github.com/artsy/convection/compare/release...master?expand=1
