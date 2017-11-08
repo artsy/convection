@@ -43,6 +43,7 @@ gem 'jquery-rails'
 gem 'haml-rails' # required for watt layouts
 
 gem 'artsy-eventservice' # for posting events to artsy event stream
+gem 'pg_search' # for searching within convection's database
 
 group :development, :test do
   gem 'pry-byebug'

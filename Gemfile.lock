@@ -199,6 +199,10 @@ GEM
     parser (2.4.0.0)
       ast (~> 2.2)
     pg (0.19.0)
+    pg_search (2.1.1)
+      activerecord (>= 4.2)
+      activesupport (>= 4.2)
+      arel (>= 6)
     powerpack (0.1.1)
     premailer (1.9.2)
       css_parser (>= 1.4.8)
@@ -350,6 +354,7 @@ DEPENDENCIES
   neat
   newrelic_rpm
   pg (~> 0.15)
+  pg_search
   premailer-rails
   pry-byebug
   puma (~> 3.0)
