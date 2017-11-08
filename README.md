@@ -10,6 +10,10 @@ encapsulates logic from [rothko-api] and [rothko-web-public].
 * Staging: [https://convection-staging.artsy.net][staging] | [Heroku][staging_heroku]
 * GitHub: [https://github.com/artsy/convection](https://github.com/artsy/convection)
 * Point People: [@sweir27]
+* Deploying: PRs merged to the `master` branch are automatically deployed to
+  staging.  Production is automatically deployed upon merges to `release`.
+  Create such a PR with [`deploy_pr`][deploy_pr] or [this handy link][deploy].
+
 
 ## Setup
 
@@ -46,12 +50,6 @@ $ foreman start
 ```
 
 See the Procfile for more.
-
-## Deploying
-
-PRs merged to the `master` branch are automatically deployed to staging.
-Production is automatically deployed upon merges to `release`. Create such a PR
-with [`deploy_pr`][deploy_pr] or [this handy link][deploy].
 
 ## Creating a Submission
 
