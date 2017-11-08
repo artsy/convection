@@ -1,10 +1,9 @@
 module Admin
   class PartnersController < ApplicationController
     expose(:partners) do
-      partners = Partner.all
-      partners = partners.search_by_name(params[:term]) if params[:term]
-      partners = partners.order(name: :asc).page(@page).per(@size)
-      partners
+      matching_partners = Partner.all
+      matching_partners = matching_partners.search_by_name(params[:term]) if params[:term]
+      matching_partners.page(@page).per(@size)
     end
 
     expose(:term) do

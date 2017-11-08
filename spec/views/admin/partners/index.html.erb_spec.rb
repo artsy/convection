@@ -7,13 +7,13 @@ describe 'admin/partners/index.html.erb', type: :feature do
       Fabricate(:partner, name: 'Gagosian Gallery')
       Fabricate(:partner, name: 'Alan Cristea Gallery')
       Fabricate(:partner, name: 'Rosier Gallery')
+      Fabricate(:partner, name: 'Auction House')
       page.visit '/admin/partners'
     end
 
     it 'displays all of the partners when no term is set' do
-      expect(page).to have_content('Gagosian Gallery')
-      expect(page).to have_content('Alan Cristea Gallery')
-      expect(page).to have_content('Rosier Gallery')
+      partner_names = page.all('.list-item--partner--name').map(&:text)
+      expect(partner_names).to eq(['Alan Cristea Gallery', 'Auction House', 'Gagosian Gallery', 'Rosier Gallery'])
     end
 
     it 'allows for searching by prefix' do
@@ -26,10 +26,8 @@ describe 'admin/partners/index.html.erb', type: :feature do
     it 'allows for searching by a common term' do
       fill_in('term', with: 'gallery')
       click_button('Search')
-      expect(page).to have_content('Gagosian Gallery')
-      expect(page).to have_content('Alan Cristea Gallery')
-      expect(page).to have_content('Rosier Gallery')
-      expect(page).to have_selector('.list-group-item', count: 3)
+      partner_names = page.all('.list-item--partner--name').map(&:text)
+      expect(partner_names).to eq(['Alan Cristea Gallery', 'Gagosian Gallery', 'Rosier Gallery'])
     end
   end
 end
