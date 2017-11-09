@@ -7,16 +7,16 @@
 <div class='container'>
   <div class='row triple-padding-top'>
     <div class='col-md-12'>
-      <form method='get' action='<%= admin_partners_url %>'>
+      <%= form_tag admin_partners_url, method: 'get' do %>
         <div class='form-group'>
           <div class='col-sm-10'>
-            <input type='text' name='term' class='form-control' placeholder='Partner name' value='<%= term %>' />
+            <%= text_field_tag 'term', term, class: 'form-control', placeholder: 'Partner name' %>
           </div>
           <div class='col-sm-2'>
-            <button type='submit' class='btn btn-primary btn-full-width btn-tiny'>Search</button>
+            <%= submit_tag 'Search', class: 'btn btn-primary btn-full-width btn-tiny' %>
           </div>
         </div>
-      </div>
+      <% end %>
     </div>
     <div class='col-md-12'>
       <div class='list-group'>
