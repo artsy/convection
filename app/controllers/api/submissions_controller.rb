@@ -23,7 +23,12 @@ module Api
     end
 
     def index
-      submissions = Submission.where(user_id: current_user).order(created_at: :desc).page(@page).per(@size)
+      param! :completed, :boolean, default: false
+
+      submissions = Submission.where(user_id: current_user)
+      submissions = submissions.completed if params[:completed]
+
+      submissions = submissions.order(created_at: :desc).page(@page).per(@size)
       render json: submissions.to_json, status: 200
     end
 

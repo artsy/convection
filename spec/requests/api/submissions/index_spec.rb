@@ -12,7 +12,7 @@ describe 'Show Submission' do
     end
 
     it "doesn't return other people's submissions" do
-      Fabricate(:submission, user_id: 'buster-bluth')
+      Fabricate(:submission, user_id: 'buster-bluth', state: 'approved')
       get '/api/submissions', headers: headers
       expect(response.status).to eq 200
       body = JSON.parse(response.body)
@@ -20,8 +20,8 @@ describe 'Show Submission' do
     end
 
     it 'returns your own submissions' do
-      submission = Fabricate(:submission, user_id: 'userid')
-      Fabricate(:submission, user_id: 'anotherid')
+      submission = Fabricate(:submission, user_id: 'userid', state: 'approved')
+      Fabricate(:submission, user_id: 'anotherid', state: 'approved')
 
       get '/api/submissions', headers: headers
       expect(response.status).to eq 200
@@ -31,14 +31,29 @@ describe 'Show Submission' do
     end
 
     it 'handles pagination correctly with your submissions' do
-      submission = Fabricate(:submission, user_id: 'userid')
-      Fabricate(:submission, user_id: 'userid')
-      Fabricate(:submission, user_id: 'userid')
+      submission = Fabricate(:submission, user_id: 'userid', state: 'approved')
+      Fabricate(:submission, user_id: 'userid', state: 'approved')
+      Fabricate(:submission, user_id: 'userid', state: 'approved')
 
       get '/api/submissions', headers: headers, params: { page: 3, size: 1 }
       expect(response.status).to eq 200
       body = JSON.parse(response.body)
       expect(body.first['id']).to eq submission.id
+    end
+
+    it 'supports only passing completed submissions' do
+      submission = Fabricate(:submission, user_id: 'userid', state: 'approved')
+      Fabricate(:submission, user_id: 'userid', state: 'draft')
+      submission3 = Fabricate(:submission, user_id: 'userid', state: 'approved')
+
+      get '/api/submissions', headers: headers, params: { completed: true }
+      expect(response.status).to eq 200
+
+      body = JSON.parse(response.body)
+      expect(body.length).to eq 2
+
+      expect(body[0]['id']).to eq submission3.id
+      expect(body[1]['id']).to eq submission.id
     end
   end
 end
