@@ -16,16 +16,16 @@ describe Admin::PartnersController, type: :controller do
       context 'with successful partner details request' do
         it 'returns the first two partners on the first page' do
           get :index, params: { page: 1, size: 2 }
-          expect(assigns(:partners).count).to eq 2
+          expect(controller.partners.count).to eq 2
         end
         it 'paginates correctly' do
           get :index, params: { page: 3, size: 2 }
-          expect(assigns(:partners).count).to eq 1
+          expect(controller.partners.count).to eq 1
         end
         it 'orders the partners correctly' do
           get :index, params: { page: 1 }
-          expect(assigns(:partners).count).to eq 5
-          expect(assigns(:partners).map(&:name)).to eq(['abracadabra', 'animal prints', 'bubbles', 'gagosian', 'zz top'])
+          expect(controller.partners.count).to eq 5
+          expect(controller.partners.map(&:name)).to eq(['abracadabra', 'animal prints', 'bubbles', 'gagosian', 'zz top'])
         end
       end
     end

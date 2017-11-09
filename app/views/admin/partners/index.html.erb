@@ -1,12 +1,26 @@
 <div class='page-title'>
-  <h2>Current Partners</h2>
+  <h2>
+    <%= link_to 'Partners', admin_partners_url %>
+  </h2>
 </div>
 
 <div class='container'>
   <div class='row triple-padding-top'>
     <div class='col-md-12'>
+      <%= form_tag admin_partners_url, method: 'get' do %>
+        <div class='form-group'>
+          <div class='col-sm-10'>
+            <%= text_field_tag 'term', term, class: 'form-control', placeholder: 'Partner name' %>
+          </div>
+          <div class='col-sm-2'>
+            <%= submit_tag 'Search', class: 'btn btn-primary btn-full-width btn-tiny' %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class='col-md-12'>
       <div class='list-group'>
-        <% @partners.each do |partner| %>
+        <% partners.each do |partner| %>
           <div class='list-group-item list-item--partner' data-id=<%= partner[:id] %>>
             <div class='list-group-item-info'>
               <p class='list-item--partner--name'>
@@ -24,5 +38,5 @@
       </div>
     </div>
   </div>
-  <%= render 'shared/watt/paginator', total_items_count: @partners.total_count, items_count: @partners.length, per_page: @size, current_page: @page, base_url: admin_partners_url %>
+  <%= render 'shared/watt/paginator', total_items_count: partners.total_count, items_count: partners.length, per_page: @size, current_page: @page, base_url: admin_partners_url %>
 </div>
