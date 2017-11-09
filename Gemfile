@@ -50,6 +50,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'foreman'
   gem 'rubocop', require: false
 end
 
