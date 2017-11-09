@@ -4,6 +4,9 @@
       <div class='attributes-container triple-padding-top'>
         <div class='page-title'>
           <h2>Submission #<%= @submission.id %></h2>
+          <div class="submission-state submission-state--<%= @submission.state %>">
+            <%= @submission.state %>
+          </div>
         </div>
         <div class='bold-label triple-padding-top'>Details</div>
 
