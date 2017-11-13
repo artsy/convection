@@ -41,19 +41,47 @@ describe 'Show Submission' do
       expect(body.first['id']).to eq submission.id
     end
 
-    it 'supports only passing completed submissions' do
-      submission = Fabricate(:submission, user_id: 'userid', state: 'approved')
-      Fabricate(:submission, user_id: 'userid', state: 'draft')
-      submission3 = Fabricate(:submission, user_id: 'userid', state: 'approved')
+    describe('filtering') do
+      it 'defaults to all types of submissions submissions' do
+        Fabricate(:submission, user_id: 'userid', state: 'approved')
+        Fabricate(:submission, user_id: 'userid', state: 'draft')
+        Fabricate(:submission, user_id: 'userid', state: 'approved')
 
-      get '/api/submissions', headers: headers, params: { completed: true }
-      expect(response.status).to eq 200
+        get '/api/submissions', headers: headers
+        expect(response.status).to eq 200
 
-      body = JSON.parse(response.body)
-      expect(body.length).to eq 2
+        body = JSON.parse(response.body)
+        expect(body.length).to eq 3
+      end
 
-      expect(body[0]['id']).to eq submission3.id
-      expect(body[1]['id']).to eq submission.id
+      it 'supports only passing completed submissions' do
+        submission = Fabricate(:submission, user_id: 'userid', state: 'approved')
+        Fabricate(:submission, user_id: 'userid', state: 'draft')
+        submission3 = Fabricate(:submission, user_id: 'userid', state: 'approved')
+
+        get '/api/submissions', headers: headers, params: { completed: true }
+        expect(response.status).to eq 200
+
+        body = JSON.parse(response.body)
+        expect(body.length).to eq 2
+
+        expect(body[0]['id']).to eq submission3.id
+        expect(body[1]['id']).to eq submission.id
+      end
+
+      it 'supports only passing draft submissions' do
+        Fabricate(:submission, user_id: 'userid', state: 'approved')
+        submission2 = Fabricate(:submission, user_id: 'userid', state: 'draft')
+        Fabricate(:submission, user_id: 'userid', state: 'approved')
+
+        get '/api/submissions', headers: headers, params: { completed: false }
+        expect(response.status).to eq 200
+
+        body = JSON.parse(response.body)
+        expect(body.length).to eq 1
+
+        expect(body[0]['id']).to eq submission2.id
+      end
     end
   end
 end
