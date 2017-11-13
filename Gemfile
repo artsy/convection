@@ -27,7 +27,8 @@ gemini_gem_spec = { git: 'https://github.com/artsy/gemini_upload-rails.git', bra
 gem 'gemini_upload-rails', gemini_gem_spec # for admins to upload images
 
 
-gem 'graphql'
+gem 'graphql' # A lovely API
+gem 'graphiql-rails' # A lovely interface to the API
 
 watt_gem_spec = { git: 'https://github.com/artsy/watt.git', branch: 'master' }
 gem 'watt', watt_gem_spec # artsy bootstrap

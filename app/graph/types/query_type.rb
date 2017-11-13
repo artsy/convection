@@ -1,11 +1,13 @@
-module Queries
-  Root = GraphQL::ObjectType.define do
+module Types
+  QueryType = GraphQL::ObjectType.define do
     name 'Query'
     description 'Query root for this schema'
     field :submission, types[Types::SubmissionType] do
       description 'Find Submissions'
       argument :ids, types[types.ID]
       argument :id, types.ID
+      argument :completed, types.Boolean
+
       resolve ->(_object, args, _context) {
         args[:ids] ? Submission.where(id: args[:ids]) : [Submission.find(args[:id])]
       }

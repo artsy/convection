@@ -1,5 +1,5 @@
 RootSchema = GraphQL::Schema.define do
-  query Queries::Root
+  query Types::QueryType
   mutation Mutations::Root
 
   max_depth 5

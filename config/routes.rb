@@ -24,6 +24,10 @@ Rails.application.routes.draw do
     post '/graphql', to: 'graphql#execute'
   end
 
+  if Rails.env.development?
+    mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/api/graphql'
+  end
+
   mount ArtsyAuth::Engine => '/'
 
   require 'sidekiq/web'
