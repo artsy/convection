@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   root to: redirect('/admin')
 
   namespace :api do
-    resources :submissions, only: [:create, :update, :show]
+    resources :submissions, only: [:create, :update, :show, :index]
     resources :assets, only: [:create, :show, :index]
     post '/callbacks/gemini', to: 'callbacks#gemini'
     post '/graphql', to: 'graphql#execute'

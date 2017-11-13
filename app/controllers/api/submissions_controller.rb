@@ -3,6 +3,7 @@ module Api
     before_action :require_authentication
     before_action :set_submission, only: [:show, :update]
     before_action :require_authorized_submission, only: [:show, :update]
+    before_action :set_pagination_params, only: [:index]
 
     def show
       render json: @submission.to_json, status: 200
@@ -19,6 +20,18 @@ module Api
     def update
       SubmissionService.update_submission(@submission, submission_params(params))
       render json: @submission.to_json, status: 201
+    end
+
+    def index
+      param! :completed, :boolean, default: nil
+
+      submissions = Submission.where(user_id: current_user)
+      if params.include? :completed
+        submissions = params[:completed] ? submissions.completed : submissions.draft
+      end
+
+      submissions = submissions.order(created_at: :desc).page(@page).per(@size)
+      render json: submissions.to_json, status: 200
     end
 
     private
