@@ -25,16 +25,16 @@ module Api
       @submission = Submission.find(submission_id)
     end
 
+    def set_current_user_roles
+      current_user_roles
+    end
+
     def require_authentication
       raise ApplicationController::NotAuthorized unless current_app && current_user
     end
 
     def require_authorized_submission
       raise ApplicationController::NotAuthorized unless current_user && current_user == @submission.user_id
-    end
-
-    def require_app
-      raise ApplicationController::NotAuthorized unless current_app
     end
 
     private
@@ -54,6 +54,10 @@ module Api
 
     def current_user
       @current_user ||= jwt_payload&.fetch('sub', nil)
+    end
+
+    def current_user_roles
+      @current_user_roles ||= jwt_payload&.fetch('roles', [])&.split(',')
     end
   end
 end

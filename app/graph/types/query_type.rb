@@ -6,6 +6,7 @@ module Types
       description 'Find Submissions'
       argument :ids, types[types.ID]
       argument :id, types.ID
+      permit ['admin']
 
       resolve ->(_object, args, _context) {
         args[:ids] ? Submission.where(id: args[:ids]) : [Submission.find(args[:id])]

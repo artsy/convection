@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 describe 'Query Submissions With Graphql' do
-  let(:jwt_token) { JWT.encode({ aud: 'gravity', sub: 'userid' }, Convection.config.jwt_secret) }
-  let(:headers) { { 'Authorization' => "Bearer #{jwt_token}" } }
+  let(:admin_jwt_token) { JWT.encode({ aud: 'gravity', sub: 'userid', roles: 'admin' }, Convection.config.jwt_secret) }
+  let(:user_jwt_token) { JWT.encode({ aud: 'gravity', sub: 'userid', roles: 'user' }, Convection.config.jwt_secret) }
+  let(:headers) { { 'Authorization' => "Bearer #{admin_jwt_token}" } }
   let(:submission) { Fabricate(:submission, artist_id: 'abbas-kiarostami', title: 'rain') }
   let!(:submission2) { Fabricate(:submission, artist_id: 'andy-warhol', title: 'no-rain') }
   let(:asset) { Fabricate(:asset, submission: submission) }
@@ -34,7 +35,7 @@ describe 'Query Submissions With Graphql' do
       post '/api/graphql', params: {
         query: introspection_query
       }
-      expect(JSON.parse(response.body)['data']['__type']['fields'].map{|f| f['name']}).to_not include('user_id')
+      expect(JSON.parse(response.body)['data']['__type']['fields'].map { |f| f['name'] }).to_not include('user_id')
       expect(response.status).to eq 200
     end
 
@@ -52,7 +53,7 @@ describe 'Query Submissions With Graphql' do
       post '/api/graphql', params: {
         query: introspection_query
       }, headers: headers
-      expect(JSON.parse(response.body)['data']['__type']['fields'].map{|f| f['name']}).to include('user_id')
+      expect(JSON.parse(response.body)['data']['__type']['fields'].map { |f| f['name'] }).to include('user_id')
       expect(response.status).to eq 200
     end
 
@@ -63,6 +64,16 @@ describe 'Query Submissions With Graphql' do
       expect(response.status).to eq 200
       body = JSON.parse(response.body)
       expect(body['data']['submission'].count).to eq 2
+    end
+
+    it 'throws an error if a user tries to access' do
+      post '/api/graphql', params: {
+        query: query_submissions
+      }, headers: { 'Authorization' => "Bearer #{user_jwt_token}" }
+      expect(response.status).to eq 200
+      body = JSON.parse(response.body)
+      expect(body['data']['submission']).to eq nil
+      expect(body['errors'][0]['message']).to eq "Can't access submission"
     end
   end
 end
