@@ -124,6 +124,8 @@ GEM
     graphiql-rails (1.4.7)
       rails
     graphql (1.6.7)
+    graphql-guard (1.0.0)
+      graphql (>= 1.6.0, < 2)
     haml (5.0.1)
       temple (>= 0.8.0)
       tilt
@@ -356,6 +358,7 @@ DEPENDENCIES
   gemini_upload-rails!
   graphiql-rails
   graphql
+  graphql-guard
   haml-rails
   hyperclient
   jquery-rails

@@ -20,11 +20,40 @@ describe 'Query Submissions With Graphql' do
   end
 
   describe 'POST /graphql' do
-    it 'rejects unauthorized requests' do
+    it 'does not return the user_id if there is no user' do
+      introspection_query = <<-graphql
+        query {
+          __type(name: "Submission") {
+            name
+            fields {
+              name
+            }
+          }
+        }
+      graphql
       post '/api/graphql', params: {
-        query: query_submissions
-      }, headers: { 'Authorization' => 'Bearer foo.bar.baz' }
-      expect(response.status).to eq 401
+        query: introspection_query
+      }
+      expect(JSON.parse(response.body)['data']['__type']['fields'].map{|f| f['name']}).to_not include('user_id')
+      expect(response.status).to eq 200
+    end
+
+    it 'includes the user_id param if there is a user present' do
+      introspection_query = <<-graphql
+        query {
+          __type(name: "Submission") {
+            name
+            fields {
+              name
+            }
+          }
+        }
+      graphql
+      post '/api/graphql', params: {
+        query: introspection_query
+      }, headers: headers
+      expect(JSON.parse(response.body)['data']['__type']['fields'].map{|f| f['name']}).to include('user_id')
+      expect(response.status).to eq 200
     end
 
     it 'finds two existing submissions' do

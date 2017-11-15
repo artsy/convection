@@ -1,7 +1,5 @@
 module Api
   class GraphqlController < BaseController
-    before_action :require_authentication
-
     def execute
       result = RootSchema.execute(
         params[:query],
@@ -9,7 +7,8 @@ module Api
         context: {
           current_application: current_app,
           current_user: current_user
-        }
+        },
+        except: PermissionBlacklist
       )
       render json: result, status: 200
     end

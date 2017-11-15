@@ -33,6 +33,10 @@ module Api
       raise ApplicationController::NotAuthorized unless current_user && current_user == @submission.user_id
     end
 
+    def require_app
+      raise ApplicationController::NotAuthorized unless current_app
+    end
+
     private
 
     # For now, require that signature is valid by verifying payload w/ secret.
