@@ -3,9 +3,10 @@ module Types
     name 'Query'
     description 'Query root for this schema'
     field :submission, types[Types::SubmissionType] do
-      description 'Find Submissions'
+      description 'Find a Submission'
       argument :ids, types[types.ID]
       argument :id, types.ID
+      permit ['admin']
 
       resolve ->(_object, args, _context) {
         args[:ids] ? Submission.where(id: args[:ids]) : [Submission.find(args[:id])]

@@ -51,5 +51,9 @@ module Api
     def current_user
       @current_user ||= jwt_payload&.fetch('sub', nil)
     end
+
+    def current_user_roles
+      @current_user_roles ||= jwt_payload&.fetch('roles', '')&.split(',')
+    end
   end
 end
