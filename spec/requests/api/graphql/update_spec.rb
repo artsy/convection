@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe 'Update Submission With Graphql' do
-  let(:jwt_token) { JWT.encode({ aud: 'gravity', sub: 'userid' }, Convection.config.jwt_secret) }
+  let(:jwt_token) { JWT.encode({ aud: 'gravity', sub: 'userid', roles: 'user' }, Convection.config.jwt_secret) }
   let(:headers) { { 'Authorization' => "Bearer #{jwt_token}" } }
   let(:submission) { Fabricate(:submission, artist_id: 'abbas-kiarostami', title: 'rain') }
 
@@ -33,7 +33,10 @@ describe 'Update Submission With Graphql' do
       post '/api/graphql', params: {
         query: update_mutation
       }, headers: { 'Authorization' => 'Bearer foo.bar.baz' }
-      expect(response.status).to eq 401
+      expect(response.status).to eq 200
+      body = JSON.parse(response.body)
+      expect(body['data']['updateSubmission']).to eq nil
+      expect(body['errors'][0]['message']).to eq "Can't access updateSubmission"
     end
 
     it 'errors for unkown submission id' do
