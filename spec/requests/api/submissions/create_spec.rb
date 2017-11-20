@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'support/gravity_helper'
 
 describe 'Create Submission' do
-  let(:jwt_token) { JWT.encode({ aud: 'gravity', sub: 'userid' }, Convection.config.jwt_secret) }
+  let(:jwt_token) { JWT.encode({ aud: 'gravity', sub: 'userid', roles: 'user' }, Convection.config.jwt_secret) }
   let(:headers) { { 'Authorization' => "Bearer #{jwt_token}" } }
 
   describe 'POST /submissions' do
