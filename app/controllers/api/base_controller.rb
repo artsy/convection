@@ -53,7 +53,7 @@ module Api
     end
 
     def current_user_roles
-      @current_user_roles ||= jwt_payload&.fetch('roles', '')&.split(',')
+      @current_user_roles ||= jwt_payload&.fetch('roles', nil)&.split(',')&.map(&:to_sym)
     end
   end
 end
