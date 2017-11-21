@@ -3,6 +3,8 @@ module Inputs
     Create = GraphQL::InputObjectType.define do
       name('CreateSubmission')
       SubmissionInput.shared_args(self)
+      # Override artist_id with a required version
+      argument :artist_id, !types.String
     end
 
     Update = GraphQL::InputObjectType.define do
@@ -13,7 +15,7 @@ module Inputs
 
     def self.shared_args(object_type)
       object_type.argument :additional_info, object_type.types.String
-      object_type.argument :artist_id, !object_type.types.String
+      object_type.argument :artist_id, object_type.types.String
       object_type.argument :authenticity_certificate, object_type.types.Boolean
       object_type.argument :category, object_type.types.String
       object_type.argument :deadline_to_sell, Types::DateType

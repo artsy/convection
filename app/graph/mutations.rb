@@ -18,7 +18,10 @@ module Mutations
 
       resolve ->(_obj, args, context) {
         submission = Submission.find_by(id: args[:submission][:id])
-        raise(GraphQL::ExecutionError, 'Submission Not Found') unless submission&.user_id == context[:current_user]
+        is_same_as_user = submission&.user_id == context[:current_user]
+        is_admin = context[:current_user_roles].include?(:admin)
+
+        raise(GraphQL::ExecutionError, 'Submission Not Found') unless is_same_as_user || is_admin
         SubmissionService.update_submission(submission, args[:submission].to_h.except(:id))
         submission
       }

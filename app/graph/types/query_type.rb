@@ -9,17 +9,11 @@ module Types
       resolve ->(_object, args, _context) { Submission.find(args[:id]) }
     end
 
-    connection :all_submissions, Types::SubmissionType.define_connection do
-      description 'Find Submissions by their IDs (Admin only)'
+    connection :allSubmissions, Types::SubmissionType.define_connection do
+      description 'Filter all submission'
 
-      argument :ids, types[types.ID], 'Get all submissions with these IDs', prepare:  ->(obj, context) do
-        unless context[:current_user_roles].include? 'admin'
-          GraphQL::ExecutionError.new('Only Admins can use the ids: argument.')
-        end
-        obj
-      end
-
-      argument :user_id, types[types.ID], 'Only get submission by this user_id', prepare:  ->(obj, context) do
+      argument :ids, types[types.ID], 'Get all submissions with these IDs', permit: :admin
+      argument :user_id, types[types.ID], 'Only get submission by this user_id', prepare: ->(obj, context) do
         is_same_as_user = obj == context[:current_user]
         if !is_same_as_user && !context[:current_user_roles].include?(:admin)
           GraphQL::ExecutionError.new('Only Admins can use the user_id for another user.')
