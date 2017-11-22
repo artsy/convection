@@ -64,5 +64,31 @@ describe 'Create Submission With Graphql' do
         expect(body['data']['createSubmission']['title']).to eq 'soup'
       end.to change(Submission, :count).by(1)
     end
+
+    it 'creates an asset' do
+      expect do
+        submission = Fabricate(:submission, user_id: 'userid')
+
+        create_asset = <<-graphql
+        mutation {
+          createAsset(submission_id: #{submission.id}, gemini_token: "gemini-token-hash"){
+            id,
+            submission {
+              id
+            }
+          }
+        }
+        graphql
+
+        post '/api/graphql', params: {
+          query: create_asset
+        }, headers: headers
+        expect(response.status).to eq 200
+
+        body = JSON.parse(response.body)
+        expect(body['data']['createAsset']['id']).not_to be_nil
+        expect(body['data']['createAsset']['submission']).not_to be_nil
+      end.to change(Asset, :count).by(1)
+    end
   end
 end

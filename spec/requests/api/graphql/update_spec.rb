@@ -61,10 +61,10 @@ describe 'Update Submission With Graphql' do
       expect(body['errors'][0]['message']).to eq 'Submission Not Found'
     end
 
-    it 'errors for unkown submission id' do
+    it 'errors for unknown submission id' do
       post '/api/graphql', params: { query: update_mutation_random_id }, headers: headers
       expect(response.status).to eq 200
-      expect(JSON.parse(response.body)['errors'].first['message']).to eq 'Submission Not Found'
+      expect(JSON.parse(response.body)['errors'].first['message']).to eq 'Submission from ID Not Found'
     end
 
     it 'updates the submission' do
