@@ -11,10 +11,14 @@ describe 'Query Submissions With Graphql' do
   let(:query_submissions) do
     <<-graphql
     query {
-      submission(ids: ["#{submission.id}", "#{submission2.id}", "random"]) {
-        id,
-        artist_id,
-        title
+      submissions(ids: ["#{submission.id}", "#{submission2.id}", "random"]) {
+        edges {
+          node {
+            id,
+            artist_id,
+            title
+          }
+        }
       }
     }
     graphql
@@ -27,17 +31,8 @@ describe 'Query Submissions With Graphql' do
       }, headers: { 'Authorization' => 'Bearer foo.bar.baz' }
       expect(response.status).to eq 200
       body = JSON.parse(response.body)
-      expect(body['data']['submission']).to eq nil
-      expect(body['errors'][0]['message']).to eq "Can't access submission"
-    end
-
-    it 'finds two existing submissions' do
-      post '/api/graphql', params: {
-        query: query_submissions
-      }, headers: headers
-      expect(response.status).to eq 200
-      body = JSON.parse(response.body)
-      expect(body['data']['submission'].count).to eq 2
+      expect(body['data']['submissions']).to eq nil
+      expect(body['errors'][0]['message']).to eq "Can't access arguments: ids"
     end
 
     it 'throws an error if a user tries to access' do
@@ -46,8 +41,17 @@ describe 'Query Submissions With Graphql' do
       }, headers: { 'Authorization' => "Bearer #{user_jwt_token}" }
       expect(response.status).to eq 200
       body = JSON.parse(response.body)
-      expect(body['data']['submission']).to eq nil
-      expect(body['errors'][0]['message']).to eq "Can't access submission"
+      expect(body['data']['submissions']).to eq nil
+      expect(body['errors'][0]['message']).to eq "Can't access arguments: ids"
+    end
+
+    it 'finds two existing submissions' do
+      post '/api/graphql', params: {
+        query: query_submissions
+      }, headers: headers
+      expect(response.status).to eq 200
+      body = JSON.parse(response.body)
+      expect(body['data']['submissions']['edges'].count).to eq 2
     end
   end
 end

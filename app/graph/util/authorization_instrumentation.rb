@@ -4,12 +4,23 @@ module Util
       return field unless requires_authorization?(field)
       old_resolve_proc = field.resolve_proc
       new_resolve_proc = ->(obj, args, ctx) do
-        if can_access?(field, ctx)
-          resolved = old_resolve_proc.call(obj, args, ctx)
-          resolved
-        else
+        # Handle fields with permissions
+        if field.metadata[:permit].present? && !can_access?(field, ctx)
           err = GraphQL::ExecutionError.new("Can't access #{field.name}")
           ctx.add_error(err)
+        end
+
+        # Handle args with permissions
+        auth_args = field.arguments.values.select { |arg| arg.metadata && arg.metadata[:permit] }
+        failing_args = auth_args.select { |arg| !can_access?(arg, ctx) }
+        unless failing_args.empty?
+          err = GraphQL::ExecutionError.new("Can't access arguments: #{failing_args.map(&:name).join(',')}")
+          ctx.add_error(err)
+        end
+
+        if ctx.errors.empty?
+          resolved = old_resolve_proc.call(obj, args, ctx)
+          resolved
         end
       end
 
@@ -19,12 +30,12 @@ module Util
     end
 
     def requires_authorization?(field)
-      field.metadata[:permit].present?
+      field.metadata[:permit].present? || field.arguments.values.find { |arg| arg.metadata && arg.metadata[:permit] }
     end
 
-    def can_access?(field, ctx)
+    def can_access?(attribute, ctx)
       return false unless ctx[:current_user_roles] && ctx[:current_application]
-      !(ctx[:current_user_roles] & [field.metadata[:permit]].flatten).empty?
+      !(ctx[:current_user_roles] & [attribute.metadata[:permit]].flatten).empty?
     end
   end
 end

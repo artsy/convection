@@ -1,4 +1,5 @@
 GraphQL::Field.accepts_definitions(permit: GraphQL::Define.assign_metadata_key(:permit))
+GraphQL::Argument.accepts_definitions(permit: GraphQL::Define.assign_metadata_key(:permit))
 
 RootSchema = GraphQL::Schema.define do
   query Types::QueryType
