@@ -60,7 +60,7 @@ When running in development, this API has a GraphiQL instance at http://localhos
 Generate a valid JWT token in a Convection console:
 
 ```ruby
-payload =  { aud: 'app', sub: '<valid user id>' }
+payload =  { aud: 'app', sub: '<valid user id>', roles: 'user,admin' }
 token = JWT.encode payload, Convection.config.jwt_secret, 'HS256'
 ```
 
