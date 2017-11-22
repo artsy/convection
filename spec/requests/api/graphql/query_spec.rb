@@ -11,7 +11,7 @@ describe 'Query Submissions With Graphql' do
   let(:query_submissions) do
     <<-graphql
     query {
-      allSubmissions(first: 10, ids: ["#{submission.id}", "#{submission2.id}", "random"]) {
+      submissions(ids: ["#{submission.id}", "#{submission2.id}", "random"]) {
         edges {
           node {
             id,
@@ -31,7 +31,7 @@ describe 'Query Submissions With Graphql' do
       }, headers: { 'Authorization' => 'Bearer foo.bar.baz' }
       expect(response.status).to eq 200
       body = JSON.parse(response.body)
-      expect(body['data']['allSubmissions']).to eq nil
+      expect(body['data']['submissions']).to eq nil
       expect(body['errors'][0]['message']).to eq "Can't access arguments: ids"
     end
 
@@ -41,7 +41,7 @@ describe 'Query Submissions With Graphql' do
       }, headers: { 'Authorization' => "Bearer #{user_jwt_token}" }
       expect(response.status).to eq 200
       body = JSON.parse(response.body)
-      expect(body['data']['allSubmissions']).to eq nil
+      expect(body['data']['submissions']).to eq nil
       expect(body['errors'][0]['message']).to eq "Can't access arguments: ids"
     end
 
@@ -51,7 +51,7 @@ describe 'Query Submissions With Graphql' do
       }, headers: headers
       expect(response.status).to eq 200
       body = JSON.parse(response.body)
-      expect(body['data']['allSubmissions']['edges'].count).to eq 2
+      expect(body['data']['submissions']['edges'].count).to eq 2
     end
   end
 end

@@ -5,11 +5,12 @@ module Types
     field :submission, Types::SubmissionType do
       description 'Get a Submission'
       argument :id, types.ID
+      permit :admin
 
       resolve ->(_object, args, _context) { Submission.find(args[:id]) }
     end
 
-    connection :allSubmissions, Types::SubmissionType.define_connection do
+    connection :submissions, Types::SubmissionType.define_connection do
       description 'Filter all submission'
 
       argument :ids, types[types.ID], 'Get all submissions with these IDs', permit: :admin

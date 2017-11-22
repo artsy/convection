@@ -34,6 +34,11 @@ module Mutations
       argument :type, types.String, 'The type of asset', default_value: 'image'
 
       resolve ->(_obj, args, _context) {
+        submission = Submission.find_by(id: args[:submission_id])
+        is_same_as_user = submission&.user_id == context[:current_user]
+        is_admin = context[:current_user_roles].include?(:admin)
+
+        raise(GraphQL::ExecutionError, 'Submission from ID Not Found') unless is_same_as_user || is_admin
         asset = @submission.assets.create!(args)
         SubmissionService.notify_user(@submission.id) if @submission.submitted?
         asset
