@@ -49,14 +49,18 @@ easy as:
 $ foreman start
 ```
 
-See the Procfile for more.
+See the Procfile to understand other services launched.
+
+## API
+
+When running in development, this API has a GraphiQL instance at http://localhost:5000/graphiql
 
 ## Creating a Submission
 
 Generate a valid JWT token in a Convection console:
 
 ```ruby
-payload =  { aud: 'app', sub: '<valid user id>' }
+payload =  { aud: 'app', sub: '<valid user id>', roles: 'user,admin' }
 token = JWT.encode payload, Convection.config.jwt_secret, 'HS256'
 ```
 
