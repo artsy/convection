@@ -1,0 +1,34 @@
+<div class='modal remodal' data-remodal-id='create-partner-modal'>
+  <div class='modal-header'>
+    <h2>
+      Add new Partner
+    </h2>
+  </div>
+  <div class='modal-close'>
+    <%= link_to '', '#', id: 'create-partner-close'%>
+  </div>
+  <div class='modal-content'>
+    <p>
+      Adding a partner to convection subscribes them to our consignments product. In order for contacts at the partner to receive
+      notifications (such as digests), they must also have partner contacts subscribed to receive the "consignment submission" communication.
+    </p>
+    <div class='single-padding-top'>
+      <p class='bold-label'>
+        Search for gravity partner
+      </p>
+      <div class='col-sm-12' id='partner-selections-form'>
+        <%= form_tag admin_partners_url, method: 'post' do %>
+          <div class='form-group'>
+            <%= text_field_tag 'gravity_partner', '', class: 'form-control', id: 'partner-search' %>
+            <%= hidden_field_tag 'gravity_partner_id' %>
+            <%= hidden_field_tag 'name' %>
+            <div class='single-padding-top'>
+              <%= submit_tag 'Create Partner', class: 'btn btn-primary btn-full-width', id: 'partner-search-submit' %>
+            </div>
+          </div>
+          <div id='partner-name-display'></div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

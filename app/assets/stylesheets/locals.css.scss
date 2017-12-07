@@ -114,3 +114,16 @@ $green: #0EDA83;
     margin-left: 20px;
   }
 }
+
+.partners_index {
+  .ui-autocomplete.ui-menu {
+    z-index: 10000
+  }
+}
+
+input[type="submit"].disabled-button {
+  cursor: not-allowed;
+  border-color: #F8F8F8 !important;
+  background-color: $gray !important;
+  pointer-events: none;
+}

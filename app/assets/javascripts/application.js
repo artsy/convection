@@ -18,6 +18,9 @@
 //= require watt/flash
 //= require watt/autocomplete
 //= require jquery.fileupload.js
+//= require watt/modals
+//= require watt/remodal
 //= require gemini/gemini_upload
 //= require new_asset
 //= require new_submission
+//= require new_partner

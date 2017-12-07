@@ -1,12 +1,23 @@
 <div class='page-title'>
-  <h2>
-    <%= link_to 'Partners', admin_partners_url %>
-  </h2>
+  <div class='row'>
+    <div class='col-md-12'>
+      <div class='col-md-10'>
+        <h2>
+          <%= link_to 'Partners', admin_partners_url %>
+        </h2>
+      </div>
+      <div class='col-md-2'>
+        <div class='row'>
+          <%= link_to 'Add Partner', '#', { 'data-remodal-target' => 'create-partner-modal', class: 'btn btn-secondary btn-tiny pull-right' } %>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class='container'>
-  <div class='row triple-padding-top'>
-    <div class='col-md-12'>
+  <div class='row double-padding-top'>
+    <div class='row col-md-12'>
       <%= form_tag admin_partners_url, method: 'get' do %>
         <div class='form-group'>
           <div class='col-sm-10'>
@@ -40,3 +51,4 @@
   </div>
   <%= render 'shared/watt/paginator', total_items_count: partners.total_count, items_count: partners.length, per_page: @size, current_page: @page, base_url: admin_partners_url %>
 </div>
+<%= render 'create_partner' %>
