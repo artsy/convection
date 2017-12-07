@@ -5,7 +5,9 @@ class Submission < ApplicationRecord
     approved
     rejected
   ).freeze
+
   DIMENSION_METRICS = %w(in cm).freeze
+
   CATEGORIES = [
     'Painting',
     'Sculpture',
