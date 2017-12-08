@@ -9,4 +9,6 @@ class Partner < ApplicationRecord
     }
 
   has_many :partner_submissions
+
+  validates :gravity_partner_id, presence: true, uniqueness: true
 end

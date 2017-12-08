@@ -62,6 +62,7 @@ group :test do
   gem 'yarjuf' # formatting for test reports on CircleCI
   gem 'webmock' # mock or forbid external network requests
   gem 'capybara', '~> 2.8' # for view tests
+  gem 'capybara-webkit'
   gem 'rails-controller-testing'
   gem 'fabrication'
   gem 'database_cleaner'
