@@ -1,0 +1,74 @@
+<div class='page-title'>
+  <h2>New Offer</h2>
+</div>
+
+<div class='container'>
+  <%= form_tag admin_offers_url, method: 'post' do %>
+    <div class='row'>
+      <div class='col-sm-12'>
+        <div class='unit bordered single-padding-top'>
+          <div class='col-md-3'>
+            <h5>
+              Metadata
+            </h5>
+          </div>
+
+          <div class='col-md-9'>
+            <div class='row'>
+              <div class='row single-padding-top'>
+                <div class='col-sm-12'>
+                  <label class='col-sm-3 control-label'>
+                    Offer type
+                  </label>
+                  <div class='col-sm-9' id='offer_type_form' class='form-group'>
+                    <% Offer::OFFER_TYPES.each do |offer_type| %>
+                      <div class='offer-type-radio'>
+                        <%= radio_button_tag :offer_type, offer_type, { class: 'form-control' } %>
+                        <%= label_tag :offer_type, offer_type, value: offer_type, class: 'control-label', for: offer_type %>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+
+              <div class='row single-padding-top'>
+                <div class='col-sm-12'>
+                  <label class='col-sm-3 control-label'>
+                    Submission
+                  </label>
+                  <div class='col-sm-9'>
+                    <% if @submission.present? %>
+                      #<%= @submission.id %>
+                    <% else %>
+                      <%= select_tag :submission, raw("<option selected value=#{@submission&.id}></option>"), class: 'form-control', id: 'new-offer-submission' %>
+                    <% end %>
+                    <%= hidden_field_tag :submission_id, @submission&.id %>
+                  </div>
+                </div>
+              </div>
+
+              <div class='row single-padding-top'>
+                <div class='col-sm-12'>
+                  <label class='col-sm-3 control-label'>
+                    Partner
+                  </label>
+                  <div class='col-sm-9'>
+                    <%= select_tag :partner, '', class: 'form-control', id: 'new-offer-partner' %>
+                    <%= hidden_field_tag :partner_id %>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='row triple-padding-top'>
+      <div class='col-sm-12'>
+        <%= submit_tag 'Next', class: 'btn btn-primary btn-full-width' %>
+      </div>
+    </div>
+  <% end %>
+</div>
+

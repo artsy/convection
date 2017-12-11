@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     resources :partners, only: [:index, :create] do
       resources :submissions, only: :index, controller: 'partner_submissions'
     end
+    resources :offers
     root to: 'submissions#index'
   end
   get '/match_artist', to: 'admin/submissions#match_artist'

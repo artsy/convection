@@ -1,0 +1,86 @@
+<div class='row'>
+  <div class='col-sm-12'>
+    <div class='col-sm-9'>
+      <div class='row'>
+        <div class='page-title'>
+          <h2>Offer #<%= @offer.id %> (<%= @offer.state %>)</h2>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-sm-12'>
+          <div class='row'>
+            <div class='col-sm-10'>
+              <div class='row'>
+                <div class='triple-padding-top'>
+                  <div class='watt-overview'>
+                    <div class='overview-section'>
+                      <div class='overview-section-title'>
+                        Meta
+                      </div>
+                      <div class='overview-section-content'>
+                        <div class='overview-item'>
+                          <div class='overview-item-title'>
+                            Offer type
+                          </div>
+                          <div class='overview-item-value'>
+                            <%= @offer.offer_type %>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class='overview-section'>
+                      <div class='overview-section-title'>
+                        Details
+                      </div>
+                      <div class='overview-section-content'>
+                        <%= render "#{@offer.offer_type.downcase.tr(' ', '_')}", offer: @offer %>
+                      </div>
+                    </div>
+                    <div class='overview-section'>
+                      <div class='overview-section-title'>
+                        Shared
+                      </div>
+                      <div class='overview-section-content'>
+                        <%= render 'shared', offer: @offer %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class='col-sm-2'>
+              <div class='row edit-container triple-padding-top'>
+                <% if @offer.state == 'draft' %>
+                  <%= link_to 'Edit', edit_admin_offer_path(@offer), class: 'btn btn-secondary btn-small btn-full-width' %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='unit bordered single-padding-top'>
+              <div class='section-title'>
+                Submission
+              </div>
+              <%= render 'admin/submissions/submission', submission: @submission, artist_details: @artist_details %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class='col-sm-3'>
+      <div class='bold-label'>
+        Partner info
+      </div>
+      <div class='single-padding-top'>
+        <div>
+          <%= @offer.partner_submission.partner.name %>
+        </div>
+      </div>
+
+      <div class='double-padding-top'>
+        <%= render 'admin/submissions/collector_info', submission: @submission %>
+      </div>
+    </div>
+  </div>
+</div>

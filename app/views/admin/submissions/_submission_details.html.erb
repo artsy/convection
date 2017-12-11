@@ -1,0 +1,125 @@
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Artist/Designer
+  </div>
+  <div class='overview-item-value'>
+    <%= @submission.artist_name %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Title
+  </div>
+  <div class='overview-item-value'>
+    <%= @submission.title %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Year
+  </div>
+  <div class='overview-item-value'>
+    <%= @submission.year %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Category
+  </div>
+  <div class='overview-item-value'>
+    <%= @submission.category %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Medium
+  </div>
+  <div class='overview-item-value'>
+    <%= @submission.medium %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Dimensions
+  </div>
+  <div class='overview-item-value'>
+    <%= formatted_dimensions(@submission) %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Location
+  </div>
+  <div class='overview-item-value'>
+    <%= formatted_location(@submission) %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Edition No./Size
+  </div>
+  <div class='overview-item-value'>
+    <%= formatted_editions(@submission) %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Provenance
+  </div>
+  <div class='overview-item-value'>
+    <%= @submission.provenance %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Signature
+  </div>
+  <div class='overview-item-value'>
+    <%= @submission.signature %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Certificate of auth.
+  </div>
+  <div class='overview-item-value'>
+    <%= @submission.authenticity_certificate %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Created At
+  </div>
+  <div class='overview-item-value'>
+    <%= @submission.created_at&.strftime('%b %-d @ %l:%M %p %Z') %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Receipt Sent At
+  </div>
+  <div class='overview-item-value'>
+    <%= @submission.receipt_sent_at&.strftime('%b %-d @ %l:%M %p %Z') %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Reminders Sent
+  </div>
+  <div class='overview-item-value'>
+    <%= @submission.reminders_sent_count %>
+  </div>
+</div>

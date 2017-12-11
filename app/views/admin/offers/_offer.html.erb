@@ -1,0 +1,23 @@
+<div class='list-group-item list-item--offer' data-id=<%= offer.id %>>
+  <div class='list-group-item-info list-group-item-info--id'>
+    <%= offer.id %>
+  </div>
+  <div class='list-group-item-info'>
+    <%= offer.partner_submission.partner.name %>
+  </div>
+  <div class='list-group-item-info'>
+    <%= offer.created_at.strftime('%m/%d/%Y') %>
+  </div>
+  <div class='list-group-item-info'>
+    <%= offer.price_cents %>
+  </div>
+  <div class='list-group-item-info'>
+    <%= offer.commission_percent %>%
+  </div>
+  <div class='list-group-item-info'>
+    <%= offer.state %>
+  </div>
+  <div class='actions'>
+    <%= link_to 'View', admin_offer_path(offer), class: 'btn btn-tiny' %>
+  </div>
+</div>

@@ -1,4 +1,11 @@
 class Submission < ApplicationRecord
+  include PgSearch
+  pg_search_scope :search,
+    against: [:id, :title],
+    using: {
+      tsearch: { prefix: true }
+    }
+
   STATES = %w(
     draft
     submitted

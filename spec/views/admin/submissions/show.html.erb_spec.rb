@@ -102,7 +102,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       end
 
       it 'approves a submission when the Approve button is clicked' do
-        expect(page).to have_selector('.submission-state--submitted')
+        expect(page).to have_content('(submitted)')
         click_link 'Approve'
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
@@ -111,11 +111,11 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         )
         expect(page).to have_content 'Approved by Jon Jonson'
         expect(page).to_not have_content 'Reject'
-        expect(page).to have_selector('.submission-state--approved')
+        expect(page).to have_content('(approved)')
       end
 
       it 'rejects a submission when the Approve button is clicked' do
-        expect(page).to have_selector('.submission-state--submitted')
+        expect(page).to have_content('(submitted)')
         click_link 'Reject'
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
@@ -124,7 +124,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         )
         expect(page).to have_content 'Rejected by Jon Jonson'
         expect(page).to_not have_content 'Approve'
-        expect(page).to have_selector('.submission-state--rejected')
+        expect(page).to have_content('(rejected)')
       end
     end
 
