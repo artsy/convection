@@ -10,11 +10,11 @@ class Offer < ApplicationRecord
     sent
   ).freeze
 
-  CURRENCIES = [%w(
+  CURRENCIES = %w(
     USD
     EUR
     GBP
-  )].freeze
+  ).freeze
 
   belongs_to :partner_submission
 

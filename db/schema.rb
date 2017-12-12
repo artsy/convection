@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171207210014) do
+ActiveRecord::Schema.define(version: 20171211221203) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,7 +41,7 @@ ActiveRecord::Schema.define(version: 20171207210014) do
     t.integer  "other_fees_cents"
     t.float    "other_fees_percent"
     t.float    "insurance_percent"
-    t.float    "insurance_cents"
+    t.integer  "insurance_cents"
     t.string   "state"
     t.string   "created_by_id"
     t.string   "reference_id"

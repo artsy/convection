@@ -11,11 +11,11 @@ module Admin
     end
 
     def create
-      if OfferService.create_offer(params)
-        redirect_to edit_admin_offer_path(@offer)
-      else
-        render 'new'
-      end
+      offer = OfferService.create_offer(params)
+      redirect_to edit_admin_offer_path(offer)
+    rescue OfferService::OfferError => e
+      flash.now[:error] = e.message
+      render 'new'
     end
 
     def show
@@ -26,11 +26,11 @@ module Admin
     def edit; end
 
     def update
-      if OfferService.update_offer(@offer, offer_params)
-        redirect_to admin_offer_path(@offer)
-      else
-        render 'edit'
-      end
+      OfferService.update_offer(@offer, offer_params)
+      redirect_to admin_offer_path(@offer)
+    rescue OfferService::OfferError => e
+      flash.now[:error] = e.message
+      render 'edit'
     end
 
     private
@@ -60,31 +60,6 @@ module Admin
         :sale_period_start,
         :shipping_cents,
         :state
-      )
-    end
-
-    def submission_params
-      params.require(:submission).permit(
-        :artist_id,
-        :authenticity_certificate,
-        :category,
-        :depth,
-        :dimensions_metric,
-        :edition_number,
-        :edition_size,
-        :height,
-        :location_city,
-        :location_country,
-        :location_state,
-        :medium,
-        :primary_image_id,
-        :provenance,
-        :signature,
-        :state,
-        :title,
-        :user_id,
-        :width,
-        :year
       )
     end
   end
