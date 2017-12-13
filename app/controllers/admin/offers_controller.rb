@@ -5,17 +5,30 @@ module Admin
     before_action :set_offer, only: [:show, :edit, :update]
     before_action :set_pagination_params, only: [:index]
 
-    def new
+    def new_step_0
       @offer = Offer.new
       @submission = Submission.find(params[:submission_id]) if params[:submission_id]
     end
 
+    def new_step_1
+      @offer = Offer.new(offer_type: params[:offer_type]) if params[:offer_type].present?
+      @submission = Submission.find(params[:submission_id]) if params[:submission_id].present?
+      @partner = Partner.find(params[:partner_id]) if params[:partner_id].present?
+
+      if params[:submission_id].present? && params[:partner_id].present?
+        render 'new_step_1'
+      else
+        flash.now[:error] = 'Offer requires type, submission, and partner.'
+        render 'new_step_0'
+      end
+    end
+
     def create
-      offer = OfferService.create_offer(params)
-      redirect_to edit_admin_offer_path(offer)
+      @offer = OfferService.create_offer(params[:submission_id], params[:partner_id], offer_params)
+      redirect_to admin_offer_path(@offer)
     rescue OfferService::OfferError => e
       flash.now[:error] = e.message
-      render 'new'
+      render 'new_step_1'
     end
 
     def show

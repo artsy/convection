@@ -56,7 +56,7 @@
               </div>
               <div class='row edit-container single-padding-top'>
                 <% if @submission.state == 'approved' %>
-                  <%= link_to 'Create Offer', new_admin_offer_path(submission_id: @submission.id), class: 'btn btn-secondary btn-small btn-full-width' %>
+                  <%= link_to 'Create Offer', new_step_0_admin_offers_path(submission_id: @submission.id), class: 'btn btn-secondary btn-small btn-full-width' %>
                 <% end %>
               </div>
             </div>

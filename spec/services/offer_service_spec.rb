@@ -8,7 +8,7 @@ describe OfferService do
     describe 'with no initial partner submission' do
       it 'creates a draft offer' do
         expect(PartnerSubmission.where(submission: submission, partner: partner).count).to eq 0
-        OfferService.create_offer(submission_id: submission.id, partner_id: partner.id)
+        OfferService.create_offer(submission.id, partner.id)
         expect(PartnerSubmission.where(submission: submission, partner: partner).count).to eq 1
         ps = PartnerSubmission.where(submission: submission, partner: partner).first
         expect(ps.offers.count).to eq 1
@@ -22,36 +22,36 @@ describe OfferService do
       end
 
       it 'creates multiple draft offers' do
-        OfferService.create_offer(submission_id: submission.id, partner_id: partner.id)
+        OfferService.create_offer(submission.id, partner.id)
         expect(@partner_submission.offers.count).to eq 1
         expect(@partner_submission.offers.first.state).to eq 'draft'
 
-        OfferService.create_offer(submission_id: submission.id, partner_id: partner.id)
+        OfferService.create_offer(submission.id, partner.id)
         expect(@partner_submission.offers.count).to eq 2
         expect(@partner_submission.offers.pluck(:state).uniq).to eq ['draft']
       end
 
       it 'fails if the partner does not exist' do
         expect do
-          OfferService.create_offer(submission_id: submission.id, partner_id: 'blah')
+          OfferService.create_offer(submission.id, 'blah')
         end.to raise_error(OfferService::OfferError)
       end
 
       it 'fails if the submission does not exist' do
         expect do
-          OfferService.create_offer(submission_id: 'blah', partner_id: partner.id)
+          OfferService.create_offer('blah', partner.id)
         end.to raise_error(OfferService::OfferError)
       end
 
       it 'fails if no partner_id param is passed' do
         expect do
-          OfferService.create_offer(submission_id: submission.id)
+          OfferService.create_offer(submission.id, nil)
         end.to raise_error(OfferService::OfferError)
       end
 
       it 'fails if no submission_id param is passed' do
         expect do
-          OfferService.create_offer(partner_id: partner.id)
+          OfferService.create_offer(nil, partner.id)
         end.to raise_error(OfferService::OfferError)
       end
     end

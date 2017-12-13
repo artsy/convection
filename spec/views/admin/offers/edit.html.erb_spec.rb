@@ -17,7 +17,7 @@ describe 'admin/offers/edit.html.erb', type: :feature do
       end
 
       it 'displays the page title and content' do
-        expect(page).to have_content("Offer ##{offer.id}")
+        expect(page).to have_content("Offer ##{offer.reference_id}")
         expect(page).to have_content("Auction consignment offer for Submission ##{submission.id} by Gagosian Gallery")
       end
 
@@ -50,7 +50,7 @@ describe 'admin/offers/edit.html.erb', type: :feature do
       end
 
       it 'displays the page title and content' do
-        expect(page).to have_content("Offer ##{offer.id}")
+        expect(page).to have_content("Offer ##{offer.reference_id}")
         expect(page).to have_content("Purchase offer for Submission ##{submission.id} by Gagosian Gallery")
       end
 
@@ -80,7 +80,7 @@ describe 'admin/offers/edit.html.erb', type: :feature do
       end
 
       it 'displays the page title and content' do
-        expect(page).to have_content("Offer ##{offer.id}")
+        expect(page).to have_content("Offer ##{offer.reference_id}")
         expect(page).to have_content("Consignment period offer for Submission ##{submission.id} by Gagosian Gallery")
       end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171211221203) do
+ActiveRecord::Schema.define(version: 20171212160509) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,8 +47,10 @@ ActiveRecord::Schema.define(version: 20171211221203) do
     t.string   "reference_id"
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
+    t.integer  "submission_id"
     t.index ["partner_submission_id"], name: "index_offers_on_partner_submission_id", using: :btree
     t.index ["reference_id"], name: "index_offers_on_reference_id", using: :btree
+    t.index ["submission_id"], name: "index_offers_on_submission_id", using: :btree
   end
 
   create_table "partner_submissions", force: :cascade do |t|
@@ -109,6 +111,7 @@ ActiveRecord::Schema.define(version: 20171211221203) do
 
   add_foreign_key "assets", "submissions"
   add_foreign_key "offers", "partner_submissions"
+  add_foreign_key "offers", "submissions"
   add_foreign_key "partner_submissions", "partners"
   add_foreign_key "partner_submissions", "submissions"
   add_foreign_key "submissions", "assets", column: "primary_image_id", on_delete: :nullify

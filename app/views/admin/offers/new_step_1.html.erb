@@ -1,12 +1,15 @@
 <div class='page-title'>
-  <h2>Offer #<%= @offer.reference_id %></h2>
+  <h2>New Offer</h2>
   <p class='single-padding-top'>
-    <%= @offer.offer_type.capitalize %> offer for Submission #<%= @offer.submission_id %> by <%= @offer.partner_submission.partner.name %>
+    <%= @offer.offer_type.capitalize %> offer for Submission #<%= @submission.id %> by <%= @partner.name %>
   </p>
 </div>
 
 <div class='container'>
-  <%= form_for(@offer, url: admin_offer_path, method: :put) do |f| %>
+  <%= form_for(@offer, url: admin_offers_path, method: :post) do |f| %>
+    <%= hidden_field_tag :submission_id, @submission.id %>
+    <%= hidden_field_tag :partner_id, @partner.id %>
+    <%= hidden_field_tag 'offer[offer_type]', @offer.offer_type %>
     <div class='row'>
       <div class='col-md-12'>
         <div class='unit bordered single-padding-top'>
@@ -37,7 +40,7 @@
     </div>
     <div class='row triple-padding-top'>
       <div class='col-md-12'>
-        <%= f.submit 'Save', class: 'btn btn-primary btn-full-width' %>
+        <%= f.submit 'Create', class: 'btn btn-primary btn-full-width' %>
       </div>
     </div>
   <% end %>

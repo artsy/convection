@@ -45,6 +45,7 @@ class Submission < ApplicationRecord
 
   has_many :assets, dependent: :destroy
   has_many :partner_submissions
+  has_many :offers
   belongs_to :primary_image, class_name: 'Asset'
 
   validates :state, inclusion: { in: STATES }

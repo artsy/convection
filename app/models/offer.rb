@@ -17,6 +17,7 @@ class Offer < ApplicationRecord
   ).freeze
 
   belongs_to :partner_submission
+  belongs_to :submission
 
   validates :state, inclusion: { in: STATES }
   validates :offer_type, inclusion: { in: OFFER_TYPES }, allow_nil: true
@@ -24,6 +25,7 @@ class Offer < ApplicationRecord
 
   before_validation :set_state, on: :create
   before_create :create_reference_id
+  before_create :set_submission
 
   def set_state
     self.state ||= 'draft'
@@ -34,5 +36,9 @@ class Offer < ApplicationRecord
       self.reference_id = SecureRandom.hex(5)
       break unless self.class.exists?(reference_id: reference_id)
     end
+  end
+
+  def set_submission
+    self.submission ||= partner_submission&.submission
   end
 end

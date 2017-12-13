@@ -9,11 +9,11 @@ class OfferService
       raise OfferError, e.message
     end
 
-    def create_offer(params, current_user = nil)
-      submission = Submission.find(params[:submission_id])
-      partner = Partner.find(params[:partner_id])
+    def create_offer(submission_id, partner_id, offer_params = {}, current_user = nil)
+      submission = Submission.find(submission_id)
+      partner = Partner.find(partner_id)
       partner_submission = PartnerSubmission.find_or_create_by!(submission_id: submission.id, partner_id: partner.id)
-      offer = partner_submission.offers.new(state: 'draft', offer_type: params[:offer_type], created_by_id: current_user)
+      offer = partner_submission.offers.new(offer_params.merge(state: 'draft', created_by_id: current_user))
       offer.save!
       offer
     rescue ActiveRecord::RecordNotFound => e

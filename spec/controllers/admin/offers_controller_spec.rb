@@ -12,16 +12,16 @@ describe Admin::OffersController, type: :controller do
     describe '#create' do
       it 'redirects to the edit view on success' do
         expect do
-          post :create, params: { partner_id: partner.id, submission_id: submission.id }
-          expect(response).to redirect_to(edit_admin_offer_url(Offer.last))
+          post :create, params: { partner_id: partner.id, submission_id: submission.id, offer: { offer_type: 'purchase' } }
+          expect(response).to redirect_to(admin_offer_url(Offer.last))
         end.to change(Offer, :count).by(1)
       end
 
       it 'remains on the new view and shows an error on failure' do
         expect do
-          post :create, params: { partner_id: partner.id }
+          post :create, params: { partner_id: partner.id, offer: { offer_type: 'purchase' } }
           expect(controller.flash[:error]).to include("Couldn't find Submission with 'id'=")
-          expect(response).to render_template(:new)
+          expect(response).to render_template(:new_step_1)
         end.to_not change(Offer, :count)
       end
     end

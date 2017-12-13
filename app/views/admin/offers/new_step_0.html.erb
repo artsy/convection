@@ -3,7 +3,7 @@
 </div>
 
 <div class='container'>
-  <%= form_tag admin_offers_url, method: 'post' do %>
+  <%= form_tag new_step_1_admin_offers_url, method: 'get' do %>
     <div class='row'>
       <div class='col-sm-12'>
         <div class='unit bordered single-padding-top'>
@@ -23,7 +23,7 @@
                   <div class='col-sm-9' id='offer_type_form' class='form-group'>
                     <% Offer::OFFER_TYPES.each do |offer_type| %>
                       <div class='offer-type-radio'>
-                        <%= radio_button_tag :offer_type, offer_type, { class: 'form-control' } %>
+                        <%= radio_button_tag :offer_type, offer_type, (offer_type == @offer.offer_type || offer_type == Offer::OFFER_TYPES.first), { class: 'form-control' } %>
                         <%= label_tag :offer_type, offer_type, value: offer_type, class: 'control-label', for: offer_type %>
                       </div>
                     <% end %>

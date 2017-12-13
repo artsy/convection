@@ -10,7 +10,6 @@ class PartnerSubmissionService
       partner = Partner.find(partner_id)
       partner_submissions = partner.partner_submissions.where(notified_at: nil)
       submissions = Submission.find(partner_submissions.pluck(:submission_id))
-
       if submissions.empty?
         Rails.logger.info "Skipping digest for #{partner_id}... no submissions."
         return

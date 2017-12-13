@@ -39,4 +39,10 @@ describe Offer do
       expect(offer.reference_id).to_not be_nil
     end
   end
+
+  context 'submission' do
+    it 'sets the submission' do
+      expect(offer.submission).to eq offer.partner_submission.submission
+    end
+  end
 end
