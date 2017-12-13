@@ -67,7 +67,6 @@ describe 'admin/offers/edit.html.erb', type: :feature do
 
       it 'displays all of the specific fields' do
         expect(page).to have_content('Price cents')
-        expect(page).to have_content('Commission %')
         expect(page).to_not have_content('Sale period end')
         expect(page).to_not have_content('Sale name')
       end

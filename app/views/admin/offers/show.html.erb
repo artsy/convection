@@ -61,7 +61,7 @@
               <div class='section-title'>
                 Submission
               </div>
-              <%= render 'admin/submissions/submission', submission: @submission, artist_details: @artist_details %>
+              <%= render 'admin/submissions/submission', submission: @offer.submission, artist_details: @artist_details %>
             </div>
           </div>
         </div>
@@ -79,7 +79,7 @@
       </div>
 
       <div class='double-padding-top'>
-        <%= render 'admin/submissions/collector_info', submission: @submission %>
+        <%= render 'admin/submissions/collector_info', submission: @offer.submission %>
       </div>
     </div>
   </div>

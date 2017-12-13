@@ -11,11 +11,11 @@ module Admin
     end
 
     def new_step_1
-      @offer = Offer.new(offer_type: params[:offer_type]) if params[:offer_type].present?
-      @submission = Submission.find(params[:submission_id]) if params[:submission_id].present?
-      @partner = Partner.find(params[:partner_id]) if params[:partner_id].present?
+      @offer = Offer.new(offer_type: params[:offer_type])
 
-      if params[:submission_id].present? && params[:partner_id].present?
+      if params[:submission_id].present? && params[:partner_id].present? && params[:offer_type].present?
+        @submission = Submission.find(params[:submission_id])
+        @partner = Partner.find(params[:partner_id])
         render 'new_step_1'
       else
         flash.now[:error] = 'Offer requires type, submission, and partner.'
@@ -32,8 +32,7 @@ module Admin
     end
 
     def show
-      @submission = @offer.partner_submission.submission
-      @artist_details = artists_query([@submission.artist_id])
+      @artist_details = artists_query([@offer.submission.artist_id])
     end
 
     def edit; end

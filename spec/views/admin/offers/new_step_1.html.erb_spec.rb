@@ -94,7 +94,6 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
 
       it 'displays all of the specific fields' do
         expect(page).to have_content('Price cents')
-        expect(page).to have_content('Commission %')
         expect(page).to_not have_content('Sale period end')
         expect(page).to_not have_content('Sale name')
       end
@@ -121,11 +120,11 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
               'Content-Type' => 'application/json'
             }
           )
-        fill_in('offer_commission_percent', with: '10')
+        fill_in('offer_price_cents', with: '10')
         click_button('Create')
         expect(page).to have_content('Offer #')
         expect(page).to have_content('(draft)')
-        expect(page).to have_content('Commission % 10.0')
+        expect(page).to have_content('Price cents 10')
       end
     end
 
