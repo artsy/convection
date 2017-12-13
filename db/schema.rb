@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171102162905) do
+ActiveRecord::Schema.define(version: 20171207210014) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,34 @@ ActiveRecord::Schema.define(version: 20171102162905) do
     t.jsonb   "image_urls",    default: {}
     t.integer "submission_id"
     t.index ["submission_id"], name: "index_assets_on_submission_id", using: :btree
+  end
+
+  create_table "offers", force: :cascade do |t|
+    t.integer  "partner_submission_id"
+    t.string   "offer_type"
+    t.datetime "sale_period_start"
+    t.datetime "sale_period_end"
+    t.datetime "sale_date"
+    t.string   "sale_name"
+    t.integer  "low_estimate_cents"
+    t.integer  "high_estimate_cents"
+    t.string   "currency"
+    t.text     "notes"
+    t.float    "commission_percent"
+    t.integer  "price_cents"
+    t.integer  "shipping_cents"
+    t.integer  "photography_cents"
+    t.integer  "other_fees_cents"
+    t.float    "other_fees_percent"
+    t.float    "insurance_percent"
+    t.float    "insurance_cents"
+    t.string   "state"
+    t.string   "created_by_id"
+    t.string   "reference_id"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.index ["partner_submission_id"], name: "index_offers_on_partner_submission_id", using: :btree
+    t.index ["reference_id"], name: "index_offers_on_reference_id", using: :btree
   end
 
   create_table "partner_submissions", force: :cascade do |t|
@@ -80,6 +108,7 @@ ActiveRecord::Schema.define(version: 20171102162905) do
   end
 
   add_foreign_key "assets", "submissions"
+  add_foreign_key "offers", "partner_submissions"
   add_foreign_key "partner_submissions", "partners"
   add_foreign_key "partner_submissions", "submissions"
   add_foreign_key "submissions", "assets", column: "primary_image_id", on_delete: :nullify
