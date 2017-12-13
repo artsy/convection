@@ -2,7 +2,7 @@ module Admin
   class OffersController < ApplicationController
     include GraphqlHelper
 
-    before_action :set_offer, only: [:show, :edit, :update]
+    before_action :set_offer, only: [:show, :edit, :update, :destroy]
     before_action :set_pagination_params, only: [:index]
 
     def new_step_0
@@ -36,6 +36,12 @@ module Admin
     end
 
     def edit; end
+
+    def destroy
+      @offer.destroy
+      flash[:success] = 'Offer deleted.'
+      redirect_to admin_submission_path(@offer.submission)
+    end
 
     def update
       OfferService.update_offer(@offer, offer_params)

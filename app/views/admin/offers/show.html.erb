@@ -51,7 +51,14 @@
             <div class='col-sm-2'>
               <div class='row edit-container triple-padding-top'>
                 <% if @offer.state == 'draft' %>
-                  <%= link_to 'Edit', edit_admin_offer_path(@offer), class: 'btn btn-secondary btn-small btn-full-width' %>
+                  <div>
+                    <%= link_to 'Edit', edit_admin_offer_path(@offer), class: 'btn btn-secondary btn-small btn-full-width' %>
+                  </div>
+                  <div class='single-padding-top'>
+                    <%= link_to('Delete', admin_offer_path(@offer), method: :delete, class: 'btn btn-delete btn-small btn-full-width',
+                          id: 'offer-delete-button',
+                          data: { confirm: 'This action will delete the offer. This action cannot be undone.' }) %>
+                  </div>
                 <% end %>
               </div>
             </div>
