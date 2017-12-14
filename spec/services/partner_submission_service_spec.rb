@@ -146,7 +146,6 @@ describe PartnerSubmissionService do
 
         it 'sends a digest with the first processed image' do
           first_image = Fabricate(:image, submission: @approved1)
-          Fabricate(:image, submission: @approved1)
           PartnerSubmissionService.daily_digest
 
           emails = ActionMailer::Base.deliveries
@@ -167,9 +166,9 @@ describe PartnerSubmissionService do
 
         it 'includes links to additional images' do
           first_image = Fabricate(:image, submission: @approved1)
-          Fabricate(:image, submission: @approved1, image_urls: { 'large' => 'http://foo1.jpg' })
-          Fabricate(:image, submission: @approved1, image_urls: { 'large' => 'http://foo2.jpg' })
-          Fabricate(:image, submission: @approved1, image_urls: { 'large' => 'http://foo3.jpg' })
+          Fabricate(:image, submission: @approved1, image_urls: { 'square' => 'http://square1.jpg', 'large' => 'http://foo1.jpg' })
+          Fabricate(:image, submission: @approved1, image_urls: { 'square' => 'http://square2.jpg', 'large' => 'http://foo2.jpg' })
+          Fabricate(:image, submission: @approved1, image_urls: { 'square' => 'http://square3.jpg', 'large' => 'http://foo3.jpg' })
           PartnerSubmissionService.daily_digest
 
           emails = ActionMailer::Base.deliveries

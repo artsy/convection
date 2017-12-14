@@ -15,7 +15,12 @@ module Admin
     include GraphqlHelper
     before_action :set_pagination_params, only: [:index, :create]
 
-    def index; end
+    def index
+      respond_to do |format|
+        format.html
+        format.json { render json: partners || [] }
+      end
+    end
 
     def create
       partner = Partner.new(gravity_partner_id: params[:gravity_partner_id], name: params[:name]) if params[:gravity_partner_id]

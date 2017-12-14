@@ -11,6 +11,7 @@ module Admin
       @filters = { state: params[:state] }
 
       @submissions = params[:state] ? Submission.where(state: params[:state]) : Submission.completed
+      @submissions = @submissions.search(params[:term]) if params[:term]
       @submissions = @submissions.order(id: :desc).page(@page).per(@size)
       @artist_details = artists_query(@submissions.map(&:artist_id))
     end
@@ -31,6 +32,8 @@ module Admin
     def show
       notified_partner_submissions = @submission.partner_submissions.where.not(notified_at: nil)
       @partner_submissions_count = notified_partner_submissions.group_by_day.count
+
+      @offers = @submission.offers
     end
 
     def edit; end
