@@ -79,4 +79,19 @@ class UserMailer < ApplicationMailer
     mail(to: user_detail.email,
          subject: 'An important update about your consignment submission')
   end
+
+  def offer(offer:, user:, user_detail:, artist:)
+    @offer = offer
+    @submission = offer.submission
+    @artist = artist
+    @user = user
+    @user_detail = user_detail
+    @utm_params = utm_params(source: 'consignment-offer', campaign: 'consignment-offer')
+
+    smtpapi category: ['offer'], unique_args: {
+      offer_id: offer.id
+    }
+    mail(to: user_detail.email,
+         subject: 'An important update about your consignment submission')
+  end
 end

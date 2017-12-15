@@ -1,0 +1,30 @@
+<%= stylesheet_link_tag 'emails', media: 'all' %>
+
+<table class='padded-email'>
+  <tr>
+    <td>
+      <table class='email-content' align='left'>
+        <tr>
+          <td>
+            <%= render 'shared/email_header' %>
+          </td>
+        </tr>
+        <tr>
+          <td class='email-title'>
+            <%= @offer.partner_submission.partner.name %> has sent you an offer
+          </td>
+        </tr>
+        <tr>
+          <td class='email-sub-title'>
+            #<%= @offer.reference_id %>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <%= render 'shared/submission_block', submission: @submission %>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>

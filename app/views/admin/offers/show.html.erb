@@ -52,6 +52,9 @@
               <div class='row edit-container triple-padding-top'>
                 <% if @offer.state == 'draft' %>
                   <div>
+                    <%= link_to 'Save & Send', admin_offer_path(@offer, offer: { state: 'sent' }), method: :put, class: 'btn btn-secondary btn-small btn-full-width', data: { confirm: 'This action will send the offer to the collector. This action cannot be undone.' } %>
+                  </div>
+                  <div class='single-padding-top'>
                     <%= link_to 'Edit', edit_admin_offer_path(@offer), class: 'btn btn-secondary btn-small btn-full-width' %>
                   </div>
                   <div class='single-padding-top'>

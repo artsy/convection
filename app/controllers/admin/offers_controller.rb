@@ -44,7 +44,7 @@ module Admin
     end
 
     def update
-      OfferService.update_offer(@offer, offer_params)
+      OfferService.update_offer(@offer, @current_user, offer_params)
       redirect_to admin_offer_path(@offer)
     rescue OfferService::OfferError => e
       flash.now[:error] = e.message

@@ -53,5 +53,28 @@ describe 'admin/offers/show.html.erb', type: :feature do
       page.visit "/admin/offers/#{offer.id}"
       expect(page).to_not have_selector('#offer-delete-button')
     end
+
+    describe 'save & send' do
+      it 'shows the save & send button when offer is in draft state' do
+        offer.update_attributes!(state: 'draft')
+        page.visit "/admin/offers/#{offer.id}"
+        expect(page).to have_content('Save & Send')
+      end
+
+      it 'does not show the save & send button after the offer has been sent' do
+        offer.update_attributes!(state: 'sent')
+        page.visit "/admin/offers/#{offer.id}"
+        expect(page).to_not have_content('Save & Send')
+      end
+
+      it 'allows you to save the offer' do
+        stub_gravity_artist(id: submission.artist_id)
+        offer.update_attributes!(state: 'draft')
+        page.visit "/admin/offers/#{offer.id}"
+        click_link('Save & Send')
+        expect(page).to have_content("Offer ##{offer.reference_id} (sent)")
+        expect(page).to_not have_content('Save & Send')
+      end
+    end
   end
 end
