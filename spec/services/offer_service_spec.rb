@@ -80,9 +80,15 @@ describe OfferService do
         OfferService.update_offer(offer, 'userid', offer_type: 'non-valid-type')
       end.to raise_error(OfferService::OfferError)
     end
+
+    it 'sends no emails if the state has not been changed' do
+      OfferService.update_offer(Fabricate(:offer), 'userid', price_cents: 20_000)
+      emails = ActionMailer::Base.deliveries
+      expect(emails.length).to eq 0
+    end
   end
 
-  context 'sending an offer' do
+  context 'with an offer' do
     let(:partner) { Fabricate(:partner, name: 'Happy Gallery') }
     let(:submission) { Fabricate(:submission) }
     let(:partner_submission) { Fabricate(:partner_submission, partner: partner, submission: submission) }
@@ -95,37 +101,63 @@ describe OfferService do
       stub_gravity_artist(id: submission.artist_id)
     end
 
-    it 'sends an email to a user with offer information' do
-      OfferService.update_offer(offer, 'userid', state: 'sent')
-      emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 1
-      expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
-      expect(emails.first.to).to eq(['michael@bluth.com'])
-      expect(emails.first.html_part.body).to include(
-        'Happy Gallery has sent you an offer'
-      )
-      expect(offer.reload.state).to eq 'sent'
-      expect(offer.sent_by).to eq 'userid'
-      expect(offer.sent_at).to_not be_nil
+    describe 'sending an offer' do
+      it 'sends an email to a user with offer information' do
+        OfferService.update_offer(offer, 'userid', state: 'sent')
+        emails = ActionMailer::Base.deliveries
+        expect(emails.length).to eq 1
+        expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
+        expect(emails.first.to).to eq([Convection.config.debug_email_address])
+        expect(emails.first.html_part.body).to include(
+          'Happy Gallery has sent you an offer'
+        )
+        expect(offer.reload.state).to eq 'sent'
+        expect(offer.sent_by).to eq 'userid'
+        expect(offer.sent_at).to_not be_nil
+      end
+
+      it 'does not send an email if the email has already been sent' do
+        offer.update_attributes!(sent_at: Time.now.utc)
+        OfferService.update_offer(offer, 'userid', state: 'sent')
+        emails = ActionMailer::Base.deliveries
+        expect(emails.length).to eq 0
+      end
     end
 
-    it 'does not send an email if the email has already been sent' do
-      offer.update_attributes!(sent_at: Time.now.utc)
-      OfferService.update_offer(offer, 'userid', state: 'sent')
-      emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 0
+    describe 'accepting an offer' do
+      it 'sends an email saying the offer has been accepted' do
+        OfferService.update_offer(offer, 'userid', state: 'accepted')
+        emails = ActionMailer::Base.deliveries
+        expect(emails.length).to eq 1
+        expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
+        expect(emails.first.to).to eq([Convection.config.debug_email_address])
+        expect(emails.first.html_part.body).to include(
+          'We will connect you directly with the collector to complete this transaction.'
+        )
+        expect(offer.reload.state).to eq 'accepted'
+        expect(offer.accepted_by).to eq 'userid'
+        expect(offer.accepted_at).to_not be_nil
+        expect(offer.rejected_by).to be_nil
+        expect(offer.rejected_at).to be_nil
+      end
     end
 
-    it 'does nothing if the state has not been changed' do
-      OfferService.update_offer(offer, 'userid', price_cents: 20_000)
-      emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 0
-    end
-
-    it 'raises an exception if the offer cannot be found' do
-      expect do
-        OfferService.deliver_offer('foo', nil)
-      end.to raise_error("Couldn't find Offer with 'id'=foo")
+    describe 'rejecting an offer' do
+      it 'sends an email saying the offer has been rejected' do
+        OfferService.update_offer(offer, 'userid', state: 'rejected')
+        emails = ActionMailer::Base.deliveries
+        expect(emails.length).to eq 1
+        expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
+        expect(emails.first.to).to eq([Convection.config.debug_email_address])
+        expect(emails.first.html_part.body).to include(
+          'The collector has rejected your offer. Sorry.'
+        )
+        expect(offer.reload.state).to eq 'rejected'
+        expect(offer.rejected_by).to eq 'userid'
+        expect(offer.rejected_at).to_not be_nil
+        expect(offer.accepted_by).to be_nil
+        expect(offer.accepted_at).to be_nil
+      end
     end
   end
 end

@@ -45,4 +45,12 @@ describe Offer do
       expect(offer.submission).to eq offer.partner_submission.submission
     end
   end
+
+  context 'rejection_reason' do
+    it 'allows only certain rejection reasons' do
+      expect(Offer.new(rejection_reason: 'blah')).not_to be_valid
+      expect(Offer.new(rejection_reason: 'Other')).to be_valid
+      expect(Offer.new(rejection_reason: 'Low estimate')).to be_valid
+    end
+  end
 end

@@ -18,4 +18,30 @@ class PartnerMailer < ApplicationMailer
       format.html { render layout: 'mailer_no_footer' }
     end
   end
+
+  def offer_acceptance_notification(offer:, artist:)
+    @offer = offer
+    @submission = offer.submission
+    @artist = artist
+    @utm_params = utm_params(source: 'consignment-offer-accepted', campaign: 'consignment-offer')
+
+    smtpapi category: ['offer'], unique_args: {
+      offer_id: offer.id
+    }
+    mail(to: Convection.config.debug_email_address,
+         subject: 'An important update about your consignment offer')
+  end
+
+  def offer_rejection_notification(offer:, artist:)
+    @offer = offer
+    @submission = offer.submission
+    @artist = artist
+    @utm_params = utm_params(source: 'consignment-offer-rejected', campaign: 'consignment-offer')
+
+    smtpapi category: ['offer'], unique_args: {
+      offer_id: offer.id
+    }
+    mail(to: Convection.config.debug_email_address,
+         subject: 'An important update about your consignment offer')
+  end
 end
