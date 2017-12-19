@@ -26,6 +26,20 @@ describe Admin::OffersController, type: :controller do
       end
     end
 
+    describe '#index' do
+      before do
+        5.times { Fabricate(:offer, state: 'sent') }
+      end
+      it 'returns the first two offers on the first page' do
+        get :index, params: { page: 1, size: 2 }
+        expect(controller.offers.count).to eq 2
+      end
+      it 'paginates correctly' do
+        get :index, params: { page: 3, size: 2 }
+        expect(controller.offers.count).to eq 1
+      end
+    end
+
     describe '#update' do
       let(:offer) do
         Fabricate(:offer,

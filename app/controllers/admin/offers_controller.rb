@@ -5,6 +5,23 @@ module Admin
     before_action :set_offer, only: [:show, :edit, :update, :destroy]
     before_action :set_pagination_params, only: [:index]
 
+    expose(:offers) do
+      matching_offers = params[:state] ? Offer.where(state: params[:state]) : Offer.all
+      matching_offers.order(id: :desc).page(@page).per(@size)
+    end
+
+    expose(:filters) do
+      { state: params[:state] }
+    end
+
+    expose(:counts) do
+      Offer.group(:state).count
+    end
+
+    expose(:offers_count) do
+      Offer.count
+    end
+
     def new_step_0
       @offer = Offer.new
       @submission = Submission.find(params[:submission_id]) if params[:submission_id]
@@ -50,6 +67,8 @@ module Admin
       flash.now[:error] = e.message
       render 'edit'
     end
+
+    def index; end
 
     private
 
