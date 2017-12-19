@@ -1,5 +1,6 @@
 require 'rails_helper'
 require 'support/gravity_helper'
+require 'support/jwt_helper'
 
 describe 'admin/offers/show.html.erb', type: :feature do
   context 'always' do
@@ -10,8 +11,10 @@ describe 'admin/offers/show.html.erb', type: :feature do
 
     before do
       allow_any_instance_of(ApplicationController).to receive(:require_artsy_authentication)
+      stub_jwt_header('userid')
 
       stub_gravity_root
+      stub_gravity_user(name: 'Lucille Bluth')
       stub_gravity_user(id: submission.user_id)
       stub_gravity_user_detail(id: submission.user_id)
 
@@ -74,6 +77,76 @@ describe 'admin/offers/show.html.erb', type: :feature do
         click_link('Save & Send')
         expect(page).to have_content("Offer ##{offer.reference_id} (sent)")
         expect(page).to_not have_content('Save & Send')
+      end
+    end
+
+    describe 'offer lapsed' do
+      before do
+        offer.update_attributes!(state: 'sent')
+        stub_gravity_artist(id: submission.artist_id)
+        page.visit "/admin/offers/#{offer.id}"
+      end
+
+      it 'shows the offer lapsed button' do
+        expect(page).to_not have_content('Save & Send')
+        expect(page).to have_content('Offer Lapsed')
+      end
+
+      it 'allows you to mark the offer as lapsed' do
+        click_link('Offer Lapsed')
+        expect(page).to have_content("Offer ##{offer.reference_id} (lapsed)")
+        expect(page).to have_content('Offer lapsed')
+      end
+    end
+
+    describe 'offer accepted' do
+      before do
+        offer.update_attributes!(state: 'sent')
+        stub_gravity_artist(id: submission.artist_id)
+        page.visit "/admin/offers/#{offer.id}"
+      end
+
+      it 'shows the accept offer button' do
+        expect(page).to_not have_content('Save & Send')
+        expect(page).to have_content('Accept Offer')
+      end
+
+      it 'allows you to mark the offer as accepted' do
+        click_link('Accept Offer')
+        expect(page).to have_content("Offer ##{offer.reference_id} (accepted)")
+        expect(page).to_not have_content('Accept Offer')
+        expect(page).to have_content('Accepted by Lucille Bluth')
+      end
+    end
+
+    describe 'offer rejected' do
+      before do
+        offer.update_attributes!(state: 'sent')
+        stub_gravity_artist(id: submission.artist_id)
+        page.visit "/admin/offers/#{offer.id}"
+      end
+
+      it 'shows the reject offer button' do
+        expect(page).to_not have_content('Save & Send')
+        expect(page).to have_content('Reject Offer')
+      end
+
+      it 'allows you to mark the offer as rejected with a note' do
+        click_link('Reject Offer')
+        choose('offer_rejection_reason_low_estimate')
+        click_button('Save and Send')
+        expect(page).to have_content("Offer ##{offer.reference_id} (rejected)")
+        expect(page).to_not have_content('Reject Offer')
+        expect(page).to have_content('Rejected by Lucille Bluth. Low estimate')
+      end
+
+      it 'allows you to add notes to the rejection' do
+        click_link('Reject Offer')
+        choose('offer_rejection_reason_other')
+        fill_in('offer_rejection_note', with: 'The user has issues with who the partner is.')
+        click_button('Save and Send')
+        expect(page).to have_content("Offer ##{offer.reference_id} (rejected)")
+        expect(page).to have_content('Rejected by Lucille Bluth. Other: The user has issues with who the partner is.')
       end
     end
   end

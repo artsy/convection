@@ -72,6 +72,8 @@ module Admin
         :other_fees_percent,
         :photography_cents,
         :price_cents,
+        :rejection_reason,
+        :rejection_note,
         :sale_date,
         :sale_name,
         :sale_period_end,

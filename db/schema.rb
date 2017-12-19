@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171214192939) do
+ActiveRecord::Schema.define(version: 20171218214858) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,12 @@ ActiveRecord::Schema.define(version: 20171214192939) do
     t.integer  "submission_id"
     t.datetime "sent_at"
     t.string   "sent_by"
+    t.string   "rejection_reason"
+    t.text     "rejection_note"
+    t.string   "rejected_by"
+    t.datetime "rejected_at"
+    t.string   "accepted_by"
+    t.datetime "accepted_at"
     t.index ["partner_submission_id"], name: "index_offers_on_partner_submission_id", using: :btree
     t.index ["reference_id"], name: "index_offers_on_reference_id", using: :btree
     t.index ["submission_id"], name: "index_offers_on_submission_id", using: :btree

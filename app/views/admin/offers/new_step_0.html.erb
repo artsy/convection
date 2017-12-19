@@ -24,7 +24,7 @@
                     <% Offer::OFFER_TYPES.each do |offer_type| %>
                       <div class='offer-type-radio'>
                         <%= radio_button_tag :offer_type, offer_type, (offer_type == @offer.offer_type || offer_type == Offer::OFFER_TYPES.first), { class: 'form-control' } %>
-                        <%= label_tag :offer_type, offer_type, value: offer_type, class: 'control-label', for: offer_type %>
+                        <%= label_tag :offer_type, offer_type, for: "offer_type_#{offer_type.parameterize.underscore}", class: 'control-label' %>
                       </div>
                     <% end %>
                   </div>
