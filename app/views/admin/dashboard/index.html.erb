@@ -1,0 +1,58 @@
+<div class='container'>
+  <div class='row'>
+    <div class='row section-header col-sm-12'>
+      <div class='col-sm-9'>
+        <h3>
+          Unreviewed Submissions
+        </h3>
+      </div>
+      <div class='col-sm-3'>
+        <div class='pull-right gray-label'>
+          <h3>
+            <%= submissions_count %>
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div class='row col-sm-12'>
+      <div class='list-group'>
+        <%= render submissions, artist_details: @artist_details %>
+      </div>
+    </div>
+    <div class='row col-sm-12'>
+      <div class='section-actions'>
+        <div class='pull-right'>
+          <%= link_to 'See All', admin_submissions_path(state: 'submitted'), class: 'btn btn-secondary btn-small' %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class='row'>
+    <div class='row section-header col-sm-12'>
+      <div class='col-sm-9'>
+        <h3>
+          Open Offers
+        </h3>
+      </div>
+      <div class='col-sm-3'>
+        <div class='pull-right gray-label'>
+          <h3>
+            <%= offers_count %>
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div class='row col-sm-12'>
+      <div class='list-group'>
+        <%= render offers %>
+      </div>
+    </div>
+    <div class='row col-sm-12'>
+      <div class='section-actions'>
+        <div class='pull-right'>
+          <%= link_to 'See All', admin_offers_path(state: 'sent'), class: 'btn btn-secondary btn-small' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
