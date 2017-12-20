@@ -15,7 +15,7 @@ Rails.application.routes.draw do
         get 'new_step_1'
       end
     end
-    root to: 'submissions#index'
+    root to: 'dashboard#index'
   end
   get '/match_artist', to: 'admin/submissions#match_artist'
   get '/match_user', to: 'admin/submissions#match_user'

@@ -23,7 +23,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
             'Content-Type' => 'application/json'
           }
         )
-      page.visit '/'
+      page.visit '/admin/submissions'
     end
 
     it 'displays the page title' do
@@ -41,7 +41,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
     context 'with submissions' do
       before do
         3.times { Fabricate(:submission, user_id: 'userid', artist_id: 'artistid', state: 'submitted') }
-        page.visit '/'
+        page.visit '/admin/submissions'
       end
 
       it 'displays all of the submissions' do
@@ -104,7 +104,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
               'Content-Type' => 'application/json'
             }
           )
-        page.visit '/'
+        page.visit '/admin/submissions'
       end
 
       it 'shows the correct artist names' do

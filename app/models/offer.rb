@@ -40,6 +40,8 @@ class Offer < ApplicationRecord
   before_create :create_reference_id
   before_create :set_submission
 
+  scope :sent, -> { where(state: 'sent') }
+
   def set_state
     self.state ||= 'draft'
   end
