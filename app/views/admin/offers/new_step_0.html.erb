@@ -36,13 +36,13 @@
                   <label class='col-sm-3 control-label'>
                     Submission
                   </label>
-                  <div class='col-sm-9'>
-                    <% if @submission.present? %>
-                      #<%= @submission.id %>
+                  <div class='col-sm-9 submission-select'>
+                    <% if submission.present? %>
+                      #<%= submission.id %>
                     <% else %>
-                      <%= select_tag :submission, raw("<option selected value=#{@submission&.id}></option>"), class: 'form-control', id: 'new-offer-submission' %>
+                      <%= select_tag :submission, '', class: 'form-control', id: 'new-offer-submission' %>
                     <% end %>
-                    <%= hidden_field_tag :submission_id, @submission&.id %>
+                    <%= hidden_field_tag :submission_id, submission&.id %>
                   </div>
                 </div>
               </div>
@@ -53,8 +53,12 @@
                     Partner
                   </label>
                   <div class='col-sm-9'>
-                    <%= select_tag :partner, '', class: 'form-control', id: 'new-offer-partner' %>
-                    <%= hidden_field_tag :partner_id %>
+                    <% if partner.present? %>
+                      <%= partner.name %>
+                    <% else %>
+                      <%= select_tag :partner, '', class: 'form-control', id: 'new-offer-partner' %>
+                    <% end %>
+                    <%= hidden_field_tag :partner_id, partner&.id %>
                   </div>
                 </div>
               </div>
@@ -71,4 +75,3 @@
     </div>
   <% end %>
 </div>
-

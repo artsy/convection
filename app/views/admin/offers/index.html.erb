@@ -25,6 +25,9 @@
         <div class='left'><%= link_to 'Rejected', admin_offers_path(state: 'rejected') %></div>
         <div class='right'><%= counts['rejected'] || 0 %></div>
       </div>
+      <div class='row double-padding-top'>
+        <%= link_to 'New', new_step_0_admin_offers_path, class: 'btn btn-tiny btn-full-width' %>
+      </div>
     </div>
     <div class='col-md-10'>
       <div class='list-group'>
