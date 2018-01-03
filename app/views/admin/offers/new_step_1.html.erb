@@ -1,14 +1,14 @@
 <div class='page-title'>
   <h2>New Offer</h2>
   <p class='single-padding-top'>
-    <%= @offer.offer_type.capitalize %> offer for Submission #<%= @submission.id %> by <%= @partner.name %>
+    <%= @offer.offer_type.capitalize %> offer for Submission #<%= submission.id %> by <%= partner.name %>
   </p>
 </div>
 
 <div class='container'>
   <%= form_for(@offer, url: admin_offers_path, method: :post) do |f| %>
-    <%= hidden_field_tag :submission_id, @submission.id %>
-    <%= hidden_field_tag :partner_id, @partner.id %>
+    <%= hidden_field_tag :submission_id, submission.id %>
+    <%= hidden_field_tag :partner_id, partner.id %>
     <%= hidden_field_tag 'offer[offer_type]', @offer.offer_type %>
     <div class='row'>
       <div class='col-md-12'>

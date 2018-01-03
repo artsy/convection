@@ -14,6 +14,14 @@ module Admin
       @submissions = @submissions.search(params[:term]) if params[:term]
       @submissions = @submissions.order(id: :desc).page(@page).per(@size)
       @artist_details = artists_query(@submissions.map(&:artist_id))
+
+      respond_to do |format|
+        format.html
+        format.json do
+          submissions_with_thumbnails = @submissions.map { |submission| submission.as_json.merge(thumbnail: submission.thumbnail) }
+          render json: submissions_with_thumbnails || []
+        end
+      end
     end
 
     def new

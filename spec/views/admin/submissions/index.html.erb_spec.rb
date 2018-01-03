@@ -23,7 +23,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
             'Content-Type' => 'application/json'
           }
         )
-      page.visit '/admin/submissions'
+      page.visit admin_submissions_path
     end
 
     it 'displays the page title' do
@@ -41,7 +41,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
     context 'with submissions' do
       before do
         3.times { Fabricate(:submission, user_id: 'userid', artist_id: 'artistid', state: 'submitted') }
-        page.visit '/admin/submissions'
+        page.visit admin_submissions_path
       end
 
       it 'displays all of the submissions' do
@@ -75,7 +75,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
         click_link('Unreviewed')
         expect(page).to have_content('Submissions')
         expect(page).to have_selector('.list-group-item', count: 3)
-        expect(current_path).to eq '/admin/submissions'
+        expect(current_path).to eq admin_submissions_path
       end
     end
 
@@ -104,7 +104,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
               'Content-Type' => 'application/json'
             }
           )
-        page.visit '/admin/submissions'
+        page.visit admin_submissions_path
       end
 
       it 'shows the correct artist names' do

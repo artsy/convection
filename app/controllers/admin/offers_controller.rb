@@ -22,6 +22,14 @@ module Admin
       Offer.count
     end
 
+    expose(:partner) do
+      Partner.find(params[:partner_id]) if params[:partner_id].present?
+    end
+
+    expose(:submission) do
+      Submission.find(params[:submission_id]) if params[:submission_id].present?
+    end
+
     def new_step_0
       @offer = Offer.new
       @submission = Submission.find(params[:submission_id]) if params[:submission_id]
@@ -31,8 +39,6 @@ module Admin
       @offer = Offer.new(offer_type: params[:offer_type])
 
       if params[:submission_id].present? && params[:partner_id].present? && params[:offer_type].present?
-        @submission = Submission.find(params[:submission_id])
-        @partner = Partner.find(params[:partner_id])
         render 'new_step_1'
       else
         flash.now[:error] = 'Offer requires type, submission, and partner.'
