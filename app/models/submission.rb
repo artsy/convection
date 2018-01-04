@@ -1,4 +1,11 @@
 class Submission < ApplicationRecord
+  include PgSearch
+  pg_search_scope :search,
+    against: [:id, :title],
+    using: {
+      tsearch: { prefix: true }
+    }
+
   STATES = %w(
     draft
     submitted
@@ -38,6 +45,7 @@ class Submission < ApplicationRecord
 
   has_many :assets, dependent: :destroy
   has_many :partner_submissions
+  has_many :offers
   belongs_to :primary_image, class_name: 'Asset'
 
   validates :state, inclusion: { in: STATES }
@@ -49,6 +57,7 @@ class Submission < ApplicationRecord
 
   scope :completed, -> { where.not(state: 'draft') }
   scope :draft, -> { where(state: 'draft') }
+  scope :submitted, -> { where(state: 'submitted') }
 
   def can_submit?
     REQUIRED_FIELDS_FOR_SUBMISSION.all? { |attr| self[attr].present? }

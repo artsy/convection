@@ -1,0 +1,44 @@
+<div class='page-title'>
+  <h2>Offer #<%= @offer.reference_id %></h2>
+  <p class='single-padding-top'>
+    <%= @offer.offer_type.capitalize %> offer for Submission #<%= @offer.submission_id %> by <%= @offer.partner_submission.partner.name %>
+  </p>
+</div>
+
+<div class='container'>
+  <%= form_for(@offer, url: admin_offer_path, method: :put) do |f| %>
+    <div class='row'>
+      <div class='col-md-12'>
+        <div class='unit bordered single-padding-top'>
+          <div class='col-md-3'>
+            <h5>
+              <%= @offer.offer_type.capitalize %> fields
+            </h5>
+          </div>
+          <div class='col-md-9'>
+            <%= render "#{@offer.offer_type.downcase.tr(' ', '_')}_form", f: f %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='row double-padding-top'>
+      <div class='col-md-12'>
+        <div class='unit bordered double-padding-top'>
+          <div class='col-md-3'>
+            <h5>
+              Shared fields
+            </h5>
+          </div>
+          <div class='col-md-9'>
+            <%= render 'shared_form', f: f %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='row triple-padding-top'>
+      <div class='col-md-12'>
+        <%= f.submit 'Save', class: 'btn btn-primary btn-full-width' %>
+      </div>
+    </div>
+  <% end %>
+</div>

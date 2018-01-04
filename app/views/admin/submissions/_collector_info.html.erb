@@ -1,0 +1,16 @@
+<div>
+  <div class='bold-label'>
+    Collector info
+  </div>
+  <div class='single-padding-top'>
+    <div>
+      <%= submission.user_name %>
+    </div>
+    <div>
+      <%= submission.user_detail.try(:email) %>
+    </div>
+    <div>
+      <%= submission.user_detail.try(:phone) %>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,7 @@
 // Watt
 @import "watt/base";
 @import 'watt/autocomplete';
+@import 'watt/overview';
 
 $green: #0EDA83;
 
@@ -43,26 +44,6 @@ $green: #0EDA83;
   }
 }
 
-.submission-state {
-  font-weight: bold;
-  text-transform: uppercase;
-  font-family: $sans-serif;
-  font-size: 12px;
-  padding-top: 10px;
-
-  &--rejected {
-    color: $red;
-  }
-
-  &--approved {
-    color: $green;
-  }
-
-  &--draft {
-    color: $gray;
-  }
-}
-
 .list-group--asset-images {
   .asset-thumb {
     img {
@@ -84,7 +65,7 @@ $green: #0EDA83;
   }
 }
 
-.list-item--submission {
+.list-item--submission, .list-item--offer {
   display: flex;
   justify-content: space-between;
 
@@ -126,4 +107,50 @@ input[type="submit"].disabled-button {
   border-color: #F8F8F8 !important;
   background-color: $gray !important;
   pointer-events: none;
+}
+
+.offer-type-radio {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  input {
+    width: 30px;
+  }
+}
+
+.section-title {
+  font-size: 24px;
+}
+
+.offers_show {
+  .overview-section {
+    margin-right: 0px !important;
+  }
+}
+
+.submission-select {
+  .select2-selection {
+    height: auto !important;
+    min-height: 28px;
+  }
+}
+
+.select2-selection__rendered {
+  .new-offer-submission-thumbnail {
+    float: left;
+  }
+}
+
+.new-offer-submission-thumbnail {
+  span {
+    padding-right: 20px;
+  }
+
+  img {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    max-width: 40px;
+    max-height: 40px;
+  }
 }

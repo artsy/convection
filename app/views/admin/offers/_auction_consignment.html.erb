@@ -1,0 +1,44 @@
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Low estimate cents
+  </div>
+  <div class='overview-item-value'>
+    <%= @offer.low_estimate_cents %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    High estimate cents
+  </div>
+  <div class='overview-item-value'>
+    <%= @offer.high_estimate_cents %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Commission %
+  </div>
+  <div class='overview-item-value'>
+    <%= @offer.commission_percent %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Sale name
+  </div>
+  <div class='overview-item-value'>
+    <%= @offer.sale_name %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Sale date
+  </div>
+  <div class='overview-item-value'>
+    <%= @offer.sale_date&.strftime('%b %-d %Y') %>
+  </div>
+</div>
