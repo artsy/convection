@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171218214858) do
+ActiveRecord::Schema.define(version: 20180105162256) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,8 +65,23 @@ ActiveRecord::Schema.define(version: 20171218214858) do
     t.integer  "submission_id"
     t.integer  "partner_id"
     t.datetime "notified_at"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.integer  "accepted_offer_id"
+    t.float    "partner_commission_percent"
+    t.float    "artsy_commission_percent"
+    t.string   "sale_name"
+    t.string   "sale_location"
+    t.string   "sale_lot_number"
+    t.datetime "sale_date"
+    t.integer  "sale_price_cents"
+    t.string   "sale_currency"
+    t.boolean  "partner_invoiced"
+    t.boolean  "partner_paid"
+    t.text     "notes"
+    t.string   "state"
+    t.string   "reference_id"
+    t.index ["accepted_offer_id"], name: "index_partner_submissions_on_accepted_offer_id", using: :btree
     t.index ["partner_id"], name: "index_partner_submissions_on_partner_id", using: :btree
     t.index ["submission_id"], name: "index_partner_submissions_on_submission_id", using: :btree
   end
@@ -99,20 +114,22 @@ ActiveRecord::Schema.define(version: 20171218214858) do
     t.string   "location_country"
     t.date     "deadline_to_sell"
     t.text     "additional_info"
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
     t.boolean  "edition"
     t.string   "state"
     t.datetime "receipt_sent_at"
     t.string   "edition_number"
     t.integer  "edition_size"
-    t.integer  "reminders_sent_count",     default: 0
+    t.integer  "reminders_sent_count",            default: 0
     t.datetime "admin_receipt_sent_at"
     t.string   "approved_by"
     t.datetime "approved_at"
     t.string   "rejected_by"
     t.datetime "rejected_at"
     t.integer  "primary_image_id"
+    t.integer  "consigned_partner_submission_id"
+    t.index ["consigned_partner_submission_id"], name: "index_submissions_on_consigned_partner_submission_id", using: :btree
     t.index ["primary_image_id"], name: "index_submissions_on_primary_image_id", using: :btree
     t.index ["user_id"], name: "index_submissions_on_user_id", using: :btree
   end
@@ -120,7 +137,9 @@ ActiveRecord::Schema.define(version: 20171218214858) do
   add_foreign_key "assets", "submissions"
   add_foreign_key "offers", "partner_submissions"
   add_foreign_key "offers", "submissions"
+  add_foreign_key "partner_submissions", "offers", column: "accepted_offer_id"
   add_foreign_key "partner_submissions", "partners"
   add_foreign_key "partner_submissions", "submissions"
   add_foreign_key "submissions", "assets", column: "primary_image_id", on_delete: :nullify
+  add_foreign_key "submissions", "partner_submissions", column: "consigned_partner_submission_id"
 end

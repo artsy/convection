@@ -1,4 +1,6 @@
 class PartnerSubmissionService
+  class PartnerSubmissionError < StandardError; end
+
   class << self
     def daily_digest
       Partner.all.each do |partner|
@@ -66,6 +68,20 @@ class PartnerSubmissionService
       Submission.where(state: 'approved').each do |submission|
         partner.partner_submissions.find_or_create_by!(submission_id: submission.id)
       end
+    end
+
+    def mark_consignment(offer)
+      offer.partner_submission.update_attributes!(
+        accepted_offer: offer,
+        partner_commission_percent: offer.commission_percent,
+        state: 'unconfirmed'
+      )
+    end
+
+    def update_partner_submission(partner_submission, params)
+      partner_submission.update_attributes!(params)
+    rescue ActiveRecord::RecordInvalid => e
+      raise PartnerSubmissionError, e.message
     end
   end
 end

@@ -30,6 +30,10 @@ module Admin
       Submission.find(params[:submission_id]) if params[:submission_id].present?
     end
 
+    expose(:consignment) do
+      @offer.partner_submission if @offer.state == 'accepted'
+    end
+
     def new_step_0
       @offer = Offer.new
       @submission = Submission.find(params[:submission_id]) if params[:submission_id]

@@ -86,6 +86,16 @@
               <%= render 'admin/submissions/submission', submission: @offer.submission, artist_details: @artist_details %>
             </div>
           </div>
+          <% if consignment %>
+            <div class='row'>
+              <div class='unit bordered single-padding-top'>
+                <div class='section-title'>
+                  Consignment
+                </div>
+                <%= render 'admin/consignments/consignment' %>
+              </div>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>

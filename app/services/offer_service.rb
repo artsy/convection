@@ -35,6 +35,8 @@ class OfferService
 
     def accept!(offer, current_user)
       offer.update_attributes!(accepted_by: current_user, accepted_at: Time.now.utc)
+      offer.submission.update_attributes!(consigned_partner_submission: offer.partner_submission)
+      PartnerSubmissionService.mark_consignment(offer)
       delay.deliver_acceptance_notification(offer.id)
     end
 

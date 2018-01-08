@@ -140,6 +140,15 @@ describe OfferService do
         expect(offer.rejected_by).to be_nil
         expect(offer.rejected_at).to be_nil
       end
+
+      it 'sets fields on submission and partner submission' do
+        OfferService.update_offer(offer, 'userid', state: 'accepted')
+        ps = offer.partner_submission
+        expect(ps.state).to eq 'unconfirmed'
+        expect(ps.accepted_offer).to eq offer
+        expect(ps.partner_commission_percent).to eq offer.commission_percent
+        expect(ps.submission.consigned_partner_submission).to eq offer.partner_submission
+      end
     end
 
     describe 'rejecting an offer' do
@@ -157,6 +166,15 @@ describe OfferService do
         expect(offer.rejected_at).to_not be_nil
         expect(offer.accepted_by).to be_nil
         expect(offer.accepted_at).to be_nil
+      end
+
+      it 'does not set consignment-related fields on an offer rejecton' do
+        OfferService.update_offer(offer, 'userid', state: 'rejected')
+        ps = offer.partner_submission
+        expect(ps.state).to be_nil
+        expect(ps.accepted_offer_id).to be_nil
+        expect(ps.partner_commission_percent).to be_nil
+        expect(ps.submission.consigned_partner_submission).to be_nil
       end
     end
   end
