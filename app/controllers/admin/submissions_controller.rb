@@ -41,6 +41,8 @@ module Admin
       notified_partner_submissions = @submission.partner_submissions.where.not(notified_at: nil)
       @partner_submissions_count = notified_partner_submissions.group_by_day.count
 
+      @consignment = @submission.consigned_partner_submission
+
       @offers = @submission.offers
     end
 
