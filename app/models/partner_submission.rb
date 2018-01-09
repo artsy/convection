@@ -7,6 +7,7 @@ class PartnerSubmission < ApplicationRecord
   belongs_to :accepted_offer, class_name: 'Offer'
 
   STATES = %w(
+    open
     unconfirmed
   ).freeze
 
@@ -14,4 +15,10 @@ class PartnerSubmission < ApplicationRecord
   scope :consigned, -> { where.not(accepted_offer_id: nil) }
 
   validates :state, inclusion: { in: STATES }, allow_nil: true
+
+  before_validation :set_state, on: :create
+
+  def set_state
+    self.state ||= 'open'
+  end
 end

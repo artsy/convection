@@ -9,6 +9,11 @@ describe PartnerSubmission do
       expect(PartnerSubmission.new(state: 'blah')).not_to be_valid
       expect(PartnerSubmission.new(state: 'unconfirmed')).to be_valid
     end
+
+    it 'sets the default to open' do
+      ps = PartnerSubmission.create!
+      expect(ps.state).to eq 'open'
+    end
   end
 
   context 'reference_id' do

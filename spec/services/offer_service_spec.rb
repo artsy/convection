@@ -171,7 +171,7 @@ describe OfferService do
       it 'does not set consignment-related fields on an offer rejecton' do
         OfferService.update_offer(offer, 'userid', state: 'rejected')
         ps = offer.partner_submission
-        expect(ps.state).to be_nil
+        expect(ps.state).to eq 'open'
         expect(ps.accepted_offer_id).to be_nil
         expect(ps.partner_commission_percent).to be_nil
         expect(ps.submission.consigned_partner_submission).to be_nil
