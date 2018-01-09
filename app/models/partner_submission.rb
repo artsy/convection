@@ -11,7 +11,7 @@ class PartnerSubmission < ApplicationRecord
   ).freeze
 
   scope :group_by_day, -> { group("date_trunc('day', notified_at) ") }
-  scope :consignment, -> { where.not(accepted_offer_id: nil) }
+  scope :consigned, -> { where.not(accepted_offer_id: nil) }
 
   validates :state, inclusion: { in: STATES }, allow_nil: true
 end

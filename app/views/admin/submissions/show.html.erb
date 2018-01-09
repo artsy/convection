@@ -8,16 +8,7 @@
       </div>
       <div class='row triple-padding-top'>
         <div class='col-sm-12'>
-          <% if @consignment %>
-            <div class='row'>
-              <div class='unit bordered single-padding-top'>
-                <div class='section-title'>
-                  Consignment
-                </div>
-                <%= render 'admin/consignments/consignment', consignment: @consignment %>
-              </div>
-            </div>
-          <% end %>
+          <%= render 'admin/consignments/consignment_section', consignment: @submission.consigned_partner_submission %>
           <% if @offers.length > 0 %>
             <div class='row'>
               <div class='unit bordered single-padding-top'>

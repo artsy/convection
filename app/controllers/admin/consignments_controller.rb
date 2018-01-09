@@ -6,23 +6,23 @@ module Admin
 
     def show
       @artist_details = artists_query([@consignment.submission.artist_id])
-      render 'show'
     end
 
     def edit; end
 
     def update
-      PartnerSubmissionService.update_partner_submission(@consignment, consignment_params)
-      redirect_to admin_consignment_path(@consignment)
-    rescue PartnerSubmissionService::PartnerSubmissionError => e
-      flash.now[:error] = e.message
-      render 'edit'
+      if @consignment.update(consignment_params)
+        redirect_to admin_consignment_path(@consignment)
+      else
+        flash.now[:error] = @consignment.errors.full_messages
+        render 'edit'
+      end
     end
 
     private
 
     def set_consignment
-      @consignment = PartnerSubmission.consignment.find(params[:id])
+      @consignment = PartnerSubmission.consigned.find(params[:id])
     end
 
     def consignment_params
