@@ -14,8 +14,8 @@ class AddConsignmentInfo < ActiveRecord::Migration[5.0]
     add_column :partner_submissions, :sale_date, :datetime
     add_column :partner_submissions, :sale_price_cents, :integer
     add_column :partner_submissions, :sale_currency, :string
-    add_column :partner_submissions, :partner_invoiced, :boolean
-    add_column :partner_submissions, :partner_paid, :boolean
+    add_column :partner_submissions, :partner_invoiced_at, :datetime
+    add_column :partner_submissions, :partner_paid_at, :datetime
     add_column :partner_submissions, :notes, :text
     add_column :partner_submissions, :state, :string
     add_column :partner_submissions, :reference_id, :string

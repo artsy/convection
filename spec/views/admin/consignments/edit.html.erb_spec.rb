@@ -68,8 +68,6 @@ describe 'admin/consignments/edit.html.erb', type: :feature do
         expect(page).to have_content('Lot number')
         expect(page).to have_content('Partner commission %')
         expect(page).to have_content('Artsy commission %')
-        expect(page).to have_content('Partner invoiced?')
-        expect(page).to have_content('Partner paid')
         expect(page).to have_content('Notes')
 
         expect(find_field('partner_submission_sale_name').value).to eq('July Prints & Multiples')

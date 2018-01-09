@@ -35,8 +35,8 @@ module Admin
         :sale_lot_number,
         :partner_commission_percent,
         :artsy_commission_percent,
-        :partner_invoiced,
-        :partner_paid,
+        :partner_invoiced_at,
+        :partner_paid_at,
         :notes
       )
     end

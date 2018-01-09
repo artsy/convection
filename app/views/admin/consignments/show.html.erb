@@ -92,26 +92,43 @@
                         </div>
                         <div class='overview-item'>
                           <div class='overview-item-title'>
-                            Partner invoiced?
+                            Notes
                           </div>
                           <div class='overview-item-value'>
-                            <%= @consignment.partner_invoiced %>
+                            <%= @consignment.notes %>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class='overview-section'>
+                      <div class='overview-section-title'>
+                        Partner
+                      </div>
+                      <div class='overview-section-content'>
+                        <div class='overview-item'>
+                          <div class='overview-item-title'>
+                            Partner invoiced?
+                          </div>
+                          <div class='overview-item-value partner-invoiced'>
+                            <%= link_to admin_consignment_path(partner_submission: { partner_invoiced_at: new_time_field_value(@consignment.partner_invoiced_at) }),
+                                        method: :put,
+                                        data: { state: @consignment.partner_invoiced_at.present? ? 'yes' : 'no' },
+                                        class: 'toggle' do %>
+                              <div class='toggle-dot'></div>
+                            <% end %>
                           </div>
                         </div>
                         <div class='overview-item'>
                           <div class='overview-item-title'>
                             Partner paid?
                           </div>
-                          <div class='overview-item-value'>
-                            <%= @consignment.partner_paid %>
-                          </div>
-                        </div>
-                        <div class='overview-item'>
-                          <div class='overview-item-title'>
-                            Notes
-                          </div>
-                          <div class='overview-item-value'>
-                            <%= @consignment.notes %>
+                          <div class='overview-item-value partner-paid'>
+                            <%= link_to admin_consignment_path(partner_submission: { partner_paid_at: new_time_field_value(@consignment.partner_paid_at) }),
+                                        method: :put,
+                                        data: { state: @consignment.partner_paid_at.present? ? 'yes' : 'no' },
+                                        class: 'toggle' do %>
+                              <div class='toggle-dot'></div>
+                            <% end %>
                           </div>
                         </div>
                       </div>

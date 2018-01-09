@@ -84,6 +84,20 @@ describe 'admin/consignments/show.html.erb', type: :feature do
         click_link('Edit')
         expect(page.current_path).to eq(edit_admin_consignment_path(partner_submission))
       end
+
+      it 'lets you change the partner_paid_at field' do
+        expect(page).to have_selector('.partner-paid .toggle[data-state="no"]')
+        page.find('.partner-paid .toggle').click
+        expect(page).to_not have_selector('.partner-paid .toggle[data-state="no"]')
+        expect(page).to have_selector('.partner-paid .toggle[data-state="yes"]')
+      end
+
+      it 'lets you change the partner_invoiced_at field' do
+        expect(page).to have_selector('.partner-invoiced .toggle[data-state="no"]')
+        page.find('.partner-invoiced .toggle').click
+        expect(page).to_not have_selector('.partner-invoiced .toggle[data-state="no"]')
+        expect(page).to have_selector('.partner-invoiced .toggle[data-state="yes"]')
+      end
     end
   end
 end
