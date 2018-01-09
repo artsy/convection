@@ -1,4 +1,6 @@
 class PartnerSubmissionService
+  class PartnerSubmissionError < StandardError; end
+
   class << self
     def daily_digest
       Partner.all.each do |partner|

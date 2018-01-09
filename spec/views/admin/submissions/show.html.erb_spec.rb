@@ -95,6 +95,10 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       expect(page).to have_content('2 partners notified on')
     end
 
+    it 'does not display the consignment list item if there is no consignment' do
+      expect(page).to_not have_selector('.list-item--consignment')
+    end
+
     context 'unreviewed submission' do
       it 'displays buttons to approve/reject if the submission is not yet reviewed' do
         expect(page).to have_content('Approve')
@@ -180,6 +184,19 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         within("div#submission-asset-#{new_primary_image.id}") do
           expect(page).to have_selector('.primary-image-label')
         end
+      end
+    end
+
+    context 'with a consignment' do
+      before do
+        consignment = Fabricate(:partner_submission, submission: @submission, state: 'unconfirmed')
+        @submission.update_attributes!(consigned_partner_submission: consignment)
+        page.visit admin_submission_path(@submission)
+      end
+
+      it 'shows the consignment' do
+        expect(page).to have_selector('.list-item--consignment')
+        expect(page).to have_content('Consignment')
       end
     end
   end
