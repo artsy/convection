@@ -3,6 +3,24 @@ module Admin
     include GraphqlHelper
 
     before_action :set_consignment, only: [:show, :edit, :update]
+    before_action :set_pagination_params, only: [:index]
+
+    expose(:consignments) do
+      matching_consignments = params[:state] ? PartnerSubmission.consigned.where(state: params[:state]) : PartnerSubmission.consigned
+      matching_consignments.order(id: :desc).page(@page).per(@size)
+    end
+
+    expose(:filters) do
+      { state: params[:state] }
+    end
+
+    expose(:counts) do
+      PartnerSubmission.consigned.group(:state).count
+    end
+
+    expose(:consignments_count) do
+      PartnerSubmission.consigned.count
+    end
 
     def show
       @artist_details = artists_query([@consignment.submission.artist_id])
@@ -19,6 +37,8 @@ module Admin
       end
     end
 
+    def index; end
+
     private
 
     def set_consignment
@@ -33,6 +53,7 @@ module Admin
         :sale_date,
         :sale_location,
         :sale_lot_number,
+        :state,
         :partner_commission_percent,
         :artsy_commission_percent,
         :partner_invoiced_at,
