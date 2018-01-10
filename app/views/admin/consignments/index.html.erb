@@ -1,0 +1,40 @@
+<div class='page-title'>
+  <h2>Consignments</h2>
+</div>
+
+<div class='container'>
+  <div class='row triple-padding-top'>
+    <div class='col-md-2'>
+      <div class='flex-label'>
+        <div class='left'><%= link_to 'All', admin_consignments_path %></div>
+        <div class='right'><%= consignments_count %></div>
+      </div>
+      <div class='flex-label'>
+        <div class='left'><%= link_to 'Unconfirmed', admin_consignments_path(state: 'unconfirmed') %></div>
+        <div class='right'><%= counts['unconfirmed'] || 0 %></div>
+      </div>
+      <div class='flex-label'>
+        <div class='left'><%= link_to 'Signed', admin_consignments_path(state: 'signed') %></div>
+        <div class='right'><%= counts['signed'] || 0 %></div>
+      </div>
+      <div class='flex-label'>
+        <div class='left'><%= link_to 'Sold', admin_consignments_path(state: 'sold') %></div>
+        <div class='right'><%= counts['sold'] || 0 %></div>
+      </div>
+      <div class='flex-label'>
+        <div class='left'><%= link_to 'Bought in', admin_consignments_path(state: 'bought in') %></div>
+        <div class='right'><%= counts['bought in'] || 0 %></div>
+      </div>
+      <div class='flex-label'>
+        <div class='left'><%= link_to 'Closed', admin_consignments_path(state: 'closed') %></div>
+        <div class='right'><%= counts['closed'] || 0 %></div>
+      </div>
+    </div>
+    <div class='col-md-10'>
+      <div class='list-group'>
+        <%= render partial: 'admin/consignments/consignment', collection: consignments %>
+      </div>
+    </div>
+  </div>
+  <%= render 'shared/watt/paginator', total_items_count: consignments.total_count, items_count: consignments.length, per_page: @size, current_page: @page, base_url: admin_consignments_url(filters) %>
+</div>

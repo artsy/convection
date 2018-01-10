@@ -15,7 +15,7 @@ Rails.application.routes.draw do
         get 'new_step_1'
       end
     end
-    resources :consignments, only: [:show, :edit, :update]
+    resources :consignments, only: [:show, :edit, :update, :index]
     root to: 'dashboard#index'
   end
   get '/match_artist', to: 'admin/submissions#match_artist'

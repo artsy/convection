@@ -1,5 +1,5 @@
 <div class='container'>
-  <div class='row'>
+  <div class='row unreviewed-submissions'>
     <div class='row section-header col-sm-12'>
       <div class='col-sm-9'>
         <h3>
@@ -27,7 +27,7 @@
       </div>
     </div>
   </div>
-  <div class='row'>
+  <div class='row open-offers'>
     <div class='row section-header col-sm-12'>
       <div class='col-sm-9'>
         <h3>
@@ -51,6 +51,34 @@
       <div class='section-actions'>
         <div class='pull-right'>
           <%= link_to 'See All', admin_offers_path(state: 'sent'), class: 'btn btn-secondary btn-small' %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class='row active-consignments'>
+    <div class='row section-header col-sm-12'>
+      <div class='col-sm-9'>
+        <h3>
+          Active Consignments
+        </h3>
+      </div>
+      <div class='col-sm-3'>
+        <div class='pull-right gray-label'>
+          <h3>
+            <%= consignments_count %>
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div class='row col-sm-12'>
+      <div class='list-group'>
+        <%= render partial: 'admin/consignments/consignment', collection: consignments %>
+      </div>
+    </div>
+    <div class='row col-sm-12'>
+      <div class='section-actions'>
+        <div class='pull-right'>
+          <%= link_to 'See All', admin_consignments_path, class: 'btn btn-secondary btn-small' %>
         </div>
       </div>
     </div>
