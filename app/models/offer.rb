@@ -1,4 +1,6 @@
 class Offer < ApplicationRecord
+  include ReferenceId
+
   OFFER_TYPES = [
     'auction consignment',
     'consignment period',
@@ -37,7 +39,6 @@ class Offer < ApplicationRecord
   validates :rejection_reason, inclusion: { in: REJECTION_REASONS }, allow_nil: true
 
   before_validation :set_state, on: :create
-  before_create :create_reference_id
   before_create :set_submission
 
   scope :sent, -> { where(state: 'sent') }
@@ -58,13 +59,6 @@ class Offer < ApplicationRecord
     Gravity.client.user(id: admin_user_id)._get if admin_user_id
   rescue Faraday::ResourceNotFound
     nil
-  end
-
-  def create_reference_id
-    loop do
-      self.reference_id = SecureRandom.hex(5)
-      break unless self.class.exists?(reference_id: reference_id)
-    end
   end
 
   def set_submission

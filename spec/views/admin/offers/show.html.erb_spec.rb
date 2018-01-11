@@ -116,6 +116,11 @@ describe 'admin/offers/show.html.erb', type: :feature do
         expect(page).to have_content("Offer ##{offer.reference_id} (accepted)")
         expect(page).to_not have_content('Accept Offer')
         expect(page).to have_content('Accepted by Lucille Bluth')
+        expect(page).to have_selector('.list-item--consignment')
+        within(:css, '.list-item--consignment') do
+          click_link('View')
+          expect(page.current_path).to include('/admin/consignment')
+        end
       end
     end
 

@@ -40,7 +40,6 @@ module Admin
     def show
       notified_partner_submissions = @submission.partner_submissions.where.not(notified_at: nil)
       @partner_submissions_count = notified_partner_submissions.group_by_day.count
-
       @offers = @submission.offers
     end
 

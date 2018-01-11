@@ -47,6 +47,7 @@ class Submission < ApplicationRecord
   has_many :partner_submissions
   has_many :offers
   belongs_to :primary_image, class_name: 'Asset'
+  belongs_to :consigned_partner_submission, class_name: 'PartnerSubmission'
 
   validates :state, inclusion: { in: STATES }
   validates :category, inclusion: { in: CATEGORIES }, allow_nil: true

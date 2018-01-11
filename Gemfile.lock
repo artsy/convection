@@ -67,8 +67,8 @@ GEM
       omniauth-artsy (>= 0.2.2)
       omniauth-oauth2
       rails (>= 4.2.0)
-    artsy-eventservice (1.0)
-      bunny (~> 2.6.2)
+    artsy-eventservice (1.0.4)
+      bunny (~> 2.7.1)
     ast (2.3.0)
     bootstrap-sass (3.0.3.0)
       sass (~> 3.2)
@@ -76,8 +76,8 @@ GEM
       sass (~> 3.4)
       thor
     builder (3.2.3)
-    bunny (2.6.6)
-      amq-protocol (>= 2.1.0)
+    bunny (2.7.3)
+      amq-protocol (>= 2.2.0)
     byebug (9.0.6)
     capybara (2.14.3)
       addressable

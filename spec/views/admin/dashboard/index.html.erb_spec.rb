@@ -32,20 +32,23 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
       expect(page).not_to have_selector('.list-group-item')
     end
 
-    context 'with some offers and submissions' do
+    context 'with some offers and submissions and consignments' do
       before do
         5.times { Fabricate(:offer, state: 'sent') }
         6.times { Fabricate(:submission, state: 'submitted') }
         Fabricate(:submission, state: 'draft')
         Fabricate(:offer, state: 'draft')
+        5.times { Fabricate(:consignment, state: 'unconfirmed') }
         page.visit '/'
       end
 
       it 'displays four of each type' do
         expect(page).to have_selector('.list-item--offer', count: 4)
         expect(page).to have_selector('.list-item--submission', count: 4)
+        expect(page).to have_selector('.list-item--consignment', count: 4)
         expect(page).to have_content('Unreviewed Submissions 6')
         expect(page).to have_content('Open Offers 5')
+        expect(page).to have_content('Active Consignments 5')
       end
 
       it 'lets you click an offer' do
@@ -73,6 +76,27 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
           click_link('View')
         end
         expect(page).to have_content("Submission ##{submission.id} (submitted)")
+      end
+
+      it 'lets you click a consignment' do
+        consignment = PartnerSubmission.consigned.order(id: :desc).first
+        stub_gravity_root
+        stub_gravity_user(id: consignment.submission.user_id)
+        stub_gravity_user_detail(id: consignment.submission.user_id)
+        stub_gravity_artist(id: consignment.submission.artist_id)
+
+        within(:css, ".list-item--consignment[data-id='#{consignment.id}']") do
+          click_link('View')
+        end
+        expect(page).to have_content("Consignment ##{consignment.reference_id} (unconfirmed)")
+      end
+
+      it 'lets you view all consignments' do
+        within(:css, '.active-consignments') do
+          click_link('See All')
+        end
+
+        expect(page.current_path).to eq admin_consignments_path
       end
     end
   end

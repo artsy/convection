@@ -86,6 +86,7 @@
               <%= render 'admin/submissions/submission', submission: @offer.submission, artist_details: @artist_details %>
             </div>
           </div>
+          <%= render 'admin/consignments/consignment_section', consignment: @offer.submission.consigned_partner_submission %>
         </div>
       </div>
     </div>
