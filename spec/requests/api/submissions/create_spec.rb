@@ -16,7 +16,7 @@ describe 'Create Submission' do
     it 'rejects submissions without an artist_id' do
       post '/api/submissions', params: {}, headers: headers
       expect(response.status).to eq 400
-      expect(JSON.parse(response.body)['error']).to eq 'Parameter is required'
+      expect(JSON.parse(response.body)['error']).to eq 'Parameter artist_id is required'
     end
 
     it 'creates a submission' do

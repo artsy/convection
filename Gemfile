@@ -16,7 +16,7 @@ gem 'rack-cors' # to allow cross-origin requests
 
 gem 'puma', '~> 3.0' # Use Puma as the app server
 
-gem 'sidekiq' # for sending emails in the background
+gem 'sidekiq', '4.2.9' # for sending emails in the background
 gem 'rails_param', github: 'nicolasblanco/rails_param' # validate and coerce API parameters (use unreleased Rails 5 support)
 gem 'hyperclient' # consume Gravity's v2 API
 gem 'premailer-rails' # generate text parts from HTML automatically
@@ -34,8 +34,8 @@ gem 'graphiql-rails' # A lovely interface to the API
 watt_gem_spec = { git: 'https://github.com/artsy/watt.git', branch: 'master' }
 gem 'watt', watt_gem_spec # artsy bootstrap
 gem 'bootstrap-sass' # required for watt
-gem 'bourbon' # required for watt
-gem 'neat' # required for watt
+gem 'bourbon', '4.2.3' # required for watt
+gem 'neat', '1.7.2' # required for watt
 gem 'coffee-rails' # required for watt
 
 gem 'kaminari' # for pagination
@@ -56,7 +56,7 @@ end
 
 group :development do
   gem 'foreman'
-  gem 'rubocop', require: false
+  gem 'rubocop', '0.47.1', require: false
 end
 
 group :test do
