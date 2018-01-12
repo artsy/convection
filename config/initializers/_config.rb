@@ -25,6 +25,7 @@ Convection.config = OpenStruct.new(
   jwt_secret: ENV['JWT_SECRET'] || 'replace-me',
   processing_grace_seconds: (ENV['PROCESSING_GRACE_SECONDS'] || 600).to_i,
   second_reminder_days_after: (ENV['SECOND_REMINDER_DAYS_AFTER'] || 1).to_i,
+  sentry_dsn: ENV['SENTRY_DSN'],
   sidekiq_username: ENV['SIDEKIQ_USERNAME'] || 'admin',
   sidekiq_password: ENV['SIDEKIQ_PASSWORD'] || 'replace-me',
   smtp_address: ENV['SMTP_ADDRESS'],
