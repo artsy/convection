@@ -82,15 +82,15 @@ GEM
     bunny (2.7.4)
       amq-protocol (~> 2.2.0)
     byebug (9.1.0)
-    capybara (2.17.0)
+    capybara (2.13.0)
       addressable
-      mini_mime (>= 0.1.3)
+      mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
-      xpath (>= 2.0, < 4.0)
-    capybara-webkit (1.1.0)
-      capybara (~> 2.0, >= 2.0.2)
+      xpath (~> 2.0)
+    capybara-webkit (1.14.0)
+      capybara (>= 2.3.0, < 2.14.0)
       json
     coderay (1.1.2)
     coffee-rails (4.2.2)
@@ -181,6 +181,9 @@ GEM
     mail (2.7.0)
       mini_mime (>= 0.1.1)
     method_source (0.9.0)
+    mime-types (3.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2016.0521)
     mini_mime (1.0.0)
     mini_portile2 (2.3.0)
     minitest (5.11.1)
@@ -349,8 +352,8 @@ GEM
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.3)
-    xpath (3.0.0)
-      nokogiri (~> 1.8)
+    xpath (2.1.0)
+      nokogiri (~> 1.3)
     yarjuf (2.0.0)
       builder
       rspec (~> 3)
@@ -363,7 +366,7 @@ DEPENDENCIES
   artsy-eventservice
   bootstrap-sass
   bourbon (= 4.2.3)
-  capybara (~> 2.8)
+  capybara
   capybara-webkit
   coffee-rails
   database_cleaner
@@ -379,22 +382,22 @@ DEPENDENCIES
   kaminari
   neat (= 1.7.2)
   newrelic_rpm
-  pg (~> 0.15)
+  pg (= 0.21.0)
   pg_search
   premailer-rails
   pry-byebug
-  puma (~> 3.0)
+  puma
   rack-cors
   rack_session_access
-  rails (~> 5.0.0, >= 5.0.0.1)
+  rails (= 5.0.6)
   rails-controller-testing
   rails_param!
   rspec-rails
   rubocop (= 0.47.1)
-  sass-rails (~> 5.0)
+  sass-rails
   sentry-raven
   sidekiq (= 4.2.9)
-  uglifier (>= 1.3.0)
+  uglifier
   watt!
   webmock
   yarjuf

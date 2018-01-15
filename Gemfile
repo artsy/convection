@@ -2,9 +2,9 @@ source 'https://rubygems.org'
 
 ruby '2.4.3'
 
-gem 'pg', '~> 0.15'
-gem 'puma', '~> 3.0'
-gem 'rails', '~> 5.0.0', '>= 5.0.0.1'
+gem 'pg', '0.21.0'
+gem 'puma'
+gem 'rails', '5.0.6'
 
 gemini_gem_spec = { git: 'https://github.com/artsy/gemini_upload-rails.git', branch: 'master' }
 gem 'gemini_upload-rails', gemini_gem_spec # for admins to upload images
@@ -30,10 +30,10 @@ gem 'pg_search' # for searching within convection's database
 gem 'premailer-rails' # generate text parts from HTML automatically
 gem 'rack-cors' # to allow cross-origin requests
 gem 'rails_param', github: 'nicolasblanco/rails_param' # validate and coerce API parameters (use unreleased Rails 5 support)
-gem 'sass-rails', '~> 5.0'
+gem 'sass-rails'
 gem 'sentry-raven' # for error reporting
 gem 'sidekiq', '4.2.9' # for sending emails in the background
-gem 'uglifier', '>= 1.3.0'
+gem 'uglifier'
 
 group :development, :test do
   gem 'pry-byebug'
@@ -46,7 +46,7 @@ group :development do
 end
 
 group :test do
-  gem 'capybara', '~> 2.8' # for view tests
+  gem 'capybara'
   gem 'capybara-webkit'
   gem 'database_cleaner'
   gem 'fabrication'
