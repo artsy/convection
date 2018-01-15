@@ -6,7 +6,7 @@ describe 'Update Submission With Graphql' do
   let(:submission) { Fabricate(:submission, artist_id: 'abbas-kiarostami', title: 'rain', user_id: 'userid') }
 
   let(:update_mutation) do
-    <<-graphql
+    <<-GRAPHQL
     mutation {
       updateSubmission(submission: { id: #{submission.id}, artist_id: "andy-warhol", title: "soup" }){
         id,
@@ -14,18 +14,18 @@ describe 'Update Submission With Graphql' do
         title
       }
     }
-    graphql
+    GRAPHQL
   end
 
   let(:update_mutation_random_id) do
-    <<-graphql
+    <<-GRAPHQL
     mutation {
       updateSubmission(submission: { id: 999999, artist_id: "andy-warhol", title: "soup" }){
         id,
         title
       }
     }
-    graphql
+    GRAPHQL
   end
 
   describe 'POST /graphql' do

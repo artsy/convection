@@ -13,7 +13,7 @@ module Admin
     end
 
     include GraphqlHelper
-    before_action :set_pagination_params, only: [:index, :create]
+    before_action :set_pagination_params, only: %i[index create]
 
     def index
       respond_to do |format|
@@ -24,7 +24,7 @@ module Admin
 
     def create
       partner = Partner.new(gravity_partner_id: params[:gravity_partner_id], name: params[:name]) if params[:gravity_partner_id]
-      if partner && partner.save
+      if partner&.save
         flash[:notice] = 'Partner successfully created.'
         redirect_to admin_partners_path
       else

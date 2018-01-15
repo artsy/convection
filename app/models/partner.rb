@@ -8,7 +8,7 @@ class Partner < ApplicationRecord
       tsearch: { prefix: true }
     }
 
-  has_many :partner_submissions
+  has_many :partner_submissions, dependent: :destroy
 
   validates :gravity_partner_id, presence: true, uniqueness: true
 end

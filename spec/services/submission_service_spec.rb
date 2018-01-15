@@ -120,7 +120,7 @@ describe SubmissionService do
         submission.update_attributes!(receipt_sent_at: Time.now.utc)
         expect do
           SubmissionService.notify_user(submission.id)
-        end.to_not change { ActionMailer::Base.deliveries.count }
+        end.to_not change(ActionMailer::Base.deliveries, :count)
       end
     end
 
@@ -197,7 +197,7 @@ describe SubmissionService do
       submission.update_attributes!(admin_receipt_sent_at: Time.now.utc)
       expect do
         SubmissionService.notify_admin(submission.id)
-      end.to_not change { ActionMailer::Base.deliveries.count }
+      end.to_not change(ActionMailer::Base.deliveries, :count)
     end
   end
 

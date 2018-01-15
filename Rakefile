@@ -9,7 +9,7 @@ if Rails.env.development? || Rails.env.test?
 
   RSpec::Core::RakeTask.new(:spec) do |t|
     test_output = File.join(ENV.fetch('CIRCLE_TEST_REPORTS', 'tmp'), 'rspec', 'junit.xml')
-    t.rspec_opts = %W(-f JUnit -o #{test_output})
+    t.rspec_opts = %W[-f JUnit -o #{test_output}]
   end
 
   task 'print_schema' => :environment do
@@ -17,5 +17,5 @@ if Rails.env.development? || Rails.env.test?
     puts GraphQL::Schema::Printer.new(RootSchema).print_schema
   end
 
-  task default: [:rubocop, :spec]
+  task default: %i[rubocop spec]
 end

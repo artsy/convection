@@ -2,7 +2,7 @@ module Admin
   class OffersController < ApplicationController
     include GraphqlHelper
 
-    before_action :set_offer, only: [:show, :edit, :update, :destroy]
+    before_action :set_offer, only: %i[show edit update destroy]
     before_action :set_pagination_params, only: [:index]
 
     expose(:offers) do

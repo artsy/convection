@@ -2,7 +2,7 @@ module Admin
   class ConsignmentsController < ApplicationController
     include GraphqlHelper
 
-    before_action :set_consignment, only: [:show, :edit, :update]
+    before_action :set_consignment, only: %i[show edit update]
     before_action :set_pagination_params, only: [:index]
 
     expose(:consignments) do

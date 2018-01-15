@@ -42,7 +42,7 @@ end
 
 group :development do
   gem 'foreman'
-  gem 'rubocop', '0.47.1', require: false
+  gem 'rubocop'
 end
 
 group :test do

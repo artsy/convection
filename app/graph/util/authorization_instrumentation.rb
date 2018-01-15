@@ -12,7 +12,7 @@ module Util
 
         # Handle args with permissions
         auth_args = field.arguments.values.select { |arg| arg.metadata && arg.metadata[:permit] }
-        failing_args = auth_args.select { |arg| !can_access?(arg, ctx) }
+        failing_args = auth_args.reject { |arg| can_access?(arg, ctx) }
         unless failing_args.empty?
           err = GraphQL::ExecutionError.new("Can't access arguments: #{failing_args.map(&:name).join(',')}")
           ctx.add_error(err)
