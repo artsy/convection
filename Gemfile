@@ -4,7 +4,7 @@ ruby '2.4.3'
 
 gem 'pg', '0.21.0'
 gem 'puma'
-gem 'rails', '5.0.6'
+gem 'rails', '5.1.4'
 
 gemini_gem_spec = { git: 'https://github.com/artsy/gemini_upload-rails.git', branch: 'master' }
 gem 'gemini_upload-rails', gemini_gem_spec # for admins to upload images
