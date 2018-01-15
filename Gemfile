@@ -29,7 +29,7 @@ gem 'newrelic_rpm' # for monitoring
 gem 'pg_search' # for searching within convection's database
 gem 'premailer-rails' # generate text parts from HTML automatically
 gem 'rack-cors' # to allow cross-origin requests
-gem 'rails_param', github: 'nicolasblanco/rails_param' # validate and coerce API parameters (use unreleased Rails 5 support)
+gem 'rails_param' # validate and coerce API parameters
 gem 'sass-rails'
 gem 'sentry-raven' # for error reporting
 gem 'sidekiq', '4.2.9' # for sending emails in the background
