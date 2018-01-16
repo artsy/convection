@@ -16,6 +16,7 @@ Style/Lambda:
 Rails/FilePath:
   Exclude:
     - config/application.rb
+
 LineLength:
   Exclude:
     - config/environments/*
@@ -46,3 +47,6 @@ Rails/SkipsModelValidations:
 
 Metrics/ClassLength:
   Max: 124
+
+Style/SymbolArray:
+  Enabled: false

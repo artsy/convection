@@ -2,7 +2,7 @@ module Admin
   class SubmissionsController < ApplicationController
     include GraphqlHelper
 
-    before_action :set_submission, only: %i[show edit update]
+    before_action :set_submission, only: [:show, :edit, :update]
     before_action :set_pagination_params, only: [:index]
 
     def index

@@ -1,7 +1,7 @@
 class Submission < ApplicationRecord
   include PgSearch
   pg_search_scope :search,
-    against: %i[id title],
+    against: [:id, :title],
     using: {
       tsearch: { prefix: true }
     }

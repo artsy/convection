@@ -13,7 +13,7 @@ module Admin
     end
 
     include GraphqlHelper
-    before_action :set_pagination_params, only: %i[index create]
+    before_action :set_pagination_params, only: [:index, :create]
 
     def index
       respond_to do |format|

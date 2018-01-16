@@ -17,5 +17,5 @@ if Rails.env.development? || Rails.env.test?
     puts GraphQL::Schema::Printer.new(RootSchema).print_schema
   end
 
-  task default: %i[rubocop spec]
+  task default: [:rubocop, :spec]
 end
