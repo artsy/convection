@@ -3,8 +3,8 @@ class PartnerSubmission < ApplicationRecord
 
   belongs_to :partner
   belongs_to :submission
-  has_many :offers
-  belongs_to :accepted_offer, class_name: 'Offer'
+  has_many :offers, dependent: :destroy
+  belongs_to :accepted_offer, class_name: 'Offer' # rubocop:disable Rails/InverseOf
 
   STATES = [
     'open',

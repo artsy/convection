@@ -9,7 +9,7 @@ describe 'Query Submissions With Graphql' do
   let(:asset) { Fabricate(:asset, submission: submission) }
 
   let(:query_submissions) do
-    <<-graphql
+    <<-GRAPHQL
     query {
       submissions(ids: ["#{submission.id}", "#{submission2.id}", "random"]) {
         edges {
@@ -21,7 +21,7 @@ describe 'Query Submissions With Graphql' do
         }
       }
     }
-    graphql
+    GRAPHQL
   end
 
   describe 'POST /graphql' do

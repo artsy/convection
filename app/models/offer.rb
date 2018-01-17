@@ -7,19 +7,19 @@ class Offer < ApplicationRecord
     'purchase'
   ].freeze
 
-  STATES = %w(
+  STATES = %w[
     draft
     sent
     accepted
     rejected
     lapsed
-  ).freeze
+  ].freeze
 
-  CURRENCIES = %w(
+  CURRENCIES = %w[
     USD
     EUR
     GBP
-  ).freeze
+  ].freeze
 
   REJECTION_REASONS = [
     'Low estimate',

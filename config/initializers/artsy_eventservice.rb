@@ -6,5 +6,5 @@ Artsy::EventService.configure do |config|
   config.tls_ca_certificate = Base64.decode64(ENV['RABBITMQ_CA_CERT'] || '')
   config.tls_cert = Base64.decode64(ENV['RABBITMQ_CLIENT_CERT'] || '')
   config.tls_key = Base64.decode64(ENV['RABBITMQ_CLIENT_KEY'] || '')
-  config.verify_peer = !(ENV['RABBITMQ_NO_VERIFY_PEER'] == 'true')
+  config.verify_peer = ENV['RABBITMQ_NO_VERIFY_PEER'] != 'true'
 end

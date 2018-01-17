@@ -6,7 +6,7 @@ module Admin
 
     def index
       @filters = { notified_at: params[:notified_at] }
-      notified_at = params[:notified_at] && params[:notified_at].blank? ? nil : params[:notified_at]
+      notified_at = params[:notified_at]&.blank? ? nil : params[:notified_at]
 
       @partner = Partner.find(params[:partner_id])
 

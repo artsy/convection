@@ -25,7 +25,7 @@ module GraphqlHelper
       variables: { ids: artist_ids.uniq }
     )
     flash.now[:error] = 'Error fetching artist details.' if artist_details_response[:errors].present?
-    return unless artist_details_response.try(:[], :data).try(:[], :artists).present?
+    return if artist_details_response.try(:[], :data).try(:[], :artists).blank?
     artist_details_response[:data][:artists].map { |h| [h[:id], h[:name]] }.to_h
   end
 
@@ -35,7 +35,7 @@ module GraphqlHelper
       variables: { term: term }
     )
     flash.now[:error] = 'Error fetching partner details.' if match_partners_response[:errors].present?
-    return unless match_partners_response.try(:[], :data).try(:[], :match_partners).present?
+    return if match_partners_response.try(:[], :data).try(:[], :match_partners).blank?
     match_partners_response[:data][:match_partners]
   end
 end

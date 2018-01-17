@@ -60,12 +60,12 @@ describe 'Update Submission' do
           emails = ActionMailer::Base.deliveries
           expect(emails.length).to eq 2
           admin_email = emails.detect { |e| e.to.include?('lucille@bluth.com') }
-          admin_copy = 'We have received the following submission from: Jon Jonson'
+          admin_copy = 'We have received the following submission from: Jon'
           expect(admin_email.html_part.body.to_s).to include(admin_copy)
           expect(admin_email.text_part.body.to_s).to include(admin_copy)
 
           user_email = emails.detect { |e| e.to.include?('michael@bluth.com') }
-          user_copy = 'Thank you for submitting your work to our consignments network'
+          user_copy = 'Thank you for submitting your work to our'
           expect(user_email.html_part.body.to_s).to include(user_copy)
           expect(user_email.text_part.body.to_s).to include(user_copy)
         end

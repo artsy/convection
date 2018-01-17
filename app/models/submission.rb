@@ -6,14 +6,14 @@ class Submission < ApplicationRecord
       tsearch: { prefix: true }
     }
 
-  STATES = %w(
+  STATES = %w[
     draft
     submitted
     approved
     rejected
-  ).freeze
+  ].freeze
 
-  DIMENSION_METRICS = %w(in cm).freeze
+  DIMENSION_METRICS = %w[in cm].freeze
 
   CATEGORIES = [
     'Painting',
@@ -33,21 +33,21 @@ class Submission < ApplicationRecord
     'Other'
   ].freeze
 
-  REQUIRED_FIELDS_FOR_SUBMISSION = %w(
+  REQUIRED_FIELDS_FOR_SUBMISSION = %w[
     artist_id
     category
     title
     user_id
     year
-  ).freeze
+  ].freeze
 
   delegate :images, to: :assets
 
   has_many :assets, dependent: :destroy
-  has_many :partner_submissions
-  has_many :offers
-  belongs_to :primary_image, class_name: 'Asset'
-  belongs_to :consigned_partner_submission, class_name: 'PartnerSubmission'
+  has_many :partner_submissions, dependent: :destroy
+  has_many :offers, dependent: :destroy
+  belongs_to :primary_image, class_name: 'Asset' # rubocop:disable Rails/InverseOf
+  belongs_to :consigned_partner_submission, class_name: 'PartnerSubmission' # rubocop:disable Rails/InverseOf
 
   validates :state, inclusion: { in: STATES }
   validates :category, inclusion: { in: CATEGORIES }, allow_nil: true
@@ -81,7 +81,9 @@ class Submission < ApplicationRecord
   end
 
   def thumbnail
-    [primary_image, images].flatten.map { |image| image && image.image_urls['thumbnail'] }.compact.first
+    possible_thumbnails = images.to_a.unshift(primary_image).compact
+    thumbnails = possible_thumbnails.map { |image| image.image_urls['thumbnail'] }.compact
+    thumbnails.first
   end
 
   # defines methods submitted?, approved?, etc. for each possible submission state
@@ -130,7 +132,7 @@ class Submission < ApplicationRecord
   end
 
   def validate_primary_image
-    return unless primary_image.present?
+    return if primary_image.blank?
     errors.add(:primary_image, 'Primary image must have asset_type=image') unless primary_image.asset_type == 'image'
   end
 end

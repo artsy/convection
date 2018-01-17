@@ -62,7 +62,7 @@ describe Asset do
     it 'raises an exception if the response is not successful' do
       asset.update_attributes!(gemini_token: 'foo')
       stub_request(:get, 'https://media-test.artsy.net/original.json?token=foo').to_return(status: 400, body: 'ruh roh')
-      expect { asset.original_image }.to raise_error { |e| expect(e.message).to eq('400: ruh roh') }
+      expect { asset.original_image }.to raise_error '400: ruh roh'
     end
   end
 end

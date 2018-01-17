@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 Rails.application.routes.draw do
   namespace :admin do
     resources :submissions do
@@ -32,9 +33,7 @@ Rails.application.routes.draw do
     post '/graphql', to: 'graphql#execute'
   end
 
-  if Rails.env.development?
-    mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/api/graphql'
-  end
+  mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/api/graphql' if Rails.env.development?
 
   mount ArtsyAuth::Engine => '/'
 
