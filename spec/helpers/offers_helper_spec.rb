@@ -42,4 +42,177 @@ describe OffersHelper, type: :helper do
       expect(helper.reviewed_byline(offer)).to eq 'Rejected by .'
     end
   end
+
+  context 'display_fields' do
+    it 'returns an array containing only the fields that are present, with minimal fields present' do
+      offer = Fabricate(:offer, offer_type: 'auction consignment', price_cents: nil, commission_percent: 10)
+      expect(helper.display_fields(offer)).to eq([{ 'Offer type' => 'Auction consignment' }, { 'Commission' => '10.0%' }])
+    end
+
+    it 'returns an array containing only the present fields with many fields present' do
+      offer = Fabricate(:offer,
+        offer_type: 'auction consignment',
+        price_cents: nil,
+        commission_percent: 10,
+        low_estimate_cents: 10_000,
+        high_estimate_cents: 40_000,
+        sale_date: Date.new(2018, 10, 30))
+      expect(helper.display_fields(offer)).to eq(
+        [
+          { 'Offer type' => 'Auction consignment' },
+          { 'Estimate' => 'USD $100 - 400' },
+          { 'Sale Date' => 'Oct 30, 2018' },
+          { 'Commission' => '10.0%' }
+        ]
+      )
+    end
+  end
+
+  context 'estimate_display' do
+    it 'works for an offer in USD' do
+      offer = Fabricate(:offer, low_estimate_cents: 10_000, high_estimate_cents: 30_000)
+      expect(helper.estimate_display(offer)).to eq 'USD $100 - 300'
+    end
+
+    it 'works for EUR' do
+      offer = Fabricate(:offer, low_estimate_cents: 10_000, high_estimate_cents: 30_000, currency: 'EUR')
+      expect(helper.estimate_display(offer)).to eq 'EUR €100 - 300'
+    end
+
+    it 'works when there is only a low estimate' do
+      offer = Fabricate(:offer, low_estimate_cents: 10_000, high_estimate_cents: nil, currency: 'EUR')
+      expect(helper.estimate_display(offer)).to eq 'EUR €100'
+    end
+
+    it 'works when there is only a high estimate' do
+      offer = Fabricate(:offer, low_estimate_cents: nil, high_estimate_cents: 30_000, currency: 'EUR')
+      expect(helper.estimate_display(offer)).to eq 'EUR €300'
+    end
+
+    it 'returns nil if both values are nil' do
+      offer = Fabricate(:offer, low_estimate_cents: nil, high_estimate_cents: nil, currency: 'EUR')
+      expect(helper.estimate_display(offer)).to eq nil
+    end
+  end
+
+  context 'price_display' do
+    it 'works for a price in USD' do
+      offer = Fabricate(:offer, price_cents: 10_000)
+      expect(helper.price_display(offer)).to eq 'USD $100'
+    end
+
+    it 'works for a price in CAD' do
+      offer = Fabricate(:offer, price_cents: 10_000, currency: 'CAD')
+      expect(helper.price_display(offer)).to eq 'CAD $100'
+    end
+
+    it 'returns nil if there is no price_cents' do
+      offer = Fabricate(:offer, price_cents: nil, currency: 'CAD')
+      expect(helper.price_display(offer)).to eq nil
+    end
+  end
+
+  context 'sale_period_display' do
+    it 'works for an offer with a sale period' do
+      offer = Fabricate(:offer, sale_period_start: Date.new(2017, 1, 10), sale_period_end: Date.new(2017, 3, 10))
+      expect(helper.sale_period_display(offer)).to eq 'Jan 10, 2017 - Mar 10, 2017'
+    end
+
+    it 'works for an offer with only a sale_period_start' do
+      offer = Fabricate(:offer, sale_period_start: Date.new(2017, 1, 10), sale_period_end: nil)
+      expect(helper.sale_period_display(offer)).to eq 'Starts Jan 10, 2017'
+    end
+
+    it 'works for an offer with only a sale_period_end' do
+      offer = Fabricate(:offer, sale_period_start: nil, sale_period_end: Date.new(2017, 3, 10))
+      expect(helper.sale_period_display(offer)).to eq 'Ends Mar 10, 2017'
+    end
+
+    it 'works for an offer with no sale period' do
+      offer = Fabricate(:offer, sale_period_start: nil, sale_period_end: nil)
+      expect(helper.sale_period_display(offer)).to eq nil
+    end
+  end
+
+  context 'sale_date_display' do
+    it 'works for an offer with a sale_date' do
+      offer = Fabricate(:offer, sale_date: Date.new(2017, 1, 10))
+      expect(helper.sale_date_display(offer)).to eq 'Jan 10, 2017'
+    end
+
+    it 'returns nil if there is no sale_date' do
+      offer = Fabricate(:offer, sale_date: nil)
+      expect(helper.sale_date_display(offer)).to eq nil
+    end
+  end
+
+  context 'commission_display' do
+    it 'works for an offer with a commission_percent' do
+      offer = Fabricate(:offer, commission_percent: 12)
+      expect(helper.commission_display(offer)).to eq '12.0%'
+    end
+
+    it 'returns nil if the offer has no commission_percent' do
+      offer = Fabricate(:offer, commission_percent: nil)
+      expect(helper.commission_display(offer)).to eq nil
+    end
+  end
+
+  context 'shipping_display' do
+    it 'works for an offer with shipping_cents' do
+      offer = Fabricate(:offer, shipping_cents: 12_000)
+      expect(helper.shipping_display(offer)).to eq 'USD $120.00'
+    end
+
+    it 'returns nil if the offer has no shipping_cents' do
+      offer = Fabricate(:offer, shipping_cents: nil)
+      expect(helper.shipping_display(offer)).to eq nil
+    end
+  end
+
+  context 'photography_display' do
+    it 'works for an offer with photography_cents' do
+      offer = Fabricate(:offer, photography_cents: 12_000)
+      expect(helper.photography_display(offer)).to eq 'USD $120.00'
+    end
+
+    it 'returns nil if the offer has no photography_cents' do
+      offer = Fabricate(:offer, photography_cents: nil)
+      expect(helper.photography_display(offer)).to eq nil
+    end
+  end
+
+  context 'insurance_display' do
+    it 'works if the offer has an insurance_cents' do
+      offer = Fabricate(:offer, insurance_cents: 12_000)
+      expect(helper.insurance_display(offer)).to eq 'USD $120.00'
+    end
+
+    it 'works if the offer has an insurance_percent' do
+      offer = Fabricate(:offer, insurance_percent: 12)
+      expect(helper.insurance_display(offer)).to eq '12.0%'
+    end
+
+    it 'returns nil if the offer has no insurance' do
+      offer = Fabricate(:offer, insurance_percent: nil, insurance_cents: nil)
+      expect(helper.insurance_display(offer)).to eq nil
+    end
+  end
+
+  context 'other_fees_display' do
+    it 'works if the offer has an other_fees_cents' do
+      offer = Fabricate(:offer, other_fees_cents: 12_000)
+      expect(helper.other_fees_display(offer)).to eq 'USD $120.00'
+    end
+
+    it 'works if the offer has an other_fees_percent' do
+      offer = Fabricate(:offer, other_fees_percent: 12)
+      expect(helper.other_fees_display(offer)).to eq '12.0%'
+    end
+
+    it 'returns nil if the offer has no other fees' do
+      offer = Fabricate(:offer, other_fees_percent: nil, other_fees_cents: nil)
+      expect(helper.other_fees_display(offer)).to eq nil
+    end
+  end
 end

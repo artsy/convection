@@ -1,6 +1,6 @@
 <%= stylesheet_link_tag 'emails', media: 'all' %>
 
-<table class='padded-email'>
+<table class='padded-email offer-email'>
   <tr>
     <td>
       <table class='email-content' align='left'>
@@ -10,14 +10,188 @@
           </td>
         </tr>
         <tr>
-          <td class='email-sub-title'>
-            <p>The collector has rejected your offer. Sorry.</p>
-            <p>Sincerely,<br />The Consignments Team</p>
+          <td class='spacer'></td>
+        </tr>
+        <% if @user_name.present? %>
+          <tr>
+            <td class='email-sub-title-serif'>
+              Dear <%= @user_name %>,
+            </td>
+          </tr>
+        <% end %>
+        <tr>
+          <td class='spacer'></td>
+        </tr>
+        <tr>
+          <td class='email-sub-title-serif'>
+            Your offer has been reviewed, and the consignor has elected to reject your offer. Please see details below.
           </td>
         </tr>
         <tr>
+          <td class='spacer'></td>
+        </tr>
+        <tr>
+          <td class='zero-padding'>
+            <%= render 'shared/submission_offer_block' %>
+          </td>
+        </tr>
+        <tr>
+          <td class='zero-padding'>
+            <table class='email-gray-bordered-section zero-border-top'>
+              <tr>
+                <td class='spacer'></td>
+              </tr>
+              <tr>
+                <td class='two-column'>
+                  <div class="column first-column">
+                    <table width="100%">
+                      <tr>
+                        <td>
+                          <table>
+                            <tr>
+                              <td class='email-gray-label email-gray-label--left'>
+                                Offer Status
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="column second-column">
+                    <table width="100%">
+                      <tr>
+                        <td class="inner">
+                          <table>
+                            <tr>
+                              <td class='email-content-serif red'>
+                                Rejected
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+              <% if @offer.rejection_reason.present? %>
+                <tr>
+                  <td class='two-column'>
+                    <div class="column first-column">
+                      <table width="100%">
+                        <tr>
+                          <td>
+                            <table>
+                              <tr>
+                                <td class='email-gray-label email-gray-label--left'>
+                                  Reason
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                    <div class="column second-column">
+                      <table width="100%">
+                        <tr>
+                          <td class="inner">
+                            <table>
+                              <tr>
+                                <td class='email-content-serif'>
+                                  <%= @offer.rejection_reason %>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+              <% if @offer.rejection_note.present? %>
+                <tr>
+                  <td class='spacer'></td>
+                </tr>
+                <tr>
+                  <td class='two-column'>
+                    <div class="column first-column">
+                      <table width="100%">
+                        <tr>
+                          <td>
+                            <table>
+                              <tr>
+                                <td class='email-gray-label email-gray-label--left'>
+                                  Note
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                    <div class="column second-column">
+                      <table width="100%">
+                        <tr>
+                          <td class="inner">
+                            <table>
+                              <tr>
+                                <td class='email-content-serif'>
+                                  <%= @offer.rejection_note %>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+              <tr>
+                <td class='spacer'></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td class='zero-padding'>
+            <%= render 'shared/offer_block' %>
+          </td>
+        </tr>
+        <% if @offer.notes.present? %>
+          <%= render 'shared/offer_note', label: 'Note' %>
+        <% end %>
+        <tr>
+          <td class='spacer'></td>
+        </tr>
+        <tr>
+          <td class='email-sub-title-serif'>
+            If you would like, you may submit a counter offer. If not, no further action is required.
+          </td>
+        </tr>
+        <tr>
+          <td class='spacer'></td>
+        </tr>
+        <tr>
           <td>
-            <%= render 'shared/submission_block', submission: @submission %>
+            <table class='full-width-button'>
+              <tr>
+                <td class='offer-response-button'>
+                  <%= link_to('Create counter offer', offer_form_url) %>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td class='spacer'></td>
+        </tr>
+        <tr>
+          <td class='email-sub-title-serif'>
+            Sincerely, <br />Collector Relations Team
           </td>
         </tr>
       </table>

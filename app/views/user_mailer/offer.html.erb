@@ -1,6 +1,6 @@
 <%= stylesheet_link_tag 'emails', media: 'all' %>
 
-<table class='padded-email'>
+<table class='padded-email offer-email'>
   <tr>
     <td>
       <table class='email-content' align='left'>
@@ -10,19 +10,58 @@
           </td>
         </tr>
         <tr>
-          <td class='email-title'>
-            <%= @offer.partner_submission.partner.name %> has sent you an offer
+          <td class='email-title-centered'>
+            Great news, an offer has been made for your work.
           </td>
         </tr>
         <tr>
-          <td class='email-sub-title'>
-            #<%= @offer.reference_id %>
+          <td class='spacer'></td>
+        </tr>
+        <tr>
+          <td class='email-sub-title-serif'>
+            Please accept or reject so that we may update our partner on your interest. Review the offer details below:
           </td>
+        </tr>
+         <tr>
+          <td class='spacer'></td>
+        </tr>
+        <tr>
+          <td class='zero-padding'>
+            <%= render 'shared/submission_offer_block' %>
+          </td>
+        </tr>
+        <tr>
+          <td class='zero-padding'>
+            <%= render 'shared/offer_block' %>
+          </td>
+        </tr>
+        <% if @offer.notes.present? %>
+          <%= render 'shared/offer_note', label: 'Note from our partner' %>
+        <% end %>
+        <tr>
+          <td class='spacer'></td>
+        </tr>
+        <tr>
+          <td class='email-sub-title-serif'>
+            Please accept promptly.
+          </td>
+        </tr>
+        <tr>
+          <td class='spacer'></td>
         </tr>
         <tr>
           <td>
-            <%= render 'shared/submission_block', submission: @submission %>
+            <table class='full-width-button'>
+              <tr>
+                  <td class='offer-response-button'>
+                    <%= link_to('Reply to this offer', offer_response_form_url) %>
+                  </td>
+              </tr>
+            </table>
           </td>
+        </tr>
+        <tr>
+          <td class='spacer'></td>
         </tr>
       </table>
     </td>

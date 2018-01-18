@@ -1,0 +1,44 @@
+<table class='email-gray-bordered-section zero-border-top'>
+  <% display_fields(@offer).each do |display_hash| %>
+    <tr>
+      <td class='spacer'></td>
+    </tr>
+    <tr>
+      <td class='two-column'>
+        <div class="column first-column">
+          <table width="100%">
+            <tr>
+              <td>
+                <table>
+                  <tr>
+                    <td class='email-gray-label email-gray-label--left'>
+                      <%= display_hash.keys.first %>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="column second-column">
+          <table width="100%">
+            <tr>
+              <td class="inner">
+                <table>
+                  <tr>
+                    <td class='email-content-serif'>
+                      <%= display_hash.values.first %>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+    <td class='spacer'></td>
+  </tr>
+</table>

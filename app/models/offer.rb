@@ -19,6 +19,7 @@ class Offer < ApplicationRecord
     USD
     EUR
     GBP
+    CAD
   ].freeze
 
   REJECTION_REASONS = [
@@ -39,6 +40,7 @@ class Offer < ApplicationRecord
   validates :rejection_reason, inclusion: { in: REJECTION_REASONS }, allow_nil: true
 
   before_validation :set_state, on: :create
+  before_validation :set_currency
   before_create :set_submission
 
   scope :sent, -> { where(state: 'sent') }
@@ -63,5 +65,9 @@ class Offer < ApplicationRecord
 
   def set_submission
     self.submission ||= partner_submission&.submission
+  end
+
+  def set_currency
+    self.currency ||= 'USD'
   end
 end

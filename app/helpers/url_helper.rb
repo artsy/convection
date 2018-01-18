@@ -12,6 +12,10 @@ module UrlHelper
     Convection.config.auction_offer_form_url
   end
 
+  def offer_response_form_url
+    Convection.config.offer_response_form_url
+  end
+
   private
 
   def utm_url(url, utm_params)
