@@ -57,9 +57,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
         stub_gravity_user_detail(id: offer.submission.user_id)
         stub_gravity_artist(id: offer.submission.artist_id)
 
-        within(:css, ".list-item--offer[data-id='#{offer.id}']") do
-          click_link('View')
-        end
+        find(".list-item--offer[data-id='#{offer.id}']").click
         expect(page).to have_content("Offer ##{offer.reference_id} (sent)")
         expect(page).to have_content('Offer Lapsed')
       end

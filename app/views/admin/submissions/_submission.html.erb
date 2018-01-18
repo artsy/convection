@@ -1,4 +1,4 @@
-<div class='list-group-item list-item--submission' data-id=<%= submission.id %>>
+<%= link_to admin_submission_path(submission), class: 'list-group-item list-item--submission', data: { id: submission.id } do %>
   <div class='list-group-item-info list-group-item-info--id'>
     <%= submission.id %>
   </div>
@@ -11,7 +11,9 @@
     <%= submission.created_at.strftime('%m/%d/%Y') %>
   </div>
   <div class='list-group-item-info'>
-    <%= artist_details[submission.artist_id] %>
+    <% if artist_details.present? %>
+      <%= artist_details[submission.artist_id] %>
+    <% end %>
   </div>
   <div class='list-group-item-info'>
     <%= submission.category %>
@@ -19,7 +21,5 @@
   <div class='list-group-item-info'>
     <%= submission.state %>
   </div>
-  <div class='actions'>
-    <%= link_to 'View', admin_submission_path(submission), class: 'btn btn-tiny' %>
-  </div>
-</div>
+  <span class='icon-chevron-right'></span>
+<% end %>

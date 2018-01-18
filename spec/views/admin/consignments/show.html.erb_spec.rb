@@ -64,9 +64,9 @@ describe 'admin/consignments/show.html.erb', type: :feature do
         within(:css, '.list-item--offer') do
           expect(page).to have_content 'accepted'
           expect(page).to have_content '12000'
-          click_link('View')
-          expect(page.current_path).to eq(admin_offer_path(offer))
         end
+        find('.list-item--offer').click
+        expect(page.current_path).to eq(admin_offer_path(offer))
       end
 
       it 'shows information about the submission and lets you navigate' do
@@ -74,9 +74,9 @@ describe 'admin/consignments/show.html.erb', type: :feature do
         within(:css, '.list-item--submission') do
           expect(page).to have_content 'approved'
           expect(page).to have_content 'Painting'
-          click_link('View')
-          expect(page.current_path).to eq(admin_submission_path(submission))
         end
+        find('.list-item--submission').click
+        expect(page.current_path).to eq(admin_submission_path(submission))
       end
 
       it 'lets you enter the edit view' do

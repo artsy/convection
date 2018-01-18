@@ -3,7 +3,7 @@
 </div>
 
 <div class='container'>
-  <div class='row triple-padding-top'>
+  <div class='row double-padding-top'>
     <div class='col-md-2'>
       <div class='flex-label'>
         <div class='left'><%= link_to 'All', admin_submissions_path %></div>
@@ -26,8 +26,22 @@
       </div>
     </div>
     <div class='col-md-10'>
-      <div class='list-group'>
-        <%= render @submissions, artist_details: @artist_details %>
+      <div class='row col-md-12'>
+        <%= form_tag admin_submissions_url, method: 'get' do %>
+          <div class='form-group'>
+            <div class='col-sm-10'>
+              <%= text_field_tag 'term', @term, class: 'form-control', placeholder: 'Search by ID or title' %>
+            </div>
+            <div class='col-sm-2'>
+              <%= submit_tag 'Search', class: 'btn btn-primary btn-full-width btn-tiny' %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class='row col-md-12 double-padding-top'>
+        <div class='list-group'>
+          <%= render @submissions, artist_details: @artist_details %>
+        </div>
       </div>
     </div>
   </div>

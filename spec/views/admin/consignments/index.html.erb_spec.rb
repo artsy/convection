@@ -63,9 +63,7 @@ describe 'admin/consignments/index.html.erb', type: :feature do
         stub_gravity_artist(id: consignment.submission.artist_id)
         page.visit admin_consignments_path
 
-        within(:css, ".list-item--consignment[data-id='#{consignment.id}']") do
-          click_link('View')
-        end
+        find(".list-item--consignment[data-id='#{consignment.id}']").click
         expect(page).to have_content("Consignment ##{consignment.reference_id} (unconfirmed)")
       end
 
@@ -87,10 +85,12 @@ describe 'admin/consignments/index.html.erb', type: :feature do
 
     context 'with a variety of consignments' do
       before do
-        3.times { Fabricate(:consignment, state: 'unconfirmed') }
-        Fabricate(:consignment, state: 'signed')
-        Fabricate(:consignment, state: 'sold')
-        Fabricate(:consignment, state: 'closed')
+        partner1 = Fabricate(:partner, name: 'Gagosian Gallery')
+        partner2 = Fabricate(:partner, name: 'Heritage Auctions')
+        3.times { Fabricate(:consignment, state: 'unconfirmed', partner: partner1) }
+        Fabricate(:consignment, state: 'signed', partner: partner2)
+        Fabricate(:consignment, state: 'sold', partner: partner2)
+        Fabricate(:consignment, state: 'closed', partner: partner2)
         page.visit admin_consignments_path
       end
 
@@ -113,6 +113,14 @@ describe 'admin/consignments/index.html.erb', type: :feature do
         page.visit('/admin/consignments?state=bought+in')
         expect(page).to have_content('Consignments')
         expect(page).to have_selector('.list-group-item', count: 0)
+      end
+
+      it 'allows you to search by partner name' do
+        fill_in('term', with: 'gallery')
+        click_button('Search')
+        partner_names = page.all('.list-group-item-info--partner-name').map(&:text)
+        expect(partner_names.count).to eq 3
+        expect(partner_names.uniq).to eq(['Gagosian Gallery'])
       end
     end
   end

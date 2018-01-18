@@ -55,9 +55,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
         stub_gravity_artist
 
         submission = Submission.order(id: :desc).first
-        within(:css, ".list-item--submission[data-id='#{submission.id}']") do
-          click_link('View')
-        end
+        find(".list-item--submission[data-id='#{submission.id}']").click
         expect(page).to have_content("Submission ##{submission.id}")
         expect(page).to have_content('Edit')
         expect(page).to have_content('Add Asset')
@@ -82,7 +80,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
     context 'with a variety of submissions' do
       before do
         3.times { Fabricate(:submission, user_id: 'userid', artist_id: 'artistid', state: 'submitted') }
-        Fabricate(:submission, user_id: 'userid', artist_id: 'artistid2', state: 'approved')
+        @submission = Fabricate(:submission, user_id: 'userid', artist_id: 'artistid2', state: 'approved')
         Fabricate(:submission, user_id: 'userid', artist_id: 'artistid4', state: 'rejected')
         Fabricate(:submission, user_id: 'userid', artist_id: 'artistid4', state: 'draft')
 
@@ -131,6 +129,13 @@ describe 'admin/submissions/index.html.erb', type: :feature do
         page.visit('/admin/submissions?state=rejected')
         expect(page).to have_content('Submissions')
         expect(page).to have_selector('.list-group-item', count: 1)
+      end
+
+      it 'allows you to search by submission ID' do
+        fill_in('term', with: @submission.id)
+        click_button('Search')
+        expect(page).to have_selector('.list-group-item', count: 1)
+        expect(page).to have_content(@submission.id)
       end
     end
   end
