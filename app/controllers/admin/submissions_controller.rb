@@ -9,9 +9,13 @@ module Admin
       @counts = Submission.group(:state).count
       @completed_submissions_count = Submission.completed.count
       @filters = { state: params[:state] }
+      @term = params[:term]
 
-      @submissions = params[:state] ? Submission.where(state: params[:state]) : Submission.completed
-      @submissions = @submissions.search(params[:term]) if params[:term]
+      @submissions = if params[:term].present?
+                       Submission.search(params[:term])
+                     else
+                       params[:state] ? Submission.where(state: params[:state]) : Submission.completed
+                     end
       @submissions = @submissions.order(id: :desc).page(@page).per(@size)
       @artist_details = artists_query(@submissions.map(&:artist_id))
 

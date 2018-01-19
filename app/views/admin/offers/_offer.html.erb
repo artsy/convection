@@ -1,4 +1,4 @@
-<div class='list-group-item list-item--offer' data-id=<%= offer.id %>>
+<%= link_to admin_offer_path(offer), class: 'list-group-item list-item--offer', data: { id: offer.id } do %>
   <div class='list-group-item-info list-group-item-info--id'>
     <%= offer.id %>
   </div>
@@ -17,7 +17,5 @@
   <div class='list-group-item-info'>
     <%= offer.state %>
   </div>
-  <div class='actions'>
-    <%= link_to 'View', admin_offer_path(offer), class: 'btn btn-tiny' %>
-  </div>
-</div>
+  <span class='icon-chevron-right'></span>
+<% end %>

@@ -31,8 +31,22 @@
       </div>
     </div>
     <div class='col-md-10'>
-      <div class='list-group'>
-        <%= render partial: 'admin/consignments/consignment', collection: consignments %>
+      <div class='row col-md-12'>
+        <%= form_tag admin_consignments_url, method: 'get' do %>
+          <div class='form-group'>
+            <div class='col-sm-10'>
+              <%= text_field_tag 'term', term, class: 'form-control', placeholder: 'Search by ID or partner' %>
+            </div>
+            <div class='col-sm-2'>
+              <%= submit_tag 'Search', class: 'btn btn-primary btn-full-width btn-tiny' %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class='row col-md-12 double-padding-top'>
+        <div class='list-group'>
+          <%= render partial: 'admin/consignments/consignment', collection: consignments %>
+        </div>
       </div>
     </div>
   </div>

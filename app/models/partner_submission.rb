@@ -1,5 +1,15 @@
 class PartnerSubmission < ApplicationRecord
   include ReferenceId
+  include PgSearch
+
+  pg_search_scope :search,
+    against: [:id, :reference_id],
+    associated_against: {
+      partner: [:name]
+    },
+    using: {
+      tsearch: { prefix: true }
+    }
 
   belongs_to :partner
   belongs_to :submission

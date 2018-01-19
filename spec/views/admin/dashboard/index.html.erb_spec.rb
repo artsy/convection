@@ -58,9 +58,7 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
         stub_gravity_user_detail(id: offer.submission.user_id)
         stub_gravity_artist(id: offer.submission.artist_id)
 
-        within(:css, ".list-item--offer[data-id='#{offer.id}']") do
-          click_link('View')
-        end
+        find(".list-item--offer[data-id='#{offer.id}']").click
         expect(page).to have_content("Offer ##{offer.reference_id} (sent)")
         expect(page).to have_content('Offer Lapsed')
       end
@@ -72,9 +70,7 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
         stub_gravity_user_detail(id: submission.user_id)
         stub_gravity_artist(id: submission.artist_id)
 
-        within(:css, ".list-item--submission[data-id='#{submission.id}']") do
-          click_link('View')
-        end
+        find(".list-item--submission[data-id='#{submission.id}']").click
         expect(page).to have_content("Submission ##{submission.id} (submitted)")
       end
 
@@ -85,9 +81,7 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
         stub_gravity_user_detail(id: consignment.submission.user_id)
         stub_gravity_artist(id: consignment.submission.artist_id)
 
-        within(:css, ".list-item--consignment[data-id='#{consignment.id}']") do
-          click_link('View')
-        end
+        find(".list-item--consignment[data-id='#{consignment.id}']").click
         expect(page).to have_content("Consignment ##{consignment.reference_id} (unconfirmed)")
       end
 

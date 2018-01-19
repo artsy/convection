@@ -1,8 +1,8 @@
-<div class='list-group-item list-item--consignment' data-id=<%= consignment.id %>>
+<%= link_to admin_consignment_path(consignment), class: 'list-group-item list-item--consignment', data: { id: consignment.id } do %>
   <div class='list-group-item-info list-group-item-info--id'>
     #<%= consignment.reference_id %>
   </div>
-  <div class='list-group-item-info'>
+  <div class='list-group-item-info list-group-item-info--partner-name'>
     <%= consignment.partner.name %>
   </div>
   <div class='list-group-item-info'>
@@ -14,7 +14,5 @@
   <div class='list-group-item-info'>
     <%= consignment.state %>
   </div>
-  <div class='actions'>
-    <%= link_to 'View', admin_consignment_path(consignment), class: 'btn btn-tiny' %>
-  </div>
-</div>
+  <span class='icon-chevron-right'></span>
+<% end %>
