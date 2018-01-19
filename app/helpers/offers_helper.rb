@@ -13,19 +13,19 @@ module OffersHelper
   end
 
   def display_fields(offer)
-    [
-      { 'Offer type' => offer.offer_type.capitalize },
-      { 'Estimate' => estimate_display(offer) },
-      { 'Price' => price_display(offer) },
-      { 'Sale Period' => sale_period_display(offer) },
-      { 'Sale Date' => sale_date_display(offer) },
-      { 'Sale Name' => offer.sale_name },
-      { 'Commission' => commission_display(offer) },
-      { 'Shipping' => shipping_display(offer) },
-      { 'Photography' => photography_display(offer) },
-      { 'Insurance' => insurance_display(offer) },
-      { 'Other fees' => other_fees_display(offer) }
-    ].select { |field_hash| field_hash.values.first.present? }
+    {
+      'Offer type' => offer.offer_type.capitalize,
+      'Estimate' => estimate_display(offer),
+      'Price' => price_display(offer),
+      'Sale Period' => sale_period_display(offer),
+      'Sale Date' => sale_date_display(offer),
+      'Sale Name' => offer.sale_name,
+      'Commission' => commission_display(offer),
+      'Shipping' => shipping_display(offer),
+      'Photography' => photography_display(offer),
+      'Insurance' => insurance_display(offer),
+      'Other fees' => other_fees_display(offer)
+    }.compact
   end
 
   def estimate_display(offer)
@@ -34,7 +34,7 @@ module OffersHelper
       offer.low_estimate_cents,
       offer.high_estimate_cents
     ].compact.map { |amt| (amt / currency.subunit_to_unit).round }.join(' - ')
-    return "#{offer.currency} #{currency.symbol}#{estimate}" if estimate.present?
+    "#{offer.currency} #{currency.symbol}#{estimate}" if estimate.present?
   end
 
   def price_display(offer)
@@ -62,7 +62,7 @@ module OffersHelper
 
   def commission_display(offer)
     return if offer.commission_percent.blank?
-    "#{offer.commission_percent}%"
+    "#{offer.commission_percent * 100}%"
   end
 
   def shipping_display(offer)
@@ -80,7 +80,7 @@ module OffersHelper
     if offer.insurance_cents.present?
       "#{offer.currency} #{Money.new(offer.insurance_cents, offer.currency).format}"
     else
-      "#{offer.insurance_percent}%"
+      "#{offer.insurance_percent * 100}%"
     end
   end
 
@@ -89,7 +89,7 @@ module OffersHelper
     if offer.other_fees_cents.present?
       "#{offer.currency} #{Money.new(offer.other_fees_cents, offer.currency).format}"
     else
-      "#{offer.other_fees_percent}%"
+      "#{offer.other_fees_percent * 100}%"
     end
   end
 

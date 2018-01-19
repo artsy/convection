@@ -1,5 +1,5 @@
 <table class='email-gray-bordered-section zero-border-top'>
-  <% display_fields(@offer).each do |display_hash| %>
+  <% display_fields(@offer).each do |label, value| %>
     <tr>
       <td class='spacer'></td>
     </tr>
@@ -12,7 +12,7 @@
                 <table>
                   <tr>
                     <td class='email-gray-label email-gray-label--left'>
-                      <%= display_hash.keys.first %>
+                      <%= label %>
                     </td>
                   </tr>
                 </table>
@@ -27,7 +27,7 @@
                 <table>
                   <tr>
                     <td class='email-content-serif'>
-                      <%= display_hash.values.first %>
+                      <%= value %>
                     </td>
                   </tr>
                 </table>

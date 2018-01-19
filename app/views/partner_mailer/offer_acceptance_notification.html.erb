@@ -6,7 +6,7 @@
       <table class='email-content' align='left'>
         <tr>
           <td>
-            <%= render 'shared/email_header' %>
+            <%= render 'shared/email/email_header' %>
           </td>
         </tr>
         <tr>
@@ -27,7 +27,7 @@
         </tr>
         <tr>
           <td class='zero-padding'>
-            <%= render 'shared/submission_offer_block' %>
+            <%= render 'shared/email/submission_offer_block' %>
           </td>
         </tr>
         <tr>
@@ -78,12 +78,10 @@
         </tr>
         <tr>
           <td class='zero-padding'>
-            <%= render 'shared/offer_block' %>
+            <%= render 'shared/email/offer_block' %>
           </td>
         </tr>
-        <% if @offer.notes.present? %>
-          <%= render 'shared/offer_note', label: 'Note' %>
-        <% end %>
+        <%= render 'shared/email/offer_note', label: 'Note' %>
         <tr>
           <td class='spacer'></td>
         </tr>

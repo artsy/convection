@@ -1,4 +1,6 @@
 class BasePreview < ActionMailer::Preview
+  private
+
   def auction_offer
     OpenStruct.new(
       id: '123',
@@ -12,21 +14,7 @@ class BasePreview < ActionMailer::Preview
       partner_submission: OpenStruct.new(
         partner: OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery')
       ),
-      submission: OpenStruct.new(
-        id: '12',
-        processed_images: [],
-        images: [],
-        title: 'My Favorite Artwork',
-        year: 1992,
-        height: 12,
-        width: 14,
-        dimensions_metric: 'in',
-        category: 'Painting',
-        medium: 'Oil on linen',
-        location_city: 'New York',
-        location_state: 'NY',
-        location_country: 'USA'
-      )
+      submission: base_submission
     )
   end
 
