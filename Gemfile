@@ -24,6 +24,7 @@ gem 'haml-rails' # required for watt layouts
 gem 'hyperclient' # consume Gravity's v2 API
 gem 'jquery-rails'
 gem 'kaminari' # for pagination
+gem 'money' # for currency/money formatting
 gem 'neat', '1.7.2' # required for watt
 gem 'newrelic_rpm' # for monitoring
 gem 'pg_search' # for searching within convection's database

@@ -6,7 +6,7 @@
       <table class='email-content submission-batch-email' align='center'>
         <tr>
           <td>
-            <%= render 'shared/email_header' %>
+            <%= render 'shared/email/email_header' %>
           </td>
         </tr>
         <tr>
@@ -29,7 +29,7 @@
             <% @submissions.each do |submission| %>
               <tr>
                 <td>
-                  <%= render 'shared/submission_digest_block', submission: submission %>
+                  <%= render 'shared/email/submission_digest_block', submission: submission %>
                 </td>
               </tr>
             <% end %>

@@ -64,10 +64,12 @@ class OfferService
     def deliver_rejection_notification(offer_id)
       offer = Offer.find(offer_id)
       artist = Gravity.client.artist(id: offer.submission.artist_id)._get
+      user_name = offer.submission.user_name
 
       PartnerMailer.offer_rejection_notification(
         offer: offer,
-        artist: artist
+        artist: artist,
+        user_name: user_name
       ).deliver_now
     end
 

@@ -109,7 +109,7 @@ describe OfferService do
         expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
         expect(emails.first.to).to eq([Convection.config.debug_email_address])
         expect(emails.first.html_part.body).to include(
-          'Happy Gallery has sent you an offer'
+          'Great news, an offer has been made for your work.'
         )
         expect(offer.reload.state).to eq 'sent'
         expect(offer.sent_by).to eq 'userid'
@@ -132,7 +132,7 @@ describe OfferService do
         expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
         expect(emails.first.to).to eq([Convection.config.debug_email_address])
         expect(emails.first.html_part.body).to include(
-          'We will connect you directly with the collector to complete this transaction.'
+          'Your offer has been reviewed, and the consignor has elected to accept your offer.'
         )
         expect(offer.reload.state).to eq 'accepted'
         expect(offer.accepted_by).to eq 'userid'
@@ -159,7 +159,7 @@ describe OfferService do
         expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
         expect(emails.first.to).to eq([Convection.config.debug_email_address])
         expect(emails.first.html_part.body).to include(
-          'The collector has rejected your offer. Sorry.'
+          'Your offer has been reviewed, and the consignor has elected to reject your offer.'
         )
         expect(offer.reload.state).to eq 'rejected'
         expect(offer.rejected_by).to eq 'userid'

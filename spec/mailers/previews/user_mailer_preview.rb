@@ -1,4 +1,4 @@
-class UserMailerPreview < ActionMailer::Preview
+class UserMailerPreview < BasePreview
   def submission_receipt
     UserMailer.submission_receipt(receipt_mail_params)
   end
@@ -23,25 +23,18 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.submission_rejected(receipt_mail_params)
   end
 
+  def offer
+    UserMailer.offer(
+      offer: auction_offer,
+      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol')
+    )
+  end
+
   private
 
   def receipt_mail_params
     {
-      submission: OpenStruct.new(
-        id: '12',
-        processed_images: [],
-        images: [],
-        title: 'My Favorite Artwork',
-        year: 1992,
-        height: 12,
-        width: 14,
-        dimensions_metric: 'in',
-        category: 'Painting',
-        medium: 'Oil on linen',
-        location_city: 'New York',
-        location_state: 'NY',
-        location_country: 'USA'
-      ),
+      submission: base_submission,
       artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol'),
       user_detail: OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com'),
       user: OpenStruct.new(id: 'x', name: 'William Black')
