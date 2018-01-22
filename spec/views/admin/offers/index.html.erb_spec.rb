@@ -28,15 +28,18 @@ describe 'admin/offers/index.html.erb', type: :feature do
 
     it 'displays the page title' do
       expect(page).to have_content('Offers')
-      expect(page).not_to have_selector('.list-group-item')
+      expect(page).to have_selector('.list-group-item', count: 1)
     end
 
-    it 'displays zeros for the counts' do
-      expect(page).to have_content('All 0')
-      expect(page).to have_content('Draft 0')
-      expect(page).to have_content('Sent 0')
-      expect(page).to have_content('Accepted 0')
-      expect(page).to have_content('Rejected 0')
+    it 'shows the offer states that can be selected' do
+      within(:css, '#offer-state-select') do
+        expect(page).to have_content('all')
+        expect(page).to have_content('draft')
+        expect(page).to have_content('sent')
+        expect(page).to have_content('accepted')
+        expect(page).to have_content('rejected')
+        expect(page).to have_content('lapsed')
+      end
     end
 
     context 'with some offers' do
@@ -47,7 +50,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
 
       it 'displays all of the offers' do
         expect(page).to have_content('Offers')
-        expect(page).to have_selector('.list-group-item', count: 3)
+        expect(page).to have_selector('.list-group-item', count: 4)
       end
 
       it 'lets you click an offer' do
@@ -58,22 +61,15 @@ describe 'admin/offers/index.html.erb', type: :feature do
         stub_gravity_artist(id: offer.submission.artist_id)
 
         find(".list-item--offer[data-id='#{offer.id}']").click
-        expect(page).to have_content("Offer ##{offer.reference_id} (sent)")
+        expect(page).to have_content("Offer ##{offer.reference_id}")
         expect(page).to have_content('Offer Lapsed')
       end
 
-      it 'shows the counts of offers' do
-        expect(page).to have_content('All 3')
-        expect(page).to have_content('Draft 0')
-        expect(page).to have_content('Sent 3')
-        expect(page).to have_content('Accepted 0')
-        expect(page).to have_content('Rejected 0')
-      end
-
-      it 'lets you click a filter option' do
-        click_link('Sent')
+      it 'lets you click a filter option', js: true do
+        select('sent', from: 'state')
+        expect(current_url).to include '&state=sent'
         expect(page).to have_content('Offers')
-        expect(page).to have_selector('.list-group-item', count: 3)
+        expect(page).to have_selector('.list-group-item', count: 4)
         expect(current_path).to eq '/admin/offers'
       end
     end
@@ -87,24 +83,17 @@ describe 'admin/offers/index.html.erb', type: :feature do
         page.visit '/admin/offers'
       end
 
-      it 'shows the correct counts' do
-        expect(page).to have_content('All 6')
-        expect(page).to have_content('Draft 1')
-        expect(page).to have_content('Sent 3')
-        expect(page).to have_content('Accepted 1')
-        expect(page).to have_content('Rejected 1')
-      end
-
-      it 'lets you click into a filter option' do
-        click_link('Accepted')
+      it 'lets you click into a filter option', js: true do
+        select('accepted', from: 'state')
+        expect(current_url).to include '&state=accepted'
         expect(page).to have_content('Offers')
-        expect(page).to have_selector('.list-group-item', count: 1)
+        expect(page).to have_selector('.list-group-item', count: 2)
       end
 
       it 'filters by changing the url' do
         page.visit('/admin/offers?state=rejected')
         expect(page).to have_content('Offers')
-        expect(page).to have_selector('.list-group-item', count: 1)
+        expect(page).to have_selector('.list-group-item', count: 2)
       end
     end
   end

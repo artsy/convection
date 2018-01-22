@@ -59,7 +59,8 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
         stub_gravity_artist(id: offer.submission.artist_id)
 
         find(".list-item--offer[data-id='#{offer.id}']").click
-        expect(page).to have_content("Offer ##{offer.reference_id} (sent)")
+        expect(page).to have_content("Offer ##{offer.reference_id}")
+        expect(page).to have_content('State sent')
         expect(page).to have_content('Offer Lapsed')
       end
 
@@ -71,7 +72,8 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
         stub_gravity_artist(id: submission.artist_id)
 
         find(".list-item--submission[data-id='#{submission.id}']").click
-        expect(page).to have_content("Submission ##{submission.id} (submitted)")
+        expect(page).to have_content("Submission ##{submission.id}")
+        expect(page).to have_content('State submitted')
       end
 
       it 'lets you click a consignment' do
@@ -82,7 +84,8 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
         stub_gravity_artist(id: consignment.submission.artist_id)
 
         find(".list-item--consignment[data-id='#{consignment.id}']").click
-        expect(page).to have_content("Consignment ##{consignment.reference_id} (unconfirmed)")
+        expect(page).to have_content("Consignment ##{consignment.reference_id}")
+        expect(page).to have_content('State unconfirmed')
       end
 
       it 'lets you view all consignments' do

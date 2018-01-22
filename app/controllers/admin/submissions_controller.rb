@@ -8,6 +8,7 @@ module Admin
     def index
       @counts = Submission.group(:state).count
       @completed_submissions_count = Submission.completed.count
+      params.delete(:state) if params[:state] == 'all'
       @filters = { state: params[:state] }
       @term = params[:term]
 

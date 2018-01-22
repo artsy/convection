@@ -21,6 +21,48 @@ $green: #0EDA83;
   justify-content: space-between;
 }
 
+.sidebar-link {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  width: 100%;
+
+  &:hover {
+    background-color: #F8F8F8;
+    cursor: pointer;
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+}
+
+.sidebar-link.is-active {
+  background-color: #F8F8F8;
+}
+
+.watt-overview {
+  .overview-section-title--inline {
+    font-size: 25px;
+    margin-bottom: 10px;
+
+    &__link {
+      a {
+        color: $purple;
+        font-size: 15px;
+        font-family: $sans-serif;
+        text-decoration: none;
+      }
+    }
+  }
+  .overview-item-title {
+    font-family: $serif;
+    text-transform: none;
+    color: #666666;
+    font-size: 16px;
+  }
+}
+
 .btn-approve {
   color: $green;
 
@@ -65,6 +107,10 @@ $green: #0EDA83;
   }
 }
 
+a.make-primary-link {
+  text-decoration: underline;
+}
+
 .list-item--submission, .list-item--offer, .list-item--consignment {
   display: flex;
   justify-content: space-between;
@@ -79,6 +125,22 @@ $green: #0EDA83;
 
   .list-group-item-info {
     flex: 1;
+  }
+}
+
+.spacer {
+  width: 16px;
+}
+
+.list-item--submission {
+  .list-group-item-info {
+    width: 17%;
+  }
+}
+
+.list-item--offer {
+  .list-group-item-info {
+    width: 10%;
   }
 }
 

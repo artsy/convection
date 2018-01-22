@@ -9,6 +9,7 @@ module Admin
       if params[:term].present?
         matching_consignments = PartnerSubmission.consigned.search(params[:term]) if params[:term]
       else
+        params.delete(:state) if params[:state] == 'all'
         matching_consignments = params[:state] ? PartnerSubmission.consigned.where(state: params[:state]) : PartnerSubmission.consigned
       end
       matching_consignments.order(id: :desc).page(@page).per(@size)
