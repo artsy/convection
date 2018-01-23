@@ -16,7 +16,7 @@
             <div class='col-md-12'>
               <% Offer::REJECTION_REASONS.each do |rejection_reason| %>
                 <div class='offer-type-radio'>
-                  <%= f.radio_button :rejection_reason, rejection_reason, checked: (rejection_reason == @offer.rejection_reason || rejection_reason == Offer::REJECTION_REASONS.first), class: 'form-control' %>
+                  <%= f.radio_button :rejection_reason, rejection_reason, checked: (rejection_reason == @offer.rejection_reason), class: 'form-control' %>
                   <%= f.label :rejection_reason, rejection_reason, value: rejection_reason, class: 'control-label' %>
                 </div>
               <% end %>

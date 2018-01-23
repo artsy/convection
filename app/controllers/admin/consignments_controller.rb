@@ -6,7 +6,6 @@ module Admin
     before_action :set_pagination_params, only: [:index]
 
     expose(:consignments) do
-      params.delete(:state) if params[:state] == 'all'
       matching_consignments = PartnerSubmission.consigned
       matching_consignments = matching_consignments.search(params[:term]) if params[:term].present?
       matching_consignments = matching_consignments.where(state: params[:state]) if params[:state].present?

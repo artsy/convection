@@ -6,8 +6,6 @@ module Admin
     before_action :set_pagination_params, only: [:index]
 
     expose(:offers) do
-      params.delete(:state) if params[:state] == 'all'
-
       matching_offers = Offer.all
       matching_offers = matching_offers.search(params[:term]) if params[:term].present?
       matching_offers = matching_offers.where(state: params[:state]) if params[:state].present?

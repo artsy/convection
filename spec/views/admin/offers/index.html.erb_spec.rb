@@ -101,7 +101,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
       it 'lets you search by partner name', js: true do
         fill_in('term', with: 'Gag')
         page.execute_script("$('#offer-filter-form').submit()")
-        expect(current_url).to include '&state=all&term=Gag'
+        expect(current_url).to include '&state=&term=Gag'
         expect(page).to have_selector('.list-group-item', count: 5)
         expect(page).to have_content('sent', count: 4)
         expect(page).to have_content('draft', count: 2)
@@ -110,7 +110,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
       it 'lets you search by state and partner name', js: true do
         fill_in('term', with: 'Gag')
         page.execute_script("$('#offer-filter-form').submit()")
-        expect(current_url).to include '&state=all&term=Gag'
+        expect(current_url).to include '&state=&term=Gag'
         select('sent', from: 'state')
         expect(current_url).to include '&state=sent&term=Gag'
         expect(page).to have_selector('.list-group-item', count: 4)

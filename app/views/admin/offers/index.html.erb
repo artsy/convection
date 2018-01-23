@@ -11,7 +11,10 @@
         <div class='col-md-3'>
           <div class='form-group'>
             <%= select_tag 'state',
-                          options_for_select(['all', Offer::STATES].flatten, filters[:state]),
+                          options_for_select(
+                            Offer::STATES.map{ |state| [state, state] }.unshift(['all', nil]),
+                            filters[:state]
+                          ),
                           class: 'form-control',
                           onchange: ("$('#offer-filter-form').submit()") %>
           </div>

@@ -33,7 +33,6 @@ class Offer < ApplicationRecord
   ].freeze
 
   REJECTION_REASONS = [
-    'None',
     'Low estimate',
     'High commission',
     'High shipping/marketing costs',

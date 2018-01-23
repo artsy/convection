@@ -9,7 +9,6 @@ module Admin
       @filters = { state: params[:state] }
       @term = params[:term]
 
-      params.delete(:state) if params[:state] == 'all'
       @submissions = Submission.all
       @submissions = @submissions.search(@term) if @term.present?
       @submissions = @submissions.where(state: params[:state]) if params[:state].present?
