@@ -16,7 +16,7 @@ describe 'admin/consignments/index.html.erb', type: :feature do
     end
 
     it 'shows the consignment states that can be selected' do
-      within(:css, '#consignment-state-select') do
+      within(:css, '#consignment-filter-form') do
         expect(page).to have_content('all')
         expect(page).to have_content('unconfirmed')
         expect(page).to have_content('signed')
@@ -88,7 +88,7 @@ describe 'admin/consignments/index.html.erb', type: :feature do
       end
 
       it 'lets you click into a filter option', js: true do
-        within(:css, '#consignment-state-select') do
+        within(:css, '#consignment-filter-form') do
           select('signed', from: 'state')
         end
         expect(current_url).to include '&state=signed'
@@ -104,11 +104,23 @@ describe 'admin/consignments/index.html.erb', type: :feature do
 
       it 'allows you to search by partner name', js: true do
         fill_in('term', with: 'gallery')
-        page.execute_script("$('#term-search').submit()")
+        page.execute_script("$('#consignment-filter-form').submit()")
         expect(current_url).to include '&term=gallery'
         partner_names = page.all('.list-group-item-info--partner-name').map(&:text)
         expect(partner_names.count).to eq 3
         expect(partner_names.uniq).to eq(['Gagosian Gallery'])
+      end
+
+      it 'allows you to search by partner name and state', js: true do
+        fill_in('term', with: 'herit')
+        page.execute_script("$('#consignment-filter-form').submit()")
+        expect(current_url).to include '&term=herit'
+        partner_names = page.all('.list-group-item-info--partner-name').map(&:text)
+        expect(partner_names.count).to eq 3
+        expect(partner_names.uniq).to eq(['Heritage Auctions'])
+        select('signed', from: 'state')
+        expect(current_url).to include '&state=signed&term=herit'
+        expect(page).to have_selector('.list-group-item', count: 2)
       end
     end
   end

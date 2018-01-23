@@ -6,9 +6,11 @@
           <div class='overview-section'>
             <div class='overview-section-title--inline'>
               Details
-              <span class='overview-section-title--inline__link'>
-                <%= link_to 'Edit', edit_admin_offer_path(@offer) %>
-              </span>
+              <% if @offer.draft? %>
+                <span class='overview-section-title--inline__link'>
+                  <%= link_to 'Edit', edit_admin_offer_path(@offer) %>
+                </span>
+              <% end %>
             </div>
             <%= render "#{@offer.offer_type.downcase.tr(' ', '_')}", offer: @offer %>
           </div>
@@ -40,7 +42,7 @@
             </div>
           </div>
           <%= render 'admin/submissions/collector_info', submission: @offer.submission %>
-          <%= render 'admin/shared/partner_info', partner: @offer.partner_submission.partner %>
+          <%= render 'admin/shared/partner_info', partner: @offer.partner %>
         </div>
       </div>
     </div>

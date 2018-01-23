@@ -7,7 +7,10 @@ module Admin
 
     expose(:offers) do
       params.delete(:state) if params[:state] == 'all'
-      matching_offers = params[:state] ? Offer.where(state: params[:state]) : Offer.all
+
+      matching_offers = Offer.all
+      matching_offers = matching_offers.search(params[:term]) if params[:term].present?
+      matching_offers = matching_offers.where(state: params[:state]) if params[:state].present?
       matching_offers.order(id: :desc).page(@page).per(@size)
     end
 
@@ -29,6 +32,10 @@ module Admin
 
     expose(:submission) do
       Submission.find(params[:submission_id]) if params[:submission_id].present?
+    end
+
+    expose(:term) do
+      params[:term]
     end
 
     def new_step_0

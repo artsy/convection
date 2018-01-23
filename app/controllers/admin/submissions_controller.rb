@@ -6,17 +6,13 @@ module Admin
     before_action :set_pagination_params, only: [:index]
 
     def index
-      @counts = Submission.group(:state).count
-      @completed_submissions_count = Submission.completed.count
-      params.delete(:state) if params[:state] == 'all'
       @filters = { state: params[:state] }
       @term = params[:term]
 
-      @submissions = if params[:term].present?
-                       Submission.search(params[:term])
-                     else
-                       params[:state] ? Submission.where(state: params[:state]) : Submission.completed
-                     end
+      params.delete(:state) if params[:state] == 'all'
+      @submissions = Submission.all
+      @submissions = @submissions.search(@term) if @term.present?
+      @submissions = @submissions.where(state: params[:state]) if params[:state].present?
       @submissions = @submissions.order(id: :desc).page(@page).per(@size)
       @artist_details = artists_query(@submissions.map(&:artist_id))
 

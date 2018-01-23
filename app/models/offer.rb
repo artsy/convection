@@ -1,5 +1,15 @@
 class Offer < ApplicationRecord
   include ReferenceId
+  include PgSearch
+
+  pg_search_scope :search,
+    against: [:id, :reference_id],
+    associated_against: {
+      partner: [:name]
+    },
+    using: {
+      tsearch: { prefix: true }
+    }
 
   OFFER_TYPES = [
     'auction consignment',
@@ -23,6 +33,7 @@ class Offer < ApplicationRecord
   ].freeze
 
   REJECTION_REASONS = [
+    'None',
     'Low estimate',
     'High commission',
     'High shipping/marketing costs',
@@ -33,6 +44,7 @@ class Offer < ApplicationRecord
 
   belongs_to :partner_submission
   belongs_to :submission
+  has_one :partner, through: :partner_submission
 
   validates :state, inclusion: { in: STATES }
   validates :offer_type, inclusion: { in: OFFER_TYPES }, allow_nil: true

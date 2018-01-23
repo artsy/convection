@@ -7,20 +7,23 @@
 <div class='container double-padding-top'>
   <div class='row'>
     <div class='row col-md-12'>
-      <div class='col-md-3'>
-        <%= form_tag admin_offers_url, method: 'get', id: 'offer-state-select' do %>
+      <%= form_tag admin_offers_url, method: 'get', id: 'offer-filter-form' do %>
+        <div class='col-md-3'>
           <div class='form-group'>
             <%= select_tag 'state',
                           options_for_select(['all', Offer::STATES].flatten, filters[:state]),
                           class: 'form-control',
-                          onchange: ("$('#offer-state-select').submit()") %>
+                          onchange: ("$('#offer-filter-form').submit()") %>
           </div>
-        <% end %>
-      </div>
-      <div class='col-md-7'>
-      </div>
+        </div>
+        <div class='col-md-7'>
+          <div class='form-group'>
+            <%= text_field_tag 'term', term, class: 'form-control', placeholder: 'Search by ID or partner' %>
+          </div>
+        </div>
+      <% end %>
       <div class='col-md-2'>
-        <%= link_to 'Create New', new_admin_offer_path, class: 'btn btn-small btn-primary btn-full-width' %>
+        <%= link_to 'Create New', new_step_0_admin_offers_path, class: 'btn btn-small btn-primary btn-full-width' %>
       </div>
     </div>
     <div class='row col-md-12'>

@@ -49,6 +49,23 @@ describe OffersHelper, type: :helper do
       expect(helper.display_fields(offer)).to eq('Offer type' => 'Auction consignment', 'Commission' => '10.0%')
     end
 
+    it 'does not include empty values' do
+      offer = Fabricate(:offer,
+        offer_type: 'auction consignment',
+        price_cents: nil,
+        sale_name: '',
+        commission_percent: 0.1,
+        low_estimate_cents: 10_000,
+        high_estimate_cents: 40_000,
+        sale_date: Date.new(2018, 10, 30))
+      expect(helper.display_fields(offer)).to eq(
+        'Offer type' => 'Auction consignment',
+        'Estimate' => 'USD $100 - 400',
+        'Sale Date' => 'Oct 30, 2018',
+        'Commission' => '10.0%'
+      )
+    end
+
     it 'returns an array containing only the present fields with many fields present' do
       offer = Fabricate(:offer,
         offer_type: 'auction consignment',

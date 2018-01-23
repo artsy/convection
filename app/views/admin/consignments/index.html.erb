@@ -7,23 +7,21 @@
 <div class='container double-padding-top'>
   <div class='row'>
     <div class='row col-md-12'>
-      <div class='col-md-3'>
-        <%= form_tag admin_consignments_url, method: 'get', id: 'consignment-state-select' do %>
+      <%= form_tag admin_consignments_url, method: 'get', id: 'consignment-filter-form' do %>
+        <div class='col-md-3'>
           <div class='form-group'>
             <%= select_tag 'state',
                           options_for_select(['all', PartnerSubmission::STATES].flatten, filters[:state]),
                           class: 'form-control',
-                          onchange: ("$('#consignment-state-select').submit()") %>
+                          onchange: ("$('#consignment-filter-form').submit()") %>
           </div>
-        <% end %>
-      </div>
-      <div class='col-md-9'>
-        <%= form_tag admin_consignments_url, id: 'term-search', method: 'get' do %>
+        </div>
+        <div class='col-md-9'>
           <div class='form-group'>
             <%= text_field_tag 'term', term, class: 'form-control', placeholder: 'Search by ID or partner' %>
           </div>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
     </div>
     <div class='row col-md-12'>
       <div class='list-group-item list-item--offer'>
