@@ -1,0 +1,8 @@
+<% if offer %>
+  <div class='overview-section'>
+    <div class='overview-section-title--inline'>
+      Offer
+    </div>
+    <%= render 'admin/offers/offer', offer: offer, truncated: true %>
+  </div>
+<% end %>

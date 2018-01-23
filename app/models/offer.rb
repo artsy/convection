@@ -56,6 +56,10 @@ class Offer < ApplicationRecord
     end
   end
 
+  def reviewed?
+    accepted? || rejected?
+  end
+
   def recorded_by_user
     admin_user_id = accepted_by || rejected_by
     Gravity.client.user(id: admin_user_id)._get if admin_user_id
@@ -69,5 +73,11 @@ class Offer < ApplicationRecord
 
   def set_currency
     self.currency ||= 'USD'
+  end
+
+  def best_price_display
+    amount = price_cents || high_estimate_cents || low_estimate_cents
+    return unless amount
+    Money.new(amount, currency).format
   end
 end

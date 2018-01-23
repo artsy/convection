@@ -93,6 +93,10 @@ class Submission < ApplicationRecord
     end
   end
 
+  def reviewed?
+    approved? || rejected?
+  end
+
   def ready?
     finished_processing_images_for_email? ||
       receipt_sent_at && (Time.now.utc > receipt_sent_at + Convection.config.processing_grace_seconds)

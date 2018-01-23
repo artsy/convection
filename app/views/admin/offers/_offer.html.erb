@@ -1,21 +1,32 @@
+<% truncated = false if local_assigns[:truncated].nil? %>
+
 <%= link_to admin_offer_path(offer), class: 'list-group-item list-item--offer', data: { id: offer.id } do %>
-  <div class='list-group-item-info list-group-item-info--id'>
-    <%= offer.id %>
+  <div class='list-group-item-info'>
+    <%= offer.state %>
   </div>
   <div class='list-group-item-info'>
-    <%= offer.partner_submission.partner.name %>
+    #<%= offer.reference_id %>
   </div>
   <div class='list-group-item-info'>
     <%= offer.created_at.strftime('%m/%d/%Y') %>
   </div>
   <div class='list-group-item-info'>
-    <%= offer.price_cents %>
+    <%= offer.partner_submission.partner.name %>
   </div>
+  <% unless truncated %>
+    <div class='list-group-item-info'>
+      <%= offer.best_price_display || '-' %>
+    </div>
+    <div class='list-group-item-info'>
+      <% if offer.commission_percent %>
+        <%= offer.commission_percent %>
+      <% else %>
+      -
+      <% end %>
+    </div>
+  <% end %>
   <div class='list-group-item-info'>
-    <%= offer.commission_percent %>%
-  </div>
-  <div class='list-group-item-info'>
-    <%= offer.state %>
+    <%= offer.offer_type %>
   </div>
   <span class='icon-chevron-right'></span>
 <% end %>

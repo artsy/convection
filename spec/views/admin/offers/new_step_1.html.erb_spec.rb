@@ -66,7 +66,7 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         fill_in('offer_commission_percent', with: '10')
         click_button('Create')
         expect(page).to have_content('Offer #')
-        expect(page).to have_content('(draft)')
+        expect(page).to have_content('State draft')
         expect(page).to have_content('Commission % 10.0')
       end
     end
@@ -123,7 +123,7 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         fill_in('offer_price_cents', with: '10')
         click_button('Create')
         expect(page).to have_content('Offer #')
-        expect(page).to have_content('(draft)')
+        expect(page).to have_content('State draft')
         expect(page).to have_content('Price cents 10')
       end
     end
@@ -182,7 +182,7 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         fill_in('offer_commission_percent', with: '10')
         click_button('Create')
         expect(page).to have_content('Offer #')
-        expect(page).to have_content('(draft)')
+        expect(page).to have_content('State draft')
         expect(page).to have_content('Commission % 10.0')
       end
     end

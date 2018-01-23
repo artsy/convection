@@ -1,54 +1,54 @@
 <div class='page-title'>
-  <h2>Consignments</h2>
+  <h2>
+    Consignments
+  </h2>
 </div>
 
-<div class='container'>
-  <div class='row triple-padding-top'>
-    <div class='col-md-2'>
-      <div class='flex-label'>
-        <div class='left'><%= link_to 'All', admin_consignments_path %></div>
-        <div class='right'><%= consignments_count %></div>
-      </div>
-      <div class='flex-label'>
-        <div class='left'><%= link_to 'Unconfirmed', admin_consignments_path(state: 'unconfirmed') %></div>
-        <div class='right'><%= counts['unconfirmed'] || 0 %></div>
-      </div>
-      <div class='flex-label'>
-        <div class='left'><%= link_to 'Signed', admin_consignments_path(state: 'signed') %></div>
-        <div class='right'><%= counts['signed'] || 0 %></div>
-      </div>
-      <div class='flex-label'>
-        <div class='left'><%= link_to 'Sold', admin_consignments_path(state: 'sold') %></div>
-        <div class='right'><%= counts['sold'] || 0 %></div>
-      </div>
-      <div class='flex-label'>
-        <div class='left'><%= link_to 'Bought in', admin_consignments_path(state: 'bought in') %></div>
-        <div class='right'><%= counts['bought in'] || 0 %></div>
-      </div>
-      <div class='flex-label'>
-        <div class='left'><%= link_to 'Closed', admin_consignments_path(state: 'closed') %></div>
-        <div class='right'><%= counts['closed'] || 0 %></div>
-      </div>
-    </div>
-    <div class='col-md-10'>
-      <div class='row col-md-12'>
-        <%= form_tag admin_consignments_url, method: 'get' do %>
+<div class='container double-padding-top'>
+  <div class='row'>
+    <div class='row col-md-12'>
+      <div class='col-md-3'>
+        <%= form_tag admin_consignments_url, method: 'get', id: 'consignment-state-select' do %>
           <div class='form-group'>
-            <div class='col-sm-10'>
-              <%= text_field_tag 'term', term, class: 'form-control', placeholder: 'Search by ID or partner' %>
-            </div>
-            <div class='col-sm-2'>
-              <%= submit_tag 'Search', class: 'btn btn-primary btn-full-width btn-tiny' %>
-            </div>
+            <%= select_tag 'state',
+                          options_for_select(['all', PartnerSubmission::STATES].flatten, filters[:state]),
+                          class: 'form-control',
+                          onchange: ("$('#consignment-state-select').submit()") %>
           </div>
         <% end %>
       </div>
-      <div class='row col-md-12 double-padding-top'>
-        <div class='list-group'>
-          <%= render partial: 'admin/consignments/consignment', collection: consignments %>
-        </div>
+      <div class='col-md-9'>
+        <%= form_tag admin_consignments_url, id: 'term-search', method: 'get' do %>
+          <div class='form-group'>
+            <%= text_field_tag 'term', term, class: 'form-control', placeholder: 'Search by ID or partner' %>
+          </div>
+        <% end %>
       </div>
     </div>
+    <div class='row col-md-12'>
+      <div class='list-group-item list-item--offer'>
+        <div class='list-group-item-info bold-label'>
+          State
+        </div>
+        <div class='list-group-item-info bold-label'>
+          ID
+        </div>
+        <div class='list-group-item-info bold-label'>
+          Date
+        </div>
+        <div class='list-group-item-info bold-label'>
+          Partner
+        </div>
+        <div class='list-group-item-info bold-label'>
+          Offer Type
+        </div>
+        <div class='spacer'>
+        </div>
+      </div>
+      <div class='list-group'>
+        <%= render partial: 'admin/consignments/consignment', collection: consignments %>
+      </div>
+    </div>
+    <%= render 'shared/watt/paginator', total_items_count: consignments.total_count, items_count: consignments.length, per_page: @size, current_page: @page, base_url: admin_consignments_url(filters) %>
   </div>
-  <%= render 'shared/watt/paginator', total_items_count: consignments.total_count, items_count: consignments.length, per_page: @size, current_page: @page, base_url: admin_consignments_url(filters) %>
 </div>

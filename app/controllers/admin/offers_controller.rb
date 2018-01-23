@@ -6,6 +6,7 @@ module Admin
     before_action :set_pagination_params, only: [:index]
 
     expose(:offers) do
+      params.delete(:state) if params[:state] == 'all'
       matching_offers = params[:state] ? Offer.where(state: params[:state]) : Offer.all
       matching_offers.order(id: :desc).page(@page).per(@size)
     end

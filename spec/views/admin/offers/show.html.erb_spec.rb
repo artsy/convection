@@ -75,7 +75,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
         offer.update_attributes!(state: 'draft')
         page.visit "/admin/offers/#{offer.id}"
         click_link('Save & Send')
-        expect(page).to have_content("Offer ##{offer.reference_id} (sent)")
+        expect(page).to have_content("Offer ##{offer.reference_id}")
         expect(page).to_not have_content('Save & Send')
       end
     end
@@ -94,8 +94,8 @@ describe 'admin/offers/show.html.erb', type: :feature do
 
       it 'allows you to mark the offer as lapsed' do
         click_link('Offer Lapsed')
-        expect(page).to have_content("Offer ##{offer.reference_id} (lapsed)")
-        expect(page).to have_content('Offer lapsed')
+        expect(page).to have_content("Offer ##{offer.reference_id}")
+        expect(page).to have_content('State lapsed')
       end
     end
 
@@ -113,7 +113,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
 
       it 'allows you to mark the offer as accepted' do
         click_link('Accept Offer')
-        expect(page).to have_content("Offer ##{offer.reference_id} (accepted)")
+        expect(page).to have_content("Offer ##{offer.reference_id}")
         expect(page).to_not have_content('Accept Offer')
         expect(page).to have_content('Accepted by Lucille Bluth')
         expect(page).to have_selector('.list-item--consignment')
@@ -138,7 +138,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
         click_link('Reject Offer')
         choose('offer_rejection_reason_low_estimate')
         click_button('Save and Send')
-        expect(page).to have_content("Offer ##{offer.reference_id} (rejected)")
+        expect(page).to have_content("Offer ##{offer.reference_id}")
         expect(page).to_not have_content('Reject Offer')
         expect(page).to have_content('Rejected by Lucille Bluth. Low estimate')
       end
@@ -148,7 +148,6 @@ describe 'admin/offers/show.html.erb', type: :feature do
         choose('offer_rejection_reason_other')
         fill_in('offer_rejection_note', with: 'The user has issues with who the partner is.')
         click_button('Save and Send')
-        expect(page).to have_content("Offer ##{offer.reference_id} (rejected)")
         expect(page).to have_content('Rejected by Lucille Bluth. Other: The user has issues with who the partner is.')
       end
     end
