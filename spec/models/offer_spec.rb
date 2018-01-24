@@ -53,4 +53,26 @@ describe Offer do
       expect(Offer.new(rejection_reason: 'Low estimate')).to be_valid
     end
   end
+
+  context 'searching' do
+    before do
+      partner1 = Fabricate(:partner, name: 'Gagosian')
+      partner2 = Fabricate(:partner, name: 'Heritage Auctions')
+      @offer1 = Fabricate(:offer, partner_submission: Fabricate(:partner_submission, partner: partner1))
+      @offer2 = Fabricate(:offer, partner_submission: Fabricate(:partner_submission, partner: partner1))
+      @offer3 = Fabricate(:offer, partner_submission: Fabricate(:partner_submission, partner: partner2))
+    end
+
+    it 'allows you to search for offers by reference_id' do
+      results = Offer.search(@offer1.reference_id)
+      expect(results.length).to eq 1
+      expect(results.first.id).to eq @offer1.id
+    end
+
+    it 'allows you to search for offers by partner name' do
+      results = Offer.search('Gag')
+      expect(results.length).to eq 2
+      expect(results.map(&:id)).to eq [@offer1.id, @offer2.id]
+    end
+  end
 end

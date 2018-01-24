@@ -32,7 +32,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
     end
 
     it 'shows the offer states that can be selected' do
-      within(:css, '#offer-state-select') do
+      within(:css, '#offer-filter-form') do
         expect(page).to have_content('all')
         expect(page).to have_content('draft')
         expect(page).to have_content('sent')
@@ -76,10 +76,12 @@ describe 'admin/offers/index.html.erb', type: :feature do
 
     context 'with a variety of offers' do
       before do
-        3.times { Fabricate(:offer, state: 'sent') }
-        Fabricate(:offer, state: 'accepted')
-        Fabricate(:offer, state: 'rejected')
-        Fabricate(:offer, state: 'draft')
+        partner1 = Fabricate(:partner, name: 'Gagosian')
+        partner2 = Fabricate(:partner, name: 'Heritage Auctions')
+        3.times { Fabricate(:offer, state: 'sent', partner_submission: Fabricate(:partner_submission, partner: partner1)) }
+        Fabricate(:offer, state: 'accepted', partner_submission: Fabricate(:partner_submission, partner: partner2))
+        Fabricate(:offer, state: 'rejected', partner_submission: Fabricate(:partner_submission, partner: partner2))
+        Fabricate(:offer, state: 'draft', partner_submission: Fabricate(:partner_submission, partner: partner1))
         page.visit '/admin/offers'
       end
 
@@ -94,6 +96,26 @@ describe 'admin/offers/index.html.erb', type: :feature do
         page.visit('/admin/offers?state=rejected')
         expect(page).to have_content('Offers')
         expect(page).to have_selector('.list-group-item', count: 2)
+      end
+
+      it 'lets you search by partner name', js: true do
+        fill_in('term', with: 'Gag')
+        page.execute_script("$('#offer-filter-form').submit()")
+        expect(current_url).to include '&state=&term=Gag'
+        expect(page).to have_selector('.list-group-item', count: 5)
+        expect(page).to have_content('sent', count: 4)
+        expect(page).to have_content('draft', count: 2)
+      end
+
+      it 'lets you search by state and partner name', js: true do
+        fill_in('term', with: 'Gag')
+        page.execute_script("$('#offer-filter-form').submit()")
+        expect(current_url).to include '&state=&term=Gag'
+        select('sent', from: 'state')
+        expect(current_url).to include '&state=sent&term=Gag'
+        expect(page).to have_selector('.list-group-item', count: 4)
+        expect(page).to have_content('sent', count: 4)
+        expect(page).to have_content('draft', count: 1)
       end
     end
   end

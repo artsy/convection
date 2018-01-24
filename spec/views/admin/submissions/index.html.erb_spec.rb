@@ -32,7 +32,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
     end
 
     it 'shows the submission states that can be selected' do
-      within(:css, '#submission-state-select') do
+      within(:css, '#submission-filter-form') do
         expect(page).to have_content('all')
         expect(page).to have_content('submitted')
         expect(page).to have_content('draft')
@@ -76,10 +76,10 @@ describe 'admin/submissions/index.html.erb', type: :feature do
 
     context 'with a variety of submissions' do
       before do
-        3.times { Fabricate(:submission, user_id: 'userid', artist_id: 'artistid', state: 'submitted') }
-        @submission = Fabricate(:submission, user_id: 'userid', artist_id: 'artistid2', state: 'approved')
-        Fabricate(:submission, user_id: 'userid', artist_id: 'artistid4', state: 'rejected')
-        Fabricate(:submission, user_id: 'userid', artist_id: 'artistid4', state: 'draft')
+        3.times { Fabricate(:submission, user_id: 'userid', artist_id: 'artistid', state: 'submitted', title: 'blah') }
+        @submission = Fabricate(:submission, user_id: 'userid', artist_id: 'artistid2', state: 'approved', title: 'my work')
+        Fabricate(:submission, user_id: 'userid', artist_id: 'artistid4', state: 'rejected', title: 'title')
+        Fabricate(:submission, user_id: 'userid', artist_id: 'artistid4', state: 'draft', title: 'blah blah')
 
         gravql_artists_response = {
           data: {
@@ -106,7 +106,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
         expect(page).to have_content('Andy Warhol', count: 3)
         expect(page).to have_content('Kara Walker', count: 1)
         expect(page).to_not have_content('Chuck Close')
-        expect(page).to have_content('Lucille Bluth', count: 1)
+        expect(page).to have_content('Lucille Bluth', count: 2)
       end
 
       it 'lets you click into a filter option', js: true do
@@ -124,10 +124,21 @@ describe 'admin/submissions/index.html.erb', type: :feature do
 
       it 'allows you to search by submission ID', js: true do
         fill_in('term', with: @submission.id)
-        page.execute_script("$('#term-search').submit()")
+        page.execute_script("$('#submission-filter-form').submit()")
         expect(current_url).to include "&term=#{@submission.id}"
         expect(page).to have_selector('.list-group-item', count: 2)
         expect(page).to have_content(@submission.id)
+      end
+
+      it 'allows you to search by term and state', js: true do
+        fill_in('term', with: 'blah')
+        page.execute_script("$('#submission-filter-form').submit()")
+        expect(current_url).to include '&term=blah'
+        expect(page).to have_selector('.list-group-item', count: 5)
+        select('draft', from: 'state')
+        expect(current_url).to include '&state=draft&term=blah'
+        expect(page).to have_selector('.list-group-item', count: 2)
+        expect(page).to have_content('draft', count: 2)
       end
     end
   end

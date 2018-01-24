@@ -25,7 +25,7 @@ module OffersHelper
       'Photography' => photography_display(offer),
       'Insurance' => insurance_display(offer),
       'Other fees' => other_fees_display(offer)
-    }.compact
+    }.select { |_key, value| value.present? }
   end
 
   def estimate_display(offer)
