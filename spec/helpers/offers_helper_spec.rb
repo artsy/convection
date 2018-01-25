@@ -9,8 +9,8 @@ describe OffersHelper, type: :helper do
     end
 
     it 'shows the correct label for an accepted offer' do
-      offer = Fabricate(:offer, state: 'accepted', accepted_by: 'userid')
-      expect(helper.reviewed_byline(offer)).to eq 'Accepted by Jon Jonson.'
+      offer = Fabricate(:offer, state: 'introduced', introduced_by: 'userid')
+      expect(helper.reviewed_byline(offer)).to eq 'Introduced by Jon Jonson.'
     end
 
     it 'shows the correct label for a rejected offer' do
@@ -33,8 +33,8 @@ describe OffersHelper, type: :helper do
     end
 
     it 'shows the correct label for an accepted offer with no user' do
-      offer = Fabricate(:offer, state: 'accepted')
-      expect(helper.reviewed_byline(offer)).to eq 'Accepted by .'
+      offer = Fabricate(:offer, state: 'introduced')
+      expect(helper.reviewed_byline(offer)).to eq 'Introduced by .'
     end
 
     it 'shows the correct label for a rejected offer with no user' do

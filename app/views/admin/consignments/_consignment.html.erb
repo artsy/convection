@@ -6,7 +6,7 @@
     #<%= consignment.reference_id %>
   </div>
   <div class='list-group-item-info'>
-    <%= consignment&.accepted_offer&.accepted_at&.strftime('%m/%d/%Y') %>
+    <%= consignment&.accepted_offer&.consigned_at&.strftime('%m/%d/%Y') %>
   </div>
   <div class='list-group-item-info list-group-item-info--partner-name'>
     <%= consignment.partner.name %>

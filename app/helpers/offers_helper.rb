@@ -1,7 +1,7 @@
 module OffersHelper
   def reviewed_byline(offer)
-    if offer.accepted?
-      "Accepted by #{offer.recorded_by_user.try(:name)}."
+    if offer.introduced?
+      "Introduced by #{offer.recorded_by_user.try(:name)}."
     elsif offer.rejected?
       [
         "Rejected by #{offer.recorded_by_user.try(:name)}. #{offer.rejection_reason}",

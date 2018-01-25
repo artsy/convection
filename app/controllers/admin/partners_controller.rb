@@ -4,7 +4,7 @@ module Admin
 
     expose(:partners) do
       matching_partners = Partner.all
-      matching_partners = matching_partners.search_by_name(params[:term]) if params[:term]
+      matching_partners = matching_partners.search_by_name(params[:term]) if params[:term].present?
       matching_partners.page(@page).per(@size)
     end
 

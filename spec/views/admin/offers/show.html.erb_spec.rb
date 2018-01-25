@@ -62,12 +62,15 @@ describe 'admin/offers/show.html.erb', type: :feature do
         offer.update_attributes!(state: 'draft')
         page.visit "/admin/offers/#{offer.id}"
         expect(page).to have_content('Save & Send')
+        expect(page).to have_selector('.offer-draft-actions')
       end
 
       it 'does not show the save & send button after the offer has been sent' do
         offer.update_attributes!(state: 'sent')
         page.visit "/admin/offers/#{offer.id}"
         expect(page).to_not have_content('Save & Send')
+        expect(page).to_not have_selector('.offer-draft-actions')
+        expect(page).to have_selector('.offer-actions')
       end
 
       it 'allows you to save the offer' do
@@ -96,29 +99,72 @@ describe 'admin/offers/show.html.erb', type: :feature do
         click_link('Offer Lapsed')
         expect(page).to have_content("Offer ##{offer.reference_id}")
         expect(page).to have_content('State lapsed')
+        expect(page).to_not have_selector('.offer-draft-actions')
+        expect(page).to_not have_selector('.offer-actions')
       end
     end
 
-    describe 'offer accepted' do
+    describe 'offer introduced' do
       before do
         offer.update_attributes!(state: 'sent')
         stub_gravity_artist(id: submission.artist_id)
         page.visit "/admin/offers/#{offer.id}"
       end
 
-      it 'shows the accept offer button' do
+      it 'shows the introduce offer button' do
         expect(page).to_not have_content('Save & Send')
-        expect(page).to have_content('Accept Offer')
+        expect(page).to have_content('Introduce')
+        expect(page).to_not have_selector('.offer-draft-actions')
+        expect(page).to have_selector('.offer-actions')
       end
 
-      it 'allows you to mark the offer as accepted' do
-        click_link('Accept Offer')
+      it 'allows you to mark the offer as introduced' do
+        expect(page).to have_selector('.offer-introduce-button')
+        click_link('Introduce')
         expect(page).to have_content("Offer ##{offer.reference_id}")
-        expect(page).to_not have_content('Accept Offer')
-        expect(page).to have_content('Accepted by Lucille Bluth')
+        expect(page).to_not have_selector('.offer-introduce-button')
+        expect(page).to have_content('Introduced by Lucille Bluth')
+      end
+    end
+
+    describe 'offer consigned' do
+      before do
+        offer.update_attributes!(state: 'introduced')
+        stub_gravity_artist(id: submission.artist_id)
+        page.visit "/admin/offers/#{offer.id}"
+      end
+
+      it 'shows the complete consignment button' do
+        expect(page).to have_content('Complete Consignment')
+        expect(page).to_not have_selector('.offer-draft-actions')
+        expect(page).to have_selector('.offer-actions')
+      end
+
+      it 'allows you to mark the offer as consigned', js: true do
+        expect(find('input#terms_signed')).to_not be_checked
+        expect(page).to have_selector('.offer-consign-button.disabled-button')
+        find('input#terms_signed').click
+        expect(page).to_not have_selector('.offer-consign-button.disabled-button')
+        find('.offer-consign-button').click
+        expect(page).to have_content("Offer ##{offer.reference_id}")
+        expect(page).to_not have_content('Complete Consignment')
         expect(page).to have_selector('.list-item--consignment')
         find('.list-item--consignment').click
         expect(page.current_path).to include('/admin/consignment')
+      end
+    end
+
+    describe 'offer locked' do
+      before do
+        offer.update_attributes!(state: 'locked')
+        stub_gravity_artist(id: submission.artist_id)
+        page.visit "/admin/offers/#{offer.id}"
+      end
+
+      it 'shows no actions' do
+        expect(page).to have_content('State locked')
+        expect(page).to_not have_selector('.offer-draft-actions')
+        expect(page).to_not have_selector('.offer-actions')
       end
     end
 
@@ -141,6 +187,8 @@ describe 'admin/offers/show.html.erb', type: :feature do
         expect(page).to have_content("Offer ##{offer.reference_id}")
         expect(page).to_not have_content('Reject Offer')
         expect(page).to have_content('Rejected by Lucille Bluth. Low estimate')
+        expect(page).to_not have_selector('.offer-draft-actions')
+        expect(page).to_not have_selector('.offer-actions')
       end
 
       it 'allows you to add notes to the rejection' do

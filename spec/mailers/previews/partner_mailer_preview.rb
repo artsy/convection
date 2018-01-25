@@ -9,8 +9,8 @@ class PartnerMailerPreview < BasePreview
     PartnerMailer.submission_digest(params)
   end
 
-  def offer_acceptance_notification
-    PartnerMailer.offer_acceptance_notification(
+  def offer_introduction
+    PartnerMailer.offer_introduction(
       offer: auction_offer,
       artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol')
     )
