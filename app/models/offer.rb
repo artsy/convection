@@ -23,6 +23,9 @@ class Offer < ApplicationRecord
     accepted
     rejected
     lapsed
+    review
+    locked
+    consigned
   ].freeze
 
   CURRENCIES = %w[
@@ -68,12 +71,11 @@ class Offer < ApplicationRecord
   end
 
   def reviewed?
-    accepted? || rejected?
+    !draft? && !sent? && !review?
   end
 
-  def recorded_by_user
-    admin_user_id = accepted_by || rejected_by
-    Gravity.client.user(id: admin_user_id)._get if admin_user_id
+  def rejected_by_user
+    Gravity.client.user(id: rejected_by)._get if rejected_by
   rescue Faraday::ResourceNotFound
     nil
   end

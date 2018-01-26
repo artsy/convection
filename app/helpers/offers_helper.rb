@@ -1,10 +1,8 @@
 module OffersHelper
   def reviewed_byline(offer)
-    if offer.accepted?
-      "Accepted by #{offer.recorded_by_user.try(:name)}."
-    elsif offer.rejected?
+    if offer.rejected?
       [
-        "Rejected by #{offer.recorded_by_user.try(:name)}. #{offer.rejection_reason}",
+        "Rejected by #{offer.rejected_by_user.try(:name)}. #{offer.rejection_reason}",
         offer.rejection_note
       ].compact.reject(&:blank?).join(': ').strip
     elsif offer.lapsed?

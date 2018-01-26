@@ -16,6 +16,10 @@ $green: #0EDA83;
   color: #999999;
 }
 
+.purple-label {
+  color: $purple;
+}
+
 .flex-label {
   display: flex;
   justify-content: space-between;
@@ -164,7 +168,7 @@ a.make-primary-link {
   }
 }
 
-input[type="submit"].disabled-button {
+.disabled-button {
   cursor: not-allowed;
   border-color: #F8F8F8 !important;
   background-color: $gray !important;

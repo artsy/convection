@@ -19,11 +19,11 @@ class PartnerMailer < ApplicationMailer
     end
   end
 
-  def offer_acceptance_notification(offer:, artist:)
+  def offer_introduction(offer:, artist:)
     @offer = offer
     @submission = offer.submission
     @artist = artist
-    @utm_params = utm_params(source: 'consignment-offer-accepted', campaign: 'consignment-offer')
+    @utm_params = utm_params(source: 'consignment-offer-introduction', campaign: 'consignment-offer')
 
     smtpapi category: ['offer'], unique_args: {
       offer_id: offer.id

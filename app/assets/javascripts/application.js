@@ -27,3 +27,4 @@
 //= require new_submission
 //= require new_partner
 //= require new_offer
+//= require offer
