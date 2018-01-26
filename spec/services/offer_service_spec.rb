@@ -126,7 +126,7 @@ describe OfferService do
 
     describe 'introducing an offer' do
       it 'sends an email saying the user is interested in the offer' do
-        OfferService.update_offer(offer, 'userid', state: 'introduced')
+        OfferService.update_offer(offer, 'userid', state: 'review')
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
@@ -134,9 +134,8 @@ describe OfferService do
         expect(emails.first.html_part.body).to include(
           'Your offer has been reviewed, and the consignor has elected to accept your offer.'
         )
-        expect(offer.reload.state).to eq 'introduced'
-        expect(offer.introduced_by).to eq 'userid'
-        expect(offer.introduced_at).to_not be_nil
+        expect(offer.reload.state).to eq 'review'
+        expect(offer.review_started_at).to_not be_nil
       end
     end
 
@@ -156,7 +155,7 @@ describe OfferService do
         additional_offer = Fabricate(:offer,
           offer_type: 'purchase',
           price_cents: 10_000,
-          state: 'introduced',
+          state: 'review',
           partner_submission: Fabricate(:partner_submission, submission: submission))
         OfferService.update_offer(offer, 'userid', state: 'consigned')
         expect(offer.state).to eq 'consigned'

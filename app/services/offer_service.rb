@@ -24,7 +24,7 @@ class OfferService
     def update_offer_state(offer, current_user)
       case offer.state
       when 'sent' then send_offer!(offer, current_user)
-      when 'introduced' then introduce!(offer, current_user)
+      when 'review' then review!(offer)
       when 'consigned' then consign!(offer, current_user)
       when 'rejected' then reject!(offer, current_user)
       end
@@ -49,8 +49,8 @@ class OfferService
       )
     end
 
-    def introduce!(offer, current_user)
-      offer.update_attributes!(introduced_by: current_user, introduced_at: Time.now.utc)
+    def review!(offer)
+      offer.update_attributes!(review_started_at: Time.now.utc)
       delay.deliver_introduction(offer.id)
     end
 

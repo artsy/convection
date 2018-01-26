@@ -8,11 +8,6 @@ describe OffersHelper, type: :helper do
       stub_gravity_user
     end
 
-    it 'shows the correct label for an accepted offer' do
-      offer = Fabricate(:offer, state: 'introduced', introduced_by: 'userid')
-      expect(helper.reviewed_byline(offer)).to eq 'Introduced by Jon Jonson.'
-    end
-
     it 'shows the correct label for a rejected offer' do
       offer = Fabricate(:offer, state: 'rejected', rejected_by: 'userid')
       expect(helper.reviewed_byline(offer)).to eq 'Rejected by Jon Jonson.'
@@ -30,11 +25,6 @@ describe OffersHelper, type: :helper do
         rejection_reason: 'Other',
         rejection_note: 'User not a fan of this partner.')
       expect(helper.reviewed_byline(offer)).to eq 'Rejected by Jon Jonson. Other: User not a fan of this partner.'
-    end
-
-    it 'shows the correct label for an accepted offer with no user' do
-      offer = Fabricate(:offer, state: 'introduced')
-      expect(helper.reviewed_byline(offer)).to eq 'Introduced by .'
     end
 
     it 'shows the correct label for a rejected offer with no user' do

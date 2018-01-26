@@ -104,32 +104,31 @@ describe 'admin/offers/show.html.erb', type: :feature do
       end
     end
 
-    describe 'offer introduced' do
+    describe 'offer in review' do
       before do
         offer.update_attributes!(state: 'sent')
         stub_gravity_artist(id: submission.artist_id)
         page.visit "/admin/offers/#{offer.id}"
       end
 
-      it 'shows the introduce offer button' do
+      it 'shows the mark in-review offer button' do
         expect(page).to_not have_content('Save & Send')
-        expect(page).to have_content('Introduce')
+        expect(page).to have_content('Mark In-Review')
         expect(page).to_not have_selector('.offer-draft-actions')
         expect(page).to have_selector('.offer-actions')
       end
 
-      it 'allows you to mark the offer as introduced' do
-        expect(page).to have_selector('.offer-introduce-button')
-        click_link('Introduce')
+      it 'allows you to mark the offer as in review' do
+        expect(page).to have_selector('.offer-review-button')
+        click_link('Mark In-Review')
         expect(page).to have_content("Offer ##{offer.reference_id}")
-        expect(page).to_not have_selector('.offer-introduce-button')
-        expect(page).to have_content('Introduced by Lucille Bluth')
+        expect(page).to_not have_selector('.offer-review-button')
       end
     end
 
     describe 'offer consigned' do
       before do
-        offer.update_attributes!(state: 'introduced')
+        offer.update_attributes!(state: 'review')
         stub_gravity_artist(id: submission.artist_id)
         page.visit "/admin/offers/#{offer.id}"
       end
