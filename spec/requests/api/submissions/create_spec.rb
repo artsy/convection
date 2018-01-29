@@ -20,6 +20,10 @@ describe 'Create Submission' do
     end
 
     it 'creates a submission' do
+      stub_gravity_root
+      stub_gravity_user
+      stub_gravity_user_detail(email: 'michael@bluth.com')
+
       expect do
         post '/api/submissions', params: {
           title: 'my sartwork',
@@ -29,6 +33,10 @@ describe 'Create Submission' do
     end
 
     it 'creates a submission with edition fields' do
+      stub_gravity_root
+      stub_gravity_user
+      stub_gravity_user_detail(email: 'michael@bluth.com')
+
       expect do
         post '/api/submissions', params: {
           title: 'my sartwork',

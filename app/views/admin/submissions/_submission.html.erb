@@ -1,11 +1,14 @@
 <% truncated = false if local_assigns[:truncated].nil? %>
 
 <%= link_to admin_submission_path(submission), class: 'list-group-item list-item--submission', data: { id: submission.id } do %>
-  <div class='list-group-item-info'>
+  <div class='list-group-item-info list-group-item-info--state'>
     <%= submission.state %>
   </div>
   <div class='list-group-item-info list-group-item-info--id'>
     <%= submission.id %>
+  </div>
+  <div class='list-group-item-info list-group-item-info--email'>
+    <%= submission.user_email %>
   </div>
   <% unless truncated %>
     <div class='list-group-item-info'>

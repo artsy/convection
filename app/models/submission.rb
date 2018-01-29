@@ -1,9 +1,10 @@
 class Submission < ApplicationRecord
   include PgSearch
   pg_search_scope :search,
-    against: [:id, :title],
+    against: [:id, :title, :user_email],
     using: {
-      tsearch: { prefix: true }
+      tsearch: { prefix: true },
+      trigram: {}
     }
 
   STATES = %w[

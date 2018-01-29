@@ -46,7 +46,7 @@ Rails/SkipsModelValidations:
   Enabled: false
 
 Metrics/ClassLength:
-  Max: 124
+  Max: 134
 
 Style/SymbolArray:
   Enabled: false
