@@ -3,11 +3,10 @@ class SubmissionService
 
   class << self
     def create_submission(submission_params, current_user)
-      user = Gravity.client.user(id: current_user)._get
-      create_params = submission_params.merge(user_id: current_user, user_email: user.user_detail.email)
-      Submission.create!(create_params)
-    rescue Faraday::ResourceNotFound
-      raise ParamError, 'Missing user.'
+      create_params = submission_params.merge(user_id: current_user)
+      submission = Submission.create!(create_params)
+      delay.update_user_email(submission.id)
+      submission
     end
 
     def update_submission(submission, params, current_user = nil)
@@ -22,6 +21,13 @@ class SubmissionService
       when 'approved' then approve!(submission, current_user)
       when 'rejected' then reject!(submission, current_user)
       end
+    end
+
+    def update_user_email(submission_id)
+      submission = Submission.find(submission_id)
+      email = Gravity.client.user_detail(id: submission.user_id).email
+      raise 'User lacks email.' if email.blank?
+      submission.update_attributes!(user_email: email)
     end
 
     def submit!(submission)

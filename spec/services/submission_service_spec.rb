@@ -28,14 +28,24 @@ describe SubmissionService do
       expect(new_submission.user_email).to eq 'michael@bluth.com'
     end
 
-    it 'raises an exception if the user cannot be found' do
+    it 'raises an exception if the user_detail cannot be found' do
       stub_gravity_root
-      stub_request(:get, "#{Convection.config.gravity_api_url}/users/foo")
+      stub_request(:get, "#{Convection.config.gravity_api_url}/user_details/foo")
         .to_raise(Faraday::ResourceNotFound)
 
       expect do
         SubmissionService.create_submission(params, 'foo')
-      end.to raise_error('Missing user.')
+      end.to raise_error(Faraday::ResourceNotFound)
+    end
+
+    it 'raises an error if the email is blank' do
+      stub_gravity_root
+      stub_gravity_user(id: 'foo')
+      stub_gravity_user_detail(id: 'foo', email: '')
+
+      expect do
+        SubmissionService.create_submission(params, 'foo')
+      end.to raise_error('User lacks email.')
     end
   end
 
