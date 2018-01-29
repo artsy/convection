@@ -20,7 +20,7 @@
       <div class='single-padding-top'>
         <% unless @offer.review? %>
           <div class='single-padding-top'>
-            <%= link_to('Mark In-Review', admin_offer_path(@offer, offer: { state: 'review' }), method: :put, class: 'btn btn-secondary btn-small btn-full-width offer-review-button',
+            <%= link_to('Consignor Interested', admin_offer_path(@offer, offer: { state: 'review' }), method: :put, class: 'btn btn-secondary btn-small btn-full-width offer-review-button',
                   data: { confirm: 'This action will send an email to the partner saying that the consignor is interested in the work. This action cannot be undone.' }) %>
           </div>
         <% end %>

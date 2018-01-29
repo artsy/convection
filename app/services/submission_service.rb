@@ -2,6 +2,14 @@ class SubmissionService
   ParamError = Class.new(StandardError)
 
   class << self
+    def create_submission(submission_params, current_user)
+      user = Gravity.client.user(id: current_user)._get
+      create_params = submission_params.merge(user_id: current_user, user_email: user.user_detail.email)
+      Submission.create!(create_params)
+    rescue Faraday::ResourceNotFound
+      raise ParamError, 'Missing user.'
+    end
+
     def update_submission(submission, params, current_user = nil)
       submission.assign_attributes(params)
       update_submission_state(submission, current_user) if submission.state_changed?

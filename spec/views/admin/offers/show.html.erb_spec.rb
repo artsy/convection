@@ -113,14 +113,14 @@ describe 'admin/offers/show.html.erb', type: :feature do
 
       it 'shows the mark in-review offer button' do
         expect(page).to_not have_content('Save & Send')
-        expect(page).to have_content('Mark In-Review')
+        expect(page).to have_content('Consignor Interested')
         expect(page).to_not have_selector('.offer-draft-actions')
         expect(page).to have_selector('.offer-actions')
       end
 
       it 'allows you to mark the offer as in review' do
         expect(page).to have_selector('.offer-review-button')
-        click_link('Mark In-Review')
+        click_link('Consignor Interested')
         expect(page).to have_content("Offer ##{offer.reference_id}")
         expect(page).to_not have_selector('.offer-review-button')
       end

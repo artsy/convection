@@ -115,16 +115,28 @@ a.make-primary-link {
   text-decoration: underline;
 }
 
+.list-item--offer {
+  .list-group-item-info {
+    width: 10%;
+  }
+}
+
 .list-item--submission, .list-item--offer, .list-item--consignment {
   display: flex;
   justify-content: space-between;
 
   .list-group-item-info {
     margin-left: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 
-  .list-group-item-info--id {
+  .list-group-item-info--id, .list-group-item-info--state {
     max-width: 80px;
+  }
+
+  .list-group-item-info--email {
+    min-width: 17%;
   }
 
   .list-group-item-info {
@@ -134,18 +146,6 @@ a.make-primary-link {
 
 .spacer {
   width: 16px;
-}
-
-.list-item--submission {
-  .list-group-item-info {
-    width: 17%;
-  }
-}
-
-.list-item--offer {
-  .list-group-item-info {
-    width: 10%;
-  }
 }
 
 .list-item--partner {

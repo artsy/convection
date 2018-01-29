@@ -76,10 +76,32 @@ describe 'admin/submissions/index.html.erb', type: :feature do
 
     context 'with a variety of submissions' do
       before do
-        3.times { Fabricate(:submission, user_id: 'userid', artist_id: 'artistid', state: 'submitted', title: 'blah') }
-        @submission = Fabricate(:submission, user_id: 'userid', artist_id: 'artistid2', state: 'approved', title: 'my work')
-        Fabricate(:submission, user_id: 'userid', artist_id: 'artistid4', state: 'rejected', title: 'title')
-        Fabricate(:submission, user_id: 'userid', artist_id: 'artistid4', state: 'draft', title: 'blah blah')
+        3.times do
+          Fabricate(:submission,
+            user_id: 'userid',
+            artist_id: 'artistid',
+            state: 'submitted',
+            title: 'blah',
+            user_email: 'sarah@test.com')
+        end
+        @submission = Fabricate(:submission,
+          user_id: 'userid',
+          artist_id: 'artistid2',
+          state: 'approved',
+          title: 'my work',
+          user_email: 'percy@test.com')
+        Fabricate(:submission,
+          user_id: 'userid',
+          artist_id: 'artistid4',
+          state: 'rejected',
+          title: 'title',
+          user_email: 'sarah@test.com')
+        Fabricate(:submission,
+          user_id: 'userid',
+          artist_id: 'artistid4',
+          state: 'draft',
+          title: 'blah blah',
+          user_email: 'percynew@test.com')
 
         gravql_artists_response = {
           data: {
@@ -139,6 +161,15 @@ describe 'admin/submissions/index.html.erb', type: :feature do
         expect(current_url).to include '&state=draft&term=blah'
         expect(page).to have_selector('.list-group-item', count: 2)
         expect(page).to have_content('draft', count: 2)
+      end
+
+      it 'allows you to search by user email', js: true do
+        fill_in('term', with: 'percy')
+        page.execute_script("$('#submission-filter-form').submit()")
+        expect(current_url).to include '&term=percy'
+        expect(page).to have_selector('.list-group-item', count: 3)
+        expect(page).to have_content 'my work'
+        expect(page).to have_content 'blah blah'
       end
     end
   end
