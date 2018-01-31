@@ -9,7 +9,7 @@ describe Admin::AssetsController, type: :controller do
       stub_gravity_user
       stub_gravity_user_detail
       stub_gravity_artist
-      @submission = Fabricate(:submission, artist_id: 'artistid', user_id: 'userid')
+      @submission = Fabricate(:submission, artist_id: 'artistid', user: Fabricate(:user, gravity_user_id: 'userid'))
     end
 
     context 'fetching an asset' do

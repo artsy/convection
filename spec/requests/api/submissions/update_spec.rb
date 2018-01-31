@@ -12,33 +12,33 @@ describe 'Update Submission' do
     end
 
     it 'returns an error if it cannot find the submission' do
-      Fabricate(:submission, user_id: 'buster-bluth')
+      Fabricate(:submission, user: Fabricate(:user, gravity_user_id: 'buster-bluth'))
       put '/api/submissions/foo', headers: headers
       expect(response.status).to eq 404
       expect(JSON.parse(response.body)['error']).to eq 'Not Found'
     end
 
     it "rejects requests for someone else's submission" do
-      submission = Fabricate(:submission, user_id: 'buster-bluth')
+      submission = Fabricate(:submission, user: Fabricate(:user, gravity_user_id: 'buster-bluth'))
       put "/api/submissions/#{submission.id}", headers: headers
       expect(response.status).to eq 401
     end
 
     it 'accepts requests for your own submission' do
-      submission = Fabricate(:submission, artist_id: 'andy-warhol', user_id: 'userid')
+      submission = Fabricate(:submission, artist_id: 'andy-warhol', user: Fabricate(:user, gravity_user_id: 'userid'))
       put "/api/submissions/#{submission.id}", params: {
         artist_id: 'kara-walker'
       }, headers: headers
       expect(response.status).to eq 201
       body = JSON.parse(response.body)
-      expect(body['user_id']).to eq 'userid'
+      expect(body['id']).to eq submission.id
       expect(body['artist_id']).to eq 'kara-walker'
     end
 
     describe 'submitting' do
       describe 'with a valid submission' do
         before do
-          @submission = Fabricate(:submission, user_id: 'userid', artist_id: 'artistid')
+          @submission = Fabricate(:submission, user: Fabricate(:user, gravity_user_id: 'userid'), artist_id: 'artistid')
         end
 
         it 'sends a receipt when your state is updated to submitted' do
@@ -84,7 +84,7 @@ describe 'Update Submission' do
       it 'returns an error if you try to submit without all of the relevant fields' do
         submission = Fabricate(:submission,
           artist_id: 'andy-warhol',
-          user_id: 'userid',
+          user: Fabricate(:user, gravity_user_id: 'userid'),
           title: nil)
         put "/api/submissions/#{submission.id}", params: {
           artist_id: 'kara-walker',

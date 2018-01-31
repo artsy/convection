@@ -4,7 +4,7 @@ require 'support/gravity_helper'
 describe 'Create Asset' do
   let(:jwt_token) { JWT.encode({ aud: 'gravity', sub: 'userid' }, Convection.config.jwt_secret) }
   let(:headers) { { 'Authorization' => "Bearer #{jwt_token}" } }
-  let(:submission) { Fabricate(:submission, artist_id: 'andy-warhol', user_id: 'userid') }
+  let(:submission) { Fabricate(:submission, artist_id: 'andy-warhol', user: Fabricate(:user, gravity_user_id: 'userid')) }
 
   describe 'POST /assets' do
     it 'rejects unauthorized requests' do

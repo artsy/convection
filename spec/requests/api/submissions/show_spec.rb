@@ -12,24 +12,24 @@ describe 'Show Submission' do
     end
 
     it 'returns an error if it cannot find the submission' do
-      Fabricate(:submission, user_id: 'buster-bluth')
+      Fabricate(:submission, user: Fabricate(:user, gravity_user_id: 'buster-bluth'))
       get '/api/submissions/foo', headers: headers
       expect(response.status).to eq 404
       expect(JSON.parse(response.body)['error']).to eq 'Not Found'
     end
 
     it "rejects requests for someone else's submission" do
-      submission = Fabricate(:submission, user_id: 'buster-bluth')
+      submission = Fabricate(:submission, user: Fabricate(:user, gravity_user_id: 'buster-bluth'))
       get "/api/submissions/#{submission.id}", headers: headers
       expect(response.status).to eq 401
     end
 
     it 'accepts requests for your own submission' do
-      submission = Fabricate(:submission, user_id: 'userid')
+      submission = Fabricate(:submission, user: Fabricate(:user, gravity_user_id: 'userid'))
       get "/api/submissions/#{submission.id}", headers: headers
       expect(response.status).to eq 200
       body = JSON.parse(response.body)
-      expect(body['user_id']).to eq 'userid'
+      expect(body['user_id']).to eq submission.user.id
       expect(body['id']).to eq submission.id
     end
   end

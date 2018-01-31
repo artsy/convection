@@ -23,7 +23,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         edition_size: 100,
         edition_number: '23a',
         category: 'Painting',
-        user_id: 'userid',
+        user: Fabricate(:user, gravity_user_id: 'userid'),
         state: 'submitted')
 
       stub_jwt_header('userid')

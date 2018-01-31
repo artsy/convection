@@ -56,8 +56,8 @@ describe 'admin/offers/index.html.erb', type: :feature do
       it 'lets you click an offer' do
         offer = Offer.first
         stub_gravity_root
-        stub_gravity_user(id: offer.submission.user_id)
-        stub_gravity_user_detail(id: offer.submission.user_id)
+        stub_gravity_user(id: offer.submission.user.gravity_user_id)
+        stub_gravity_user_detail(id: offer.submission.user.gravity_user_id)
         stub_gravity_artist(id: offer.submission.artist_id)
 
         find(".list-item--offer[data-id='#{offer.id}']").click

@@ -43,8 +43,8 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
 
       it 'allows you to create an offer' do
         stub_gravity_root
-        stub_gravity_user(id: submission.user_id)
-        stub_gravity_user_detail(id: submission.user_id)
+        stub_gravity_user(id: submission.user.gravity_user_id)
+        stub_gravity_user_detail(id: submission.user.gravity_user_id)
 
         allow(Convection.config).to receive(:gravity_xapp_token).and_return('xapp_token')
         gravql_artists_response = {
@@ -100,8 +100,8 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
 
       it 'allows you to create an offer' do
         stub_gravity_root
-        stub_gravity_user(id: submission.user_id)
-        stub_gravity_user_detail(id: submission.user_id)
+        stub_gravity_user(id: submission.user.gravity_user_id)
+        stub_gravity_user_detail(id: submission.user.gravity_user_id)
 
         allow(Convection.config).to receive(:gravity_xapp_token).and_return('xapp_token')
         gravql_artists_response = {
@@ -159,8 +159,8 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
 
       it 'allows you to create an offer' do
         stub_gravity_root
-        stub_gravity_user(id: submission.user_id)
-        stub_gravity_user_detail(id: submission.user_id)
+        stub_gravity_user(id: submission.user.gravity_user_id)
+        stub_gravity_user_detail(id: submission.user.gravity_user_id)
 
         allow(Convection.config).to receive(:gravity_xapp_token).and_return('xapp_token')
         gravql_artists_response = {

@@ -12,7 +12,7 @@ describe 'admin/submissions/edit.html.erb', type: :feature do
         edition_size: 100,
         edition_number: '23a',
         category: 'Painting',
-        user_id: 'userid')
+        user: Fabricate(:user, gravity_user_id: 'userid'))
 
       stub_gravity_root
       stub_gravity_user

@@ -29,12 +29,12 @@ module Admin
     end
 
     def create
-      @submission = Submission.new(submission_params.merge(state: 'submitted'))
-      if @submission.save
-        redirect_to admin_submission_path(@submission)
-      else
-        render 'new'
-      end
+      @submission = SubmissionService.create_submission(submission_params.merge(state: 'submitted'), params[:submission][:user_id])
+      redirect_to admin_submission_path(@submission)
+    rescue SubmissionService::SubmissionError => e
+      @submission = Submission.new(submission_params)
+      flash.now[:error] = e.message
+      render 'new'
     end
 
     def show
@@ -98,7 +98,6 @@ module Admin
         :signature,
         :state,
         :title,
-        :user_id,
         :width,
         :year
       )

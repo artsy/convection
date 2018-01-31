@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'support/gravity_helper'
 
 describe 'Create Submission With Graphql' do
   let(:jwt_token) { JWT.encode({ aud: 'gravity', sub: 'userid', roles: 'user' }, Convection.config.jwt_secret) }
@@ -54,6 +55,10 @@ describe 'Create Submission With Graphql' do
     end
 
     it 'creates a submission' do
+      stub_gravity_root
+      stub_gravity_user
+      stub_gravity_user_detail(email: 'michael@bluth.com')
+
       expect do
         post '/api/graphql', params: {
           query: create_mutation
@@ -67,7 +72,7 @@ describe 'Create Submission With Graphql' do
 
     it 'creates an asset' do
       expect do
-        submission = Fabricate(:submission, user_id: 'userid')
+        submission = Fabricate(:submission, user: Fabricate(:user, gravity_user_id: 'userid'))
 
         create_asset = <<-GRAPHQL
         mutation {

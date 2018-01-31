@@ -30,7 +30,7 @@ module Api
     end
 
     def require_authorized_submission
-      raise ApplicationController::NotAuthorized unless current_user && current_user == @submission.user_id
+      raise ApplicationController::NotAuthorized unless current_user && current_user == @submission.user&.gravity_user_id
     end
 
     private
