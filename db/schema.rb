@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180126212637) do
+ActiveRecord::Schema.define(version: 20180131172252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -138,11 +138,20 @@ ActiveRecord::Schema.define(version: 20180126212637) do
     t.index ["user_id"], name: "index_submissions_on_user_id"
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "gravity_user_id", null: false
+    t.string "email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["gravity_user_id"], name: "index_users_on_gravity_user_id", unique: true
+  end
+
   add_foreign_key "assets", "submissions"
   add_foreign_key "offers", "partner_submissions"
   add_foreign_key "offers", "submissions"
   add_foreign_key "partner_submissions", "offers", column: "accepted_offer_id"
   add_foreign_key "partner_submissions", "partners"
   add_foreign_key "partner_submissions", "submissions"
+  add_foreign_key "submissions", "assets", column: "primary_image_id", on_delete: :nullify
   add_foreign_key "submissions", "partner_submissions", column: "consigned_partner_submission_id"
 end
