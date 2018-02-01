@@ -7,7 +7,7 @@ module Mutations
       argument :submission, Inputs::SubmissionInput::Create
       permit :user
       resolve ->(_obj, args, context) {
-        Submission.create!(args[:submission].to_h.merge(user_id: context[:current_user]))
+        SubmissionService.create_submission(args[:submission].to_h, context[:current_user])
       }
     end
 
@@ -20,7 +20,7 @@ module Mutations
         submission = Submission.find_by(id: args[:submission][:id])
         raise(GraphQL::ExecutionError, 'Submission from ID Not Found') unless submission
 
-        is_same_as_user = submission&.user_id == context[:current_user]
+        is_same_as_user = submission&.user&.gravity_user_id == context[:current_user]
         is_admin = context[:current_user_roles].include?(:admin)
 
         raise(GraphQL::ExecutionError, 'Submission Not Found') unless is_same_as_user || is_admin
@@ -39,7 +39,7 @@ module Mutations
         submission = Submission.find_by(id: args[:submission_id])
         raise(GraphQL::ExecutionError, 'Submission from ID Not Found') unless submission
 
-        is_same_as_user = submission&.user_id == context[:current_user]
+        is_same_as_user = submission&.user&.gravity_user_id == context[:current_user]
         is_admin = context[:current_user_roles].include?(:admin)
 
         raise(GraphQL::ExecutionError, 'Submission from ID Not Found') unless is_same_as_user || is_admin

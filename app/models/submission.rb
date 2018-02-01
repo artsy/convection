@@ -47,6 +47,7 @@ class Submission < ApplicationRecord
   has_many :assets, dependent: :destroy
   has_many :partner_submissions, dependent: :destroy
   has_many :offers, dependent: :destroy
+  belongs_to :user
   belongs_to :primary_image, class_name: 'Asset' # rubocop:disable Rails/InverseOf
   belongs_to :consigned_partner_submission, class_name: 'PartnerSubmission' # rubocop:disable Rails/InverseOf
 
@@ -118,22 +119,6 @@ class Submission < ApplicationRecord
 
   def artist_name
     artist.try(:name)
-  end
-
-  def user
-    Gravity.client.user(id: user_id)._get if user_id
-  rescue Faraday::ResourceNotFound
-    nil
-  end
-
-  def user_name
-    user.try(:name)
-  end
-
-  def user_detail
-    user.try(:user_detail)
-  rescue Faraday::ResourceNotFound
-    nil
   end
 
   def validate_primary_image

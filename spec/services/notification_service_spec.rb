@@ -4,7 +4,7 @@ describe NotificationService do
   let(:submission) do
     Fabricate(:submission,
       artist_id: 'artistid',
-      user_id: 'userid',
+      user: Fabricate(:user, gravity_user_id: 'userid'),
       title: 'My Artwork',
       medium: 'painting',
       year: '1992',

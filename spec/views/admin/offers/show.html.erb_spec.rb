@@ -15,8 +15,8 @@ describe 'admin/offers/show.html.erb', type: :feature do
 
       stub_gravity_root
       stub_gravity_user(name: 'Lucille Bluth')
-      stub_gravity_user(id: submission.user_id)
-      stub_gravity_user_detail(id: submission.user_id)
+      stub_gravity_user(id: submission.user.gravity_user_id)
+      stub_gravity_user_detail(id: submission.user.gravity_user_id)
 
       allow(Convection.config).to receive(:gravity_xapp_token).and_return('xapp_token')
       gravql_artists_response = {

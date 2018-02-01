@@ -96,8 +96,8 @@ describe OfferService do
 
     before do
       stub_gravity_root
-      stub_gravity_user(id: offer.submission.user_id)
-      stub_gravity_user_detail(email: 'michael@bluth.com', id: offer.submission.user_id)
+      stub_gravity_user(id: offer.submission.user.gravity_user_id)
+      stub_gravity_user_detail(email: 'michael@bluth.com', id: offer.submission.user.gravity_user_id)
       stub_gravity_artist(id: submission.artist_id)
     end
 

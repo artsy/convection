@@ -43,7 +43,8 @@ describe 'admin/submissions/index.html.erb', type: :feature do
 
     context 'with submissions' do
       before do
-        3.times { Fabricate(:submission, user_id: 'userid', artist_id: 'artistid', state: 'submitted') }
+        user = Fabricate(:user, gravity_user_id: 'userid')
+        3.times { Fabricate(:submission, user: user, artist_id: 'artistid', state: 'submitted') }
         page.visit admin_submissions_path
       end
 
@@ -76,28 +77,29 @@ describe 'admin/submissions/index.html.erb', type: :feature do
 
     context 'with a variety of submissions' do
       before do
+        user = Fabricate(:user, gravity_user_id: 'userid')
         3.times do
           Fabricate(:submission,
-            user_id: 'userid',
+            user: user,
             artist_id: 'artistid',
             state: 'submitted',
             title: 'blah',
             user_email: 'sarah@test.com')
         end
         @submission = Fabricate(:submission,
-          user_id: 'userid',
+          user: user,
           artist_id: 'artistid2',
           state: 'approved',
           title: 'my work',
           user_email: 'percy@test.com')
         Fabricate(:submission,
-          user_id: 'userid',
+          user: user,
           artist_id: 'artistid4',
           state: 'rejected',
           title: 'title',
           user_email: 'sarah@test.com')
         Fabricate(:submission,
-          user_id: 'userid',
+          user: user,
           artist_id: 'artistid4',
           state: 'draft',
           title: 'blah blah',

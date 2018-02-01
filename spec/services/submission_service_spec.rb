@@ -2,8 +2,9 @@ require 'rails_helper'
 require 'support/gravity_helper'
 
 describe SubmissionService do
+  let!(:user) { Fabricate(:user, gravity_user_id: 'userid', email: 'michael@bluth.com') }
   let(:submission) do
-    Fabricate(:submission, artist_id: 'artistid', user_id: 'userid', title: 'My Artwork')
+    Fabricate(:submission, artist_id: 'artistid', user: user, title: 'My Artwork')
   end
 
   before do
@@ -24,8 +25,8 @@ describe SubmissionService do
 
       new_submission = SubmissionService.create_submission(params, 'userid')
       expect(new_submission.reload.state).to eq 'draft'
-      expect(new_submission.user_id).to eq 'userid'
-      expect(new_submission.user_email).to eq 'michael@bluth.com'
+      expect(new_submission.user_id).to eq user.id
+      expect(new_submission.user.email).to eq 'michael@bluth.com'
     end
 
     it 'raises an exception if the user_detail cannot be found' do

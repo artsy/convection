@@ -3,6 +3,7 @@ require 'support/gravity_helper'
 
 describe PartnerSubmissionService do
   before do
+    @user = Fabricate(:user, gravity_user_id: 'userid')
     stub_gravity_root
     stub_gravity_user
     stub_gravity_user_detail
@@ -25,7 +26,7 @@ describe PartnerSubmissionService do
 
     it 'generates new partner submissions' do
       partner = Fabricate(:partner)
-      submission = Fabricate(:submission, state: 'submitted', user_id: 'userid', artist_id: 'artistid')
+      submission = Fabricate(:submission, state: 'submitted', user: @user, artist_id: 'artistid')
       SubmissionService.update_submission(submission, state: 'approved')
       expect(PartnerSubmission.where(submission: submission, partner: partner).count).to eq 1
       Fabricate(:submission, state: 'approved')
@@ -77,19 +78,19 @@ describe PartnerSubmissionService do
         @approved1 = Fabricate(:submission,
           state: 'submitted',
           artist_id: 'artistid',
-          user_id: 'userid',
+          user: @user,
           title: 'First approved artwork',
           year: '1992')
         @approved2 = Fabricate(:submission,
           state: 'submitted',
           artist_id: 'artistid',
-          user_id: 'userid',
+          user: @user,
           title: 'Second approved artwork',
           year: '1993')
         @approved3 = Fabricate(:submission,
           state: 'submitted',
           artist_id: 'artistid',
-          user_id: 'userid',
+          user: @user,
           title: 'Third approved artwork',
           year: '1997')
         Fabricate(:submission, state: 'rejected')

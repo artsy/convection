@@ -24,7 +24,8 @@ module Api
     def index
       param! :completed, :boolean, default: nil
 
-      submissions = Submission.where(user_id: current_user)
+      user = User.where(gravity_user_id: current_user).first
+      submissions = Submission.where(user: user)
       if params.include? :completed
         submissions = params[:completed] ? submissions.completed : submissions.draft
       end
