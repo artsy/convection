@@ -1,20 +1,18 @@
-<div class='list-group-item list-item--consignment' data-id=<%= consignment.id %>>
-  <div class='list-group-item-info list-group-item-info--id'>
-    #<%= consignment.reference_id %>
-  </div>
-  <div class='list-group-item-info'>
-    <%= consignment.partner.name %>
-  </div>
-  <div class='list-group-item-info'>
-    <%= consignment.sale_price_cents %>
-  </div>
-  <div class='list-group-item-info'>
-    <%= consignment.partner_commission_percent %>%
-  </div>
+<%= link_to admin_consignment_path(consignment), class: 'list-group-item list-item--consignment', data: { id: consignment.id } do %>
   <div class='list-group-item-info'>
     <%= consignment.state %>
   </div>
-  <div class='actions'>
-    <%= link_to 'View', admin_consignment_path(consignment), class: 'btn btn-tiny' %>
+  <div class='list-group-item-info'>
+    #<%= consignment.reference_id %>
   </div>
-</div>
+  <div class='list-group-item-info'>
+    <%= consignment&.accepted_offer&.consigned_at&.strftime('%m/%d/%Y') %>
+  </div>
+  <div class='list-group-item-info list-group-item-info--partner-name'>
+    <%= consignment.partner.name %>
+  </div>
+  <div class='list-group-item-info'>
+    <%= consignment&.accepted_offer&.offer_type %>
+  </div>
+  <span class='icon-chevron-right'></span>
+<% end %>

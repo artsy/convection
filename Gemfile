@@ -1,52 +1,40 @@
 source 'https://rubygems.org'
 
-ruby '2.4.0'
+ruby '2.5.0'
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.0.0', '>= 5.0.0.1'
-# Use postgresql as the database for Active Record
-gem 'pg', '~> 0.15'
-# Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
-gem 'artsy-auth'
-
-gem 'rack-cors' # to allow cross-origin requests
-
-gem 'puma', '~> 3.0' # Use Puma as the app server
-
-gem 'sidekiq' # for sending emails in the background
-gem 'rails_param', github: 'nicolasblanco/rails_param' # validate and coerce API parameters (use unreleased Rails 5 support)
-gem 'hyperclient' # consume Gravity's v2 API
-gem 'premailer-rails' # generate text parts from HTML automatically
-
-gem 'newrelic_rpm' # for monitoring
+gem 'pg', '0.21.0'
+gem 'puma'
+gem 'rails', '5.1.4'
 
 gemini_gem_spec = { git: 'https://github.com/artsy/gemini_upload-rails.git', branch: 'master' }
 gem 'gemini_upload-rails', gemini_gem_spec # for admins to upload images
 
-
-gem 'graphql' # A lovely API
-gem 'graphiql-rails' # A lovely interface to the API
-
 watt_gem_spec = { git: 'https://github.com/artsy/watt.git', branch: 'master' }
 gem 'watt', watt_gem_spec # artsy bootstrap
-gem 'bootstrap-sass' # required for watt
-gem 'bourbon' # required for watt
-gem 'neat' # required for watt
-gem 'coffee-rails' # required for watt
 
-gem 'kaminari' # for pagination
-
-# Use jquery as the JavaScript library
-gem 'jquery-rails'
-gem 'haml-rails' # required for watt layouts
-
+gem 'artsy-auth'
 gem 'artsy-eventservice' # for posting events to artsy event stream
-gem 'pg_search' # for searching within convection's database
-
+gem 'bootstrap-sass' # required for watt
+gem 'bourbon', '4.2.3' # required for watt
+gem 'coffee-rails' # required for watt
 gem 'decent_exposure' # for safely referencing variables in views
+gem 'graphiql-rails' # A lovely interface to the API
+gem 'graphql' # A lovely API
+gem 'haml-rails' # required for watt layouts
+gem 'hyperclient' # consume Gravity's v2 API
+gem 'jquery-rails'
+gem 'kaminari' # for pagination
+gem 'money' # for currency/money formatting
+gem 'neat', '1.7.2' # required for watt
+gem 'newrelic_rpm' # for monitoring
+gem 'pg_search' # for searching within convection's database
+gem 'premailer-rails' # generate text parts from HTML automatically
+gem 'rack-cors' # to allow cross-origin requests
+gem 'rails_param' # validate and coerce API parameters
+gem 'sass-rails'
+gem 'sentry-raven' # for error reporting
+gem 'sidekiq', '4.2.9' # for sending emails in the background
+gem 'uglifier'
 
 group :development, :test do
   gem 'pry-byebug'
@@ -55,16 +43,16 @@ end
 
 group :development do
   gem 'foreman'
-  gem 'rubocop', require: false
+  gem 'rubocop'
 end
 
 group :test do
-  gem 'yarjuf' # formatting for test reports on CircleCI
-  gem 'webmock' # mock or forbid external network requests
-  gem 'capybara', '~> 2.8' # for view tests
+  gem 'capybara'
   gem 'capybara-webkit'
-  gem 'rails-controller-testing'
-  gem 'fabrication'
   gem 'database_cleaner'
+  gem 'fabrication'
   gem 'rack_session_access'
+  gem 'rails-controller-testing'
+  gem 'webmock' # mock or forbid external network requests
+  gem 'yarjuf' # formatting for test reports on CircleCI
 end

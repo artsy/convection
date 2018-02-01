@@ -4,7 +4,7 @@ module Admin
 
     expose(:partners) do
       matching_partners = Partner.all
-      matching_partners = matching_partners.search_by_name(params[:term]) if params[:term]
+      matching_partners = matching_partners.search_by_name(params[:term]) if params[:term].present?
       matching_partners.page(@page).per(@size)
     end
 
@@ -24,7 +24,7 @@ module Admin
 
     def create
       partner = Partner.new(gravity_partner_id: params[:gravity_partner_id], name: params[:name]) if params[:gravity_partner_id]
-      if partner && partner.save
+      if partner&.save
         flash[:notice] = 'Partner successfully created.'
         redirect_to admin_partners_path
       else

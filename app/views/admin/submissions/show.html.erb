@@ -1,104 +1,56 @@
 <div class='row'>
   <div class='col-sm-12'>
-    <div class='col-sm-9'>
-      <div class='row'>
-        <div class='page-title'>
-          <h2>Submission #<%= @submission.id %> (<%= @submission.state %>)</h2>
-        </div>
-      </div>
-      <div class='row triple-padding-top'>
-        <div class='col-sm-12'>
-          <%= render 'admin/consignments/consignment_section', consignment: @submission.consigned_partner_submission %>
-          <% if @offers.length > 0 %>
-            <div class='row'>
-              <div class='unit bordered single-padding-top'>
-                <div class='section-title'>
-                  Offers
-                </div>
-                <% @offers.each do |offer| %>
-                  <%= render 'admin/offers/offer', offer: offer %>
-                <% end %>
-              </div>
+    <div class='col-md-8'>
+      <div class='col-md-12'>
+        <div class='watt-overview'>
+          <div class='overview-section'>
+            <div class='overview-section-title--inline'>
+              Details
+              <span class='overview-section-title--inline__link'>
+                <%= link_to 'Edit', edit_admin_submission_path(@submission) %>
+              </span>
             </div>
-          <% end %>
-          <div class='row'>
-            <div class='col-sm-10'>
-              <div class='row'>
-                <div class='triple-padding-top'>
-                  <div class='watt-overview'>
-                    <div class='overview-section'>
-                      <div class='overview-section-title'>
-                        Details
-                      </div>
-                      <div class='overview-section-content'>
-                        <%= render 'submission_details', submission: @submission %>
-                      </div>
-                    </div>
-                    <div class='overview-section'>
-                      <div class='overview-section-title'>
-                        Assets
-                      </div>
-                      <div class='overview-section-content'>
-                        <p>
-                          <%= link_to 'Add Asset', new_admin_submission_asset_path(@submission), class: 'btn btn-small btn-secondary' %>
-                        </p>
-                        <div class='list-group list-group--asset-images'>
-                          <%= render @submission.assets %>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class='col-sm-2'>
-              <div class='row edit-container triple-padding-top'>
-                <%= link_to 'Edit', edit_admin_submission_path(@submission), class: 'btn btn-secondary btn-small btn-full-width' %>
-              </div>
-              <div class='row edit-container single-padding-top'>
-                <% if @submission.state == 'approved' %>
-                  <%= link_to 'Create Offer', new_step_0_admin_offers_path(submission_id: @submission.id), class: 'btn btn-secondary btn-small btn-full-width' %>
-                <% end %>
-              </div>
-            </div>
+            <%= render 'submission_details', submission: @submission %>
           </div>
+          <div class='overview-section'>
+            <div class='overview-section-title--inline'>
+              Assets
+              <span class='overview-section-title--inline__link'>
+                <%= link_to 'Add New', new_admin_submission_asset_path(@submission) %>
+              </span>
+            </div>
+            <%= render @submission.assets %>
+          </div>
+          <%= render 'admin/consignments/consignment_section', consignment: @submission.consigned_partner_submission %>
+          <%= render 'admin/offers/offers_section', offers: @offers, truncated: true %>
         </div>
       </div>
     </div>
 
-    <div class='col-sm-3'>
-      <%= render 'collector_info', submission: @submission %>
-
-      <div>
-        <div class='double-padding-top'>
-          <div class='bold-label'>Internal Approval</div>
-        </div>
-        <% if @submission.submitted? %>
-          <div class='single-padding-top'>
-            <%= link_to('Approve',
-                        admin_submission_path(@submission, submission: { state: 'approved' }),
-                        method: :put,
-                        class: 'btn btn-secondary btn-approve btn-small btn-full-width',
-                        data: { confirm: 'An email will be sent to the consignor, letting them know that their submission will be sent to our partner network. This action cannot be undone.' }) %>
+    <div class='col-md-4'>
+      <div class='col-md-12'>
+        <div class='watt-overview'>
+          <div class='overview-section'>
+            <div class='overview-section-title--inline'>
+              Submission #<%= @submission.id %>
+            </div>
           </div>
-          <div class='single-padding-top'>
-            <%= link_to('Reject',
-                        admin_submission_path(@submission, submission: { state: 'rejected' }),
-                        method: :put,
-                        class: 'btn btn-secondary btn-delete btn-small btn-full-width',
-                        data: { confirm: 'An email will be sent to the consignor, letting them know that we are not accepting their submission. This action cannot be undone.' }) %>
+          <%= render 'state_actions' %>
+          <div class='overview-section'>
+            <div class='bold-label'>State</div>
+            <div class='single-padding-top'>
+              <%= @submission.state %>
+            </div>
           </div>
-        <% else %>
-          <div class='single-padding-top'>
-            <%= reviewer_byline(@submission) %>
+          <%= render 'collector_info', submission: @submission %>
+          <div class='overview-section'>
+            <div class='bold-label'>Partner Interest</div>
+            <div class='single-padding-top'>
+              <% @partner_submissions_count.each do |date, count| %>
+                <%= "#{count} partners notified on #{date.strftime('%Y-%m-%d')}" %>
+              <% end %>
+            </div>
           </div>
-        <% end %>
-        <div class='double-padding-top'>
-          <div class='bold-label'>Partner Interest</div>
-
-          <% @partner_submissions_count.each do |date, count| %>
-            <%= "#{count} partners notified on #{date.strftime('%Y-%m-%d')}" %>
-          <% end %>
         </div>
       </div>
     </div>

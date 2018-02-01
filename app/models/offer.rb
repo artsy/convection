@@ -1,5 +1,15 @@
 class Offer < ApplicationRecord
   include ReferenceId
+  include PgSearch
+
+  pg_search_scope :search,
+    against: [:id, :reference_id],
+    associated_against: {
+      partner: [:name]
+    },
+    using: {
+      tsearch: { prefix: true }
+    }
 
   OFFER_TYPES = [
     'auction consignment',
@@ -7,19 +17,23 @@ class Offer < ApplicationRecord
     'purchase'
   ].freeze
 
-  STATES = %w(
+  STATES = %w[
     draft
     sent
     accepted
     rejected
     lapsed
-  ).freeze
+    review
+    locked
+    consigned
+  ].freeze
 
-  CURRENCIES = %w(
+  CURRENCIES = %w[
     USD
     EUR
     GBP
-  ).freeze
+    CAD
+  ].freeze
 
   REJECTION_REASONS = [
     'Low estimate',
@@ -32,6 +46,7 @@ class Offer < ApplicationRecord
 
   belongs_to :partner_submission
   belongs_to :submission
+  has_one :partner, through: :partner_submission
 
   validates :state, inclusion: { in: STATES }
   validates :offer_type, inclusion: { in: OFFER_TYPES }, allow_nil: true
@@ -39,6 +54,7 @@ class Offer < ApplicationRecord
   validates :rejection_reason, inclusion: { in: REJECTION_REASONS }, allow_nil: true
 
   before_validation :set_state, on: :create
+  before_validation :set_currency
   before_create :set_submission
 
   scope :sent, -> { where(state: 'sent') }
@@ -54,14 +70,27 @@ class Offer < ApplicationRecord
     end
   end
 
-  def recorded_by_user
-    admin_user_id = accepted_by || rejected_by
-    Gravity.client.user(id: admin_user_id)._get if admin_user_id
+  def reviewed?
+    !draft? && !sent? && !review?
+  end
+
+  def rejected_by_user
+    Gravity.client.user(id: rejected_by)._get if rejected_by
   rescue Faraday::ResourceNotFound
     nil
   end
 
   def set_submission
     self.submission ||= partner_submission&.submission
+  end
+
+  def set_currency
+    self.currency ||= 'USD'
+  end
+
+  def best_price_display
+    amount = price_cents || high_estimate_cents || low_estimate_cents
+    return unless amount
+    Money.new(amount, currency).format
   end
 end

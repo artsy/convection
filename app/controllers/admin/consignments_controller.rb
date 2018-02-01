@@ -6,7 +6,9 @@ module Admin
     before_action :set_pagination_params, only: [:index]
 
     expose(:consignments) do
-      matching_consignments = params[:state] ? PartnerSubmission.consigned.where(state: params[:state]) : PartnerSubmission.consigned
+      matching_consignments = PartnerSubmission.consigned
+      matching_consignments = matching_consignments.search(params[:term]) if params[:term].present?
+      matching_consignments = matching_consignments.where(state: params[:state]) if params[:state].present?
       matching_consignments.order(id: :desc).page(@page).per(@size)
     end
 
@@ -20,6 +22,10 @@ module Admin
 
     expose(:consignments_count) do
       PartnerSubmission.consigned.count
+    end
+
+    expose(:term) do
+      params[:term]
     end
 
     def show

@@ -1,0 +1,21 @@
+<% if @offer.notes.present? %>
+  <tr>
+    <td class='zero-padding'>
+      <table class='email-gray-bordered-section zero-border-top'>
+        <tr>
+          <td class='spacer'></td>
+        </tr>
+        <tr>
+          <td class='email-gray-label email-gray-label--center'>
+            <%= label %>
+          </td>
+        </tr>
+        <tr>
+          <td class='email-content-serif email-content-serif--small bottom-element top-element'>
+            <%= @offer.notes.try(:truncate, 600) %>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+<% end %>

@@ -6,7 +6,7 @@
       <table class='email-content' align='left'>
         <tr>
           <td>
-            <%= render 'shared/email_header' %>
+            <%= render 'shared/email/email_header' %>
           </td>
         </tr>
         <tr>
@@ -21,7 +21,7 @@
         </tr>
         <tr>
           <td>
-            <%= render 'shared/submission_block', submission: @submission %>
+            <%= render 'shared/email/submission_block', submission: @submission %>
           </td>
         </tr>
       </table>

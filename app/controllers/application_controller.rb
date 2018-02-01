@@ -1,9 +1,11 @@
 # frozen_string_literal: true
+
 class ApplicationController < ActionController::Base
   include ArtsyAuth::Authenticated
   helper Watt::Engine.helpers
 
   before_action :set_current_user
+  before_action :set_raven_context
 
   NotAuthorized = Class.new(StandardError)
 
@@ -23,5 +25,9 @@ class ApplicationController < ActionController::Base
   def set_pagination_params
     @page = (params[:page] || 1).to_i
     @size = (params[:size] || 10).to_i
+  end
+
+  def set_raven_context
+    Raven.user_context(id: @current_user)
   end
 end

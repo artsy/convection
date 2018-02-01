@@ -12,13 +12,12 @@ module Api
     def create
       param! :artist_id, String, required: true
 
-      create_params = submission_params(params).merge(user_id: current_user)
-      submission = Submission.create!(create_params)
+      submission = SubmissionService.create_submission(submission_params, current_user)
       render json: submission.to_json, status: 201
     end
 
     def update
-      SubmissionService.update_submission(@submission, submission_params(params))
+      SubmissionService.update_submission(@submission, submission_params)
       render json: @submission.to_json, status: 201
     end
 
@@ -36,7 +35,7 @@ module Api
 
     private
 
-    def submission_params(params)
+    def submission_params
       params.permit(
         :additional_info,
         :artist_id,

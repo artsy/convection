@@ -28,14 +28,17 @@ describe 'admin/submissions/index.html.erb', type: :feature do
 
     it 'displays the page title' do
       expect(page).to have_content('Submissions')
-      expect(page).not_to have_selector('.list-group-item')
+      expect(page).to have_selector('.list-group-item', count: 1)
     end
 
-    it 'displays zeros for the counts' do
-      expect(page).to have_content('All 0')
-      expect(page).to have_content('Unreviewed 0')
-      expect(page).to have_content('Approved 0')
-      expect(page).to have_content('Rejected 0')
+    it 'shows the submission states that can be selected' do
+      within(:css, '#submission-filter-form') do
+        expect(page).to have_content('all')
+        expect(page).to have_content('submitted')
+        expect(page).to have_content('draft')
+        expect(page).to have_content('approved')
+        expect(page).to have_content('rejected')
+      end
     end
 
     context 'with submissions' do
@@ -46,7 +49,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
 
       it 'displays all of the submissions' do
         expect(page).to have_content('Submissions')
-        expect(page).to have_selector('.list-group-item', count: 3)
+        expect(page).to have_selector('.list-group-item', count: 4)
       end
 
       it 'lets you click a submission' do
@@ -55,36 +58,50 @@ describe 'admin/submissions/index.html.erb', type: :feature do
         stub_gravity_artist
 
         submission = Submission.order(id: :desc).first
-        within(:css, ".list-item--submission[data-id='#{submission.id}']") do
-          click_link('View')
-        end
+        find(".list-item--submission[data-id='#{submission.id}']").click
         expect(page).to have_content("Submission ##{submission.id}")
         expect(page).to have_content('Edit')
-        expect(page).to have_content('Add Asset')
+        expect(page).to have_content('Assets')
         expect(page).to have_content('Jon Jonson')
       end
 
-      it 'shows the counts of submissions' do
-        expect(page).to have_content('All 3')
-        expect(page).to have_content('Unreviewed 3')
-        expect(page).to have_content('Approved 0')
-        expect(page).to have_content('Rejected 0')
-      end
-
-      it 'lets you click a filter option' do
-        click_link('Unreviewed')
+      it 'lets you click a filter option', js: true do
+        select('submitted', from: 'state')
+        expect(current_url).to include '&state=submitted'
         expect(page).to have_content('Submissions')
-        expect(page).to have_selector('.list-group-item', count: 3)
+        expect(page).to have_selector('.list-group-item', count: 4)
         expect(current_path).to eq admin_submissions_path
       end
     end
 
     context 'with a variety of submissions' do
       before do
-        3.times { Fabricate(:submission, user_id: 'userid', artist_id: 'artistid', state: 'submitted') }
-        Fabricate(:submission, user_id: 'userid', artist_id: 'artistid2', state: 'approved')
-        Fabricate(:submission, user_id: 'userid', artist_id: 'artistid4', state: 'rejected')
-        Fabricate(:submission, user_id: 'userid', artist_id: 'artistid4', state: 'draft')
+        3.times do
+          Fabricate(:submission,
+            user_id: 'userid',
+            artist_id: 'artistid',
+            state: 'submitted',
+            title: 'blah',
+            user_email: 'sarah@test.com')
+        end
+        @submission = Fabricate(:submission,
+          user_id: 'userid',
+          artist_id: 'artistid2',
+          state: 'approved',
+          title: 'my work',
+          user_email: 'percy@test.com')
+        Fabricate(:submission,
+          user_id: 'userid',
+          artist_id: 'artistid4',
+          state: 'rejected',
+          title: 'title',
+          user_email: 'sarah@test.com')
+        Fabricate(:submission,
+          user_id: 'userid',
+          artist_id: 'artistid4',
+          state: 'draft',
+          title: 'blah blah',
+          user_email: 'percynew@test.com')
 
         gravql_artists_response = {
           data: {
@@ -111,26 +128,48 @@ describe 'admin/submissions/index.html.erb', type: :feature do
         expect(page).to have_content('Andy Warhol', count: 3)
         expect(page).to have_content('Kara Walker', count: 1)
         expect(page).to_not have_content('Chuck Close')
-        expect(page).to have_content('Lucille Bluth', count: 1)
+        expect(page).to have_content('Lucille Bluth', count: 2)
       end
 
-      it 'shows the correct numbers' do
-        expect(page).to have_content('All 5')
-        expect(page).to have_content('Unreviewed 3')
-        expect(page).to have_content('Approved 1')
-        expect(page).to have_content('Rejected 1')
-      end
-
-      it 'lets you click into a filter option' do
-        click_link('Approved')
+      it 'lets you click into a filter option', js: true do
+        select('approved', from: 'state')
+        expect(current_url).to include '&state=approved'
         expect(page).to have_content('Submissions')
-        expect(page).to have_selector('.list-group-item', count: 1)
+        expect(page).to have_selector('.list-group-item', count: 2)
       end
 
       it 'filters by changing the url' do
         page.visit('/admin/submissions?state=rejected')
         expect(page).to have_content('Submissions')
-        expect(page).to have_selector('.list-group-item', count: 1)
+        expect(page).to have_selector('.list-group-item', count: 2)
+      end
+
+      it 'allows you to search by submission ID', js: true do
+        fill_in('term', with: @submission.id)
+        page.execute_script("$('#submission-filter-form').submit()")
+        expect(current_url).to include "&term=#{@submission.id}"
+        expect(page).to have_selector('.list-group-item', count: 2)
+        expect(page).to have_content(@submission.id)
+      end
+
+      it 'allows you to search by term and state', js: true do
+        fill_in('term', with: 'blah')
+        page.execute_script("$('#submission-filter-form').submit()")
+        expect(current_url).to include '&term=blah'
+        expect(page).to have_selector('.list-group-item', count: 5)
+        select('draft', from: 'state')
+        expect(current_url).to include '&state=draft&term=blah'
+        expect(page).to have_selector('.list-group-item', count: 2)
+        expect(page).to have_content('draft', count: 2)
+      end
+
+      it 'allows you to search by user email', js: true do
+        fill_in('term', with: 'percy')
+        page.execute_script("$('#submission-filter-form').submit()")
+        expect(current_url).to include '&term=percy'
+        expect(page).to have_selector('.list-group-item', count: 3)
+        expect(page).to have_content 'my work'
+        expect(page).to have_content 'blah blah'
       end
     end
   end

@@ -41,7 +41,7 @@ describe 'Show Submission' do
       expect(body.first['id']).to eq submission.id
     end
 
-    describe('filtering') do
+    describe 'filtering' do
       it 'defaults to all types of submissions submissions' do
         Fabricate(:submission, user_id: 'userid', state: 'approved')
         Fabricate(:submission, user_id: 'userid', state: 'draft')

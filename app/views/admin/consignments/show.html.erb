@@ -1,182 +1,144 @@
 <div class='row'>
   <div class='col-sm-12'>
-    <div class='col-sm-9'>
-      <div class='row'>
-        <div class='page-title'>
-          <h2>Consignment #<%= @consignment.reference_id %> (<%= @consignment.state %>)</h2>
-        </div>
-      </div>
-      <div class='row'>
-        <div class='col-sm-12'>
-          <div class='row'>
-            <div class='col-sm-9'>
-              <div class='row'>
-                <div class='triple-padding-top'>
-                  <div class='watt-overview'>
-                    <div class='overview-section'>
-                      <div class='overview-section-title'>
-                        Sale
-                      </div>
-                      <div class='overview-section-content'>
-                        <div class='overview-item'>
-                          <div class='overview-item-title'>
-                            State
-                          </div>
-                          <div class='overview-item-value'>
-                            <%= @consignment.state %>
-                          </div>
-                        </div>
-                        <div class='overview-item'>
-                          <div class='overview-item-title'>
-                            Currency
-                          </div>
-                          <div class='overview-item-value'>
-                            <%= @consignment.sale_currency %>
-                          </div>
-                        </div>
-                        <div class='overview-item'>
-                          <div class='overview-item-title'>
-                            Price cents
-                          </div>
-                          <div class='overview-item-value'>
-                            <%= @consignment.sale_price_cents %>
-                          </div>
-                        </div>
-                        <div class='overview-item'>
-                          <div class='overview-item-title'>
-                            Date
-                          </div>
-                          <div class='overview-item-value'>
-                            <%= @consignment.sale_date&.strftime('%b %-d %Y') %>
-                          </div>
-                        </div>
-                        <div class='overview-item'>
-                          <div class='overview-item-title'>
-                            Name
-                          </div>
-                          <div class='overview-item-value'>
-                            <%= @consignment.sale_name %>
-                          </div>
-                        </div>
-                        <div class='overview-item'>
-                          <div class='overview-item-title'>
-                            Location
-                          </div>
-                          <div class='overview-item-value'>
-                            <%= @consignment.sale_location %>
-                          </div>
-                        </div>
-                        <div class='overview-item'>
-                          <div class='overview-item-title'>
-                            Lot number
-                          </div>
-                          <div class='overview-item-value'>
-                            <%= @consignment.sale_lot_number %>
-                          </div>
-                        </div>
-                        <div class='overview-item'>
-                          <div class='overview-item-title'>
-                            Partner Commission %
-                          </div>
-                          <div class='overview-item-value'>
-                            <%= @consignment.partner_commission_percent %>
-                          </div>
-                        </div>
-                        <div class='overview-item'>
-                          <div class='overview-item-title'>
-                            Artsy Commission %
-                          </div>
-                          <div class='overview-item-value'>
-                            <%= @consignment.artsy_commission_percent %>
-                          </div>
-                        </div>
-                        <div class='overview-item'>
-                          <div class='overview-item-title'>
-                            Notes
-                          </div>
-                          <div class='overview-item-value'>
-                            <%= @consignment.notes %>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class='overview-section'>
-                      <div class='overview-section-title'>
-                        Partner
-                      </div>
-                      <div class='overview-section-content'>
-                        <div class='overview-item'>
-                          <div class='overview-item-title'>
-                            Partner invoiced?
-                          </div>
-                          <div class='overview-item-value partner-invoiced'>
-                            <%= link_to admin_consignment_path(partner_submission: { partner_invoiced_at: new_time_field_value(@consignment.partner_invoiced_at) }),
-                                        method: :put,
-                                        data: { state: @consignment.partner_invoiced_at.present? ? 'yes' : 'no' },
-                                        class: 'toggle' do %>
-                              <div class='toggle-dot'></div>
-                            <% end %>
-                          </div>
-                        </div>
-                        <div class='overview-item'>
-                          <div class='overview-item-title'>
-                            Partner paid?
-                          </div>
-                          <div class='overview-item-value partner-paid'>
-                            <%= link_to admin_consignment_path(partner_submission: { partner_paid_at: new_time_field_value(@consignment.partner_paid_at) }),
-                                        method: :put,
-                                        data: { state: @consignment.partner_paid_at.present? ? 'yes' : 'no' },
-                                        class: 'toggle' do %>
-                              <div class='toggle-dot'></div>
-                            <% end %>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+    <div class='col-md-8'>
+      <div class='col-md-12'>
+        <div class='watt-overview'>
+          <div class='overview-section'>
+            <div class='overview-section-title--inline'>
+              Details
+              <span class='overview-section-title--inline__link'>
+                <%= link_to 'Edit', edit_admin_consignment_path(@consignment) %>
+              </span>
+            </div>
+            <div class='overview-item'>
+              <div class='overview-item-title'>
+                State
+              </div>
+              <div class='overview-item-value'>
+                <%= @consignment.state %>
               </div>
             </div>
-            <div class='col-sm-3'>
-              <div class='row edit-container triple-padding-top'>
-                <div class='single-padding-top'>
-                  <%= link_to 'Edit', edit_admin_consignment_path(@consignment), class: 'btn btn-secondary btn-small btn-full-width' %>
-                </div>
+            <div class='overview-item'>
+              <div class='overview-item-title'>
+                Currency
+              </div>
+              <div class='overview-item-value'>
+                <%= @consignment.sale_currency %>
+              </div>
+            </div>
+            <div class='overview-item'>
+              <div class='overview-item-title'>
+                Price cents
+              </div>
+              <div class='overview-item-value'>
+                <%= @consignment.sale_price_cents %>
+              </div>
+            </div>
+            <div class='overview-item'>
+              <div class='overview-item-title'>
+                Date
+              </div>
+              <div class='overview-item-value'>
+                <%= @consignment.sale_date&.strftime('%b %-d %Y') %>
+              </div>
+            </div>
+            <div class='overview-item'>
+              <div class='overview-item-title'>
+                Name
+              </div>
+              <div class='overview-item-value'>
+                <%= @consignment.sale_name %>
+              </div>
+            </div>
+            <div class='overview-item'>
+              <div class='overview-item-title'>
+                Location
+              </div>
+              <div class='overview-item-value'>
+                <%= @consignment.sale_location %>
+              </div>
+            </div>
+            <div class='overview-item'>
+              <div class='overview-item-title'>
+                Lot number
+              </div>
+              <div class='overview-item-value'>
+                <%= @consignment.sale_lot_number %>
+              </div>
+            </div>
+            <div class='overview-item'>
+              <div class='overview-item-title'>
+                Partner Commission %
+              </div>
+              <div class='overview-item-value'>
+                <%= @consignment.partner_commission_percent %>
+              </div>
+            </div>
+            <div class='overview-item'>
+              <div class='overview-item-title'>
+                Artsy Commission %
+              </div>
+              <div class='overview-item-value'>
+                <%= @consignment.artsy_commission_percent %>
+              </div>
+            </div>
+            <div class='overview-item'>
+              <div class='overview-item-title'>
+                Notes
+              </div>
+              <div class='overview-item-value'>
+                <%= @consignment.notes %>
               </div>
             </div>
           </div>
-          <div class='row'>
-            <div class='unit bordered single-padding-top'>
-              <div class='section-title'>
-                Offer
+          <div class='overview-section'>
+            <div class='overview-section-title--inline'>
+              Partner
+            </div>
+            <div class='overview-item'>
+              <div class='overview-item-title'>
+                Partner invoiced?
               </div>
-              <%= render 'admin/offers/offer', offer: @consignment.accepted_offer %>
+              <div class='overview-item-value partner-invoiced'>
+                <%= link_to admin_consignment_path(partner_submission: { partner_invoiced_at: new_time_field_value(@consignment.partner_invoiced_at) }),
+                            method: :put,
+                            data: { state: @consignment.partner_invoiced_at.present? ? 'yes' : 'no' },
+                            class: 'toggle' do %>
+                  <div class='toggle-dot'></div>
+                <% end %>
+              </div>
+            </div>
+            <div class='overview-item'>
+              <div class='overview-item-title'>
+                Partner paid?
+              </div>
+              <div class='overview-item-value partner-paid'>
+                <%= link_to admin_consignment_path(partner_submission: { partner_paid_at: new_time_field_value(@consignment.partner_paid_at) }),
+                            method: :put,
+                            data: { state: @consignment.partner_paid_at.present? ? 'yes' : 'no' },
+                            class: 'toggle' do %>
+                  <div class='toggle-dot'></div>
+                <% end %>
+              </div>
             </div>
           </div>
-          <div class='row'>
-            <div class='unit bordered single-padding-top'>
-              <div class='section-title'>
-                Submission
-              </div>
-              <%= render 'admin/submissions/submission', submission: @consignment.submission, artist_details: @artist_details %>
-            </div>
-          </div>
+          <%= render 'admin/submissions/submission_section', submission: @consignment.submission %>
+          <%= render 'admin/offers/offer_section', offer: @consignment.accepted_offer %>
         </div>
       </div>
     </div>
 
-    <div class='col-sm-3'>
-      <div class='bold-label'>
-        Partner info
-      </div>
-      <div class='single-padding-top'>
-        <div>
-          <%= @consignment.partner.name %>
+    <div class='col-md-4'>
+      <div class='col-md-12'>
+        <div class='watt-overview'>
+          <div class='overview-section'>
+            <div class='overview-section-title--inline'>
+              Consignment #<%= @consignment.reference_id %>
+            </div>
+          </div>
+          <%= render 'admin/submissions/collector_info', submission: @consignment.submission %>
+          <%= render 'admin/shared/partner_info', partner: @consignment.partner %>
         </div>
-      </div>
-
-      <div class='double-padding-top'>
-        <%= render 'admin/submissions/collector_info', submission: @consignment.submission %>
       </div>
     </div>
   </div>

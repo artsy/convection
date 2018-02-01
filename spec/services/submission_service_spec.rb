@@ -13,6 +13,42 @@ describe SubmissionService do
     stub_gravity_artist
   end
 
+  context 'create_submission' do
+    let(:params) { { artist_id: 'artistid', state: 'draft', title: 'My Artwork' } }
+
+    it 'creates a submission and sets the user_id and email' do
+      stub_gravity_root
+      stub_gravity_user
+      stub_gravity_user_detail(email: 'michael@bluth.com')
+      stub_gravity_artist
+
+      new_submission = SubmissionService.create_submission(params, 'userid')
+      expect(new_submission.reload.state).to eq 'draft'
+      expect(new_submission.user_id).to eq 'userid'
+      expect(new_submission.user_email).to eq 'michael@bluth.com'
+    end
+
+    it 'raises an exception if the user_detail cannot be found' do
+      stub_gravity_root
+      stub_request(:get, "#{Convection.config.gravity_api_url}/user_details/foo")
+        .to_raise(Faraday::ResourceNotFound)
+
+      expect do
+        SubmissionService.create_submission(params, 'foo')
+      end.to raise_error(Faraday::ResourceNotFound)
+    end
+
+    it 'raises an error if the email is blank' do
+      stub_gravity_root
+      stub_gravity_user(id: 'foo')
+      stub_gravity_user_detail(id: 'foo', email: '')
+
+      expect do
+        SubmissionService.create_submission(params, 'foo')
+      end.to raise_error('User lacks email.')
+    end
+  end
+
   context 'update_submission' do
     it 'sends no emails of the submission is not being submitted' do
       SubmissionService.update_submission(submission, state: 'draft')
@@ -120,7 +156,7 @@ describe SubmissionService do
         submission.update_attributes!(receipt_sent_at: Time.now.utc)
         expect do
           SubmissionService.notify_user(submission.id)
-        end.to_not change { ActionMailer::Base.deliveries.count }
+        end.to_not change(ActionMailer::Base.deliveries, :count)
       end
     end
 
@@ -197,7 +233,7 @@ describe SubmissionService do
       submission.update_attributes!(admin_receipt_sent_at: Time.now.utc)
       expect do
         SubmissionService.notify_admin(submission.id)
-      end.to_not change { ActionMailer::Base.deliveries.count }
+      end.to_not change(ActionMailer::Base.deliveries, :count)
     end
   end
 

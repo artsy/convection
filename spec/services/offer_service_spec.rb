@@ -109,7 +109,7 @@ describe OfferService do
         expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
         expect(emails.first.to).to eq([Convection.config.debug_email_address])
         expect(emails.first.html_part.body).to include(
-          'Happy Gallery has sent you an offer'
+          'Great news, an offer has been made for your work.'
         )
         expect(offer.reload.state).to eq 'sent'
         expect(offer.sent_by).to eq 'userid'
@@ -124,30 +124,42 @@ describe OfferService do
       end
     end
 
-    describe 'accepting an offer' do
-      it 'sends an email saying the offer has been accepted' do
-        OfferService.update_offer(offer, 'userid', state: 'accepted')
+    describe 'introducing an offer' do
+      it 'sends an email saying the user is interested in the offer' do
+        OfferService.update_offer(offer, 'userid', state: 'review')
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
         expect(emails.first.to).to eq([Convection.config.debug_email_address])
         expect(emails.first.html_part.body).to include(
-          'We will connect you directly with the collector to complete this transaction.'
+          'Your offer has been reviewed, and the consignor has elected to accept your offer.'
         )
-        expect(offer.reload.state).to eq 'accepted'
-        expect(offer.accepted_by).to eq 'userid'
-        expect(offer.accepted_at).to_not be_nil
-        expect(offer.rejected_by).to be_nil
-        expect(offer.rejected_at).to be_nil
+        expect(offer.reload.state).to eq 'review'
+        expect(offer.review_started_at).to_not be_nil
       end
+    end
 
+    describe 'consigning an offer' do
       it 'sets fields on submission and partner submission' do
-        OfferService.update_offer(offer, 'userid', state: 'accepted')
+        OfferService.update_offer(offer, 'userid', state: 'consigned')
+        expect(ActionMailer::Base.deliveries.count).to eq 0
         ps = offer.partner_submission
-        expect(ps.state).to eq 'unconfirmed'
+        expect(ps.state).to eq 'open'
         expect(ps.accepted_offer).to eq offer
         expect(ps.partner_commission_percent).to eq offer.commission_percent
         expect(ps.submission.consigned_partner_submission).to eq offer.partner_submission
+        expect(offer.consigned_at).to_not be_nil
+      end
+
+      it 'marks all other offers as locked' do
+        additional_offer = Fabricate(:offer,
+          offer_type: 'purchase',
+          price_cents: 10_000,
+          state: 'review',
+          partner_submission: Fabricate(:partner_submission, submission: submission))
+        OfferService.update_offer(offer, 'userid', state: 'consigned')
+        expect(offer.state).to eq 'consigned'
+        expect(additional_offer.reload.state).to eq 'locked'
       end
     end
 
@@ -159,13 +171,11 @@ describe OfferService do
         expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
         expect(emails.first.to).to eq([Convection.config.debug_email_address])
         expect(emails.first.html_part.body).to include(
-          'The collector has rejected your offer. Sorry.'
+          'Your offer has been reviewed, and the consignor has elected to reject your offer.'
         )
         expect(offer.reload.state).to eq 'rejected'
         expect(offer.rejected_by).to eq 'userid'
         expect(offer.rejected_at).to_not be_nil
-        expect(offer.accepted_by).to be_nil
-        expect(offer.accepted_at).to be_nil
       end
 
       it 'does not set consignment-related fields on an offer rejecton' do

@@ -24,7 +24,8 @@ class OfferService
     def update_offer_state(offer, current_user)
       case offer.state
       when 'sent' then send_offer!(offer, current_user)
-      when 'accepted' then accept!(offer, current_user)
+      when 'review' then review!(offer)
+      when 'consigned' then consign!(offer, current_user)
       when 'rejected' then reject!(offer, current_user)
       end
     end
@@ -33,15 +34,24 @@ class OfferService
       delay.deliver_offer(offer.id, current_user)
     end
 
-    def accept!(offer, current_user)
-      offer.update_attributes!(accepted_by: current_user, accepted_at: Time.now.utc)
+    def consign!(offer, _current_user)
+      offer.update_attributes!(consigned_at: Time.now.utc)
       offer.submission.update_attributes!(consigned_partner_submission: offer.partner_submission)
+
+      # mark other offers on the same submission as "locked"
+      other_offers = offer.submission.offers.to_a - [offer]
+      other_offers.each { |o| o.update_attributes!(state: 'locked') }
+
       offer.partner_submission.update_attributes!(
         accepted_offer: offer,
         partner_commission_percent: offer.commission_percent,
-        state: 'unconfirmed'
+        state: 'open'
       )
-      delay.deliver_acceptance_notification(offer.id)
+    end
+
+    def review!(offer)
+      offer.update_attributes!(review_started_at: Time.now.utc)
+      delay.deliver_introduction(offer.id)
     end
 
     def reject!(offer, current_user)
@@ -51,11 +61,11 @@ class OfferService
 
     private
 
-    def deliver_acceptance_notification(offer_id)
+    def deliver_introduction(offer_id)
       offer = Offer.find(offer_id)
       artist = Gravity.client.artist(id: offer.submission.artist_id)._get
 
-      PartnerMailer.offer_acceptance_notification(
+      PartnerMailer.offer_introduction(
         offer: offer,
         artist: artist
       ).deliver_now
@@ -64,10 +74,12 @@ class OfferService
     def deliver_rejection_notification(offer_id)
       offer = Offer.find(offer_id)
       artist = Gravity.client.artist(id: offer.submission.artist_id)._get
+      user_name = offer.submission.user_name
 
       PartnerMailer.offer_rejection_notification(
         offer: offer,
-        artist: artist
+        artist: artist,
+        user_name: user_name
       ).deliver_now
     end
 

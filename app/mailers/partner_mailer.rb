@@ -1,5 +1,5 @@
 class PartnerMailer < ApplicationMailer
-  helper :url, :submissions
+  helper :url, :submissions, :offers
 
   def submission_digest(submissions:, partner_name:, partner_type:, email:)
     @submissions = submissions
@@ -19,11 +19,11 @@ class PartnerMailer < ApplicationMailer
     end
   end
 
-  def offer_acceptance_notification(offer:, artist:)
+  def offer_introduction(offer:, artist:)
     @offer = offer
     @submission = offer.submission
     @artist = artist
-    @utm_params = utm_params(source: 'consignment-offer-accepted', campaign: 'consignment-offer')
+    @utm_params = utm_params(source: 'consignment-offer-introduction', campaign: 'consignment-offer')
 
     smtpapi category: ['offer'], unique_args: {
       offer_id: offer.id
@@ -32,10 +32,11 @@ class PartnerMailer < ApplicationMailer
          subject: 'An important update about your consignment offer')
   end
 
-  def offer_rejection_notification(offer:, artist:)
+  def offer_rejection_notification(offer:, artist:, user_name:)
     @offer = offer
     @submission = offer.submission
     @artist = artist
+    @user_name = user_name
     @utm_params = utm_params(source: 'consignment-offer-rejected', campaign: 'consignment-offer')
 
     smtpapi category: ['offer'], unique_args: {

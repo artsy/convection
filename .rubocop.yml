@@ -2,7 +2,7 @@ Documentation:
   Enabled: false
 
 AllCops:
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.5
   Exclude:
     - db/**/*
     - tmp/**/*
@@ -16,6 +16,7 @@ Style/Lambda:
 Rails/FilePath:
   Exclude:
     - config/application.rb
+
 LineLength:
   Exclude:
     - config/environments/*
@@ -45,4 +46,7 @@ Rails/SkipsModelValidations:
   Enabled: false
 
 Metrics/ClassLength:
-  Max: 124
+  Max: 134
+
+Style/SymbolArray:
+  Enabled: false

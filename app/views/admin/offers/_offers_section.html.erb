@@ -1,0 +1,10 @@
+<% if offers && offers.length > 0 %>
+  <div class='overview-section'>
+    <div class='overview-section-title--inline'>
+      Offers
+    </div>
+    <% @offers.each do |offer| %>
+      <%= render 'admin/offers/offer', offer: offer, truncated: true %>
+    <% end %>
+  </div>
+<% end %>

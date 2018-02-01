@@ -5,25 +5,25 @@ describe 'Create Submission With Graphql' do
   let(:headers) { { 'Authorization' => "Bearer #{jwt_token}" } }
 
   let(:create_mutation) do
-    <<-graphql
+    <<-GRAPHQL
     mutation {
       createSubmission(submission: { artist_id: "andy", title: "soup" }){
         id,
         title
       }
     }
-    graphql
+    GRAPHQL
   end
 
   let(:create_mutation_no_artist_id) do
-    <<-graphql
+    <<-GRAPHQL
     mutation {
       createSubmission(submission: { title: "soup" }){
         id,
         title
       }
     }
-    graphql
+    GRAPHQL
   end
 
   describe 'POST /graphql' do
@@ -69,7 +69,7 @@ describe 'Create Submission With Graphql' do
       expect do
         submission = Fabricate(:submission, user_id: 'userid')
 
-        create_asset = <<-graphql
+        create_asset = <<-GRAPHQL
         mutation {
           createAsset(submission_id: #{submission.id}, gemini_token: "gemini-token-hash"){
             id,
@@ -78,7 +78,7 @@ describe 'Create Submission With Graphql' do
             }
           }
         }
-        graphql
+        GRAPHQL
 
         post '/api/graphql', params: {
           query: create_asset

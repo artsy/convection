@@ -23,7 +23,7 @@ describe 'Create Asset' do
     it 'rejects assets without a gemini_token' do
       post '/api/assets', params: { submission_id: submission.id }, headers: headers
       expect(response.status).to eq 400
-      expect(JSON.parse(response.body)['error']).to eq 'Parameter is required'
+      expect(JSON.parse(response.body)['error']).to eq 'Parameter gemini_token is required'
     end
 
     it 'creates an asset' do

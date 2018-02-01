@@ -1,35 +1,61 @@
 <div class='page-title'>
-  <h2>Submissions</h2>
+  <h2>
+    Submissions
+  </h2>
 </div>
 
-<div class='container'>
-  <div class='row triple-padding-top'>
-    <div class='col-md-2'>
-      <div class='flex-label'>
-        <div class='left'><%= link_to 'All', admin_submissions_path %></div>
-        <div class='right'><%= @completed_submissions_count %></div>
-      </div>
-      <div class='flex-label'>
-        <div class='left'><%= link_to 'Unreviewed', admin_submissions_path(state: 'submitted') %></div>
-        <div class='right'><%= @counts['submitted'] || 0 %></div>
-      </div>
-      <div class='flex-label'>
-        <div class='left'><%= link_to 'Approved', admin_submissions_path(state: 'approved') %></div>
-        <div class='right'><%= @counts['approved'] || 0 %></div>
-      </div>
-      <div class='flex-label'>
-        <div class='left'><%= link_to 'Rejected', admin_submissions_path(state: 'rejected') %></div>
-        <div class='right'><%= @counts['rejected'] || 0 %></div>
-      </div>
-      <div class='row double-padding-top'>
-        <%= link_to 'New', new_admin_submission_path, class: 'btn btn-tiny btn-full-width' %>
-      </div>
-    </div>
-    <div class='col-md-10'>
-      <div class='list-group'>
-        <%= render @submissions, artist_details: @artist_details %>
+<div class='container double-padding-top'>
+  <div class='row'>
+    <div class='row col-md-12'>
+      <%= form_tag admin_submissions_url, method: 'get', id: 'submission-filter-form' do %>
+        <div class='col-md-3'>
+          <div class='form-group'>
+            <%= select_tag 'state',
+                          options_for_select(
+                            Submission::STATES.map{ |state| [state, state] }.unshift(['all', nil]),
+                            @filters[:state]
+                          ),
+                          class: 'form-control',
+                          onchange: ("$('#submission-filter-form').submit()") %>
+          </div>
+        </div>
+        <div class='col-md-7'>
+          <div class='form-group'>
+            <%= text_field_tag 'term', @term, class: 'form-control', placeholder: 'Search by ID, title, or user email' %>
+          </div>
+        </div>
+      <% end %>
+      <div class='col-md-2'>
+        <%= link_to 'Create New', new_admin_submission_path, class: 'btn btn-small btn-primary btn-full-width' %>
       </div>
     </div>
+    <div class='row col-md-12'>
+      <div class='list-group-item list-item--submission'>
+        <div class='list-group-item-info bold-label list-group-item-info--state'>
+          State
+        </div>
+        <div class='list-group-item-info bold-label list-group-item-info--id'>
+          ID
+        </div>
+        <div class='list-group-item-info bold-label list-group-item-info--email'>
+          Email
+        </div>
+        <div class='list-group-item-info bold-label'>
+          Date
+        </div>
+        <div class='list-group-item-info bold-label'>
+          Artist
+        </div>
+        <div class='list-group-item-info bold-label'>
+          Title
+        </div>
+        <div class='list-group-item-info bold-label'>
+        </div>
+        <div class='icon-spacer'>
+        </div>
+      </div>
+      <%= render @submissions, artist_details: @artist_details %>
+    </div>
+    <%= render 'shared/watt/paginator', total_items_count: @submissions.total_count, items_count: @submissions.length, per_page: @size, current_page: @page, base_url: admin_submissions_url(@filters) %>
   </div>
-  <%= render 'shared/watt/paginator', total_items_count: @submissions.total_count, items_count: @submissions.length, per_page: @size, current_page: @page, base_url: admin_submissions_url(@filters) %>
 </div>

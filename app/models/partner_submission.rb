@@ -1,10 +1,20 @@
 class PartnerSubmission < ApplicationRecord
   include ReferenceId
+  include PgSearch
+
+  pg_search_scope :search,
+    against: [:id, :reference_id],
+    associated_against: {
+      partner: [:name]
+    },
+    using: {
+      tsearch: { prefix: true }
+    }
 
   belongs_to :partner
   belongs_to :submission
-  has_many :offers
-  belongs_to :accepted_offer, class_name: 'Offer'
+  has_many :offers, dependent: :destroy
+  belongs_to :accepted_offer, class_name: 'Offer' # rubocop:disable Rails/InverseOf
 
   STATES = [
     'open',
