@@ -14,7 +14,7 @@ class User < ApplicationRecord
   end
 
   def user_detail
-    gravity_user.try(:user_detail)._get
+    gravity_user&.user_detail&._get
   rescue Faraday::ResourceNotFound
     nil
   end

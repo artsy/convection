@@ -38,5 +38,12 @@ describe User do
       expect(user.name).to eq 'Buster Bluth'
       expect(user.user_detail.email).to eq 'buster@bluth.com'
     end
+
+    it 'returns nil if there is no gravity_user' do
+      stub_gravity_root
+      stub_request(:get, "#{Convection.config.gravity_api_url}/users/#{user.gravity_user_id}")
+        .to_raise(Faraday::ResourceNotFound)
+      expect(user.user_detail).to be_nil
+    end
   end
 end
