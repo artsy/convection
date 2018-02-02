@@ -1,5 +1,5 @@
 Fabricator(:submission) do
-  user_id { Fabricate.sequence(:user_id) }
+  user { Fabricate(:user) }
   artist_id { Fabricate.sequence(:artist_id) }
   title { Fabricate.sequence(:title) { |i| "The Last Supper #{i}" } }
   year 2010

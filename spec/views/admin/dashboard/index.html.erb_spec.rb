@@ -54,8 +54,8 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
       it 'lets you click an offer' do
         offer = Offer.sent.order(id: :desc).first
         stub_gravity_root
-        stub_gravity_user(id: offer.submission.user_id)
-        stub_gravity_user_detail(id: offer.submission.user_id)
+        stub_gravity_user(id: offer.submission.user.gravity_user_id)
+        stub_gravity_user_detail(id: offer.submission.user.gravity_user_id)
         stub_gravity_artist(id: offer.submission.artist_id)
 
         find(".list-item--offer[data-id='#{offer.id}']").click
@@ -67,8 +67,8 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
       it 'lets you click a submission' do
         submission = Submission.submitted.order(id: :desc).first
         stub_gravity_root
-        stub_gravity_user(id: submission.user_id)
-        stub_gravity_user_detail(id: submission.user_id)
+        stub_gravity_user(id: submission.user.gravity_user_id)
+        stub_gravity_user_detail(id: submission.user.gravity_user_id)
         stub_gravity_artist(id: submission.artist_id)
 
         find(".list-item--submission[data-id='#{submission.id}']").click
@@ -79,8 +79,8 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
       it 'lets you click a consignment' do
         consignment = PartnerSubmission.consigned.order(id: :desc).first
         stub_gravity_root
-        stub_gravity_user(id: consignment.submission.user_id)
-        stub_gravity_user_detail(id: consignment.submission.user_id)
+        stub_gravity_user(id: consignment.submission.user.gravity_user_id)
+        stub_gravity_user_detail(id: consignment.submission.user.gravity_user_id)
         stub_gravity_artist(id: consignment.submission.artist_id)
 
         find(".list-item--consignment[data-id='#{consignment.id}']").click

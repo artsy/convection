@@ -19,7 +19,7 @@ describe 'Submission Flow' do
     # first create the submission, without a location_city
     post '/api/submissions', params: {
       artist_id: 'artistid',
-      user_id: 'userid',
+      user: Fabricate(:user, gravity_user_id: 'userid'),
       title: 'My Artwork',
       medium: 'painting',
       year: '1992',
@@ -63,7 +63,7 @@ describe 'Submission Flow' do
       # first create the submission
       post '/api/submissions', params: {
         artist_id: 'artistid',
-        user_id: 'userid',
+        user: Fabricate(:user, gravity_user_id: 'userid'),
         title: 'My Artwork',
         medium: 'painting',
         year: '1992',
@@ -108,7 +108,7 @@ describe 'Submission Flow' do
       # first create the submission
       post '/api/submissions', params: {
         artist_id: 'artistid',
-        user_id: 'userid',
+        user: Fabricate(:user, gravity_user_id: 'userid'),
         title: 'My Artwork',
         medium: 'painting',
         year: '1992',

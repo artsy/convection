@@ -3,7 +3,9 @@ require 'rails_helper'
 describe 'Update Submission With Graphql' do
   let(:jwt_token) { JWT.encode({ aud: 'gravity', sub: 'userid', roles: 'user' }, Convection.config.jwt_secret) }
   let(:headers) { { 'Authorization' => "Bearer #{jwt_token}" } }
-  let(:submission) { Fabricate(:submission, artist_id: 'abbas-kiarostami', title: 'rain', user_id: 'userid') }
+  let(:submission) do
+    Fabricate(:submission, artist_id: 'abbas-kiarostami', title: 'rain', user: Fabricate(:user, gravity_user_id: 'userid'))
+  end
 
   let(:update_mutation) do
     <<-GRAPHQL

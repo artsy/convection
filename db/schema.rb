@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180131172252) do
+ActiveRecord::Schema.define(version: 20180131182229) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,7 +98,7 @@ ActiveRecord::Schema.define(version: 20180131172252) do
   end
 
   create_table "submissions", id: :serial, force: :cascade do |t|
-    t.string "user_id"
+    t.string "ext_user_id"
     t.boolean "qualified"
     t.string "artist_id"
     t.string "title"
@@ -133,7 +133,9 @@ ActiveRecord::Schema.define(version: 20180131172252) do
     t.integer "primary_image_id"
     t.integer "consigned_partner_submission_id"
     t.string "user_email"
+    t.integer "user_id"
     t.index ["consigned_partner_submission_id"], name: "index_submissions_on_consigned_partner_submission_id"
+    t.index ["ext_user_id"], name: "index_submissions_on_ext_user_id"
     t.index ["primary_image_id"], name: "index_submissions_on_primary_image_id"
     t.index ["user_id"], name: "index_submissions_on_user_id"
   end
@@ -154,4 +156,5 @@ ActiveRecord::Schema.define(version: 20180131172252) do
   add_foreign_key "partner_submissions", "submissions"
   add_foreign_key "submissions", "assets", column: "primary_image_id", on_delete: :nullify
   add_foreign_key "submissions", "partner_submissions", column: "consigned_partner_submission_id"
+  add_foreign_key "submissions", "users"
 end

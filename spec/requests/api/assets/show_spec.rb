@@ -19,14 +19,14 @@ describe 'Show Asset' do
     end
 
     it "rejects requests for someone else's submission" do
-      submission = Fabricate(:submission, artist_id: 'andy-warhol', user_id: 'buster-bluth')
+      submission = Fabricate(:submission, artist_id: 'andy-warhol', user: Fabricate(:user, gravity_user_id: 'buster-bluth'))
       asset = Fabricate(:image, submission: submission)
       get "/api/assets/#{asset.id}", headers: headers
       expect(response.status).to eq 401
     end
 
     it 'accepts requests for your own submission' do
-      submission = Fabricate(:submission, artist_id: 'andy-warhol', user_id: 'userid')
+      submission = Fabricate(:submission, artist_id: 'andy-warhol', user: Fabricate(:user, gravity_user_id: 'userid'))
       asset = Fabricate(:image, submission: submission)
       get "/api/assets/#{asset.id}", headers: headers
       expect(response.status).to eq 200

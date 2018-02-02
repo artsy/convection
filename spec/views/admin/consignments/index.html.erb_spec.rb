@@ -60,8 +60,8 @@ describe 'admin/consignments/index.html.erb', type: :feature do
           )
 
         stub_gravity_root
-        stub_gravity_user(id: consignment.submission.user_id)
-        stub_gravity_user_detail(id: consignment.submission.user_id)
+        stub_gravity_user(id: consignment.submission.user.gravity_user_id)
+        stub_gravity_user_detail(id: consignment.submission.user.gravity_user_id)
         stub_gravity_artist(id: consignment.submission.artist_id)
         page.visit admin_consignments_path
 

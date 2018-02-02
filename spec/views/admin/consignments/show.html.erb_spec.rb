@@ -4,7 +4,7 @@ require 'support/jwt_helper'
 
 describe 'admin/consignments/show.html.erb', type: :feature do
   context 'always' do
-    let(:submission) { Fabricate(:submission, category: 'Painting', state: 'approved') }
+    let(:submission) { Fabricate(:submission, category: 'Painting', state: 'approved', user: Fabricate(:user, gravity_user_id: 'userid')) }
     let(:partner) { Fabricate(:partner) }
     let(:partner_submission) { Fabricate(:partner_submission, submission: submission, partner: partner) }
     let(:offer) do
@@ -29,8 +29,8 @@ describe 'admin/consignments/show.html.erb', type: :feature do
       stub_gravity_root
       stub_gravity_user(name: 'Lucille Bluth')
       stub_gravity_artist(id: submission.artist_id)
-      stub_gravity_user(id: submission.user_id)
-      stub_gravity_user_detail(id: submission.user_id)
+      stub_gravity_user(id: submission.user.gravity_user_id)
+      stub_gravity_user_detail(id: submission.user.gravity_user_id)
 
       allow(Convection.config).to receive(:gravity_xapp_token).and_return('xapp_token')
       gravql_artists_response = {
