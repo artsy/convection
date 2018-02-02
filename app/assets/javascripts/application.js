@@ -29,3 +29,4 @@
 //= require new_offer
 //= require offer
 //= require consignment
+//= require match

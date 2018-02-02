@@ -8,7 +8,7 @@
     <%= submission.id %>
   </div>
   <div class='list-group-item-info list-group-item-info--email'>
-    <%= submission.user_email %>
+    <%= submission.user&.email %>
   </div>
   <% unless truncated %>
     <div class='list-group-item-info'>

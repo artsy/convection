@@ -7,7 +7,7 @@ class SubmissionService
       user = User.find_or_create_by!(gravity_user_id: current_user)
       create_params = submission_params.merge(user_id: user.id)
       submission = Submission.create!(create_params)
-      delay.update_user_email(submission.id)
+      UserService.delay.update_email(current_user.id)
       submission
     rescue ActiveRecord::RecordInvalid => e
       raise SubmissionError, e.message
@@ -25,13 +25,6 @@ class SubmissionService
       when 'approved' then approve!(submission, current_user)
       when 'rejected' then reject!(submission, current_user)
       end
-    end
-
-    def update_user_email(submission_id)
-      submission = Submission.find(submission_id)
-      email = Gravity.client.user_detail(id: submission.user.gravity_user_id).email
-      raise 'User lacks email.' if email.blank?
-      submission.update_attributes!(user_email: email)
     end
 
     def submit!(submission)

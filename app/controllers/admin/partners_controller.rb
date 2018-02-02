@@ -1,6 +1,7 @@
 module Admin
   class PartnersController < ApplicationController
     include GraphqlHelper
+    before_action :set_pagination_params, only: [:index, :create]
 
     expose(:partners) do
       matching_partners = Partner.all
@@ -11,9 +12,6 @@ module Admin
     expose(:term) do
       params[:term]
     end
-
-    include GraphqlHelper
-    before_action :set_pagination_params, only: [:index, :create]
 
     def index
       respond_to do |format|
