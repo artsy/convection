@@ -1,6 +1,7 @@
 class PartnerSubmission < ApplicationRecord
   include ReferenceId
   include PgSearch
+  include Currency
 
   pg_search_scope :search,
     against: [:id, :reference_id],

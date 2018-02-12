@@ -4,7 +4,7 @@
       Currency
     </label>
     <div class='col-sm-9'>
-      <%= f.select :currency, Offer::CURRENCIES, class: 'form-control' %>
+      <%= f.select :currency, Currency::SUPPORTED, class: 'form-control' %>
     </div>
   </div>
 </div>

@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180131182229) do
+ActiveRecord::Schema.define(version: 20180212170737) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
 
   create_table "assets", id: :serial, force: :cascade do |t|
@@ -78,7 +79,7 @@ ActiveRecord::Schema.define(version: 20180131182229) do
     t.string "sale_lot_number"
     t.datetime "sale_date"
     t.integer "sale_price_cents"
-    t.string "sale_currency"
+    t.string "currency"
     t.datetime "partner_invoiced_at"
     t.datetime "partner_paid_at"
     t.text "notes"
