@@ -1,6 +1,7 @@
 class Offer < ApplicationRecord
   include ReferenceId
   include PgSearch
+  include Currency
 
   pg_search_scope :search,
     against: [:id, :reference_id],
@@ -28,13 +29,6 @@ class Offer < ApplicationRecord
     consigned
   ].freeze
 
-  CURRENCIES = %w[
-    USD
-    EUR
-    GBP
-    CAD
-  ].freeze
-
   REJECTION_REASONS = [
     'Low estimate',
     'High commission',
@@ -50,11 +44,9 @@ class Offer < ApplicationRecord
 
   validates :state, inclusion: { in: STATES }
   validates :offer_type, inclusion: { in: OFFER_TYPES }, allow_nil: true
-  validates :currency, inclusion: { in: CURRENCIES }, allow_nil: true
   validates :rejection_reason, inclusion: { in: REJECTION_REASONS }, allow_nil: true
 
   before_validation :set_state, on: :create
-  before_validation :set_currency
   before_create :set_submission
 
   scope :sent, -> { where(state: 'sent') }
@@ -82,10 +74,6 @@ class Offer < ApplicationRecord
 
   def set_submission
     self.submission ||= partner_submission&.submission
-  end
-
-  def set_currency
-    self.currency ||= 'USD'
   end
 
   def best_price_display

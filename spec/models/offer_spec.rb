@@ -31,6 +31,7 @@ describe Offer do
       expect(Offer.new(currency: 'USD')).to be_valid
       expect(Offer.new(currency: 'EUR')).to be_valid
       expect(Offer.new(currency: 'GBP')).to be_valid
+      expect(Offer.new(currency: 'HKD')).to be_valid
     end
   end
 
