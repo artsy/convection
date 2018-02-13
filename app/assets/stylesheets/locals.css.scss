@@ -220,3 +220,12 @@ a.make-primary-link {
     max-height: 40px;
   }
 }
+
+.ui-autocomplete {
+  .section-label {
+    cursor: default;
+    border-bottom: none;
+    font-weight: bold;
+    padding: 10px;
+  }
+}

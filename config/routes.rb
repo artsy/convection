@@ -17,12 +17,12 @@ Rails.application.routes.draw do
       end
     end
     resources :consignments, only: [:show, :edit, :update, :index]
+    resources :users, only: :index
     root to: 'dashboard#index'
   end
   get '/match_artist', to: 'admin/submissions#match_artist'
   get '/match_user', to: 'admin/submissions#match_user'
   get '/match_partner', to: 'admin/partners#match_partner'
-  get '/match', to: 'admin/match#match'
   get 'system/up'
 
   root to: redirect('/admin')

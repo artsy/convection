@@ -4,9 +4,7 @@ class UserService
       user = User.find(user_id)
       email = Gravity.client.user_detail(id: user.gravity_user_id).email
       raise 'User lacks email.' if email.blank?
-      if email != user.email
-        user.update_attributes!(email: email)
-      end
+      user.update_attributes!(email: email) if email != user.email
     end
   end
 end

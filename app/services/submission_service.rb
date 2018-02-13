@@ -7,7 +7,7 @@ class SubmissionService
       user = User.find_or_create_by!(gravity_user_id: current_user)
       create_params = submission_params.merge(user_id: user.id)
       submission = Submission.create!(create_params)
-      UserService.delay.update_email(current_user.id)
+      UserService.delay.update_email(user.id)
       submission
     rescue ActiveRecord::RecordInvalid => e
       raise SubmissionError, e.message

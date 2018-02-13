@@ -8,12 +8,23 @@ module Admin
     expose(:offers) do
       matching_offers = Offer.all
       matching_offers = matching_offers.search(params[:term]) if params[:term].present?
+
+      if params[:partner].present?
+        partner = Partner.find(params[:partner])
+        matching_offers = partner.offers
+      end
+
+      if params[:user].present?
+        user = User.find(params[:user])
+        matching_offers = matching_offers.where(submission: user.submissions)
+      end
+
       matching_offers = matching_offers.where(state: params[:state]) if params[:state].present?
       matching_offers.order(id: :desc).page(@page).per(@size)
     end
 
     expose(:filters) do
-      { state: params[:state] }
+      { state: params[:state], partner: params[:partner], user: params[:user] }
     end
 
     expose(:counts) do
@@ -80,7 +91,12 @@ module Admin
       render 'edit'
     end
 
-    def index; end
+    def index
+      respond_to do |format|
+        format.html
+        format.json { render json: offers || [] }
+      end
+    end
 
     private
 

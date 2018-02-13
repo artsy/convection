@@ -22,13 +22,7 @@ class User < ApplicationRecord
   end
 
   def user_detail
-<<<<<<< HEAD
     gravity_user&.user_detail&._get
-=======
-    fetched_user = gravity_user
-    return unless fetched_user
-    fetched_user.try(:user_detail)._get
->>>>>>> search by users wip
   rescue Faraday::ResourceNotFound
     nil
   end

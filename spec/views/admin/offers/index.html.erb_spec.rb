@@ -76,12 +76,12 @@ describe 'admin/offers/index.html.erb', type: :feature do
 
     context 'with a variety of offers' do
       before do
-        partner1 = Fabricate(:partner, name: 'Gagosian')
-        partner2 = Fabricate(:partner, name: 'Heritage Auctions')
-        3.times { Fabricate(:offer, state: 'sent', partner_submission: Fabricate(:partner_submission, partner: partner1)) }
-        Fabricate(:offer, state: 'accepted', partner_submission: Fabricate(:partner_submission, partner: partner2))
-        Fabricate(:offer, state: 'rejected', partner_submission: Fabricate(:partner_submission, partner: partner2))
-        Fabricate(:offer, state: 'draft', partner_submission: Fabricate(:partner_submission, partner: partner1))
+        @partner1 = Fabricate(:partner, name: 'Gagosian')
+        @partner2 = Fabricate(:partner, name: 'Heritage Auctions')
+        3.times { Fabricate(:offer, state: 'sent', partner_submission: Fabricate(:partner_submission, partner: @partner1)) }
+        @offer1 = Fabricate(:offer, state: 'accepted', partner_submission: Fabricate(:partner_submission, partner: @partner2))
+        Fabricate(:offer, state: 'rejected', partner_submission: Fabricate(:partner_submission, partner: @partner2))
+        Fabricate(:offer, state: 'draft', partner_submission: Fabricate(:partner_submission, partner: @partner1))
         page.visit '/admin/offers'
       end
 
@@ -100,19 +100,29 @@ describe 'admin/offers/index.html.erb', type: :feature do
 
       it 'lets you search by partner name', js: true do
         fill_in('term', with: 'Gag')
-        page.execute_script("$('#offer-filter-form').submit()")
-        expect(current_url).to include '&state=&term=Gag'
+        expect(page).to have_selector('.ui-autocomplete')
+        expect(page).to have_content('Partner Gagosian')
+        click_link("partner-#{@partner1.id}")
+        expect(current_url).to include "&partner=#{@partner1.id}"
         expect(page).to have_selector('.list-group-item', count: 5)
         expect(page).to have_content('sent', count: 4)
         expect(page).to have_content('draft', count: 2)
       end
 
+      it 'allows you to navigate to a specific offer', js: true do
+        fill_in('term', with: @offer1.reference_id)
+        expect(page).to have_selector('.ui-autocomplete')
+        click_link("offer-#{@offer1.id}")
+        expect(current_path).to eq admin_offer_path(@offer1)
+      end
+
       it 'lets you search by state and partner name', js: true do
-        fill_in('term', with: 'Gag')
-        page.execute_script("$('#offer-filter-form').submit()")
-        expect(current_url).to include '&state=&term=Gag'
         select('sent', from: 'state')
-        expect(current_url).to include '&state=sent&term=Gag'
+        fill_in('term', with: 'Gag')
+        expect(page).to have_selector('.ui-autocomplete')
+        expect(page).to have_content('Partner Gagosian')
+        click_link("partner-#{@partner1.id}")
+        expect(current_url).to include "state=sent&partner=#{@partner1.id}"
         expect(page).to have_selector('.list-group-item', count: 4)
         expect(page).to have_content('sent', count: 4)
         expect(page).to have_content('draft', count: 1)

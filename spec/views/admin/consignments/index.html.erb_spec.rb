@@ -76,12 +76,12 @@ describe 'admin/consignments/index.html.erb', type: :feature do
 
     context 'with a variety of consignments' do
       before do
-        partner1 = Fabricate(:partner, name: 'Gagosian Gallery')
-        partner2 = Fabricate(:partner, name: 'Heritage Auctions')
-        3.times { Fabricate(:consignment, state: 'open', partner: partner1) }
-        Fabricate(:consignment, state: 'bought in', partner: partner2)
-        Fabricate(:consignment, state: 'sold', partner: partner2)
-        Fabricate(:consignment, state: 'canceled', partner: partner2)
+        @partner1 = Fabricate(:partner, name: 'Gagosian Gallery')
+        @partner2 = Fabricate(:partner, name: 'Heritage Auctions')
+        3.times { Fabricate(:consignment, state: 'open', partner: @partner1) }
+        @consignment1 = Fabricate(:consignment, state: 'bought in', partner: @partner2)
+        Fabricate(:consignment, state: 'sold', partner: @partner2)
+        Fabricate(:consignment, state: 'canceled', partner: @partner2)
         page.visit admin_consignments_path
       end
 
@@ -102,22 +102,32 @@ describe 'admin/consignments/index.html.erb', type: :feature do
 
       it 'allows you to search by partner name', js: true do
         fill_in('term', with: 'gallery')
-        page.execute_script("$('#consignment-filter-form').submit()")
-        expect(current_url).to include '&term=gallery'
+        expect(page).to have_selector('.ui-autocomplete')
+        expect(page).to have_content('Partner Gagosian Gallery')
+        click_link("partner-#{@partner1.id}")
+        expect(current_url).to include "&partner=#{@partner1.id}"
         partner_names = page.all('.list-group-item-info--partner-name').map(&:text)
         expect(partner_names.count).to eq 3
         expect(partner_names.uniq).to eq(['Gagosian Gallery'])
       end
 
+      it 'allows you to navigate to a specific consignment', js: true do
+        fill_in('term', with: @consignment1.reference_id)
+        expect(page).to have_selector('.ui-autocomplete')
+        click_link("consignment-#{@consignment1.id}")
+        expect(current_path).to eq admin_consignment_path(@consignment1)
+      end
+
       it 'allows you to search by partner name and state', js: true do
-        fill_in('term', with: 'herit')
-        page.execute_script("$('#consignment-filter-form').submit()")
-        expect(current_url).to include '&term=herit'
-        partner_names = page.all('.list-group-item-info--partner-name').map(&:text)
-        expect(partner_names.count).to eq 3
-        expect(partner_names.uniq).to eq(['Heritage Auctions'])
         select('bought in', from: 'state')
-        expect(current_url).to include '&state=bought+in&term=herit'
+        fill_in('term', with: 'herit')
+        expect(page).to have_selector('.ui-autocomplete')
+        expect(page).to have_content('Partner Heritage Auctions')
+        click_link("partner-#{@partner2.id}")
+        partner_names = page.all('.list-group-item-info--partner-name').map(&:text)
+        expect(partner_names.count).to eq 1
+        expect(partner_names.first).to eq('Heritage Auctions')
+        expect(current_url).to include "state=bought+in&partner=#{@partner2.id}"
         expect(page).to have_selector('.list-group-item', count: 2)
       end
     end

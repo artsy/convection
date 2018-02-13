@@ -8,12 +8,23 @@ module Admin
     expose(:consignments) do
       matching_consignments = PartnerSubmission.consigned
       matching_consignments = matching_consignments.search(params[:term]) if params[:term].present?
+
+      if params[:partner].present?
+        partner = Partner.find(params[:partner])
+        matching_consignments = partner.partner_submissions.consigned
+      end
+
+      if params[:user].present?
+        user = User.find(params[:user])
+        matching_consignments = matching_consignments.where(submission: user.submissions)
+      end
+
       matching_consignments = matching_consignments.where(state: params[:state]) if params[:state].present?
       matching_consignments.order(id: :desc).page(@page).per(@size)
     end
 
     expose(:filters) do
-      { state: params[:state] }
+      { state: params[:state], partner: params[:partner], user: params[:user] }
     end
 
     expose(:counts) do
@@ -43,7 +54,12 @@ module Admin
       end
     end
 
-    def index; end
+    def index
+      respond_to do |format|
+        format.html
+        format.json { render json: consignments || [] }
+      end
+    end
 
     private
 
