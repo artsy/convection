@@ -19,11 +19,9 @@ class PartnerSubmission < ApplicationRecord
 
   STATES = [
     'open',
-    'unconfirmed',
-    'signed',
     'sold',
     'bought in',
-    'closed'
+    'canceled'
   ].freeze
 
   scope :group_by_day, -> { group("date_trunc('day', notified_at) ") }

@@ -18,18 +18,16 @@ describe 'admin/consignments/index.html.erb', type: :feature do
     it 'shows the consignment states that can be selected' do
       within(:css, '#consignment-filter-form') do
         expect(page).to have_content('all')
-        expect(page).to have_content('unconfirmed')
-        expect(page).to have_content('signed')
         expect(page).to have_content('sold')
         expect(page).to have_content('bought in')
-        expect(page).to have_content('closed')
+        expect(page).to have_content('canceled')
       end
     end
 
     context 'with some consignments' do
       before do
         3.times do
-          Fabricate(:consignment, state: 'unconfirmed')
+          Fabricate(:consignment, state: 'open')
         end
         page.visit admin_consignments_path
       end
@@ -70,9 +68,9 @@ describe 'admin/consignments/index.html.erb', type: :feature do
       end
 
       it 'lets you click a filter option', js: true do
-        select('signed', from: 'state')
+        select('bought in', from: 'state')
         expect(page).to have_selector('.list-group-item', count: 1)
-        expect(current_url).to include '&state=signed'
+        expect(current_url).to include '&state=bought+in'
       end
     end
 
@@ -80,18 +78,18 @@ describe 'admin/consignments/index.html.erb', type: :feature do
       before do
         partner1 = Fabricate(:partner, name: 'Gagosian Gallery')
         partner2 = Fabricate(:partner, name: 'Heritage Auctions')
-        3.times { Fabricate(:consignment, state: 'unconfirmed', partner: partner1) }
-        Fabricate(:consignment, state: 'signed', partner: partner2)
+        3.times { Fabricate(:consignment, state: 'open', partner: partner1) }
+        Fabricate(:consignment, state: 'bought in', partner: partner2)
         Fabricate(:consignment, state: 'sold', partner: partner2)
-        Fabricate(:consignment, state: 'closed', partner: partner2)
+        Fabricate(:consignment, state: 'canceled', partner: partner2)
         page.visit admin_consignments_path
       end
 
       it 'lets you click into a filter option', js: true do
         within(:css, '#consignment-filter-form') do
-          select('signed', from: 'state')
+          select('bought in', from: 'state')
         end
-        expect(current_url).to include '&state=signed'
+        expect(current_url).to include '&state=bought+in'
         expect(page).to have_content('Consignments')
         expect(page).to have_selector('.list-group-item', count: 2)
       end
@@ -99,7 +97,7 @@ describe 'admin/consignments/index.html.erb', type: :feature do
       it 'filters by changing the url' do
         page.visit('/admin/consignments?state=bought+in')
         expect(page).to have_content('Consignments')
-        expect(page).to have_selector('.list-group-item', count: 1)
+        expect(page).to have_selector('.list-group-item', count: 2)
       end
 
       it 'allows you to search by partner name', js: true do
@@ -118,8 +116,8 @@ describe 'admin/consignments/index.html.erb', type: :feature do
         partner_names = page.all('.list-group-item-info--partner-name').map(&:text)
         expect(partner_names.count).to eq 3
         expect(partner_names.uniq).to eq(['Heritage Auctions'])
-        select('signed', from: 'state')
-        expect(current_url).to include '&state=signed&term=herit'
+        select('bought in', from: 'state')
+        expect(current_url).to include '&state=bought+in&term=herit'
         expect(page).to have_selector('.list-group-item', count: 2)
       end
     end

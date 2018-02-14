@@ -7,7 +7,8 @@ describe PartnerSubmission do
   context 'state' do
     it 'allows only certain states' do
       expect(PartnerSubmission.new(state: 'blah')).not_to be_valid
-      expect(PartnerSubmission.new(state: 'unconfirmed')).to be_valid
+      expect(PartnerSubmission.new(state: 'open')).to be_valid
+      expect(PartnerSubmission.new(state: 'canceled')).to be_valid
     end
 
     it 'sets the default to open' do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180212170737) do
+ActiveRecord::Schema.define(version: 20180214173948) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(version: 20180212170737) do
     t.text "notes"
     t.string "state"
     t.string "reference_id"
+    t.text "canceled_reason"
     t.index ["accepted_offer_id"], name: "index_partner_submissions_on_accepted_offer_id"
     t.index ["partner_id"], name: "index_partner_submissions_on_partner_id"
     t.index ["submission_id"], name: "index_partner_submissions_on_submission_id"

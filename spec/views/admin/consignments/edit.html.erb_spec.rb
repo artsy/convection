@@ -17,7 +17,7 @@ describe 'admin/consignments/edit.html.erb', type: :feature do
 
     before do
       partner_submission.update_attributes!(
-        state: 'unconfirmed',
+        state: 'open',
         accepted_offer_id: offer.id,
         sale_name: 'July Prints & Multiples',
         sale_location: 'London'
@@ -78,6 +78,16 @@ describe 'admin/consignments/edit.html.erb', type: :feature do
         click_button('Save')
         expect(page.current_path).to eq admin_consignment_path(partner_submission)
         expect(page).to have_content('Name August Sale')
+      end
+
+      it 'shows the canceled reason box when canceled is selected', js: true do
+        select('canceled', from: 'partner_submission_state')
+        expect(page).to have_content 'Canceled Reason'
+        fill_in('partner_submission_canceled_reason', with: 'do not want this piece.')
+        click_button('Save')
+        expect(page.current_path).to eq admin_consignment_path(partner_submission)
+        expect(page).to have_content('State canceled')
+        expect(page).to have_content('Canceled Reason do not want this piece.')
       end
     end
   end
