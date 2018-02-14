@@ -29,7 +29,7 @@ class PartnerMailer < ApplicationMailer
       offer_id: offer.id
     }
     mail(to: Convection.config.debug_email_address,
-         subject: 'An important update about your consignment offer')
+         subject: 'The consignor has expressed interest in your offer')
   end
 
   def offer_rejection_notification(offer:, artist:, user_name:)
@@ -43,6 +43,6 @@ class PartnerMailer < ApplicationMailer
       offer_id: offer.id
     }
     mail(to: Convection.config.debug_email_address,
-         subject: 'An important update about your consignment offer')
+         subject: 'A response to your consignment offer')
   end
 end

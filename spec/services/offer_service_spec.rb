@@ -108,9 +108,11 @@ describe OfferService do
         expect(emails.length).to eq 1
         expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
         expect(emails.first.to).to eq([Convection.config.debug_email_address])
+        expect(emails.first.subject).to eq('An offer for your consignment submission')
         expect(emails.first.html_part.body).to include(
           'Great news, an offer has been made for your work.'
         )
+        expect(emails.first.html_part.body).to include('The work will be purchased directly from you by the partner')
         expect(offer.reload.state).to eq 'sent'
         expect(offer.sent_by).to eq 'userid'
         expect(offer.sent_at).to_not be_nil
@@ -131,9 +133,11 @@ describe OfferService do
         expect(emails.length).to eq 1
         expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
         expect(emails.first.to).to eq([Convection.config.debug_email_address])
+        expect(emails.first.subject).to eq('The consignor has expressed interest in your offer')
         expect(emails.first.html_part.body).to include(
-          'Your offer has been reviewed, and the consignor has elected to accept your offer.'
+          'Your offer has been reviewed, and the consignor has expressed interest your offer'
         )
+        expect(emails.first.html_part.body).to_not include('The work will be purchased directly from you by the partner')
         expect(offer.reload.state).to eq 'review'
         expect(offer.review_started_at).to_not be_nil
       end
@@ -170,9 +174,11 @@ describe OfferService do
         expect(emails.length).to eq 1
         expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
         expect(emails.first.to).to eq([Convection.config.debug_email_address])
+        expect(emails.first.subject).to eq('A response to your consignment offer')
         expect(emails.first.html_part.body).to include(
-          'Your offer has been reviewed, and the consignor has elected to reject your offer.'
+          'Your offer has been reviewed, and the consignor has rejected your offer.'
         )
+        expect(emails.first.html_part.body).to_not include('The work will be purchased directly from you by the partner')
         expect(offer.reload.state).to eq 'rejected'
         expect(offer.rejected_by).to eq 'userid'
         expect(offer.rejected_at).to_not be_nil

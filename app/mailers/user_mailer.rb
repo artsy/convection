@@ -90,6 +90,6 @@ class UserMailer < ApplicationMailer
       offer_id: offer.id
     }
     mail(to: Convection.config.debug_email_address,
-         subject: 'An important update about your consignment submission')
+         subject: 'An offer for your consignment submission')
   end
 end

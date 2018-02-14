@@ -12,7 +12,6 @@ module OffersHelper
 
   def display_fields(offer)
     {
-      'Offer type' => offer.offer_type.capitalize,
       'Estimate' => estimate_display(offer),
       'Price' => price_display(offer),
       'Sale Period' => sale_period_display(offer),
@@ -24,6 +23,33 @@ module OffersHelper
       'Insurance' => insurance_display(offer),
       'Other fees' => other_fees_display(offer)
     }.select { |_key, value| value.present? }
+  end
+
+  def formatted_offer_type(offer)
+    if offer.offer_type == 'auction consignment'
+      offer.offer_type.capitalize
+    elsif offer.offer_type == 'purchase'
+      'Outright purchase'
+    elsif offer.offer_type == 'retail'
+      'Private Sale: Retail'
+    else
+      'Private Sale: Net sale'
+    end
+  end
+
+  def offer_type_description(offer)
+    if offer.offer_type == 'auction consignment'
+      'This work will be offered in an auction. The work will sell if bidding meets the minimum '\
+      'selling price that you and the auction house have agreed to.'
+    elsif offer.offer_type == 'purchase'
+      'The work will be purchased directly from you by the partner for the specified price.'
+    elsif offer.offer_type == 'retail'
+      'This work will be offered privately to a small group of collectors that the partner has '\
+      'relationships with. The work will sell if a collector agrees to your price.'
+    else
+      'This work will be offered privately to a small group of collectors that the partner has '\
+      'relationships with. The work will sell if a collector agrees to your price.'
+    end
   end
 
   def estimate_display(offer)

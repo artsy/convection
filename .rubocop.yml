@@ -48,5 +48,8 @@ Rails/SkipsModelValidations:
 Metrics/ClassLength:
   Max: 136
 
+Metrics/ModuleLength:
+  Max: 108
+
 Style/SymbolArray:
   Enabled: false

@@ -14,10 +14,12 @@ class Offer < ApplicationRecord
 
   OFFER_TYPES = [
     'auction consignment',
-    'consignment period',
+    'net price',
+    'retail',
     'purchase'
   ].freeze
 
+  # FIXME: deprecate 'accepted' state
   STATES = %w[
     draft
     sent

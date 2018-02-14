@@ -1,0 +1,40 @@
+<tr>
+  <td class='spacer'></td>
+</tr>
+<tr>
+  <td class='two-column'>
+    <div class="column first-column">
+      <table width="100%">
+        <tr>
+          <td>
+            <table>
+              <tr>
+                <td class='email-gray-label email-gray-label--left'>
+                  Offer Type
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="column second-column">
+      <table width="100%">
+        <tr>
+          <td class="inner">
+            <table>
+              <tr>
+                <td class='email-content-serif'>
+                  <%= formatted_offer_type(@offer) %>
+                  <% if include_description == true %>
+                    <br /><i class='offer-type-description'><%= offer_type_description(@offer) %></i>
+                  <% end %>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </td>
+</tr>
