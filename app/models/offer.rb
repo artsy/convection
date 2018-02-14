@@ -13,10 +13,10 @@ class Offer < ApplicationRecord
     }
 
   OFFER_TYPES = [
-    'auction consignment',
-    'net price',
-    'retail',
-    'purchase'
+    AUCTION_CONSIGNMENT = 'auction consignment'.freeze,
+    NET_PRICE = 'net price'.freeze,
+    RETAIL = 'retail'.freeze,
+    PURCHASE = 'purchase'.freeze
   ].freeze
 
   # FIXME: deprecate 'accepted' state

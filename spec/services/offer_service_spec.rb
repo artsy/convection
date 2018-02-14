@@ -113,6 +113,7 @@ describe OfferService do
           'Great news, an offer has been made for your work.'
         )
         expect(emails.first.html_part.body).to include('The work will be purchased directly from you by the partner')
+        expect(emails.first.html_part.body).to include('Happy Gallery')
         expect(offer.reload.state).to eq 'sent'
         expect(offer.sent_by).to eq 'userid'
         expect(offer.sent_at).to_not be_nil
@@ -137,6 +138,7 @@ describe OfferService do
         expect(emails.first.html_part.body).to include(
           'Your offer has been reviewed, and the consignor has expressed interest your offer'
         )
+        expect(emails.first.html_part.body).to include('Happy Gallery')
         expect(emails.first.html_part.body).to_not include('The work will be purchased directly from you by the partner')
         expect(offer.reload.state).to eq 'review'
         expect(offer.review_started_at).to_not be_nil
@@ -178,6 +180,7 @@ describe OfferService do
         expect(emails.first.html_part.body).to include(
           'Your offer has been reviewed, and the consignor has rejected your offer.'
         )
+        expect(emails.first.html_part.body).to include('Happy Gallery')
         expect(emails.first.html_part.body).to_not include('The work will be purchased directly from you by the partner')
         expect(offer.reload.state).to eq 'rejected'
         expect(offer.rejected_by).to eq 'userid'

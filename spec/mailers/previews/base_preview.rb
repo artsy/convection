@@ -14,6 +14,7 @@ class BasePreview < ActionMailer::Preview
       partner_submission: OpenStruct.new(
         partner: OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery')
       ),
+      partner: OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery'),
       submission: base_submission
     )
   end

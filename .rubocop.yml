@@ -49,7 +49,7 @@ Metrics/ClassLength:
   Max: 136
 
 Metrics/ModuleLength:
-  Max: 108
+  Max: 110
 
 Style/SymbolArray:
   Enabled: false

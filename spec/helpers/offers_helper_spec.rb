@@ -79,12 +79,12 @@ describe OffersHelper, type: :helper do
 
     it 'returns the correct string for a retail offer' do
       offer = double('offer', offer_type: 'retail')
-      expect(helper.formatted_offer_type(offer)).to eq 'Private Sale: Retail'
+      expect(helper.formatted_offer_type(offer)).to eq 'Private Sale: Retail Price'
     end
 
     it 'returns the correct string for a net price offer' do
       offer = double('offer', offer_type: 'net price')
-      expect(helper.formatted_offer_type(offer)).to eq 'Private Sale: Net sale'
+      expect(helper.formatted_offer_type(offer)).to eq 'Private Sale: Net Price'
     end
 
     it 'returns the correct string for a direct purchase offer' do

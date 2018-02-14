@@ -46,6 +46,7 @@ class UserMailerPreview < BasePreview
         partner_submission: OpenStruct.new(
           partner: OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery')
         ),
+        partner: OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery'),
         submission: base_submission
       ),
       artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol')
@@ -65,6 +66,7 @@ class UserMailerPreview < BasePreview
         partner_submission: OpenStruct.new(
           partner: OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery')
         ),
+        partner: OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery'),
         submission: base_submission
       ),
       artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol')
@@ -86,6 +88,7 @@ class UserMailerPreview < BasePreview
         partner_submission: OpenStruct.new(
           partner: OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery')
         ),
+        partner: OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery'),
         submission: base_submission
       ),
       artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol')

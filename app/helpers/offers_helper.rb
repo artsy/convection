@@ -26,27 +26,29 @@ module OffersHelper
   end
 
   def formatted_offer_type(offer)
-    if offer.offer_type == 'auction consignment'
+    case offer.offer_type
+    when Offer::AUCTION_CONSIGNMENT
       offer.offer_type.capitalize
-    elsif offer.offer_type == 'purchase'
+    when Offer::PURCHASE
       'Outright purchase'
-    elsif offer.offer_type == 'retail'
-      'Private Sale: Retail'
-    else
-      'Private Sale: Net sale'
+    when Offer::RETAIL
+      'Private Sale: Retail Price'
+    when Offer::NET_PRICE
+      'Private Sale: Net Price'
     end
   end
 
   def offer_type_description(offer)
-    if offer.offer_type == 'auction consignment'
+    case offer.offer_type
+    when Offer::AUCTION_CONSIGNMENT
       'This work will be offered in an auction. The work will sell if bidding meets the minimum '\
       'selling price that you and the auction house have agreed to.'
-    elsif offer.offer_type == 'purchase'
+    when Offer::PURCHASE
       'The work will be purchased directly from you by the partner for the specified price.'
-    elsif offer.offer_type == 'retail'
+    when Offer::RETAIL
       'This work will be offered privately to a small group of collectors that the partner has '\
       'relationships with. The work will sell if a collector agrees to your price.'
-    else
+    when Offer::NET_PRICE
       'This work will be offered privately to a small group of collectors that the partner has '\
       'relationships with. The work will sell if a collector agrees to your price.'
     end
