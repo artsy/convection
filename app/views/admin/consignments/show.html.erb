@@ -18,6 +18,16 @@
                 <%= @consignment.state %>
               </div>
             </div>
+            <% if @consignment.state == 'canceled' %>
+              <div class='overview-item'>
+                <div class='overview-item-title'>
+                  Canceled Reason
+                </div>
+                <div class='overview-item-value'>
+                  <%= @consignment.canceled_reason %>
+                </div>
+              </div>
+            <% end %>
             <div class='overview-item'>
               <div class='overview-item-title'>
                 Currency

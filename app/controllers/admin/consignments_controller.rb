@@ -53,6 +53,7 @@ module Admin
 
     def consignment_params
       params.require(:partner_submission).permit(
+        :canceled_reason,
         :currency,
         :sale_price_cents,
         :sale_name,

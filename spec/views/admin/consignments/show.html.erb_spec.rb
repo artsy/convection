@@ -17,7 +17,7 @@ describe 'admin/consignments/show.html.erb', type: :feature do
 
     before do
       partner_submission.update_attributes!(
-        state: 'unconfirmed',
+        state: 'open',
         accepted_offer_id: offer.id,
         sale_name: 'July Prints & Multiples',
         sale_location: 'London'
@@ -57,6 +57,7 @@ describe 'admin/consignments/show.html.erb', type: :feature do
         expect(page).to have_content("Consignment ##{partner_submission.reference_id}")
         expect(page).to have_content('Name July Prints & Multiples')
         expect(page).to have_content('Location London')
+        expect(page).to_not have_content('Canceled Reason')
       end
 
       it 'shows information about the offer and lets you navigate' do
@@ -77,6 +78,13 @@ describe 'admin/consignments/show.html.erb', type: :feature do
         end
         find('.list-item--submission').click
         expect(page.current_path).to eq(admin_submission_path(submission))
+      end
+
+      it 'shows a canceled reason if the consignment has been canceled' do
+        partner_submission.update_attributes!(state: 'canceled', canceled_reason: 'done with this piece.')
+        page.visit admin_consignment_path(partner_submission)
+        expect(page).to have_content 'Canceled Reason'
+        expect(page).to have_content 'done with this piece.'
       end
 
       it 'lets you enter the edit view' do
