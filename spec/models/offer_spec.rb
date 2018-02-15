@@ -21,7 +21,9 @@ describe Offer do
       expect(Offer.new(offer_type: 'blah')).not_to be_valid
       expect(Offer.new(offer_type: 'auction consignment')).to be_valid
       expect(Offer.new(offer_type: 'purchase')).to be_valid
-      expect(Offer.new(offer_type: 'consignment period')).to be_valid
+      expect(Offer.new(offer_type: 'consignment period')).to_not be_valid
+      expect(Offer.new(offer_type: 'retail')).to be_valid
+      expect(Offer.new(offer_type: 'net price')).to be_valid
     end
   end
 

@@ -101,8 +101,8 @@ describe Admin::OffersController, type: :controller do
         expect(purchase_offer.reload).to have_attributes(new_params)
       end
 
-      it 'allows you to update every param for a consignment period' do
-        consignment_period_offer = Fabricate(:offer, offer_type: 'consignment period')
+      it 'allows you to update every param for a retail offer' do
+        retail_offer = Fabricate(:offer, offer_type: 'retail')
         new_params = {
           price_cents: 10_000,
           commission_percent: 10.0,
@@ -118,10 +118,38 @@ describe Admin::OffersController, type: :controller do
           notes: 'New notes.'
         }
         put :update, params: {
-          id: consignment_period_offer.id,
+          id: retail_offer.id,
           offer: new_params
         }
-        expect(consignment_period_offer.reload).to have_attributes(new_params)
+        expect(retail_offer.reload).to have_attributes(new_params)
+      end
+
+      it 'remains on the edit view and shows an error on failure' do
+        put :update, params: { id: offer.id, offer: { offer_type: 'bogus type' } }
+        expect(response).to render_template(:edit)
+        expect(controller.flash[:error]).to include('Validation failed: Offer type is not included in the list')
+      end
+
+      it 'allows you to update every param for a net price offer' do
+        net_price_offer = Fabricate(:offer, offer_type: 'net price')
+        new_params = {
+          price_cents: 10_000,
+          sale_period_start: Date.new(2017, 1, 1),
+          sale_period_end: Date.new(2017, 10, 1),
+          currency: 'GBP',
+          photography_cents: 10_000,
+          shipping_cents: 20_000,
+          insurance_cents: 1_000,
+          insurance_percent: 12.0,
+          other_fees_cents: 2_000,
+          other_fees_percent: 11.0,
+          notes: 'New notes.'
+        }
+        put :update, params: {
+          id: net_price_offer.id,
+          offer: new_params
+        }
+        expect(net_price_offer.reload).to have_attributes(new_params)
       end
 
       it 'remains on the edit view and shows an error on failure' do

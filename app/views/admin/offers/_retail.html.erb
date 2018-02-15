@@ -1,0 +1,44 @@
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Offer type
+  </div>
+  <div class='overview-item-value'>
+    <%= @offer.offer_type %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Retail price cents
+  </div>
+  <div class='overview-item-value'>
+    <%= @offer.price_cents %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Commission %
+  </div>
+  <div class='overview-item-value'>
+    <%= @offer.commission_percent %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Sale period start
+  </div>
+  <div class='overview-item-value'>
+    <%= @offer.sale_period_start&.strftime('%b %-d %Y') %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Sale period end
+  </div>
+  <div class='overview-item-value'>
+    <%= @offer.sale_period_end&.strftime('%b %-d %Y') %>
+  </div>
+</div>
