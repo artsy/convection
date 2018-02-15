@@ -38,19 +38,25 @@
           ID
         </div>
         <div class='list-group-item-info bold-label'>
-          Date
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'offers.created_at', label: 'Date' %>
         </div>
         <div class='list-group-item-info bold-label'>
-          Partner
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'partners.name', label: 'Partner' %>
         </div>
         <div class='list-group-item-info bold-label'>
-          Price
+          Email
+        </div>
+        <div class='list-group-item-info bold-label'>
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'price_cents', label: 'Price' %>
+        </div>
+        <div class='list-group-item-info bold-label'>
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'high_estimate_cents', label: 'Estimate' %>
         </div>
         <div class='list-group-item-info bold-label'>
           Commission
         </div>
         <div class='list-group-item-info bold-label'>
-          Type
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'offer_type', label: 'Type' %>
         </div>
         <div class='spacer'>
         </div>

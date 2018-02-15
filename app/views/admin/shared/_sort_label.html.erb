@@ -1,0 +1,8 @@
+<%= link_to filters.merge(sort: sort_field, direction: (filters[:direction] == 'desc' ? 'asc' : 'desc')) do %>
+  <div class=<%= filters[:sort] == sort_field ? 'gray-background-header' : '' %>>
+    <%= label %>
+    <span>
+      <%= image_tag(image_url("#{filters[:sort] == sort_field && filters[:direction] || 'asc'}_arrow.svg"), id: 'arrow') %>
+    </span>
+  </div>
+<% end %>

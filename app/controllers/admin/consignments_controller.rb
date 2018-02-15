@@ -5,9 +5,13 @@ module Admin
     before_action :set_consignment, only: [:show, :edit, :update]
     before_action :set_pagination_params, only: [:index]
 
+    expose(:consignment) do
+      PartnerSubmission.consigned.find(params[:id])
+    end
+
     expose(:consignments) do
       matching_consignments = PartnerSubmission.consigned
-      matching_consignments = matching_consignments.search(params[:term]) if params[:term].present?
+      matching_consignments = matching_consignments.search(term) if term.present?
 
       if params[:partner].present?
         partner = Partner.find(params[:partner])
@@ -20,11 +24,30 @@ module Admin
       end
 
       matching_consignments = matching_consignments.where(state: params[:state]) if params[:state].present?
-      matching_consignments.order(id: :desc).page(@page).per(@size)
+
+      sort = params[:sort].presence || 'id'
+      direction = params[:direction].presence || 'asc'
+      matching_consignments = if sort.include?('partners')
+                                matching_consignments.includes(:partner).reorder("#{sort} #{direction}")
+                              elsif sort.include?('offers')
+                                matching_consignments.joins(:accepted_offer).reorder("#{sort} #{direction}")
+                              else
+                                matching_consignments.reorder("#{sort} #{direction}")
+                              end
+
+      matching_consignments.page(@page).per(@size)
+    end
+
+    expose(:artist_details) do
+      artists_query(consignments.map(&:submission).map(&:artist_id))
+    end
+
+    expose(:artist) do
+      artists_query([consignment.submission&.artist_id])&.values&.first
     end
 
     expose(:filters) do
-      { state: params[:state], partner: params[:partner], user: params[:user] }
+      { state: params[:state], partner: params[:partner], user: params[:user], sort: params[:sort], direction: params[:direction] }
     end
 
     expose(:counts) do

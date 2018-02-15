@@ -5,6 +5,8 @@ module Admin
     before_action :set_offer, only: [:show, :edit, :update, :destroy]
     before_action :set_pagination_params, only: [:index]
 
+    expose :offer
+
     expose(:offers) do
       matching_offers = Offer.all
       matching_offers = matching_offers.search(params[:term]) if params[:term].present?
@@ -20,11 +22,22 @@ module Admin
       end
 
       matching_offers = matching_offers.where(state: params[:state]) if params[:state].present?
-      matching_offers.order(id: :desc).page(@page).per(@size)
+
+      sort = params[:sort].presence || 'id'
+      direction = params[:direction].presence || 'asc'
+      matching_offers = if sort.include?('partners')
+                          matching_offers.includes(:partner_submission).includes(:partner).reorder("#{sort} #{direction}")
+                        elsif sort.include?('submissions')
+                          matching_offers.includes(:submission).reorder("#{sort} #{direction}")
+                        else
+                          matching_offers.reorder("#{sort} #{direction}")
+                        end
+
+      matching_offers.page(@page).per(@size)
     end
 
     expose(:filters) do
-      { state: params[:state], partner: params[:partner], user: params[:user] }
+      { state: params[:state], partner: params[:partner], user: params[:user], sort: params[:sort], direction: params[:direction] }
     end
 
     expose(:counts) do
@@ -45,6 +58,10 @@ module Admin
 
     expose(:term) do
       params[:term]
+    end
+
+    expose(:artist) do
+      artists_query([offer.submission.artist_id])
     end
 
     def new_step_0

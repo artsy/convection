@@ -6,7 +6,9 @@
   <div class='row triple-padding-top'>
     <div class='col-md-12'>
       <div class='list-group'>
-        <%= render @partner_submissions.map(&:submission), artist_details: @artist_details %>
+        <% @partner_submissions.map(&:submission).each do |submission| %>
+          <%= render 'admin/submissions/submission', submission: submission, artist: @artist_details&.dig(submission.artist_id) %>
+        <% end %>
       </div>
     </div>
   </div>

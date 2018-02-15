@@ -6,14 +6,24 @@ module Admin
     before_action :set_pagination_params, only: [:index]
 
     def index
-      @filters = { state: params[:state], user: params[:user] }
+      @filters = { state: params[:state], user: params[:user], sort: params[:sort], direction: params[:direction] }
       @term = params[:term]
 
       @submissions = Submission.all
       @submissions = @submissions.search(@term) if @term.present?
       @submissions = @submissions.where(state: params[:state]) if params[:state].present?
       @submissions = @submissions.where(user_id: params[:user]) if params[:user].present?
-      @submissions = @submissions.order(id: :desc).page(@page).per(@size)
+
+      sort = params[:sort].presence || 'id'
+      direction = params[:direction].presence || 'asc'
+
+      @submissions = if sort.include?('users')
+                       @submissions.includes(:user).reorder("#{sort} #{direction}")
+                     else
+                       @submissions.reorder("#{sort} #{direction}")
+                     end
+      @submissions = @submissions.page(@page).per(@size)
+
       @artist_details = artists_query(@submissions.map(&:artist_id))
 
       respond_to do |format|

@@ -127,6 +127,17 @@ describe 'admin/offers/index.html.erb', type: :feature do
         expect(page).to have_content('sent', count: 4)
         expect(page).to have_content('draft', count: 1)
       end
+
+      it 'allows you to search by partner name, filter by state, and sort by price_cents', js: true do
+        select('sent', from: 'state')
+        fill_in('term', with: 'Gag')
+        expect(page).to have_selector('.ui-autocomplete')
+        expect(page).to have_content('Partner Gagosian')
+        click_link("partner-#{@partner1.id}")
+        expect(current_url).to include "state=sent&partner=#{@partner1.id}"
+        click_link('Price')
+        expect(current_url).to include("partner=#{@partner1.id}", 'state=sent', 'sort=price_cents', 'direction=desc')
+      end
     end
   end
 end

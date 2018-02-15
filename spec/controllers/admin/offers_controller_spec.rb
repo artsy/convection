@@ -28,15 +28,95 @@ describe Admin::OffersController, type: :controller do
 
     describe '#index' do
       before do
-        5.times { Fabricate(:offer, state: 'sent') }
+        @partner1 = Fabricate(:partner, name: 'Gagosian Gallery')
+        partner2 = Fabricate(:partner, name: 'Heritage Auctions')
+        @offer1 = Fabricate(:offer,
+          state: 'sent',
+          partner_submission: Fabricate(:partner_submission,
+            partner: @partner1,
+            submission: Fabricate(:submission, user_email: 'michael@bluth.com')),
+          offer_type: 'purchase',
+          price_cents: 100_00)
+        @offer2 = Fabricate(:offer,
+          state: 'sent',
+          partner_submission: Fabricate(:partner_submission,
+            partner: @partner1,
+            submission: Fabricate(:submission, user_email: 'michael@bluth.com')),
+          offer_type: 'purchase',
+          price_cents: 200_00)
+        @offer3 = Fabricate(:offer,
+          state: 'sent',
+          partner_submission: Fabricate(:partner_submission,
+            partner: @partner1,
+            submission: Fabricate(:submission, user_email: 'lucille@bluth.com')),
+          offer_type: 'purchase',
+          price_cents: 300_00)
+        @offer4 = Fabricate(:offer,
+          state: 'sent',
+          partner_submission: Fabricate(:partner_submission,
+            partner: partner2,
+            submission: Fabricate(:submission, user_email: 'lucille@bluth.com')),
+          offer_type: 'auction consignment',
+          high_estimate_cents: 400_00)
+        @offer5 = Fabricate(:offer,
+          state: 'rejected',
+          partner_submission: Fabricate(:partner_submission,
+            partner: partner2,
+            submission: Fabricate(:submission, user_email: 'lucille@bluth.com')),
+          offer_type: 'purchase',
+          price_cents: 500_00)
       end
+
       it 'returns the first two offers on the first page' do
         get :index, params: { page: 1, size: 2 }
         expect(controller.offers.count).to eq 2
       end
+
       it 'paginates correctly' do
         get :index, params: { page: 3, size: 2 }
         expect(controller.offers.count).to eq 1
+      end
+
+      describe '#sorting and filtering' do
+        it 'allows you to filter by state = sent' do
+          get :index, params: { state: 'sent' }
+          expect(controller.offers.pluck(:id)).to eq [@offer1.id, @offer2.id, @offer3.id, @offer4.id]
+        end
+
+        it 'allows you to filter by state = rejected' do
+          get :index, params: { state: 'rejected' }
+          expect(controller.offers.pluck(:id)).to eq [@offer5.id]
+        end
+
+        it 'allows you to sort by user email' do
+          get :index, params: { sort: 'submissions.user_email', direction: 'asc' }
+          expect(controller.offers.pluck(:id)).to eq [@offer3.id, @offer4.id, @offer5.id, @offer1.id, @offer2.id]
+        end
+
+        it 'allows you to sort by partner name' do
+          get :index, params: { sort: 'partners.name', direction: 'desc' }
+          expect(controller.offers.pluck(:id)).to eq [@offer4.id, @offer5.id, @offer1.id, @offer2.id, @offer3.id]
+        end
+
+        it 'allows you to sort by price_cents' do
+          get :index, params: { sort: 'price_cents', direction: 'desc' }
+          expect(controller.offers.pluck(:id)).to eq [@offer4.id, @offer5.id, @offer3.id, @offer2.id, @offer1.id]
+        end
+
+        it 'allows you to filter by state and sort by price_cents' do
+          get :index, params: { sort: 'price_cents', direction: 'desc', state: 'sent' }
+          expect(controller.offers.pluck(:id)).to eq [@offer4.id, @offer3.id, @offer2.id, @offer1.id]
+        end
+
+        it 'allows you to filter by state, search for partner, and sort by price_cents' do
+          get :index, params: { sort: 'price_cents', direction: 'desc', state: 'sent', partner: @partner1.id }
+          expect(controller.offers.pluck(:id)).to eq [@offer3.id, @offer2.id, @offer1.id]
+        end
+
+        it 'allows you to filter by state, search for partner, and sort by date' do
+          get :index, params: { sort: 'offers.created_at', direction: 'desc', state: 'sent', partner: @partner1.id }
+          expect(controller.offers.pluck(:id)).to eq [@offer3.id, @offer2.id, @offer1.id]
+        end
       end
     end
 

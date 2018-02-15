@@ -136,6 +136,7 @@ ActiveRecord::Schema.define(version: 20180214173948) do
     t.integer "consigned_partner_submission_id"
     t.string "user_email"
     t.integer "user_id"
+    t.integer "offers_count", default: 0
     t.index ["consigned_partner_submission_id"], name: "index_submissions_on_consigned_partner_submission_id"
     t.index ["ext_user_id"], name: "index_submissions_on_ext_user_id"
     t.index ["primary_image_id"], name: "index_submissions_on_primary_image_id"

@@ -41,7 +41,7 @@ class Offer < ApplicationRecord
   ].freeze
 
   belongs_to :partner_submission
-  belongs_to :submission
+  belongs_to :submission, counter_cache: true
   has_one :partner, through: :partner_submission
 
   validates :state, inclusion: { in: STATES }
