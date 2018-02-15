@@ -19,12 +19,12 @@
                           onchange: ("$('#consignment-filter-form').submit()") %>
           </div>
         </div>
-        <div class='col-md-9'>
-          <div class='form-group'>
-            <%= text_field_tag 'term', term, class: 'form-control', placeholder: 'Search by ID or partner' %>
-          </div>
-        </div>
       <% end %>
+      <div class='col-md-9'>
+        <div class='form-group'>
+          <%= text_field_tag 'term', term, class: 'form-control', placeholder: 'Search by ID, user name, or partner', id: 'consignments-search-form' %>
+        </div>
+      </div>
     </div>
     <div class='row col-md-12'>
       <div class='list-group-item list-item--offer'>

@@ -6,7 +6,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
     before do
       stub_gravity_root
 
-      allow_any_instance_of(Admin::SubmissionsController).to receive(:require_artsy_authentication)
+      allow_any_instance_of(ApplicationController).to receive(:require_artsy_authentication)
       allow(Convection.config).to receive(:gravity_xapp_token).and_return('xapp_token')
       gravql_artists_response = {
         data: {
@@ -77,33 +77,30 @@ describe 'admin/submissions/index.html.erb', type: :feature do
 
     context 'with a variety of submissions' do
       before do
-        user = Fabricate(:user, gravity_user_id: 'userid')
+        @user1 = Fabricate(:user, gravity_user_id: 'userid', email: 'jon-jonson@test.com')
+        @user2 = Fabricate(:user, gravity_user_id: 'userid2', email: 'percy@test.com')
         3.times do
           Fabricate(:submission,
-            user: user,
+            user: @user1,
             artist_id: 'artistid',
             state: 'submitted',
-            title: 'blah',
-            user_email: 'sarah@test.com')
+            title: 'blah')
         end
         @submission = Fabricate(:submission,
-          user: user,
+          user: @user2,
           artist_id: 'artistid2',
           state: 'approved',
-          title: 'my work',
-          user_email: 'percy@test.com')
+          title: 'my work')
         Fabricate(:submission,
-          user: user,
+          user: @user2,
           artist_id: 'artistid4',
           state: 'rejected',
-          title: 'title',
-          user_email: 'sarah@test.com')
+          title: 'title')
         Fabricate(:submission,
-          user: user,
+          user: @user2,
           artist_id: 'artistid4',
           state: 'draft',
-          title: 'blah blah',
-          user_email: 'percynew@test.com')
+          title: 'blah blah')
 
         gravql_artists_response = {
           data: {
@@ -146,30 +143,31 @@ describe 'admin/submissions/index.html.erb', type: :feature do
         expect(page).to have_selector('.list-group-item', count: 2)
       end
 
-      it 'allows you to search by submission ID', js: true do
-        fill_in('term', with: @submission.id)
-        page.execute_script("$('#submission-filter-form').submit()")
-        expect(current_url).to include "&term=#{@submission.id}"
-        expect(page).to have_selector('.list-group-item', count: 2)
-        expect(page).to have_content(@submission.id)
-      end
-
-      it 'allows you to search by term and state', js: true do
-        fill_in('term', with: 'blah')
-        page.execute_script("$('#submission-filter-form').submit()")
-        expect(current_url).to include '&term=blah'
-        expect(page).to have_selector('.list-group-item', count: 5)
+      it 'allows you to search by user and state', js: true do
         select('draft', from: 'state')
-        expect(current_url).to include '&state=draft&term=blah'
+        fill_in('term', with: 'percy')
+        expect(page).to have_selector('.ui-autocomplete')
+        click_link("user-#{@user2.id}")
+        expect(current_url).to include "state=draft&user=#{@user2.id}"
         expect(page).to have_selector('.list-group-item', count: 2)
         expect(page).to have_content('draft', count: 2)
       end
 
+      it 'allows you to navigate to a specific submission', js: true do
+        fill_in('term', with: @submission.id)
+        expect(page).to have_selector('.ui-autocomplete')
+        expect(page).to have_selector('.ui-menu-item')
+        click_link("submission-#{@submission.id}")
+        expect(current_path).to eq admin_submission_path(@submission)
+      end
+
       it 'allows you to search by user email', js: true do
         fill_in('term', with: 'percy')
-        page.execute_script("$('#submission-filter-form').submit()")
-        expect(current_url).to include '&term=percy'
-        expect(page).to have_selector('.list-group-item', count: 3)
+        expect(page).to have_selector('.ui-autocomplete')
+        expect(page).to have_content('User percy')
+        click_link("user-#{@user2.id}")
+        expect(current_url).to include "&user=#{@user2.id}"
+        expect(page).to have_selector('.list-group-item', count: 4)
         expect(page).to have_content 'my work'
         expect(page).to have_content 'blah blah'
       end

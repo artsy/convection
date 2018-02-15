@@ -1,7 +1,7 @@
 class Submission < ApplicationRecord
   include PgSearch
   pg_search_scope :search,
-    against: [:id, :title, :user_email],
+    against: [:id, :title],
     using: {
       tsearch: { prefix: true },
       trigram: {}
