@@ -4,31 +4,36 @@ module Admin
 
     before_action :set_submission, only: [:show, :edit, :update]
 
-    def index
-      @filters = { state: params[:state], user: params[:user], sort: params[:sort], direction: params[:direction] }
-      @term = params[:term]
-
-      @submissions = Submission.all
-      @submissions = @submissions.search(@term) if @term.present?
-      @submissions = @submissions.where(state: params[:state]) if params[:state].present?
-      @submissions = @submissions.where(user_id: params[:user]) if params[:user].present?
+    expose(:submissions) do
+      matching_submissions = Submission.all
+      matching_submissions = matching_submissions.search(params[:term]) if params[:term].present?
+      matching_submissions = matching_submissions.where(state: params[:state]) if params[:state].present?
+      matching_submissions = matching_submissions.where(user_id: params[:user]) if params[:user].present?
 
       sort = params[:sort].presence || 'id'
       direction = params[:direction].presence || 'asc'
 
-      @submissions = if sort.include?('users')
-                       @submissions.includes(:user).reorder("#{sort} #{direction}")
-                     else
-                       @submissions.reorder("#{sort} #{direction}")
-                     end
-      @submissions = @submissions.page(page).per(size)
+      matching_submissions = if sort.include?('users')
+                               matching_submissions.includes(:user).reorder("#{sort} #{direction}")
+                             else
+                               matching_submissions.reorder("#{sort} #{direction}")
+                             end
+      matching_submissions.page(page).per(size)
+    end
 
-      @artist_details = artists_query(@submissions.map(&:artist_id))
+    expose(:artist_details) do
+      artists_query(submissions.map(&:artist_id))
+    end
 
+    expose(:filters) do
+      { state: params[:state], user: params[:user], sort: params[:sort], direction: params[:direction] }
+    end
+
+    def index
       respond_to do |format|
         format.html
         format.json do
-          submissions_with_thumbnails = @submissions.map { |submission| submission.as_json.merge(thumbnail: submission.thumbnail) }
+          submissions_with_thumbnails = submissions.map { |submission| submission.as_json.merge(thumbnail: submission.thumbnail) }
           render json: submissions_with_thumbnails || []
         end
       end
@@ -65,21 +70,21 @@ module Admin
 
     def match_artist
       if params[:term]
-        @term = params[:term]
-        @artists = Gravity.client.artists(term: @term).artists
+        term = params[:term]
+        artists = Gravity.client.artists(term: term).artists
       end
       respond_to do |format|
-        format.json { render json: @artists || [] }
+        format.json { render json: artists || [] }
       end
     end
 
     def match_user
       if params[:term]
-        @term = params[:term]
-        @users = Gravity.client.users(term: @term).users
+        term = params[:term]
+        users = Gravity.client.users(term: term).users
       end
       respond_to do |format|
-        format.json { render json: @users || [] }
+        format.json { render json: users || [] }
       end
     end
 

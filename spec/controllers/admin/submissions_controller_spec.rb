@@ -37,33 +37,33 @@ describe Admin::SubmissionsController, type: :controller do
       describe 'filtering the index view' do
         it 'returns the first two submissions on the first page' do
           get :index, params: { page: 1, size: 2 }
-          expect(assigns(:submissions).count).to eq 2
+          expect(controller.submissions.count).to eq 2
         end
         it 'paginates correctly' do
           get :index, params: { page: 3, size: 2 }
-          expect(assigns(:submissions).count).to eq 1
+          expect(controller.submissions.count).to eq 1
         end
         it 'sets the artist details correctly' do
           get :index
-          expect(assigns(:artist_details)).to eq('artist1' => 'Andy Warhol',
-                                                 'artist2' => 'Kara Walker')
+          expect(controller.artist_details).to eq('artist1' => 'Andy Warhol',
+                                                  'artist2' => 'Kara Walker')
         end
       end
 
       describe '#sorting and filtering' do
         it 'allows you to filter by state = approved' do
           get :index, params: { state: 'approved' }
-          expect(assigns(:submissions).pluck(:id)).to eq [@submission4.id, @submission5.id]
+          expect(controller.submissions.pluck(:id)).to eq [@submission4.id, @submission5.id]
         end
 
         it 'allows you to filter by state = submitted' do
           get :index, params: { state: 'submitted' }
-          expect(assigns(:submissions).pluck(:id)).to eq [@submission1.id, @submission2.id, @submission3.id]
+          expect(controller.submissions.pluck(:id)).to eq [@submission1.id, @submission2.id, @submission3.id]
         end
 
         it 'allows you to sort by user email' do
           get :index, params: { sort: 'users.email', direction: 'asc' }
-          expect(assigns(:submissions).pluck(:id)).to eq(
+          expect(controller.submissions.pluck(:id)).to eq(
             [@submission5.id, @submission4.id, @submission3.id, @submission2.id, @submission1.id]
           )
         end
@@ -73,19 +73,19 @@ describe Admin::SubmissionsController, type: :controller do
           Fabricate(:offer, partner_submission: Fabricate(:partner_submission, submission: @submission2))
           Fabricate(:offer, partner_submission: Fabricate(:partner_submission, submission: @submission3))
           get :index, params: { sort: 'offers_count', direction: 'desc' }
-          expect(assigns(:submissions).pluck(:id)).to eq(
+          expect(controller.submissions.pluck(:id)).to eq(
             [@submission2.id, @submission3.id, @submission1.id, @submission4.id, @submission5.id]
           )
         end
 
         it 'allows you to filter by state and sort by user email' do
           get :index, params: { sort: 'users.email', direction: 'desc', state: 'submitted' }
-          expect(assigns(:submissions).pluck(:id)).to eq [@submission1.id, @submission2.id, @submission3.id]
+          expect(controller.submissions.pluck(:id)).to eq [@submission1.id, @submission2.id, @submission3.id]
         end
 
         it 'allows you to filter by state, search for user, and sort by ID' do
           get :index, params: { sort: 'id', direction: 'desc', state: 'submitted', user: @user1.id }
-          expect(assigns(:submissions).pluck(:id)).to eq [@submission2.id, @submission1.id]
+          expect(controller.submissions.pluck(:id)).to eq [@submission2.id, @submission1.id]
         end
       end
 
