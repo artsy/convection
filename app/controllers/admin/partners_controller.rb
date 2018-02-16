@@ -1,12 +1,11 @@
 module Admin
   class PartnersController < ApplicationController
     include GraphqlHelper
-    before_action :set_pagination_params, only: [:index, :create]
 
     expose(:partners) do
       matching_partners = Partner.all
       matching_partners = matching_partners.search_by_name(params[:term]) if params[:term].present?
-      matching_partners.page(@page).per(@size)
+      matching_partners.page(page).per(size)
     end
 
     expose(:term) do

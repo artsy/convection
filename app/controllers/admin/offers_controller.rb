@@ -3,7 +3,6 @@ module Admin
     include GraphqlHelper
 
     before_action :set_offer, only: [:show, :edit, :update, :destroy]
-    before_action :set_pagination_params, only: [:index]
 
     expose :offer
 
@@ -33,7 +32,7 @@ module Admin
                           matching_offers.reorder("#{sort} #{direction}")
                         end
 
-      matching_offers.page(@page).per(@size)
+      matching_offers.page(page).per(size)
     end
 
     expose(:filters) do

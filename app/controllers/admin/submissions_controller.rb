@@ -3,7 +3,6 @@ module Admin
     include GraphqlHelper
 
     before_action :set_submission, only: [:show, :edit, :update]
-    before_action :set_pagination_params, only: [:index]
 
     def index
       @filters = { state: params[:state], user: params[:user], sort: params[:sort], direction: params[:direction] }
@@ -22,7 +21,7 @@ module Admin
                      else
                        @submissions.reorder("#{sort} #{direction}")
                      end
-      @submissions = @submissions.page(@page).per(@size)
+      @submissions = @submissions.page(page).per(size)
 
       @artist_details = artists_query(@submissions.map(&:artist_id))
 

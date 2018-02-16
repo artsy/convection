@@ -49,6 +49,6 @@
       </div>
     </div>
   </div>
-  <%= render 'shared/watt/paginator', total_items_count: partners.total_count, items_count: partners.length, per_page: @size, current_page: @page, base_url: admin_partners_url %>
+  <%= render 'shared/watt/paginator', total_items_count: partners.total_count, items_count: partners.length, per_page: size, current_page: page, base_url: admin_partners_url %>
 </div>
 <%= render 'create_partner' %>

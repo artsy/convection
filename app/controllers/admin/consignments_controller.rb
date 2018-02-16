@@ -3,7 +3,6 @@ module Admin
     include GraphqlHelper
 
     before_action :set_consignment, only: [:show, :edit, :update]
-    before_action :set_pagination_params, only: [:index]
 
     expose(:consignment) do
       PartnerSubmission.consigned.find(params[:id])
@@ -35,7 +34,7 @@ module Admin
                                 matching_consignments.reorder("#{sort} #{direction}")
                               end
 
-      matching_consignments.page(@page).per(@size)
+      matching_consignments.page(page).per(size)
     end
 
     expose(:artist_details) do
