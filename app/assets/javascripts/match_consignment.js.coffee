@@ -1,20 +1,11 @@
 $ ->
-  existingFilters = () ->
-    filters = {}
-    $('.filter_field').each (index, field) ->
-      if $(field).val().length > 0
-        val = $(field).val()
-        filters[$(field).attr('name')] = val
-    return filters
-
   # Autocomplete for consignments index view
   if $('#consignments-search-form').length != 0
-    filters = existingFilters()
-
     $('#consignments-search-form').autocomplete(
       source: (request, response) ->
         compiledData = []
-        baseURL = "/admin/consignments"
+        currentStateFilter = $('#state :selected').val().replace(' ', '+')
+        baseURL = "/admin/consignments?state=#{currentStateFilter}"
         respond = _.after 3, ->
           response compiledData
         $.getJSON '/admin/consignments', { term: request.term, size: 5, format: 'json' }, (data) ->
@@ -22,25 +13,23 @@ $ ->
             item.display = "##{item.reference_id}"
             item.label = 'Consignment'
             item.value = item.id
-            item.href = "#{baseURL}/#{item.id}"
+            item.href = "/admin/consignments/#{item.id}"
           compiledData = compiledData.concat data
           respond()
         $.getJSON '/admin/partners', { term: request.term, size: 5, format: 'json' }, (data) ->
           for item in data
-            partnerFilter = $.extend(filters, {'partner': item.id})
             item.display = item.name
             item.label = 'Partner'
             item.value = item.id
-            item.href = "#{baseURL}?#{$.param(partnerFilter)}"
+            item.href = "#{baseURL}&partner=#{item.id}"
           compiledData = compiledData.concat data
           respond()
         $.getJSON '/admin/users', { term: request.term, size: 5, format: 'json' }, (data) ->
           for item in data
-            userFilter = $.extend(filters, {'user': item.id})
             item.display = item.email
             item.label = 'User'
             item.value = item.id
-            item.href = "#{baseURL}?#{$.param(userFilter)}"
+            item.href = "#{baseURL}&user=#{item.id}"
           compiledData = compiledData.concat data
           respond()
       select: (e) ->

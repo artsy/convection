@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="10px" height="5px" viewBox="0 0 10 5" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
-    <title>Rectangle 6 Copy</title>
-    <desc>Created with Sketch.</desc>
     <defs></defs>
-    <g id="SUBMISSIONS" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-470.000000, -273.000000)">
+    <g id="asc_arrow" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-470.000000, -273.000000)">
         <polygon id="Rectangle-6-Copy" fill="#333333" transform="translate(474.949747, 277.949747) scale(1, -1) rotate(-225.000000) translate(-474.949747, -277.949747) " points="471.449747 274.449747 478.449747 274.449747 478.449747 281.449747"></polygon>
     </g>
 </svg>
