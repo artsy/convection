@@ -16,7 +16,9 @@
     </div>
     <div class='row col-sm-12'>
       <div class='list-group'>
-        <%= render submissions, artist_details: @artist_details %>
+        <% submissions.each do |submission| %>
+          <%= render 'admin/submissions/submission', submission: submission, artist: artist_details&.dig(submission.artist_id) %>
+        <% end %>
       </div>
     </div>
     <div class='row col-sm-12'>
@@ -72,7 +74,9 @@
     </div>
     <div class='row col-sm-12'>
       <div class='list-group'>
-        <%= render partial: 'admin/consignments/consignment', collection: consignments %>
+        <% consignments.each do |consignment| %>
+          <%= render 'admin/consignments/consignment', consignment: consignment, artist: artist_details&.dig(consignment.submission.artist_id) %>
+        <% end %>
       </div>
     </div>
     <div class='row col-sm-12'>

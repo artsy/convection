@@ -32,24 +32,34 @@
           State
         </div>
         <div class='list-group-item-info bold-label'>
-          ID
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'id', label: 'ID' %>
         </div>
         <div class='list-group-item-info bold-label'>
-          Date
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'sale_date', label: 'Sale date' %>
         </div>
         <div class='list-group-item-info bold-label'>
-          Partner
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'partners.name', label: 'Partner' %>
         </div>
         <div class='list-group-item-info bold-label'>
-          Offer Type
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'sale_price_cents', label: 'Price' %>
+        </div>
+        <div class='list-group-item-info bold-label'>
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'offers.offer_type', label: 'Offer type' %>
+        </div>
+        <div class='list-group-item-info bold-label'>
+          Artist
+        </div>
+        <div class='list-group-item-info bold-label'>
         </div>
         <div class='spacer'>
         </div>
       </div>
       <div class='list-group'>
-        <%= render partial: 'admin/consignments/consignment', collection: consignments %>
+        <% consignments.each do |consignment| %>
+          <%= render 'admin/consignments/consignment', consignment: consignment, artist: artist_details.dig(consignment.submission.artist_id) %>
+        <% end %>
       </div>
     </div>
-    <%= render 'shared/watt/paginator', total_items_count: consignments.total_count, items_count: consignments.length, per_page: @size, current_page: @page, base_url: admin_consignments_url(filters) %>
+    <%= render 'shared/watt/paginator', total_items_count: consignments.total_count, items_count: consignments.length, per_page: size, current_page: page, base_url: admin_consignments_url(filters) %>
   </div>
 </div>

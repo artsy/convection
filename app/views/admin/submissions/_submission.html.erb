@@ -15,10 +15,13 @@
       <%= submission.created_at.strftime('%m/%d/%Y') %>
     </div>
   <% end %>
+  <% unless truncated %>
+    <div class='list-group-item-info'>
+      <%= submission.offers_count %>
+    </div>
+  <% end %>
   <div class='list-group-item-info'>
-    <% if artist_details.present? %>
-      <%= artist_details[submission.artist_id] %>
-    <% end %>
+    <%= artist %>
   </div>
   <div class='list-group-item-info'>
     <%= submission&.title&.truncate(30) %>

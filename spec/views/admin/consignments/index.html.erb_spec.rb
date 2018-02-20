@@ -6,6 +6,25 @@ describe 'admin/consignments/index.html.erb', type: :feature do
     before do
       allow_any_instance_of(ApplicationController).to receive(:require_artsy_authentication)
 
+      stub_gravity_root
+      allow(Convection.config).to receive(:gravity_xapp_token).and_return('xapp_token')
+      gravql_artists_response = {
+        data: {
+          artists: [
+            { id: 'artist1', name: 'Andy Warhol' },
+            { id: 'artist2', name: 'Kara Walker' }
+          ]
+        }
+      }
+      stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
+        .to_return(body: gravql_artists_response.to_json)
+        .with(
+          headers: {
+            'X-XAPP-TOKEN' => 'xapp_token',
+            'Content-Type' => 'application/json'
+          }
+        )
+
       allow(Convection.config).to receive(:gravity_xapp_token).and_return('xapp_token')
       page.visit admin_consignments_path
     end
@@ -39,24 +58,6 @@ describe 'admin/consignments/index.html.erb', type: :feature do
 
       it 'lets you click a consignment' do
         consignment = PartnerSubmission.consigned.first
-
-        allow(Convection.config).to receive(:gravity_xapp_token).and_return('xapp_token')
-        gravql_artists_response = {
-          data: {
-            artists: [
-              { id: 'artist1', name: 'Andy Warhol' }
-            ]
-          }
-        }
-        stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
-          .to_return(body: gravql_artists_response.to_json)
-          .with(
-            headers: {
-              'X-XAPP-TOKEN' => 'xapp_token',
-              'Content-Type' => 'application/json'
-            }
-          )
-
         stub_gravity_root
         stub_gravity_user(id: consignment.submission.user.gravity_user_id)
         stub_gravity_user_detail(id: consignment.submission.user.gravity_user_id)
@@ -105,7 +106,7 @@ describe 'admin/consignments/index.html.erb', type: :feature do
         expect(page).to have_selector('.ui-autocomplete')
         expect(page).to have_content('Partner Gagosian Gallery')
         click_link("partner-#{@partner1.id}")
-        expect(current_url).to include "&partner=#{@partner1.id}"
+        expect(current_url).to include "partner=#{@partner1.id}"
         partner_names = page.all('.list-group-item-info--partner-name').map(&:text)
         expect(partner_names.count).to eq 3
         expect(partner_names.uniq).to eq(['Gagosian Gallery'])
@@ -129,6 +130,17 @@ describe 'admin/consignments/index.html.erb', type: :feature do
         expect(partner_names.first).to eq('Heritage Auctions')
         expect(current_url).to include "state=bought+in&partner=#{@partner2.id}"
         expect(page).to have_selector('.list-group-item', count: 2)
+      end
+
+      it 'allows you to search by partner name, filter by state, and sort by sale_price_cents', js: true do
+        select('bought in', from: 'state')
+        fill_in('term', with: 'herit')
+        expect(page).to have_selector('.ui-autocomplete')
+        expect(page).to have_content('Partner Heritage Auctions')
+        click_link("partner-#{@partner2.id}")
+        expect(current_url).to include "state=bought+in&partner=#{@partner2.id}"
+        click_link('Price')
+        expect(current_url).to include("partner=#{@partner2.id}", 'state=bought+in', 'sort=sale_price_cents', 'direction=desc')
       end
     end
   end

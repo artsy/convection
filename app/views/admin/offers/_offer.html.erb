@@ -13,9 +13,19 @@
   <div class='list-group-item-info'>
     <%= offer.partner.name %>
   </div>
-  <% unless truncated %>
+  <% if truncated %>
     <div class='list-group-item-info'>
       <%= offer.best_price_display || '-' %>
+    </div>
+  <% else %>
+    <div class='list-group-item-info'>
+      <%= offer.submission.user&.email %>
+    </div>
+    <div class='list-group-item-info'>
+      <%= offer.price_cents %>
+    </div>
+    <div class='list-group-item-info'>
+      <%= offer.high_estimate_cents %>
     </div>
     <div class='list-group-item-info'>
       <% if offer.commission_percent %>
