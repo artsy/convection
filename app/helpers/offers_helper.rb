@@ -88,7 +88,7 @@ module OffersHelper
 
   def commission_display(offer)
     return if offer.commission_percent.blank?
-    "#{offer.commission_percent * 100}%"
+    "#{(offer.commission_percent * 100).round(2)}%"
   end
 
   def shipping_display(offer)

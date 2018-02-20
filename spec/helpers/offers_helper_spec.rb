@@ -200,6 +200,11 @@ describe OffersHelper, type: :helper do
       expect(helper.commission_display(offer)).to eq '12.0%'
     end
 
+    it 'works for an offer with a 0.14 comission_percent' do
+      offer = double('offer', commission_percent: 0.14)
+      expect(helper.commission_display(offer)).to eq '14.0%'
+    end
+
     it 'returns nil if the offer has no commission_percent' do
       offer = double('offer', commission_percent: nil)
       expect(helper.commission_display(offer)).to eq nil
