@@ -32,6 +32,11 @@
           <div class='overview-section'>
             <div class='overview-section-title--inline'>
               Offer #<%= offer.reference_id %>
+              <% if @offer.locked? %>
+                <span class='locked'>
+                  <%= image_tag(image_url('lock.svg'), id: 'lock') %>
+                </span>
+              <% end %>
             </div>
           </div>
           <%= render 'state_actions' %>

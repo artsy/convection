@@ -49,6 +49,25 @@ describe Offer do
     end
   end
 
+  context 'locked?' do
+    it 'returns true if this offer is not the accepted_offer and the partner submission is consigned' do
+      ps = offer.partner_submission
+      consigned_offer = Fabricate(:offer, partner_submission: ps)
+      OfferService.consign!(consigned_offer)
+      expect(offer.locked?).to eq true
+      expect(consigned_offer.locked?).to eq false
+    end
+
+    it 'returns false if the submission has not been consigned at all' do
+      expect(offer.locked?).to eq false
+    end
+
+    it 'returns false if this offer is the accepted_offer' do
+      OfferService.consign!(offer)
+      expect(offer.locked?).to eq false
+    end
+  end
+
   context 'rejection_reason' do
     it 'allows only certain rejection reasons' do
       expect(Offer.new(rejection_reason: 'blah')).not_to be_valid

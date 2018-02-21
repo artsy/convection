@@ -1,6 +1,16 @@
 <% truncated = false if local_assigns[:truncated].nil? %>
 
 <%= link_to admin_offer_path(offer), class: 'list-group-item list-item--offer', data: { id: offer.id } do %>
+  <span>
+    <% if offer.locked? %>
+      <div class='locked'>
+        <%= image_tag(image_url('lock.svg'), id: 'lock') %>
+      </div>
+    <% else %>
+      <div class='spacer'>
+      </div>
+    <% end %>
+  </span>
   <div class='list-group-item-info'>
     <%= offer.state %>
   </div>

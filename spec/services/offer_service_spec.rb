@@ -156,17 +156,6 @@ describe OfferService do
         expect(ps.submission.consigned_partner_submission).to eq offer.partner_submission
         expect(offer.consigned_at).to_not be_nil
       end
-
-      it 'marks all other offers as locked' do
-        additional_offer = Fabricate(:offer,
-          offer_type: 'purchase',
-          price_cents: 10_000,
-          state: 'review',
-          partner_submission: Fabricate(:partner_submission, submission: submission))
-        OfferService.update_offer(offer, 'userid', state: 'consigned')
-        expect(offer.state).to eq 'consigned'
-        expect(additional_offer.reload.state).to eq 'locked'
-      end
     end
 
     describe 'rejecting an offer' do

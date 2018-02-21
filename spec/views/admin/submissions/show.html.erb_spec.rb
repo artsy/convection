@@ -197,6 +197,10 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       it 'shows the consignment' do
         expect(page).to have_selector('.list-item--consignment')
         expect(page).to have_content('Consignment')
+
+        within(:css, '.list-item--consignment') do
+          expect(page).to have_content('Gob Bluth')
+        end
       end
     end
   end

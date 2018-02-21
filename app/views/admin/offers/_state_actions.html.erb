@@ -1,4 +1,4 @@
-<% unless @offer.rejected? || @offer.lapsed? || @offer.consigned? || @offer.locked? %>
+<% unless @offer.rejected? || @offer.lapsed? || @offer.consigned? %>
   <% if @offer.draft? %>
     <div class='overview-section offer-draft-actions'>
       <div class='single-padding-top'>
@@ -31,20 +31,26 @@
           <%= link_to('Offer Lapsed', admin_offer_path(@offer, offer: { state: 'lapsed' }), method: :put, class: 'btn btn-secondary btn-small btn-full-width',
                 data: { confirm: 'This action will mark the consignment as lapsed. This action cannot be undone.' }) %>
         </div>
-        <div class='double-padding-top'>
-          <%= check_box_tag 'terms_signed' %>
-          <span class='purple-label'>Required:</span> Terms signed.
+        <% if @offer.locked? %>
           <div class='single-padding-top'>
-            <%= link_to('Complete Consignment',
-                  admin_offer_path(@offer, offer: { state: 'consigned' }),
-                  method: :put,
-                  class: 'btn btn-primary btn-small btn-full-width offer-consign-button disabled-button',
-                  data: { confirm: 'This action will complete the consignment. This action cannot be undone.' }) %>
+            <i>This offer is locked since a competing offer is in review.</i>
           </div>
-          <div class='single-padding-top'>
-            <i>When offer is consigned, all other competing offers will lock.</i>
+        <% else %>
+          <div class='double-padding-top'>
+            <%= check_box_tag 'terms_signed' %>
+            <span class='purple-label'>Required:</span> Terms signed.
+            <div class='single-padding-top'>
+              <%= link_to('Complete Consignment',
+                    admin_offer_path(@offer, offer: { state: 'consigned' }),
+                    method: :put,
+                    class: 'btn btn-primary btn-small btn-full-width offer-consign-button disabled-button',
+                    data: { confirm: 'This action will complete the consignment. This action cannot be undone.' }) %>
+            </div>
+            <div class='single-padding-top'>
+              <i>When offer is consigned, all other competing offers will lock.</i>
+            </div>
           </div>
-        </div>
+        <% end %>
       </div>
     </div>
   <% end %>
