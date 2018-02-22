@@ -93,14 +93,14 @@ module Admin
       params.require(:partner_submission).permit(
         :canceled_reason,
         :currency,
-        :sale_price_cents,
+        :sale_price,
         :sale_name,
         :sale_date,
         :sale_location,
         :sale_lot_number,
         :state,
-        :partner_commission_percent,
-        :artsy_commission_percent,
+        :partner_commission_percent_whole,
+        :artsy_commission_percent_whole,
         :partner_invoiced_at,
         :partner_paid_at,
         :notes

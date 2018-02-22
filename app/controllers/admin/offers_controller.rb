@@ -122,26 +122,26 @@ module Admin
 
     def offer_params
       params.require(:offer).permit(
-        :commission_percent,
+        :commission_percent_whole,
         :created_by_id,
         :currency,
-        :high_estimate_cents,
-        :insurance_cents,
-        :insurance_percent,
-        :low_estimate_cents,
+        :high_estimate,
+        :insurance,
+        :insurance_percent_whole,
+        :low_estimate,
         :notes,
         :offer_type,
-        :other_fees_cents,
-        :other_fees_percent,
-        :photography_cents,
-        :price_cents,
+        :other_fees,
+        :other_fees_percent_whole,
+        :photography,
+        :price,
         :rejection_reason,
         :rejection_note,
         :sale_date,
         :sale_name,
         :sale_period_end,
         :sale_period_start,
-        :shipping_cents,
+        :shipping,
         :state
       )
     end

@@ -23,22 +23,22 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
 
       it 'displays all of the shared fields' do
         expect(page).to have_content('Currency')
-        expect(page).to have_content('Photography cents')
-        expect(page).to have_content('Shipping cents')
-        expect(page).to have_content('Insurance cents')
+        expect(page).to have_content('Photography')
+        expect(page).to have_content('Shipping')
+        expect(page).to have_content('Insurance')
         expect(page).to have_content('Insurance %')
-        expect(page).to have_content('Other fees cents')
+        expect(page).to have_content('Other fees')
         expect(page).to have_content('Other fees %')
         expect(page).to have_content('Notes')
       end
 
       it 'displays all of the specific fields' do
-        expect(page).to have_content('Low estimate cents')
-        expect(page).to have_content('High estimate cents')
+        expect(page).to have_content('Low estimate')
+        expect(page).to have_content('High estimate')
         expect(page).to have_content('Commission %')
         expect(page).to have_content('Sale name')
         expect(page).to have_content('Sale date')
-        expect(page).to_not have_content('Price cents')
+        expect(page).to_not have_content('Price')
       end
 
       it 'allows you to create an offer' do
@@ -63,11 +63,28 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
               'Content-Type' => 'application/json'
             }
           )
-        fill_in('offer_commission_percent', with: '10')
+        fill_in('offer_commission_percent_whole', with: '10')
+        fill_in('offer_low_estimate', with: '100')
+        fill_in('offer_high_estimate', with: '300')
+        fill_in('offer_photography', with: '50')
+        fill_in('offer_shipping', with: '70')
+        fill_in('offer_insurance', with: '10')
+        fill_in('offer_other_fees', with: '5')
+        fill_in('offer_insurance_percent_whole', with: '8')
+        fill_in('offer_other_fees_percent_whole', with: '8.8')
+
         click_button('Create')
         expect(page).to have_content('Offer #')
         expect(page).to have_content('State draft')
         expect(page).to have_content('Commission % 10.0')
+        expect(page).to have_content('Low estimate $100')
+        expect(page).to have_content('High estimate $300')
+        expect(page).to have_content('Shipping $70')
+        expect(page).to have_content('Photography $50')
+        expect(page).to have_content('Insurance $10')
+        expect(page).to have_content('Other fees $5')
+        expect(page).to have_content('Insurance % 8.0')
+        expect(page).to have_content('Other fees % 8.8')
       end
     end
 
@@ -83,17 +100,17 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
 
       it 'displays all of the shared fields' do
         expect(page).to have_content('Currency')
-        expect(page).to have_content('Photography cents')
-        expect(page).to have_content('Shipping cents')
-        expect(page).to have_content('Insurance cents')
+        expect(page).to have_content('Photography')
+        expect(page).to have_content('Shipping')
+        expect(page).to have_content('Insurance')
         expect(page).to have_content('Insurance %')
-        expect(page).to have_content('Other fees cents')
+        expect(page).to have_content('Other fees')
         expect(page).to have_content('Other fees %')
         expect(page).to have_content('Notes')
       end
 
       it 'displays all of the specific fields' do
-        expect(page).to have_content('Price cents')
+        expect(page).to have_content('Price')
         expect(page).to_not have_content('Sale period end')
         expect(page).to_not have_content('Sale name')
       end
@@ -120,11 +137,24 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
               'Content-Type' => 'application/json'
             }
           )
-        fill_in('offer_price_cents', with: '10')
+        fill_in('offer_price', with: '700')
+        fill_in('offer_photography', with: '50')
+        fill_in('offer_shipping', with: '70')
+        fill_in('offer_insurance', with: '10')
+        fill_in('offer_other_fees', with: '5')
+        fill_in('offer_insurance_percent_whole', with: '8')
+        fill_in('offer_other_fees_percent_whole', with: '8.8')
+
         click_button('Create')
         expect(page).to have_content('Offer #')
         expect(page).to have_content('State draft')
-        expect(page).to have_content('Price cents 10')
+        expect(page).to have_content('Price $700')
+        expect(page).to have_content('Shipping $70')
+        expect(page).to have_content('Photography $50')
+        expect(page).to have_content('Insurance $10')
+        expect(page).to have_content('Other fees $5')
+        expect(page).to have_content('Insurance % 8.0')
+        expect(page).to have_content('Other fees % 8.8')
       end
     end
 
@@ -140,17 +170,17 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
 
       it 'displays all of the shared fields' do
         expect(page).to have_content('Currency')
-        expect(page).to have_content('Photography cents')
-        expect(page).to have_content('Shipping cents')
-        expect(page).to have_content('Insurance cents')
+        expect(page).to have_content('Photography')
+        expect(page).to have_content('Shipping')
+        expect(page).to have_content('Insurance')
         expect(page).to have_content('Insurance %')
-        expect(page).to have_content('Other fees cents')
+        expect(page).to have_content('Other fees')
         expect(page).to have_content('Other fees %')
         expect(page).to have_content('Notes')
       end
 
       it 'displays all of the specific fields' do
-        expect(page).to have_content('Retail price cents')
+        expect(page).to have_content('Retail price')
         expect(page).to have_content('Commission %')
         expect(page).to have_content('Sale period start')
         expect(page).to have_content('Sale period end')
@@ -179,11 +209,27 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
               'Content-Type' => 'application/json'
             }
           )
-        fill_in('offer_commission_percent', with: '10')
+
+        fill_in('offer_price', with: '700')
+        fill_in('offer_commission_percent_whole', with: '12.5')
+        fill_in('offer_photography', with: '50')
+        fill_in('offer_shipping', with: '70')
+        fill_in('offer_insurance', with: '10')
+        fill_in('offer_other_fees', with: '5')
+        fill_in('offer_insurance_percent_whole', with: '8')
+        fill_in('offer_other_fees_percent_whole', with: '8.8')
+
         click_button('Create')
         expect(page).to have_content('Offer #')
         expect(page).to have_content('State draft')
-        expect(page).to have_content('Commission % 10.0')
+        expect(page).to have_content('Commission % 12.5')
+        expect(page).to have_content('Retail price $700')
+        expect(page).to have_content('Shipping $70')
+        expect(page).to have_content('Photography $50')
+        expect(page).to have_content('Insurance $10')
+        expect(page).to have_content('Other fees $5')
+        expect(page).to have_content('Insurance % 8.0')
+        expect(page).to have_content('Other fees % 8.8')
       end
     end
 
@@ -199,17 +245,17 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
 
       it 'displays all of the shared fields' do
         expect(page).to have_content('Currency')
-        expect(page).to have_content('Photography cents')
-        expect(page).to have_content('Shipping cents')
-        expect(page).to have_content('Insurance cents')
+        expect(page).to have_content('Photography')
+        expect(page).to have_content('Shipping')
+        expect(page).to have_content('Insurance')
         expect(page).to have_content('Insurance %')
-        expect(page).to have_content('Other fees cents')
+        expect(page).to have_content('Other fees')
         expect(page).to have_content('Other fees %')
         expect(page).to have_content('Notes')
       end
 
       it 'displays all of the specific fields' do
-        expect(page).to have_content('Net sale price cents')
+        expect(page).to have_content('Net sale price ')
         expect(page).to have_content('Sale period start')
         expect(page).to have_content('Sale period end')
         expect(page).to_not have_content('Sale name')
@@ -238,11 +284,25 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
               'Content-Type' => 'application/json'
             }
           )
-        fill_in('offer_price_cents', with: '10000')
+
+        fill_in('offer_price', with: '700')
+        fill_in('offer_photography', with: '50')
+        fill_in('offer_shipping', with: '70')
+        fill_in('offer_insurance', with: '10')
+        fill_in('offer_other_fees', with: '5')
+        fill_in('offer_insurance_percent_whole', with: '8')
+        fill_in('offer_other_fees_percent_whole', with: '8.8')
+
         click_button('Create')
         expect(page).to have_content('Offer #')
         expect(page).to have_content('State draft')
-        expect(page).to have_content('Price cents 10000')
+        expect(page).to have_content('Price $700')
+        expect(page).to have_content('Shipping $70')
+        expect(page).to have_content('Photography $50')
+        expect(page).to have_content('Insurance $10')
+        expect(page).to have_content('Other fees $5')
+        expect(page).to have_content('Insurance % 8.0')
+        expect(page).to have_content('Other fees % 8.8')
       end
     end
   end

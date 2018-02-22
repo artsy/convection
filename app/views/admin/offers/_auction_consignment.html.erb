@@ -9,19 +9,19 @@
 
 <div class='overview-item'>
   <div class='overview-item-title'>
-    Low estimate cents
+    Low estimate
   </div>
   <div class='overview-item-value'>
-    <%= @offer.low_estimate_cents %>
+    <%= @offer.low_estimate_display %>
   </div>
 </div>
 
 <div class='overview-item'>
   <div class='overview-item-title'>
-    High estimate cents
+    High estimate
   </div>
   <div class='overview-item-value'>
-    <%= @offer.high_estimate_cents %>
+    <%= @offer.high_estimate_display %>
   </div>
 </div>
 
@@ -30,7 +30,7 @@
     Commission %
   </div>
   <div class='overview-item-value'>
-    <%= @offer.commission_percent %>
+    <%= @offer.commission_percent_whole %>
   </div>
 </div>
 

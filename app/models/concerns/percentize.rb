@@ -1,0 +1,29 @@
+module Percentize
+  extend ActiveSupport::Concern
+
+  # Call like:
+  #   percentize :commission_percent  # => defines commission_percent_whole
+  #
+  def percentize(*method_names)
+    method_names.each do |method_name|
+      attribute "#{method_name}_whole".to_sym
+
+      define_method "#{method_name}_whole" do
+        return if self[method_name].blank?
+        (self[method_name] * 100).round(2)
+      end
+
+      define_method "#{method_name}_whole=" do |percent_whole|
+        return if percent_whole.blank?
+        percentage = percent_whole.to_f / 100
+        self[method_name] = percentage
+      end
+    end
+  end
+
+  def percent(*attributes)
+    attributes.each do |name|
+      percentize name
+    end
+  end
+end

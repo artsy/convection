@@ -61,7 +61,7 @@ describe 'admin/consignments/edit.html.erb', type: :feature do
       it 'displays all of the shared fields' do
         expect(page).to have_content('State')
         expect(page).to have_content('Currency')
-        expect(page).to have_content('Price cents')
+        expect(page).to have_content('Price')
         expect(page).to have_content('Date')
         expect(page).to have_content('Name')
         expect(page).to have_content('Location')
@@ -75,9 +75,16 @@ describe 'admin/consignments/edit.html.erb', type: :feature do
 
       it 'allows you to edit a consignment' do
         fill_in('partner_submission_sale_name', with: 'August Sale')
+        fill_in('partner_submission_sale_price', with: '700')
+        fill_in('partner_submission_partner_commission_percent_whole', with: '10')
+        fill_in('partner_submission_artsy_commission_percent_whole', with: '8.8')
+
         click_button('Save')
         expect(page.current_path).to eq admin_consignment_path(partner_submission)
         expect(page).to have_content('Name August Sale')
+        expect(page).to have_content('Price $700')
+        expect(page).to have_content('Partner Commission % 10.0')
+        expect(page).to have_content('Artsy Commission % 8.8')
       end
 
       it 'shows the canceled reason box when canceled is selected', js: true do

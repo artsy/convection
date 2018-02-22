@@ -38,10 +38,10 @@
             </div>
             <div class='overview-item'>
               <div class='overview-item-title'>
-                Price cents
+                Price
               </div>
               <div class='overview-item-value'>
-                <%= @consignment.sale_price_cents %>
+                <%= @consignment.sale_price_display %>
               </div>
             </div>
             <div class='overview-item'>
@@ -81,7 +81,7 @@
                 Partner Commission %
               </div>
               <div class='overview-item-value'>
-                <%= @consignment.partner_commission_percent %>
+                <%= @consignment.partner_commission_percent_whole %>
               </div>
             </div>
             <div class='overview-item'>
@@ -89,7 +89,7 @@
                 Artsy Commission %
               </div>
               <div class='overview-item-value'>
-                <%= @consignment.artsy_commission_percent %>
+                <%= @consignment.artsy_commission_percent_whole %>
               </div>
             </div>
             <div class='overview-item'>

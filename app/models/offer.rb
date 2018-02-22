@@ -2,6 +2,8 @@ class Offer < ApplicationRecord
   include ReferenceId
   include PgSearch
   include Currency
+  extend Dollarize
+  extend Percentize
 
   pg_search_scope :search,
     against: [:id, :reference_id],
@@ -52,6 +54,18 @@ class Offer < ApplicationRecord
   before_create :set_submission
 
   scope :sent, -> { where(state: 'sent') }
+
+  cents :price_cents
+  cents :low_estimate_cents
+  cents :high_estimate_cents
+  cents :photography_cents
+  cents :shipping_cents
+  cents :insurance_cents
+  cents :other_fees_cents
+
+  percent :commission_percent
+  percent :insurance_percent
+  percent :other_fees_percent
 
   def set_state
     self.state ||= 'draft'

@@ -2,6 +2,8 @@ class PartnerSubmission < ApplicationRecord
   include ReferenceId
   include PgSearch
   include Currency
+  extend Dollarize
+  extend Percentize
 
   pg_search_scope :search,
     against: [:id, :reference_id],
@@ -30,6 +32,11 @@ class PartnerSubmission < ApplicationRecord
   validates :state, inclusion: { in: STATES }, allow_nil: true
 
   before_validation :set_state, on: :create
+
+  cents :sale_price_cents
+
+  percent :partner_commission_percent
+  percent :artsy_commission_percent
 
   def set_state
     self.state ||= 'open'
