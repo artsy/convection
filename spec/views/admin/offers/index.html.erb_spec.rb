@@ -23,7 +23,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
           }
         )
 
-      page.visit '/admin/offers'
+      page.visit admin_offers_path
     end
 
     it 'displays the page title' do
@@ -45,7 +45,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
     context 'with some offers' do
       before do
         3.times { Fabricate(:offer, state: 'sent') }
-        page.visit '/admin/offers'
+        page.visit admin_offers_path
       end
 
       it 'displays all of the offers' do
@@ -70,7 +70,16 @@ describe 'admin/offers/index.html.erb', type: :feature do
         expect(current_url).to include '&state=sent'
         expect(page).to have_content('Offers')
         expect(page).to have_selector('.list-group-item', count: 4)
-        expect(current_path).to eq '/admin/offers'
+        expect(current_path).to eq admin_offers_path
+      end
+
+      it 'displays a lock symbol if the offer is locked' do
+        ps = Fabricate(:partner_submission)
+        accepted_offer = Fabricate(:offer, partner_submission: ps)
+        Fabricate(:offer, partner_submission: ps)
+        OfferService.consign!(accepted_offer)
+        page.visit admin_offers_path
+        expect(page).to have_selector('.locked', count: 1)
       end
     end
 
@@ -82,7 +91,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
         @offer1 = Fabricate(:offer, state: 'accepted', partner_submission: Fabricate(:partner_submission, partner: @partner2))
         Fabricate(:offer, state: 'rejected', partner_submission: Fabricate(:partner_submission, partner: @partner2))
         Fabricate(:offer, state: 'draft', partner_submission: Fabricate(:partner_submission, partner: @partner1))
-        page.visit '/admin/offers'
+        page.visit admin_offers_path
       end
 
       it 'lets you click into a filter option', js: true do

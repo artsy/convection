@@ -27,7 +27,6 @@ class Offer < ApplicationRecord
     rejected
     lapsed
     review
-    locked
     consigned
   ].freeze
 
@@ -37,6 +36,7 @@ class Offer < ApplicationRecord
     'High shipping/marketing costs',
     'Took competing offer',
     'Lost interest',
+    'Inconvenient partner location',
     'Other'
   ].freeze
 
@@ -66,6 +66,10 @@ class Offer < ApplicationRecord
 
   def reviewed?
     !draft? && !sent? && !review?
+  end
+
+  def locked?
+    submission.consigned_partner_submission_id.present? && submission.consigned_partner_submission.accepted_offer_id != id
   end
 
   def rejected_by_user

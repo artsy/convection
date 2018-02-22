@@ -25,6 +25,14 @@ $green: #0EDA83;
   justify-content: space-between;
 }
 
+.locked {
+  padding-bottom: 5px;
+  img {
+    width: 16px;
+    height: 16px;
+  }
+}
+
 .sidebar-link {
   padding-top: 5px;
   padding-bottom: 5px;

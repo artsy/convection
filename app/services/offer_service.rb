@@ -25,7 +25,7 @@ class OfferService
       case offer.state
       when 'sent' then send_offer!(offer, current_user)
       when 'review' then review!(offer)
-      when 'consigned' then consign!(offer, current_user)
+      when 'consigned' then consign!(offer)
       when 'rejected' then reject!(offer, current_user)
       end
     end
@@ -34,13 +34,9 @@ class OfferService
       delay.deliver_offer(offer.id, current_user)
     end
 
-    def consign!(offer, _current_user)
+    def consign!(offer)
       offer.update_attributes!(consigned_at: Time.now.utc)
       offer.submission.update_attributes!(consigned_partner_submission: offer.partner_submission)
-
-      # mark other offers on the same submission as "locked"
-      other_offers = offer.submission.offers.to_a - [offer]
-      other_offers.each { |o| o.update_attributes!(state: 'locked') }
 
       offer.partner_submission.update_attributes!(
         accepted_offer: offer,

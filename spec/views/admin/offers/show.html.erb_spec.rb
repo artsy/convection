@@ -57,6 +57,14 @@ describe 'admin/offers/show.html.erb', type: :feature do
       expect(page).to_not have_selector('#offer-delete-button')
     end
 
+    it 'shows information about the submission' do
+      expect(page).to have_content 'Submission'
+      within(:css, '.list-item--submission') do
+        expect(page).to have_content('Andy Warhol')
+        expect(page).to_not have_content('artist1')
+      end
+    end
+
     describe 'save & send' do
       it 'shows the save & send button when offer is in draft state' do
         offer.update_attributes!(state: 'draft')
@@ -155,15 +163,17 @@ describe 'admin/offers/show.html.erb', type: :feature do
 
     describe 'offer locked' do
       before do
-        offer.update_attributes!(state: 'locked')
+        accepted_offer = Fabricate(:offer, partner_submission: partner_submission)
+        offer.update_attributes!(state: 'review')
+        OfferService.consign!(accepted_offer)
         stub_gravity_artist(id: submission.artist_id)
         page.visit "/admin/offers/#{offer.id}"
       end
 
       it 'shows no actions' do
-        expect(page).to have_content('State locked')
+        expect(page).to have_content('State review')
+        expect(page).to have_content('This offer is locked')
         expect(page).to_not have_selector('.offer-draft-actions')
-        expect(page).to_not have_selector('.offer-actions')
       end
     end
 

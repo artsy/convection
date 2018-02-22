@@ -60,7 +60,7 @@ module Admin
     end
 
     expose(:artist) do
-      artists_query([offer.submission.artist_id])
+      artists_query([offer.submission.artist_id])&.values&.first
     end
 
     def new_step_0

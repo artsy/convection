@@ -21,7 +21,7 @@
             </div>
             <%= render @submission.assets %>
           </div>
-          <%= render 'admin/consignments/consignment_section', consignment: @submission.consigned_partner_submission, artist: @submission.artist %>
+          <%= render 'admin/consignments/consignment_section', consignment: @submission.consigned_partner_submission, artist: @submission.artist&.name %>
           <%= render 'admin/offers/offers_section', offers: @offers, truncated: true %>
         </div>
       </div>
