@@ -127,6 +127,7 @@ describe SubmissionService do
       expect(emails.length).to eq 1
       expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
       expect(emails.first.to).to eq(['michael@bluth.com'])
+      expect(emails.first.from).to eq(['consign@artsy.net'])
       expect(emails.first.html_part.body).to include(
         'they do not have a market for this work at the moment'
       )
@@ -171,6 +172,7 @@ describe SubmissionService do
         expect(emails.first.html_part.body).to include('utm_campaign=consignment-complete')
         expect(emails.first.html_part.body).to include('utm_source=drip-consignment-reminder-e01')
         expect(emails.first.to).to eq(['michael@bluth.com'])
+        expect(emails.first.from).to eq(['consign@artsy.net'])
         expect(submission.reload.receipt_sent_at).to be nil
         expect(submission.reload.reminders_sent_count).to eq 1
       end
@@ -185,6 +187,7 @@ describe SubmissionService do
         expect(emails.first.html_part.body).to include('utm_campaign=consignment-complete')
         expect(emails.first.html_part.body).to include('utm_source=drip-consignment-reminder-e02')
         expect(emails.first.to).to eq(['michael@bluth.com'])
+        expect(emails.first.from).to eq(['consign@artsy.net'])
         expect(submission.reload.receipt_sent_at).to be nil
         expect(submission.reload.reminders_sent_count).to eq 2
       end
@@ -199,6 +202,7 @@ describe SubmissionService do
         expect(emails.first.html_part.body).to include('utm_campaign=consignment-complete')
         expect(emails.first.html_part.body).to include('utm_source=drip-consignment-reminder-e03')
         expect(emails.first.to).to eq(['michael@bluth.com'])
+        expect(emails.first.from).to eq(['consign@artsy.net'])
         expect(submission.reload.receipt_sent_at).to be nil
         expect(submission.reload.reminders_sent_count).to eq 3
       end

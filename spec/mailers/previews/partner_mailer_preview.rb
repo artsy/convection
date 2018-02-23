@@ -16,8 +16,8 @@ class PartnerMailerPreview < BasePreview
     )
   end
 
-  def offer_rejection_notification
-    PartnerMailer.offer_rejection_notification(
+  def offer_rejection
+    PartnerMailer.offer_rejection(
       offer: auction_offer,
       artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol'),
       user_name: 'Lucille Bluth'

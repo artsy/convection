@@ -168,7 +168,7 @@
             <table class='full-width-button'>
               <tr>
                 <td class='offer-response-button'>
-                  <%= link_to('Create counter-offer', offer_form_url) %>
+                  <%= link_to('Create counter-offer', offer_form_url(submission_id: @submission.id)) %>
                 </td>
               </tr>
             </table>
