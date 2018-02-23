@@ -75,7 +75,7 @@ describe 'admin/consignments/edit.html.erb', type: :feature do
 
       it 'allows you to edit a consignment' do
         fill_in('partner_submission_sale_name', with: 'August Sale')
-        fill_in('partner_submission_sale_price', with: '700')
+        fill_in('partner_submission_sale_price_dollars', with: '700')
         fill_in('partner_submission_partner_commission_percent_whole', with: '10')
         fill_in('partner_submission_artsy_commission_percent_whole', with: '8.8')
 

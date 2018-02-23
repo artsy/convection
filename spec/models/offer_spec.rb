@@ -82,25 +82,25 @@ describe Offer do
   describe 'Dollarize' do
     it 'has all of the correct attributes' do
       expect(Offer.new.attributes.keys).to include(
-        'low_estimate',
+        'low_estimate_dollars',
         'low_estimate_cents',
-        'high_estimate',
+        'high_estimate_dollars',
         'high_estimate_cents',
-        'photography',
+        'photography_dollars',
         'photography_cents',
-        'shipping',
+        'shipping_dollars',
         'shipping_cents',
-        'insurance',
+        'insurance_dollars',
         'insurance_cents',
-        'other_fees',
+        'other_fees_dollars',
         'other_fees_cents'
       )
     end
 
     it 'converts _cents attribute to a currency display' do
-      offer = Offer.new(low_estimate: 100)
+      offer = Offer.new(low_estimate_dollars: 100)
       expect(offer.low_estimate_cents).to eq 100_00
-      expect(offer.low_estimate).to eq 100
+      expect(offer.low_estimate_dollars).to eq 100
       expect(offer.low_estimate_display).to eq '$100'
     end
   end

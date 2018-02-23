@@ -64,12 +64,12 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
             }
           )
         fill_in('offer_commission_percent_whole', with: '10')
-        fill_in('offer_low_estimate', with: '100')
-        fill_in('offer_high_estimate', with: '300')
-        fill_in('offer_photography', with: '50')
-        fill_in('offer_shipping', with: '70')
-        fill_in('offer_insurance', with: '10')
-        fill_in('offer_other_fees', with: '5')
+        fill_in('offer_low_estimate_dollars', with: '100')
+        fill_in('offer_high_estimate_dollars', with: '300')
+        fill_in('offer_photography_dollars', with: '50')
+        fill_in('offer_shipping_dollars', with: '70')
+        fill_in('offer_insurance_dollars', with: '10')
+        fill_in('offer_other_fees_dollars', with: '5')
         fill_in('offer_insurance_percent_whole', with: '8')
         fill_in('offer_other_fees_percent_whole', with: '8.8')
 
@@ -137,11 +137,11 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
               'Content-Type' => 'application/json'
             }
           )
-        fill_in('offer_price', with: '700')
-        fill_in('offer_photography', with: '50')
-        fill_in('offer_shipping', with: '70')
-        fill_in('offer_insurance', with: '10')
-        fill_in('offer_other_fees', with: '5')
+        fill_in('offer_price_dollars', with: '700')
+        fill_in('offer_photography_dollars', with: '50')
+        fill_in('offer_shipping_dollars', with: '70')
+        fill_in('offer_insurance_dollars', with: '10')
+        fill_in('offer_other_fees_dollars', with: '5')
         fill_in('offer_insurance_percent_whole', with: '8')
         fill_in('offer_other_fees_percent_whole', with: '8.8')
 
@@ -210,12 +210,12 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
             }
           )
 
-        fill_in('offer_price', with: '700')
+        fill_in('offer_price_dollars', with: '700')
         fill_in('offer_commission_percent_whole', with: '12.5')
-        fill_in('offer_photography', with: '50')
-        fill_in('offer_shipping', with: '70')
-        fill_in('offer_insurance', with: '10')
-        fill_in('offer_other_fees', with: '5')
+        fill_in('offer_photography_dollars', with: '50')
+        fill_in('offer_shipping_dollars', with: '70')
+        fill_in('offer_insurance_dollars', with: '10')
+        fill_in('offer_other_fees_dollars', with: '5')
         fill_in('offer_insurance_percent_whole', with: '8')
         fill_in('offer_other_fees_percent_whole', with: '8.8')
 
@@ -285,11 +285,11 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
             }
           )
 
-        fill_in('offer_price', with: '700')
-        fill_in('offer_photography', with: '50')
-        fill_in('offer_shipping', with: '70')
-        fill_in('offer_insurance', with: '10')
-        fill_in('offer_other_fees', with: '5')
+        fill_in('offer_price_dollars', with: '700')
+        fill_in('offer_photography_dollars', with: '50')
+        fill_in('offer_shipping_dollars', with: '70')
+        fill_in('offer_insurance_dollars', with: '10')
+        fill_in('offer_other_fees_dollars', with: '5')
         fill_in('offer_insurance_percent_whole', with: '8')
         fill_in('offer_other_fees_percent_whole', with: '8.8')
 
