@@ -14,7 +14,7 @@ module Admin
       direction = params[:direction].presence || 'asc'
 
       matching_submissions = if sort.include?('users')
-                               matching_submissions.includes(:user).reorder("#{sort} #{direction}")
+                               matching_submissions.includes(:user).reorder("#{sort} #{direction}, id desc")
                              else
                                matching_submissions.reorder("#{sort} #{direction}")
                              end

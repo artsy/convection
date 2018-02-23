@@ -32,14 +32,14 @@
       <%= offer.submission.user&.email %>
     </div>
     <div class='list-group-item-info'>
-      <%= offer.price_cents %>
+      <%= offer.price_display %>
     </div>
     <div class='list-group-item-info'>
-      <%= offer.high_estimate_cents %>
+      <%= offer.high_estimate_display %>
     </div>
     <div class='list-group-item-info'>
       <% if offer.commission_percent %>
-        <%= offer.commission_percent %>
+        <%= offer.commission_percent_whole %>
       <% else %>
       -
       <% end %>

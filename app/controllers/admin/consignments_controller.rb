@@ -27,9 +27,9 @@ module Admin
       sort = params[:sort].presence || 'id'
       direction = params[:direction].presence || 'asc'
       matching_consignments = if sort.include?('partners')
-                                matching_consignments.includes(:partner).reorder("#{sort} #{direction}")
+                                matching_consignments.includes(:partner).reorder("#{sort} #{direction}, id desc")
                               elsif sort.include?('offers')
-                                matching_consignments.joins(:accepted_offer).reorder("#{sort} #{direction}")
+                                matching_consignments.joins(:accepted_offer).reorder("#{sort} #{direction}, id desc")
                               else
                                 matching_consignments.reorder("#{sort} #{direction}")
                               end
@@ -93,14 +93,14 @@ module Admin
       params.require(:partner_submission).permit(
         :canceled_reason,
         :currency,
-        :sale_price_cents,
+        :sale_price_dollars,
         :sale_name,
         :sale_date,
         :sale_location,
         :sale_lot_number,
         :state,
-        :partner_commission_percent,
-        :artsy_commission_percent,
+        :partner_commission_percent_whole,
+        :artsy_commission_percent_whole,
         :partner_invoiced_at,
         :partner_paid_at,
         :notes

@@ -93,11 +93,6 @@ describe Admin::OffersController, type: :controller do
           expect(controller.offers.pluck(:id)).to eq [@offer3.id, @offer4.id, @offer5.id, @offer1.id, @offer2.id]
         end
 
-        it 'allows you to sort by partner name' do
-          get :index, params: { sort: 'partners.name', direction: 'desc' }
-          expect(controller.offers.pluck(:id)).to eq [@offer4.id, @offer5.id, @offer1.id, @offer2.id, @offer3.id]
-        end
-
         it 'allows you to sort by price_cents' do
           get :index, params: { sort: 'price_cents', direction: 'desc' }
           expect(controller.offers.pluck(:id)).to eq [@offer4.id, @offer5.id, @offer3.id, @offer2.id, @offer1.id]
@@ -130,7 +125,7 @@ describe Admin::OffersController, type: :controller do
       end
 
       it 'redirects to the show view on success' do
-        put :update, params: { id: offer.id, offer: { high_estimate_cents: 30_000, notes: 'Adding some notes to the offer.' } }
+        put :update, params: { id: offer.id, offer: { high_estimate_dollars: 300, notes: 'Adding some notes to the offer.' } }
         expect(response).to redirect_to(admin_offer_url(offer))
         expect(offer.reload.high_estimate_cents).to eq 30_000
         expect(offer.notes).to eq 'Adding some notes to the offer.'
@@ -139,18 +134,18 @@ describe Admin::OffersController, type: :controller do
       it 'allows you to update every param for an auction consignment' do
         auction_offer = Fabricate(:offer, offer_type: 'auction consignment')
         new_params = {
-          low_estimate_cents: 10_000,
-          high_estimate_cents: 50_000,
-          commission_percent: 10.0,
+          low_estimate_dollars: 10_000,
+          high_estimate_dollars: 50_000,
+          commission_percent_whole: 10.0,
           sale_name: 'Fun sale',
           sale_date: Date.new(2017, 10, 1),
           currency: 'GBP',
-          photography_cents: 10_000,
-          shipping_cents: 20_000,
-          insurance_cents: 1_000,
-          insurance_percent: 12.0,
-          other_fees_cents: 2_000,
-          other_fees_percent: 11.0,
+          photography_dollars: 10_000,
+          shipping_dollars: 20_000,
+          insurance_dollars: 1_000,
+          insurance_percent_whole: 12.0,
+          other_fees_dollars: 2_000,
+          other_fees_percent_whole: 11.0,
           notes: 'New notes.'
         }
         put :update, params: {
@@ -163,15 +158,15 @@ describe Admin::OffersController, type: :controller do
       it 'allows you to update every param for a direct purchase' do
         purchase_offer = Fabricate(:offer, offer_type: 'purchase')
         new_params = {
-          price_cents: 10_000,
-          commission_percent: 10.0,
+          price_dollars: 10_000,
+          commission_percent_whole: 10.0,
           currency: 'GBP',
-          photography_cents: 10_000,
-          shipping_cents: 20_000,
-          insurance_cents: 1_000,
-          insurance_percent: 12.0,
-          other_fees_cents: 2_000,
-          other_fees_percent: 11.0,
+          photography_dollars: 10_000,
+          shipping_dollars: 20_000,
+          insurance_dollars: 1_000,
+          insurance_percent_whole: 12.0,
+          other_fees_dollars: 2_000,
+          other_fees_percent_whole: 11.0,
           notes: 'New notes.'
         }
         put :update, params: {
@@ -184,17 +179,17 @@ describe Admin::OffersController, type: :controller do
       it 'allows you to update every param for a retail offer' do
         retail_offer = Fabricate(:offer, offer_type: 'retail')
         new_params = {
-          price_cents: 10_000,
-          commission_percent: 10.0,
+          price_dollars: 10_000,
+          commission_percent_whole: 10.0,
           sale_period_start: Date.new(2017, 1, 1),
           sale_period_end: Date.new(2017, 10, 1),
           currency: 'GBP',
-          photography_cents: 10_000,
-          shipping_cents: 20_000,
-          insurance_cents: 1_000,
-          insurance_percent: 12.0,
-          other_fees_cents: 2_000,
-          other_fees_percent: 11.0,
+          photography_dollars: 10_000,
+          shipping_dollars: 20_000,
+          insurance_dollars: 1_000,
+          insurance_percent_whole: 12.0,
+          other_fees_dollars: 2_000,
+          other_fees_percent_whole: 11.0,
           notes: 'New notes.'
         }
         put :update, params: {
@@ -213,16 +208,16 @@ describe Admin::OffersController, type: :controller do
       it 'allows you to update every param for a net price offer' do
         net_price_offer = Fabricate(:offer, offer_type: 'net price')
         new_params = {
-          price_cents: 10_000,
+          price_dollars: 10_000,
           sale_period_start: Date.new(2017, 1, 1),
           sale_period_end: Date.new(2017, 10, 1),
           currency: 'GBP',
-          photography_cents: 10_000,
-          shipping_cents: 20_000,
-          insurance_cents: 1_000,
-          insurance_percent: 12.0,
-          other_fees_cents: 2_000,
-          other_fees_percent: 11.0,
+          photography_dollars: 10_000,
+          shipping_dollars: 20_000,
+          insurance_dollars: 1_000,
+          insurance_percent_whole: 12.0,
+          other_fees_dollars: 2_000,
+          other_fees_percent_whole: 11.0,
           notes: 'New notes.'
         }
         put :update, params: {

@@ -73,14 +73,14 @@ describe Admin::ConsignmentsController, type: :controller do
       it 'allows you to sort by offer type' do
         get :index, params: { sort: 'offers.offer_type', direction: 'asc' }
         expect(controller.consignments.pluck(:id)).to eq(
-          [@consignment4.id, @consignment3.id, @consignment1.id, @consignment2.id, @consignment5.id]
+          [@consignment4.id, @consignment3.id, @consignment2.id, @consignment1.id, @consignment5.id]
         )
       end
 
       it 'allows you to sort by partner name' do
         get :index, params: { sort: 'partners.name', direction: 'desc' }
         expect(controller.consignments.pluck(:id)).to eq(
-          [@consignment4.id, @consignment5.id, @consignment1.id, @consignment2.id, @consignment3.id]
+          [@consignment5.id, @consignment4.id, @consignment3.id, @consignment2.id, @consignment1.id]
         )
       end
 

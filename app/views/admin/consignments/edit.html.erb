@@ -44,10 +44,10 @@
             <div class='row single-padding-top'>
               <div class='col-sm-12'>
                 <label class='col-sm-3 control-label'>
-                  Price cents
+                  Price
                 </label>
                 <div class='col-sm-9'>
-                  <%= f.text_field :sale_price_cents, class: 'form-control' %>
+                  <%= f.text_field :sale_price_dollars, class: 'form-control' %>
                 </div>
               </div>
             </div>
@@ -102,7 +102,7 @@
                   Partner commission %
                 </label>
                 <div class='col-sm-9'>
-                  <%= f.text_field :partner_commission_percent, class: 'form-control' %>
+                  <%= f.text_field :partner_commission_percent_whole, class: 'form-control' %>
                 </div>
               </div>
             </div>
@@ -113,7 +113,7 @@
                   Artsy commission %
                 </label>
                 <div class='col-sm-9'>
-                  <%= f.text_field :artsy_commission_percent, class: 'form-control' %>
+                  <%= f.text_field :artsy_commission_percent_whole, class: 'form-control' %>
                 </div>
               </div>
             </div>

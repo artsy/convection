@@ -80,7 +80,7 @@ describe Admin::SubmissionsController, type: :controller do
 
         it 'allows you to filter by state and sort by user email' do
           get :index, params: { sort: 'users.email', direction: 'desc', state: 'submitted' }
-          expect(controller.submissions.pluck(:id)).to eq [@submission1.id, @submission2.id, @submission3.id]
+          expect(controller.submissions.pluck(:id)).to eq [@submission2.id, @submission1.id, @submission3.id]
         end
 
         it 'allows you to filter by state, search for user, and sort by ID' do

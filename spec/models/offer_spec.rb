@@ -97,4 +97,49 @@ describe Offer do
       expect(results.map(&:id)).to eq [@offer1.id, @offer2.id]
     end
   end
+
+  describe 'Dollarize' do
+    it 'has all of the correct attributes' do
+      expect(Offer.new.attributes.keys).to include(
+        'low_estimate_dollars',
+        'low_estimate_cents',
+        'high_estimate_dollars',
+        'high_estimate_cents',
+        'photography_dollars',
+        'photography_cents',
+        'shipping_dollars',
+        'shipping_cents',
+        'insurance_dollars',
+        'insurance_cents',
+        'other_fees_dollars',
+        'other_fees_cents'
+      )
+    end
+
+    it 'converts _cents attribute to a currency display' do
+      offer = Offer.new(low_estimate_dollars: 100)
+      expect(offer.low_estimate_cents).to eq 100_00
+      expect(offer.low_estimate_dollars).to eq 100
+      expect(offer.low_estimate_display).to eq '$100'
+    end
+  end
+
+  describe 'Percentize' do
+    it 'has all of the correct attributes' do
+      expect(Offer.new.attributes.keys).to include(
+        'commission_percent',
+        'commission_percent_whole',
+        'insurance_percent',
+        'insurance_percent_whole',
+        'other_fees_percent',
+        'other_fees_percent_whole'
+      )
+    end
+
+    it 'converts _cents attribute to a currency display' do
+      offer = Offer.new(commission_percent_whole: 12.25)
+      expect(offer.commission_percent).to eq 0.1225
+      expect(offer.commission_percent_whole).to eq 12.25
+    end
+  end
 end
