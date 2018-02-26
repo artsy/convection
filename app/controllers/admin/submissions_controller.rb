@@ -11,10 +11,10 @@ module Admin
       matching_submissions = matching_submissions.where(user_id: params[:user]) if params[:user].present?
 
       sort = params[:sort].presence || 'id'
-      direction = params[:direction].presence || 'asc'
+      direction = params[:direction].presence || 'desc'
 
       matching_submissions = if sort.include?('users')
-                               matching_submissions.includes(:user).reorder("#{sort} #{direction}, id desc")
+                               matching_submissions.includes(:user).reorder("#{sort} #{direction}, submissions.id desc")
                              else
                                matching_submissions.reorder("#{sort} #{direction}")
                              end

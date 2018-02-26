@@ -23,7 +23,7 @@ module Admin
       matching_offers = matching_offers.where(state: params[:state]) if params[:state].present?
 
       sort = params[:sort].presence || 'id'
-      direction = params[:direction].presence || 'asc'
+      direction = params[:direction].presence || 'desc'
       matching_offers = if sort.include?('partners')
                           matching_offers.includes(:partner_submission).includes(:partner).reorder("#{sort} #{direction}")
                         elsif sort.include?('submissions')

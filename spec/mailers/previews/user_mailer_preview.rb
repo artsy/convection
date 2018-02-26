@@ -26,7 +26,9 @@ class UserMailerPreview < BasePreview
   def auction_consignment_offer
     UserMailer.offer(
       offer: auction_offer,
-      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol')
+      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol'),
+      user_detail: OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com'),
+      user: OpenStruct.new(id: 'x', name: 'William Black')
     )
   end
 
@@ -49,7 +51,9 @@ class UserMailerPreview < BasePreview
         partner: OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery'),
         submission: base_submission
       ),
-      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol')
+      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol'),
+      user_detail: OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com'),
+      user: OpenStruct.new(id: 'x', name: 'William Black')
     )
   end
 
@@ -69,7 +73,9 @@ class UserMailerPreview < BasePreview
         partner: OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery'),
         submission: base_submission
       ),
-      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol')
+      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol'),
+      user_detail: OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com'),
+      user: OpenStruct.new(id: 'x', name: 'William Black')
     )
   end
 
@@ -91,7 +97,9 @@ class UserMailerPreview < BasePreview
         partner: OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery'),
         submission: base_submission
       ),
-      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol')
+      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol'),
+      user_detail: OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com'),
+      user: OpenStruct.new(id: 'x', name: 'William Black')
     )
   end
 

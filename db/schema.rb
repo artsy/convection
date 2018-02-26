@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180214173948) do
+ActiveRecord::Schema.define(version: 20180226122325) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,12 +32,12 @@ ActiveRecord::Schema.define(version: 20180214173948) do
     t.datetime "sale_period_end"
     t.datetime "sale_date"
     t.string "sale_name"
-    t.integer "low_estimate_cents"
-    t.integer "high_estimate_cents"
+    t.bigint "low_estimate_cents"
+    t.bigint "high_estimate_cents"
     t.string "currency"
     t.text "notes"
     t.float "commission_percent"
-    t.integer "price_cents"
+    t.bigint "price_cents"
     t.integer "shipping_cents"
     t.integer "photography_cents"
     t.integer "other_fees_cents"
@@ -78,7 +78,7 @@ ActiveRecord::Schema.define(version: 20180214173948) do
     t.string "sale_location"
     t.string "sale_lot_number"
     t.datetime "sale_date"
-    t.integer "sale_price_cents"
+    t.bigint "sale_price_cents"
     t.string "currency"
     t.datetime "partner_invoiced_at"
     t.datetime "partner_paid_at"
@@ -135,8 +135,8 @@ ActiveRecord::Schema.define(version: 20180214173948) do
     t.integer "primary_image_id"
     t.integer "consigned_partner_submission_id"
     t.string "user_email"
-    t.integer "user_id"
     t.integer "offers_count", default: 0
+    t.integer "user_id"
     t.index ["consigned_partner_submission_id"], name: "index_submissions_on_consigned_partner_submission_id"
     t.index ["ext_user_id"], name: "index_submissions_on_ext_user_id"
     t.index ["primary_image_id"], name: "index_submissions_on_primary_image_id"
