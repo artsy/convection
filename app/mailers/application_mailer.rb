@@ -1,5 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'Artsy <support@artsy.net>'
+  default from: 'Artsy <consign@artsy.net>'
   default bcc: Convection.config.bcc_email_address
   layout 'mailer'
 

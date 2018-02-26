@@ -60,7 +60,7 @@
             <table class='full-width-button'>
               <tr>
                   <td class='offer-response-button'>
-                    <%= link_to('Reply to this offer', offer_response_form_url) %>
+                    <%= link_to('Reply to this offer', offer_response_form_url(submission_id: @submission.id, partner_name: @offer.partner.name)) %>
                   </td>
               </tr>
             </table>

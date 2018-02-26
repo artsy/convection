@@ -80,16 +80,18 @@ class UserMailer < ApplicationMailer
          subject: 'An important update about your consignment submission')
   end
 
-  def offer(offer:, artist:)
+  def offer(offer:, artist:, user:, user_detail:)
     @offer = offer
     @submission = offer.submission
     @artist = artist
+    @user = user
+    @user_detail = user_detail
     @utm_params = utm_params(source: 'consignment-offer', campaign: 'consignment-offer')
 
     smtpapi category: ['offer'], unique_args: {
       offer_id: offer.id
     }
-    mail(to: Convection.config.debug_email_address,
+    mail(to: user_detail.email,
          subject: 'An offer for your consignment submission')
   end
 end

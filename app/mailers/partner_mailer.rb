@@ -19,7 +19,7 @@ class PartnerMailer < ApplicationMailer
     end
   end
 
-  def offer_introduction(offer:, artist:)
+  def offer_introduction(offer:, artist:, email:)
     @offer = offer
     @submission = offer.submission
     @artist = artist
@@ -28,21 +28,20 @@ class PartnerMailer < ApplicationMailer
     smtpapi category: ['offer'], unique_args: {
       offer_id: offer.id
     }
-    mail(to: Convection.config.debug_email_address,
+    mail(to: email,
          subject: 'The consignor has expressed interest in your offer')
   end
 
-  def offer_rejection_notification(offer:, artist:, user_name:)
+  def offer_rejection(offer:, artist:, email:)
     @offer = offer
     @submission = offer.submission
     @artist = artist
-    @user_name = user_name
     @utm_params = utm_params(source: 'consignment-offer-rejected', campaign: 'consignment-offer')
 
     smtpapi category: ['offer'], unique_args: {
       offer_id: offer.id
     }
-    mail(to: Convection.config.debug_email_address,
+    mail(to: email,
          subject: 'A response to your consignment offer')
   end
 end
