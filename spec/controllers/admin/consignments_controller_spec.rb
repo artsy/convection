@@ -62,7 +62,7 @@ describe Admin::ConsignmentsController, type: :controller do
     describe '#sorting and filtering' do
       it 'allows you to filter by state = open' do
         get :index, params: { state: 'open' }
-        expect(controller.consignments.pluck(:id)).to eq [@consignment1.id, @consignment2.id, @consignment4.id, @consignment5.id]
+        expect(controller.consignments.pluck(:id)).to eq [@consignment5.id, @consignment4.id, @consignment2.id, @consignment1.id]
       end
 
       it 'allows you to filter by state = bought in' do

@@ -25,11 +25,11 @@ module Admin
       matching_consignments = matching_consignments.where(state: params[:state]) if params[:state].present?
 
       sort = params[:sort].presence || 'id'
-      direction = params[:direction].presence || 'asc'
+      direction = params[:direction].presence || 'desc'
       matching_consignments = if sort.include?('partners')
-                                matching_consignments.includes(:partner).reorder("#{sort} #{direction}, id desc")
+                                matching_consignments.includes(:partner).reorder("#{sort} #{direction}, partner_submissions.id desc")
                               elsif sort.include?('offers')
-                                matching_consignments.joins(:accepted_offer).reorder("#{sort} #{direction}, id desc")
+                                matching_consignments.joins(:accepted_offer).reorder("#{sort} #{direction}, partner_submissions.id desc")
                               else
                                 matching_consignments.reorder("#{sort} #{direction}")
                               end

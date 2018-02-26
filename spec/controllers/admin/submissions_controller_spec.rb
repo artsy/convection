@@ -53,12 +53,12 @@ describe Admin::SubmissionsController, type: :controller do
       describe '#sorting and filtering' do
         it 'allows you to filter by state = approved' do
           get :index, params: { state: 'approved' }
-          expect(controller.submissions.pluck(:id)).to eq [@submission4.id, @submission5.id]
+          expect(controller.submissions.pluck(:id)).to eq [@submission5.id, @submission4.id]
         end
 
         it 'allows you to filter by state = submitted' do
           get :index, params: { state: 'submitted' }
-          expect(controller.submissions.pluck(:id)).to eq [@submission1.id, @submission2.id, @submission3.id]
+          expect(controller.submissions.pluck(:id)).to eq [@submission3.id, @submission2.id, @submission1.id]
         end
 
         it 'allows you to sort by user email' do
@@ -102,7 +102,7 @@ describe Admin::SubmissionsController, type: :controller do
           get :index, format: 'json', params: { term: 'art' }
           submissions = JSON.parse(response.body)
           expect(submissions.length).to eq 2
-          expect(submissions.map { |sub| sub['id'] }).to eq [@submission2.id, @submission3.id]
+          expect(submissions.map { |sub| sub['id'] }).to eq [@submission3.id, @submission2.id]
         end
 
         it 'merges in the thumbnail url' do

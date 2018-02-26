@@ -80,7 +80,7 @@ describe Admin::OffersController, type: :controller do
       describe '#sorting and filtering' do
         it 'allows you to filter by state = sent' do
           get :index, params: { state: 'sent' }
-          expect(controller.offers.pluck(:id)).to eq [@offer1.id, @offer2.id, @offer3.id, @offer4.id]
+          expect(controller.offers.pluck(:id)).to eq [@offer4.id, @offer3.id, @offer2.id, @offer1.id]
         end
 
         it 'allows you to filter by state = rejected' do
