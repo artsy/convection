@@ -27,8 +27,8 @@ module Admin
     end
 
     expose(:artist_details) do
-      submission_artists = artists_query(submissions.map(&:artist_id))
-      consignment_artists = artists_query(consignments.map(&:submission).map(&:artist_id))
+      submission_artists = artists_query(submissions.map(&:artist_id)) || {}
+      consignment_artists = artists_query(consignments.map(&:submission).map(&:artist_id)) || {}
       submission_artists.merge(consignment_artists)
     end
 
