@@ -32,6 +32,34 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
       expect(page).not_to have_selector('.list-group-item')
     end
 
+    context 'with just submissions' do
+      before do
+        6.times { Fabricate(:submission, state: 'submitted') }
+        page.visit '/'
+      end
+
+      it 'displays four submissions' do
+        expect(page).to have_selector('.list-item--offer', count: 0)
+        expect(page).to have_selector('.list-item--submission', count: 4)
+        expect(page).to have_selector('.list-item--consignment', count: 0)
+        expect(page).to have_content('Unreviewed Submissions 6')
+        expect(page).to have_content('Open Offers 0')
+        expect(page).to have_content('Active Consignments 0')
+      end
+
+      it 'lets you click a submission' do
+        submission = Submission.submitted.order(id: :desc).first
+        stub_gravity_root
+        stub_gravity_user(id: submission.user.gravity_user_id)
+        stub_gravity_user_detail(id: submission.user.gravity_user_id)
+        stub_gravity_artist(id: submission.artist_id)
+
+        find(".list-item--submission[data-id='#{submission.id}']").click
+        expect(page).to have_content("Submission ##{submission.id}")
+        expect(page).to have_content('State submitted')
+      end
+    end
+
     context 'with some offers and submissions and consignments' do
       before do
         5.times { Fabricate(:offer, state: 'sent') }
