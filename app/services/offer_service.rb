@@ -25,7 +25,7 @@ class OfferService
       case offer.state
       when 'sent' then send_offer!(offer, current_user)
       when 'review' then review!(offer)
-      when 'consigned' then consign!(offer, current_user)
+      when 'consigned' then consign!(offer)
       when 'rejected' then reject!(offer, current_user)
       end
     end
@@ -34,13 +34,9 @@ class OfferService
       delay.deliver_offer(offer.id, current_user)
     end
 
-    def consign!(offer, _current_user)
+    def consign!(offer)
       offer.update_attributes!(consigned_at: Time.now.utc)
       offer.submission.update_attributes!(consigned_partner_submission: offer.partner_submission)
-
-      # mark other offers on the same submission as "locked"
-      other_offers = offer.submission.offers.to_a - [offer]
-      other_offers.each { |o| o.update_attributes!(state: 'locked') }
 
       offer.partner_submission.update_attributes!(
         accepted_offer: offer,
@@ -63,23 +59,41 @@ class OfferService
 
     def deliver_introduction(offer_id)
       offer = Offer.find(offer_id)
+
+      partner_emails = PartnerService.fetch_partner_contacts!(offer.partner)
+      partner_emails.each do |email|
+        delay.deliver_partner_contact_introduction(offer.id, email)
+      end
+    end
+
+    def deliver_partner_contact_introduction(offer_id, email)
+      offer = Offer.find(offer_id)
       artist = Gravity.client.artist(id: offer.submission.artist_id)._get
 
       PartnerMailer.offer_introduction(
         offer: offer,
-        artist: artist
+        artist: artist,
+        email: email
       ).deliver_now
     end
 
     def deliver_rejection_notification(offer_id)
       offer = Offer.find(offer_id)
-      artist = Gravity.client.artist(id: offer.submission.artist_id)._get
-      user_name = offer.submission.user.name
 
-      PartnerMailer.offer_rejection_notification(
+      partner_emails = PartnerService.fetch_partner_contacts!(offer.partner)
+      partner_emails.each do |email|
+        delay.deliver_partner_contact_rejection(offer.id, email)
+      end
+    end
+
+    def deliver_partner_contact_rejection(offer_id, email)
+      offer = Offer.find(offer_id)
+      artist = Gravity.client.artist(id: offer.submission.artist_id)._get
+
+      PartnerMailer.offer_rejection(
         offer: offer,
         artist: artist,
-        user_name: user_name
+        email: email
       ).deliver_now
     end
 
@@ -87,11 +101,17 @@ class OfferService
       offer = Offer.find(offer_id)
       return if offer.sent_at
 
+      user = Gravity.client.user(id: offer.submission.user.gravity_user_id)._get
+      user_detail = user.user_detail._get
+      raise 'User lacks email.' if user_detail.email.blank?
+
       artist = Gravity.client.artist(id: offer.submission.artist_id)._get
 
       UserMailer.offer(
         offer: offer,
-        artist: artist
+        artist: artist,
+        user: user,
+        user_detail: user_detail
       ).deliver_now
 
       offer.update_attributes!(sent_at: Time.now.utc, sent_by: current_user)

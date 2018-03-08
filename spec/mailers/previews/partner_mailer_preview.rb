@@ -12,15 +12,16 @@ class PartnerMailerPreview < BasePreview
   def offer_introduction
     PartnerMailer.offer_introduction(
       offer: auction_offer,
-      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol')
+      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol'),
+      email: 'contact1@partner.com'
     )
   end
 
-  def offer_rejection_notification
-    PartnerMailer.offer_rejection_notification(
+  def offer_rejection
+    PartnerMailer.offer_rejection(
       offer: auction_offer,
       artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol'),
-      user_name: 'Lucille Bluth'
+      email: 'contact1@partner.com'
     )
   end
 

@@ -8,12 +8,14 @@ class BasePreview < ActionMailer::Preview
       reference_id: '12345',
       currency: 'USD',
       rejection_reason: 'High shipping/marketing costs',
+      rejection_note: 'Not my type either',
       low_estimate_cents: 12_300,
       high_estimate_cents: 15_000,
       notes: 'We would love to sell your work!',
       partner_submission: OpenStruct.new(
         partner: OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery')
       ),
+      partner: OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery'),
       submission: base_submission
     )
   end

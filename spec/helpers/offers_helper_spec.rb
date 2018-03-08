@@ -36,7 +36,7 @@ describe OffersHelper, type: :helper do
   context 'display_fields' do
     it 'returns an array containing only the fields that are present, with minimal fields present' do
       offer = Fabricate(:offer, offer_type: 'auction consignment', price_cents: nil, commission_percent: 0.1)
-      expect(helper.display_fields(offer)).to eq('Offer type' => 'Auction consignment', 'Commission' => '10.0%')
+      expect(helper.display_fields(offer)).to eq('Commission' => '10.0%')
     end
 
     it 'does not include empty values' do
@@ -49,7 +49,6 @@ describe OffersHelper, type: :helper do
         high_estimate_cents: 40_000,
         sale_date: Date.new(2018, 10, 30))
       expect(helper.display_fields(offer)).to eq(
-        'Offer type' => 'Auction consignment',
         'Estimate' => 'USD $100 - 400',
         'Sale Date' => 'Oct 30, 2018',
         'Commission' => '10.0%'
@@ -65,11 +64,55 @@ describe OffersHelper, type: :helper do
         high_estimate_cents: 40_000,
         sale_date: Date.new(2018, 10, 30))
       expect(helper.display_fields(offer)).to eq(
-        'Offer type' => 'Auction consignment',
         'Estimate' => 'USD $100 - 400',
         'Sale Date' => 'Oct 30, 2018',
         'Commission' => '10.0%'
       )
+    end
+  end
+
+  context 'formatted_offer_type' do
+    it 'returns the correct string for an auction consignment offer' do
+      offer = double('offer', offer_type: 'auction consignment')
+      expect(helper.formatted_offer_type(offer)).to eq 'Auction consignment'
+    end
+
+    it 'returns the correct string for a retail offer' do
+      offer = double('offer', offer_type: 'retail')
+      expect(helper.formatted_offer_type(offer)).to eq 'Private Sale: Retail Price'
+    end
+
+    it 'returns the correct string for a net price offer' do
+      offer = double('offer', offer_type: 'net price')
+      expect(helper.formatted_offer_type(offer)).to eq 'Private Sale: Net Price'
+    end
+
+    it 'returns the correct string for a direct purchase offer' do
+      offer = double('offer', offer_type: 'purchase')
+      expect(helper.formatted_offer_type(offer)).to eq 'Outright purchase'
+    end
+  end
+
+  context 'offer_type_description' do
+    it 'returns the correct string for an auction consignment offer' do
+      offer = double('offer', offer_type: 'auction consignment')
+      expect(helper.offer_type_description(offer)).to include 'This work will be offered in an auction.'
+    end
+
+    it 'returns the correct string for a retail offer' do
+      offer = double('offer', offer_type: 'retail')
+      expect(helper.offer_type_description(offer)).to include 'This work will be offered privately'
+    end
+
+    it 'returns the correct string for a net price offer' do
+      offer = double('offer', offer_type: 'net price')
+      expect(helper.offer_type_description(offer)).to include 'This work will be offered privately'
+    end
+
+    it 'returns the correct string for a direct purchase offer' do
+      offer = double('offer', offer_type: 'purchase')
+      expect(helper.offer_type_description(offer)).to include 'The work will be purchased directly from you by the '\
+      'partner for the specified price.'
     end
   end
 
@@ -155,6 +198,16 @@ describe OffersHelper, type: :helper do
     it 'works for an offer with a commission_percent' do
       offer = double('offer', commission_percent: 0.12)
       expect(helper.commission_display(offer)).to eq '12.0%'
+    end
+
+    it 'works for an offer with a 0.14 comission_percent' do
+      offer = double('offer', commission_percent: 0.14)
+      expect(helper.commission_display(offer)).to eq '14.0%'
+    end
+
+    it 'works for an offer with a 0 comission_percent' do
+      offer = double('offer', commission_percent: 0)
+      expect(helper.commission_display(offer)).to eq '0%'
     end
 
     it 'returns nil if the offer has no commission_percent' do

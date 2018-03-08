@@ -8,17 +8,20 @@
     <%= submission.id %>
   </div>
   <div class='list-group-item-info list-group-item-info--email'>
-    <%= submission.user_email %>
+    <%= submission.user&.email %>
   </div>
   <% unless truncated %>
     <div class='list-group-item-info'>
       <%= submission.created_at.strftime('%m/%d/%Y') %>
     </div>
   <% end %>
+  <% unless truncated %>
+    <div class='list-group-item-info'>
+      <%= submission.offers_count %>
+    </div>
+  <% end %>
   <div class='list-group-item-info'>
-    <% if artist_details.present? %>
-      <%= artist_details[submission.artist_id] %>
-    <% end %>
+    <%= artist %>
   </div>
   <div class='list-group-item-info'>
     <%= submission&.title&.truncate(30) %>

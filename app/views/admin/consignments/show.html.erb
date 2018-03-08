@@ -18,20 +18,30 @@
                 <%= @consignment.state %>
               </div>
             </div>
+            <% if @consignment.state == 'canceled' %>
+              <div class='overview-item'>
+                <div class='overview-item-title'>
+                  Canceled Reason
+                </div>
+                <div class='overview-item-value'>
+                  <%= @consignment.canceled_reason %>
+                </div>
+              </div>
+            <% end %>
             <div class='overview-item'>
               <div class='overview-item-title'>
                 Currency
               </div>
               <div class='overview-item-value'>
-                <%= @consignment.sale_currency %>
+                <%= @consignment.currency %>
               </div>
             </div>
             <div class='overview-item'>
               <div class='overview-item-title'>
-                Price cents
+                Price
               </div>
               <div class='overview-item-value'>
-                <%= @consignment.sale_price_cents %>
+                <%= @consignment.sale_price_display %>
               </div>
             </div>
             <div class='overview-item'>
@@ -71,7 +81,7 @@
                 Partner Commission %
               </div>
               <div class='overview-item-value'>
-                <%= @consignment.partner_commission_percent %>
+                <%= @consignment.partner_commission_percent_whole %>
               </div>
             </div>
             <div class='overview-item'>
@@ -79,7 +89,7 @@
                 Artsy Commission %
               </div>
               <div class='overview-item-value'>
-                <%= @consignment.artsy_commission_percent %>
+                <%= @consignment.artsy_commission_percent_whole %>
               </div>
             </div>
             <div class='overview-item'>
@@ -122,7 +132,7 @@
               </div>
             </div>
           </div>
-          <%= render 'admin/submissions/submission_section', submission: @consignment.submission %>
+          <%= render 'admin/submissions/submission_section', submission: @consignment.submission, artist: artist %>
           <%= render 'admin/offers/offer_section', offer: @consignment.accepted_offer %>
         </div>
       </div>

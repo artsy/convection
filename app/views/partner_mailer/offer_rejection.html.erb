@@ -12,19 +12,9 @@
         <tr>
           <td class='spacer'></td>
         </tr>
-        <% if @user_name.present? %>
-          <tr>
-            <td class='email-sub-title-serif'>
-              Dear <%= @user_name %>,
-            </td>
-          </tr>
-        <% end %>
-        <tr>
-          <td class='spacer'></td>
-        </tr>
         <tr>
           <td class='email-sub-title-serif'>
-            Your offer has been reviewed, and the consignor has elected to reject your offer. Please see details below.
+            Your offer has been reviewed, and the consignor has rejected your offer. Please see further details below.
           </td>
         </tr>
         <tr>
@@ -76,6 +66,9 @@
                 </td>
               </tr>
               <% if @offer.rejection_reason.present? %>
+                <tr>
+                  <td class='spacer'></td>
+                </tr>
                 <tr>
                   <td class='two-column'>
                     <div class="column first-column">
@@ -167,7 +160,7 @@
         </tr>
         <tr>
           <td class='email-sub-title-serif'>
-            If you would like, you may submit a counteroffer. If not, no further action is required.
+            If you would like, you may submit a counter-offer. If not, no further action is required.
           </td>
         </tr>
         <tr>
@@ -178,7 +171,7 @@
             <table class='full-width-button'>
               <tr>
                 <td class='offer-response-button'>
-                  <%= link_to('Create counteroffer', offer_form_url) %>
+                  <%= link_to('Create counter-offer', offer_form_url(submission_id: @submission.id)) %>
                 </td>
               </tr>
             </table>
@@ -189,7 +182,7 @@
         </tr>
         <tr>
           <td class='email-sub-title-serif'>
-            Sincerely, <br />Collector Relations Team
+            Sincerely, <br />Artsy
           </td>
         </tr>
       </table>

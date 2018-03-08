@@ -28,3 +28,7 @@
 //= require new_partner
 //= require new_offer
 //= require offer
+//= require consignment
+//= require match_submission
+//= require match_offer
+//= require match_consignment

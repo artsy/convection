@@ -8,12 +8,13 @@ module UrlHelper
     utm_url("#{Convection.config.artsy_url}/#{path}", utm_params)
   end
 
-  def offer_form_url
-    Convection.config.auction_offer_form_url
+  def offer_form_url(submission_id: '')
+    Convection.config.auction_offer_form_url.gsub('SUBMISSION_NUMBER', submission_id.to_s)
   end
 
-  def offer_response_form_url
-    Convection.config.offer_response_form_url
+  def offer_response_form_url(submission_id: '', partner_name: '')
+    url = Convection.config.offer_response_form_url.gsub('SUBMISSION_NUMBER', submission_id.to_s)
+    url.gsub('PARTNER_NAME', partner_name)
   end
 
   private

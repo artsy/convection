@@ -21,7 +21,9 @@ describe Offer do
       expect(Offer.new(offer_type: 'blah')).not_to be_valid
       expect(Offer.new(offer_type: 'auction consignment')).to be_valid
       expect(Offer.new(offer_type: 'purchase')).to be_valid
-      expect(Offer.new(offer_type: 'consignment period')).to be_valid
+      expect(Offer.new(offer_type: 'consignment period')).to_not be_valid
+      expect(Offer.new(offer_type: 'retail')).to be_valid
+      expect(Offer.new(offer_type: 'net price')).to be_valid
     end
   end
 
@@ -31,6 +33,7 @@ describe Offer do
       expect(Offer.new(currency: 'USD')).to be_valid
       expect(Offer.new(currency: 'EUR')).to be_valid
       expect(Offer.new(currency: 'GBP')).to be_valid
+      expect(Offer.new(currency: 'HKD')).to be_valid
     end
   end
 
@@ -43,6 +46,25 @@ describe Offer do
   context 'submission' do
     it 'sets the submission' do
       expect(offer.submission).to eq offer.partner_submission.submission
+    end
+  end
+
+  context 'locked?' do
+    it 'returns true if this offer is not the accepted_offer and the partner submission is consigned' do
+      ps = offer.partner_submission
+      consigned_offer = Fabricate(:offer, partner_submission: ps)
+      OfferService.consign!(consigned_offer)
+      expect(offer.locked?).to eq true
+      expect(consigned_offer.locked?).to eq false
+    end
+
+    it 'returns false if the submission has not been consigned at all' do
+      expect(offer.locked?).to eq false
+    end
+
+    it 'returns false if this offer is the accepted_offer' do
+      OfferService.consign!(offer)
+      expect(offer.locked?).to eq false
     end
   end
 
@@ -73,6 +95,51 @@ describe Offer do
       results = Offer.search('Gag')
       expect(results.length).to eq 2
       expect(results.map(&:id)).to eq [@offer1.id, @offer2.id]
+    end
+  end
+
+  describe 'Dollarize' do
+    it 'has all of the correct attributes' do
+      expect(Offer.new.attributes.keys).to include(
+        'low_estimate_dollars',
+        'low_estimate_cents',
+        'high_estimate_dollars',
+        'high_estimate_cents',
+        'photography_dollars',
+        'photography_cents',
+        'shipping_dollars',
+        'shipping_cents',
+        'insurance_dollars',
+        'insurance_cents',
+        'other_fees_dollars',
+        'other_fees_cents'
+      )
+    end
+
+    it 'converts _cents attribute to a currency display' do
+      offer = Offer.new(low_estimate_dollars: 100)
+      expect(offer.low_estimate_cents).to eq 100_00
+      expect(offer.low_estimate_dollars).to eq 100
+      expect(offer.low_estimate_display).to eq '$100'
+    end
+  end
+
+  describe 'Percentize' do
+    it 'has all of the correct attributes' do
+      expect(Offer.new.attributes.keys).to include(
+        'commission_percent',
+        'commission_percent_whole',
+        'insurance_percent',
+        'insurance_percent_whole',
+        'other_fees_percent',
+        'other_fees_percent_whole'
+      )
+    end
+
+    it 'converts _cents attribute to a currency display' do
+      offer = Offer.new(commission_percent_whole: 12.25)
+      expect(offer.commission_percent).to eq 0.1225
+      expect(offer.commission_percent_whole).to eq 12.25
     end
   end
 end

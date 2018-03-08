@@ -23,22 +23,22 @@ describe 'admin/offers/edit.html.erb', type: :feature do
 
       it 'displays all of the shared fields' do
         expect(page).to have_content('Currency')
-        expect(page).to have_content('Photography cents')
-        expect(page).to have_content('Shipping cents')
-        expect(page).to have_content('Insurance cents')
+        expect(page).to have_content('Photography')
+        expect(page).to have_content('Shipping')
+        expect(page).to have_content('Insurance')
         expect(page).to have_content('Insurance %')
-        expect(page).to have_content('Other fees cents')
+        expect(page).to have_content('Other fees')
         expect(page).to have_content('Other fees %')
         expect(page).to have_content('Notes')
       end
 
       it 'displays all of the specific fields' do
-        expect(page).to have_content('Low estimate cents')
-        expect(page).to have_content('High estimate cents')
+        expect(page).to have_content('Low estimate')
+        expect(page).to have_content('High estimate')
         expect(page).to have_content('Commission %')
         expect(page).to have_content('Sale name')
         expect(page).to have_content('Sale date')
-        expect(page).to_not have_content('Price cents')
+        expect(page).to_not have_content('Price')
       end
     end
 
@@ -56,50 +56,81 @@ describe 'admin/offers/edit.html.erb', type: :feature do
 
       it 'displays all of the shared fields' do
         expect(page).to have_content('Currency')
-        expect(page).to have_content('Photography cents')
-        expect(page).to have_content('Shipping cents')
-        expect(page).to have_content('Insurance cents')
+        expect(page).to have_content('Photography')
+        expect(page).to have_content('Shipping')
+        expect(page).to have_content('Insurance')
         expect(page).to have_content('Insurance %')
-        expect(page).to have_content('Other fees cents')
+        expect(page).to have_content('Other fees')
         expect(page).to have_content('Other fees %')
         expect(page).to have_content('Notes')
       end
 
       it 'displays all of the specific fields' do
-        expect(page).to have_content('Price cents')
+        expect(page).to have_content('Price')
         expect(page).to_not have_content('Sale period end')
         expect(page).to_not have_content('Sale name')
       end
     end
 
-    describe 'consignment period offer' do
-      let(:offer) { Fabricate(:offer, offer_type: 'consignment period', partner_submission: partner_submission) }
+    describe 'retail offer' do
+      let(:offer) { Fabricate(:offer, offer_type: 'retail', partner_submission: partner_submission) }
       before do
         page.visit "/admin/offers/#{offer.id}/edit"
       end
 
       it 'displays the page title and content' do
         expect(page).to have_content("Offer ##{offer.reference_id}")
-        expect(page).to have_content("Consignment period offer for Submission ##{submission.id} by Gagosian Gallery")
+        expect(page).to have_content("Retail offer for Submission ##{submission.id} by Gagosian Gallery")
       end
 
       it 'displays all of the shared fields' do
         expect(page).to have_content('Currency')
-        expect(page).to have_content('Photography cents')
-        expect(page).to have_content('Shipping cents')
-        expect(page).to have_content('Insurance cents')
+        expect(page).to have_content('Photography')
+        expect(page).to have_content('Shipping')
+        expect(page).to have_content('Insurance')
         expect(page).to have_content('Insurance %')
-        expect(page).to have_content('Other fees cents')
+        expect(page).to have_content('Other fees')
         expect(page).to have_content('Other fees %')
         expect(page).to have_content('Notes')
       end
 
       it 'displays all of the specific fields' do
-        expect(page).to have_content('Price cents')
+        expect(page).to have_content('Retail price')
         expect(page).to have_content('Commission %')
         expect(page).to have_content('Sale period start')
         expect(page).to have_content('Sale period end')
         expect(page).to_not have_content('Sale name')
+      end
+    end
+
+    describe 'net price offer' do
+      let(:offer) { Fabricate(:offer, offer_type: 'net price', partner_submission: partner_submission) }
+      before do
+        page.visit "/admin/offers/#{offer.id}/edit"
+      end
+
+      it 'displays the page title and content' do
+        expect(page).to have_content("Offer ##{offer.reference_id}")
+        expect(page).to have_content("Net price offer for Submission ##{submission.id} by Gagosian Gallery")
+      end
+
+      it 'displays all of the shared fields' do
+        expect(page).to have_content('Currency')
+        expect(page).to have_content('Photography')
+        expect(page).to have_content('Shipping')
+        expect(page).to have_content('Insurance')
+        expect(page).to have_content('Insurance %')
+        expect(page).to have_content('Other fees')
+        expect(page).to have_content('Other fees %')
+        expect(page).to have_content('Notes')
+      end
+
+      it 'displays all of the specific fields' do
+        expect(page).to have_content('Net sale price')
+        expect(page).to have_content('Sale period start')
+        expect(page).to have_content('Sale period end')
+        expect(page).to_not have_content('Sale name')
+        expect(page).to_not have_content('Commission %')
       end
     end
   end

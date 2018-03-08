@@ -38,7 +38,7 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
         6.times { Fabricate(:submission, state: 'submitted') }
         Fabricate(:submission, state: 'draft')
         Fabricate(:offer, state: 'draft')
-        5.times { Fabricate(:consignment, state: 'unconfirmed') }
+        5.times { Fabricate(:consignment, state: 'open') }
         page.visit '/'
       end
 
@@ -85,7 +85,7 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
 
         find(".list-item--consignment[data-id='#{consignment.id}']").click
         expect(page).to have_content("Consignment ##{consignment.reference_id}")
-        expect(page).to have_content('State unconfirmed')
+        expect(page).to have_content('State open')
       end
 
       it 'lets you view all consignments' do

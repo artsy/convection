@@ -99,6 +99,17 @@ describe OfferService do
       stub_gravity_user(id: offer.submission.user.gravity_user_id)
       stub_gravity_user_detail(email: 'michael@bluth.com', id: offer.submission.user.gravity_user_id)
       stub_gravity_artist(id: submission.artist_id)
+      stub_gravity_partner(id: partner.gravity_partner_id)
+      stub_gravity_partner_communications(partner_id: partner.gravity_partner_id)
+      stub_gravity_partner_contacts(
+        partner_id: partner.gravity_partner_id,
+        override_body: [
+          { email: 'contact1@partner.com' },
+          { email: 'contact2@partner.com' }
+        ]
+      )
+      allow(Convection.config).to receive(:offer_response_form_url).and_return('https://google.com/response_form?entry.1=SUBMISSION_NUMBER&entry.2=PARTNER_NAME')
+      allow(Convection.config).to receive(:auction_offer_form_url).and_return('https://google.com/offer_form?entry.1=SUBMISSION_NUMBER')
     end
 
     describe 'sending an offer' do
@@ -107,10 +118,17 @@ describe OfferService do
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
-        expect(emails.first.to).to eq([Convection.config.debug_email_address])
-        expect(emails.first.html_part.body).to include(
+        expect(emails.first.to).to eq(['michael@bluth.com'])
+        expect(emails.first.from).to eq(['consign@artsy.net'])
+        expect(emails.first.subject).to eq('An offer for your consignment submission')
+
+        email_body = emails.first.html_part.body
+        expect(email_body).to include(
           'Great news, an offer has been made for your work.'
         )
+        expect(email_body).to include('The work will be purchased directly from you by the partner')
+        expect(email_body).to include('Happy Gallery')
+        expect(email_body).to include("https://google.com/response_form?entry.1=#{submission.id}&amp;entry.2=Happy%20Gallery")
         expect(offer.reload.state).to eq 'sent'
         expect(offer.sent_by).to eq 'userid'
         expect(offer.sent_at).to_not be_nil
@@ -128,12 +146,16 @@ describe OfferService do
       it 'sends an email saying the user is interested in the offer' do
         OfferService.update_offer(offer, 'userid', state: 'review')
         emails = ActionMailer::Base.deliveries
-        expect(emails.length).to eq 1
+        expect(emails.length).to eq 2
         expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
-        expect(emails.first.to).to eq([Convection.config.debug_email_address])
+        expect(emails.map(&:to).flatten).to eq(['contact1@partner.com', 'contact2@partner.com'])
+        expect(emails.first.from).to eq(['consign@artsy.net'])
+        expect(emails.first.subject).to eq('The consignor has expressed interest in your offer')
         expect(emails.first.html_part.body).to include(
-          'Your offer has been reviewed, and the consignor has elected to accept your offer.'
+          'Your offer has been reviewed, and the consignor has expressed interest your offer'
         )
+        expect(emails.first.html_part.body).to include('Happy Gallery')
+        expect(emails.first.html_part.body).to_not include('The work will be purchased directly from you by the partner')
         expect(offer.reload.state).to eq 'review'
         expect(offer.review_started_at).to_not be_nil
       end
@@ -150,29 +172,25 @@ describe OfferService do
         expect(ps.submission.consigned_partner_submission).to eq offer.partner_submission
         expect(offer.consigned_at).to_not be_nil
       end
-
-      it 'marks all other offers as locked' do
-        additional_offer = Fabricate(:offer,
-          offer_type: 'purchase',
-          price_cents: 10_000,
-          state: 'review',
-          partner_submission: Fabricate(:partner_submission, submission: submission))
-        OfferService.update_offer(offer, 'userid', state: 'consigned')
-        expect(offer.state).to eq 'consigned'
-        expect(additional_offer.reload.state).to eq 'locked'
-      end
     end
 
     describe 'rejecting an offer' do
       it 'sends an email saying the offer has been rejected' do
         OfferService.update_offer(offer, 'userid', state: 'rejected')
         emails = ActionMailer::Base.deliveries
-        expect(emails.length).to eq 1
+        expect(emails.length).to eq 2
         expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
-        expect(emails.first.to).to eq([Convection.config.debug_email_address])
-        expect(emails.first.html_part.body).to include(
-          'Your offer has been reviewed, and the consignor has elected to reject your offer.'
+        expect(emails.map(&:to).flatten).to eq(['contact1@partner.com', 'contact2@partner.com'])
+        expect(emails.first.from).to eq(['consign@artsy.net'])
+        expect(emails.first.subject).to eq('A response to your consignment offer')
+
+        email_body = emails.first.html_part.body
+        expect(email_body).to include(
+          'Your offer has been reviewed, and the consignor has rejected your offer.'
         )
+        expect(email_body).to include('Happy Gallery')
+        expect(email_body).to_not include('The work will be purchased directly from you by the partner')
+        expect(email_body).to include("https://google.com/offer_form?entry.1=#{submission.id}")
         expect(offer.reload.state).to eq 'rejected'
         expect(offer.rejected_by).to eq 'userid'
         expect(offer.rejected_at).to_not be_nil

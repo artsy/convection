@@ -6,22 +6,22 @@
           <div class='overview-section'>
             <div class='overview-section-title--inline'>
               Details
-              <% if @offer.draft? %>
+              <% if offer.draft? %>
                 <span class='overview-section-title--inline__link'>
-                  <%= link_to 'Edit', edit_admin_offer_path(@offer) %>
+                  <%= link_to 'Edit', edit_admin_offer_path(offer) %>
                 </span>
               <% end %>
             </div>
-            <%= render "#{@offer.offer_type.downcase.tr(' ', '_')}", offer: @offer %>
+            <%= render "#{offer.offer_type.downcase.tr(' ', '_')}", offer: offer %>
           </div>
           <div class='overview-section'>
             <div class='overview-section-title--inline'>
               Shared
             </div>
-            <%= render 'shared', offer: @offer %>
+            <%= render 'shared', offer: offer %>
           </div>
-          <%= render 'admin/consignments/consignment_section', consignment: @offer.submission.consigned_partner_submission %>
-          <%= render 'admin/submissions/submission_section', submission: @offer.submission %>
+          <%= render 'admin/consignments/consignment_section', consignment: offer.submission.consigned_partner_submission, artist: artist %>
+          <%= render 'admin/submissions/submission_section', submission: offer.submission, artist: artist %>
         </div>
       </div>
     </div>
@@ -31,18 +31,23 @@
         <div class='watt-overview'>
           <div class='overview-section'>
             <div class='overview-section-title--inline'>
-              Offer #<%= @offer.reference_id %>
+              Offer #<%= offer.reference_id %>
+              <% if @offer.locked? %>
+                <span class='locked'>
+                  <%= image_tag(image_url('lock.svg'), id: 'lock') %>
+                </span>
+              <% end %>
             </div>
           </div>
           <%= render 'state_actions' %>
           <div class='overview-section'>
             <div class='bold-label'>State</div>
             <div class='single-padding-top'>
-              <%= @offer.state %>
+              <%= offer.state %>
             </div>
           </div>
-          <%= render 'admin/submissions/collector_info', submission: @offer.submission %>
-          <%= render 'admin/shared/partner_info', partner: @offer.partner %>
+          <%= render 'admin/submissions/collector_info', submission: offer.submission %>
+          <%= render 'admin/shared/partner_info', partner: offer.partner %>
         </div>
       </div>
     </div>

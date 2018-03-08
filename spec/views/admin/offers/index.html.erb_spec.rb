@@ -23,7 +23,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
           }
         )
 
-      page.visit '/admin/offers'
+      page.visit admin_offers_path
     end
 
     it 'displays the page title' do
@@ -45,7 +45,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
     context 'with some offers' do
       before do
         3.times { Fabricate(:offer, state: 'sent') }
-        page.visit '/admin/offers'
+        page.visit admin_offers_path
       end
 
       it 'displays all of the offers' do
@@ -70,19 +70,28 @@ describe 'admin/offers/index.html.erb', type: :feature do
         expect(current_url).to include '&state=sent'
         expect(page).to have_content('Offers')
         expect(page).to have_selector('.list-group-item', count: 4)
-        expect(current_path).to eq '/admin/offers'
+        expect(current_path).to eq admin_offers_path
+      end
+
+      it 'displays a lock symbol if the offer is locked' do
+        ps = Fabricate(:partner_submission)
+        accepted_offer = Fabricate(:offer, partner_submission: ps)
+        Fabricate(:offer, partner_submission: ps)
+        OfferService.consign!(accepted_offer)
+        page.visit admin_offers_path
+        expect(page).to have_selector('.locked', count: 1)
       end
     end
 
     context 'with a variety of offers' do
       before do
-        partner1 = Fabricate(:partner, name: 'Gagosian')
-        partner2 = Fabricate(:partner, name: 'Heritage Auctions')
-        3.times { Fabricate(:offer, state: 'sent', partner_submission: Fabricate(:partner_submission, partner: partner1)) }
-        Fabricate(:offer, state: 'accepted', partner_submission: Fabricate(:partner_submission, partner: partner2))
-        Fabricate(:offer, state: 'rejected', partner_submission: Fabricate(:partner_submission, partner: partner2))
-        Fabricate(:offer, state: 'draft', partner_submission: Fabricate(:partner_submission, partner: partner1))
-        page.visit '/admin/offers'
+        @partner1 = Fabricate(:partner, name: 'Gagosian')
+        @partner2 = Fabricate(:partner, name: 'Heritage Auctions')
+        3.times { Fabricate(:offer, state: 'sent', partner_submission: Fabricate(:partner_submission, partner: @partner1)) }
+        @offer1 = Fabricate(:offer, state: 'accepted', partner_submission: Fabricate(:partner_submission, partner: @partner2))
+        Fabricate(:offer, state: 'rejected', partner_submission: Fabricate(:partner_submission, partner: @partner2))
+        Fabricate(:offer, state: 'draft', partner_submission: Fabricate(:partner_submission, partner: @partner1))
+        page.visit admin_offers_path
       end
 
       it 'lets you click into a filter option', js: true do
@@ -100,22 +109,43 @@ describe 'admin/offers/index.html.erb', type: :feature do
 
       it 'lets you search by partner name', js: true do
         fill_in('term', with: 'Gag')
-        page.execute_script("$('#offer-filter-form').submit()")
-        expect(current_url).to include '&state=&term=Gag'
+        expect(page).to have_selector('.ui-autocomplete')
+        expect(page).to have_content('Partner Gagosian')
+        click_link("partner-#{@partner1.id}")
+        expect(current_url).to include "&partner=#{@partner1.id}"
         expect(page).to have_selector('.list-group-item', count: 5)
         expect(page).to have_content('sent', count: 4)
         expect(page).to have_content('draft', count: 2)
       end
 
+      it 'allows you to navigate to a specific offer', js: true do
+        fill_in('term', with: @offer1.reference_id)
+        expect(page).to have_selector('.ui-autocomplete')
+        click_link("offer-#{@offer1.id}")
+        expect(current_path).to eq admin_offer_path(@offer1)
+      end
+
       it 'lets you search by state and partner name', js: true do
-        fill_in('term', with: 'Gag')
-        page.execute_script("$('#offer-filter-form').submit()")
-        expect(current_url).to include '&state=&term=Gag'
         select('sent', from: 'state')
-        expect(current_url).to include '&state=sent&term=Gag'
+        fill_in('term', with: 'Gag')
+        expect(page).to have_selector('.ui-autocomplete')
+        expect(page).to have_content('Partner Gagosian')
+        click_link("partner-#{@partner1.id}")
+        expect(current_url).to include "state=sent&partner=#{@partner1.id}"
         expect(page).to have_selector('.list-group-item', count: 4)
         expect(page).to have_content('sent', count: 4)
         expect(page).to have_content('draft', count: 1)
+      end
+
+      it 'allows you to search by partner name, filter by state, and sort by price_cents', js: true do
+        select('sent', from: 'state')
+        fill_in('term', with: 'Gag')
+        expect(page).to have_selector('.ui-autocomplete')
+        expect(page).to have_content('Partner Gagosian')
+        click_link("partner-#{@partner1.id}")
+        expect(current_url).to include "state=sent&partner=#{@partner1.id}"
+        click_link('Price')
+        expect(current_url).to include("partner=#{@partner1.id}", 'state=sent', 'sort=price_cents', 'direction=desc')
       end
     end
   end

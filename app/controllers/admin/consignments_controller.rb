@@ -3,17 +3,50 @@ module Admin
     include GraphqlHelper
 
     before_action :set_consignment, only: [:show, :edit, :update]
-    before_action :set_pagination_params, only: [:index]
+
+    expose(:consignment) do
+      PartnerSubmission.consigned.find(params[:id])
+    end
 
     expose(:consignments) do
       matching_consignments = PartnerSubmission.consigned
-      matching_consignments = matching_consignments.search(params[:term]) if params[:term].present?
+      matching_consignments = matching_consignments.search(term) if term.present?
+
+      if params[:partner].present?
+        partner = Partner.find(params[:partner])
+        matching_consignments = partner.partner_submissions.consigned
+      end
+
+      if params[:user].present?
+        user = User.find(params[:user])
+        matching_consignments = matching_consignments.where(submission: user.submissions)
+      end
+
       matching_consignments = matching_consignments.where(state: params[:state]) if params[:state].present?
-      matching_consignments.order(id: :desc).page(@page).per(@size)
+
+      sort = params[:sort].presence || 'id'
+      direction = params[:direction].presence || 'desc'
+      matching_consignments = if sort.include?('partners')
+                                matching_consignments.includes(:partner).reorder("#{sort} #{direction}, partner_submissions.id desc")
+                              elsif sort.include?('offers')
+                                matching_consignments.joins(:accepted_offer).reorder("#{sort} #{direction}, partner_submissions.id desc")
+                              else
+                                matching_consignments.reorder("#{sort} #{direction}")
+                              end
+
+      matching_consignments.page(page).per(size)
+    end
+
+    expose(:artist_details) do
+      artists_query(consignments.map(&:submission).map(&:artist_id))
+    end
+
+    expose(:artist) do
+      artists_query([consignment.submission&.artist_id])&.values&.first
     end
 
     expose(:filters) do
-      { state: params[:state] }
+      { state: params[:state], partner: params[:partner], user: params[:user], sort: params[:sort], direction: params[:direction] }
     end
 
     expose(:counts) do
@@ -43,7 +76,12 @@ module Admin
       end
     end
 
-    def index; end
+    def index
+      respond_to do |format|
+        format.html
+        format.json { render json: consignments || [] }
+      end
+    end
 
     private
 
@@ -53,15 +91,16 @@ module Admin
 
     def consignment_params
       params.require(:partner_submission).permit(
-        :sale_currency,
-        :sale_price_cents,
+        :canceled_reason,
+        :currency,
+        :sale_price_dollars,
         :sale_name,
         :sale_date,
         :sale_location,
         :sale_lot_number,
         :state,
-        :partner_commission_percent,
-        :artsy_commission_percent,
+        :partner_commission_percent_whole,
+        :artsy_commission_percent_whole,
         :partner_invoiced_at,
         :partner_paid_at,
         :notes

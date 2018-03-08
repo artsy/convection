@@ -3,17 +3,40 @@ module Admin
     include GraphqlHelper
 
     before_action :set_offer, only: [:show, :edit, :update, :destroy]
-    before_action :set_pagination_params, only: [:index]
+
+    expose :offer
 
     expose(:offers) do
       matching_offers = Offer.all
       matching_offers = matching_offers.search(params[:term]) if params[:term].present?
+
+      if params[:partner].present?
+        partner = Partner.find(params[:partner])
+        matching_offers = partner.offers
+      end
+
+      if params[:user].present?
+        user = User.find(params[:user])
+        matching_offers = matching_offers.where(submission: user.submissions)
+      end
+
       matching_offers = matching_offers.where(state: params[:state]) if params[:state].present?
-      matching_offers.order(id: :desc).page(@page).per(@size)
+
+      sort = params[:sort].presence || 'id'
+      direction = params[:direction].presence || 'desc'
+      matching_offers = if sort.include?('partners')
+                          matching_offers.includes(:partner_submission).includes(:partner).reorder("#{sort} #{direction}")
+                        elsif sort.include?('submissions')
+                          matching_offers.includes(:submission).reorder("#{sort} #{direction}")
+                        else
+                          matching_offers.reorder("#{sort} #{direction}")
+                        end
+
+      matching_offers.page(page).per(size)
     end
 
     expose(:filters) do
-      { state: params[:state] }
+      { state: params[:state], partner: params[:partner], user: params[:user], sort: params[:sort], direction: params[:direction] }
     end
 
     expose(:counts) do
@@ -34,6 +57,10 @@ module Admin
 
     expose(:term) do
       params[:term]
+    end
+
+    expose(:artist) do
+      artists_query([offer.submission.artist_id])&.values&.first
     end
 
     def new_step_0
@@ -80,7 +107,12 @@ module Admin
       render 'edit'
     end
 
-    def index; end
+    def index
+      respond_to do |format|
+        format.html
+        format.json { render json: offers || [] }
+      end
+    end
 
     private
 
@@ -90,26 +122,26 @@ module Admin
 
     def offer_params
       params.require(:offer).permit(
-        :commission_percent,
+        :commission_percent_whole,
         :created_by_id,
         :currency,
-        :high_estimate_cents,
-        :insurance_cents,
-        :insurance_percent,
-        :low_estimate_cents,
+        :high_estimate_dollars,
+        :insurance_dollars,
+        :insurance_percent_whole,
+        :low_estimate_dollars,
         :notes,
         :offer_type,
-        :other_fees_cents,
-        :other_fees_percent,
-        :photography_cents,
-        :price_cents,
+        :other_fees_dollars,
+        :other_fees_percent_whole,
+        :photography_dollars,
+        :price_dollars,
         :rejection_reason,
         :rejection_note,
         :sale_date,
         :sale_name,
         :sale_period_end,
         :sale_period_start,
-        :shipping_cents,
+        :shipping_dollars,
         :state
       )
     end

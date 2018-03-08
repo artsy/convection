@@ -1,6 +1,9 @@
 class Offer < ApplicationRecord
   include ReferenceId
   include PgSearch
+  include Currency
+  include Dollarize
+  include Percentize
 
   pg_search_scope :search,
     against: [:id, :reference_id],
@@ -12,11 +15,13 @@ class Offer < ApplicationRecord
     }
 
   OFFER_TYPES = [
-    'auction consignment',
-    'consignment period',
-    'purchase'
+    AUCTION_CONSIGNMENT = 'auction consignment'.freeze,
+    NET_PRICE = 'net price'.freeze,
+    RETAIL = 'retail'.freeze,
+    PURCHASE = 'purchase'.freeze
   ].freeze
 
+  # FIXME: deprecate 'accepted' state
   STATES = %w[
     draft
     sent
@@ -24,15 +29,7 @@ class Offer < ApplicationRecord
     rejected
     lapsed
     review
-    locked
     consigned
-  ].freeze
-
-  CURRENCIES = %w[
-    USD
-    EUR
-    GBP
-    CAD
   ].freeze
 
   REJECTION_REASONS = [
@@ -41,23 +38,32 @@ class Offer < ApplicationRecord
     'High shipping/marketing costs',
     'Took competing offer',
     'Lost interest',
+    'Inconvenient partner location',
     'Other'
   ].freeze
 
   belongs_to :partner_submission
-  belongs_to :submission
+  belongs_to :submission, counter_cache: true
   has_one :partner, through: :partner_submission
 
   validates :state, inclusion: { in: STATES }
   validates :offer_type, inclusion: { in: OFFER_TYPES }, allow_nil: true
-  validates :currency, inclusion: { in: CURRENCIES }, allow_nil: true
   validates :rejection_reason, inclusion: { in: REJECTION_REASONS }, allow_nil: true
 
   before_validation :set_state, on: :create
-  before_validation :set_currency
   before_create :set_submission
 
   scope :sent, -> { where(state: 'sent') }
+
+  dollarize :price_cents,
+    :low_estimate_cents,
+    :high_estimate_cents,
+    :photography_cents,
+    :shipping_cents,
+    :insurance_cents,
+    :other_fees_cents
+
+  percentize :commission_percent, :insurance_percent, :other_fees_percent
 
   def set_state
     self.state ||= 'draft'
@@ -74,6 +80,10 @@ class Offer < ApplicationRecord
     !draft? && !sent? && !review?
   end
 
+  def locked?
+    submission.consigned_partner_submission_id.present? && submission.consigned_partner_submission.accepted_offer_id != id
+  end
+
   def rejected_by_user
     Gravity.client.user(id: rejected_by)._get if rejected_by
   rescue Faraday::ResourceNotFound
@@ -82,10 +92,6 @@ class Offer < ApplicationRecord
 
   def set_submission
     self.submission ||= partner_submission&.submission
-  end
-
-  def set_currency
-    self.currency ||= 'USD'
   end
 
   def best_price_display
