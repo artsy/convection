@@ -56,7 +56,7 @@
       </div>
       <div class='list-group'>
         <% consignments.each do |consignment| %>
-          <%= render 'admin/consignments/consignment', consignment: consignment, artist: artist_details.dig(consignment.submission.artist_id) %>
+          <%= render 'admin/consignments/consignment', consignment: consignment, artist: artist_details&.dig(consignment.submission.artist_id) %>
         <% end %>
       </div>
     </div>
