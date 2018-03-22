@@ -10,7 +10,7 @@ describe 'Update Submission With Graphql' do
   let(:update_mutation) do
     <<-GRAPHQL
     mutation {
-      updateSubmission(submission: { id: #{submission.id}, artist_id: "andy-warhol", title: "soup" }){
+      updateConsignmentSubmission(input: { id: #{submission.id}, artist_id: "andy-warhol", title: "soup" }){
         id,
         artist_id,
         title
@@ -22,7 +22,7 @@ describe 'Update Submission With Graphql' do
   let(:update_mutation_random_id) do
     <<-GRAPHQL
     mutation {
-      updateSubmission(submission: { id: 999999, artist_id: "andy-warhol", title: "soup" }){
+      updateConsignmentSubmission(input: { id: 999999, artist_id: "andy-warhol", title: "soup" }){
         id,
         title
       }
@@ -37,8 +37,8 @@ describe 'Update Submission With Graphql' do
       }, headers: { 'Authorization' => 'Bearer foo.bar.baz' }
       expect(response.status).to eq 200
       body = JSON.parse(response.body)
-      expect(body['data']['updateSubmission']).to eq nil
-      expect(body['errors'][0]['message']).to eq "Can't access updateSubmission"
+      expect(body['data']['updateConsignmentSubmission']).to eq nil
+      expect(body['errors'][0]['message']).to eq "Can't access updateConsignmentSubmission"
     end
 
     it 'rejects requests without and app token' do
@@ -48,8 +48,8 @@ describe 'Update Submission With Graphql' do
       }, headers: { 'Authorization' => "Bearer #{user_token}" }
       expect(response.status).to eq 200
       body = JSON.parse(response.body)
-      expect(body['data']['updateSubmission']).to eq nil
-      expect(body['errors'][0]['message']).to eq "Can't access updateSubmission"
+      expect(body['data']['updateConsignmentSubmission']).to eq nil
+      expect(body['errors'][0]['message']).to eq "Can't access updateConsignmentSubmission"
     end
 
     it 'rejects requests to update a submission that you do not own' do
@@ -59,7 +59,7 @@ describe 'Update Submission With Graphql' do
       }, headers: { 'Authorization' => "Bearer #{another_token}" }
       expect(response.status).to eq 200
       body = JSON.parse(response.body)
-      expect(body['data']['updateSubmission']).to eq nil
+      expect(body['data']['updateConsignmentSubmission']).to eq nil
       expect(body['errors'][0]['message']).to eq 'Submission Not Found'
     end
 
@@ -75,9 +75,9 @@ describe 'Update Submission With Graphql' do
       }, headers: headers
       expect(response.status).to eq 200
       body = JSON.parse(response.body)
-      expect(body['data']['updateSubmission']['id'].to_i).to eq submission.id
-      expect(body['data']['updateSubmission']['title']).to eq 'soup'
-      expect(body['data']['updateSubmission']['artist_id']).to eq 'andy-warhol'
+      expect(body['data']['updateConsignmentSubmission']['id'].to_i).to eq submission.id
+      expect(body['data']['updateConsignmentSubmission']['title']).to eq 'soup'
+      expect(body['data']['updateConsignmentSubmission']['artist_id']).to eq 'andy-warhol'
     end
   end
 end
