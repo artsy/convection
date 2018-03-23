@@ -16,9 +16,7 @@ module Types
       argument :ids, types[types.ID], 'Get all submissions with these IDs', permit: :admin
       argument :user_id, types[types.ID], 'Only get submission by this user_id', prepare: ->(obj, context) do
         is_same_as_user = obj == context[:current_user]
-        if !is_same_as_user && !context[:current_user_roles].include?(:admin)
-          GraphQL::ExecutionError.new('Only Admins can use the user_id for another user.')
-        end
+        GraphQL::ExecutionError.new('Only Admins can use the user_id for another user.') if !is_same_as_user && !context[:current_user_roles].include?(:admin)
         obj
       end
 
@@ -26,9 +24,7 @@ module Types
 
       resolve ->(_object, args, context) do
         get_all_submissions = !args[:ids] && !args[:user_id]
-        if !get_all_submissions && !context[:current_user_roles].include?(:admin)
-          return GraphQL::ExecutionError.new('Only Admins can look at all submissions.')
-        end
+        return GraphQL::ExecutionError.new('Only Admins can look at all submissions.') if !get_all_submissions && !context[:current_user_roles].include?(:admin)
 
         submissions = Submission.order(id: :desc)
         submissions = if args[:ids]
