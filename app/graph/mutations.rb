@@ -18,7 +18,7 @@ module Mutations
     input_field :medium, types.String
     input_field :provenance, types.String
     input_field :signature, types.Boolean
-    input_field :state, types.String
+    input_field :state, Types::StateType
     input_field :title, types.String
     input_field :width, types.String
     input_field :year, types.String
@@ -46,7 +46,7 @@ module Mutations
     input_field :medium, types.String
     input_field :provenance, types.String
     input_field :signature, types.Boolean
-    input_field :state, types.String
+    input_field :state, Types::StateType
     input_field :title, types.String
     input_field :width, types.String
     input_field :year, types.String

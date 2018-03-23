@@ -21,7 +21,7 @@ module Types
     field :medium, types.String
     field :provenance, types.String
     field :signature, types.Boolean
-    field :state, types.String
+    field :state, Types::StateType
     field :title, types.String
     field :width, types.String
     field :year, types.String
