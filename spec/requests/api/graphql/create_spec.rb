@@ -82,10 +82,11 @@ describe 'Create Submission With Graphql' do
 
         create_asset = <<-GRAPHQL
         mutation {
-          addAssetToConsignmentSubmission(submission_id: #{submission.id}, gemini_token: "gemini-token-hash"){
-            id,
-            submission {
+          addAssetToConsignmentSubmission(input: { clientMutationId: "test", submission_id: #{submission.id}, gemini_token: "gemini-token-hash" }){
+            clientMutationId
+            asset {
               id
+              submission_id
             }
           }
         }
@@ -97,8 +98,8 @@ describe 'Create Submission With Graphql' do
         expect(response.status).to eq 200
 
         body = JSON.parse(response.body)
-        expect(body['data']['addAssetToConsignmentSubmission']['id']).not_to be_nil
-        expect(body['data']['addAssetToConsignmentSubmission']['submission']).not_to be_nil
+        expect(body['data']['addAssetToConsignmentSubmission']['asset']['id']).not_to be_nil
+        expect(body['data']['addAssetToConsignmentSubmission']['asset']['submission_id'].to_i).to eq submission.id
       end.to change(Asset, :count).by(1)
     end
   end

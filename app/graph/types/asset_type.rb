@@ -5,7 +5,7 @@ module Types
 
     field :id, !types.ID, 'Uniq ID for this asset'
     field :asset_type, !types.String, 'type of this Asset'
-    field :image_urls, Types::JsonType, 'Json of available image urls'
-    field :submission, !Types::SubmissionType
+    field :gemini_token, types.String, 'gemini token for asset'
+    field :submission_id, !types.ID
   end
 end

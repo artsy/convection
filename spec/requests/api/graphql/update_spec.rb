@@ -10,10 +10,13 @@ describe 'Update Submission With Graphql' do
   let(:update_mutation) do
     <<-GRAPHQL
     mutation {
-      updateConsignmentSubmission(input: { id: #{submission.id}, artist_id: "andy-warhol", title: "soup" }){
-        id,
-        artist_id,
-        title
+      updateConsignmentSubmission(input: { clientMutationId: "test", id: #{submission.id}, artist_id: "andy-warhol", title: "soup" }){
+        clientMutationId
+        consignment_submission {
+          id
+          artist_id
+          title
+        }
       }
     }
     GRAPHQL
@@ -22,9 +25,13 @@ describe 'Update Submission With Graphql' do
   let(:update_mutation_random_id) do
     <<-GRAPHQL
     mutation {
-      updateConsignmentSubmission(input: { id: 999999, artist_id: "andy-warhol", title: "soup" }){
-        id,
-        title
+      updateConsignmentSubmission(input: { clientMutationId: "test", id: 999999, artist_id: "andy-warhol", title: "soup" }){
+        clientMutationId
+        consignment_submission {
+          id
+          artist_id
+          title
+        }
       }
     }
     GRAPHQL
@@ -75,9 +82,9 @@ describe 'Update Submission With Graphql' do
       }, headers: headers
       expect(response.status).to eq 200
       body = JSON.parse(response.body)
-      expect(body['data']['updateConsignmentSubmission']['id'].to_i).to eq submission.id
-      expect(body['data']['updateConsignmentSubmission']['title']).to eq 'soup'
-      expect(body['data']['updateConsignmentSubmission']['artist_id']).to eq 'andy-warhol'
+      expect(body['data']['updateConsignmentSubmission']['consignment_submission']['id'].to_i).to eq submission.id
+      expect(body['data']['updateConsignmentSubmission']['consignment_submission']['title']).to eq 'soup'
+      expect(body['data']['updateConsignmentSubmission']['consignment_submission']['artist_id']).to eq 'andy-warhol'
     end
   end
 end
