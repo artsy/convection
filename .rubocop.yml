@@ -21,7 +21,7 @@ LineLength:
   Exclude:
     - config/environments/*
     - config/initializers/*
-  Max: 139
+  Max: 145
   IgnoreCopDirectives: true
 
 Layout/AlignParameters:

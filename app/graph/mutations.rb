@@ -5,7 +5,7 @@ module Mutations
     input_field :additional_info, types.String
     input_field :artist_id, !types.String
     input_field :authenticity_certificate, types.Boolean
-    input_field :category, types.String
+    input_field :category, Types::CategoryType
     input_field :depth, types.String
     input_field :dimensions_metric, types.String
     input_field :edition, types.Boolean
@@ -33,7 +33,7 @@ module Mutations
     input_field :additional_info, types.String
     input_field :artist_id, types.String
     input_field :authenticity_certificate, types.Boolean
-    input_field :category, types.String
+    input_field :category, Types::CategoryType
     input_field :depth, types.String
     input_field :dimensions_metric, types.String
     input_field :edition, types.Boolean
