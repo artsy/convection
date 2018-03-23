@@ -9,7 +9,6 @@ module Types
     field :artist_id, !types.String
     field :authenticity_certificate, types.Boolean
     field :category, types.String
-    field :deadline_to_sell, Types::DateType
     field :depth, types.String
     field :dimensions_metric, types.String
     field :edition, types.String
