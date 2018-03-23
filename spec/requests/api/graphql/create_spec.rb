@@ -8,9 +8,12 @@ describe 'Create Submission With Graphql' do
   let(:create_mutation) do
     <<-GRAPHQL
     mutation {
-      createConsignmentSubmission(input: { artist_id: "andy", title: "soup" }){
-        id,
-        title
+      createConsignmentSubmission(input: { clientMutationId: "2", artist_id: "andy", title: "soup" }){
+        clientMutationId
+        consignment_submission {
+          id
+          title
+        }
       }
     }
     GRAPHQL
@@ -20,8 +23,10 @@ describe 'Create Submission With Graphql' do
     <<-GRAPHQL
     mutation {
       createConsignmentSubmission(input: { title: "soup" }){
-        id,
-        title
+        consignment_submission {
+          id
+          title
+        }
       }
     }
     GRAPHQL
@@ -65,8 +70,9 @@ describe 'Create Submission With Graphql' do
         }, headers: headers
         expect(response.status).to eq 200
         body = JSON.parse(response.body)
-        expect(body['data']['createConsignmentSubmission']['id']).not_to be_nil
-        expect(body['data']['createConsignmentSubmission']['title']).to eq 'soup'
+        expect(body['data']['createConsignmentSubmission']['consignment_submission']['id']).not_to be_nil
+        expect(body['data']['createConsignmentSubmission']['consignment_submission']['title']).to eq 'soup'
+        expect(body['data']['createConsignmentSubmission']['clientMutationId']).to eq '2'
       end.to change(Submission, :count).by(1)
     end
 
