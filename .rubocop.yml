@@ -24,7 +24,7 @@ LineLength:
   Max: 139
   IgnoreCopDirectives: true
 
-Style/AlignParameters:
+Layout/AlignParameters:
   EnforcedStyle: with_fixed_indentation
 
 Style/FrozenStringLiteralComment:

@@ -8,9 +8,12 @@ describe 'Create Submission With Graphql' do
   let(:create_mutation) do
     <<-GRAPHQL
     mutation {
-      createSubmission(submission: { artist_id: "andy", title: "soup" }){
-        id,
-        title
+      createConsignmentSubmission(input: { clientMutationId: "2", artist_id: "andy", title: "soup" }){
+        clientMutationId
+        consignment_submission {
+          id
+          title
+        }
       }
     }
     GRAPHQL
@@ -19,9 +22,11 @@ describe 'Create Submission With Graphql' do
   let(:create_mutation_no_artist_id) do
     <<-GRAPHQL
     mutation {
-      createSubmission(submission: { title: "soup" }){
-        id,
-        title
+      createConsignmentSubmission(input: { title: "soup" }){
+        consignment_submission {
+          id
+          title
+        }
       }
     }
     GRAPHQL
@@ -34,8 +39,8 @@ describe 'Create Submission With Graphql' do
       }, headers: { 'Authorization' => 'Bearer foo.bar.baz' }
       expect(response.status).to eq 200
       body = JSON.parse(response.body)
-      expect(body['data']['createSubmission']).to eq nil
-      expect(body['errors'][0]['message']).to eq "Can't access createSubmission"
+      expect(body['data']['createConsignmentSubmission']).to eq nil
+      expect(body['errors'][0]['message']).to eq "Can't access createConsignmentSubmission"
     end
 
     it 'rejects requests without an app token' do
@@ -45,8 +50,8 @@ describe 'Create Submission With Graphql' do
       }, headers: { 'Authorization' => "Bearer #{user_token}" }
       expect(response.status).to eq 200
       body = JSON.parse(response.body)
-      expect(body['data']['createSubmission']).to eq nil
-      expect(body['errors'][0]['message']).to eq "Can't access createSubmission"
+      expect(body['data']['createConsignmentSubmission']).to eq nil
+      expect(body['errors'][0]['message']).to eq "Can't access createConsignmentSubmission"
     end
 
     it 'rejects when missing artist_id' do
@@ -65,8 +70,9 @@ describe 'Create Submission With Graphql' do
         }, headers: headers
         expect(response.status).to eq 200
         body = JSON.parse(response.body)
-        expect(body['data']['createSubmission']['id']).not_to be_nil
-        expect(body['data']['createSubmission']['title']).to eq 'soup'
+        expect(body['data']['createConsignmentSubmission']['consignment_submission']['id']).not_to be_nil
+        expect(body['data']['createConsignmentSubmission']['consignment_submission']['title']).to eq 'soup'
+        expect(body['data']['createConsignmentSubmission']['clientMutationId']).to eq '2'
       end.to change(Submission, :count).by(1)
     end
 
@@ -76,7 +82,7 @@ describe 'Create Submission With Graphql' do
 
         create_asset = <<-GRAPHQL
         mutation {
-          createAsset(submission_id: #{submission.id}, gemini_token: "gemini-token-hash"){
+          addAssetToConsignmentSubmission(submission_id: #{submission.id}, gemini_token: "gemini-token-hash"){
             id,
             submission {
               id
@@ -91,8 +97,8 @@ describe 'Create Submission With Graphql' do
         expect(response.status).to eq 200
 
         body = JSON.parse(response.body)
-        expect(body['data']['createAsset']['id']).not_to be_nil
-        expect(body['data']['createAsset']['submission']).not_to be_nil
+        expect(body['data']['addAssetToConsignmentSubmission']['id']).not_to be_nil
+        expect(body['data']['addAssetToConsignmentSubmission']['submission']).not_to be_nil
       end.to change(Asset, :count).by(1)
     end
   end
