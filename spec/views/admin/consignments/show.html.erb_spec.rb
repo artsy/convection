@@ -16,13 +16,13 @@ describe 'admin/consignments/show.html.erb', type: :feature do
     end
 
     before do
-      partner_submission.update_attributes!(
+      partner_submission.update!(
         state: 'open',
         accepted_offer_id: offer.id,
         sale_name: 'July Prints & Multiples',
         sale_location: 'London'
       )
-      submission.update_attributes!(consigned_partner_submission_id: partner_submission.id)
+      submission.update!(consigned_partner_submission_id: partner_submission.id)
       allow_any_instance_of(ApplicationController).to receive(:require_artsy_authentication)
 
       stub_jwt_header('userid')
@@ -81,7 +81,7 @@ describe 'admin/consignments/show.html.erb', type: :feature do
       end
 
       it 'shows a canceled reason if the consignment has been canceled' do
-        partner_submission.update_attributes!(state: 'canceled', canceled_reason: 'done with this piece.')
+        partner_submission.update!(state: 'canceled', canceled_reason: 'done with this piece.')
         page.visit admin_consignment_path(partner_submission)
         expect(page).to have_content 'Canceled Reason'
         expect(page).to have_content 'done with this piece.'

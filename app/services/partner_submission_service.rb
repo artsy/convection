@@ -43,7 +43,7 @@ class PartnerSubmissionService
       end
 
       notified_at = Time.now.utc
-      partner_submissions.each { |ps| ps.update_attributes!(notified_at: notified_at) }
+      partner_submissions.each { |ps| ps.update!(notified_at: notified_at) }
     end
 
     def deliver_partner_contact_email(submission_ids, partner_name, partner_type, email)
