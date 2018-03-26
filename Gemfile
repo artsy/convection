@@ -49,7 +49,7 @@ end
 
 group :test do
   gem 'capybara'
-  gem 'capybara-webkit'
+  gem 'capybara-webkit', '1.1.0'
   gem 'database_cleaner'
   gem 'fabrication'
   gem 'rack_session_access'
