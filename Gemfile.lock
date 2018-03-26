@@ -123,9 +123,8 @@ GEM
       thor (~> 0.19.1)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
-    graphiql-rails (1.4.10)
-      railties
-      sprockets-rails
+    graphiql-rails (1.4.8)
+      rails
     graphql (1.7.13)
     haml (5.0.4)
       temple (>= 0.8.0)
@@ -371,7 +370,7 @@ DEPENDENCIES
   fabrication
   foreman
   gemini_upload-rails!
-  graphiql-rails
+  graphiql-rails (= 1.4.8)
   graphql
   haml-rails
   hyperclient

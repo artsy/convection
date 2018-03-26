@@ -19,7 +19,7 @@ gem 'bootstrap-sass' # required for watt
 gem 'bourbon', '4.2.3' # required for watt
 gem 'coffee-rails' # required for watt
 gem 'decent_exposure' # for safely referencing variables in views
-gem 'graphiql-rails' # A lovely interface to the API
+gem 'graphiql-rails', '1.4.8' # A lovely interface to the API
 gem 'graphql' # A lovely API
 gem 'haml-rails' # required for watt layouts
 gem 'hyperclient' # consume Gravity's v2 API
