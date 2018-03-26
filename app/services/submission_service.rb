@@ -37,13 +37,13 @@ class SubmissionService
     end
 
     def approve!(submission, current_user)
-      submission.update_attributes!(approved_by: current_user, approved_at: Time.now.utc)
+      submission.update!(approved_by: current_user, approved_at: Time.now.utc)
       delay.deliver_approval_notification(submission.id)
       PartnerSubmissionService.delay.generate_for_all_partners(submission.id)
     end
 
     def reject!(submission, current_user)
-      submission.update_attributes!(rejected_by: current_user, rejected_at: Time.now.utc)
+      submission.update!(rejected_by: current_user, rejected_at: Time.now.utc)
       delay.deliver_rejection_notification(submission.id)
     end
 
@@ -52,7 +52,7 @@ class SubmissionService
       return if submission.admin_receipt_sent_at
       delay.deliver_submission_notification(submission.id)
       NotificationService.delay.post_submission_event(submission_id, SubmissionEvent::SUBMITTED)
-      submission.update_attributes!(admin_receipt_sent_at: Time.now.utc)
+      submission.update!(admin_receipt_sent_at: Time.now.utc)
     end
 
     def notify_user(submission_id)
@@ -60,7 +60,7 @@ class SubmissionService
       return if submission.receipt_sent_at
       if submission.images.count.positive?
         delay.deliver_submission_receipt(submission.id)
-        submission.update_attributes!(receipt_sent_at: Time.now.utc)
+        submission.update!(receipt_sent_at: Time.now.utc)
       else
         return if submission.reminders_sent_count >= 3
         delay.deliver_upload_reminder(submission.id)

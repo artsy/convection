@@ -120,6 +120,6 @@ module OffersHelper
   end
 
   def formatted_date_offer(date)
-    date.strftime('%b %-d, %Y') # rubocop:disable Style/FormatStringToken
+    date.strftime('%b %-d, %Y')
   end
 end

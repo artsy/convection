@@ -9,13 +9,13 @@ module Api
       param! :submission_id, String, required: true
 
       assets = @submission.assets.limit(10)
-      render json: assets.to_json, status: 200
+      render json: assets.to_json, status: :ok
     end
 
     def show
       param! :id, String, required: true
 
-      render json: @asset.to_json, status: 200
+      render json: @asset.to_json, status: :ok
     end
 
     def create
@@ -25,7 +25,7 @@ module Api
 
       asset = @submission.assets.create!(asset_params)
       SubmissionService.notify_user(@submission.id) if @submission.submitted?
-      render json: asset.to_json, status: 201
+      render json: asset.to_json, status: :created
     end
 
     private

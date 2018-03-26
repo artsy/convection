@@ -2,9 +2,10 @@ source 'https://rubygems.org'
 
 ruby '2.5.0'
 
+gem 'rails', '5.1.5'
+
 gem 'pg', '0.21.0'
 gem 'puma'
-gem 'rails', '5.1.4'
 
 gemini_gem_spec = { git: 'https://github.com/artsy/gemini_upload-rails.git', branch: 'master' }
 gem 'gemini_upload-rails', gemini_gem_spec # for admins to upload images
@@ -48,7 +49,7 @@ end
 
 group :test do
   gem 'capybara'
-  gem 'capybara-webkit'
+  gem 'capybara-webkit', '1.1.0'
   gem 'database_cleaner'
   gem 'fabrication'
   gem 'rack_session_access'
