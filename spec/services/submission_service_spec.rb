@@ -155,7 +155,7 @@ describe SubmissionService do
       end
 
       it 'does not send a receipt if one has already been sent' do
-        submission.update_attributes!(receipt_sent_at: Time.now.utc)
+        submission.update!(receipt_sent_at: Time.now.utc)
         expect do
           SubmissionService.notify_user(submission.id)
         end.to_not change(ActionMailer::Base.deliveries, :count)
@@ -178,7 +178,7 @@ describe SubmissionService do
       end
 
       it 'sends the second reminder if one reminder has been sent' do
-        submission.update_attributes!(reminders_sent_count: 1)
+        submission.update!(reminders_sent_count: 1)
         SubmissionService.notify_user(submission.id)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
@@ -193,7 +193,7 @@ describe SubmissionService do
       end
 
       it 'sends the third reminder if two reminders have ben sent' do
-        submission.update_attributes!(reminders_sent_count: 2)
+        submission.update!(reminders_sent_count: 2)
         SubmissionService.notify_user(submission.id)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
@@ -208,14 +208,14 @@ describe SubmissionService do
       end
 
       it 'does not send a reminder if a receipt has already been sent' do
-        submission.update_attributes!(reminders_sent_count: 1, receipt_sent_at: Time.now.utc)
+        submission.update!(reminders_sent_count: 1, receipt_sent_at: Time.now.utc)
         SubmissionService.notify_user(submission.id)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 0
       end
 
       it 'does not send a reminder if three reminders have already been sent' do
-        submission.update_attributes!(reminders_sent_count: 3)
+        submission.update!(reminders_sent_count: 3)
         SubmissionService.notify_user(submission.id)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 0
@@ -235,7 +235,7 @@ describe SubmissionService do
     end
 
     it 'does not send an email if one has already been sent' do
-      submission.update_attributes!(admin_receipt_sent_at: Time.now.utc)
+      submission.update!(admin_receipt_sent_at: Time.now.utc)
       expect do
         SubmissionService.notify_admin(submission.id)
       end.to_not change(ActionMailer::Base.deliveries, :count)
@@ -250,7 +250,7 @@ describe SubmissionService do
     end
 
     it 'raises an exception if all of the images have not been processed' do
-      submission.update_attributes!(receipt_sent_at: Time.now.utc)
+      submission.update!(receipt_sent_at: Time.now.utc)
       Fabricate(:unprocessed_image, submission: submission)
       expect do
         SubmissionService.deliver_submission_receipt(submission.id)
@@ -265,7 +265,7 @@ describe SubmissionService do
       stub_gravity_user_detail(email: 'michael@bluth.com')
       stub_gravity_artist
 
-      submission.update_attributes!(receipt_sent_at: Time.now.utc - 20.minutes)
+      submission.update!(receipt_sent_at: Time.now.utc - 20.minutes)
       Fabricate(:unprocessed_image, submission: submission)
       SubmissionService.deliver_submission_receipt(submission.id)
       emails = ActionMailer::Base.deliveries
@@ -283,7 +283,7 @@ describe SubmissionService do
     end
 
     it 'raises an exception if all of the images have not been processed' do
-      submission.update_attributes!(receipt_sent_at: Time.now.utc)
+      submission.update!(receipt_sent_at: Time.now.utc)
       Fabricate(:unprocessed_image, submission: submission)
       expect do
         SubmissionService.deliver_submission_notification(submission.id)
@@ -297,7 +297,7 @@ describe SubmissionService do
       stub_gravity_user
       stub_gravity_user_detail(email: 'michael@bluth.com')
       stub_gravity_artist
-      submission.update_attributes!(receipt_sent_at: Time.now.utc - 20.minutes)
+      submission.update!(receipt_sent_at: Time.now.utc - 20.minutes)
       Fabricate(:unprocessed_image, submission: submission)
       SubmissionService.deliver_submission_notification(submission.id)
       emails = ActionMailer::Base.deliveries

@@ -32,19 +32,19 @@ describe Admin::ConsignmentsController, type: :controller do
         state: 'open', submission: Fabricate(:submission, state: 'approved'),
         partner: partner2)
 
-      @consignment1.update_attributes!(
+      @consignment1.update!(
         accepted_offer: Fabricate(:offer, state: 'sent', partner_submission: @consignment1, offer_type: 'purchase')
       )
-      @consignment2.update_attributes!(
+      @consignment2.update!(
         accepted_offer: Fabricate(:offer, state: 'sent', partner_submission: @consignment1, offer_type: 'purchase')
       )
-      @consignment3.update_attributes!(
+      @consignment3.update!(
         accepted_offer: Fabricate(:offer, state: 'sent', partner_submission: @consignment1, offer_type: 'net price')
       )
-      @consignment4.update_attributes!(
+      @consignment4.update!(
         accepted_offer: Fabricate(:offer, state: 'sent', partner_submission: @consignment1, offer_type: 'auction consignment')
       )
-      @consignment5.update_attributes!(
+      @consignment5.update!(
         accepted_offer: Fabricate(:offer, state: 'sent', partner_submission: @consignment1, offer_type: 'retail')
       )
     end

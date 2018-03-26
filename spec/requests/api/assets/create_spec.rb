@@ -44,7 +44,7 @@ describe 'Create Asset' do
       stub_gravity_user_detail(email: 'michael@bluth.com')
       stub_gravity_artist
 
-      submission.update_attributes!(state: 'submitted')
+      submission.update!(state: 'submitted')
       expect do
         post '/api/assets', params: {
           submission_id: submission.id,

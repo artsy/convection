@@ -5,19 +5,19 @@ module Api
     before_action :require_authorized_submission, only: [:show, :update]
 
     def show
-      render json: @submission.to_json, status: 200
+      render json: @submission.to_json, status: :ok
     end
 
     def create
       param! :artist_id, String, required: true
 
       submission = SubmissionService.create_submission(submission_params, current_user)
-      render json: submission.to_json, status: 201
+      render json: submission.to_json, status: :created
     end
 
     def update
       SubmissionService.update_submission(@submission, submission_params)
-      render json: @submission.to_json, status: 201
+      render json: @submission.to_json, status: :created
     end
 
     def index
@@ -30,7 +30,7 @@ module Api
       end
 
       submissions = submissions.order(created_at: :desc).page(page).per(size)
-      render json: submissions.to_json, status: 200
+      render json: submissions.to_json, status: :ok
     end
 
     private

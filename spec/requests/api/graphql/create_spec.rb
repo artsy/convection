@@ -8,11 +8,13 @@ describe 'Create Submission With Graphql' do
   let(:create_mutation) do
     <<-GRAPHQL
     mutation {
-      createConsignmentSubmission(input: { clientMutationId: "2", artist_id: "andy", title: "soup" }){
+      createConsignmentSubmission(input: { state: REJECTED, clientMutationId: "2", artist_id: "andy", title: "soup", category: JEWELRY }){
         clientMutationId
         consignment_submission {
           id
           title
+          category
+          state
         }
       }
     }
@@ -72,6 +74,8 @@ describe 'Create Submission With Graphql' do
         body = JSON.parse(response.body)
         expect(body['data']['createConsignmentSubmission']['consignment_submission']['id']).not_to be_nil
         expect(body['data']['createConsignmentSubmission']['consignment_submission']['title']).to eq 'soup'
+        expect(body['data']['createConsignmentSubmission']['consignment_submission']['category']).to eq 'JEWELRY'
+        expect(body['data']['createConsignmentSubmission']['consignment_submission']['state']).to eq 'REJECTED'
         expect(body['data']['createConsignmentSubmission']['clientMutationId']).to eq '2'
       end.to change(Submission, :count).by(1)
     end
@@ -82,10 +86,11 @@ describe 'Create Submission With Graphql' do
 
         create_asset = <<-GRAPHQL
         mutation {
-          addAssetToConsignmentSubmission(submission_id: #{submission.id}, gemini_token: "gemini-token-hash"){
-            id,
-            submission {
+          addAssetToConsignmentSubmission(input: { clientMutationId: "test", submission_id: #{submission.id}, gemini_token: "gemini-token-hash" }){
+            clientMutationId
+            asset {
               id
+              submission_id
             }
           }
         }
@@ -97,8 +102,8 @@ describe 'Create Submission With Graphql' do
         expect(response.status).to eq 200
 
         body = JSON.parse(response.body)
-        expect(body['data']['addAssetToConsignmentSubmission']['id']).not_to be_nil
-        expect(body['data']['addAssetToConsignmentSubmission']['submission']).not_to be_nil
+        expect(body['data']['addAssetToConsignmentSubmission']['asset']['id']).not_to be_nil
+        expect(body['data']['addAssetToConsignmentSubmission']['asset']['submission_id'].to_i).to eq submission.id
       end.to change(Asset, :count).by(1)
     end
   end

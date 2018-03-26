@@ -52,7 +52,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
     end
 
     it 'does not display the delete button if not in draft state' do
-      offer.update_attributes!(state: 'sent')
+      offer.update!(state: 'sent')
       page.visit "/admin/offers/#{offer.id}"
       expect(page).to_not have_selector('#offer-delete-button')
     end
@@ -67,14 +67,14 @@ describe 'admin/offers/show.html.erb', type: :feature do
 
     describe 'save & send' do
       it 'shows the save & send button when offer is in draft state' do
-        offer.update_attributes!(state: 'draft')
+        offer.update!(state: 'draft')
         page.visit "/admin/offers/#{offer.id}"
         expect(page).to have_content('Save & Send')
         expect(page).to have_selector('.offer-draft-actions')
       end
 
       it 'does not show the save & send button after the offer has been sent' do
-        offer.update_attributes!(state: 'sent')
+        offer.update!(state: 'sent')
         page.visit "/admin/offers/#{offer.id}"
         expect(page).to_not have_content('Save & Send')
         expect(page).to_not have_selector('.offer-draft-actions')
@@ -83,7 +83,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
 
       it 'allows you to save the offer' do
         stub_gravity_artist(id: submission.artist_id)
-        offer.update_attributes!(state: 'draft')
+        offer.update!(state: 'draft')
         page.visit "/admin/offers/#{offer.id}"
         click_link('Save & Send')
         expect(page).to have_content("Offer ##{offer.reference_id}")
@@ -99,7 +99,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
 
     describe 'offer lapsed' do
       before do
-        offer.update_attributes!(state: 'sent')
+        offer.update!(state: 'sent')
         stub_gravity_artist(id: submission.artist_id)
         page.visit "/admin/offers/#{offer.id}"
       end
@@ -120,7 +120,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
 
     describe 'offer in review' do
       before do
-        offer.update_attributes!(state: 'sent')
+        offer.update!(state: 'sent')
         stub_gravity_root
         stub_gravity_user(id: offer.submission.user.gravity_user_id)
         stub_gravity_user_detail(email: 'michael@bluth.com', id: offer.submission.user.gravity_user_id)
@@ -160,7 +160,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
 
     describe 'offer consigned' do
       before do
-        offer.update_attributes!(state: 'review')
+        offer.update!(state: 'review')
         stub_gravity_artist(id: submission.artist_id)
         page.visit "/admin/offers/#{offer.id}"
       end
@@ -188,7 +188,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
     describe 'offer locked' do
       before do
         accepted_offer = Fabricate(:offer, partner_submission: partner_submission)
-        offer.update_attributes!(state: 'review')
+        offer.update!(state: 'review')
         OfferService.consign!(accepted_offer)
         stub_gravity_artist(id: submission.artist_id)
         page.visit "/admin/offers/#{offer.id}"
@@ -203,7 +203,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
 
     describe 'offer rejected' do
       before do
-        offer.update_attributes!(state: 'sent')
+        offer.update!(state: 'sent')
         stub_gravity_root
         stub_gravity_user(id: offer.submission.user.gravity_user_id)
         stub_gravity_user_detail(email: 'michael@bluth.com', id: offer.submission.user.gravity_user_id)

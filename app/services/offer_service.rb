@@ -35,10 +35,10 @@ class OfferService
     end
 
     def consign!(offer)
-      offer.update_attributes!(consigned_at: Time.now.utc)
-      offer.submission.update_attributes!(consigned_partner_submission: offer.partner_submission)
+      offer.update!(consigned_at: Time.now.utc)
+      offer.submission.update!(consigned_partner_submission: offer.partner_submission)
 
-      offer.partner_submission.update_attributes!(
+      offer.partner_submission.update!(
         accepted_offer: offer,
         partner_commission_percent: offer.commission_percent,
         state: 'open'
@@ -46,12 +46,12 @@ class OfferService
     end
 
     def review!(offer)
-      offer.update_attributes!(review_started_at: Time.now.utc)
+      offer.update!(review_started_at: Time.now.utc)
       delay.deliver_introduction(offer.id)
     end
 
     def reject!(offer, current_user)
-      offer.update_attributes!(rejected_by: current_user, rejected_at: Time.now.utc)
+      offer.update!(rejected_by: current_user, rejected_at: Time.now.utc)
       delay.deliver_rejection_notification(offer.id)
     end
 
@@ -114,7 +114,7 @@ class OfferService
         user_detail: user_detail
       ).deliver_now
 
-      offer.update_attributes!(sent_at: Time.now.utc, sent_by: current_user)
+      offer.update!(sent_at: Time.now.utc, sent_by: current_user)
     end
   end
 end
