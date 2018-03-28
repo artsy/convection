@@ -199,6 +199,16 @@ describe Admin::OffersController, type: :controller do
         expect(retail_offer.reload).to have_attributes(new_params)
       end
 
+      it 'allows you to un-set fields' do
+        retail_offer = Fabricate(:offer, offer_type: 'retail', insurance_dollars: 10, insurance_percent_whole: 12)
+        put :update, params: {
+          id: retail_offer.id,
+          offer: { insurance_dollars: nil, insurance_percent_whole: nil }
+        }
+        expect(retail_offer.reload.insurance_cents).to eq nil
+        expect(retail_offer.reload.insurance_percent_whole).to eq nil
+      end
+
       it 'remains on the edit view and shows an error on failure' do
         put :update, params: { id: offer.id, offer: { offer_type: 'bogus type' } }
         expect(response).to render_template(:edit)

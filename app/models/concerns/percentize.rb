@@ -15,9 +15,12 @@ module Percentize
         end
 
         define_method "#{method_name}_whole=" do |percent_whole|
-          return if percent_whole.blank?
-          percentage = percent_whole.to_f / 100
-          self[method_name] = percentage
+          if percent_whole.blank?
+            self[method_name] = nil
+          else
+            percentage = percent_whole.to_f / 100
+            self[method_name] = percentage
+          end
         end
       end
     end
