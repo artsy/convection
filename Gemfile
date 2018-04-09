@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.5.1'
+ruby File.read('.ruby-version')
 
 gem 'rails', '5.1.6'
 
