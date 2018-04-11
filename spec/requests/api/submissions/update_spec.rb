@@ -71,8 +71,8 @@ describe 'Update Submission' do
         end
 
         it 'does not resend notifications' do
-          @submission.update_attributes!(receipt_sent_at: Time.now.utc)
-          @submission.update_attributes!(admin_receipt_sent_at: Time.now.utc)
+          @submission.update!(receipt_sent_at: Time.now.utc)
+          @submission.update!(admin_receipt_sent_at: Time.now.utc)
 
           put "/api/submissions/#{@submission.id}", params: {
             state: 'submitted'

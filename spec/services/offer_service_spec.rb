@@ -135,7 +135,7 @@ describe OfferService do
       end
 
       it 'does not send an email if the email has already been sent' do
-        offer.update_attributes!(sent_at: Time.now.utc)
+        offer.update!(sent_at: Time.now.utc)
         OfferService.update_offer(offer, 'userid', state: 'sent')
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 0

@@ -10,7 +10,7 @@ module Api
           current_user_roles: current_user_roles
         }
       )
-      render json: result, status: 200
+      render json: result, status: :ok
     end
   end
 end

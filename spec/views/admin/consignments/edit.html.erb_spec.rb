@@ -16,13 +16,13 @@ describe 'admin/consignments/edit.html.erb', type: :feature do
     end
 
     before do
-      partner_submission.update_attributes!(
+      partner_submission.update!(
         state: 'open',
         accepted_offer_id: offer.id,
         sale_name: 'July Prints & Multiples',
         sale_location: 'London'
       )
-      submission.update_attributes!(consigned_partner_submission_id: partner_submission.id)
+      submission.update!(consigned_partner_submission_id: partner_submission.id)
       allow_any_instance_of(Admin::ConsignmentsController).to receive(:require_artsy_authentication)
 
       stub_jwt_header('userid')

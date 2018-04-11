@@ -8,7 +8,7 @@ module Types
     field :user_id, !types.String
     field :artist_id, !types.String
     field :authenticity_certificate, types.Boolean
-    field :category, types.String
+    field :category, Types::CategoryType
     field :depth, types.String
     field :dimensions_metric, types.String
     field :edition, types.String
@@ -21,7 +21,7 @@ module Types
     field :medium, types.String
     field :provenance, types.String
     field :signature, types.Boolean
-    field :state, types.String
+    field :state, Types::StateType
     field :title, types.String
     field :width, types.String
     field :year, types.String

@@ -15,7 +15,7 @@ module PartnerUpdateService
 
       gravity_partner = Gravity.client.partner(id: partner.gravity_partner_id)
       new_partner_name = gravity_partner.name
-      partner.update_attributes!(name: new_partner_name) unless partner.name == new_partner_name
+      partner.update!(name: new_partner_name) unless partner.name == new_partner_name
     end
   end
 end

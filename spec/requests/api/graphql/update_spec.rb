@@ -4,15 +4,17 @@ describe 'Update Submission With Graphql' do
   let(:jwt_token) { JWT.encode({ aud: 'gravity', sub: 'userid', roles: 'user' }, Convection.config.jwt_secret) }
   let(:headers) { { 'Authorization' => "Bearer #{jwt_token}" } }
   let(:submission) do
-    Fabricate(:submission, artist_id: 'abbas-kiarostami', title: 'rain', user: Fabricate(:user, gravity_user_id: 'userid'))
+    Fabricate(:submission, state: 'submitted', category: 'Painting', artist_id: 'abbas-kiarostami', title: 'rain', user: Fabricate(:user, gravity_user_id: 'userid'))
   end
 
   let(:update_mutation) do
     <<-GRAPHQL
     mutation {
-      updateConsignmentSubmission(input: { clientMutationId: "test", id: #{submission.id}, artist_id: "andy-warhol", title: "soup" }){
+      updateConsignmentSubmission(input: { state: DRAFT, category: JEWELRY, clientMutationId: "test", id: #{submission.id}, artist_id: "andy-warhol", title: "soup" }){
         clientMutationId
         consignment_submission {
+          category
+          state
           id
           artist_id
           title
@@ -85,6 +87,8 @@ describe 'Update Submission With Graphql' do
       expect(body['data']['updateConsignmentSubmission']['consignment_submission']['id'].to_i).to eq submission.id
       expect(body['data']['updateConsignmentSubmission']['consignment_submission']['title']).to eq 'soup'
       expect(body['data']['updateConsignmentSubmission']['consignment_submission']['artist_id']).to eq 'andy-warhol'
+      expect(body['data']['updateConsignmentSubmission']['consignment_submission']['category']).to eq 'JEWELRY'
+      expect(body['data']['updateConsignmentSubmission']['consignment_submission']['state']).to eq 'DRAFT'
     end
   end
 end

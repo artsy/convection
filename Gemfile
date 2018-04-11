@@ -1,10 +1,11 @@
 source 'https://rubygems.org'
 
-ruby '2.5.0'
+ruby File.read('.ruby-version')
+
+gem 'rails', '5.1.6'
 
 gem 'pg', '0.21.0'
 gem 'puma'
-gem 'rails', '5.1.4'
 
 gemini_gem_spec = { git: 'https://github.com/artsy/gemini_upload-rails.git', branch: 'master' }
 gem 'gemini_upload-rails', gemini_gem_spec # for admins to upload images
@@ -18,7 +19,7 @@ gem 'bootstrap-sass' # required for watt
 gem 'bourbon', '4.2.3' # required for watt
 gem 'coffee-rails' # required for watt
 gem 'decent_exposure' # for safely referencing variables in views
-gem 'graphiql-rails' # A lovely interface to the API
+gem 'graphiql-rails', '1.4.8' # A lovely interface to the API
 gem 'graphql' # A lovely API
 gem 'haml-rails' # required for watt layouts
 gem 'hyperclient' # consume Gravity's v2 API
@@ -48,7 +49,7 @@ end
 
 group :test do
   gem 'capybara'
-  gem 'capybara-webkit'
+  gem 'capybara-webkit', '1.1.0'
   gem 'database_cleaner'
   gem 'fabrication'
   gem 'rack_session_access'

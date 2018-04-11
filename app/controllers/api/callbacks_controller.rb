@@ -13,7 +13,7 @@ module Api
 
       raise ActiveRecord::RecordNotFound unless asset && asset.gemini_token == gemini_params[:token]
       asset.update_image_urls!(gemini_params)
-      render json: asset.reload.to_json, status: 200
+      render json: asset.reload.to_json, status: :ok
     end
 
     private

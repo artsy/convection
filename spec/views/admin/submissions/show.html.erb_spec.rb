@@ -39,13 +39,13 @@ describe 'admin/submissions/show.html.erb', type: :feature do
     end
 
     it 'displays the reviewer byline if the submission has been approved' do
-      @submission.update_attributes!(state: 'approved', approved_by: 'userid', approved_at: Time.now.utc)
+      @submission.update!(state: 'approved', approved_by: 'userid', approved_at: Time.now.utc)
       page.visit "/admin/submissions/#{@submission.id}"
       expect(page).to have_content 'Approved by Jon Jonson'
     end
 
     it 'displays the reviewer byline if the submission has been rejected' do
-      @submission.update_attributes!(state: 'rejected', rejected_by: 'userid', rejected_at: Time.now.utc)
+      @submission.update!(state: 'rejected', rejected_by: 'userid', rejected_at: Time.now.utc)
       page.visit "/admin/submissions/#{@submission.id}"
       expect(page).to have_content 'Rejected by Jon Jonson'
     end
@@ -162,7 +162,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
 
       it 'displays the primary asset label and respects changing it' do
         primary_image = @submission.assets.first
-        @submission.update_attributes!(primary_image_id: primary_image.id)
+        @submission.update!(primary_image_id: primary_image.id)
         page.visit "/admin/submissions/#{@submission.id}"
         within("div#submission-asset-#{primary_image.id}") do
           expect(page).to have_selector('.primary-image-label', count: 1)
@@ -190,7 +190,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
     context 'with a consignment' do
       before do
         consignment = Fabricate(:partner_submission, submission: @submission, state: 'open')
-        @submission.update_attributes!(consigned_partner_submission: consignment)
+        @submission.update!(consigned_partner_submission: consignment)
         page.visit admin_submission_path(@submission)
       end
 

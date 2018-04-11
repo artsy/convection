@@ -9,15 +9,15 @@ module Api
     end
 
     rescue_from ActiveRecord::RecordNotFound do |_ex|
-      render json: { error: 'Not Found' }, status: 404
+      render json: { error: 'Not Found' }, status: :not_found
     end
 
     rescue_from ApplicationController::NotAuthorized do |_ex|
-      render json: { error: 'Unauthorized' }, status: 401
+      render json: { error: 'Unauthorized' }, status: :unauthorized
     end
 
     rescue_from SubmissionService::ParamError do |ex|
-      render json: { error: ex.message }, status: 400
+      render json: { error: ex.message }, status: :bad_request
     end
 
     def set_submission
