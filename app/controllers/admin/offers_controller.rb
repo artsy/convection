@@ -133,6 +133,7 @@ module Admin
         :offer_type,
         :other_fees_dollars,
         :other_fees_percent_whole,
+        :override_email,
         :photography_dollars,
         :price_dollars,
         :rejection_reason,

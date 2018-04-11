@@ -255,6 +255,18 @@ describe 'admin/offers/show.html.erb', type: :feature do
         expect(emails.first.from).to eq(['consign@artsy.net'])
         expect(emails.first.subject).to eq('A response to your consignment offer')
       end
+
+      it 'allows you to provide an override e-mail' do
+        click_link('Reject Offer')
+        choose('offer_rejection_reason_low_estimate')
+        fill_in('offer_override_email', with: 'override@partner.com')
+        click_button('Save and Send')
+        emails = ActionMailer::Base.deliveries
+        expect(emails.length).to eq 1
+        expect(emails.map(&:to).flatten).to eq(['override@partner.com'])
+        expect(emails.first.from).to eq(['consign@artsy.net'])
+        expect(emails.first.subject).to eq('A response to your consignment offer')
+      end
     end
   end
 end
