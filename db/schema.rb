@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180226122325) do
+ActiveRecord::Schema.define(version: 20180411194253) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 20180226122325) do
     t.datetime "accepted_at"
     t.datetime "review_started_at"
     t.datetime "consigned_at"
+    t.string "override_email"
     t.index ["partner_submission_id"], name: "index_offers_on_partner_submission_id"
     t.index ["reference_id"], name: "index_offers_on_reference_id"
     t.index ["submission_id"], name: "index_offers_on_submission_id"

@@ -79,9 +79,7 @@ class OfferService
 
     def deliver_rejection_notification(offer_id)
       offer = Offer.find(offer_id)
-
-      partner_emails = PartnerService.fetch_partner_contacts!(offer.partner)
-      partner_emails.each do |email|
+      partner_emails(offer).each do |email|
         delay.deliver_partner_contact_rejection(offer.id, email)
       end
     end
@@ -115,6 +113,14 @@ class OfferService
       ).deliver_now
 
       offer.update!(sent_at: Time.now.utc, sent_by: current_user)
+    end
+  end
+
+  def self.partner_emails(offer)
+    if offer.override_email.present?
+      [offer.override_email]
+    else
+      PartnerService.fetch_partner_contacts!(offer.partner)
     end
   end
 end
