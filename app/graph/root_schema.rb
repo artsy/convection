@@ -3,7 +3,7 @@ GraphQL::Argument.accepts_definitions(permit: GraphQL::Define.assign_metadata_ke
 
 RootSchema = GraphQL::Schema.define do
   query Types::QueryType
-  mutation Mutations::Root
+  mutation Types::MutationType
 
   instrument(:field, Util::AuthorizationInstrumentation.new)
   max_depth 5
