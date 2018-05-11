@@ -13,6 +13,7 @@ encapsulates logic from [rothko-api] and [rothko-web-public].
 * Deploying: PRs merged to the `master` branch are automatically deployed to
   staging.  Production is automatically deployed upon merges to `release`.
   Create such a PR with [`deploy_pr`][deploy_pr] or [this handy link][deploy].
+* A daily digest is sent to partners [via a Jenkins Job](https://joe.artsy.net/job/convection-partner-daily-digest/)
 
 
 ## Setup
