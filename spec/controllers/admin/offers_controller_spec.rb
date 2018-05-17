@@ -20,7 +20,7 @@ describe Admin::OffersController, type: :controller do
       it 'remains on the new view and shows an error on failure' do
         expect do
           post :create, params: { partner_id: partner.id, offer: { offer_type: 'purchase' } }
-          expect(controller.flash[:error]).to include("Couldn't find Submission with 'id'=")
+          expect(controller.flash[:error]).to include("Couldn't find Submission without an ID")
           expect(response).to render_template(:new_step_1)
         end.to_not change(Offer, :count)
       end
