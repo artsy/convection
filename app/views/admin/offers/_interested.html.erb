@@ -1,7 +1,7 @@
 <div class='modal remodal' data-remodal-id='interested-modal'>
   <div class='modal-header'>
     <h3>
-      Please pick one
+      Send email to partner
     </h3>
   </div>
   <div class='modal-close'>
@@ -14,17 +14,9 @@
           <%= f.hidden_field :state, value: 'review' %>
           <div class='row'>
             <div class='col-md-12'>
-              <div class='offer-type-radio'>
-                <%= radio_button_tag :email_type, :email_partner, true, class: 'form-control' %>
-                <%= label_tag :email_partner, nil, class: 'control-label' %>
-              </div>
-              <div class='offer-type-radio'>
-                <%= radio_button_tag :email_type, :override_email, false, class: 'form-control' %>
-                <%= label_tag :override_email, nil, class: 'control-label' %>
-              </div>
               <div class='row single-padding-top'>
                 <div class='col-sm-12'>
-                  <%= f.text_field :override_email, placeholder: '(override) Partner e-mail', class: 'form-control' %>
+                  <%= f.text_field :override_email, placeholder: 'Override partner email', class: 'form-control' %>
                 </div>
               </div>
             </div>

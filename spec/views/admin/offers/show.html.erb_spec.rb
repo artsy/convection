@@ -163,7 +163,6 @@ describe 'admin/offers/show.html.erb', type: :feature do
       it 'allows you to provide an override e-mail' do
         click_link('Consignor Interested')
         within('[data-remodal-id="interested-modal"]') do
-          choose('email_type_override_email')
           fill_in('offer_override_email', with: 'override@partner.com')
           click_button('Save and Send')
         end
