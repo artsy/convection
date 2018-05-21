@@ -1,0 +1,33 @@
+<div class='modal remodal' data-remodal-id='interested-modal'>
+  <div class='modal-header'>
+    <h3>
+      Send email to partner
+    </h3>
+  </div>
+  <div class='modal-close'>
+    <%= link_to '', '#', id: 'interested-close'%>
+  </div>
+  <div class='modal-content'>
+    <div class='single-padding-top'>
+      <div class='col-sm-12'>
+        <%= form_for(@offer, url: admin_offer_path, method: :put) do |f| %>
+          <%= f.hidden_field :state, value: 'review' %>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='row single-padding-top'>
+                <div class='col-sm-12'>
+                  <%= f.text_field :override_email, placeholder: 'Override partner email', class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class='row triple-padding-top'>
+            <div class='col-md-12'>
+              <%= f.submit 'Save and Send', class: 'btn btn-primary btn-full-width' %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
