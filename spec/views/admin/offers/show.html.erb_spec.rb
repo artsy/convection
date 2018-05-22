@@ -147,6 +147,9 @@ describe 'admin/offers/show.html.erb', type: :feature do
       it 'allows you to mark the offer as in review' do
         expect(page).to have_selector('.offer-review-button')
         click_link('Consignor Interested')
+        within('[data-remodal-id="interested-modal"]') do
+          click_button('Save and Send')
+        end
         expect(page).to have_content("Offer ##{offer.reference_id}")
         expect(page).to_not have_selector('.offer-review-button')
 
@@ -155,6 +158,17 @@ describe 'admin/offers/show.html.erb', type: :feature do
         expect(emails.map(&:to).flatten).to eq(['contact1@partner.com', 'contact2@partner.com'])
         expect(emails.first.from).to eq(['consign@artsy.net'])
         expect(emails.first.subject).to eq('The consignor has expressed interest in your offer')
+      end
+
+      it 'allows you to provide an override e-mail' do
+        click_link('Consignor Interested')
+        within('[data-remodal-id="interested-modal"]') do
+          fill_in('offer_override_email', with: 'override@partner.com')
+          click_button('Save and Send')
+        end
+        emails = ActionMailer::Base.deliveries
+        expect(emails.length).to eq 1
+        expect(emails.map(&:to).flatten).to eq(['override@partner.com'])
       end
     end
 
@@ -227,8 +241,10 @@ describe 'admin/offers/show.html.erb', type: :feature do
 
       it 'allows you to mark the offer as rejected with a note' do
         click_link('Reject Offer')
-        choose('offer_rejection_reason_low_estimate')
-        click_button('Save and Send')
+        within('[data-remodal-id="reject-offer-modal"]') do
+          choose('offer_rejection_reason_low_estimate')
+          click_button('Save and Send')
+        end
         expect(page).to have_content("Offer ##{offer.reference_id}")
         expect(page).to_not have_content('Reject Offer')
         expect(page).to have_content('Rejected by Lucille Bluth. Low estimate')
@@ -244,9 +260,11 @@ describe 'admin/offers/show.html.erb', type: :feature do
 
       it 'allows you to add notes to the rejection' do
         click_link('Reject Offer')
-        choose('offer_rejection_reason_other')
-        fill_in('offer_rejection_note', with: 'The user has issues with who the partner is.')
-        click_button('Save and Send')
+        within('[data-remodal-id="reject-offer-modal"]') do
+          choose('offer_rejection_reason_other')
+          fill_in('offer_rejection_note', with: 'The user has issues with who the partner is.')
+          click_button('Save and Send')
+        end
         expect(page).to have_content('Rejected by Lucille Bluth. Other: The user has issues with who the partner is.')
 
         emails = ActionMailer::Base.deliveries
@@ -258,9 +276,11 @@ describe 'admin/offers/show.html.erb', type: :feature do
 
       it 'allows you to provide an override e-mail' do
         click_link('Reject Offer')
-        choose('offer_rejection_reason_low_estimate')
-        fill_in('offer_override_email', with: 'override@partner.com')
-        click_button('Save and Send')
+        within('[data-remodal-id="reject-offer-modal"]') do
+          choose('offer_rejection_reason_low_estimate')
+          fill_in('offer_override_email', with: 'override@partner.com')
+          click_button('Save and Send')
+        end
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.map(&:to).flatten).to eq(['override@partner.com'])

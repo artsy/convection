@@ -2,9 +2,9 @@ source 'https://rubygems.org'
 
 ruby File.read('.ruby-version')
 
-gem 'rails', '5.1.6'
+gem 'rails', '5.2.0'
 
-gem 'pg', '0.21.0'
+gem 'pg'
 gem 'puma'
 
 gemini_gem_spec = { git: 'https://github.com/artsy/gemini_upload-rails.git', branch: 'master' }
@@ -44,7 +44,7 @@ end
 
 group :development do
   gem 'foreman'
-  gem 'rubocop'
+  gem 'rubocop', '0.54.0'
 end
 
 group :test do

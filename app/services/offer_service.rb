@@ -59,9 +59,7 @@ class OfferService
 
     def deliver_introduction(offer_id)
       offer = Offer.find(offer_id)
-
-      partner_emails = PartnerService.fetch_partner_contacts!(offer.partner)
-      partner_emails.each do |email|
+      partner_emails(offer).each do |email|
         delay.deliver_partner_contact_introduction(offer.id, email)
       end
     end
