@@ -14,6 +14,7 @@ class OfferService
       submission = Submission.find(submission_id)
       partner = Partner.find(partner_id)
       partner_submission = PartnerSubmission.find_or_create_by!(submission_id: submission.id, partner_id: partner.id)
+      partner_submission.update!(notified_at: Time.now.utc) if partner_submission.notified_at.blank?
       offer = partner_submission.offers.new(offer_params.merge(state: 'draft', created_by_id: current_user))
       offer.save!
       offer
