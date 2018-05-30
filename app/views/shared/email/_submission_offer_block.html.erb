@@ -1,0 +1,61 @@
+<table class='email-gray-bordered-section'>
+  <tr>
+    <td class='spacer'></td>
+  </tr>
+  <tr>
+    <td class='two-column'>
+      <div class="column first-column">
+        <table width="100%">
+          <tr>
+            <td>
+              <table>
+                <tr>
+                  <td class='email-gray-label email-gray-label--left'>
+                    Submission
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="column second-column">
+        <table width="100%">
+          <tr>
+            <td class="inner">
+              <table>
+                <tr>
+                  <td class='email-content-serif'>
+                    <%= @artist.name %>
+                  </td>
+                </tr>
+                <tr>
+                  <td class='email-content-serif'>
+                    <i><%= @submission.title %></i><span><%= ", #{@submission.year}" %></span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class='email-content-serif gray'>
+                    ID #<%= @submission.id %>
+                  </td>
+                </tr>
+                <tr>
+                  <td class='email-content-small-image'>
+                    <% if @submission.processed_images.length > 0 %>
+                      <%= image_tag(@submission.processed_images.first.image_urls['square'], id: 'first-image') %>
+                    <% else %>
+                      <%= image_tag(image_url('missing_image.png'), id: 'first-image') %>
+                    <% end %>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td class='spacer'></td>
+  </tr>
+</table>

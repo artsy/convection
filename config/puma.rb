@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Adapted from https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server
 
 workers Integer(ENV['WEB_CONCURRENCY'] || 2)

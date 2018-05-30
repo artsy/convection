@@ -2,8 +2,9 @@ require 'rails_helper'
 require 'support/gravity_helper'
 
 describe SubmissionService do
+  let!(:user) { Fabricate(:user, gravity_user_id: 'userid', email: 'michael@bluth.com') }
   let(:submission) do
-    Fabricate(:submission, artist_id: 'artistid', user_id: 'userid', title: 'My Artwork')
+    Fabricate(:submission, artist_id: 'artistid', user: user, title: 'My Artwork')
   end
 
   before do
@@ -11,6 +12,42 @@ describe SubmissionService do
     stub_gravity_user
     stub_gravity_user_detail(email: 'michael@bluth.com')
     stub_gravity_artist
+  end
+
+  context 'create_submission' do
+    let(:params) { { artist_id: 'artistid', state: 'draft', title: 'My Artwork' } }
+
+    it 'creates a submission and sets the user_id and email' do
+      stub_gravity_root
+      stub_gravity_user
+      stub_gravity_user_detail(email: 'michael@bluth.com')
+      stub_gravity_artist
+
+      new_submission = SubmissionService.create_submission(params, 'userid')
+      expect(new_submission.reload.state).to eq 'draft'
+      expect(new_submission.user_id).to eq user.id
+      expect(new_submission.user.email).to eq 'michael@bluth.com'
+    end
+
+    it 'raises an exception if the user_detail cannot be found' do
+      stub_gravity_root
+      stub_request(:get, "#{Convection.config.gravity_api_url}/user_details/foo")
+        .to_raise(Faraday::ResourceNotFound)
+
+      expect do
+        SubmissionService.create_submission(params, 'foo')
+      end.to raise_error(Faraday::ResourceNotFound)
+    end
+
+    it 'raises an error if the email is blank' do
+      stub_gravity_root
+      stub_gravity_user(id: 'foo')
+      stub_gravity_user_detail(id: 'foo', email: '')
+
+      expect do
+        SubmissionService.create_submission(params, 'foo')
+      end.to raise_error('User lacks email.')
+    end
   end
 
   context 'update_submission' do
@@ -90,6 +127,7 @@ describe SubmissionService do
       expect(emails.length).to eq 1
       expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
       expect(emails.first.to).to eq(['michael@bluth.com'])
+      expect(emails.first.from).to eq(['consign@artsy.net'])
       expect(emails.first.html_part.body).to include(
         'they do not have a market for this work at the moment'
       )
@@ -117,10 +155,10 @@ describe SubmissionService do
       end
 
       it 'does not send a receipt if one has already been sent' do
-        submission.update_attributes!(receipt_sent_at: Time.now.utc)
+        submission.update!(receipt_sent_at: Time.now.utc)
         expect do
           SubmissionService.notify_user(submission.id)
-        end.to_not change { ActionMailer::Base.deliveries.count }
+        end.to_not change(ActionMailer::Base.deliveries, :count)
       end
     end
 
@@ -134,12 +172,13 @@ describe SubmissionService do
         expect(emails.first.html_part.body).to include('utm_campaign=consignment-complete')
         expect(emails.first.html_part.body).to include('utm_source=drip-consignment-reminder-e01')
         expect(emails.first.to).to eq(['michael@bluth.com'])
+        expect(emails.first.from).to eq(['consign@artsy.net'])
         expect(submission.reload.receipt_sent_at).to be nil
         expect(submission.reload.reminders_sent_count).to eq 1
       end
 
       it 'sends the second reminder if one reminder has been sent' do
-        submission.update_attributes!(reminders_sent_count: 1)
+        submission.update!(reminders_sent_count: 1)
         SubmissionService.notify_user(submission.id)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
@@ -148,12 +187,13 @@ describe SubmissionService do
         expect(emails.first.html_part.body).to include('utm_campaign=consignment-complete')
         expect(emails.first.html_part.body).to include('utm_source=drip-consignment-reminder-e02')
         expect(emails.first.to).to eq(['michael@bluth.com'])
+        expect(emails.first.from).to eq(['consign@artsy.net'])
         expect(submission.reload.receipt_sent_at).to be nil
         expect(submission.reload.reminders_sent_count).to eq 2
       end
 
       it 'sends the third reminder if two reminders have ben sent' do
-        submission.update_attributes!(reminders_sent_count: 2)
+        submission.update!(reminders_sent_count: 2)
         SubmissionService.notify_user(submission.id)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
@@ -162,19 +202,20 @@ describe SubmissionService do
         expect(emails.first.html_part.body).to include('utm_campaign=consignment-complete')
         expect(emails.first.html_part.body).to include('utm_source=drip-consignment-reminder-e03')
         expect(emails.first.to).to eq(['michael@bluth.com'])
+        expect(emails.first.from).to eq(['consign@artsy.net'])
         expect(submission.reload.receipt_sent_at).to be nil
         expect(submission.reload.reminders_sent_count).to eq 3
       end
 
       it 'does not send a reminder if a receipt has already been sent' do
-        submission.update_attributes!(reminders_sent_count: 1, receipt_sent_at: Time.now.utc)
+        submission.update!(reminders_sent_count: 1, receipt_sent_at: Time.now.utc)
         SubmissionService.notify_user(submission.id)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 0
       end
 
       it 'does not send a reminder if three reminders have already been sent' do
-        submission.update_attributes!(reminders_sent_count: 3)
+        submission.update!(reminders_sent_count: 3)
         SubmissionService.notify_user(submission.id)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 0
@@ -194,10 +235,10 @@ describe SubmissionService do
     end
 
     it 'does not send an email if one has already been sent' do
-      submission.update_attributes!(admin_receipt_sent_at: Time.now.utc)
+      submission.update!(admin_receipt_sent_at: Time.now.utc)
       expect do
         SubmissionService.notify_admin(submission.id)
-      end.to_not change { ActionMailer::Base.deliveries.count }
+      end.to_not change(ActionMailer::Base.deliveries, :count)
     end
   end
 
@@ -209,7 +250,7 @@ describe SubmissionService do
     end
 
     it 'raises an exception if all of the images have not been processed' do
-      submission.update_attributes!(receipt_sent_at: Time.now.utc)
+      submission.update!(receipt_sent_at: Time.now.utc)
       Fabricate(:unprocessed_image, submission: submission)
       expect do
         SubmissionService.deliver_submission_receipt(submission.id)
@@ -224,7 +265,7 @@ describe SubmissionService do
       stub_gravity_user_detail(email: 'michael@bluth.com')
       stub_gravity_artist
 
-      submission.update_attributes!(receipt_sent_at: Time.now.utc - 20.minutes)
+      submission.update!(receipt_sent_at: Time.now.utc - 20.minutes)
       Fabricate(:unprocessed_image, submission: submission)
       SubmissionService.deliver_submission_receipt(submission.id)
       emails = ActionMailer::Base.deliveries
@@ -242,7 +283,7 @@ describe SubmissionService do
     end
 
     it 'raises an exception if all of the images have not been processed' do
-      submission.update_attributes!(receipt_sent_at: Time.now.utc)
+      submission.update!(receipt_sent_at: Time.now.utc)
       Fabricate(:unprocessed_image, submission: submission)
       expect do
         SubmissionService.deliver_submission_notification(submission.id)
@@ -256,7 +297,7 @@ describe SubmissionService do
       stub_gravity_user
       stub_gravity_user_detail(email: 'michael@bluth.com')
       stub_gravity_artist
-      submission.update_attributes!(receipt_sent_at: Time.now.utc - 20.minutes)
+      submission.update!(receipt_sent_at: Time.now.utc - 20.minutes)
       Fabricate(:unprocessed_image, submission: submission)
       SubmissionService.deliver_submission_notification(submission.id)
       emails = ActionMailer::Base.deliveries

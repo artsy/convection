@@ -1,7 +1,18 @@
 class SubmissionService
-  ParamError = Class.new(StandardError)
+  class ParamError < StandardError; end
+  class SubmissionError < StandardError; end
 
   class << self
+    def create_submission(submission_params, current_user)
+      user = User.find_or_create_by!(gravity_user_id: current_user)
+      create_params = submission_params.merge(user_id: user.id)
+      submission = Submission.create!(create_params)
+      UserService.delay.update_email(user.id)
+      submission
+    rescue ActiveRecord::RecordInvalid => e
+      raise SubmissionError, e.message
+    end
+
     def update_submission(submission, params, current_user = nil)
       submission.assign_attributes(params)
       update_submission_state(submission, current_user) if submission.state_changed?
@@ -26,13 +37,13 @@ class SubmissionService
     end
 
     def approve!(submission, current_user)
-      submission.update_attributes!(approved_by: current_user, approved_at: Time.now.utc)
+      submission.update!(approved_by: current_user, approved_at: Time.now.utc)
       delay.deliver_approval_notification(submission.id)
       PartnerSubmissionService.delay.generate_for_all_partners(submission.id)
     end
 
     def reject!(submission, current_user)
-      submission.update_attributes!(rejected_by: current_user, rejected_at: Time.now.utc)
+      submission.update!(rejected_by: current_user, rejected_at: Time.now.utc)
       delay.deliver_rejection_notification(submission.id)
     end
 
@@ -41,7 +52,7 @@ class SubmissionService
       return if submission.admin_receipt_sent_at
       delay.deliver_submission_notification(submission.id)
       NotificationService.delay.post_submission_event(submission_id, SubmissionEvent::SUBMITTED)
-      submission.update_attributes!(admin_receipt_sent_at: Time.now.utc)
+      submission.update!(admin_receipt_sent_at: Time.now.utc)
     end
 
     def notify_user(submission_id)
@@ -49,7 +60,7 @@ class SubmissionService
       return if submission.receipt_sent_at
       if submission.images.count.positive?
         delay.deliver_submission_receipt(submission.id)
-        submission.update_attributes!(receipt_sent_at: Time.now.utc)
+        submission.update!(receipt_sent_at: Time.now.utc)
       else
         return if submission.reminders_sent_count >= 3
         delay.deliver_upload_reminder(submission.id)
@@ -59,7 +70,7 @@ class SubmissionService
     def deliver_upload_reminder(submission_id)
       submission = Submission.find(submission_id)
       return if submission.receipt_sent_at || submission.images.count.positive?
-      user = Gravity.client.user(id: submission.user_id)._get
+      user = Gravity.client.user(id: submission.user.gravity_user_id)._get
       user_detail = user.user_detail._get
       raise 'User lacks email.' if user_detail.email.blank?
 
@@ -82,7 +93,7 @@ class SubmissionService
     def deliver_submission_receipt(submission_id)
       submission = Submission.find(submission_id)
       raise 'Still processing images.' unless submission.ready?
-      user = Gravity.client.user(id: submission.user_id)._get
+      user = Gravity.client.user(id: submission.user.gravity_user_id)._get
       user_detail = user.user_detail._get
       raise 'User lacks email.' if user_detail.email.blank?
       artist = Gravity.client.artist(id: submission.artist_id)._get
@@ -98,7 +109,7 @@ class SubmissionService
     def deliver_submission_notification(submission_id)
       submission = Submission.find(submission_id)
       raise 'Still processing images.' unless submission.ready?
-      user = Gravity.client.user(id: submission.user_id)._get
+      user = Gravity.client.user(id: submission.user.gravity_user_id)._get
       user_detail = user.user_detail._get
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
@@ -112,7 +123,7 @@ class SubmissionService
 
     def deliver_approval_notification(submission_id)
       submission = Submission.find(submission_id)
-      user = Gravity.client.user(id: submission.user_id)._get
+      user = Gravity.client.user(id: submission.user.gravity_user_id)._get
       user_detail = user.user_detail._get
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
@@ -126,7 +137,7 @@ class SubmissionService
 
     def deliver_rejection_notification(submission_id)
       submission = Submission.find(submission_id)
-      user = Gravity.client.user(id: submission.user_id)._get
+      user = Gravity.client.user(id: submission.user.gravity_user_id)._get
       user_detail = user.user_detail._get
       artist = Gravity.client.artist(id: submission.artist_id)._get
 

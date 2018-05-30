@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require File.expand_path('../boot', __FILE__)
+
+require File.expand_path('boot', __dir__)
 
 require 'rails/all'
 require_relative '../lib/middleware/jwt_middleware'
@@ -15,13 +16,14 @@ module Convection
     # -- all .rb files in that directory are automatically loaded.
     config.paths.add 'app', glob: '**/*.rb'
 
-    config.eager_load_paths += %W(
+    config.eager_load_paths += %W[
       #{config.root}/lib
       #{Rails.root.join('app', 'events')}
       #{Rails.root.join('app', 'services')}
       #{Rails.root.join('app', 'graph')}
       #{Rails.root.join('app', 'controllers', 'concerns')}
-    )
+      #{Rails.root.join('app', 'models', 'concerns')}
+    ]
 
     # include JWT middleware
     config.middleware.use ::JwtMiddleware

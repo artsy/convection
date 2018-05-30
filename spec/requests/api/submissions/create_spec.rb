@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'support/gravity_helper'
 
 describe 'Create Submission' do
-  let(:jwt_token) { JWT.encode({ aud: 'gravity', sub: 'userid' }, Convection.config.jwt_secret) }
+  let(:jwt_token) { JWT.encode({ aud: 'gravity', sub: 'userid', roles: 'user' }, Convection.config.jwt_secret) }
   let(:headers) { { 'Authorization' => "Bearer #{jwt_token}" } }
 
   describe 'POST /submissions' do
@@ -16,10 +16,14 @@ describe 'Create Submission' do
     it 'rejects submissions without an artist_id' do
       post '/api/submissions', params: {}, headers: headers
       expect(response.status).to eq 400
-      expect(JSON.parse(response.body)['error']).to eq 'Parameter is required'
+      expect(JSON.parse(response.body)['error']).to eq 'Parameter artist_id is required'
     end
 
     it 'creates a submission' do
+      stub_gravity_root
+      stub_gravity_user
+      stub_gravity_user_detail(email: 'michael@bluth.com')
+
       expect do
         post '/api/submissions', params: {
           title: 'my sartwork',
@@ -29,6 +33,10 @@ describe 'Create Submission' do
     end
 
     it 'creates a submission with edition fields' do
+      stub_gravity_root
+      stub_gravity_user
+      stub_gravity_user_detail(email: 'michael@bluth.com')
+
       expect do
         post '/api/submissions', params: {
           title: 'my sartwork',

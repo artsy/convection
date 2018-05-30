@@ -1,0 +1,70 @@
+<div class='page-title'>
+  <h2>
+    Offers
+  </h2>
+</div>
+
+<div class='container double-padding-top'>
+  <div class='row'>
+    <div class='row col-md-12'>
+      <%= form_tag admin_offers_url, method: 'get', id: 'offer-filter-form' do %>
+        <div class='col-md-3'>
+          <div class='form-group'>
+            <%= select_tag 'state',
+                          options_for_select(
+                            Offer::STATES.map{ |state| [state, state] }.unshift(['all', nil]),
+                            filters[:state]
+                          ),
+                          class: 'form-control',
+                          onchange: ("$('#offer-filter-form').submit()") %>
+          </div>
+        </div>
+      <% end %>
+      <div class='col-md-7'>
+        <div class='form-group'>
+          <%= text_field_tag 'term', term, class: 'form-control', placeholder: 'Search by ID, partner name, or user email', id: 'offer-search-form' %>
+        </div>
+      </div>
+      <div class='col-md-2'>
+        <%= link_to 'Create New', new_step_0_admin_offers_path, class: 'btn btn-small btn-primary btn-full-width' %>
+      </div>
+    </div>
+    <div class='row col-md-12'>
+      <div class='list-group-item list-item--offer'>
+        <div class='spacer'>
+        </div>
+        <div class='list-group-item-info bold-label'>
+          State
+        </div>
+        <div class='list-group-item-info bold-label'>
+          ID
+        </div>
+        <div class='list-group-item-info bold-label'>
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'offers.created_at', label: 'Date' %>
+        </div>
+        <div class='list-group-item-info bold-label'>
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'partners.name', label: 'Partner' %>
+        </div>
+        <div class='list-group-item-info bold-label'>
+          Email
+        </div>
+        <div class='list-group-item-info bold-label'>
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'price_cents', label: 'Price' %>
+        </div>
+        <div class='list-group-item-info bold-label'>
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'high_estimate_cents', label: 'Estimate' %>
+        </div>
+        <div class='list-group-item-info bold-label'>
+          Commission
+        </div>
+        <div class='list-group-item-info bold-label'>
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'offer_type', label: 'Type' %>
+        </div>
+        <div class='spacer'>
+        </div>
+      </div>
+      <%= render offers %>
+    </div>
+    <%= render 'shared/watt/paginator', total_items_count: offers.total_count, items_count: offers.length, per_page: size, current_page: page, base_url: admin_offers_url(filters) %>
+  </div>
+</div>

@@ -22,22 +22,100 @@ describe Admin::SubmissionsController, type: :controller do
           }
         )
     end
-    context 'filtering the index view' do
+
+    context 'with many submissions' do
       before do
-        5.times { Fabricate(:submission, state: 'submitted') }
+        @user1 = Fabricate(:user, email: 'sarah@artsymail.com')
+        @user2 = Fabricate(:user, email: 'lucille@bluth.com')
+        @submission1 = Fabricate(:submission, state: 'submitted', title: 'hi hi', user: @user1)
+        @submission2 = Fabricate(:submission, state: 'submitted', title: 'my artwork', user: @user1)
+        @submission3 = Fabricate(:submission, state: 'submitted', title: 'another artwork', user: @user2)
+        @submission4 = Fabricate(:submission, state: 'approved', title: 'zzz', user: @user2)
+        @submission5 = Fabricate(:submission, state: 'approved', title: 'aaa', user: @user2)
       end
-      it 'returns the first two submissions on the first page' do
-        get :index, params: { page: 1, size: 2 }
-        expect(assigns(:submissions).count).to eq 2
+
+      describe 'filtering the index view' do
+        it 'returns the first two submissions on the first page' do
+          get :index, params: { page: 1, size: 2 }
+          expect(controller.submissions.count).to eq 2
+        end
+        it 'paginates correctly' do
+          get :index, params: { page: 3, size: 2 }
+          expect(controller.submissions.count).to eq 1
+        end
+        it 'sets the artist details correctly' do
+          get :index
+          expect(controller.artist_details).to eq('artist1' => 'Andy Warhol',
+                                                  'artist2' => 'Kara Walker')
+        end
       end
-      it 'paginates correctly' do
-        get :index, params: { page: 3, size: 2 }
-        expect(assigns(:submissions).count).to eq 1
+
+      describe '#sorting and filtering' do
+        it 'allows you to filter by state = approved' do
+          get :index, params: { state: 'approved' }
+          expect(controller.submissions.pluck(:id)).to eq [@submission5.id, @submission4.id]
+        end
+
+        it 'allows you to filter by state = submitted' do
+          get :index, params: { state: 'submitted' }
+          expect(controller.submissions.pluck(:id)).to eq [@submission3.id, @submission2.id, @submission1.id]
+        end
+
+        it 'allows you to sort by user email' do
+          get :index, params: { sort: 'users.email', direction: 'asc' }
+          expect(controller.submissions.pluck(:id)).to eq(
+            [@submission5.id, @submission4.id, @submission3.id, @submission2.id, @submission1.id]
+          )
+        end
+
+        it 'allows you to sort by offers_count' do
+          Fabricate(:offer, partner_submission: Fabricate(:partner_submission, submission: @submission2))
+          Fabricate(:offer, partner_submission: Fabricate(:partner_submission, submission: @submission2))
+          Fabricate(:offer, partner_submission: Fabricate(:partner_submission, submission: @submission3))
+          get :index, params: { sort: 'offers_count', direction: 'desc' }
+          expect(controller.submissions.pluck(:id)).to eq(
+            [@submission2.id, @submission3.id, @submission1.id, @submission4.id, @submission5.id]
+          )
+        end
+
+        it 'allows you to filter by state and sort by user email' do
+          get :index, params: { sort: 'users.email', direction: 'desc', state: 'submitted' }
+          expect(controller.submissions.pluck(:id)).to eq [@submission2.id, @submission1.id, @submission3.id]
+        end
+
+        it 'allows you to filter by state, search for user, and sort by ID' do
+          get :index, params: { sort: 'id', direction: 'desc', state: 'submitted', user: @user1.id }
+          expect(controller.submissions.pluck(:id)).to eq [@submission2.id, @submission1.id]
+        end
       end
-      it 'sets the artist details correctly' do
-        get :index
-        expect(assigns(:artist_details)).to eq('artist1' => 'Andy Warhol',
-                                               'artist2' => 'Kara Walker')
+
+      describe 'matching on the index' do
+        it 'returns the submissions that match as json' do
+          get :index, format: 'json', params: { term: 'hi' }
+          submissions = JSON.parse(response.body)
+          expect(submissions.length).to eq 1
+          expect(submissions.first['id']).to eq @submission1.id
+          expect(submissions.first['thumbnail']).to eq nil
+        end
+
+        it 'returns multiple submissions that match' do
+          get :index, format: 'json', params: { term: 'art' }
+          submissions = JSON.parse(response.body)
+          expect(submissions.length).to eq 2
+          expect(submissions.map { |sub| sub['id'] }).to eq [@submission3.id, @submission2.id]
+        end
+
+        it 'merges in the thumbnail url' do
+          Fabricate(:image,
+            submission: @submission1,
+            image_urls: { square: 'https://square.jpg', thumbnail: 'https://thumbnail-1.jpg' })
+
+          get :index, format: 'json', params: { term: 'hi' }
+          submissions = JSON.parse(response.body)
+          expect(submissions.length).to eq 1
+          expect(submissions.first['id']).to eq @submission1.id
+          expect(submissions.first['thumbnail']).to eq 'https://thumbnail-1.jpg'
+        end
       end
     end
   end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 Rails.application.routes.draw do
   namespace :admin do
     resources :submissions do
@@ -6,23 +7,34 @@ Rails.application.routes.draw do
         post :multiple, on: :collection
       end
     end
-    resources :partners, only: :index do
+    resources :partners, only: [:index, :create] do
       resources :submissions, only: :index, controller: 'partner_submissions'
     end
-    root to: 'submissions#index'
+    resources :offers do
+      collection do
+        get 'new_step_0'
+        get 'new_step_1'
+      end
+    end
+    resources :consignments, only: [:show, :edit, :update, :index]
+    resources :users, only: :index
+    root to: 'dashboard#index'
   end
   get '/match_artist', to: 'admin/submissions#match_artist'
   get '/match_user', to: 'admin/submissions#match_user'
+  get '/match_partner', to: 'admin/partners#match_partner'
   get 'system/up'
 
   root to: redirect('/admin')
 
   namespace :api do
-    resources :submissions, only: [:create, :update, :show]
+    resources :submissions, only: [:create, :update, :show, :index]
     resources :assets, only: [:create, :show, :index]
     post '/callbacks/gemini', to: 'callbacks#gemini'
     post '/graphql', to: 'graphql#execute'
   end
+
+  mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/api/graphql' if Rails.env.development?
 
   mount ArtsyAuth::Engine => '/'
 

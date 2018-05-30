@@ -60,12 +60,12 @@
                 <tr>
                   <td>
                     <table class='image-links-table'>
-                      <% submission.large_images.each_slice(5) do |batch| %>
+                      <% submission.large_images.sort_by(&:id).each_slice(5) do |batch| %>
                         <tr>
                           <% batch.each_with_index do |image, index| %>
                             <% if image.image_urls['large'].present? %>
                               <td class='image-link'>
-                                <%= link_to "Image #{submission.large_images.find_index(image) + 1}", image.image_urls['large'] %>
+                                <%= link_to "Image #{submission.large_images.sort_by(&:id).find_index(image) + 1}", image.image_urls['large'] %>
                               </td>
                             <% end %>
                           <% end %>

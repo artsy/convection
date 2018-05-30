@@ -1,5 +1,5 @@
 class PartnerMailer < ApplicationMailer
-  helper :url, :submissions
+  helper :url, :submissions, :offers
 
   def submission_digest(submissions:, partner_name:, partner_type:, email:)
     @submissions = submissions
@@ -17,5 +17,31 @@ class PartnerMailer < ApplicationMailer
     ) do |format|
       format.html { render layout: 'mailer_no_footer' }
     end
+  end
+
+  def offer_introduction(offer:, artist:, email:)
+    @offer = offer
+    @submission = offer.submission
+    @artist = artist
+    @utm_params = utm_params(source: 'consignment-offer-introduction', campaign: 'consignment-offer')
+
+    smtpapi category: ['offer'], unique_args: {
+      offer_id: offer.id
+    }
+    mail(to: email,
+         subject: 'The consignor has expressed interest in your offer')
+  end
+
+  def offer_rejection(offer:, artist:, email:)
+    @offer = offer
+    @submission = offer.submission
+    @artist = artist
+    @utm_params = utm_params(source: 'consignment-offer-rejected', campaign: 'consignment-offer')
+
+    smtpapi category: ['offer'], unique_args: {
+      offer_id: offer.id
+    }
+    mail(to: email,
+         subject: 'A response to your consignment offer')
   end
 end

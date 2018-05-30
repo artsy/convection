@@ -13,6 +13,8 @@
 /tmp
 .env
 public
+latest.dump
 
 .DS_Store
 .byebug_history
+.ruby-gemset

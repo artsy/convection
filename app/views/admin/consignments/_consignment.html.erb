@@ -1,0 +1,29 @@
+<%= link_to admin_consignment_path(consignment), class: 'list-group-item list-item--consignment', data: { id: consignment.id } do %>
+  <div class='list-group-item-info'>
+    <%= consignment.state %>
+  </div>
+  <div class='list-group-item-info'>
+    #<%= consignment.reference_id %>
+  </div>
+  <div class='list-group-item-info'>
+    <%= consignment.sale_date&.strftime('%m/%d/%Y') %>
+  </div>
+  <div class='list-group-item-info list-group-item-info--partner-name'>
+    <%= consignment.partner.name %>
+  </div>
+  <div class='list-group-item-info'>
+    <%= consignment.sale_price_display %>
+  </div>
+  <div class='list-group-item-info'>
+    <%= consignment&.accepted_offer&.offer_type %>
+  </div>
+  <div class='list-group-item-info'>
+    <%= artist %>
+  </div>
+  <div class='list-group-item-info asset-thumb'>
+    <% if consignment.submission.thumbnail.present? %>
+      <%= image_tag consignment.submission.thumbnail %>
+    <% end %>
+  </div>
+  <span class='icon-chevron-right'></span>
+<% end %>

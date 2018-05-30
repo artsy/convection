@@ -4,7 +4,7 @@ require 'support/gravity_helper'
 describe 'Create Asset' do
   let(:jwt_token) { JWT.encode({ aud: 'gravity', sub: 'userid' }, Convection.config.jwt_secret) }
   let(:headers) { { 'Authorization' => "Bearer #{jwt_token}" } }
-  let(:submission) { Fabricate(:submission, artist_id: 'andy-warhol', user_id: 'userid') }
+  let(:submission) { Fabricate(:submission, artist_id: 'andy-warhol', user: Fabricate(:user, gravity_user_id: 'userid')) }
 
   describe 'POST /assets' do
     it 'rejects unauthorized requests' do
@@ -23,7 +23,7 @@ describe 'Create Asset' do
     it 'rejects assets without a gemini_token' do
       post '/api/assets', params: { submission_id: submission.id }, headers: headers
       expect(response.status).to eq 400
-      expect(JSON.parse(response.body)['error']).to eq 'Parameter is required'
+      expect(JSON.parse(response.body)['error']).to eq 'Parameter gemini_token is required'
     end
 
     it 'creates an asset' do
@@ -44,7 +44,7 @@ describe 'Create Asset' do
       stub_gravity_user_detail(email: 'michael@bluth.com')
       stub_gravity_artist
 
-      submission.update_attributes!(state: 'submitted')
+      submission.update!(state: 'submitted')
       expect do
         post '/api/assets', params: {
           submission_id: submission.id,

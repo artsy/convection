@@ -1,0 +1,53 @@
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Offer type
+  </div>
+  <div class='overview-item-value'>
+    <%= @offer.offer_type %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Low estimate
+  </div>
+  <div class='overview-item-value'>
+    <%= @offer.low_estimate_display %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    High estimate
+  </div>
+  <div class='overview-item-value'>
+    <%= @offer.high_estimate_display %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Commission %
+  </div>
+  <div class='overview-item-value'>
+    <%= @offer.commission_percent_whole %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Sale name
+  </div>
+  <div class='overview-item-value'>
+    <%= @offer.sale_name %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Sale date
+  </div>
+  <div class='overview-item-value'>
+    <%= @offer.sale_date&.strftime('%b %-d %Y') %>
+  </div>
+</div>

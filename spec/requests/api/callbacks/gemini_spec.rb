@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'support/gravity_helper'
 
 describe 'Gemini Callback' do
-  let(:submission) { Fabricate(:submission, artist_id: 'andy-warhol', user_id: 'userid') }
+  let(:submission) { Fabricate(:submission, artist_id: 'andy-warhol', user: Fabricate(:user, gravity_user_id: 'userid')) }
 
   before do
     allow(Convection.config).to receive(:access_token).and_return('auth-token')

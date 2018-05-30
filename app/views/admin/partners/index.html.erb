@@ -1,16 +1,41 @@
 <div class='page-title'>
-  <h2>Current Partners</h2>
+  <div class='row'>
+    <div class='col-md-12'>
+      <div class='col-md-10'>
+        <h2>
+          <%= link_to 'Partners', admin_partners_url %>
+        </h2>
+      </div>
+      <div class='col-md-2'>
+        <div class='row'>
+          <%= link_to 'Add Partner', '#', { 'data-remodal-target' => 'create-partner-modal', class: 'btn btn-secondary btn-tiny pull-right' } %>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class='container'>
-  <div class='row triple-padding-top'>
+  <div class='row double-padding-top'>
+    <div class='row col-md-12'>
+      <%= form_tag admin_partners_url, method: 'get' do %>
+        <div class='form-group'>
+          <div class='col-sm-10'>
+            <%= text_field_tag 'term', term, class: 'form-control', placeholder: 'Partner name' %>
+          </div>
+          <div class='col-sm-2'>
+            <%= submit_tag 'Search', class: 'btn btn-primary btn-full-width btn-tiny' %>
+          </div>
+        </div>
+      <% end %>
+    </div>
     <div class='col-md-12'>
       <div class='list-group'>
-        <% @partners.each do |partner| %>
+        <% partners.each do |partner| %>
           <div class='list-group-item list-item--partner' data-id=<%= partner[:id] %>>
             <div class='list-group-item-info'>
               <p class='list-item--partner--name'>
-                <%= @partner_details[partner.gravity_partner_id][:given_name] %>
+                <%= partner.name %>
               </p>
               <p>
                 <%= link_to 'View next digest contents', admin_partner_submissions_path(partner_id: partner.id, notified_at: '') %>
@@ -24,5 +49,6 @@
       </div>
     </div>
   </div>
-  <%= render 'shared/watt/paginator', total_items_count: @partners.total_count, items_count: @partners.length, per_page: @size, current_page: @page, base_url: admin_partners_url %>
+  <%= render 'shared/watt/paginator', total_items_count: partners.total_count, items_count: partners.length, per_page: size, current_page: page, base_url: admin_partners_url %>
 </div>
+<%= render 'create_partner' %>

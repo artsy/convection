@@ -1,4 +1,6 @@
 class PartnerSubmissionService
+  class PartnerSubmissionError < StandardError; end
+
   class << self
     def daily_digest
       Partner.all.each do |partner|
@@ -10,7 +12,6 @@ class PartnerSubmissionService
       partner = Partner.find(partner_id)
       partner_submissions = partner.partner_submissions.where(notified_at: nil)
       submissions = Submission.find(partner_submissions.pluck(:submission_id))
-
       if submissions.empty?
         Rails.logger.info "Skipping digest for #{partner_id}... no submissions."
         return
@@ -38,11 +39,11 @@ class PartnerSubmissionService
 
       submission_ids = submissions.pluck(:id)
       partner_contacts.map(&:email).each do |email|
-        delay.deliver_partner_contact_email(submission_ids, gravity_partner.name, gravity_partner.type, email)
+        delay.deliver_partner_contact_email(submission_ids, partner.name, gravity_partner.type, email)
       end
 
       notified_at = Time.now.utc
-      partner_submissions.each { |ps| ps.update_attributes!(notified_at: notified_at) }
+      partner_submissions.each { |ps| ps.update!(notified_at: notified_at) }
     end
 
     def deliver_partner_contact_email(submission_ids, partner_name, partner_type, email)

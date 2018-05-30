@@ -1,0 +1,84 @@
+<% include_description = false if local_assigns[:include_description].nil? %>
+
+<table class='email-gray-bordered-section zero-border-top'>
+  <tr>
+    <td class='spacer'></td>
+  </tr>
+  <tr>
+    <td class='two-column'>
+      <div class="column first-column">
+        <table width="100%">
+          <tr>
+            <td>
+              <table>
+                <tr>
+                  <td class='email-gray-label email-gray-label--left'>
+                    Partner
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="column second-column">
+        <table width="100%">
+          <tr>
+            <td class="inner">
+              <table>
+                <tr>
+                  <td class='email-content-serif'>
+                    <%= @offer.partner&.name %>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </td>
+  </tr>
+  <%= render 'shared/email/offer_type', include_description: include_description %>
+  <% display_fields(@offer).each do |label, value| %>
+    <tr>
+      <td class='spacer'></td>
+    </tr>
+    <tr>
+      <td class='two-column'>
+        <div class="column first-column">
+          <table width="100%">
+            <tr>
+              <td>
+                <table>
+                  <tr>
+                    <td class='email-gray-label email-gray-label--left'>
+                      <%= label %>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="column second-column">
+          <table width="100%">
+            <tr>
+              <td class="inner">
+                <table>
+                  <tr>
+                    <td class='email-content-serif'>
+                      <%= value %>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+    <td class='spacer'></td>
+  </tr>
+</table>

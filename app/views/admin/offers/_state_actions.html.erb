@@ -1,0 +1,67 @@
+<% unless @offer.rejected? || @offer.lapsed? || @offer.consigned? %>
+  <% if @offer.draft? %>
+    <div class='overview-section offer-draft-actions'>
+      <div class='single-padding-top'>
+        <div>
+          <%= link_to 'Save & Send', admin_offer_path(@offer, offer: { state: 'sent' }), method: :put, class: 'btn btn-secondary btn-small btn-full-width', data: { confirm: 'This action will send the offer to the collector. This action cannot be undone.' } %>
+        </div>
+        <div class='single-padding-top'>
+          <%= link_to 'Edit', edit_admin_offer_path(@offer), class: 'btn btn-secondary btn-small btn-full-width' %>
+        </div>
+        <div class='single-padding-top'>
+          <%= link_to('Delete', admin_offer_path(@offer), method: :delete, class: 'btn btn-delete btn-small btn-full-width',
+                id: 'offer-delete-button',
+                data: { confirm: 'This action will delete the offer. This action cannot be undone.' }) %>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <div class='overview-section offer-actions'>
+      <div class='single-padding-top'>
+        <% unless @offer.review? %>
+          <div class='single-padding-top'>
+            <%= link_to 'Consignor Interested', '#', { 'data-remodal-target' => 'interested-modal', class: 'btn btn-secondary btn-small btn-full-width offer-review-button' } %>
+          </div>
+        <% end %>
+        <div class='single-padding-top'>
+          <%= link_to 'Reject Offer', '#', { 'data-remodal-target' => 'reject-offer-modal', class: 'btn btn-small btn-delete btn-full-width' } %>
+        </div>
+        <div class='single-padding-top'>
+          <%= link_to('Offer Lapsed', admin_offer_path(@offer, offer: { state: 'lapsed' }), method: :put, class: 'btn btn-secondary btn-small btn-full-width',
+                data: { confirm: 'This action will mark the consignment as lapsed. This action cannot be undone.' }) %>
+        </div>
+        <% if @offer.locked? %>
+          <div class='single-padding-top'>
+            <i>This offer is locked since a competing offer is in review.</i>
+          </div>
+        <% else %>
+          <div class='double-padding-top'>
+            <%= check_box_tag 'terms_signed' %>
+            <span class='purple-label'>Required:</span> Terms signed.
+            <div class='single-padding-top'>
+              <%= link_to('Complete Consignment',
+                    admin_offer_path(@offer, offer: { state: 'consigned' }),
+                    method: :put,
+                    class: 'btn btn-primary btn-small btn-full-width offer-consign-button disabled-button',
+                    data: { confirm: 'This action will complete the consignment. This action cannot be undone.' }) %>
+            </div>
+            <div class='single-padding-top'>
+              <i>When offer is consigned, all other competing offers will lock.</i>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+
+<% if @offer.reviewed? %>
+  <div class='overview-section'>
+    <div class='bold-label'>
+      Internal Approval
+    </div>
+    <div class='single-padding-top'>
+      <%= reviewed_byline(@offer) %>
+    </div>
+  </div>
+<% end %>

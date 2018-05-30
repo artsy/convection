@@ -2,7 +2,7 @@ Documentation:
   Enabled: false
 
 AllCops:
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.5
   Exclude:
     - db/**/*
     - tmp/**/*
@@ -16,14 +16,15 @@ Style/Lambda:
 Rails/FilePath:
   Exclude:
     - config/application.rb
+
 LineLength:
   Exclude:
     - config/environments/*
     - config/initializers/*
-  Max: 139
+  Max: 165
   IgnoreCopDirectives: true
 
-Style/AlignParameters:
+Layout/AlignParameters:
   EnforcedStyle: with_fixed_indentation
 
 Style/FrozenStringLiteralComment:
@@ -45,4 +46,10 @@ Rails/SkipsModelValidations:
   Enabled: false
 
 Metrics/ClassLength:
-  Max: 124
+  Max: 136
+
+Metrics/ModuleLength:
+  Max: 110
+
+Style/SymbolArray:
+  Enabled: false

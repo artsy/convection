@@ -1,0 +1,96 @@
+<%= stylesheet_link_tag 'emails', media: 'all' %>
+
+<table class='padded-email offer-email'>
+  <tr>
+    <td>
+      <table class='email-content' align='left'>
+        <tr>
+          <td>
+            <%= render 'shared/email/email_header' %>
+          </td>
+        </tr>
+        <tr>
+          <td class='email-title-centered'>
+            Great news, the consignor has expressed interest in your offer.
+          </td>
+        </tr>
+        <tr>
+          <td class='spacer'></td>
+        </tr>
+        <tr>
+          <td class='email-sub-title-serif'>
+            Your offer has been reviewed, and the consignor has expressed interest your offer. An Artsy representative will reach out to you soon to introduce you to the consignor. For your reference, the details of your offer are included below.
+          </td>
+        </tr>
+        <tr>
+          <td class='spacer'></td>
+        </tr>
+        <tr>
+          <td class='zero-padding'>
+            <%= render 'shared/email/submission_offer_block' %>
+          </td>
+        </tr>
+        <tr>
+          <td class='zero-padding'>
+            <table class='email-gray-bordered-section zero-border-top'>
+              <tr>
+                <td class='spacer'></td>
+              </tr>
+              <tr>
+                <td class='two-column'>
+                  <div class="column first-column">
+                    <table width="100%">
+                      <tr>
+                        <td>
+                          <table>
+                            <tr>
+                              <td class='email-gray-label email-gray-label--left'>
+                                Offer Status
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="column second-column">
+                    <table width="100%">
+                      <tr>
+                        <td class="inner">
+                          <table>
+                            <tr>
+                              <td class='email-content-serif green'>
+                                Interested
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class='spacer'></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td class='zero-padding'>
+            <%= render 'shared/email/offer_block' %>
+          </td>
+        </tr>
+        <%= render 'shared/email/offer_note', label: 'Note' %>
+        <tr>
+          <td class='spacer'></td>
+        </tr>
+        <tr>
+          <td class='email-sub-title-serif'>
+            Sincerely, <br />Artsy
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>

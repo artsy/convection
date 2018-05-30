@@ -12,7 +12,7 @@ describe 'admin/submissions/edit.html.erb', type: :feature do
         edition_size: 100,
         edition_number: '23a',
         category: 'Painting',
-        user_id: 'userid')
+        user: Fabricate(:user, gravity_user_id: 'userid'))
 
       stub_gravity_root
       stub_gravity_user
@@ -35,7 +35,7 @@ describe 'admin/submissions/edit.html.erb', type: :feature do
       find_button('Save').click
       expect(@submission.reload.title).to eq('my new artwork title')
       expect(page).to have_content('Gob Bluth')
-      expect(page).to have_content('Add Asset')
+      expect(page).to have_content('Add New')
     end
   end
 end

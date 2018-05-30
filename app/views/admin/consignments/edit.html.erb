@@ -1,0 +1,141 @@
+<div class='page-title'>
+  <h2>Consignment #<%= @consignment.reference_id %></h2>
+</div>
+
+<div class='container'>
+  <%= form_for(@consignment, url: admin_consignment_path, method: :put) do |f| %>
+    <div class='row'>
+      <div class='col-md-12'>
+        <div class='unit bordered single-padding-top'>
+          <div class='col-md-9'>
+            <div class='row single-padding-top'>
+              <div class='col-sm-12'>
+                <label class='col-sm-3 control-label'>
+                  State
+                </label>
+                <div class='col-sm-9'>
+                  <%= f.select :state, PartnerSubmission::STATES, class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+
+            <div class='row single-padding-top hidden canceled-reason-field'>
+              <div class='col-sm-12'>
+                <label class='col-sm-3 control-label'>
+                  Canceled Reason
+                </label>
+                <div class='col-sm-9'>
+                  <%= f.text_area :canceled_reason, class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+
+            <div class='row single-padding-top'>
+              <div class='col-sm-12'>
+                <label class='col-sm-3 control-label'>
+                  Currency
+                </label>
+                <div class='col-sm-9'>
+                  <%= f.select :currency, Currency::SUPPORTED, class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+
+            <div class='row single-padding-top'>
+              <div class='col-sm-12'>
+                <label class='col-sm-3 control-label'>
+                  Price
+                </label>
+                <div class='col-sm-9'>
+                  <%= f.text_field :sale_price_dollars, class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+
+            <div class='row single-padding-top'>
+              <div class='col-sm-12'>
+                <label class='col-sm-3 control-label'>
+                  Date
+                </label>
+                <div class='col-sm-9'>
+                  <%= f.date_field :sale_date, class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+
+            <div class='row single-padding-top'>
+              <div class='col-sm-12'>
+                <label class='col-sm-3 control-label'>
+                  Name
+                </label>
+                <div class='col-sm-9'>
+                  <%= f.text_field :sale_name, class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+
+            <div class='row single-padding-top'>
+              <div class='col-sm-12'>
+                <label class='col-sm-3 control-label'>
+                  Location
+                </label>
+                <div class='col-sm-9'>
+                  <%= f.text_field :sale_location, class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+
+            <div class='row single-padding-top'>
+              <div class='col-sm-12'>
+                <label class='col-sm-3 control-label'>
+                  Lot number
+                </label>
+                <div class='col-sm-9'>
+                  <%= f.text_field :sale_lot_number, class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+
+            <div class='row single-padding-top'>
+              <div class='col-sm-12'>
+                <label class='col-sm-3 control-label'>
+                  Partner commission %
+                </label>
+                <div class='col-sm-9'>
+                  <%= f.text_field :partner_commission_percent_whole, class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+
+            <div class='row single-padding-top'>
+              <div class='col-sm-12'>
+                <label class='col-sm-3 control-label'>
+                  Artsy commission %
+                </label>
+                <div class='col-sm-9'>
+                  <%= f.text_field :artsy_commission_percent_whole, class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+
+            <div class='row single-padding-top'>
+              <div class='col-sm-12'>
+                <label class='col-sm-3 control-label'>
+                  Notes
+                </label>
+                <div class='col-sm-9'>
+                  <%= f.text_area :notes, class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='row triple-padding-top'>
+      <div class='col-md-12'>
+        <%= f.submit 'Save', class: 'btn btn-primary btn-full-width' %>
+      </div>
+    </div>
+  <% end %>
+</div>

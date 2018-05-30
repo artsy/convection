@@ -9,15 +9,15 @@ module Api
     end
 
     rescue_from ActiveRecord::RecordNotFound do |_ex|
-      render json: { error: 'Not Found' }, status: 404
+      render json: { error: 'Not Found' }, status: :not_found
     end
 
     rescue_from ApplicationController::NotAuthorized do |_ex|
-      render json: { error: 'Unauthorized' }, status: 401
+      render json: { error: 'Unauthorized' }, status: :unauthorized
     end
 
     rescue_from SubmissionService::ParamError do |ex|
-      render json: { error: ex.message }, status: 400
+      render json: { error: ex.message }, status: :bad_request
     end
 
     def set_submission
@@ -30,7 +30,7 @@ module Api
     end
 
     def require_authorized_submission
-      raise ApplicationController::NotAuthorized unless current_user && current_user == @submission.user_id
+      raise ApplicationController::NotAuthorized unless current_user && current_user == @submission.user&.gravity_user_id
     end
 
     private
@@ -50,6 +50,10 @@ module Api
 
     def current_user
       @current_user ||= jwt_payload&.fetch('sub', nil)
+    end
+
+    def current_user_roles
+      @current_user_roles ||= jwt_payload&.fetch('roles', nil)&.split(',')&.map(&:to_sym)
     end
   end
 end

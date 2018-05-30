@@ -3,13 +3,14 @@ require 'support/gravity_helper'
 
 describe PartnerSubmissionService do
   before do
+    @user = Fabricate(:user, gravity_user_id: 'userid')
     stub_gravity_root
     stub_gravity_user
     stub_gravity_user_detail
     stub_gravity_artist
     stub_gravity_partner_communications
     stub_gravity_partner_contacts
-    allow(Time).to receive(:now).and_return(DateTime.new(2017, 9, 27).in_time_zone('UTC')) # stub time for email subject lines
+    allow(Time).to receive(:now).and_return(Time.new(2017, 9, 27).in_time_zone('UTC')) # stub time for email subject lines
     allow(Convection.config).to receive(:auction_offer_form_url).and_return('https://google.com/auction')
   end
 
@@ -25,7 +26,7 @@ describe PartnerSubmissionService do
 
     it 'generates new partner submissions' do
       partner = Fabricate(:partner)
-      submission = Fabricate(:submission, state: 'submitted', user_id: 'userid', artist_id: 'artistid')
+      submission = Fabricate(:submission, state: 'submitted', user: @user, artist_id: 'artistid')
       SubmissionService.update_submission(submission, state: 'approved')
       expect(PartnerSubmission.where(submission: submission, partner: partner).count).to eq 1
       Fabricate(:submission, state: 'approved')
@@ -77,19 +78,19 @@ describe PartnerSubmissionService do
         @approved1 = Fabricate(:submission,
           state: 'submitted',
           artist_id: 'artistid',
-          user_id: 'userid',
+          user: @user,
           title: 'First approved artwork',
           year: '1992')
         @approved2 = Fabricate(:submission,
           state: 'submitted',
           artist_id: 'artistid',
-          user_id: 'userid',
+          user: @user,
           title: 'Second approved artwork',
           year: '1993')
         @approved3 = Fabricate(:submission,
           state: 'submitted',
           artist_id: 'artistid',
-          user_id: 'userid',
+          user: @user,
           title: 'Third approved artwork',
           year: '1997')
         Fabricate(:submission, state: 'rejected')
@@ -146,7 +147,6 @@ describe PartnerSubmissionService do
 
         it 'sends a digest with the first processed image' do
           first_image = Fabricate(:image, submission: @approved1)
-          Fabricate(:image, submission: @approved1)
           PartnerSubmissionService.daily_digest
 
           emails = ActionMailer::Base.deliveries
@@ -157,7 +157,7 @@ describe PartnerSubmissionService do
         it 'sends a digest with the primary image' do
           Fabricate(:image, submission: @approved1)
           second_image = Fabricate(:image, submission: @approved1)
-          @approved1.update_attributes!(primary_image_id: second_image.id)
+          @approved1.update!(primary_image_id: second_image.id)
           PartnerSubmissionService.daily_digest
 
           emails = ActionMailer::Base.deliveries
@@ -167,9 +167,9 @@ describe PartnerSubmissionService do
 
         it 'includes links to additional images' do
           first_image = Fabricate(:image, submission: @approved1)
-          Fabricate(:image, submission: @approved1, image_urls: { 'large' => 'http://foo1.jpg' })
-          Fabricate(:image, submission: @approved1, image_urls: { 'large' => 'http://foo2.jpg' })
-          Fabricate(:image, submission: @approved1, image_urls: { 'large' => 'http://foo3.jpg' })
+          Fabricate(:image, submission: @approved1, image_urls: { 'square' => 'http://square1.jpg', 'large' => 'http://foo1.jpg' })
+          Fabricate(:image, submission: @approved1, image_urls: { 'square' => 'http://square2.jpg', 'large' => 'http://foo2.jpg' })
+          Fabricate(:image, submission: @approved1, image_urls: { 'square' => 'http://square3.jpg', 'large' => 'http://foo3.jpg' })
           PartnerSubmissionService.daily_digest
 
           emails = ActionMailer::Base.deliveries

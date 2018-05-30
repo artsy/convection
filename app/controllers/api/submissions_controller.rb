@@ -5,25 +5,37 @@ module Api
     before_action :require_authorized_submission, only: [:show, :update]
 
     def show
-      render json: @submission.to_json, status: 200
+      render json: @submission.to_json, status: :ok
     end
 
     def create
       param! :artist_id, String, required: true
 
-      create_params = submission_params(params).merge(user_id: current_user)
-      submission = Submission.create!(create_params)
-      render json: submission.to_json, status: 201
+      submission = SubmissionService.create_submission(submission_params, current_user)
+      render json: submission.to_json, status: :created
     end
 
     def update
-      SubmissionService.update_submission(@submission, submission_params(params))
-      render json: @submission.to_json, status: 201
+      SubmissionService.update_submission(@submission, submission_params)
+      render json: @submission.to_json, status: :created
+    end
+
+    def index
+      param! :completed, :boolean, default: nil
+
+      user = User.where(gravity_user_id: current_user).first
+      submissions = Submission.where(user: user)
+      if params.include? :completed
+        submissions = params[:completed] ? submissions.completed : submissions.draft
+      end
+
+      submissions = submissions.order(created_at: :desc).page(page).per(size)
+      render json: submissions.to_json, status: :ok
     end
 
     private
 
-    def submission_params(params)
+    def submission_params
       params.permit(
         :additional_info,
         :artist_id,

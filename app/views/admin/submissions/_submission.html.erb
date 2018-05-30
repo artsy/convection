@@ -1,25 +1,35 @@
-<div class='list-group-item list-item--submission' data-id=<%= submission.id %>>
+<% truncated = false if local_assigns[:truncated].nil? %>
+
+<%= link_to admin_submission_path(submission), class: 'list-group-item list-item--submission', data: { id: submission.id } do %>
+  <div class='list-group-item-info list-group-item-info--state'>
+    <%= submission.state %>
+  </div>
   <div class='list-group-item-info list-group-item-info--id'>
     <%= submission.id %>
+  </div>
+  <div class='list-group-item-info list-group-item-info--email'>
+    <%= submission.user&.email %>
+  </div>
+  <% unless truncated %>
+    <div class='list-group-item-info'>
+      <%= submission.created_at.strftime('%m/%d/%Y') %>
+    </div>
+  <% end %>
+  <% unless truncated %>
+    <div class='list-group-item-info'>
+      <%= submission.offers_count %>
+    </div>
+  <% end %>
+  <div class='list-group-item-info'>
+    <%= artist %>
+  </div>
+  <div class='list-group-item-info'>
+    <%= submission&.title&.truncate(30) %>
   </div>
   <div class='list-group-item-info asset-thumb'>
     <% if submission.thumbnail.present? %>
       <%= image_tag submission.thumbnail %>
     <% end %>
   </div>
-  <div class='list-group-item-info'>
-    <%= submission.created_at.strftime('%m/%d/%Y') %>
-  </div>
-  <div class='list-group-item-info'>
-    <%= artist_details[submission.artist_id] %>
-  </div>
-  <div class='list-group-item-info'>
-    <%= submission.category %>
-  </div>
-  <div class='list-group-item-info'>
-    <%= submission.state %>
-  </div>
-  <div class='actions'>
-    <%= link_to 'View', admin_submission_path(submission), class: 'btn btn-tiny' %>
-  </div>
-</div>
+  <span class='icon-chevron-right'></span>
+<% end %>

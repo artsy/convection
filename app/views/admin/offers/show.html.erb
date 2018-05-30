@@ -1,0 +1,57 @@
+<div class='row'>
+  <div class='col-sm-12'>
+    <div class='col-md-8'>
+      <div class='col-md-12'>
+        <div class='watt-overview'>
+          <div class='overview-section'>
+            <div class='overview-section-title--inline'>
+              Details
+              <% if offer.draft? %>
+                <span class='overview-section-title--inline__link'>
+                  <%= link_to 'Edit', edit_admin_offer_path(offer) %>
+                </span>
+              <% end %>
+            </div>
+            <%= render "#{offer.offer_type.downcase.tr(' ', '_')}", offer: offer %>
+          </div>
+          <div class='overview-section'>
+            <div class='overview-section-title--inline'>
+              Shared
+            </div>
+            <%= render 'shared', offer: offer %>
+          </div>
+          <%= render 'admin/consignments/consignment_section', consignment: offer.submission.consigned_partner_submission, artist: artist %>
+          <%= render 'admin/submissions/submission_section', submission: offer.submission, artist: artist %>
+        </div>
+      </div>
+    </div>
+
+    <div class='col-md-4'>
+      <div class='col-md-12'>
+        <div class='watt-overview'>
+          <div class='overview-section'>
+            <div class='overview-section-title--inline'>
+              Offer #<%= offer.reference_id %>
+              <% if @offer.locked? %>
+                <span class='locked'>
+                  <%= image_tag(image_url('lock.svg'), id: 'lock') %>
+                </span>
+              <% end %>
+            </div>
+          </div>
+          <%= render 'state_actions' %>
+          <div class='overview-section'>
+            <div class='bold-label'>State</div>
+            <div class='single-padding-top'>
+              <%= offer.state %>
+            </div>
+          </div>
+          <%= render 'admin/submissions/collector_info', submission: offer.submission %>
+          <%= render 'admin/shared/partner_info', partner: offer.partner %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%= render 'reject_offer' %>
+<%= render 'interested' %>

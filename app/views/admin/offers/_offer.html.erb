@@ -1,0 +1,52 @@
+<% truncated = false if local_assigns[:truncated].nil? %>
+
+<%= link_to admin_offer_path(offer), class: 'list-group-item list-item--offer', data: { id: offer.id } do %>
+  <span>
+    <% if offer.locked? %>
+      <div class='locked'>
+        <%= image_tag(image_url('lock.svg'), id: 'lock') %>
+      </div>
+    <% else %>
+      <div class='spacer'>
+      </div>
+    <% end %>
+  </span>
+  <div class='list-group-item-info'>
+    <%= offer.state %>
+  </div>
+  <div class='list-group-item-info'>
+    #<%= offer.reference_id %>
+  </div>
+  <div class='list-group-item-info'>
+    <%= offer.created_at.strftime('%m/%d/%Y') %>
+  </div>
+  <div class='list-group-item-info'>
+    <%= offer.partner.name %>
+  </div>
+  <% if truncated %>
+    <div class='list-group-item-info'>
+      <%= offer.best_price_display || '-' %>
+    </div>
+  <% else %>
+    <div class='list-group-item-info'>
+      <%= offer.submission.user&.email %>
+    </div>
+    <div class='list-group-item-info'>
+      <%= offer.price_display %>
+    </div>
+    <div class='list-group-item-info'>
+      <%= offer.high_estimate_display %>
+    </div>
+    <div class='list-group-item-info'>
+      <% if offer.commission_percent %>
+        <%= offer.commission_percent_whole %>
+      <% else %>
+      -
+      <% end %>
+    </div>
+  <% end %>
+  <div class='list-group-item-info'>
+    <%= offer.offer_type %>
+  </div>
+  <span class='icon-chevron-right'></span>
+<% end %>

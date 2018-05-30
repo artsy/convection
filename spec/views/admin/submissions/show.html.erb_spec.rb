@@ -23,7 +23,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         edition_size: 100,
         edition_number: '23a',
         category: 'Painting',
-        user_id: 'userid',
+        user: Fabricate(:user, gravity_user_id: 'userid'),
         state: 'submitted')
 
       stub_jwt_header('userid')
@@ -39,13 +39,13 @@ describe 'admin/submissions/show.html.erb', type: :feature do
     end
 
     it 'displays the reviewer byline if the submission has been approved' do
-      @submission.update_attributes!(state: 'approved', approved_by: 'userid', approved_at: Time.now.utc)
+      @submission.update!(state: 'approved', approved_by: 'userid', approved_at: Time.now.utc)
       page.visit "/admin/submissions/#{@submission.id}"
       expect(page).to have_content 'Approved by Jon Jonson'
     end
 
     it 'displays the reviewer byline if the submission has been rejected' do
-      @submission.update_attributes!(state: 'rejected', rejected_by: 'userid', rejected_at: Time.now.utc)
+      @submission.update!(state: 'rejected', rejected_by: 'userid', rejected_at: Time.now.utc)
       page.visit "/admin/submissions/#{@submission.id}"
       expect(page).to have_content 'Rejected by Jon Jonson'
     end
@@ -95,6 +95,10 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       expect(page).to have_content('2 partners notified on')
     end
 
+    it 'does not display the consignment list item if there is no consignment' do
+      expect(page).to_not have_selector('.list-item--consignment')
+    end
+
     context 'unreviewed submission' do
       it 'displays buttons to approve/reject if the submission is not yet reviewed' do
         expect(page).to have_content('Approve')
@@ -102,6 +106,8 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       end
 
       it 'approves a submission when the Approve button is clicked' do
+        expect(page).to_not have_content('Create Offer')
+        expect(page).to have_content('submitted')
         click_link 'Approve'
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
@@ -110,9 +116,12 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         )
         expect(page).to have_content 'Approved by Jon Jonson'
         expect(page).to_not have_content 'Reject'
+        expect(page).to have_content('approved')
+        expect(page).to have_content('Create Offer')
       end
 
-      it 'rejects a submission when the Approve button is clicked' do
+      it 'rejects a submission when the Reject button is clicked' do
+        expect(page).to have_content('submitted')
         click_link 'Reject'
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
@@ -121,6 +130,8 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         )
         expect(page).to have_content 'Rejected by Jon Jonson'
         expect(page).to_not have_content 'Approve'
+        expect(page).to have_content('rejected')
+        expect(page).to_not have_content('Create Offer')
       end
     end
 
@@ -151,7 +162,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
 
       it 'displays the primary asset label and respects changing it' do
         primary_image = @submission.assets.first
-        @submission.update_attributes!(primary_image_id: primary_image.id)
+        @submission.update!(primary_image_id: primary_image.id)
         page.visit "/admin/submissions/#{@submission.id}"
         within("div#submission-asset-#{primary_image.id}") do
           expect(page).to have_selector('.primary-image-label', count: 1)
@@ -172,6 +183,23 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         end
         within("div#submission-asset-#{new_primary_image.id}") do
           expect(page).to have_selector('.primary-image-label')
+        end
+      end
+    end
+
+    context 'with a consignment' do
+      before do
+        consignment = Fabricate(:partner_submission, submission: @submission, state: 'open')
+        @submission.update!(consigned_partner_submission: consignment)
+        page.visit admin_submission_path(@submission)
+      end
+
+      it 'shows the consignment' do
+        expect(page).to have_selector('.list-item--consignment')
+        expect(page).to have_content('Consignment')
+
+        within(:css, '.list-item--consignment') do
+          expect(page).to have_content('Gob Bluth')
         end
       end
     end

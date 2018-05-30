@@ -1,5 +1,8 @@
 $sans-serif: HelveticaNeue, Helvetica, 'Helvetica', sans-serif;
 $serif: TimesNewRoman, 'Times New Roman', Times, serif;
+$purple: #6E1FFF;
+$red: #F7625A;
+$green: #0EDA83;
 
 body {
   margin: 0px;
@@ -64,12 +67,30 @@ table.bordered-email {
     border-collapse: collapse;
   }
 
+  .spacer {
+    height: 20px;
+  }
+
   table.padded-email {
     margin-top: 20px;
     margin-bottom: 40px;
     border-collapse: collapse;
     margin-left: 10px;
     margin-right: 10px;
+  }
+
+  table.offer-email {
+    td.two-column {
+      text-align: left;
+    }
+
+    .first-column {
+      max-width: 200px;
+    }
+
+    .second-column {
+      max-width: 300px;
+    }
   }
 
   table.consignments-header-table {
@@ -104,8 +125,24 @@ table.bordered-email {
     font-family: $sans-serif;
   }
 
+  .email-title-centered {
+    font-size: 30px;
+    text-align: center;
+    font-family: $sans-serif;
+    padding-top: 60px;
+    padding-bottom: 30px;
+  }
+
   .sans-serif {
     font-family: $sans-serif;
+  }
+
+  .red {
+    color: $red;
+  }
+
+  .green {
+    color: $green;
   }
 
   .email-main-photo img {
@@ -143,8 +180,84 @@ table.bordered-email {
     text-align: left;
   }
 
+  .email-sub-title-serif {
+    font-size: 18px;
+    font-family: $serif;
+    text-align: left;
+    line-height: 1.6;
+  }
+
   .email-sub-title-bottom {
     padding-bottom: 30px;
+  }
+
+  .email-gray-label {
+    color: #666666;
+    font-size: 12px;
+    font-family: $sans-serif;
+    text-transform: uppercase;
+    vertical-align: top;
+    padding-left: 30px;
+    padding-right: 60px;
+    letter-spacing: 0.5px;
+    max-width: 100px;
+    line-height: 25px;
+  }
+
+  .email-gray-label--left {
+    text-align: left;
+  }
+
+  .email-gray-label--center {
+    text-align: center;
+  }
+
+  .email-content-serif {
+    font-size: 18px;
+    text-align: left;
+    font-family: $serif;
+    padding-bottom: 2px;
+    padding-left: 30px;
+    padding-right: 30px;
+    line-height: 25px;
+  }
+
+  .email-content-serif--small {
+    font-size: 16px;
+  }
+
+  .email-content-small-image {
+    text-align: left;
+    padding-left: 30px;
+    img {
+      height: 73px;
+      max-height: 73px;
+      width: 73px;
+      max-width: 73px;
+    }
+  }
+
+  table.email-gray-bordered-section {
+    border: 1px solid #E5E5E5;
+    width: 100%;
+    border-collapse: collapse;
+    padding: 0;
+
+    td.top-element {
+      padding-top: 30px;
+    }
+
+    td.bottom-element {
+      padding-bottom: 30px;
+    }
+  }
+
+  .zero-padding {
+    padding: 0;
+  }
+
+  table.zero-border-top {
+    border-top: none;
   }
 
   table.submission-info {
@@ -193,7 +306,7 @@ table.bordered-email {
     padding-top: 20px;
   }
 
-  .upload-photo-button, .submit-proposal-button {
+  .upload-photo-button, .submit-proposal-button, .offer-response-button {
     background-color: black;
     padding-top: 15px;
     padding-bottom: 15px;
@@ -206,6 +319,14 @@ table.bordered-email {
       text-transform: uppercase;
       display: block;
     }
+  }
+
+  .offer-response-button {
+    background-color: $purple;
+  }
+
+  .offer-type-description {
+    font-size: 16px;
   }
 
   table.email-footer {

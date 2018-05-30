@@ -104,7 +104,7 @@ def stub_gravity_partner_communications(opts = {})
       partner_communications: communication_items
     }
   }
-  stub_gravity_request("/partner_communications?name=#{URI.encode(name)}", body)
+  stub_gravity_request("/partner_communications?name=#{CGI.escape(name)}", body)
 end
 
 def stub_gravity_partner_contacts(opts = {})

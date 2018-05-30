@@ -1,0 +1,65 @@
+<div class='page-title'>
+  <h2>
+    Consignments
+  </h2>
+</div>
+
+<div class='container double-padding-top'>
+  <div class='row'>
+    <div class='row col-md-12'>
+      <%= form_tag admin_consignments_url, method: 'get', id: 'consignment-filter-form' do %>
+        <div class='col-md-3'>
+          <div class='form-group'>
+            <%= select_tag 'state',
+                          options_for_select(
+                            PartnerSubmission::STATES.map{ |state| [state, state] }.unshift(['all', nil]),
+                            filters[:state]
+                          ),
+                          class: 'form-control',
+                          onchange: ("$('#consignment-filter-form').submit()") %>
+          </div>
+        </div>
+      <% end %>
+      <div class='col-md-9'>
+        <div class='form-group'>
+          <%= text_field_tag 'term', term, class: 'form-control', placeholder: 'Search by ID, user name, or partner', id: 'consignments-search-form' %>
+        </div>
+      </div>
+    </div>
+    <div class='row col-md-12'>
+      <div class='list-group-item list-item--offer'>
+        <div class='list-group-item-info bold-label'>
+          State
+        </div>
+        <div class='list-group-item-info bold-label'>
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'id', label: 'ID' %>
+        </div>
+        <div class='list-group-item-info bold-label'>
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'sale_date', label: 'Sale date' %>
+        </div>
+        <div class='list-group-item-info bold-label'>
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'partners.name', label: 'Partner' %>
+        </div>
+        <div class='list-group-item-info bold-label'>
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'sale_price_cents', label: 'Price' %>
+        </div>
+        <div class='list-group-item-info bold-label'>
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'offers.offer_type', label: 'Offer type' %>
+        </div>
+        <div class='list-group-item-info bold-label'>
+          Artist
+        </div>
+        <div class='list-group-item-info bold-label'>
+        </div>
+        <div class='spacer'>
+        </div>
+      </div>
+      <div class='list-group'>
+        <% consignments.each do |consignment| %>
+          <%= render 'admin/consignments/consignment', consignment: consignment, artist: artist_details&.dig(consignment.submission.artist_id) %>
+        <% end %>
+      </div>
+    </div>
+    <%= render 'shared/watt/paginator', total_items_count: consignments.total_count, items_count: consignments.length, per_page: size, current_page: page, base_url: admin_consignments_url(filters) %>
+  </div>
+</div>

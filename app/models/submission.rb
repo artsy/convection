@@ -1,11 +1,21 @@
 class Submission < ApplicationRecord
-  STATES = %w(
+  include PgSearch
+  pg_search_scope :search,
+    against: [:id, :title],
+    using: {
+      tsearch: { prefix: true },
+      trigram: {}
+    }
+
+  STATES = %w[
     draft
     submitted
     approved
     rejected
-  ).freeze
-  DIMENSION_METRICS = %w(in cm).freeze
+  ].freeze
+
+  DIMENSION_METRICS = %w[in cm].freeze
+
   CATEGORIES = [
     'Painting',
     'Sculpture',
@@ -24,19 +34,22 @@ class Submission < ApplicationRecord
     'Other'
   ].freeze
 
-  REQUIRED_FIELDS_FOR_SUBMISSION = %w(
+  REQUIRED_FIELDS_FOR_SUBMISSION = %w[
     artist_id
     category
     title
     user_id
     year
-  ).freeze
+  ].freeze
 
   delegate :images, to: :assets
 
   has_many :assets, dependent: :destroy
-  has_many :partner_submissions
-  belongs_to :primary_image, class_name: 'Asset'
+  has_many :partner_submissions, dependent: :destroy
+  has_many :offers, dependent: :destroy
+  belongs_to :user
+  belongs_to :primary_image, class_name: 'Asset' # rubocop:disable Rails/InverseOf
+  belongs_to :consigned_partner_submission, class_name: 'PartnerSubmission' # rubocop:disable Rails/InverseOf
 
   validates :state, inclusion: { in: STATES }
   validates :category, inclusion: { in: CATEGORIES }, allow_nil: true
@@ -46,6 +59,8 @@ class Submission < ApplicationRecord
   before_validation :set_state, on: :create
 
   scope :completed, -> { where.not(state: 'draft') }
+  scope :draft, -> { where(state: 'draft') }
+  scope :submitted, -> { where(state: 'submitted') }
 
   def can_submit?
     REQUIRED_FIELDS_FOR_SUBMISSION.all? { |attr| self[attr].present? }
@@ -68,7 +83,9 @@ class Submission < ApplicationRecord
   end
 
   def thumbnail
-    [primary_image, images].flatten.map { |image| image && image.image_urls['thumbnail'] }.compact.first
+    possible_thumbnails = images.to_a.unshift(primary_image).compact
+    thumbnails = possible_thumbnails.map { |image| image.image_urls['thumbnail'] }.compact
+    thumbnails.first
   end
 
   # defines methods submitted?, approved?, etc. for each possible submission state
@@ -76,6 +93,10 @@ class Submission < ApplicationRecord
     define_method "#{method}?".to_sym do
       state == method
     end
+  end
+
+  def reviewed?
+    approved? || rejected?
   end
 
   def ready?
@@ -100,24 +121,8 @@ class Submission < ApplicationRecord
     artist.try(:name)
   end
 
-  def user
-    Gravity.client.user(id: user_id)._get if user_id
-  rescue Faraday::ResourceNotFound
-    nil
-  end
-
-  def user_name
-    user.try(:name)
-  end
-
-  def user_detail
-    user.try(:user_detail)
-  rescue Faraday::ResourceNotFound
-    nil
-  end
-
   def validate_primary_image
-    return unless primary_image.present?
+    return if primary_image.blank?
     errors.add(:primary_image, 'Primary image must have asset_type=image') unless primary_image.asset_type == 'image'
   end
 end

@@ -17,11 +17,33 @@ describe UrlHelper, type: :helper do
 
   describe '#offer_form_url' do
     before do
-      allow(Convection.config).to receive(:auction_offer_form_url).and_return('https://google.com/auction')
+      allow(Convection.config).to receive(:auction_offer_form_url).and_return('https://google.com/auction?entry.blahblah=SUBMISSION_NUMBER')
     end
 
     it 'returns the correct url for an auction' do
-      expect(helper.offer_form_url).to eq('https://google.com/auction')
+      expect(helper.offer_form_url).to eq('https://google.com/auction?entry.blahblah=')
+    end
+
+    it 'correctly replaces the submission number if one is supplied' do
+      expect(helper.offer_form_url(submission_id: 123)).to eq('https://google.com/auction?entry.blahblah=123')
+    end
+  end
+
+  describe '#offer_response_form_url' do
+    before do
+      allow(Convection.config).to receive(:offer_response_form_url).and_return(
+        'https://google.com/response?entry.blahblah=SUBMISSION_NUMBER&entry.blah2=PARTNER_NAME'
+      )
+    end
+
+    it 'returns the correct url for a user to respond' do
+      expect(helper.offer_response_form_url).to eq('https://google.com/response?entry.blahblah=&entry.blah2=')
+    end
+
+    it 'correctly replaces the submission number if one is supplied' do
+      expect(helper.offer_response_form_url(submission_id: 123, partner_name: 'gagosian gallery')).to eq(
+        'https://google.com/response?entry.blahblah=123&entry.blah2=gagosian gallery'
+      )
     end
   end
 end

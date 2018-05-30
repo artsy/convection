@@ -39,7 +39,7 @@ module SubmissionsHelper
   end
 
   def preferred_image(submission)
-    (submission.primary_image.presence || submission.processed_images.first).image_urls['square']
+    (submission.primary_image.presence || submission.processed_images.sort_by(&:id).first).image_urls['square']
   end
 
   def formatted_current_time

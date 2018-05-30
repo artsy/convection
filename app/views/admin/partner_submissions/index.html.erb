@@ -1,14 +1,16 @@
 <div class='page-title'>
-<h2>Submissions for <%= @partner_details.values.first[:given_name] %> included in next digest</h2>
+<h2>Submissions for <%= @partner.name %> included in next digest</h2>
 </div>
 
 <div class='container'>
   <div class='row triple-padding-top'>
     <div class='col-md-12'>
       <div class='list-group'>
-        <%= render @partner_submissions.map(&:submission), artist_details: @artist_details %>
+        <% @partner_submissions.map(&:submission).each do |submission| %>
+          <%= render 'admin/submissions/submission', submission: submission, artist: @artist_details&.dig(submission.artist_id) %>
+        <% end %>
       </div>
     </div>
   </div>
-  <%= render 'shared/watt/paginator', total_items_count: @partner_submissions.total_count, items_count: @partner_submissions.length, per_page: @size, current_page: @page, base_url: admin_partner_submissions_url(@filters) %>
+  <%= render 'shared/watt/paginator', total_items_count: @partner_submissions.total_count, items_count: @partner_submissions.length, per_page: size, current_page: page, base_url: admin_partner_submissions_url(@filters) %>
 </div>
