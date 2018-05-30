@@ -14,6 +14,7 @@ describe OfferService do
         ps = PartnerSubmission.where(submission: submission, partner: partner).first
         expect(ps.offers.count).to eq 1
         expect(ps.offers.first.state).to eq 'draft'
+        expect(ps.notified_at).to_not be_nil
       end
     end
 
