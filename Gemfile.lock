@@ -65,7 +65,7 @@ GEM
       omniauth-artsy (>= 0.2.2)
       omniauth-oauth2
       rails (>= 4.2.0)
-    artsy-eventservice (1.0.7)
+    artsy-eventservice (1.0.8)
       bunny
     ast (2.4.0)
     autoprefixer-rails (8.5.0)
