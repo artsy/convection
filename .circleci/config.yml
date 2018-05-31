@@ -25,10 +25,22 @@ jobs:
       - run: bundle exec rake db:create db:migrate
       - run: bundle exec rake
 
-      - run: bash .circleci/heroku_setup
-      - add_ssh_keys:
-          fingerprints:
-            - "BLAH"
+  deploy:
+    docker:
+      - image: buildpack-deps:trusty
+    steps:
+      - checkout
+      - run: git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/convection-staging.git $CIRCLE_SHA1:master
+
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
       - deploy:
-          name: Deploy
-          command: .circleci/heroku_deploy
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
