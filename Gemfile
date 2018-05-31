@@ -49,11 +49,12 @@ end
 
 group :test do
   gem 'capybara'
-  gem 'capybara-webkit', '1.1.0'
+  gem 'chromedriver-helper'
   gem 'database_cleaner'
   gem 'fabrication'
   gem 'rack_session_access'
   gem 'rails-controller-testing'
+  gem 'selenium-webdriver'
   gem 'webmock' # mock or forbid external network requests
   gem 'yarjuf' # formatting for test reports on CircleCI
 end

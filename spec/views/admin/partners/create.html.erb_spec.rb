@@ -51,7 +51,7 @@ describe 'partners create', type: :feature do
       expect(page).to have_selector('.ui-menu-item a')
       page.execute_script("$('.ui-menu-item:contains(\"Storefront\")').find('a').trigger('mouseenter').click()")
       expect(page).to_not have_selector('#partner-selections-form #partner-search-submit.disabled-button')
-      find('#create-partner-close').trigger('click')
+      find('#create-partner-close').click
       expect(page).to_not have_content('Partner successfully created.')
       expect(Partner.count).to eq 4
     end

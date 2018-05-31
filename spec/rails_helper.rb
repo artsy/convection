@@ -33,7 +33,7 @@ RSpec.configure do |config|
 end
 
 Capybara.configure do |config|
-  config.javascript_driver = :webkit
+  config.javascript_driver = :selenium_chrome_headless
   config.default_max_wait_time = 10
   config.ignore_hidden_elements = false
 end
