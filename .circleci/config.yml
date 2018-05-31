@@ -25,12 +25,19 @@ jobs:
       - run: bundle exec rake db:create db:migrate
       - run: bundle exec rake
 
-  deploy:
+  deploy-staging:
     docker:
       - image: buildpack-deps:trusty
     steps:
       - checkout
       - run: git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/convection-staging.git $CIRCLE_SHA1:master
+
+  deploy-production:
+    docker:
+      - image: buildpack-deps:trusty
+    steps:
+      - checkout
+      - run: git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/convection-production.git $CIRCLE_SHA1:master
 
 
 workflows:
@@ -38,9 +45,15 @@ workflows:
   build-deploy:
     jobs:
       - build
-      - deploy:
+      - deploy-staging:
           requires:
             - build
           filters:
             branches:
               only: master
+      - deploy-production:
+          requires:
+            - build
+          filters:
+            branches:
+              only: release
