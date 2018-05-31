@@ -19,6 +19,8 @@ jobs:
         paths:
           - vendor/bundle
 
+      - run: chromedriver-update 2.37
+
       - run: mv config/database{.circle,}.yml
       - run: bundle exec rake db:create db:migrate
       - run: bundle exec rake
