@@ -1,0 +1,34 @@
+version: 2
+
+jobs:
+  build:
+    working_directory: ~/convection
+    docker:
+      - image: artsy/ruby:2.5.1-node-chrome
+        environment:
+          RAILS_ENV: test
+      - image: circleci/postgres:10.1-alpine
+    steps:
+      - checkout
+
+      - type: cache-restore
+        key: convection-bundler-{{ checksum "Gemfile.lock" }}
+      - run: bundle install --path vendor/bundle
+      - type: cache-save
+        key: convection-bundler-{{ checksum "Gemfile.lock" }}
+        paths:
+          - vendor/bundle
+
+      - run: chromedriver-update 2.37
+
+      - run: mv config/database{.circle,}.yml
+      - run: bundle exec rake db:create db:migrate
+      - run: bundle exec rake
+
+      - run: bash .circleci/heroku_setup
+      - add_ssh_keys:
+          fingerprints:
+            - "BLAH"
+      - deploy:
+          name: Deploy
+          command: .circleci/heroku_deploy
