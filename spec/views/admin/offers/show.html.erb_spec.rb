@@ -191,6 +191,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
         find('input#terms_signed').click
         expect(page).to_not have_selector('.offer-consign-button.disabled-button')
         find('.offer-consign-button').click
+        page.driver.browser.switch_to.alert.accept
         expect(page).to have_content("Offer ##{offer.reference_id}")
         expect(page).to_not have_content('Complete Consignment')
         expect(page).to have_selector('.list-item--consignment')
