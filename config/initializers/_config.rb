@@ -10,7 +10,7 @@ Convection.config = OpenStruct.new(
   offer_response_form_url: ENV['OFFER_RESPONSE_FORM_URL'] || 'https://foo.com',
   bcc_email_address: ENV['BCC_EMAIL_ADDRESS'] || 'consignments-archive@artsymail.com',
   cloudfront_url: ENV['CLOUDFRONT_URL'],
-  consignment_communication_name: ENV['CONSIGNMENT_COMMUNICATION_NAME'] || 'Consignment Submissions',
+  consignment_communication_name: ENV['CONSIGNMENT_COMMUNICATION_NAME'] || 'Consignment Submissions' || 'Private Sales & Consignments',
   contact_email_address: ENV['CONTACT_EMAIL'] || 'specialist@artsy.net',
   contact_phone_number: ENV['CONTACT_PHONE_NUMBER'] || '+1 (646) 712-8154',
   convection_url: ENV['CONVECTION_URL'] || 'https://convection-staging.artsy.net',
