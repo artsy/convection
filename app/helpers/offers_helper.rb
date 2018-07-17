@@ -1,4 +1,4 @@
-module OffersHelper
+module OffersHelper # rubocop:disable Metrics/ModuleLength
   def reviewed_byline(offer)
     if offer.rejected?
       [
@@ -41,8 +41,11 @@ module OffersHelper
   def offer_type_description(offer)
     case offer.offer_type
     when Offer::AUCTION_CONSIGNMENT
-      'This work will be offered in an auction. The work will sell if bidding meets the minimum '\
-      'selling price that you and the auction house have agreed to.'
+      'This work will be offered in an auction. The work will sell if bidding meets the '\
+      'minimum selling price that you and the auction house have agreed to. Please note '\
+      'that the minimum selling price generally cannot be higher than the suggested low '\
+      'estimate. You are responsible for shipping the work to the auction house unless '\
+      'otherwise stated in the notes.'
     when Offer::PURCHASE
       'The work will be purchased directly from you by the partner for the specified price.'
     when Offer::RETAIL
