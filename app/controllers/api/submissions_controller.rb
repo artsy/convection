@@ -52,6 +52,7 @@ module Api
         :location_country,
         :location_state,
         :medium,
+        :minimum_price_cents,
         :provenance,
         :signature,
         :state,

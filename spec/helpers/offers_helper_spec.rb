@@ -146,17 +146,17 @@ describe OffersHelper, type: :helper do
   context 'price_display' do
     it 'works for a price in USD' do
       offer = double('offer', price_cents: 10_000, currency: 'USD')
-      expect(helper.price_display(offer)).to eq 'USD $100'
+      expect(helper.price_display(offer.currency, offer.price_cents)).to eq 'USD $100'
     end
 
     it 'works for a price in CAD' do
       offer = double('offer', price_cents: 10_000, currency: 'CAD')
-      expect(helper.price_display(offer)).to eq 'CAD $100'
+      expect(helper.price_display(offer.currency, offer.price_cents)).to eq 'CAD $100'
     end
 
     it 'returns nil if there is no price_cents' do
       offer = double('offer', price_cents: nil, currency: 'USD')
-      expect(helper.price_display(offer)).to eq nil
+      expect(helper.price_display(offer.currency, offer.price_cents)).to eq nil
     end
   end
 

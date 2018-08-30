@@ -19,6 +19,7 @@ module Types
     field :location_country, types.String
     field :location_state, types.String
     field :medium, types.String
+    field :minimum_price_cents, types.Int
     field :provenance, types.String
     field :signature, types.Boolean
     field :state, Types::StateType

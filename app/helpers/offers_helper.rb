@@ -1,4 +1,5 @@
-module OffersHelper # rubocop:disable Metrics/ModuleLength
+module OffersHelper
+  include ApplicationHelper
   def reviewed_byline(offer)
     if offer.rejected?
       [
@@ -13,7 +14,7 @@ module OffersHelper # rubocop:disable Metrics/ModuleLength
   def display_fields(offer)
     {
       'Estimate' => estimate_display(offer),
-      'Price' => price_display(offer),
+      'Price' => price_display(offer.currency, offer.price_cents),
       'Sale Period' => sale_period_display(offer),
       'Sale Date' => sale_date_display(offer),
       'Sale Name' => offer.sale_name,
@@ -64,11 +65,6 @@ module OffersHelper # rubocop:disable Metrics/ModuleLength
       offer.high_estimate_cents
     ].compact.map { |amt| (amt / currency.subunit_to_unit).round }.join(' - ')
     "#{offer.currency} #{currency.symbol}#{estimate}" if estimate.present?
-  end
-
-  def price_display(offer)
-    return if offer.price_cents.blank?
-    "#{offer.currency} #{Money.new(offer.price_cents, offer.currency).format(no_cents: true)}"
   end
 
   def sale_period_display(offer)

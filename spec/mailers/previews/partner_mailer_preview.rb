@@ -30,7 +30,7 @@ class PartnerMailerPreview < BasePreview
   def submission_digest_mail_params
     {
       submissions: [
-        base_submission,
+        base_submission_with_minimum_price,
         base_submission,
         base_submission
       ]

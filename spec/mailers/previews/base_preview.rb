@@ -55,4 +55,12 @@ class BasePreview < ActionMailer::Preview
       ]
     )
   end
+
+  def base_submission_with_minimum_price
+    s = base_submission
+    s.minimum_price_cents = 50_000_00
+    s.currency = 'USD'
+    s.minimum_price_display = Money.new(s.minimum_price_cents, s.currency).format(no_cents: true)
+    s
+  end
 end
