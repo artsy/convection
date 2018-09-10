@@ -32,6 +32,7 @@ Rails.application.routes.draw do
     resources :assets, only: [:create, :show, :index]
     post '/callbacks/gemini', to: 'callbacks#gemini'
     post '/graphql', to: 'graphql#execute'
+    put '/anonymize_user_email', to: 'users#anonymize_user_email'
   end
 
   mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/api/graphql' if Rails.env.development?

@@ -25,6 +25,10 @@ module Api
       @submission = Submission.find(submission_id)
     end
 
+    def require_trusted_app
+      raise ApplicationController::NotAuthorized unless current_app
+    end
+
     def require_authentication
       raise ApplicationController::NotAuthorized unless current_app && current_user
     end
