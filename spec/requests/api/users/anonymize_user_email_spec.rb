@@ -10,7 +10,8 @@ describe 'Anonymize user email' do
 
   it 'finds users with this email address and nils it out' do
     expect(User.where(email: "test1@test.com").count).to eq(1)
-    put '/api/anonymize_user_email?email=test1@test.com',
+    put '/api/anonymize_user_email',
+      params: { email: "test1@test.com" },
       headers: headers
 
     expect(User.where(email: "test1@test.com").count).to eq(0)
@@ -20,7 +21,8 @@ describe 'Anonymize user email' do
 
   it 'works when multiple users are returned' do
     expect(User.where(email: "test2@test.com").count).to eq(2)
-    put '/api/anonymize_user_email?email=test2@test.com',
+    put '/api/anonymize_user_email',
+      params: { email: "test2@test.com" },
       headers: headers
 
     expect(User.where(email: "test2@test.com").count).to eq(0)
@@ -31,7 +33,8 @@ describe 'Anonymize user email' do
 
   it 'does not error out when no users are found' do
     expect(User.where(email: "test3@test.com").count).to eq(0)
-    put '/api/anonymize_user_email?email=test3@test.com',
+    put '/api/anonymize_user_email',
+      params: { email: 'test3@test.com' },
       headers: headers
 
     expect(response.status).to eq(201)
