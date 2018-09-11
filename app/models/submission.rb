@@ -47,7 +47,7 @@ class Submission < ApplicationRecord
   has_many :assets, dependent: :destroy
   has_many :partner_submissions, dependent: :destroy
   has_many :offers, dependent: :destroy
-  belongs_to :user  # rubocop:disable Rails/InverseOf
+  belongs_to :user
   belongs_to :primary_image, class_name: 'Asset'  # rubocop:disable Rails/InverseOf
   belongs_to :consigned_partner_submission, class_name: 'PartnerSubmission'  # rubocop:disable Rails/InverseOf
 
