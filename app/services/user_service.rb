@@ -8,8 +8,7 @@ class UserService
     end
 
     def anonymize_email!(email)
-      users = User.where(email: email)
-      users.each { |u| u.update!(email: nil) }
+      User.where(email: email).update_all(email: nil)
     end
   end
 end
