@@ -55,7 +55,7 @@ describe 'Anonymize user email' do
   end
 
   it 'requires a trusted role' do
-    bad_token = JWT.encode({ aud: 'gravity', roles: 'foo,bar,baz'}, Convection.config.jwt_secret)
+    bad_token = JWT.encode({ aud: 'gravity', roles: 'foo,bar,baz' }, Convection.config.jwt_secret)
     put '/api/anonymize_user_email', headers: { 'Authorization' => "Bearer #{bad_token}" }
     expect(response.status).to eq 401
   end
