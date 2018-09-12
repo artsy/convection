@@ -48,8 +48,8 @@ class Submission < ApplicationRecord
   has_many :partner_submissions, dependent: :destroy
   has_many :offers, dependent: :destroy
   belongs_to :user
-  belongs_to :primary_image, class_name: 'Asset'  # rubocop:disable Rails/InverseOf
-  belongs_to :consigned_partner_submission, class_name: 'PartnerSubmission'  # rubocop:disable Rails/InverseOf
+  belongs_to :primary_image, class_name: 'Asset' # rubocop:disable Rails/InverseOf
+  belongs_to :consigned_partner_submission, class_name: 'PartnerSubmission' # rubocop:disable Rails/InverseOf
 
   validates :state, inclusion: { in: STATES }
   validates :category, inclusion: { in: CATEGORIES }, allow_nil: true
