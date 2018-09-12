@@ -5,7 +5,7 @@ describe 'Anonymize user email' do
   let!(:user1) { Fabricate(:user, email: 'test1@test.com') }
   let!(:user2) { Fabricate(:user, email: 'test2@test.com') }
   let!(:user3) { Fabricate(:user, email: 'test2@test.com') }
-  let(:jwt_token) { JWT.encode({ aud: 'gravity' }, Convection.config.jwt_secret) }
+  let(:jwt_token) { JWT.encode({ aud: 'gravity', roles: 'trusted' }, Convection.config.jwt_secret) }
   let(:headers) { { 'Authorization' => "Bearer #{jwt_token}" } }
 
   it 'finds users with this email address and nils it out' do
@@ -47,9 +47,15 @@ describe 'Anonymize user email' do
     expect(response.status).to eq 401
   end
 
-  it 'requires its token to specify a trusted app' do
-    bad_token = JWT.encode({ whatever: 'random' }, Convection.config.jwt_secret)
+  it 'requires a valid token' do
+    bad_token = JWT.encode({ whatever: 'random', roles: 'trusted' }, Convection.config.jwt_secret)
 
+    put '/api/anonymize_user_email', headers: { 'Authorization' => "Bearer #{bad_token}" }
+    expect(response.status).to eq 401
+  end
+
+  it 'requires a trusted role' do
+    bad_token = JWT.encode({ aud: 'gravity', roles: 'foo,bar,baz'}, Convection.config.jwt_secret)
     put '/api/anonymize_user_email', headers: { 'Authorization' => "Bearer #{bad_token}" }
     expect(response.status).to eq 401
   end
