@@ -17,7 +17,7 @@ module Mutations
       input_field :location_country, types.String
       input_field :location_state, types.String
       input_field :medium, types.String
-      input_field :minimum_price, types.Int
+      input_field :minimum_price_dollars, types.Int
       input_field :provenance, types.String
       input_field :signature, types.Boolean
       input_field :state, Types::StateType
@@ -31,8 +31,6 @@ module Mutations
     def self.resolve(_obj, args, context)
       params = args.to_h['input'].except('clientMutationId')
       client_mutation_id = args.to_h['input']['clientMutationId']
-      min_price = params.delete('minimum_price')
-      params['minimum_price_cents'] = min_price * 100 if min_price.present? && min_price.positive?
       submission = SubmissionService.create_submission(params, context[:current_user])
       OpenStruct.new(consignment_submission: submission, client_mutation_id: client_mutation_id)
     end

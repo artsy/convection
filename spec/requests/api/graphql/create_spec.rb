@@ -8,13 +8,14 @@ describe 'Create Submission With Graphql' do
   let(:create_mutation) do
     <<-GRAPHQL
     mutation {
-      createConsignmentSubmission(input: { state: REJECTED, clientMutationId: "2", artist_id: "andy", title: "soup", category: JEWELRY }){
+      createConsignmentSubmission(input: { state: REJECTED, clientMutationId: "2", artist_id: "andy", title: "soup", category: JEWELRY, minimum_price_dollars: 50000 }){
         clientMutationId
         consignment_submission {
           id
           title
           category
           state
+          minimum_price_dollars
         }
       }
     }
@@ -76,6 +77,7 @@ describe 'Create Submission With Graphql' do
         expect(body['data']['createConsignmentSubmission']['consignment_submission']['title']).to eq 'soup'
         expect(body['data']['createConsignmentSubmission']['consignment_submission']['category']).to eq 'JEWELRY'
         expect(body['data']['createConsignmentSubmission']['consignment_submission']['state']).to eq 'REJECTED'
+        expect(body['data']['createConsignmentSubmission']['consignment_submission']['minimum_price_dollars']).to eq 50_000
         expect(body['data']['createConsignmentSubmission']['clientMutationId']).to eq '2'
       end.to change(Submission, :count).by(1)
     end

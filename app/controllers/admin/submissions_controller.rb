@@ -108,7 +108,7 @@ module Admin
         :location_country,
         :location_state,
         :medium,
-        :minimum_price_cents,
+        :minimum_price_dollars,
         :primary_image_id,
         :provenance,
         :signature,
