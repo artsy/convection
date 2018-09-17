@@ -45,4 +45,16 @@ module SubmissionsHelper
   def formatted_current_time
     Time.now.in_time_zone('Eastern Time (US & Canada)').strftime('%l:%M %Z %B %-d, %Y')
   end
+
+  def formatted_minimum_price(submission)
+    if submission.minimum_price_cents.present?
+      "Yes, #{submission.minimum_price_display}"
+    else
+      'No'
+    end
+  end
+
+  def formatted_minimum_price_for_email(submission)
+    submission.minimum_price_cents.presence || 'Price not provided'
+  end
 end

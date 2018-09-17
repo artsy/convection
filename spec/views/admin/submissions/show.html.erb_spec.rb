@@ -38,6 +38,20 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       expect(page).to have_content('Painting')
     end
 
+    it 'displays No for price in mind if there is no minimum_price' do
+      within('.minimum-price') do
+        expect(page).to have_content('No')
+      end
+    end
+
+    it 'displays a formatted minimum_price if present' do
+      @submission.update!(minimum_price_cents: 5_000 * 100)
+      page.visit "/admin/submissions/#{@submission.id}"
+      within('.minimum-price') do
+        expect(page).to have_content('Yes, $5,000')
+      end
+    end
+
     it 'displays the reviewer byline if the submission has been approved' do
       @submission.update!(state: 'approved', approved_by: 'userid', approved_at: Time.now.utc)
       page.visit "/admin/submissions/#{@submission.id}"

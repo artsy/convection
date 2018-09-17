@@ -204,6 +204,17 @@
             </div>
           </div>
 
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
+                Price in Mind
+              </label>
+              <div class='col-sm-10'>
+                <%= f.text_field :minimum_price_dollars, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
           <div class='row triple-padding-top'>
             <div class='col-sm-12'>
               <%= f.submit @submission.persisted? ? 'Save' : 'Create', class: 'btn btn-primary btn-full-width' %>

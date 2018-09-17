@@ -537,8 +537,11 @@ table.bordered-email {
       width: 100%;
       max-width: 600px;
 
+      border-top: 1px solid #e5e5e5;
+
       .two-column {
         text-align: left;
+        padding: 25px 0 15px 0;
 
         .first-column {
           max-width: 150px;

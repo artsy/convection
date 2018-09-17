@@ -18,6 +18,7 @@ module Mutations
       input_field :location_country, types.String
       input_field :location_state, types.String
       input_field :medium, types.String
+      input_field :minimum_price_dollars, types.Int
       input_field :provenance, types.String
       input_field :signature, types.Boolean
       input_field :state, Types::StateType
