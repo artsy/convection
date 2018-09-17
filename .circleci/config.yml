@@ -30,14 +30,25 @@ jobs:
       - image: buildpack-deps:trusty
     steps:
       - checkout
-      - run: git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/convection-staging.git $CIRCLE_SHA1:master
-
+      - run:
+          name: Deploy to Staging
+          command: |
+            curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+            git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/convection-staging.git $CIRCLE_SHA1:master
+            heroku run --exit-code rake db:migrate --app convection-staging &&
+            heroku restart --app convection-staging
   deploy-production:
     docker:
       - image: buildpack-deps:trusty
     steps:
       - checkout
-      - run: git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/convection-production.git $CIRCLE_SHA1:master
+      - run:
+          name: Deploy to Staging
+          command: |
+            curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+            git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/convection-production.git $CIRCLE_SHA1:master
+            heroku run --exit-code rake db:migrate --app convection-production &&
+            heroku restart --app convection-production
 
 
 workflows:
