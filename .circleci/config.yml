@@ -7,7 +7,7 @@ jobs:
       - image: artsy/ruby:2.5.1-node-chrome
         environment:
           RAILS_ENV: test
-      - image: circleci/postgres:10.1-alpine
+      - image: circleci/postgres:9.6-alpine
     steps:
       - run: gem install bundler
       - checkout
