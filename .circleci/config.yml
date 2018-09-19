@@ -9,8 +9,8 @@ jobs:
           RAILS_ENV: test
       - image: circleci/postgres:10.1-alpine
     steps:
+      - run: gem install bundler
       - checkout
-
       - type: cache-restore
         key: convection-bundler-{{ checksum "Gemfile.lock" }}
       - run: bundle install --path vendor/bundle
@@ -22,6 +22,9 @@ jobs:
       - run: chromedriver-update 2.37
 
       - run: mv config/database{.circle,}.yml
+      - run:
+          name: Wait for Postgres
+          command: ./ci/wait-for-postgres.sh
       - run: bundle exec rake db:create db:migrate
       - run: bundle exec rake
 
