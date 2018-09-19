@@ -1,5 +1,8 @@
 class Submission < ApplicationRecord
+  include Currency
+  include Dollarize
   include PgSearch
+
   pg_search_scope :search,
     against: [:id, :title],
     using: {
@@ -61,6 +64,8 @@ class Submission < ApplicationRecord
   scope :completed, -> { where.not(state: 'draft') }
   scope :draft, -> { where(state: 'draft') }
   scope :submitted, -> { where(state: 'submitted') }
+
+  dollarize :minimum_price_cents
 
   def can_submit?
     REQUIRED_FIELDS_FOR_SUBMISSION.all? { |attr| self[attr].present? }

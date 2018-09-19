@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180411194253) do
+ActiveRecord::Schema.define(version: 2018_08_21_221301) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
+  enable_extension "plpgsql"
 
   create_table "assets", id: :serial, force: :cascade do |t|
     t.string "asset_type"
@@ -138,6 +138,8 @@ ActiveRecord::Schema.define(version: 20180411194253) do
     t.string "user_email"
     t.integer "user_id"
     t.integer "offers_count", default: 0
+    t.bigint "minimum_price_cents"
+    t.string "currency"
     t.index ["consigned_partner_submission_id"], name: "index_submissions_on_consigned_partner_submission_id"
     t.index ["ext_user_id"], name: "index_submissions_on_ext_user_id"
     t.index ["primary_image_id"], name: "index_submissions_on_primary_image_id"

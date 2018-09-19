@@ -50,5 +50,26 @@ describe 'Create Submission' do
         expect(JSON.parse(response.body)['edition_size']).to eq 100
       end.to change { Submission.count }.by(1)
     end
+
+    it 'creates a submission with a minimum price' do
+      stub_gravity_root
+      stub_gravity_user
+      stub_gravity_user_detail(email: 'michael@bluth.com')
+
+      expect do
+        post '/api/submissions', params: {
+          title: 'my sartwork',
+          artist_id: 'artistid',
+          edition: true,
+          edition_size: 100,
+          edition_number: '23a',
+          category: 'Painting',
+          minimum_price_dollars: 50_000
+        }, headers: headers
+
+        expect(JSON.parse(response.body)['edition_size']).to eq 100
+        expect(JSON.parse(response.body)['minimum_price_dollars']).to eq 50_000
+      end.to change { Submission.count }.by(1)
+    end
   end
 end

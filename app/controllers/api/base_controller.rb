@@ -25,6 +25,10 @@ module Api
       @submission = Submission.find(submission_id)
     end
 
+    def require_trusted_app
+      raise ApplicationController::NotAuthorized unless current_app.present? && current_user.blank? && current_user_roles.include?(:trusted)
+    end
+
     def require_authentication
       raise ApplicationController::NotAuthorized unless current_app && current_user
     end
@@ -53,7 +57,7 @@ module Api
     end
 
     def current_user_roles
-      @current_user_roles ||= jwt_payload&.fetch('roles', nil)&.split(',')&.map(&:to_sym)
+      @current_user_roles ||= jwt_payload&.fetch('roles', nil)&.split(',')&.map(&:to_sym) || []
     end
   end
 end

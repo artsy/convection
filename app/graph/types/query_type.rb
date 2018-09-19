@@ -35,7 +35,7 @@ module Types
                         submissions
                       end
 
-        if args.keys.include? 'completed'
+        if args.key?('completed')
           submissions = args[:completed] ? submissions.completed : submissions.draft
         end
 
