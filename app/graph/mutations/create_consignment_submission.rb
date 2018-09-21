@@ -7,6 +7,7 @@ module Mutations
       input_field :artist_id, !types.String
       input_field :authenticity_certificate, types.Boolean
       input_field :category, Types::CategoryType
+      input_field :currency, types.String
       input_field :depth, types.String
       input_field :dimensions_metric, types.String
       input_field :edition, types.Boolean
