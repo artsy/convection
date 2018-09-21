@@ -40,6 +40,7 @@ module Api
         :artist_id,
         :authenticity_certificate,
         :category,
+        :currency,
         :deadline_to_sell,
         :depth,
         :dimensions_metric,

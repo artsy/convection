@@ -64,11 +64,13 @@ describe 'Create Submission' do
           edition_size: 100,
           edition_number: '23a',
           category: 'Painting',
-          minimum_price_dollars: 50_000
+          minimum_price_dollars: 50_000,
+          currency: 'GBP'
         }, headers: headers
 
         expect(JSON.parse(response.body)['edition_size']).to eq 100
         expect(JSON.parse(response.body)['minimum_price_dollars']).to eq 50_000
+        expect(JSON.parse(response.body)['currency']).to eq 'GBP'
       end.to change { Submission.count }.by(1)
     end
   end

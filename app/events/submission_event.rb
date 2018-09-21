@@ -33,7 +33,8 @@ class SubmissionEvent < Events::BaseEvent
       dimensions_metric: @object.dimensions_metric,
       category: @object.category,
       medium: @object.medium,
-      minimum_price: @object.minimum_price_display
+      minimum_price: @object.minimum_price_display,
+      currency: @object.currency
     }
   end
 end
