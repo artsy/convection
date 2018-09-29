@@ -34,7 +34,8 @@ class SubmissionEvent < Events::BaseEvent
       category: @object.category,
       medium: @object.medium,
       minimum_price: @object.minimum_price_display,
-      currency: @object.currency
+      currency: @object.currency,
+      images_urls: @object.images&.map(&:image_urls)
     }
   end
 end

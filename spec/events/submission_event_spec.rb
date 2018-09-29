@@ -18,6 +18,13 @@ describe SubmissionEvent do
       location_country: 'US',
       category: 'Painting')
   end
+  let!(:images) do
+    [
+      Fabricate(:image, submission: submission, image_urls: { 'thumbnail' => 'https://thumb.jpg' }),
+      Fabricate(:image, submission: submission, image_urls: { 'thumbnail' => 'https://thumb2.jpg' })
+    ]
+  end
+
   let(:event) { SubmissionEvent.new(model: submission, action: 'submitted') }
   describe '#object' do
     it 'returns proper id and display' do
@@ -46,6 +53,7 @@ describe SubmissionEvent do
       expect(event.properties[:dimensions_metric]).to eq 'in'
       expect(event.properties[:category]).to eq 'Painting'
       expect(event.properties[:medium]).to eq 'painting'
+      expect(event.properties[:images_urls]).to match_array([{ 'thumbnail' => 'https://thumb2.jpg' }, { 'thumbnail' => 'https://thumb.jpg' }])
     end
   end
 end

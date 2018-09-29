@@ -13,7 +13,6 @@
 ActiveRecord::Schema.define(version: 2018_08_21_221301) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
 
@@ -136,8 +135,8 @@ ActiveRecord::Schema.define(version: 2018_08_21_221301) do
     t.integer "primary_image_id"
     t.integer "consigned_partner_submission_id"
     t.string "user_email"
-    t.integer "user_id"
     t.integer "offers_count", default: 0
+    t.integer "user_id"
     t.bigint "minimum_price_cents"
     t.string "currency"
     t.index ["consigned_partner_submission_id"], name: "index_submissions_on_consigned_partner_submission_id"
