@@ -55,6 +55,6 @@ module SubmissionsHelper
   end
 
   def formatted_minimum_price_for_email(submission)
-    submission.minimum_price_cents.presence || 'Price not provided'
+    submission.minimum_price_display.presence || 'Price not provided'
   end
 end

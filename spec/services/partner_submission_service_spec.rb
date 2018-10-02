@@ -92,7 +92,9 @@ describe PartnerSubmissionService do
           artist_id: 'artistid',
           user: @user,
           title: 'Third approved artwork',
-          year: '1997')
+          year: '1997',
+          minimum_price_cents: 50_000_00,
+          currency: 'USD')
         Fabricate(:submission, state: 'rejected')
         SubmissionService.update_submission(@approved1, state: 'approved')
         SubmissionService.update_submission(@approved2, state: 'approved')
@@ -200,6 +202,22 @@ describe PartnerSubmissionService do
           expect(email.html_part.body).to include('<i>First approved artwork</i><span>, 1992</span>')
           expect(email.html_part.body).to include('<i>Second approved artwork</i><span>, 1993</span>')
           expect(email.html_part.body).to include('<i>Third approved artwork</i><span>, 1997</span>')
+        end
+
+        it 'shows the text for no minimum price' do
+          PartnerSubmissionService.daily_digest
+          emails = ActionMailer::Base.deliveries
+          expect(emails.length).to eq 1
+          email_body = emails.first.html_part.body
+          expect(email_body).to include('Looking for: Price not provided')
+        end
+
+        it 'shows a properly formatted minimum price' do
+          PartnerSubmissionService.daily_digest
+          emails = ActionMailer::Base.deliveries
+          expect(emails.length).to eq 1
+          email_body = emails.first.html_part.body
+          expect(email_body).to include('Looking for: $50,000')
         end
 
         it 'sends to only one partner if only one has partner contacts' do
