@@ -43,6 +43,19 @@ describe Admin::AssetsController, type: :controller do
       end
     end
 
+    context 'removing an asset on a submission' do
+      it 'removes an existing asset' do
+        asset = Fabricate(:image, submission: @submission)
+
+        expect do
+          delete :destroy, params: {
+            submission_id: @submission.id,
+            id: asset.id
+          }
+        end.to change(@submission.assets, :count).by(-1)
+      end
+    end
+
     context 'creating assets for a submission' do
       it 'correctly adds the assets for a single token' do
         expect do
