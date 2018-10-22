@@ -174,6 +174,17 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         expect(page).to have_selector('.make-primary-image', count: 4)
       end
 
+      it 'lets you remove an existing asset' do
+        asset = @submission.assets.first
+        selector = "div#submission-asset-#{asset.id}"
+
+        within(selector) do
+          click_link('Remove')
+        end
+
+        expect(page).to_not have_selector(selector)
+      end
+
       it 'displays the primary asset label and respects changing it' do
         primary_image = @submission.assets.first
         @submission.update!(primary_image_id: primary_image.id)

@@ -29,7 +29,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :submissions, only: [:create, :update, :show, :index]
-    resources :assets, only: [:create, :show, :index]
+    resources :assets, only: [:create, :show, :index, :destroy]
     post '/callbacks/gemini', to: 'callbacks#gemini'
     post '/graphql', to: 'graphql#execute'
     put '/anonymize_user_email', to: 'users#anonymize_user_email'
