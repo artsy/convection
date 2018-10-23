@@ -174,13 +174,15 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         expect(page).to have_selector('.make-primary-image', count: 4)
       end
 
-      it 'lets you remove an existing asset' do
+      it 'lets you remove an existing asset', js: true do
         asset = @submission.assets.first
         selector = "div#submission-asset-#{asset.id}"
 
         within(selector) do
           click_link('Remove')
         end
+
+        page.driver.browser.switch_to.alert.accept
 
         expect(page).to_not have_selector(selector)
       end
