@@ -22,6 +22,7 @@
           <%= link_to 'Make primary', admin_submission_path(submission: { primary_image_id: asset.id }), method: :put, class: 'make-primary-link' %>
         </div>
       <% end %>
+      <%= link_to 'Remove', admin_submission_asset_path(asset.submission, asset), method: :delete, class: 'make-primary-link', data: { confirm: "Are you sure?" } %>
     <% end %>
   </div>
 </div>
