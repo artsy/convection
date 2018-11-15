@@ -19,9 +19,9 @@ describe OfferService do
     end
     describe 'with a submission in a draft state' do
       it 'raises an error' do
-        expect{ OfferService.create_offer(draft_submission.id, partner.id, {}, user.id) }.to raise_error do |error|
+        expect { OfferService.create_offer(draft_submission.id, partner.id, {}, user.id) }.to raise_error do |error|
           expect(error).to be_a OfferService::OfferError
-          expect(error.message).to eq 'Cannot create offer on draft submission'          
+          expect(error.message).to eq 'Cannot create offer on draft submission'
         end
       end
     end
@@ -184,7 +184,7 @@ describe OfferService do
     describe 'consigning an offer' do
       context 'with an offer on a non-approved submission' do
         it 'raises an error' do
-          expect{ OfferService.update_offer(offer, 'userid', state: 'consigned') }.to raise_error do |error|
+          expect { OfferService.update_offer(offer, 'userid', state: 'consigned') }.to raise_error do |error|
             expect(error).to be_a OfferService::OfferError
             expect(error.message).to eq 'Cannot complete consignment on non-approved submission'
           end
