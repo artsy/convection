@@ -7,6 +7,7 @@ describe OfferService do
   let(:submission) { Fabricate(:submission, state: 'approved') }
   let(:draft_submission) { Fabricate(:submission) }
   let(:partner) { Fabricate(:partner, name: 'Gagosian Gallery') }
+  let(:rejected_submission) { Fabricate(:submission, state: 'rejected') }
 
   context 'create_offer' do
     describe 'with a submission in submitted state' do
@@ -21,7 +22,15 @@ describe OfferService do
       it 'raises an error' do
         expect { OfferService.create_offer(draft_submission.id, partner.id, {}, user.id) }.to raise_error do |error|
           expect(error).to be_a OfferService::OfferError
-          expect(error.message).to eq 'Cannot create offer on draft submission'
+          expect(error.message).to eq 'Invalid submission state for offer creation'
+        end
+      end
+    end
+    describe 'with a submission in a rejected state' do
+      it 'raises an error' do
+        expect { OfferService.create_offer(rejected_submission.id, partner.id, {}, user.id) }.to raise_error do |error|
+          expect(error).to be_a OfferService::OfferError
+          expect(error.message).to eq 'Invalid submission state for offer creation'
         end
       end
     end
