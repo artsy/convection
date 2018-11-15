@@ -242,3 +242,13 @@ a.make-primary-link {
     padding: 10px;
   }
 }
+
+.mark-as-consigned-link-wrapper {
+  text-align: center;
+}
+
+.mark-as-consigned-link {
+  font-size: 12px;
+  color: $gray-dark;
+  text-decoration: underline;
+}
