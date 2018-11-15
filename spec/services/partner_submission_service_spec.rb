@@ -27,6 +27,7 @@ describe PartnerSubmissionService do
     it 'generates new partner submissions' do
       partner = Fabricate(:partner)
       submission = Fabricate(:submission, state: 'submitted', user: @user, artist_id: 'artistid')
+      expect(NotificationService).to receive(:post_submission_event).once.with(submission.id, 'approved')
       SubmissionService.update_submission(submission, state: 'approved')
       expect(PartnerSubmission.where(submission: submission, partner: partner).count).to eq 1
       Fabricate(:submission, state: 'approved')
@@ -83,6 +84,7 @@ describe PartnerSubmissionService do
           year: '1992',
           minimum_price_cents: 50_000_00,
           currency: 'USD')
+        expect(NotificationService).to receive(:post_submission_event).once.with(@approved1.id, 'approved')
         SubmissionService.update_submission(@approved1, state: 'approved')
       end
 
@@ -103,6 +105,7 @@ describe PartnerSubmissionService do
           user: @user,
           title: 'Approved artwork with minimum price',
           year: '1992')
+        expect(NotificationService).to receive(:post_submission_event).once.with(@approved1.id, 'approved')
         SubmissionService.update_submission(@approved1, state: 'approved')
       end
 
@@ -136,6 +139,9 @@ describe PartnerSubmissionService do
           title: 'Third approved artwork',
           year: '1997')
         Fabricate(:submission, state: 'rejected')
+        expect(NotificationService).to receive(:post_submission_event).once.with(@approved1.id, 'approved')
+        expect(NotificationService).to receive(:post_submission_event).once.with(@approved2.id, 'approved')
+        expect(NotificationService).to receive(:post_submission_event).once.with(@approved3.id, 'approved')
         SubmissionService.update_submission(@approved1, state: 'approved')
         SubmissionService.update_submission(@approved2, state: 'approved')
         SubmissionService.update_submission(@approved3, state: 'approved')

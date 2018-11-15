@@ -65,6 +65,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
     end
 
     it 'does not display partners who have not been notified' do
+      expect(NotificationService).to receive(:post_submission_event).once.with(@submission.id, 'approved')
       partner1 = Fabricate(:partner, gravity_partner_id: 'partnerid')
       partner2 = Fabricate(:partner, gravity_partner_id: 'phillips')
       SubmissionService.update_submission(@submission, state: 'approved')
@@ -77,6 +78,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
     end
 
     it 'displays the partners that a submission has been shown to' do
+      expect(NotificationService).to receive(:post_submission_event).once.with(@submission.id, 'approved')
       stub_gravity_partner_communications
       stub_gravity_partner_contacts
       partner1 = Fabricate(:partner, gravity_partner_id: 'partnerid')
@@ -120,6 +122,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       end
 
       it 'approves a submission when the Approve button is clicked' do
+        expect(NotificationService).to receive(:post_submission_event).once.with(@submission.id, 'approved')
         expect(page).to_not have_content('Create Offer')
         expect(page).to have_content('submitted')
         click_link 'Approve'
