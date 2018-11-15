@@ -12,6 +12,8 @@ class OfferService
 
     def create_offer(submission_id, partner_id, offer_params = {}, current_user = nil)
       submission = Submission.find(submission_id)
+      puts current_user
+      submission.update!(state: Submission::APPROVED, approved_by: current_user, approved_at: Time.now.utc) if submission.state == Submission::SUBMITTED
       partner = Partner.find(partner_id)
       partner_submission = PartnerSubmission.find_or_create_by!(submission_id: submission.id, partner_id: partner.id)
       partner_submission.update!(notified_at: Time.now.utc) if partner_submission.notified_at.blank?

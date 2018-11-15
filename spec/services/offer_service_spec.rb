@@ -2,10 +2,20 @@ require 'rails_helper'
 require 'support/gravity_helper'
 
 describe OfferService do
+  let!(:user) { Fabricate(:user) }
+  let(:submitted_submission) { Fabricate(:submission, state: 'submitted') }
   let(:submission) { Fabricate(:submission, state: 'approved') }
   let(:partner) { Fabricate(:partner, name: 'Gagosian Gallery') }
 
   context 'create_offer' do
+    describe 'with a submission in submitted state' do
+      it 'updates the submission state to approved' do
+        OfferService.create_offer(submitted_submission.id, partner.id, {}, user.id)
+        expect(submitted_submission.reload.state).to eq 'approved'
+        expect(submitted_submission.reload.approved_by).to eq user.id.to_s
+        expect(submitted_submission.reload.approved_at).to_not be_nil
+      end
+    end
     describe 'with no initial partner submission' do
       it 'creates a draft offer' do
         expect(PartnerSubmission.where(submission: submission, partner: partner).count).to eq 0
