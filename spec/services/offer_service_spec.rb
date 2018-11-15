@@ -5,6 +5,7 @@ describe OfferService do
   let!(:user) { Fabricate(:user) }
   let(:submitted_submission) { Fabricate(:submission, state: 'submitted') }
   let(:submission) { Fabricate(:submission, state: 'approved') }
+  let(:draft_submission) { Fabricate(:submission) }
   let(:partner) { Fabricate(:partner, name: 'Gagosian Gallery') }
 
   context 'create_offer' do
@@ -14,6 +15,14 @@ describe OfferService do
         expect(submitted_submission.reload.state).to eq 'approved'
         expect(submitted_submission.reload.approved_by).to eq user.id.to_s
         expect(submitted_submission.reload.approved_at).to_not be_nil
+      end
+    end
+    describe 'with a submission in a draft state' do
+      it 'raises an error' do
+        expect{ OfferService.create_offer(draft_submission.id, partner.id, {}, user.id) }.to raise_error do |error|
+          expect(error).to be_a OfferService::OfferError
+          expect(error.message).to eq 'Cannot create offer on draft submission'          
+        end
       end
     end
     describe 'with no initial partner submission' do
@@ -173,15 +182,27 @@ describe OfferService do
     end
 
     describe 'consigning an offer' do
-      it 'sets fields on submission and partner submission' do
-        OfferService.update_offer(offer, 'userid', state: 'consigned')
-        expect(ActionMailer::Base.deliveries.count).to eq 0
-        ps = offer.partner_submission
-        expect(ps.state).to eq 'open'
-        expect(ps.accepted_offer).to eq offer
-        expect(ps.partner_commission_percent).to eq offer.commission_percent
-        expect(ps.submission.consigned_partner_submission).to eq offer.partner_submission
-        expect(offer.consigned_at).to_not be_nil
+      context 'with an offer on a non-approved submission' do
+        it 'raises an error' do
+          expect{ OfferService.update_offer(offer, 'userid', state: 'consigned') }.to raise_error do |error|
+            expect(error).to be_a OfferService::OfferError
+            expect(error.message).to eq 'Cannot complete consignment on non-approved submission'
+          end
+        end
+      end
+      context 'with an offer on an approved submission' do
+        let(:approved_submission) { Fabricate(:submission, state: Submission::APPROVED) }
+        let(:ps) { Fabricate(:partner_submission, submission: approved_submission) }
+        let(:consignable_offer) { Fabricate(:offer, partner_submission: ps) }
+        it 'sets fields on submission and partner submission' do
+          OfferService.update_offer(consignable_offer, 'userid', state: 'consigned')
+          expect(ActionMailer::Base.deliveries.count).to eq 0
+          expect(ps.state).to eq 'open'
+          expect(ps.accepted_offer).to eq consignable_offer
+          expect(ps.partner_commission_percent).to eq consignable_offer.commission_percent
+          expect(ps.submission.consigned_partner_submission).to eq consignable_offer.partner_submission
+          expect(consignable_offer.consigned_at).to_not be_nil
+        end
       end
     end
 
