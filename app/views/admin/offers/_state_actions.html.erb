@@ -13,6 +13,13 @@
                 id: 'offer-delete-button',
                 data: { confirm: 'This action will delete the offer. This action cannot be undone.' }) %>
         </div>
+        <div class='single-padding-top'>
+          <%= link_to('Complete Consignment',
+                admin_offer_path(@offer, offer: { state: 'consigned' }),
+                method: :put,
+                class: 'btn btn-secondary btn-small btn-full-width offer-consign-button',
+                data: { confirm: 'This action will complete the consignment. This action cannot be undone.' }) %>
+        </div>
       </div>
     </div>
   <% else %>
