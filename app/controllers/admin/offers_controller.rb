@@ -80,7 +80,7 @@ module Admin
     end
 
     def create
-      @offer = OfferService.create_offer(params[:submission_id], params[:partner_id], offer_params)
+      @offer = OfferService.create_offer(params[:submission_id], params[:partner_id], offer_params, @current_user)
       redirect_to admin_offer_path(@offer)
     rescue OfferService::OfferError => e
       flash.now[:error] = e.message

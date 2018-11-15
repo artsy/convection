@@ -74,7 +74,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
       end
 
       it 'displays a lock symbol if the offer is locked' do
-        ps = Fabricate(:partner_submission)
+        ps = Fabricate(:partner_submission, submission: Fabricate(:submission, state: Submission::APPROVED))
         accepted_offer = Fabricate(:offer, partner_submission: ps)
         Fabricate(:offer, partner_submission: ps)
         OfferService.consign!(accepted_offer)

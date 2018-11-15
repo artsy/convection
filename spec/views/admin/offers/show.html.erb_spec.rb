@@ -4,7 +4,7 @@ require 'support/jwt_helper'
 
 describe 'admin/offers/show.html.erb', type: :feature do
   context 'always' do
-    let(:submission) { Fabricate(:submission) }
+    let(:submission) { Fabricate(:submission, state: Submission::APPROVED) }
     let(:partner) { Fabricate(:partner) }
     let(:partner_submission) { Fabricate(:partner_submission, submission: submission, partner: partner) }
     let(:offer) { Fabricate(:offer, partner_submission: partner_submission, offer_type: 'purchase', state: 'draft') }

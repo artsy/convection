@@ -3,6 +3,7 @@ require 'support/gravity_helper'
 
 describe Offer do
   let(:offer) { Fabricate(:offer) }
+  let(:approved_submission) { Fabricate(:submission, state: Submission::APPROVED) }
 
   context 'state' do
     it 'correctly sets the initial state to sent' do
@@ -51,10 +52,11 @@ describe Offer do
 
   context 'locked?' do
     it 'returns true if this offer is not the accepted_offer and the partner submission is consigned' do
-      ps = offer.partner_submission
+      ps = Fabricate(:partner_submission, submission: approved_submission)
       consigned_offer = Fabricate(:offer, partner_submission: ps)
+      unaccepted_offer = Fabricate(:offer, submission: approved_submission)
       OfferService.consign!(consigned_offer)
-      expect(offer.locked?).to eq true
+      expect(unaccepted_offer.locked?).to eq true
       expect(consigned_offer.locked?).to eq false
     end
 
@@ -63,8 +65,9 @@ describe Offer do
     end
 
     it 'returns false if this offer is the accepted_offer' do
-      OfferService.consign!(offer)
-      expect(offer.locked?).to eq false
+      accepted_offer = Fabricate(:offer, submission: approved_submission)
+      OfferService.consign!(accepted_offer)
+      expect(accepted_offer.locked?).to eq false
     end
   end
 

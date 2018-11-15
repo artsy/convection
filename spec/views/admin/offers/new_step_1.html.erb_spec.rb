@@ -4,7 +4,7 @@ require 'support/gravity_helper'
 describe 'admin/offers/new_step_1.html.erb', type: :feature do
   context 'with an offer' do
     let(:partner) { Fabricate(:partner, name: 'Gagosian Gallery') }
-    let(:submission) { Fabricate(:submission) }
+    let(:submission) { Fabricate(:submission, state: Submission::APPROVED) }
     let(:partner_submission) { Fabricate(:partner_submission, partner: partner, submission: submission) }
 
     before do
