@@ -94,6 +94,7 @@ describe SubmissionService do
     end
 
     it 'sends an approval notification if the submission state is changed to approved' do
+      expect(NotificationService).to receive(:post_submission_event).once.with(submission.id, 'approved')
       SubmissionService.update_submission(submission, { state: 'approved' }, 'userid')
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
@@ -110,6 +111,7 @@ describe SubmissionService do
     end
 
     it 'generates partner submissions on an approval' do
+      expect(NotificationService).to receive(:post_submission_event).once.with(submission.id, 'approved')
       partner1 = Fabricate(:partner, gravity_partner_id: 'partner1')
       partner2 = Fabricate(:partner, gravity_partner_id: 'partner2')
 
