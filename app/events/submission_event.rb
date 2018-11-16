@@ -1,7 +1,8 @@
 class SubmissionEvent < Events::BaseEvent
   TOPIC = 'consignments'.freeze
   ACTIONS = [
-    SUBMITTED = 'submitted'.freeze
+    SUBMITTED = 'submitted'.freeze,
+    APPROVED = 'approved'.freeze
   ].freeze
 
   def object
@@ -34,7 +35,17 @@ class SubmissionEvent < Events::BaseEvent
       category: @object.category,
       medium: @object.medium,
       minimum_price: @object.minimum_price_display,
-      currency: @object.currency
+      currency: @object.currency,
+      provenance: @object.provenance,
+      signature: @object.signature,
+      authenticity_certificate: @object.authenticity_certificate,
+      thumbnail: @object.thumbnail,
+      image_urls: large_image_urls,
+      offer_link: Convection.config.auction_offer_form_url
     }
+  end
+
+  def large_image_urls
+    @object.large_images&.map { |img| img.image_urls['large'] }
   end
 end
