@@ -13,6 +13,13 @@
                 id: 'offer-delete-button',
                 data: { confirm: 'This action will delete the offer. This action cannot be undone.' }) %>
         </div>
+        <div class='single-padding-top mark-as-consigned-link-wrapper'>
+          <%= link_to('Mark as Consigned',
+                admin_offer_path(@offer, offer: { state: 'consigned' }),
+                method: :put,
+                class: 'mark-as-consigned-link',
+                data: { confirm: 'This action will complete the consignment. This action cannot be undone.' }) %>
+        </div>
       </div>
     </div>
   <% else %>

@@ -10,11 +10,11 @@ class Submission < ApplicationRecord
       trigram: {}
     }
 
-  STATES = %w[
-    draft
-    submitted
-    approved
-    rejected
+  STATES = [
+    DRAFT = 'draft'.freeze,
+    SUBMITTED = 'submitted'.freeze,
+    APPROVED = 'approved'.freeze,
+    REJECTED = 'rejected'.freeze
   ].freeze
 
   DIMENSION_METRICS = %w[in cm].freeze
