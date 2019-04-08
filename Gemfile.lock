@@ -72,6 +72,8 @@ GEM
     ast (2.4.0)
     autoprefixer-rails (8.5.0)
       execjs
+    bootsnap (1.4.1)
+      msgpack (~> 1.0)
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
@@ -192,6 +194,7 @@ GEM
     minitest (5.11.3)
     money (6.11.3)
       i18n (>= 0.6.4, < 1.1)
+    msgpack (1.2.7)
     multi_json (1.13.1)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
@@ -376,6 +379,7 @@ PLATFORMS
 DEPENDENCIES
   artsy-auth
   artsy-eventservice
+  bootsnap
   bootstrap-sass
   bourbon (= 4.2.3)
   capybara

@@ -36,6 +36,7 @@ gem 'sass-rails'
 gem 'sentry-raven' # for error reporting
 gem 'sidekiq', '4.2.9' # for sending emails in the background
 gem 'uglifier'
+gem 'bootsnap', require: false # Speed up boot time by caching expensive operations.
 
 group :development, :test do
   gem 'pry-byebug'
