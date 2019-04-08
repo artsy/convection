@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby File.read('.ruby-version')
 
-gem 'rails', '5.2.0'
+gem 'rails', '5.2.3'
 
 gem 'pg'
 gem 'puma'
@@ -36,6 +36,7 @@ gem 'sass-rails'
 gem 'sentry-raven' # for error reporting
 gem 'sidekiq', '4.2.9' # for sending emails in the background
 gem 'uglifier'
+gem 'bootsnap', require: false # Speed up boot time by caching expensive operations.
 
 group :development, :test do
   gem 'pry-byebug'
