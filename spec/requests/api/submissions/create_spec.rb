@@ -66,11 +66,12 @@ describe 'Create Submission' do
           category: 'Painting',
           minimum_price_dollars: 50_000,
           currency: 'GBP'
-        }, headers: headers
+        }, headers: headers.merge('User-Agent' => 'Eigen')
 
         expect(JSON.parse(response.body)['edition_size']).to eq 100
         expect(JSON.parse(response.body)['minimum_price_dollars']).to eq 50_000
         expect(JSON.parse(response.body)['currency']).to eq 'GBP'
+        expect(JSON.parse(response.body)['user_agent']).to eq 'Eigen'
       end.to change { Submission.count }.by(1)
     end
   end
