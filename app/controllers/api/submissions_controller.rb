@@ -59,7 +59,7 @@ module Api
         :title,
         :width,
         :year
-      )
+      ).merge(user_agent: request.user_agent)
     end
   end
 end
