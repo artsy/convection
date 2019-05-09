@@ -2,7 +2,7 @@ module Admin
   class SubmissionsController < ApplicationController
     include GraphqlHelper
 
-    before_action :set_submission, only: [:show, :edit, :update]
+    before_action :set_submission, only: [:show, :edit, :update, :undo_approval]
 
     expose(:submissions) do
       matching_submissions = Submission.all
@@ -66,6 +66,14 @@ module Admin
       else
         render 'edit'
       end
+    end
+
+    def undo_approval
+      SubmissionService.undo_approval(@submission)
+      redirect_to admin_submission_path(@submission)
+    rescue SubmissionService::SubmissionError => e
+      flash[:error] = e.message
+      redirect_to admin_submission_path(@submission)
     end
 
     def match_artist

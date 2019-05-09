@@ -58,6 +58,12 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       expect(page).to have_content 'Approved by Jon Jonson'
     end
 
+    it 'displays the undo approval link if the submission has been approved' do
+      @submission.update!(state: 'approved', approved_by: 'userid', approved_at: Time.now.utc)
+      page.visit "/admin/submissions/#{@submission.id}"
+      expect(page).to have_content 'Undo approval'
+    end
+
     it 'displays the reviewer byline if the submission has been rejected' do
       @submission.update!(state: 'rejected', rejected_by: 'userid', rejected_at: Time.now.utc)
       page.visit "/admin/submissions/#{@submission.id}"

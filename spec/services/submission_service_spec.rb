@@ -123,6 +123,28 @@ describe SubmissionService do
       expect(partner2.partner_submissions.first.notified_at).to be_nil
     end
 
+    it 'deletes partner submissions and sends no emails on an undo approval' do
+      expect(NotificationService).to receive(:post_submission_event).once.with(submission.id, 'approved')
+      Fabricate(:partner, gravity_partner_id: 'partner1')
+      Fabricate(:partner, gravity_partner_id: 'partner2')
+
+      SubmissionService.update_submission(submission, { state: 'approved' }, 'userid')
+      expect(ActionMailer::Base.deliveries.length).to eq 1
+      expect(submission.partner_submissions.length).to eq 2
+
+      SubmissionService.undo_approval(submission)
+      submission.reload
+      expect(submission.partner_submissions.length).to eq 0
+      expect(submission.state).to eq 'submitted'
+      expect(submission.approved_by).to be_nil
+      expect(submission.approved_at).to be_nil
+      expect(submission.rejected_by).to be_nil
+      expect(submission.rejected_at).to be_nil
+
+      # no new emails
+      expect(ActionMailer::Base.deliveries.length).to eq 1
+    end
+
     it 'sends a rejection notification if the submission state is changed to rejected' do
       SubmissionService.update_submission(submission, { state: 'rejected' }, 'userid')
       emails = ActionMailer::Base.deliveries

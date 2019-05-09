@@ -3,6 +3,9 @@
 Rails.application.routes.draw do
   namespace :admin do
     resources :submissions do
+      member do
+        put 'undo_approval'
+      end
       resources :assets do
         post :multiple, on: :collection
       end
