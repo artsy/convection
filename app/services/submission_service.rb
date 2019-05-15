@@ -29,6 +29,14 @@ class SubmissionService
 
     def undo_approval(submission)
       raise SubmissionError, 'Undoing approval of a submission with offers is not allowed!' if submission.offers.count.positive?
+      return_to_submitted_state(submission)
+    end
+
+    def undo_rejection(submission)
+      return_to_submitted_state(submission)
+    end
+
+    def return_to_submitted_state(submission)
       submission.update!(state: 'submitted', approved_at: nil, approved_by: nil, rejected_at: nil, rejected_by: nil)
       submission.partner_submissions.each(&:destroy)
     end

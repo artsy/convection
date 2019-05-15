@@ -70,6 +70,12 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       expect(page).to have_content 'Rejected by Jon Jonson'
     end
 
+    it 'displays the undo rejection link if the submission has been approved' do
+      @submission.update!(state: 'rejected', rejected_by: 'userid', rejected_at: Time.now.utc)
+      page.visit "/admin/submissions/#{@submission.id}"
+      expect(page).to have_content 'Undo rejection'
+    end
+
     it 'does not display partners who have not been notified' do
       expect(NotificationService).to receive(:post_submission_event).once.with(@submission.id, 'approved')
       partner1 = Fabricate(:partner, gravity_partner_id: 'partnerid')
