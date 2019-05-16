@@ -141,6 +141,60 @@ describe SubmissionService do
     end
   end
 
+  context 'undo' do
+    describe 'with approved submission' do
+      before do
+        expect(NotificationService).to receive(:post_submission_event).once.with(submission.id, 'approved')
+        Fabricate(:partner, gravity_partner_id: 'partner1')
+        Fabricate(:image, submission: submission)
+        SubmissionService.update_submission(submission, { state: 'approved' }, 'userid')
+      end
+
+      it 'deletes partner submissions and sends no emails on an undo approval' do
+        expect(submission.partner_submissions.length).to eq 1
+
+        expect { SubmissionService.undo_approval(submission) }.to_not change { ActionMailer::Base.deliveries.length }
+
+        submission.reload
+        expect(submission.partner_submissions.length).to eq 0
+        expect(submission.state).to eq 'submitted'
+        expect(submission.approved_by).to be_nil
+        expect(submission.approved_at).to be_nil
+        expect(submission.rejected_by).to be_nil
+        expect(submission.rejected_at).to be_nil
+      end
+
+      it 'fails to undo an approval if there are any offers' do
+        Fabricate(:offer, partner_submission: submission.partner_submissions.first)
+        expect { SubmissionService.undo_approval(submission) }.to raise_error(SubmissionService::SubmissionError,
+          'Undoing approval of a submission with offers is not allowed!')
+      end
+    end
+
+    describe 'with rejected submission' do
+      before do
+        Fabricate(:partner, gravity_partner_id: 'partner1')
+        Fabricate(:image, submission: submission)
+        SubmissionService.update_submission(submission, { state: 'rejected' }, 'userid')
+      end
+
+      it 'sends no emails for an undo rejection' do
+        expect(ActionMailer::Base.deliveries.length).to eq 1
+
+        SubmissionService.undo_rejection(submission)
+        submission.reload
+        expect(submission.state).to eq 'submitted'
+        expect(submission.approved_by).to be_nil
+        expect(submission.approved_at).to be_nil
+        expect(submission.rejected_by).to be_nil
+        expect(submission.rejected_at).to be_nil
+
+        # no new emails
+        expect(ActionMailer::Base.deliveries.length).to eq 1
+      end
+    end
+  end
+
   context 'notify_user' do
     describe 'with assets' do
       before do

@@ -10,6 +10,14 @@ AllCops:
     - bin/**/*
     - Gemfile
 
+# prevent warnings from         
+#   expect { PartnerSubmissionService.daily_digest }.to change { ActionMailer::Base.deliveries.length }
+# see https://github.com/rubocop-hq/rubocop/issues/4222
+
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - "spec/**/*"
+
 Style/Lambda:
   Enabled: false
 
@@ -46,7 +54,7 @@ Rails/SkipsModelValidations:
   Enabled: false
 
 Metrics/ClassLength:
-  Max: 136
+  Max: 142
 
 Metrics/ModuleLength:
   Max: 110

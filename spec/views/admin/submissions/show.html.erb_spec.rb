@@ -38,6 +38,11 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       expect(page).to have_content('Painting')
     end
 
+    it 'displays no undo links' do
+      expect(page).to_not have_content 'Undo approval'
+      expect(page).to_not have_content 'Undo rejection'
+    end
+
     it 'displays No for price in mind if there is no minimum_price' do
       within('.minimum-price') do
         expect(page).to have_content('No')
@@ -58,10 +63,24 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       expect(page).to have_content 'Approved by Jon Jonson'
     end
 
+    it 'displays the undo approval link if the submission has been approved' do
+      @submission.update!(state: 'approved', approved_by: 'userid', approved_at: Time.now.utc)
+      page.visit "/admin/submissions/#{@submission.id}"
+      expect(page).to have_content 'Undo approval'
+      expect(page).to_not have_content 'Undo rejection'
+    end
+
     it 'displays the reviewer byline if the submission has been rejected' do
       @submission.update!(state: 'rejected', rejected_by: 'userid', rejected_at: Time.now.utc)
       page.visit "/admin/submissions/#{@submission.id}"
       expect(page).to have_content 'Rejected by Jon Jonson'
+    end
+
+    it 'displays the undo rejection link if the submission has been approved' do
+      @submission.update!(state: 'rejected', rejected_by: 'userid', rejected_at: Time.now.utc)
+      page.visit "/admin/submissions/#{@submission.id}"
+      expect(page).to have_content 'Undo rejection'
+      expect(page).to_not have_content 'Undo approval'
     end
 
     it 'does not display partners who have not been notified' do
@@ -149,6 +168,59 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         expect(page).to_not have_content 'Approve'
         expect(page).to have_content('rejected')
         expect(page).to_not have_content('Create Offer')
+      end
+
+      describe 'undo actions' do
+        let(:submission2) do
+          Fabricate(:submission,
+            title: 'THE SECOND ARTWORK',
+            artist_id: 'artistid',
+            edition: true,
+            edition_size: 100,
+            edition_number: '23a',
+            category: 'Painting',
+            user: Fabricate(:user, gravity_user_id: 'userid3'),
+            state: 'submitted')
+        end
+        before do
+          partner = Fabricate(:partner, gravity_partner_id: 'partnerid')
+          Fabricate(:partner, gravity_partner_id: 'phillips')
+          stub_gravity_user(id: 'userid3')
+          stub_gravity_user_detail(id: 'userid3')
+          stub_gravity_partner(id: 'partnerid')
+          stub_gravity_partner(id: 'phillips')
+          stub_gravity_partner_contacts(partner_id: 'partnerid')
+          stub_gravity_partner_contacts(partner_id: 'phillips')
+          stub_gravity_partner_contacts(
+            partner_id: partner.gravity_partner_id,
+            override_body: [
+              { email: 'contact1@partner.com' },
+              { email: 'contact2@partner.com' }
+            ]
+          )
+          stub_gravity_partner_communications
+        end
+
+        it 'removes the work from the digest when Undo approval is clicked' do
+          expect(NotificationService).to receive(:post_submission_event).once.with(@submission.id, 'approved')
+          expect(NotificationService).to receive(:post_submission_event).once.with(submission2.id, 'approved')
+          SubmissionService.update_submission(@submission, state: 'approved')
+          SubmissionService.update_submission(submission2, state: 'approved')
+          expect(@submission.partner_submissions.count).to eq 2
+          expect(submission2.partner_submissions.count).to eq 2
+          page.visit "/admin/submissions/#{@submission.id}"
+
+          click_link 'Undo approval'
+          expect(page).to have_content 'Approve'
+          expect(@submission.partner_submissions.count).to eq 0
+          ActionMailer::Base.deliveries = []
+          expect { PartnerSubmissionService.daily_digest }.to change { ActionMailer::Base.deliveries.length }
+
+          email = ActionMailer::Base.deliveries.first
+
+          expect(email.html_part.body).to include(submission2.title)
+          expect(email.html_part.body).to_not include(@submission.title)
+        end
       end
     end
 
