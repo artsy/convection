@@ -1,9 +1,9 @@
 // Watt
 @import "watt/base";
-@import 'watt/autocomplete';
-@import 'watt/overview';
+@import "watt/autocomplete";
+@import "watt/overview";
 
-$green: #0EDA83;
+$green: #0eda83;
 
 .bold-label {
   font-family: $sans-serif;
@@ -34,23 +34,9 @@ $green: #0EDA83;
 }
 
 .sidebar-link {
-  padding-top: 5px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  width: 100%;
-
-  &:hover {
-    background-color: #F8F8F8;
-    cursor: pointer;
-  }
-
-  a:hover {
-    text-decoration: none;
-  }
-}
-
-.sidebar-link.is-active {
-  background-color: #F8F8F8;
+  font-size: 12px;
+  color: $gray-dark;
+  text-decoration: underline;
 }
 
 .watt-overview {
@@ -129,7 +115,9 @@ a.make-primary-link {
   }
 }
 
-.list-item--submission, .list-item--offer, .list-item--consignment {
+.list-item--submission,
+.list-item--offer,
+.list-item--consignment {
   display: flex;
   justify-content: space-between;
 
@@ -139,7 +127,8 @@ a.make-primary-link {
     overflow: hidden;
   }
 
-  .list-group-item-info--id, .list-group-item-info--state {
+  .list-group-item-info--id,
+  .list-group-item-info--state {
     max-width: 80px;
   }
 
@@ -171,19 +160,19 @@ a.make-primary-link {
 }
 
 .gray-background-header {
-  background-color: #F8F8F8;
+  background-color: #f8f8f8;
   padding: 4px;
 }
 
 .partners_index {
   .ui-autocomplete.ui-menu {
-    z-index: 10000
+    z-index: 10000;
   }
 }
 
 .disabled-button {
   cursor: not-allowed;
-  border-color: #F8F8F8 !important;
+  border-color: #f8f8f8 !important;
   background-color: $gray !important;
   pointer-events: none;
 }

@@ -41,6 +41,14 @@
             <div class='single-padding-top'>
               <%= @submission.state %>
             </div>
+              <div class='single-padding-top'>
+                <% if @submission.state == Submission::APPROVED %>
+                  <%= link_to 'Undo approval', undo_approval_admin_submission_path(@submission), method: :put, class: 'sidebar-link' %>
+                <% end %>
+                <% if @submission.state == Submission::REJECTED %>
+                  <%= link_to 'Undo rejection', undo_rejection_admin_submission_path(@submission), method: :put, class: 'sidebar-link' %>
+                <% end %>
+            </div>
           </div>
           <%= render 'collector_info', submission: @submission %>
           <div class='overview-section'>
