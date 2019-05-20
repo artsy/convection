@@ -26,11 +26,22 @@
         </tr>
         <tr>
           <td>
-            <% @submissions.each do |submission| %>
+            <% @users_to_submissions.each do |user, submissions| %>
               <tr>
-                <td>
-                  <%= render 'shared/email/submission_digest_block', submission: submission %>
+                <td class='consignor-header'>
+                  <p class='consignor-id'>Consignor <%= 10_000 + rand(10_000) %></p>
+                  <span class='consignor-works-count'><%= pluralize(submissions.count, 'work') %></span>
                 </td>
+              </tr>
+              <% submissions.each do |submission| %>
+                <tr>
+                  <td>
+                    <%= render 'shared/email/submission_digest_block', submission: submission %>
+                  </td>
+                </tr>
+              <% end %>
+              <tr>
+                <td class='consignor-border'><p></p></td>
               </tr>
             <% end %>
           </td>
@@ -40,7 +51,7 @@
             <table class='submission-batch-todo sans-serif'>
               <% if @partner_type == 'Auction' %>
                 <tr>
-                  <td class='email-sub-title email-sub-title--extra-padding-bottom'>
+                  <td class='email-sub-title email-sub-title--extra-padding-bottom email-sub-title--extra-padding-top'>
                     Please click below to send one proposal per submission and respond directly to this email if you have any questions.
                   </td>
                 </tr>

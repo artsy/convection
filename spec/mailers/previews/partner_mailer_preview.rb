@@ -28,12 +28,14 @@ class PartnerMailerPreview < BasePreview
   private
 
   def submission_digest_mail_params
+    sub1 = base_submission
+    sub2 = base_submission
+    sub2.user_id = 'userid2'
+    users_to_submissions = [sub1, sub2, base_submission_with_minimum_price].group_by(&:user_id)
+
     {
-      submissions: [
-        base_submission_with_minimum_price,
-        base_submission,
-        base_submission
-      ]
+      users_to_submissions: users_to_submissions,
+      submissions_count: 3
     }
   end
 end
