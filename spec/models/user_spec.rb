@@ -2,10 +2,23 @@ require 'rails_helper'
 require 'support/gravity_helper'
 
 describe User do
-  let!(:user) { Fabricate(:user, gravity_user_id: 'userid') }
+  include ActiveSupport::Testing::TimeHelpers
+
+  let(:user) { Fabricate(:user, gravity_user_id: 'userid') }
 
   it 'generates a consistent consignor number' do
-    expect(user.consignor_number).to be_a(Integer)
+    travel_to Time.zone.local(2019, 1, 1, 0, 0, 0) do
+      user.id = 1
+      expect(user.consignor_number).to eq(801)
+      user.id = 9
+      expect(user.consignor_number).to eq(809)
+    end
+
+    travel_to Time.zone.local(2019, 8, 7, 6, 5, 4) do
+      user1 = Fabricate(:user)
+      user1.id = 1
+      expect(user1.consignor_number).to eq(57_905)
+    end
   end
 
   context 'gravity_user' do
