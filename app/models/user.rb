@@ -26,4 +26,8 @@ class User < ApplicationRecord
   rescue Faraday::ResourceNotFound
     nil
   end
+
+  def consignor_number
+    created_at.to_i % 100_000 + id
+  end
 end

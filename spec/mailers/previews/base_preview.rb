@@ -24,6 +24,7 @@ class BasePreview < ActionMailer::Preview
     OpenStruct.new(
       id: '12',
       user_id: 'userid',
+      user: OpenStruct.new(consignor_number: 12),
       processed_images: [],
       images: [],
       title: 'My Favorite Artwork',

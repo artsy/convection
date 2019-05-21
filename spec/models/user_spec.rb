@@ -4,6 +4,10 @@ require 'support/gravity_helper'
 describe User do
   let!(:user) { Fabricate(:user, gravity_user_id: 'userid') }
 
+  it 'generates a consistent consignor number' do
+    expect(user.consignor_number).to be_a(Integer)
+  end
+
   context 'gravity_user' do
     it 'returns nil if it cannot find the object' do
       stub_gravity_root
