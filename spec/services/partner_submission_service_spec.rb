@@ -4,8 +4,11 @@ require 'support/gravity_helper'
 describe PartnerSubmissionService do
   before do
     @user = Fabricate(:user, gravity_user_id: 'userid')
+    @user2 = Fabricate(:user, gravity_user_id: 'userid2')
     stub_gravity_root
     stub_gravity_user
+    stub_gravity_user(id: 'userid2')
+    stub_gravity_user_detail(id: 'userid2')
     stub_gravity_user_detail
     stub_gravity_artist
     stub_gravity_partner_communications
@@ -86,12 +89,12 @@ describe PartnerSubmissionService do
           currency: 'USD')
         expect(NotificationService).to receive(:post_submission_event).once.with(@approved1.id, 'approved')
         SubmissionService.update_submission(@approved1, state: 'approved')
+        PartnerSubmissionService.daily_digest
+        @email = ActionMailer::Base.deliveries.last
       end
 
       it 'properly formats the price' do
-        PartnerSubmissionService.daily_digest
-        email = ActionMailer::Base.deliveries.last
-        expect(email.html_part.body).to include('Looking for: $50,000')
+        expect(@email.html_part.body).to include('Looking for: $50,000')
       end
     end
 
@@ -129,7 +132,7 @@ describe PartnerSubmissionService do
         @approved2 = Fabricate(:submission,
           state: 'submitted',
           artist_id: 'artistid',
-          user: @user,
+          user: @user2,
           title: 'Second approved artwork',
           year: '1993')
         @approved3 = Fabricate(:submission,
@@ -227,6 +230,15 @@ describe PartnerSubmissionService do
           expect(email_body).to include('<a href="http://foo1.jpg" style="color: #000001;">Image 2</a>')
           expect(email_body).to include('<a href="http://foo2.jpg" style="color: #000001;">Image 3</a>')
           expect(email_body).to include('<a href="http://foo3.jpg" style="color: #000001;">Image 4</a>')
+        end
+
+        it 'displays the consignor information lines' do
+          PartnerSubmissionService.daily_digest
+          emails = ActionMailer::Base.deliveries
+          email_body = emails.first.html_part.body
+          expect(email_body.decoded.scan(/Consignor \d+/).size).to eq 2
+          expect(email_body).to include('2 works')
+          expect(email_body).to include('1 work')
         end
 
         it 'sends an email digest to multiple partners' do

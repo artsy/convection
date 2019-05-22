@@ -2,7 +2,24 @@ require 'rails_helper'
 require 'support/gravity_helper'
 
 describe User do
-  let!(:user) { Fabricate(:user, gravity_user_id: 'userid') }
+  include ActiveSupport::Testing::TimeHelpers
+
+  let(:user) { Fabricate(:user, gravity_user_id: 'userid') }
+
+  it 'generates a consistent consignor number' do
+    travel_to Time.zone.local(2019, 1, 1, 0, 0, 0) do
+      user.id = 1
+      expect(user.unique_code_for_digest).to eq(801)
+      user.id = 9
+      expect(user.unique_code_for_digest).to eq(809)
+    end
+
+    travel_to Time.zone.local(2019, 8, 7, 6, 5, 4) do
+      user1 = Fabricate(:user)
+      user1.id = 1
+      expect(user1.unique_code_for_digest).to eq(57_905)
+    end
+  end
 
   context 'gravity_user' do
     it 'returns nil if it cannot find the object' do

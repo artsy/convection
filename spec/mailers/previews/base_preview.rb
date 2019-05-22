@@ -22,7 +22,9 @@ class BasePreview < ActionMailer::Preview
 
   def base_submission
     OpenStruct.new(
-      id: '12',
+      id: 12,
+      user_id: 'userid',
+      user: OpenStruct.new(unique_code_for_digest: 12),
       processed_images: [],
       images: [],
       title: 'My Favorite Artwork',
