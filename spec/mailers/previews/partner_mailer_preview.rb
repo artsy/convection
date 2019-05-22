@@ -30,7 +30,7 @@ class PartnerMailerPreview < BasePreview
   def submission_digest_mail_params
     sub1 = base_submission
     sub2 = base_submission
-    sub2.user = OpenStruct.new(consignor_number: 12_312)
+    sub2.user = OpenStruct.new(unique_code_for_digest: 12_312)
     users_to_submissions = [sub1, sub2, base_submission_with_minimum_price].group_by(&:user)
 
     {

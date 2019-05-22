@@ -27,7 +27,7 @@ class User < ApplicationRecord
     nil
   end
 
-  def consignor_number
-    created_at.to_i % 100_000 + id
+  def unique_code_for_digest
+    created_at.to_i % 100_000 + id + (submissions.first&.id || 0)
   end
 end

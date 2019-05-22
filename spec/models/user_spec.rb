@@ -9,15 +9,15 @@ describe User do
   it 'generates a consistent consignor number' do
     travel_to Time.zone.local(2019, 1, 1, 0, 0, 0) do
       user.id = 1
-      expect(user.consignor_number).to eq(801)
+      expect(user.unique_code_for_digest).to eq(801)
       user.id = 9
-      expect(user.consignor_number).to eq(809)
+      expect(user.unique_code_for_digest).to eq(809)
     end
 
     travel_to Time.zone.local(2019, 8, 7, 6, 5, 4) do
       user1 = Fabricate(:user)
       user1.id = 1
-      expect(user1.consignor_number).to eq(57_905)
+      expect(user1.unique_code_for_digest).to eq(57_905)
     end
   end
 
