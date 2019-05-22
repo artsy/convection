@@ -96,11 +96,6 @@ describe PartnerSubmissionService do
       it 'properly formats the price' do
         expect(@email.html_part.body).to include('Looking for: $50,000')
       end
-
-      it 'displays the consignor information lines' do
-        expect(@email.html_part.body).to match(/Consignor \d+/)
-        expect(@email.html_part.body).to include('1 work')
-      end
     end
 
     context 'with one submission without a minimum price' do
