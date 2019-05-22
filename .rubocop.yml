@@ -46,6 +46,8 @@ Metrics/AbcSize:
 
 Metrics/MethodLength:
   Max: 33
+  Exclude:
+    - spec/mailers/previews/*
 
 Metrics/CyclomaticComplexity:
   Max: 8

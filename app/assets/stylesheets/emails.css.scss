@@ -508,6 +508,24 @@ table.bordered-email {
       width: 100%;
     }
 
+    td.consignor-header {
+      font-size: 14px;
+      line-height: 17px;
+      color: #808080;
+      border-top: 1px solid #e5e5e5;
+
+      p.consignor-id {
+        color: #000000;
+        font-weight: bold;
+        margin-top: 30px;
+        margin-bottom: 4px;  
+      }
+    }
+
+    td.consignor-border {
+      margin-bottom: 20px;
+    }
+ 
     .email-title {
       padding-bottom: 0px;
     }
@@ -530,14 +548,12 @@ table.bordered-email {
       font-size: 16px;
       color: gray;
       font-family: sans-serif;
-      padding-bottom: 16px;
+      padding-bottom: 30px;
     }
 
     .submission-digest-block {
       width: 100%;
       max-width: 600px;
-
-      border-top: 1px solid #e5e5e5;
 
       .two-column {
         text-align: left;
@@ -574,6 +590,10 @@ table.bordered-email {
           font-size: 14px;
         }
       }
+    }
+
+    table.submission-batch-todo {
+      border-top: 1px solid #e5e5e5;
     }
 
     table.image-links-table {

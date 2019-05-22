@@ -49,11 +49,13 @@ class PartnerSubmissionService
     def deliver_partner_contact_email(submission_ids, partner_name, partner_type, email)
       submissions = Submission.find(submission_ids)
       return if submissions.empty?
+      users_to_submissions = submissions.group_by(&:user)
       PartnerMailer.submission_digest(
-        submissions: submissions,
+        users_to_submissions: users_to_submissions,
         partner_name: partner_name,
         partner_type: partner_type,
-        email: email
+        email: email,
+        submissions_count: submissions.count
       ).deliver_now
     end
 
