@@ -36,7 +36,6 @@ $ ->
     geminiOptions =
       geminiApp: window.GEMINI_APP
       acl: 'private'
-      s3Key: window.GEMINI_S3_KEY
       templateKey: window.GEMINI_ACCOUNT_KEY
       geminiKey: window.GEMINI_ACCOUNT_KEY
       metadata: metadata
