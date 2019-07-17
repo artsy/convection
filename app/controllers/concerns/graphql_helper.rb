@@ -2,7 +2,7 @@ module GraphqlHelper
   extend ActiveSupport::Concern
 
   ARTISTS_DETAILS_QUERY = %|
-  query artistsDetails($ids: [ID]!){
+  query artistsDetails($ids: [ID!]!){
     artists(ids: $ids){
       id
       name
@@ -11,7 +11,7 @@ module GraphqlHelper
   |.freeze
 
   MATCH_PARTNERS_QUERY = %|
-  query matchPartners($term: String) {
+  query matchPartners($term: String!) {
     match_partners(term: $term){
       id
       given_name
