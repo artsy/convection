@@ -49,7 +49,7 @@ end
 
 group :test do
   gem 'capybara'
-  gem 'webdrivers', '~> 4.0'
+  gem 'webdrivers', '~> 4.1'
   gem 'database_cleaner'
   gem 'fabrication'
   gem 'rack_session_access'
