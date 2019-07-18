@@ -151,6 +151,7 @@ GEM
       uri_template
     i18n (1.0.1)
       concurrent-ruby (~> 1.0)
+    jaro_winkler (1.5.3)
     jquery-rails (4.3.3)
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
@@ -208,15 +209,14 @@ GEM
     omniauth-oauth2 (1.5.0)
       oauth2 (~> 1.1)
       omniauth (~> 1.2)
-    parallel (1.12.1)
-    parser (2.5.1.0)
+    parallel (1.17.0)
+    parser (2.6.3.0)
       ast (~> 2.4.0)
     pg (1.0.0)
     pg_search (2.1.2)
       activerecord (>= 4.2)
       activesupport (>= 4.2)
       arel (>= 6)
-    powerpack (0.1.1)
     premailer (1.11.1)
       addressable
       css_parser (>= 1.6.0)
@@ -297,14 +297,14 @@ GEM
       rspec-mocks (~> 3.7.0)
       rspec-support (~> 3.7.0)
     rspec-support (3.7.1)
-    rubocop (0.54.0)
+    rubocop (0.73.0)
+      jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
-      parser (>= 2.5)
-      powerpack (~> 0.1)
+      parser (>= 2.6)
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
-      unicode-display_width (~> 1.0, >= 1.0.1)
-    ruby-progressbar (1.9.0)
+      unicode-display_width (>= 1.4.0, < 1.7)
+    ruby-progressbar (1.10.1)
     ruby_parser (3.11.0)
       sexp_processor (~> 4.9)
     rubyzip (1.2.2)
@@ -349,7 +349,7 @@ GEM
       thread_safe (~> 0.1)
     uglifier (4.1.20)
       execjs (>= 0.3.0, < 3)
-    unicode-display_width (1.3.2)
+    unicode-display_width (1.6.0)
     uri_template (0.7.0)
     webdrivers (4.1.0)
       nokogiri (~> 1.6)
@@ -404,7 +404,7 @@ DEPENDENCIES
   rails-controller-testing
   rails_param
   rspec-rails
-  rubocop (= 0.54.0)
+  rubocop (= 0.73.0)
   sass-rails
   selenium-webdriver
   sentry-raven

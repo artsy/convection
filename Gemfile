@@ -44,7 +44,7 @@ end
 
 group :development do
   gem 'foreman'
-  gem 'rubocop', '0.54.0'
+  gem 'rubocop', '0.73.0'
 end
 
 group :test do
