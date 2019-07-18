@@ -57,7 +57,7 @@ GEM
       omniauth-artsy (>= 0.2.2)
       omniauth-oauth2
       rails (>= 4.2.0)
-    artsy-eventservice (1.0.8)
+    artsy-eventservice (1.0.9)
       bunny
     ast (2.4.0)
     autoprefixer-rails (9.5.1)
@@ -71,8 +71,8 @@ GEM
       sass (~> 3.4)
       thor
     builder (3.2.3)
-    bunny (2.9.2)
-      amq-protocol (~> 2.3.0)
+    bunny (2.14.2)
+      amq-protocol (~> 2.3, >= 2.3.0)
     byebug (10.0.2)
     capybara (2.18.0)
       addressable
