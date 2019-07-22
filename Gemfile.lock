@@ -186,9 +186,8 @@ GEM
     multi_json (1.13.1)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
-    neat (1.7.2)
-      bourbon (>= 4.0)
-      sass (>= 3.3)
+    neat (4.0.0)
+      thor (~> 0.19)
     net-http-digest_auth (1.4.1)
     newrelic_rpm (5.1.0.344)
     nio4r (2.3.1)
@@ -390,7 +389,7 @@ DEPENDENCIES
   jquery-rails
   kaminari
   money
-  neat (= 1.7.2)
+  neat (= 4.0.0)
   newrelic_rpm
   pg
   pg_search
