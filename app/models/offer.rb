@@ -1,6 +1,6 @@
 class Offer < ApplicationRecord
   include ReferenceId
-  include PgSearch
+  include PgSearch::Model
   include Currency
   include Dollarize
   include Percentize

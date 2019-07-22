@@ -1,7 +1,7 @@
 class Submission < ApplicationRecord
   include Currency
   include Dollarize
-  include PgSearch
+  include PgSearch::Model
 
   pg_search_scope :search,
     against: [:id, :title],

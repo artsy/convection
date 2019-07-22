@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
 
   validates :gravity_user_id, presence: true, uniqueness: true
 

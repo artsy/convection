@@ -4,7 +4,7 @@ jobs:
   build:
     working_directory: ~/convection
     docker:
-      - image: artsy/ruby:2.5.1-node-chrome
+      - image: artsy/ruby:2.6.2-node-chrome
         environment:
           RAILS_ENV: test
       - image: circleci/postgres:9.6-alpine
@@ -18,8 +18,6 @@ jobs:
         key: convection-bundler-{{ checksum "Gemfile.lock" }}
         paths:
           - vendor/bundle
-
-      - run: chromedriver-update 2.37
 
       - run: mv config/database{.circle,}.yml
       - run:
