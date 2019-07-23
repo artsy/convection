@@ -15,7 +15,7 @@ gem 'watt', watt_gem_spec # artsy bootstrap
 gem 'artsy-auth'
 gem 'artsy-eventservice' # for posting events to artsy event stream
 gem 'bootstrap-sass' # required for watt
-gem 'bourbon', '4.2.3' # required for watt
+gem 'bourbon', '6.0.0' # required for watt
 gem 'coffee-rails' # required for watt
 gem 'decent_exposure' # for safely referencing variables in views
 gem 'graphiql-rails', '1.7.0' # A lovely interface to the API

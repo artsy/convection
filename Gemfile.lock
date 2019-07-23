@@ -67,9 +67,8 @@ GEM
     bootstrap-sass (3.4.1)
       autoprefixer-rails (>= 5.2.1)
       sassc (>= 2.0.0)
-    bourbon (4.2.3)
-      sass (~> 3.4)
-      thor
+    bourbon (6.0.0)
+      thor (~> 0.19)
     builder (3.2.3)
     bunny (2.14.2)
       amq-protocol (~> 2.3, >= 2.3.0)
@@ -376,7 +375,7 @@ DEPENDENCIES
   artsy-eventservice
   bootsnap
   bootstrap-sass
-  bourbon (= 4.2.3)
+  bourbon (= 6.0.0)
   capybara
   coffee-rails
   database_cleaner
