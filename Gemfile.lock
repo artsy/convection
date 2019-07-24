@@ -263,7 +263,7 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.0.4)
       loofah (~> 2.2, >= 2.2.2)
-    rails_param (0.10.0)
+    rails_param (0.10.2)
     railties (5.2.3)
       actionpack (= 5.2.3)
       activesupport (= 5.2.3)
