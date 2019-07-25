@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/artsy/watt.git
-  revision: 5cf4359914ae70a2996c3f9978c7a19ae6a7db97
+  revision: 15ca4bfb270a0835d29ed418b418c4b3ebf4530c
   branch: master
   specs:
     watt (0.0.9)
