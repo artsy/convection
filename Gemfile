@@ -18,7 +18,7 @@ gem 'bootstrap-sass' # required for watt
 gem 'bourbon', '4.2.3' # required for watt
 gem 'coffee-rails' # required for watt
 gem 'decent_exposure' # for safely referencing variables in views
-gem 'graphiql-rails', '1.4.8' # A lovely interface to the API
+gem 'graphiql-rails', '1.7.0' # A lovely interface to the API
 gem 'graphql' # A lovely API
 gem 'haml-rails' # required for watt layouts
 gem 'hyperclient' # consume Gravity's v2 API
@@ -33,7 +33,7 @@ gem 'rack-cors' # to allow cross-origin requests
 gem 'rails_param' # validate and coerce API parameters
 gem 'sass-rails'
 gem 'sentry-raven' # for error reporting
-gem 'sidekiq', '4.2.9' # for sending emails in the background
+gem 'sidekiq', '5.2.7' # for sending emails in the background
 gem 'uglifier'
 gem 'bootsnap', require: false # Speed up boot time by caching expensive operations.
 
