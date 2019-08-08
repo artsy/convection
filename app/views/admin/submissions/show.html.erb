@@ -36,9 +36,9 @@
             </div>
             <div>
               <% if @submission.deleted_at.nil? %>
-                <%= link_to 'Delete submission', admin_submission_path(@submission, submission: { deleted_at: Time.now }), method: :put%>
+                <%= link_to 'Delete submission', admin_submission_path(@submission, submission: { deleted_at: Time.now }), method: :put, class: 'sidebar-link' %>
               <% else %>
-                <%= link_to 'Undelete submission', admin_submission_path(@submission, submission: { deleted_at: nil }), method: :put%>
+                <%= link_to 'Undelete submission', admin_submission_path(@submission, submission: { deleted_at: nil }), method: :put, class: 'sidebar-link' %>
               <% end %>
             </div>
           </div>
