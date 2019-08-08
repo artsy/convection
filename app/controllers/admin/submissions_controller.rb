@@ -113,6 +113,7 @@ module Admin
         :authenticity_certificate,
         :category,
         :currency,
+        :deleted_at,
         :depth,
         :dimensions_metric,
         :edition_number,

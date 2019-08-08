@@ -32,7 +32,14 @@
         <div class='watt-overview'>
           <div class='overview-section'>
             <div class='overview-section-title--inline'>
-              Submission #<%= @submission.id %>
+              Submission #<%= @submission.id %> <%= @submission.deleted_at.nil? ? nil : "(Deleted)" %>
+            </div>
+            <div>
+              <% if @submission.deleted_at.nil? %>
+                <%= link_to 'Delete submission', admin_submission_path(@submission, submission: { deleted_at: Time.now }), method: :put%>
+              <% else %>
+                <%= link_to 'Undelete submission', admin_submission_path(@submission, submission: { deleted_at: nil }), method: :put%>
+              <% end %>
             </div>
           </div>
           <%= render 'state_actions' %>
