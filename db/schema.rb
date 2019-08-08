@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_08_181209) do
+ActiveRecord::Schema.define(version: 2019_08_08_142434) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -141,6 +141,7 @@ ActiveRecord::Schema.define(version: 2019_04_08_181209) do
     t.bigint "minimum_price_cents"
     t.string "currency"
     t.string "user_agent"
+    t.boolean "marked_as_deleted"
     t.index ["consigned_partner_submission_id"], name: "index_submissions_on_consigned_partner_submission_id"
     t.index ["ext_user_id"], name: "index_submissions_on_ext_user_id"
     t.index ["primary_image_id"], name: "index_submissions_on_primary_image_id"
