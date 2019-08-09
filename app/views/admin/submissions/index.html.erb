@@ -58,9 +58,7 @@
         </div>
       </div>
       <% submissions.each do |submission| %>
-        <% if submission.deleted_at.nil? %>
-          <%= render 'admin/submissions/submission', submission: submission, artist: artist_details&.dig(submission.artist_id) %>
-        <% end %>
+        <%= render 'admin/submissions/submission', submission: submission, artist: artist_details&.dig(submission.artist_id) %>
       <% end %>
     </div>
     <%= render 'shared/watt/paginator', total_items_count: submissions.total_count, items_count: submissions.length, per_page: size, current_page: page, base_url: admin_submissions_url(filters) %>

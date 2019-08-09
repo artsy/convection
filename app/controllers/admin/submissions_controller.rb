@@ -5,7 +5,7 @@ module Admin
     before_action :set_submission, only: [:show, :edit, :update, :undo_approval, :undo_rejection]
 
     expose(:submissions) do
-      matching_submissions = Submission.all
+      matching_submissions = Submission.not_deleted
       matching_submissions = matching_submissions.search(params[:term]) if params[:term].present?
       matching_submissions = matching_submissions.where(state: params[:state]) if params[:state].present?
       matching_submissions = matching_submissions.where(user_id: params[:user]) if params[:user].present?
