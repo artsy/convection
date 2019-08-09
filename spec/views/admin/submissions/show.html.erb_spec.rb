@@ -41,6 +41,11 @@ describe 'admin/submissions/show.html.erb', type: :feature do
     it 'displays no undo links' do
       expect(page).to_not have_content 'Undo approval'
       expect(page).to_not have_content 'Undo rejection'
+      expect(page).to_not have_content 'Undelete submission'
+    end
+
+    it 'displays a delete submission link' do
+      expect(page).to have_content('Delete submission')
     end
 
     it 'displays No for price in mind if there is no minimum_price' do
@@ -68,6 +73,13 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       page.visit "/admin/submissions/#{@submission.id}"
       expect(page).to have_content 'Undo approval'
       expect(page).to_not have_content 'Undo rejection'
+    end
+
+    it 'displays the undelete submission link and informs the user the submission is deleted if the submission has been deleted' do
+      @submission.update!(deleted_at: Time.now.utc)
+      page.visit "/admin/submissions/#{@submission.id}"
+      expect(page).to have_content 'Undelete submission'
+      expect(page).to have_content '(Deleted)'
     end
 
     it 'displays the reviewer byline if the submission has been rejected' do
