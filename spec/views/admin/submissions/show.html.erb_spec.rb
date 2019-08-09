@@ -79,7 +79,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       @submission.update!(deleted_at: Time.now.utc)
       page.visit "/admin/submissions/#{@submission.id}"
       expect(page).to have_content 'Undelete submission'
-      expect(page).to have_content "(Deleted)"
+      expect(page).to have_content '(Deleted)'
     end
 
     it 'displays the reviewer byline if the submission has been rejected' do
