@@ -32,6 +32,13 @@ describe Admin::SubmissionsController, type: :controller do
         @submission3 = Fabricate(:submission, state: 'submitted', title: 'another artwork', user: @user2)
         @submission4 = Fabricate(:submission, state: 'approved', title: 'zzz', user: @user2)
         @submission5 = Fabricate(:submission, state: 'approved', title: 'aaa', user: @user2)
+        @deleted_submission = Fabricate(:submission, state: 'submitted', title: 'deleted submission', user: @user2, deleted_at: Time.now.utc)
+      end
+
+      it 'does not return deleted submissions' do
+        get :index
+        expect(controller.submissions.count).to eq 5
+        expect(controller.submissions).not_to include(@deleted_submission)
       end
 
       describe 'filtering the index view' do
