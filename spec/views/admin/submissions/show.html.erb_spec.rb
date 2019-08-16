@@ -146,6 +146,18 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       expect(page).to_not have_selector('.list-item--consignment')
     end
 
+    it 'sets deleted_at if the user clicks delete submission' do
+      click_link 'Delete submission'
+      expect(@submission.reload.deleted_at).to_not be_nil
+    end
+
+    it 'sets deleted_at to nil if the user clicks undelete submission on a deleted submission' do
+      @submission.update!(deleted_at: Time.now.utc)
+      page.visit "/admin/submissions/#{@submission.id}"
+      click_link 'Undelete submission'
+      expect(@submission.reload.deleted_at).to be_nil
+    end
+
     context 'unreviewed submission' do
       it 'displays buttons to approve/reject if the submission is not yet reviewed' do
         expect(page).to have_content('Approve')
