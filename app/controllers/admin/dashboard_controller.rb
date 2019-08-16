@@ -3,7 +3,7 @@ module Admin
     include GraphqlHelper
 
     expose(:submissions) do
-      Submission.submitted.order(id: :desc).take(4)
+      Submission.not_deleted.submitted.order(id: :desc).take(4)
     end
 
     expose(:offers) do
@@ -15,7 +15,7 @@ module Admin
     end
 
     expose(:submissions_count) do
-      Submission.submitted.count
+      Submission.not_deleted.submitted.count
     end
 
     expose(:offers_count) do
