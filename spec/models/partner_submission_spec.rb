@@ -40,5 +40,11 @@ describe PartnerSubmission do
         .to change { Submission.count }.by(0)
                                        .and change { Offer.count }.by(-1)
     end
+
+    it 'nullifies consigned_partner_submission_id on offer' do
+      submission = partner_submission.submission
+      partner_submission.destroy
+      expect(submission.reload.consigned_partner_submission_id).to be_nil
+    end
   end
 end

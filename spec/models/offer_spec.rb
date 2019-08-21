@@ -153,6 +153,7 @@ describe Offer do
       offer.destroy
       expect(submission.reload).to be_present
       expect(partner_submission.reload).to be_present
+      expect(partner_submission.accepted_offer_id).to be_nil
     end
   end
 end
