@@ -117,4 +117,16 @@ describe Submission do
       expect(submission.thumbnail).to eq 'https://thumb.jpg'
     end
   end
+
+  context 'real deletion (destroy)' do
+    it 'deletes associated partner submissions and offers' do
+      Fabricate(:partner_submission, submission: submission)
+      Fabricate(:offer, submission: submission)
+      expect do
+        submission.destroy
+      end
+        .to change { PartnerSubmission.count }.by(-1)
+                                              .and change { Offer.count }.by(-1)
+    end
+  end
 end

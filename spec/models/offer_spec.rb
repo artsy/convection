@@ -145,4 +145,14 @@ describe Offer do
       expect(offer.commission_percent_whole).to eq 12.25
     end
   end
+
+  describe 'Deletion' do
+    it 'does not delete associated submission or partner submissions' do
+      submission = offer.submission
+      partner_submission = offer.partner_submission
+      offer.destroy
+      expect(submission.reload).to be_present
+      expect(partner_submission.reload).to be_present
+    end
+  end
 end
