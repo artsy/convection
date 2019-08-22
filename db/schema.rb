@@ -10,10 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_08_142434) do
+ActiveRecord::Schema.define(version: 2019_08_20_201521) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
 
@@ -157,12 +156,12 @@ ActiveRecord::Schema.define(version: 2019_08_08_142434) do
   end
 
   add_foreign_key "assets", "submissions"
-  add_foreign_key "offers", "partner_submissions"
-  add_foreign_key "offers", "submissions"
-  add_foreign_key "partner_submissions", "offers", column: "accepted_offer_id"
+  add_foreign_key "offers", "partner_submissions", on_delete: :cascade
+  add_foreign_key "offers", "submissions", on_delete: :cascade
+  add_foreign_key "partner_submissions", "offers", column: "accepted_offer_id", on_delete: :nullify
   add_foreign_key "partner_submissions", "partners"
   add_foreign_key "partner_submissions", "submissions"
   add_foreign_key "submissions", "assets", column: "primary_image_id", on_delete: :nullify
-  add_foreign_key "submissions", "partner_submissions", column: "consigned_partner_submission_id"
+  add_foreign_key "submissions", "partner_submissions", column: "consigned_partner_submission_id", on_delete: :nullify
   add_foreign_key "submissions", "users"
 end

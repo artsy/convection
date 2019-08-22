@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'support/gravity_helper'
 
 describe PartnerSubmission do
-  let(:ps) { Fabricate(:partner_submission) }
+  let(:partner_submission) { Fabricate(:partner_submission) }
 
   context 'state' do
     it 'allows only certain states' do
@@ -12,14 +12,13 @@ describe PartnerSubmission do
     end
 
     it 'sets the default to open' do
-      ps = PartnerSubmission.create!
-      expect(ps.state).to eq 'open'
+      expect(partner_submission.state).to eq 'open'
     end
   end
 
   context 'reference_id' do
     it 'generates a reference id when creating the object' do
-      expect(ps.reference_id).to_not be_nil
+      expect(partner_submission.reference_id).to_not be_nil
     end
   end
 
@@ -29,6 +28,23 @@ describe PartnerSubmission do
       expect(PartnerSubmission.new(currency: 'USD')).to be_valid
       expect(PartnerSubmission.new(currency: 'EUR')).to be_valid
       expect(PartnerSubmission.new(currency: 'GBP')).to be_valid
+    end
+  end
+
+  context 'deletion' do
+    it 'deletes associated offers, but not the submission' do
+      Fabricate(:offer, submission: partner_submission.submission, partner_submission: partner_submission)
+      expect do
+        partner_submission.destroy
+      end
+        .to change { Submission.count }.by(0)
+                                       .and change { Offer.count }.by(-1)
+    end
+
+    it 'nullifies consigned_partner_submission_id on offer' do
+      submission = partner_submission.submission
+      partner_submission.destroy
+      expect(submission.reload.consigned_partner_submission_id).to be_nil
     end
   end
 end
