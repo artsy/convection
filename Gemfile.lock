@@ -123,7 +123,7 @@ GEM
     graphiql-rails (1.7.0)
       railties
       sprockets-rails
-    graphql (1.9.13)
+    graphql (1.9.14)
     haml (5.1.1)
       temple (>= 0.8.0)
       tilt
