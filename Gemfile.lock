@@ -94,7 +94,7 @@ GEM
     connection_pool (2.2.2)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    crass (1.0.4)
+    crass (1.0.5)
     css_parser (1.7.0)
       addressable
     database_cleaner (1.7.0)
@@ -167,7 +167,7 @@ GEM
       activerecord
       kaminari-core (= 1.1.1)
     kaminari-core (1.1.1)
-    loofah (2.3.0)
+    loofah (2.3.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
