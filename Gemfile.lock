@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/artsy/watt.git
-  revision: 15ca4bfb270a0835d29ed418b418c4b3ebf4530c
+  revision: b005e0d4fa4bcc4d3d101494480269aac9a2071e
   branch: master
   specs:
     watt (0.0.9)
@@ -94,7 +94,7 @@ GEM
     connection_pool (2.2.2)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    crass (1.0.4)
+    crass (1.0.5)
     css_parser (1.7.0)
       addressable
     database_cleaner (1.7.0)
@@ -123,7 +123,7 @@ GEM
     graphiql-rails (1.7.0)
       railties
       sprockets-rails
-    graphql (1.9.14)
+    graphql (1.9.15)
     haml (5.1.1)
       temple (>= 0.8.0)
       tilt
@@ -167,7 +167,7 @@ GEM
       activerecord
       kaminari-core (= 1.1.1)
     kaminari-core (1.1.1)
-    loofah (2.3.0)
+    loofah (2.3.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -327,10 +327,10 @@ GEM
     selenium-webdriver (3.142.6)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
-    sentry-raven (2.12.0)
+    sentry-raven (2.12.2)
       faraday (>= 0.7.6, < 1.0)
     sexp_processor (4.12.1)
-    sidekiq (6.0.2)
+    sidekiq (6.0.3)
       connection_pool (>= 2.2.2)
       rack (>= 2.0.0)
       rack-protection (>= 2.0.0)
@@ -408,7 +408,7 @@ DEPENDENCIES
   sass-rails
   selenium-webdriver
   sentry-raven
-  sidekiq (= 6.0.2)
+  sidekiq (= 6.0.3)
   uglifier
   watt!
   webdrivers (~> 4.1)
