@@ -1,9 +1,18 @@
 ---
-version: '2'
+version: "2"
 services:
   convection:
-    command: ["bundle", "exec", "rspec"]
-    env_file: .env.test
+    command: ./hokusai/ci.sh
+    environment:
+      - RAILS_ENV=test
+      - DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true
+      - DATABASE_URL=postgresql://postgres:@convection-postgres/convection_test
     extends:
       file: build.yml
       service: convection
+    depends_on:
+      - convection-postgres
+  convection-postgres:
+    image: postgres:9.5-alpine
+    environment:
+      - POSTGRES_DB=convection_test

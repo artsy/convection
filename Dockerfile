@@ -1,8 +1,18 @@
-FROM ruby:latest
+FROM ruby:2.6.2-alpine
 ENV LANG C.UTF-8
+ARG BUNDLE_GITHUB__COM
 
 # Set up nodejs and dumb-init
-RUN apt-get update -qq && apt-get install -y nodejs dumb-init && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apk update && apk --no-cache --quiet add \
+  bash \
+  build-base \
+  dumb-init \
+  git \
+  nodejs \
+  postgresql-dev \
+  postgresql-client \
+  tzdata \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN gem install bundler
 
@@ -16,6 +26,7 @@ RUN mkdir /app
 WORKDIR /tmp
 ADD Gemfile Gemfile
 ADD Gemfile.lock Gemfile.lock
+ADD .ruby-version .ruby-version
 RUN bundle install -j4
 
 # Finally, add the rest of our app's code
