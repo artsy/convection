@@ -1,60 +1,44 @@
-version: 2
+version: 2.1
 
-jobs:
-  build:
-    working_directory: ~/convection
-    docker:
-      - image: artsy/ruby:2.6.2-node-chrome
-        environment:
-          RAILS_ENV: test
-      - image: circleci/postgres:9.6-alpine
-    steps:
-      - run: gem install bundler
-      - checkout
-      - type: cache-restore
-        key: convection-bundler-{{ checksum "Gemfile.lock" }}
-      - run: bundle install --path vendor/bundle
-      - type: cache-save
-        key: convection-bundler-{{ checksum "Gemfile.lock" }}
-        paths:
-          - vendor/bundle
+orbs:
+  hokusai: artsy/hokusai@0.7.0
 
-      - run: mv config/database{.circle,}.yml
-      - run:
-          name: Wait for Postgres
-          command: ./ci/wait-for-postgres.sh
-      - run: bundle exec rake db:create db:migrate
-      - run: bundle exec rake
+not_staging_or_release: &not_staging_or_release
+  filters:
+    branches:
+      ignore:
+        - staging
+        - release
 
-  deploy-staging:
-    docker:
-      - image: buildpack-deps:trusty
-    steps:
-      - checkout
-      - run: git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/convection-staging.git $CIRCLE_SHA1:master
+only_master: &only_master
+  context: hokusai
+  filters:
+    branches:
+      only: master
 
-  deploy-production:
-    docker:
-      - image: buildpack-deps:trusty
-    steps:
-      - checkout
-      - run: git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/convection-production.git $CIRCLE_SHA1:master
-
+only_release: &only_release
+  context: hokusai
+  filters:
+    branches:
+      only: release
 
 workflows:
-  version: 2
   build-deploy:
     jobs:
-      - build
-      - deploy-staging:
+      - hokusai/test:
+          <<: *not_staging_or_release
+
+      - hokusai/push:
+          name: push-staging-image
+          <<: *only_master
           requires:
-            - build
-          filters:
-            branches:
-              only: master
-      - deploy-production:
+            - hokusai/test
+
+      - hokusai/deploy-staging:
+          <<: *only_master
+          project-name: convection
           requires:
-            - build
-          filters:
-            branches:
-              only: release
+            - push-staging-image
+
+      - hokusai/deploy-production:
+          <<: *only_release
