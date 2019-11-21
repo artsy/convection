@@ -25,7 +25,7 @@ retry() {
   bundle exec rake db:migrate
 
   # run specs
-  bundle exec rake spec
+  bundle exec rake
 }
 
 retry 1>&2 ${MAX_ATTEMPTS:-5} ${RETRY_DELAY_SECONDS:-1} psql ${DATABASE_URL} -c '\l'
