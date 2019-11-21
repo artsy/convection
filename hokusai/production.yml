@@ -153,3 +153,66 @@ spec:
     component: web
   sessionAffinity: None
   type: LoadBalancer
+
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: convection-partners-update
+spec:
+  schedule: "0 2 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: convection-partners-update
+              image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/convection:production
+              command: ["rake", "partners:update"]
+              imagePullPolicy: Always
+              envFrom:
+                - configMapRef:
+                    name: convection-environment
+          restartPolicy: Never
+          affinity:
+            nodeAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+                - weight: 1
+                  preference:
+                    matchExpressions:
+                      - key: tier
+                        operator: In
+                        values:
+                          - background
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: convection-partners-daily-digest
+spec:
+  schedule: "0 3 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: convection-partners-daily-digest
+              image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/convection:production
+              command: ["rake", "partners:daily_digest"]
+              imagePullPolicy: Always
+              envFrom:
+                - configMapRef:
+                    name: convection-environment
+          restartPolicy: Never
+          affinity:
+            nodeAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+                - weight: 1
+                  preference:
+                    matchExpressions:
+                      - key: tier
+                        operator: In
+                        values:
+                          - background
