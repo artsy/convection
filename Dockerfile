@@ -31,7 +31,6 @@ RUN bundle install -j4 && \
 
 COPY . ./
 
-# Setup Rails shared folders for Puma
 RUN bundle exec rake assets:precompile && \
   chown -R deploy:deploy ./
 
