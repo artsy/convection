@@ -33,7 +33,7 @@ gem 'rack-cors' # to allow cross-origin requests
 gem 'rails_param' # validate and coerce API parameters
 gem 'sass-rails'
 gem 'sentry-raven' # for error reporting
-gem 'sidekiq', '6.0.3' # for sending emails in the background
+gem 'sidekiq', '<6' # for sending emails in the background (<6 necessary for Redis 3 compatibility)
 gem 'uglifier'
 gem 'bootsnap', require: false # Speed up boot time by caching expensive operations.
 
