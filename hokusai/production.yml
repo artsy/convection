@@ -245,7 +245,7 @@ spec:
   template:
     metadata:
       labels:
-        app: latconvectiontice
+        app: convection
         layer: application
         component: sidekiq
       name: convection-sidekiq
