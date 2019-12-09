@@ -1,9 +1,9 @@
 require 'ddtrace'
 
 Datadog.configure do |c|
-  enabled = ENV['DATADOG_TRACE_AGENT_HOSTNAME'].present?
-  hostname = ENV['DATADOG_TRACE_AGENT_HOSTNAME']
-  debug = ENV['DATADOG_DEBUG'] == 'true'
+  enabled = Convection.config[:datadog_trace_agent_hostname].present?
+  hostname = Convection.config[:datadog_trace_agent_hostname]
+  debug = Convection.config[:datadog_debug] == 'true'
 
   c.tracer enabled: enabled, hostname: hostname, distributed_tracing: true, debug: debug
   c.use :rails, service_name: 'convection', controller_service: 'convection.controller', cache_service: 'convection.cache'
