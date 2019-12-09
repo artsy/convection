@@ -15,7 +15,7 @@ Convection.config = OpenStruct.new(
   contact_phone_number: ENV['CONTACT_PHONE_NUMBER'] || '+1 (646) 712-8154',
   convection_url: ENV['CONVECTION_URL'] || 'https://convection-staging.artsy.net',
   datadog_trace_agent_hostname: ENV['DATADOG_TRACE_AGENT_HOSTNAME'],
-  datadog_debug: ENV['DATADOG_DEBUG'],
+  datadog_debug: ENV['DATADOG_DEBUG'] == 'true',
   debug_email_address: ENV['DEBUG_EMAIL_ADDRESS'] || 'sarah@artsymail.com',
   gemini_account_key: ENV['GEMINI_ACCOUNT_KEY'] || 'convection-staging',
   gemini_app: ENV['GEMINI_APP'] || 'https://media.artsy.net',
