@@ -58,3 +58,5 @@ group :test do
   gem 'webmock' # mock or forbid external network requests
   gem 'yarjuf' # formatting for test reports on CircleCI
 end
+
+gem "ddtrace", "~> 0.30.0"
