@@ -5,7 +5,7 @@
     </div>
   </div>
   <% if asset.asset_type == 'image' %>
-    <% if asset.image_urls['thumbnail'].present? %>
+    <% if asset.image_urls['thumbnail'].present? && image_tag asset.image_urls['square'].present? %>
       <div class='list-group-item-content'>
         <div class='asset-thumb'>
           <%= image_tag asset.image_urls['square'] %>
