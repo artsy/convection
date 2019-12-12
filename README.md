@@ -4,15 +4,13 @@ Convection is the application that powers our consignments workflow, enabling
 users to submit works to consign through Artsy partners. For now, it
 encapsulates logic from [rothko-api] and [rothko-web-public].
 
-- State: production
-- Production: [https://convection.artsy.net][production] | [Kubernetes][production_k8]
-- Staging: [https://convection-staging.artsy.net][staging] | [Kubernetes][staging_k8]
-- GitHub: [https://github.com/artsy/convection](https://github.com/artsy/convection)
-- Point People: [@sweir27]
-- Deploying: PRs merged to the `master` branch are automatically deployed to
-  staging. Production is automatically deployed upon merges to `release`.
-  Create such a PR with [`deploy_pr`][deploy_pr] or [this handy link][deploy].
-- A daily digest is sent to partners via a cron task at 3am.
+- **State:** production
+- **Production:** [https://convection.artsy.net][production] | [Kubernetes][production_k8]
+- **Staging:** [https://convection-staging.artsy.net][staging] | [Kubernetes][staging_k8]
+- **GitHub:** [https://github.com/artsy/convection](https://github.com/artsy/convection)
+- **Point People:** [@sweir27]
+- **CI/Deploys:** [CircleCi](https://circleci.com/gh/artsy/convection); PRs merged to `artsy/convection#master` are automatically deployed to staging; PRs from `staging` to `release` are automatically deployed to production. Create such a PR with [`deploy_pr`][deploy_pr] or [this handy link][deploy].
+- A daily digest is sent to partners via a cron task at 10am EST.
 
 ## Setup
 
@@ -82,4 +80,4 @@ curl -H 'Authorization: Bearer <token>' -H 'Accept: application/json' -d 'artist
 [staging_k8]: https://kubernetes-staging.artsy.net/#!/deployment/default/convection-web
 [@sweir27]: https://github.com/sweir27
 [deploy_pr]: https://github.com/jonallured/deploy_pr
-[deploy]: https://github.com/artsy/convection/compare/release...master?expand=1
+[deploy]: https://github.com/artsy/convection/compare/release...staging?expand=1
