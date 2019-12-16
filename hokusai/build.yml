@@ -5,4 +5,5 @@ services:
     build:
       context: ../
       args:
+        APP_NAME: convection
         BUNDLE_GITHUB__COM: ${BUNDLE_GITHUB__COM}
