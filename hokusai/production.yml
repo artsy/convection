@@ -300,10 +300,13 @@ spec:
             - name: convection-data-export
               image: artsy/pg-data-sync
               imagePullPolicy: Always
+              env:
+                - name: APP_NAME
+                  value: "convection"
               envFrom:
                 - configMapRef:
                     name: convection-environment
-              args: ["sh", "./export-db.sh"]
+              args: ["sh", "./export-db.sh", "production"]
           restartPolicy: Never
           affinity:
             nodeAffinity:
