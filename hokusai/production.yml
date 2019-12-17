@@ -284,3 +284,37 @@ spec:
                     operator: In
                     values:
                       - background
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: convection-data-export
+spec:
+  schedule: "0 5 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: convection-data-export
+              image: artsy/pg-data-sync
+              imagePullPolicy: Always
+              env:
+                - name: APP_NAME
+                  value: "convection"
+              envFrom:
+                - configMapRef:
+                    name: convection-environment
+              args: ["sh", "./export-db.sh", "production"]
+          restartPolicy: Never
+          affinity:
+            nodeAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+                - weight: 1
+                  preference:
+                    matchExpressions:
+                      - key: tier
+                        operator: In
+                        values:
+                          - background
