@@ -1,0 +1,54 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: convection-sidekiq-legacy
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: convection
+        layer: application
+        component: sidekiq
+      name: convection-sidekiq-legacy
+      namespace: default
+    spec:
+      containers:
+        - name: convection-sidekiq
+          envFrom:
+            - configMapRef:
+                name: convection-environment
+          image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/convection:staging
+          imagePullPolicy: Always
+          args: ["bundle", "exec", "sidekiq"]
+          livenessProbe:
+            exec:
+              command:
+                - pgrep
+                - -f
+                - sidekiq
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: "1"
+      dnsPolicy: ClusterFirst
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: tier
+                    operator: In
+                    values:
+                      - background
