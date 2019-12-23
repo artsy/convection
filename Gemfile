@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby File.read('.ruby-version')
 
-gem 'rails', '5.2.3'
+gem 'rails', '6.0.2.1'
 
 gem 'pg'
 gem 'puma'
@@ -39,7 +39,7 @@ gem 'bootsnap', require: false # Speed up boot time by caching expensive operati
 
 group :development, :test do
   gem 'pry-byebug'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 4.0.0.beta3'
 end
 
 group :development do
