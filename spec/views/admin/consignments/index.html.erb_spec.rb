@@ -84,6 +84,9 @@ describe 'admin/consignments/index.html.erb', type: :feature do
         Fabricate(:consignment, state: 'sold', partner: @partner2)
         Fabricate(:consignment, state: 'canceled', partner: @partner2)
         page.visit admin_consignments_path
+
+        stub_gravity_user(id: @consignment1.submission.user.gravity_user_id)
+        stub_gravity_user_detail(id: @consignment1.submission.user.gravity_user_id)
       end
 
       it 'lets you click into a filter option', js: true do
@@ -104,7 +107,7 @@ describe 'admin/consignments/index.html.erb', type: :feature do
       it 'allows you to search by partner name', js: true do
         fill_in('term', with: 'gallery')
         expect(page).to have_selector('.ui-autocomplete')
-        expect(page).to have_content('Partner Gagosian Gallery')
+        expect(page).to have_content('Partner   Gagosian Gallery')
         click_link("partner-#{@partner1.id}")
         expect(current_url).to include "partner=#{@partner1.id}"
         partner_names = page.all('.list-group-item-info--partner-name').map(&:text)
@@ -123,7 +126,7 @@ describe 'admin/consignments/index.html.erb', type: :feature do
         select('bought in', from: 'state')
         fill_in('term', with: 'herit')
         expect(page).to have_selector('.ui-autocomplete')
-        expect(page).to have_content('Partner Heritage Auctions')
+        expect(page).to have_content('Partner   Heritage Auctions')
         click_link("partner-#{@partner2.id}")
         partner_names = page.all('.list-group-item-info--partner-name').map(&:text)
         expect(partner_names.count).to eq 1
@@ -136,7 +139,7 @@ describe 'admin/consignments/index.html.erb', type: :feature do
         select('bought in', from: 'state')
         fill_in('term', with: 'herit')
         expect(page).to have_selector('.ui-autocomplete')
-        expect(page).to have_content('Partner Heritage Auctions')
+        expect(page).to have_content('Partner   Heritage Auctions')
         click_link("partner-#{@partner2.id}")
         expect(current_url).to include "state=bought+in&partner=#{@partner2.id}"
         click_link('Price')

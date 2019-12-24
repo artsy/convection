@@ -4,6 +4,8 @@ require 'support/gravity_helper'
 describe 'admin/offers/index.html.erb', type: :feature do
   context 'always' do
     before do
+      stub_gravity_root
+
       allow_any_instance_of(ApplicationController).to receive(:require_artsy_authentication)
 
       allow(Convection.config).to receive(:gravity_xapp_token).and_return('xapp_token')
@@ -91,6 +93,10 @@ describe 'admin/offers/index.html.erb', type: :feature do
         @offer1 = Fabricate(:offer, state: 'accepted', partner_submission: Fabricate(:partner_submission, partner: @partner2))
         Fabricate(:offer, state: 'rejected', partner_submission: Fabricate(:partner_submission, partner: @partner2))
         Fabricate(:offer, state: 'draft', partner_submission: Fabricate(:partner_submission, partner: @partner1))
+
+        stub_gravity_user(id: @offer1.submission.user.gravity_user_id)
+        stub_gravity_user_detail(id: @offer1.submission.user.gravity_user_id)
+
         page.visit admin_offers_path
       end
 
@@ -110,7 +116,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
       it 'lets you search by partner name', js: true do
         fill_in('term', with: 'Gag')
         expect(page).to have_selector('.ui-autocomplete')
-        expect(page).to have_content('Partner Gagosian')
+        expect(page).to have_content('Partner   Gagosian')
         click_link("partner-#{@partner1.id}")
         expect(current_url).to include "&partner=#{@partner1.id}"
         expect(page).to have_selector('.list-group-item', count: 5)
@@ -129,7 +135,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
         select('sent', from: 'state')
         fill_in('term', with: 'Gag')
         expect(page).to have_selector('.ui-autocomplete')
-        expect(page).to have_content('Partner Gagosian')
+        expect(page).to have_content('Partner   Gagosian')
         click_link("partner-#{@partner1.id}")
         expect(current_url).to include "state=sent&partner=#{@partner1.id}"
         expect(page).to have_selector('.list-group-item', count: 4)
@@ -141,7 +147,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
         select('sent', from: 'state')
         fill_in('term', with: 'Gag')
         expect(page).to have_selector('.ui-autocomplete')
-        expect(page).to have_content('Partner Gagosian')
+        expect(page).to have_content('Partner   Gagosian')
         click_link("partner-#{@partner1.id}")
         expect(current_url).to include "state=sent&partner=#{@partner1.id}"
         click_link('Price')

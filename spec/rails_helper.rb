@@ -34,8 +34,9 @@ RSpec.configure do |config|
   end
 end
 
+Capybara.server = :puma, { Silent: true }
 Capybara.configure do |config|
-  config.javascript_driver = :headless_chrome
+  config.javascript_driver = ENV['NO_HEADLESS'] ? :selenium_chrome : :headless_chrome
   config.default_max_wait_time = 10
   config.ignore_hidden_elements = false
 end
