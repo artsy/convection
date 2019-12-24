@@ -40,6 +40,7 @@ gem 'bootsnap', require: false # Speed up boot time by caching expensive operati
 group :development, :test do
   gem 'pry-byebug'
   gem 'rspec-rails'
+  gem 'webdrivers', '~> 4.0'
 end
 
 group :development do
@@ -48,8 +49,7 @@ group :development do
 end
 
 group :test do
-  gem 'capybara'
-  gem 'webdrivers', require: false
+  gem 'capybara', '~> 3.29.0'
   gem 'database_cleaner'
   gem 'fabrication'
   gem 'rack_session_access'
