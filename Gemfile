@@ -49,7 +49,7 @@ group :development do
 end
 
 group :test do
-  gem 'capybara', '~> 3.29.0'
+  gem 'capybara', '~> 3.30.0'
   gem 'database_cleaner'
   gem 'fabrication'
   gem 'rack_session_access'
