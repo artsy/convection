@@ -192,7 +192,6 @@ GEM
       bourbon (>= 4.0)
       sass (>= 3.3)
     net-http-digest_auth (1.4.1)
-    newrelic_rpm (6.7.0.359)
     nio4r (2.5.2)
     nokogiri (1.10.7)
       mini_portile2 (~> 2.4.0)
@@ -398,7 +397,6 @@ DEPENDENCIES
   kaminari
   money
   neat (= 1.7.2)
-  newrelic_rpm
   pg
   pg_search
   premailer-rails
