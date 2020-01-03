@@ -22,7 +22,7 @@ retry() {
   done
 
   # set up test database
-  bundle exec rake db:migrate
+  bundle exec rake db:setup
 
   # run specs
   bundle exec rake

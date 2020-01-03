@@ -26,7 +26,6 @@ gem 'jquery-rails'
 gem 'kaminari' # for pagination
 gem 'money' # for currency/money formatting
 gem 'neat', '1.7.2' # required for watt
-gem 'newrelic_rpm' # for monitoring
 gem 'pg_search' # for searching within convection's database
 gem 'premailer-rails' # generate text parts from HTML automatically
 gem 'rack-cors' # to allow cross-origin requests
@@ -40,6 +39,7 @@ gem 'bootsnap', require: false # Speed up boot time by caching expensive operati
 group :development, :test do
   gem 'pry-byebug'
   gem 'rspec-rails'
+  gem 'webdrivers', '~> 4.2'
 end
 
 group :development do
@@ -48,8 +48,7 @@ group :development do
 end
 
 group :test do
-  gem 'capybara'
-  gem 'webdrivers', require: false
+  gem 'capybara', '~> 3.30.0'
   gem 'database_cleaner'
   gem 'fabrication'
   gem 'rack_session_access'
@@ -59,4 +58,4 @@ group :test do
   gem 'yarjuf' # formatting for test reports on CircleCI
 end
 
-gem "ddtrace", "~> 0.30.0"
+gem "ddtrace", "~> 0.30.1"

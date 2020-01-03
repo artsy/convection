@@ -5,6 +5,9 @@ describe 'admin/submissions/index.html.erb', type: :feature do
   context 'always' do
     before do
       stub_gravity_root
+      stub_gravity_artist(id: 'artistid2')
+      stub_gravity_user(id: 'userid2')
+      stub_gravity_user_detail(id: 'userid2')
 
       allow_any_instance_of(ApplicationController).to receive(:require_artsy_authentication)
       allow(Convection.config).to receive(:gravity_xapp_token).and_return('xapp_token')
@@ -164,7 +167,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
       it 'allows you to search by user email', js: true do
         fill_in('term', with: 'percy')
         expect(page).to have_selector('.ui-autocomplete')
-        expect(page).to have_content('User percy')
+        expect(page).to have_content('User   percy')
         click_link("user-#{@user2.id}")
         expect(current_url).to include "&user=#{@user2.id}"
         expect(page).to have_selector('.list-group-item', count: 4)
@@ -176,7 +179,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
         select('approved', from: 'state')
         fill_in('term', with: 'percy')
         expect(page).to have_selector('.ui-autocomplete')
-        expect(page).to have_content('User percy')
+        expect(page).to have_content('User   percy')
         click_link("user-#{@user2.id}")
         expect(current_url).to include("user=#{@user2.id}", 'state=approved')
         click_link('ID')
