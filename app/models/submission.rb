@@ -64,6 +64,7 @@ class Submission < ApplicationRecord
   validate :validate_primary_image
 
   before_validation :set_state, on: :create
+  before_save :set_initial_demand_score
 
   scope :completed, -> { where.not(state: 'draft') }
   scope :draft, -> { where(state: 'draft') }
@@ -124,6 +125,27 @@ class Submission < ApplicationRecord
     Gravity.client.artist(id: artist_id)._get if artist_id
   rescue Faraday::ResourceNotFound
     nil
+  end
+
+  def demand_score
+    final_demand_score || initial_demand_score
+  end
+
+  def set_initial_demand_score
+    self.initial_demand_score = calculate_initial_demand_score if state == DRAFT
+  end
+
+  def artist_appraisal_rating
+    ArtistAppraisalRating.find_by(artist_id: artist_id)&.score || 0
+  end
+
+  def calculate_initial_demand_score
+    category_modifiers = {
+      'Painting' => 1,
+      'Print' => 0.75,
+    }
+
+    artist_appraisal_rating * 1 * category_modifiers.fetch(category, 0.5)
   end
 
   def artist_name

@@ -1,0 +1,2 @@
+class ArtistAppraisalRating < ApplicationRecord
+end
