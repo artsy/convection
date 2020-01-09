@@ -20,7 +20,6 @@ ActiveRecord::Schema.define(version: 2020_01_08_220043) do
     t.string "artist_id"
     t.float "artist_score"
     t.float "auction_score"
-    t.float "score"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
