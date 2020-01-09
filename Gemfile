@@ -58,4 +58,4 @@ group :test do
   gem 'yarjuf' # formatting for test reports on CircleCI
 end
 
-gem "ddtrace", "~> 0.30.1"
+gem "ddtrace", "~> 0.31.0"
