@@ -11,6 +11,7 @@ module Dollarize
 
         define_method method_name.to_s.gsub(/_cents$/, '_dollars') do
           return if self[method_name].blank?
+
           self[method_name] / 100
         end
 
@@ -25,6 +26,7 @@ module Dollarize
 
         define_method method_name.to_s.gsub(/_cents$/, '_display') do
           return if self[method_name].blank?
+
           currency = self.currency || 'USD'
           Money.new(self[method_name], currency).format(no_cents: true)
         end

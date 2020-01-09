@@ -6,10 +6,10 @@ class User < ApplicationRecord
   has_many :submissions, dependent: :nullify
 
   pg_search_scope :search,
-    against: :email,
-    using: {
-      tsearch: { prefix: true }
-    }
+                  against: :email,
+                  using: {
+                    tsearch: { prefix: true }
+                  }
 
   def gravity_user
     Gravity.client.user(id: gravity_user_id)._get

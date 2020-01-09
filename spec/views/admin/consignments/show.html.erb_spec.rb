@@ -9,10 +9,10 @@ describe 'admin/consignments/show.html.erb', type: :feature do
     let(:partner_submission) { Fabricate(:partner_submission, submission: submission, partner: partner) }
     let(:offer) do
       Fabricate(:offer,
-        partner_submission: partner_submission,
-        offer_type: 'purchase',
-        state: 'accepted',
-        price_cents: 12_000)
+                partner_submission: partner_submission,
+                offer_type: 'purchase',
+                state: 'accepted',
+                price_cents: 12_000)
     end
 
     before do

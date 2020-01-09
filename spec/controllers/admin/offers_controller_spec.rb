@@ -31,40 +31,40 @@ describe Admin::OffersController, type: :controller do
         @partner1 = Fabricate(:partner, name: 'Gagosian Gallery')
         partner2 = Fabricate(:partner, name: 'Heritage Auctions')
         @offer1 = Fabricate(:offer,
-          state: 'sent',
-          partner_submission: Fabricate(:partner_submission,
-            partner: @partner1,
-            submission: Fabricate(:submission, user_email: 'michael@bluth.com')),
-          offer_type: 'purchase',
-          price_cents: 100_00)
+                            state: 'sent',
+                            partner_submission: Fabricate(:partner_submission,
+                                                          partner: @partner1,
+                                                          submission: Fabricate(:submission, user_email: 'michael@bluth.com')),
+                            offer_type: 'purchase',
+                            price_cents: 100_00)
         @offer2 = Fabricate(:offer,
-          state: 'sent',
-          partner_submission: Fabricate(:partner_submission,
-            partner: @partner1,
-            submission: Fabricate(:submission, user_email: 'michael@bluth.com')),
-          offer_type: 'purchase',
-          price_cents: 200_00)
+                            state: 'sent',
+                            partner_submission: Fabricate(:partner_submission,
+                                                          partner: @partner1,
+                                                          submission: Fabricate(:submission, user_email: 'michael@bluth.com')),
+                            offer_type: 'purchase',
+                            price_cents: 200_00)
         @offer3 = Fabricate(:offer,
-          state: 'sent',
-          partner_submission: Fabricate(:partner_submission,
-            partner: @partner1,
-            submission: Fabricate(:submission, user_email: 'lucille@bluth.com')),
-          offer_type: 'purchase',
-          price_cents: 300_00)
+                            state: 'sent',
+                            partner_submission: Fabricate(:partner_submission,
+                                                          partner: @partner1,
+                                                          submission: Fabricate(:submission, user_email: 'lucille@bluth.com')),
+                            offer_type: 'purchase',
+                            price_cents: 300_00)
         @offer4 = Fabricate(:offer,
-          state: 'sent',
-          partner_submission: Fabricate(:partner_submission,
-            partner: partner2,
-            submission: Fabricate(:submission, user_email: 'lucille@bluth.com')),
-          offer_type: 'auction consignment',
-          high_estimate_cents: 400_00)
+                            state: 'sent',
+                            partner_submission: Fabricate(:partner_submission,
+                                                          partner: partner2,
+                                                          submission: Fabricate(:submission, user_email: 'lucille@bluth.com')),
+                            offer_type: 'auction consignment',
+                            high_estimate_cents: 400_00)
         @offer5 = Fabricate(:offer,
-          state: 'rejected',
-          partner_submission: Fabricate(:partner_submission,
-            partner: partner2,
-            submission: Fabricate(:submission, user_email: 'lucille@bluth.com')),
-          offer_type: 'purchase',
-          price_cents: 500_00)
+                            state: 'rejected',
+                            partner_submission: Fabricate(:partner_submission,
+                                                          partner: partner2,
+                                                          submission: Fabricate(:submission, user_email: 'lucille@bluth.com')),
+                            offer_type: 'purchase',
+                            price_cents: 500_00)
       end
 
       it 'returns the first two offers on the first page' do
@@ -118,10 +118,10 @@ describe Admin::OffersController, type: :controller do
     describe '#update' do
       let(:offer) do
         Fabricate(:offer,
-          offer_type: 'auction consignment',
-          low_estimate_cents: 10_000,
-          high_estimate_cents: 20_000,
-          sale_name: 'Fun sale!')
+                  offer_type: 'auction consignment',
+                  low_estimate_cents: 10_000,
+                  high_estimate_cents: 20_000,
+                  sale_name: 'Fun sale!')
       end
 
       it 'redirects to the show view on success' do

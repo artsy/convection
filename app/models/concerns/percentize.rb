@@ -11,6 +11,7 @@ module Percentize
 
         define_method "#{method_name}_whole" do
           return if self[method_name].blank?
+
           (self[method_name] * 100).round(2)
         end
 

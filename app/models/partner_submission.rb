@@ -6,18 +6,18 @@ class PartnerSubmission < ApplicationRecord
   include Percentize
 
   pg_search_scope :search,
-    against: [:id, :reference_id],
-    associated_against: {
-      partner: [:name]
-    },
-    using: {
-      tsearch: { prefix: true }
-    }
+                  against: [:id, :reference_id],
+                  associated_against: {
+                    partner: [:name]
+                  },
+                  using: {
+                    tsearch: { prefix: true }
+                  }
 
   belongs_to :partner
   belongs_to :submission
   has_many :offers, dependent: :destroy
-  belongs_to :accepted_offer, class_name: 'Offer' # rubocop:disable Rails/InverseOf
+  belongs_to :accepted_offer, class_name: 'Offer'
 
   STATES = [
     'open',

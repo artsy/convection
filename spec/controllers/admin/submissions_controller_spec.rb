@@ -114,8 +114,8 @@ describe Admin::SubmissionsController, type: :controller do
 
         it 'merges in the thumbnail url' do
           Fabricate(:image,
-            submission: @submission1,
-            image_urls: { square: 'https://square.jpg', thumbnail: 'https://thumbnail-1.jpg' })
+                    submission: @submission1,
+                    image_urls: { square: 'https://square.jpg', thumbnail: 'https://thumbnail-1.jpg' })
 
           get :index, format: 'json', params: { term: 'hi' }
           submissions = JSON.parse(response.body)

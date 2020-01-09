@@ -83,9 +83,9 @@ describe 'Update Submission' do
 
       it 'returns an error if you try to submit without all of the relevant fields' do
         submission = Fabricate(:submission,
-          artist_id: 'andy-warhol',
-          user: Fabricate(:user, gravity_user_id: 'userid'),
-          title: nil)
+                               artist_id: 'andy-warhol',
+                               user: Fabricate(:user, gravity_user_id: 'userid'),
+                               title: nil)
         put "/api/submissions/#{submission.id}", params: {
           artist_id: 'kara-walker',
           state: 'submitted'

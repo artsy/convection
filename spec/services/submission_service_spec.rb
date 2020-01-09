@@ -167,7 +167,7 @@ describe SubmissionService do
       it 'fails to undo an approval if there are any offers' do
         Fabricate(:offer, partner_submission: submission.partner_submissions.first)
         expect { SubmissionService.undo_approval(submission) }.to raise_error(SubmissionService::SubmissionError,
-          'Undoing approval of a submission with offers is not allowed!')
+                                                                              'Undoing approval of a submission with offers is not allowed!')
       end
     end
 

@@ -39,12 +39,12 @@ gem 'uglifier'
 group :development, :test do
   gem 'pry-byebug'
   gem 'rspec-rails'
+  gem 'rubocop-rails'
   gem 'webdrivers', '~> 4.2'
 end
 
 group :development do
   gem 'foreman'
-  gem 'rubocop', '0.54.0'
 end
 
 group :test do

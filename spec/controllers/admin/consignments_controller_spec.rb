@@ -10,27 +10,27 @@ describe Admin::ConsignmentsController, type: :controller do
       @partner1 = Fabricate(:partner, name: 'Gagosian Gallery')
       partner2 = Fabricate(:partner, name: 'Heritage Auctions')
       @consignment1 = Fabricate(:partner_submission,
-        state: 'open',
-        submission: Fabricate(:submission, state: 'approved'),
-        partner: @partner1,
-        sale_price_cents: 100_000)
+                                state: 'open',
+                                submission: Fabricate(:submission, state: 'approved'),
+                                partner: @partner1,
+                                sale_price_cents: 100_000)
       @consignment2 = Fabricate(:partner_submission,
-        state: 'open',
-        submission: Fabricate(:submission, state: 'approved'),
-        partner: @partner1,
-        sale_price_cents: 200_000)
+                                state: 'open',
+                                submission: Fabricate(:submission, state: 'approved'),
+                                partner: @partner1,
+                                sale_price_cents: 200_000)
       @consignment3 = Fabricate(:partner_submission,
-        state: 'bought in',
-        submission: Fabricate(:submission, state: 'approved'),
-        partner: @partner1,
-        sale_price_cents: 300_000)
+                                state: 'bought in',
+                                submission: Fabricate(:submission, state: 'approved'),
+                                partner: @partner1,
+                                sale_price_cents: 300_000)
       @consignment4 = Fabricate(:partner_submission,
-        state: 'open',
-        submission: Fabricate(:submission, state: 'approved'),
-        partner: partner2)
+                                state: 'open',
+                                submission: Fabricate(:submission, state: 'approved'),
+                                partner: partner2)
       @consignment5 = Fabricate(:partner_submission,
-        state: 'open', submission: Fabricate(:submission, state: 'approved'),
-        partner: partner2)
+                                state: 'open', submission: Fabricate(:submission, state: 'approved'),
+                                partner: partner2)
 
       @consignment1.update!(
         accepted_offer: Fabricate(:offer, state: 'sent', partner_submission: @consignment1, offer_type: 'purchase')
