@@ -33,6 +33,27 @@ describe Submission do
     end
   end
 
+  context 'artist standings' do
+    it 'is re-calculated on every save to a draft' do
+      Fabricate(:artist_standing_score, artist_id: 'artistid', artist_score: 0.69, auction_score: 0.72)
+      submission = Fabricate(:submission, artist_id: 'artistid', medium: nil, state: 'draft')
+      expect(submission.auction_score).to eq 0.72
+      expect { submission.update(category: 'Print') }
+        .to change { submission.auction_score }
+    end
+
+    it 'is not re-calculated for an already-submitted submission' do
+      submission = Fabricate(:submission, artist_id: 'artistid', medium: nil, state: 'submitted')
+      expect(submission).not_to receive(:calculate_demand_score)
+      submission.save!
+    end
+
+    it 'is 0 if no standing score is found' do
+      submission = Fabricate(:submission, artist_id: 'noonespecial', medium: nil, state: 'draft')
+      expect(submission.auction_score).to eq 0
+    end
+  end
+
   context 'category' do
     it 'allows only certain categories' do
       expect(Submission.new(category: nil)).to be_valid
