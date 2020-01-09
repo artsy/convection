@@ -1,12 +1,6 @@
 module SubmissionsHelper
-  def artist_score(submission)
-    score = submission.artist_score || 0
-    score * 100
-  end
-
-  def auction_score(submission)
-    score = submission.auction_score || 0
-    score * 100
+  def formatted_score(score)
+    (score || 0) * 100
   end
 
   def formatted_location(submission)
@@ -16,6 +10,7 @@ module SubmissionsHelper
   def formatted_dimensions(submission)
     values = [submission.height, submission.width, submission.depth].select(&:present?)
     return if values.empty?
+
     "#{values.join('x')}#{submission.dimensions_metric.try(:downcase)}"
   end
 

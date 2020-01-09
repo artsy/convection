@@ -138,7 +138,7 @@
     Artist Score
   </div>
   <div class='overview-item-value artist-score'>
-    <%= artist_score(@submission) %>
+    <%= formatted_score(@submission.artist_score) %>
   </div>
 </div>
 
@@ -147,6 +147,6 @@
     Auction Score
   </div>
   <div class='overview-item-value auction-score'>
-    <%= auction_score(@submission) %>
+    <%= formatted_score(@submission.auction_score) %>
   </div>
 </div>
