@@ -34,25 +34,14 @@ describe Submission do
   end
 
   context 'demand_score' do
-    before do
-      Fabricate(:artist_appraisal_rating, artist_id: 'artistid', score: 0.69)
-      @submission = Fabricate(:submission, artist_id: 'artistid', medium: nil)
-    end
-
     describe 'demand_score' do
-      it 'is the final demand score or the initial demand score' do
+      it 'is calculated on every save' do
+        Fabricate(:artist_appraisal_rating, artist_id: 'artistid', score: 0.69)
+        @submission = Fabricate(:submission, artist_id: 'artistid', medium: nil)
         expect(@submission.demand_score).to eq 0.69
-        @submission.update_attributes(final_demand_score: 0.420)
-        expect(@submission.demand_score).to eq 0.42
-
+        expect { @submission.update(category: 'Print') }
+          .to change { @submission.demand_score }
       end
-    end
-    describe 'initial_demand_score' do
-      it 'is calculated on every save prior to submission' do
-        expect(@submission.initial_demand_score).to eq 0.69
-        expect{@submission.update(category: 'Print')}.to change{ @submission.initial_demand_score}
-      end
-      it 'no longer updates on submission'
     end
   end
 
