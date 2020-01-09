@@ -1,4 +1,8 @@
 module SubmissionsHelper
+  def formatted_score(score)
+    (score || 0) * 100
+  end
+
   def formatted_location(submission)
     [submission.location_city, submission.location_state, submission.location_country].select(&:present?).join(', ')
   end
@@ -6,6 +10,7 @@ module SubmissionsHelper
   def formatted_dimensions(submission)
     values = [submission.height, submission.width, submission.depth].select(&:present?)
     return if values.empty?
+
     "#{values.join('x')}#{submission.dimensions_metric.try(:downcase)}"
   end
 
