@@ -1,4 +1,14 @@
 module SubmissionsHelper
+  def artist_score(submission)
+    score = submission.artist_score || 0
+    score * 100
+  end
+
+  def auction_score(submission)
+    score = submission.auction_score || 0
+    score * 100
+  end
+
   def formatted_location(submission)
     [submission.location_city, submission.location_state, submission.location_country].select(&:present?).join(', ')
   end
