@@ -64,7 +64,7 @@ class Submission < ApplicationRecord
   validate :validate_primary_image
 
   before_validation :set_state, on: :create
-  before_save :set_demand_score
+  before_save :set_artist_standing_scores
 
   scope :completed, -> { where.not(state: 'draft') }
   scope :draft, -> { where(state: 'draft') }
@@ -127,21 +127,21 @@ class Submission < ApplicationRecord
     nil
   end
 
-  def set_demand_score
-    self.demand_score = calculate_initial_demand_score if state == DRAFT
+  def set_artist_standing_scores
+    if state == DRAFT
+      artist_standing_score = ArtistStandingScore.find_by(artist_id: artist_id)
+      self.artist_score = calculate_demand_score(artist_standing_score&.artist_score || 0)
+      self.auction_score = calculate_demand_score(artist_standing_score&.auction_score || 0)
+    end
   end
 
-  def artist_appraisal_rating
-    ArtistAppraisalRating.find_by(artist_id: artist_id)&.score || 0
-  end
-
-  def calculate_initial_demand_score
+  def calculate_demand_score(score)
     category_modifiers = {
       'Painting' => 1,
       'Print' => 0.75
     }
 
-    artist_appraisal_rating * 1 * category_modifiers.fetch(category, 0.5)
+    score * category_modifiers.fetch(category, 0.5)
   end
 
   def artist_name

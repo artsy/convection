@@ -16,8 +16,10 @@ ActiveRecord::Schema.define(version: 2020_01_08_220043) do
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
 
-  create_table "artist_appraisal_ratings", force: :cascade do |t|
+  create_table "artist_standing_scores", force: :cascade do |t|
     t.string "artist_id"
+    t.float "artist_score"
+    t.float "auction_score"
     t.float "score"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -148,7 +150,8 @@ ActiveRecord::Schema.define(version: 2020_01_08_220043) do
     t.string "currency"
     t.string "user_agent"
     t.datetime "deleted_at"
-    t.float "demand_score"
+    t.float "artist_score"
+    t.float "auction_score"
     t.index ["consigned_partner_submission_id"], name: "index_submissions_on_consigned_partner_submission_id"
     t.index ["ext_user_id"], name: "index_submissions_on_ext_user_id"
     t.index ["primary_image_id"], name: "index_submissions_on_primary_image_id"

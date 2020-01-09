@@ -33,15 +33,18 @@ describe Submission do
     end
   end
 
-  context 'demand_score' do
-    describe 'demand_score' do
-      it 'is calculated on every save' do
-        Fabricate(:artist_appraisal_rating, artist_id: 'artistid', score: 0.69)
-        @submission = Fabricate(:submission, artist_id: 'artistid', medium: nil)
-        expect(@submission.demand_score).to eq 0.69
-        expect { @submission.update(category: 'Print') }
-          .to change { @submission.demand_score }
-      end
+  context 'artist standings' do
+    it 'is re-calculated on every save to a draft' do
+      Fabricate(:artist_standing_score, artist_id: 'artistid', artist_score: 0.69, auction_score: 0.72)
+      @submission = Fabricate(:submission, artist_id: 'artistid', medium: nil, state: 'draft')
+      expect(@submission.auction_score).to eq 0.72
+      expect { @submission.update(category: 'Print') }
+        .to change { @submission.auction_score }
+    end
+
+    it 'is 0 if no standing score is found' do
+      @submission = Fabricate(:submission, artist_id: 'noonespecial', medium: nil, state: 'draft')
+      expect(@submission.auction_score).to eq 0
     end
   end
 
