@@ -64,7 +64,7 @@ class Submission < ApplicationRecord
   validate :validate_primary_image
 
   before_validation :set_state, on: :create
-  before_save :set_artist_standing_scores
+  before_save :set_demand_scores
 
   scope :completed, -> { where.not(state: 'draft') }
   scope :draft, -> { where(state: 'draft') }
@@ -127,7 +127,7 @@ class Submission < ApplicationRecord
     nil
   end
 
-  def set_artist_standing_scores
+  def set_demand_scores
     recent_draft = changes['state']&.include?(DRAFT) || state == DRAFT
     worth_calculating = %i[category artist_id].any? { |attr| changes[attr].present? }
     return unless recent_draft && worth_calculating
