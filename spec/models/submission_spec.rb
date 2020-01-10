@@ -33,25 +33,68 @@ describe Submission do
     end
   end
 
-  context 'artist standings' do
-    it 'is re-calculated on every save to a draft' do
-      Fabricate(:artist_standing_score, artist_id: 'artistid', artist_score: 0.69, auction_score: 0.72)
-      submission = Fabricate(:submission, artist_id: 'artistid', medium: nil, state: 'draft')
-      expect(submission.auction_score).to eq 0.72
-      expect { submission.update(category: 'Print') }
-        .to change { submission.auction_score }
+  context 'demand scores' do
+    let(:artist_id) { 'artistid' }
+
+    let!(:artist_standing_score) do
+      Fabricate(:artist_standing_score, artist_id: artist_id, artist_score: 0.50, auction_score: 1.0)
     end
 
-    it 'is not re-calculated for an already-submitted submission' do
-      Fabricate(:artist_standing_score, artist_id: 'artistid', artist_score: 0.69, auction_score: 0.72)
-      submission = Fabricate(:submission, artist_id: 'artistid', medium: nil, state: 'submitted')
-      expect { submission.update(category: 'Print') }
-        .to_not change { submission.auction_score }
+    let!(:other_standing_score) do
+      Fabricate(:artist_standing_score, artist_id: 'other', artist_score: 0.33, auction_score: 0.66)
     end
 
-    it 'is 0 if no standing score is found' do
-      submission = Fabricate(:submission, artist_id: 'noonespecial', medium: nil, state: 'draft')
-      expect(submission.auction_score).to eq 0
+    let(:submission_state) { 'draft' }
+
+    let(:submission) do
+      Fabricate(:submission, artist_id: artist_id, medium: 'Painting', state: submission_state)
+    end
+
+    it 'is set on create' do
+      expect(submission.artist_score).to eq artist_standing_score.artist_score
+      expect(submission.auction_score).to eq artist_standing_score.auction_score
+    end
+
+    context 'updating when in draft' do
+      it 'is re-calculated when category changes' do
+        submission.update(category: 'Photography')
+        submission.reload
+
+        expect(submission.artist_score).to eq 0.25
+        expect(submission.auction_score).to eq 0.5
+      end
+
+      it 'is re-calculated when artist id changes' do
+        submission.update(artist_id: 'other')
+
+        expect(submission.artist_score).to eq other_standing_score.artist_score
+        expect(submission.auction_score).to eq other_standing_score.auction_score
+      end
+
+      it 'does not re-calcuate when unrelated things change' do
+        expect(DemandCalculator).to receive(:score).and_return({}).once
+        submission.update(title: 'Some great work')
+      end
+    end
+
+    context 'updating when not draft' do
+      let(:submission_state) { 'approved' }
+
+      it 'does not re-calculate' do
+        submission.update(artist_id: 'other')
+
+        expect(submission.artist_score).to eq artist_standing_score.artist_score
+        expect(submission.auction_score).to eq artist_standing_score.auction_score
+      end
+    end
+
+    context 'updating away from draft' do
+      it 'does not re-calculate' do
+        submission.update(artist_id: 'other', state: 'approved')
+
+        expect(submission.artist_score).to eq artist_standing_score.artist_score
+        expect(submission.auction_score).to eq artist_standing_score.auction_score
+      end
     end
   end
 
