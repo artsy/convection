@@ -132,21 +132,9 @@ class Submission < ApplicationRecord
     worth_calculating = %i[category artist_id].any? { |attr| changes[attr].present? }
     return unless recent_draft && worth_calculating
 
-    artist_standing_score = ArtistStandingScore.find_by(artist_id: artist_id)
-    self.artist_score = calculate_demand_score(artist_standing_score&.artist_score)
-    self.auction_score = calculate_demand_score(artist_standing_score&.auction_score)
-  end
-
-  # TODO: Move into own service
-  def calculate_demand_score(base_score)
-    return 0 unless base_score&.positive?
-
-    category_modifiers = {
-      'Painting' => 1,
-      'Print' => 0.75
-    }
-
-    base_score * category_modifiers.fetch(category, 0.5)
+    scores = DemandCalculator.score(artist_id, category)
+    self.artist_score = scores[:artist_score]
+    self.auction_score = scores[:auction_score]
   end
 
   def artist_name

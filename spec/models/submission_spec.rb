@@ -43,9 +43,10 @@ describe Submission do
     end
 
     it 'is not re-calculated for an already-submitted submission' do
+      Fabricate(:artist_standing_score, artist_id: 'artistid', artist_score: 0.69, auction_score: 0.72)
       submission = Fabricate(:submission, artist_id: 'artistid', medium: nil, state: 'submitted')
-      expect(submission).not_to receive(:calculate_demand_score)
-      submission.save!
+      expect { submission.update(category: 'Print') }
+        .to_not change { submission.auction_score }
     end
 
     it 'is 0 if no standing score is found' do
