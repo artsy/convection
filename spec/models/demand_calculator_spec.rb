@@ -19,6 +19,13 @@ describe DemandCalculator do
       expect(scores[:artist_score]).to eq 0
       expect(scores[:auction_score]).to eq 0
     end
+
+    it 'uses the one created first when there are two matches' do
+      duplicate_standing_score = Fabricate(:artist_standing_score, artist_id: artist_id, artist_score: 0.33, auction_score: 0.66, created_at: 1.day.ago)
+      scores = DemandCalculator.score(artist_id, 'Painting')
+      expect(scores[:artist_score]).to eq duplicate_standing_score.artist_score
+      expect(scores[:auction_score]).to eq duplicate_standing_score.auction_score
+    end
   end
 
   context 'modifiers' do
