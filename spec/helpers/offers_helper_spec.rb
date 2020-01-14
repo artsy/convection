@@ -20,10 +20,10 @@ describe OffersHelper, type: :helper do
 
     it 'shows the correct label for a rejected offer with a rejection_reason and rejection_note' do
       offer = Fabricate(:offer,
-        state: 'rejected',
-        rejected_by: 'userid',
-        rejection_reason: 'Other',
-        rejection_note: 'User not a fan of this partner.')
+                        state: 'rejected',
+                        rejected_by: 'userid',
+                        rejection_reason: 'Other',
+                        rejection_note: 'User not a fan of this partner.')
       expect(helper.reviewed_byline(offer)).to eq 'Rejected by Jon Jonson. Other: User not a fan of this partner.'
     end
 
@@ -41,13 +41,13 @@ describe OffersHelper, type: :helper do
 
     it 'does not include empty values' do
       offer = Fabricate(:offer,
-        offer_type: 'auction consignment',
-        price_cents: nil,
-        sale_name: '',
-        commission_percent: 0.1,
-        low_estimate_cents: 10_000,
-        high_estimate_cents: 40_000,
-        sale_date: Date.new(2018, 10, 30))
+                        offer_type: 'auction consignment',
+                        price_cents: nil,
+                        sale_name: '',
+                        commission_percent: 0.1,
+                        low_estimate_cents: 10_000,
+                        high_estimate_cents: 40_000,
+                        sale_date: Date.new(2018, 10, 30))
       expect(helper.display_fields(offer)).to eq(
         'Estimate' => 'USD $100 - 400',
         'Sale Date' => 'Oct 30, 2018',
@@ -57,12 +57,12 @@ describe OffersHelper, type: :helper do
 
     it 'returns an array containing only the present fields with many fields present' do
       offer = Fabricate(:offer,
-        offer_type: 'auction consignment',
-        price_cents: nil,
-        commission_percent: 0.1,
-        low_estimate_cents: 10_000,
-        high_estimate_cents: 40_000,
-        sale_date: Date.new(2018, 10, 30))
+                        offer_type: 'auction consignment',
+                        price_cents: nil,
+                        commission_percent: 0.1,
+                        low_estimate_cents: 10_000,
+                        high_estimate_cents: 40_000,
+                        sale_date: Date.new(2018, 10, 30))
       expect(helper.display_fields(offer)).to eq(
         'Estimate' => 'USD $100 - 400',
         'Sale Date' => 'Oct 30, 2018',

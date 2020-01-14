@@ -69,6 +69,7 @@ module OffersHelper
 
   def sale_period_display(offer)
     return unless offer.sale_period_start.present? || offer.sale_period_end.present?
+
     if offer.sale_period_start.present?
       if offer.sale_period_end.present?
         "#{formatted_date_offer(offer.sale_period_start)} - #{formatted_date_offer(offer.sale_period_end)}"
@@ -82,26 +83,31 @@ module OffersHelper
 
   def sale_date_display(offer)
     return if offer.sale_date.blank?
+
     formatted_date_offer(offer.sale_date)
   end
 
   def commission_display(offer)
     return if offer.commission_percent.blank?
+
     "#{(offer.commission_percent * 100).round(2)}%"
   end
 
   def shipping_display(offer)
     return if offer.shipping_cents.blank?
+
     "#{offer.currency} #{Money.new(offer.shipping_cents, offer.currency).format}"
   end
 
   def photography_display(offer)
     return if offer.photography_cents.blank?
+
     "#{offer.currency} #{Money.new(offer.photography_cents, offer.currency).format}"
   end
 
   def insurance_display(offer)
     return unless offer.insurance_cents.present? || offer.insurance_percent.present?
+
     if offer.insurance_cents.present?
       "#{offer.currency} #{Money.new(offer.insurance_cents, offer.currency).format}"
     else
@@ -111,6 +117,7 @@ module OffersHelper
 
   def other_fees_display(offer)
     return unless offer.other_fees_cents.present? || offer.other_fees_percent.present?
+
     if offer.other_fees_cents.present?
       "#{offer.currency} #{Money.new(offer.other_fees_cents, offer.currency).format}"
     else

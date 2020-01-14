@@ -8,11 +8,11 @@ class Submission < ApplicationRecord
   scope :not_deleted, -> { where(deleted_at: nil) }
 
   pg_search_scope :search,
-    against: [:id, :title],
-    using: {
-      tsearch: { prefix: true },
-      trigram: {}
-    }
+                  against: [:id, :title],
+                  using: {
+                    tsearch: { prefix: true },
+                    trigram: {}
+                  }
 
   STATES = [
     DRAFT = 'draft'.freeze,
@@ -55,8 +55,8 @@ class Submission < ApplicationRecord
   has_many :partner_submissions, dependent: :destroy
   has_many :offers, dependent: :destroy
   belongs_to :user
-  belongs_to :primary_image, class_name: 'Asset' # rubocop:disable Rails/InverseOf
-  belongs_to :consigned_partner_submission, class_name: 'PartnerSubmission' # rubocop:disable Rails/InverseOf
+  belongs_to :primary_image, class_name: 'Asset'
+  belongs_to :consigned_partner_submission, class_name: 'PartnerSubmission'
 
   validates :state, inclusion: { in: STATES }
   validates :category, inclusion: { in: CATEGORIES }, allow_nil: true
@@ -131,6 +131,7 @@ class Submission < ApplicationRecord
     recent_draft = changes['state']&.include?(DRAFT) || state == DRAFT
     worth_calculating = %i[category artist_id].any? { |attr| changes[attr].present? }
     return unless recent_draft && worth_calculating
+
     artist_standing_score = ArtistStandingScore.find_by(artist_id: artist_id)
     self.artist_score = calculate_demand_score(artist_standing_score&.artist_score)
     self.auction_score = calculate_demand_score(artist_standing_score&.auction_score)
@@ -139,6 +140,7 @@ class Submission < ApplicationRecord
   # TODO: Move into own service
   def calculate_demand_score(base_score)
     return 0 unless base_score&.positive?
+
     category_modifiers = {
       'Painting' => 1,
       'Print' => 0.75
@@ -153,6 +155,7 @@ class Submission < ApplicationRecord
 
   def validate_primary_image
     return if primary_image.blank?
+
     errors.add(:primary_image, 'Primary image must have asset_type=image') unless primary_image.asset_type == 'image'
   end
 end

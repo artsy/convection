@@ -7,17 +7,18 @@ gem 'rails', '5.2.3'
 gem 'pg'
 gem 'puma'
 
-gem 'gemini_upload-rails' # for admins to upload images
-
 watt_gem_spec = { git: 'https://github.com/artsy/watt.git', branch: 'master' }
 gem 'watt', watt_gem_spec # artsy bootstrap
 
 gem 'artsy-auth'
 gem 'artsy-eventservice' # for posting events to artsy event stream
+gem 'bootsnap', require: false # Speed up boot time by caching expensive operations.
 gem 'bootstrap-sass' # required for watt
 gem 'bourbon', '4.2.3' # required for watt
 gem 'coffee-rails' # required for watt
+gem 'ddtrace', '~> 0.31.0'
 gem 'decent_exposure' # for safely referencing variables in views
+gem 'gemini_upload-rails' # for admins to upload images
 gem 'graphiql-rails', '1.7.0' # A lovely interface to the API
 gem 'graphql' # A lovely API
 gem 'haml-rails' # required for watt layouts
@@ -34,17 +35,16 @@ gem 'sass-rails'
 gem 'sentry-raven' # for error reporting
 gem 'sidekiq', '<6' # for sending emails in the background (<6 necessary for Redis 3 compatibility)
 gem 'uglifier'
-gem 'bootsnap', require: false # Speed up boot time by caching expensive operations.
 
 group :development, :test do
   gem 'pry-byebug'
   gem 'rspec-rails'
+  gem 'rubocop-rails'
   gem 'webdrivers', '~> 4.2'
 end
 
 group :development do
   gem 'foreman'
-  gem 'rubocop', '0.54.0'
 end
 
 group :test do
@@ -57,5 +57,3 @@ group :test do
   gem 'webmock' # mock or forbid external network requests
   gem 'yarjuf' # formatting for test reports on CircleCI
 end
-
-gem "ddtrace", "~> 0.31.0"

@@ -17,14 +17,14 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       stub_gravity_artist
 
       @submission = Fabricate(:submission,
-        title: 'my sartwork',
-        artist_id: 'artistid',
-        edition: true,
-        edition_size: 100,
-        edition_number: '23a',
-        category: 'Painting',
-        user: Fabricate(:user, gravity_user_id: 'userid'),
-        state: 'submitted')
+                              title: 'my sartwork',
+                              artist_id: 'artistid',
+                              edition: true,
+                              edition_size: 100,
+                              edition_number: '23a',
+                              category: 'Painting',
+                              user: Fabricate(:user, gravity_user_id: 'userid'),
+                              state: 'submitted')
 
       stub_jwt_header('userid')
       page.visit "/admin/submissions/#{@submission.id}"
@@ -232,14 +232,14 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       describe 'undo actions' do
         let(:submission2) do
           Fabricate(:submission,
-            title: 'THE SECOND ARTWORK',
-            artist_id: 'artistid',
-            edition: true,
-            edition_size: 100,
-            edition_number: '23a',
-            category: 'Painting',
-            user: Fabricate(:user, gravity_user_id: 'userid3'),
-            state: 'submitted')
+                    title: 'THE SECOND ARTWORK',
+                    artist_id: 'artistid',
+                    edition: true,
+                    edition_size: 100,
+                    edition_number: '23a',
+                    category: 'Painting',
+                    user: Fabricate(:user, gravity_user_id: 'userid3'),
+                    state: 'submitted')
         end
         before do
           partner = Fabricate(:partner, gravity_partner_id: 'partnerid')

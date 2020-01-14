@@ -84,26 +84,26 @@ describe 'admin/submissions/index.html.erb', type: :feature do
         @user2 = Fabricate(:user, gravity_user_id: 'userid2', email: 'percy@test.com')
         3.times do
           Fabricate(:submission,
-            user: @user1,
-            artist_id: 'artistid',
-            state: 'submitted',
-            title: 'blah')
+                    user: @user1,
+                    artist_id: 'artistid',
+                    state: 'submitted',
+                    title: 'blah')
         end
         @submission = Fabricate(:submission,
-          user: @user2,
-          artist_id: 'artistid2',
-          state: 'approved',
-          title: 'my work')
+                                user: @user2,
+                                artist_id: 'artistid2',
+                                state: 'approved',
+                                title: 'my work')
         Fabricate(:submission,
-          user: @user2,
-          artist_id: 'artistid4',
-          state: 'rejected',
-          title: 'title')
+                  user: @user2,
+                  artist_id: 'artistid4',
+                  state: 'rejected',
+                  title: 'title')
         Fabricate(:submission,
-          user: @user2,
-          artist_id: 'artistid4',
-          state: 'draft',
-          title: 'blah blah')
+                  user: @user2,
+                  artist_id: 'artistid4',
+                  state: 'draft',
+                  title: 'blah blah')
 
         gravql_artists_response = {
           data: {

@@ -90,10 +90,10 @@ describe OfferService do
   context 'update_offer' do
     it 'updates the offer with the new params' do
       offer = Fabricate(:offer,
-        low_estimate_cents: 10_000,
-        high_estimate_cents: 20_000,
-        commission_percent: 10,
-        offer_type: 'auction consignment')
+                        low_estimate_cents: 10_000,
+                        high_estimate_cents: 20_000,
+                        commission_percent: 10,
+                        offer_type: 'auction consignment')
       OfferService.update_offer(offer, 'userid', high_estimate_cents: 30_000, notes: 'New offer notes!')
       expect(offer.reload.high_estimate_cents).to eq 30_000
       expect(offer.reload.notes).to eq 'New offer notes!'
@@ -101,10 +101,10 @@ describe OfferService do
 
     it 'raises an error if validation fails' do
       offer = Fabricate(:offer,
-        low_estimate_cents: 10_000,
-        high_estimate_cents: 20_000,
-        commission_percent: 10,
-        offer_type: 'auction consignment')
+                        low_estimate_cents: 10_000,
+                        high_estimate_cents: 20_000,
+                        commission_percent: 10,
+                        offer_type: 'auction consignment')
       expect do
         OfferService.update_offer(offer, 'userid', offer_type: 'non-valid-type')
       end.to raise_error(OfferService::OfferError)

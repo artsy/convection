@@ -80,13 +80,13 @@ describe PartnerSubmissionService do
         @partner = Fabricate(:partner, gravity_partner_id: 'partnerid')
         Fabricate(:submission, state: 'submitted')
         @approved1 = Fabricate(:submission,
-          state: 'submitted',
-          artist_id: 'artistid',
-          user: @user,
-          title: 'Approved artwork with minimum price',
-          year: '1992',
-          minimum_price_cents: 50_000_00,
-          currency: 'USD')
+                               state: 'submitted',
+                               artist_id: 'artistid',
+                               user: @user,
+                               title: 'Approved artwork with minimum price',
+                               year: '1992',
+                               minimum_price_cents: 50_000_00,
+                               currency: 'USD')
         expect(NotificationService).to receive(:post_submission_event).once.with(@approved1.id, 'approved')
         SubmissionService.update_submission(@approved1, state: 'approved')
         PartnerSubmissionService.daily_digest
@@ -103,11 +103,11 @@ describe PartnerSubmissionService do
         @partner = Fabricate(:partner, gravity_partner_id: 'partnerid')
         Fabricate(:submission, state: 'submitted')
         @approved1 = Fabricate(:submission,
-          state: 'submitted',
-          artist_id: 'artistid',
-          user: @user,
-          title: 'Approved artwork with minimum price',
-          year: '1992')
+                               state: 'submitted',
+                               artist_id: 'artistid',
+                               user: @user,
+                               title: 'Approved artwork with minimum price',
+                               year: '1992')
         expect(NotificationService).to receive(:post_submission_event).once.with(@approved1.id, 'approved')
         SubmissionService.update_submission(@approved1, state: 'approved')
       end
@@ -124,23 +124,23 @@ describe PartnerSubmissionService do
         @partner = Fabricate(:partner, gravity_partner_id: 'partnerid')
         Fabricate(:submission, state: 'submitted')
         @approved1 = Fabricate(:submission,
-          state: 'submitted',
-          artist_id: 'artistid',
-          user: @user,
-          title: 'First approved artwork',
-          year: '1992')
+                               state: 'submitted',
+                               artist_id: 'artistid',
+                               user: @user,
+                               title: 'First approved artwork',
+                               year: '1992')
         @approved2 = Fabricate(:submission,
-          state: 'submitted',
-          artist_id: 'artistid',
-          user: @user2,
-          title: 'Second approved artwork',
-          year: '1993')
+                               state: 'submitted',
+                               artist_id: 'artistid',
+                               user: @user2,
+                               title: 'Second approved artwork',
+                               year: '1993')
         @approved3 = Fabricate(:submission,
-          state: 'submitted',
-          artist_id: 'artistid',
-          user: @user,
-          title: 'Third approved artwork',
-          year: '1997')
+                               state: 'submitted',
+                               artist_id: 'artistid',
+                               user: @user,
+                               title: 'Third approved artwork',
+                               year: '1997')
         Fabricate(:submission, state: 'rejected')
         expect(NotificationService).to receive(:post_submission_event).once.with(@approved1.id, 'approved')
         expect(NotificationService).to receive(:post_submission_event).once.with(@approved2.id, 'approved')

@@ -3,53 +3,53 @@ require 'rails_helper'
 describe SubmissionEvent do
   let(:submission) do
     Fabricate(:submission,
-      artist_id: 'artistid',
-      user: Fabricate(:user, gravity_user_id: 'userid'),
-      title: 'My Artwork',
-      state: 'submitted',
-      medium: 'painting',
-      year: '1992',
-      height: '12',
-      width: '14',
-      depth: '2',
-      dimensions_metric: 'in',
-      location_city: 'New York',
-      location_state: 'NY',
-      location_country: 'US',
-      category: 'Painting',
-      signature: true,
-      authenticity_certificate: true,
-      provenance: 'This is the provenance')
+              artist_id: 'artistid',
+              user: Fabricate(:user, gravity_user_id: 'userid'),
+              title: 'My Artwork',
+              state: 'submitted',
+              medium: 'painting',
+              year: '1992',
+              height: '12',
+              width: '14',
+              depth: '2',
+              dimensions_metric: 'in',
+              location_city: 'New York',
+              location_state: 'NY',
+              location_country: 'US',
+              category: 'Painting',
+              signature: true,
+              authenticity_certificate: true,
+              provenance: 'This is the provenance')
   end
 
   let!(:image1) do
     Fabricate(:image,
-      submission: submission,
-      image_urls: {
-        'square' => 'http://square1.jpg',
-        'large' => 'http://foo1.jpg',
-        'thumbnail' => 'http://thumb1.jpg'
-      })
+              submission: submission,
+              image_urls: {
+                'square' => 'http://square1.jpg',
+                'large' => 'http://foo1.jpg',
+                'thumbnail' => 'http://thumb1.jpg'
+              })
   end
 
   let!(:image2) do
     Fabricate(:image,
-      submission: submission,
-      image_urls: {
-        'square' => 'http://square2.jpg',
-        'large' => 'http://foo2.jpg',
-        'thumbnail' => 'http://thumb2.jpg'
-      })
+              submission: submission,
+              image_urls: {
+                'square' => 'http://square2.jpg',
+                'large' => 'http://foo2.jpg',
+                'thumbnail' => 'http://thumb2.jpg'
+              })
   end
 
   let!(:image3) do
     Fabricate(:image,
-      submission: submission,
-      image_urls: {
-        'square' => 'http://square3.jpg',
-        'large' => 'http://foo3.jpg',
-        'thumbnail' => 'http://thumb3.jpg'
-      })
+              submission: submission,
+              image_urls: {
+                'square' => 'http://square3.jpg',
+                'large' => 'http://foo3.jpg',
+                'thumbnail' => 'http://thumb3.jpg'
+              })
   end
 
   let(:event) { SubmissionEvent.new(model: submission, action: 'submitted') }

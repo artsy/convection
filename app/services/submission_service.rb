@@ -29,6 +29,7 @@ class SubmissionService
 
     def undo_approval(submission)
       raise SubmissionError, 'Undoing approval of a submission with offers is not allowed!' if submission.offers.count.positive?
+
       return_to_submitted_state(submission)
       submission.partner_submissions.each(&:destroy)
     end
@@ -43,9 +44,11 @@ class SubmissionService
 
     def submit!(submission)
       raise ParamError, 'Missing fields for submission.' unless submission.can_submit?
+
       notify_admin(submission.id)
       notify_user(submission.id)
       return if submission.images.count.positive?
+
       delay_until(Convection.config.second_reminder_days_after.days.from_now).notify_user(submission.id)
       delay_until(Convection.config.third_reminder_days_after.days.from_now).notify_user(submission.id)
     end
@@ -65,6 +68,7 @@ class SubmissionService
     def notify_admin(submission_id)
       submission = Submission.find(submission_id)
       return if submission.admin_receipt_sent_at
+
       delay.deliver_submission_notification(submission.id)
       NotificationService.delay.post_submission_event(submission_id, SubmissionEvent::SUBMITTED)
       submission.update!(admin_receipt_sent_at: Time.now.utc)
@@ -73,11 +77,13 @@ class SubmissionService
     def notify_user(submission_id)
       submission = Submission.find(submission_id)
       return if submission.receipt_sent_at
+
       if submission.images.count.positive?
         delay.deliver_submission_receipt(submission.id)
         submission.update!(receipt_sent_at: Time.now.utc)
       else
         return if submission.reminders_sent_count >= 3
+
         delay.deliver_upload_reminder(submission.id)
       end
     end
@@ -85,6 +91,7 @@ class SubmissionService
     def deliver_upload_reminder(submission_id)
       submission = Submission.find(submission_id)
       return if submission.receipt_sent_at || submission.images.count.positive?
+
       user = Gravity.client.user(id: submission.user.gravity_user_id)._get
       user_detail = user.user_detail._get
       raise 'User lacks email.' if user_detail.email.blank?
@@ -108,9 +115,11 @@ class SubmissionService
     def deliver_submission_receipt(submission_id)
       submission = Submission.find(submission_id)
       raise 'Still processing images.' unless submission.ready?
+
       user = Gravity.client.user(id: submission.user.gravity_user_id)._get
       user_detail = user.user_detail._get
       raise 'User lacks email.' if user_detail.email.blank?
+
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
       UserMailer.submission_receipt(
@@ -124,6 +133,7 @@ class SubmissionService
     def deliver_submission_notification(submission_id)
       submission = Submission.find(submission_id)
       raise 'Still processing images.' unless submission.ready?
+
       user = Gravity.client.user(id: submission.user.gravity_user_id)._get
       user_detail = user.user_detail._get
       artist = Gravity.client.artist(id: submission.artist_id)._get
