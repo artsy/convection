@@ -21,6 +21,12 @@ spec:
     spec:
       containers:
         - name: convection-sidekiq
+          env:
+            - name: "REDIS_URL"
+              valueFrom:
+                configMapKeyRef:
+                  name: convection-environment
+                  key: LEGACY_REDIS_URL
           envFrom:
             - configMapRef:
                 name: convection-environment

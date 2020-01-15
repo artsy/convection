@@ -24,6 +24,12 @@ spec:
           envFrom:
             - configMapRef:
                 name: convection-environment
+          env:
+            - name: "REDIS_URL"
+              valueFrom:
+                configMapKeyRef:
+                  name: convection-environment
+                  key: LEGACY_REDIS_URL
           image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/convection:production
           imagePullPolicy: Always
           args: ["bundle", "exec", "sidekiq"]
