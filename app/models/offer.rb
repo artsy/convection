@@ -6,13 +6,13 @@ class Offer < ApplicationRecord
   include Percentize
 
   pg_search_scope :search,
-    against: [:id, :reference_id],
-    associated_against: {
-      partner: [:name]
-    },
-    using: {
-      tsearch: { prefix: true }
-    }
+                  against: [:id, :reference_id],
+                  associated_against: {
+                    partner: [:name]
+                  },
+                  using: {
+                    tsearch: { prefix: true }
+                  }
 
   OFFER_TYPES = [
     AUCTION_CONSIGNMENT = 'auction consignment'.freeze,
@@ -56,12 +56,12 @@ class Offer < ApplicationRecord
   scope :sent, -> { where(state: 'sent') }
 
   dollarize :price_cents,
-    :low_estimate_cents,
-    :high_estimate_cents,
-    :photography_cents,
-    :shipping_cents,
-    :insurance_cents,
-    :other_fees_cents
+            :low_estimate_cents,
+            :high_estimate_cents,
+            :photography_cents,
+            :shipping_cents,
+            :insurance_cents,
+            :other_fees_cents
 
   percentize :commission_percent, :insurance_percent, :other_fees_percent
 
@@ -97,6 +97,7 @@ class Offer < ApplicationRecord
   def best_price_display
     amount = price_cents || high_estimate_cents || low_estimate_cents
     return unless amount
+
     Money.new(amount, currency).format
   end
 end

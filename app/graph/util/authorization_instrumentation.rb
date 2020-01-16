@@ -2,6 +2,7 @@ module Util
   class AuthorizationInstrumentation
     def instrument(_type, field)
       return field unless requires_authorization?(field)
+
       old_resolve_proc = field.resolve_proc
       new_resolve_proc = ->(obj, args, ctx) do
         # Handle fields with permissions
@@ -35,6 +36,7 @@ module Util
 
     def can_access?(attribute, ctx)
       return false unless ctx[:current_user_roles] && ctx[:current_application]
+
       !(ctx[:current_user_roles] & [attribute.metadata[:permit]].flatten).empty?
     end
   end

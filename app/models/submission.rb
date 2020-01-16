@@ -8,11 +8,11 @@ class Submission < ApplicationRecord
   scope :not_deleted, -> { where(deleted_at: nil) }
 
   pg_search_scope :search,
-    against: [:id, :title],
-    using: {
-      tsearch: { prefix: true },
-      trigram: {}
-    }
+                  against: [:id, :title],
+                  using: {
+                    tsearch: { prefix: true },
+                    trigram: {}
+                  }
 
   STATES = [
     DRAFT = 'draft'.freeze,
@@ -55,8 +55,8 @@ class Submission < ApplicationRecord
   has_many :partner_submissions, dependent: :destroy
   has_many :offers, dependent: :destroy
   belongs_to :user
-  belongs_to :primary_image, class_name: 'Asset' # rubocop:disable Rails/InverseOf
-  belongs_to :consigned_partner_submission, class_name: 'PartnerSubmission' # rubocop:disable Rails/InverseOf
+  belongs_to :primary_image, class_name: 'Asset'
+  belongs_to :consigned_partner_submission, class_name: 'PartnerSubmission'
 
   validates :state, inclusion: { in: STATES }
   validates :category, inclusion: { in: CATEGORIES }, allow_nil: true
@@ -64,6 +64,8 @@ class Submission < ApplicationRecord
   validate :validate_primary_image
 
   before_validation :set_state, on: :create
+  before_create :calculate_demand_scores
+  before_update :calculate_demand_scores, if: :worth_recalculating?
 
   scope :completed, -> { where.not(state: 'draft') }
   scope :draft, -> { where(state: 'draft') }
@@ -126,12 +128,26 @@ class Submission < ApplicationRecord
     nil
   end
 
+  def calculate_demand_scores
+    scores = DemandCalculator.score(artist_id, category)
+    self.artist_score = scores[:artist_score]
+    self.auction_score = scores[:auction_score]
+  end
+
+  def worth_recalculating?
+    in_draft_state = state == DRAFT
+    relevant_fields = %w[artist_id category]
+    has_relevant_change = (changes.keys & relevant_fields).any?
+    in_draft_state && has_relevant_change
+  end
+
   def artist_name
     artist.try(:name)
   end
 
   def validate_primary_image
     return if primary_image.blank?
+
     errors.add(:primary_image, 'Primary image must have asset_type=image') unless primary_image.asset_type == 'image'
   end
 end

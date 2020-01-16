@@ -16,6 +16,7 @@ module Admin
 
     def multiple
       return unless params[:gemini_tokens]
+
       gemini_tokens = params[:gemini_tokens].split(' ')
       gemini_tokens.each do |token|
         @submission.assets.create(asset_type: params[:asset_type], gemini_token: token)

@@ -17,14 +17,14 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       stub_gravity_artist
 
       @submission = Fabricate(:submission,
-        title: 'my sartwork',
-        artist_id: 'artistid',
-        edition: true,
-        edition_size: 100,
-        edition_number: '23a',
-        category: 'Painting',
-        user: Fabricate(:user, gravity_user_id: 'userid'),
-        state: 'submitted')
+                              title: 'my sartwork',
+                              artist_id: 'artistid',
+                              edition: true,
+                              edition_size: 100,
+                              edition_number: '23a',
+                              category: 'Painting',
+                              user: Fabricate(:user, gravity_user_id: 'userid'),
+                              state: 'submitted')
 
       stub_jwt_header('userid')
       page.visit "/admin/submissions/#{@submission.id}"
@@ -158,6 +158,41 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       expect(@submission.reload.deleted_at).to be_nil
     end
 
+    context 'scores' do
+      context 'with scores' do
+        before do
+          Fabricate(:artist_standing_score, artist_id: @submission.artist_id)
+          @submission.update(state: 'draft', category: 'Sculpture')
+        end
+
+        it 'displays the scores when present' do
+          page.visit "/admin/submissions/#{@submission.id}"
+
+          within('.artist-score') do
+            expect(page).to have_content(@submission.artist_score * 100)
+          end
+
+          within('.auction-score') do
+            expect(page).to have_content(@submission.auction_score * 100)
+          end
+        end
+      end
+
+      context 'without scores' do
+        it 'displays zero when scores are empty' do
+          page.visit "/admin/submissions/#{@submission.id}"
+
+          within('.artist-score') do
+            expect(page).to have_content(0)
+          end
+
+          within('.auction-score') do
+            expect(page).to have_content(0)
+          end
+        end
+      end
+    end
+
     context 'unreviewed submission' do
       it 'displays buttons to approve/reject if the submission is not yet reviewed' do
         expect(page).to have_content('Approve')
@@ -197,14 +232,14 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       describe 'undo actions' do
         let(:submission2) do
           Fabricate(:submission,
-            title: 'THE SECOND ARTWORK',
-            artist_id: 'artistid',
-            edition: true,
-            edition_size: 100,
-            edition_number: '23a',
-            category: 'Painting',
-            user: Fabricate(:user, gravity_user_id: 'userid3'),
-            state: 'submitted')
+                    title: 'THE SECOND ARTWORK',
+                    artist_id: 'artistid',
+                    edition: true,
+                    edition_size: 100,
+                    edition_number: '23a',
+                    category: 'Painting',
+                    user: Fabricate(:user, gravity_user_id: 'userid3'),
+                    state: 'submitted')
         end
         before do
           partner = Fabricate(:partner, gravity_partner_id: 'partnerid')

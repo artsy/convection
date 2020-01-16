@@ -33,6 +33,71 @@ describe Submission do
     end
   end
 
+  context 'demand scores' do
+    let(:artist_id) { 'artistid' }
+
+    let!(:artist_standing_score) do
+      Fabricate(:artist_standing_score, artist_id: artist_id, artist_score: 0.50, auction_score: 1.0)
+    end
+
+    let!(:other_standing_score) do
+      Fabricate(:artist_standing_score, artist_id: 'other', artist_score: 0.33, auction_score: 0.66)
+    end
+
+    let(:submission_state) { 'draft' }
+
+    let(:submission) do
+      Fabricate(:submission, artist_id: artist_id, medium: 'Painting', state: submission_state)
+    end
+
+    it 'is set on create' do
+      expect(submission.artist_score).to eq artist_standing_score.artist_score
+      expect(submission.auction_score).to eq artist_standing_score.auction_score
+    end
+
+    context 'updating when in draft' do
+      it 'is re-calculated when category changes' do
+        submission.update(category: 'Photography')
+        submission.reload
+
+        expect(submission.artist_score).to eq 0.25
+        expect(submission.auction_score).to eq 0.5
+      end
+
+      it 'is re-calculated when artist id changes' do
+        submission.update(artist_id: 'other')
+
+        expect(submission.artist_score).to eq other_standing_score.artist_score
+        expect(submission.auction_score).to eq other_standing_score.auction_score
+      end
+
+      it 'does not re-calcuate when unrelated things change' do
+        expect(DemandCalculator).to receive(:score).and_return({}).once
+        submission.update(title: 'Some great work')
+      end
+    end
+
+    context 'updating when not draft' do
+      let(:submission_state) { 'approved' }
+
+      it 'does not re-calculate' do
+        submission.update(artist_id: 'other')
+
+        expect(submission.artist_score).to eq artist_standing_score.artist_score
+        expect(submission.auction_score).to eq artist_standing_score.auction_score
+      end
+    end
+
+    context 'updating away from draft' do
+      it 'does not re-calculate' do
+        submission.update(artist_id: 'other', state: 'approved')
+
+        expect(submission.artist_score).to eq artist_standing_score.artist_score
+        expect(submission.auction_score).to eq artist_standing_score.auction_score
+      end
+    end
+  end
+
   context 'category' do
     it 'allows only certain categories' do
       expect(Submission.new(category: nil)).to be_valid

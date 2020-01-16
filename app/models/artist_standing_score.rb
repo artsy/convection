@@ -1,0 +1,2 @@
+class ArtistStandingScore < ApplicationRecord
+end

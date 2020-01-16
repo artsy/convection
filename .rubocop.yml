@@ -1,4 +1,8 @@
-Documentation:
+require: rubocop-rails
+
+inherit_from: .rubocop_todo.yml
+
+Style/Documentation:
   Enabled: false
 
 AllCops:
@@ -21,18 +25,14 @@ Lint/AmbiguousBlockAssociation:
 Style/Lambda:
   Enabled: false
 
-Rails/FilePath:
-  Exclude:
-    - config/application.rb
-
-LineLength:
+Layout/LineLength:
   Exclude:
     - config/environments/*
     - config/initializers/*
   Max: 165
   IgnoreCopDirectives: true
 
-Layout/AlignParameters:
+Layout/ParameterAlignment:
   EnforcedStyle: with_fixed_indentation
 
 Style/FrozenStringLiteralComment:
@@ -51,9 +51,6 @@ Metrics/MethodLength:
 
 Metrics/CyclomaticComplexity:
   Max: 8
-
-Rails/SkipsModelValidations:
-  Enabled: false
 
 Metrics/ClassLength:
   Max: 142

@@ -256,12 +256,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: convection-environment
-          env:
-            - name: "REDIS_URL"
-              valueFrom:
-                configMapKeyRef:
-                  name: shared-redis-db-assignments
-                  key: convection
           image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/convection:production
           imagePullPolicy: Always
           args: ["bundle", "exec", "sidekiq"]
