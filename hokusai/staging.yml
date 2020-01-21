@@ -230,6 +230,7 @@ metadata:
 spec:
   schedule: "0 6 * * *"
   concurrencyPolicy: Forbid
+  suspend: true
   jobTemplate:
     spec:
       template:
