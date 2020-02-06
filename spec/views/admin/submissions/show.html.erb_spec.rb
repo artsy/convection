@@ -32,7 +32,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
 
     it 'displays the page title and content' do
       expect(page).to have_content("Submission ##{@submission.id}")
-      expect(page).to have_content('Gob Bluth')
+      expect(page).to have_content('Gob Bluth'.upcase)
       expect(page).to have_content('Jon Jonson')
       expect(page).to have_content('user@example.com')
       expect(page).to have_content('Painting')
