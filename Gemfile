@@ -45,6 +45,7 @@ end
 
 group :development do
   gem 'foreman'
+  gem 'solargraph' # VSCode language server for autocompletion
 end
 
 group :test do
