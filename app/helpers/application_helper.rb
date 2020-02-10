@@ -6,4 +6,9 @@ module ApplicationHelper
 
     "#{currency} #{Money.new(price_cents, currency).format(no_cents: true)}"
   end
+
+  def markdown_formatted(note)
+    markdown = MarkdownParser.render(note)
+    markdown.html_safe # rubocop:disable Rails/OutputSafety
+  end
 end
