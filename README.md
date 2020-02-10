@@ -26,6 +26,14 @@ Convection is the application that powers our consignments workflow, enabling us
   $ bin/setup
   ```
 
+- Populate environment variables
+
+  `.env.example` contains the keys you'll need to add to your local `.env` file. Consider using [the `copy_env` utility](https://github.com/jonallured/copy_env) to populate the values directly from hokusai:
+
+  ```
+  $ copy_env hokusai
+  ```
+
 ## Tests
 
 Once setup, you can run the tests like this:
