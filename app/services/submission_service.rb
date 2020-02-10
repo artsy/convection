@@ -13,16 +13,16 @@ class SubmissionService
       raise SubmissionError, e.message
     end
 
-    def update_submission(submission, params, current_user = nil)
+    def update_submission(submission, params, include_in_digest, current_user = nil)
       submission.assign_attributes(params)
-      update_submission_state(submission, current_user) if submission.state_changed?
+      update_submission_state(submission, current_user, include_in_digest) if submission.state_changed?
       submission.save!
     end
 
-    def update_submission_state(submission, current_user)
+    def update_submission_state(submission, current_user, include_in_digest)
       case submission.state
       when 'submitted' then submit!(submission)
-      when 'approved' then approve!(submission, current_user)
+      when 'approved' then approve!(submission, current_user, include_in_digest)
       when 'rejected' then reject!(submission, current_user)
       end
     end
@@ -53,11 +53,11 @@ class SubmissionService
       delay_until(Convection.config.third_reminder_days_after.days.from_now).notify_user(submission.id)
     end
 
-    def approve!(submission, current_user)
+    def approve!(submission, current_user, include_in_digest)
       submission.update!(approved_by: current_user, approved_at: Time.now.utc)
       delay.deliver_approval_notification(submission.id)
       NotificationService.delay.post_submission_event(submission.id, SubmissionEvent::APPROVED)
-      PartnerSubmissionService.delay.generate_for_all_partners(submission.id)
+      PartnerSubmissionService.delay.generate_for_all_partners(submission.id) if include_in_digest
     end
 
     def reject!(submission, current_user)

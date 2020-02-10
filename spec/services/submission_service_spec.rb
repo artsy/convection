@@ -52,14 +52,14 @@ describe SubmissionService do
 
   context 'update_submission' do
     it 'sends no emails of the submission is not being submitted' do
-      SubmissionService.update_submission(submission, state: 'draft')
+      SubmissionService.update_submission(submission, { state: 'draft' }, false)
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 0
     end
 
     it 'sends a reminder if the submission has no images' do
       expect(NotificationService).to receive(:post_submission_event).once.with(submission.id, 'submitted')
-      SubmissionService.update_submission(submission, state: 'submitted')
+      SubmissionService.update_submission(submission, { state: 'submitted' }, false)
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 4
     end
@@ -67,13 +67,13 @@ describe SubmissionService do
     it 'sends no reminders if the submission has images' do
       expect(NotificationService).to receive(:post_submission_event).once.with(submission.id, 'submitted')
       Fabricate(:image, submission: submission)
-      SubmissionService.update_submission(submission, state: 'submitted')
+      SubmissionService.update_submission(submission, { state: 'submitted' }, false)
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 2
     end
 
     it 'sends no emails if the state is not being changed' do
-      SubmissionService.update_submission(submission, { title: 'Updated Artwork Title', state: 'draft' }, 'userid')
+      SubmissionService.update_submission(submission, { title: 'Updated Artwork Title', state: 'draft' }, false, 'userid')
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 0
       expect(submission.title).to eq 'Updated Artwork Title'
@@ -84,7 +84,7 @@ describe SubmissionService do
     end
 
     it 'sends no emails if the state is not being changed to approved or rejected' do
-      SubmissionService.update_submission(submission, { state: 'draft' }, 'userid')
+      SubmissionService.update_submission(submission, { state: 'draft' }, false, 'userid')
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 0
       expect(submission.rejected_by).to be_nil
@@ -95,7 +95,7 @@ describe SubmissionService do
 
     it 'sends an approval notification if the submission state is changed to approved' do
       expect(NotificationService).to receive(:post_submission_event).once.with(submission.id, 'approved')
-      SubmissionService.update_submission(submission, { state: 'approved' }, 'userid')
+      SubmissionService.update_submission(submission, { state: 'approved' }, true, 'userid')
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
       expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
@@ -115,7 +115,7 @@ describe SubmissionService do
       partner1 = Fabricate(:partner, gravity_partner_id: 'partner1')
       partner2 = Fabricate(:partner, gravity_partner_id: 'partner2')
 
-      SubmissionService.update_submission(submission, { state: 'approved' }, 'userid')
+      SubmissionService.update_submission(submission, { state: 'approved' }, true, 'userid')
       expect(ActionMailer::Base.deliveries.length).to eq 1
       expect(partner1.partner_submissions.length).to eq 1
       expect(partner2.partner_submissions.length).to eq 1
@@ -124,7 +124,7 @@ describe SubmissionService do
     end
 
     it 'sends a rejection notification if the submission state is changed to rejected' do
-      SubmissionService.update_submission(submission, { state: 'rejected' }, 'userid')
+      SubmissionService.update_submission(submission, { state: 'rejected' }, false, 'userid')
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
       expect(emails.first.bcc).to eq(['consignments-archive@artsymail.com'])
@@ -147,7 +147,7 @@ describe SubmissionService do
         expect(NotificationService).to receive(:post_submission_event).once.with(submission.id, 'approved')
         Fabricate(:partner, gravity_partner_id: 'partner1')
         Fabricate(:image, submission: submission)
-        SubmissionService.update_submission(submission, { state: 'approved' }, 'userid')
+        SubmissionService.update_submission(submission, { state: 'approved' }, true, 'userid')
       end
 
       it 'deletes partner submissions and sends no emails on an undo approval' do
@@ -175,7 +175,7 @@ describe SubmissionService do
       before do
         Fabricate(:partner, gravity_partner_id: 'partner1')
         Fabricate(:image, submission: submission)
-        SubmissionService.update_submission(submission, { state: 'rejected' }, 'userid')
+        SubmissionService.update_submission(submission, { state: 'rejected' }, false, 'userid')
       end
 
       it 'sends no emails for an undo rejection' do

@@ -31,7 +31,7 @@ describe PartnerSubmissionService do
       partner = Fabricate(:partner)
       submission = Fabricate(:submission, state: 'submitted', user: @user, artist_id: 'artistid')
       expect(NotificationService).to receive(:post_submission_event).once.with(submission.id, 'approved')
-      SubmissionService.update_submission(submission, state: 'approved')
+      SubmissionService.update_submission(submission, { state: 'approved' }, true)
       expect(PartnerSubmission.where(submission: submission, partner: partner).count).to eq 1
       Fabricate(:submission, state: 'approved')
       PartnerSubmissionService.generate_for_new_partner(partner)
@@ -88,7 +88,7 @@ describe PartnerSubmissionService do
                                minimum_price_cents: 50_000_00,
                                currency: 'USD')
         expect(NotificationService).to receive(:post_submission_event).once.with(@approved1.id, 'approved')
-        SubmissionService.update_submission(@approved1, state: 'approved')
+        SubmissionService.update_submission(@approved1, { state: 'approved' }, true)
         PartnerSubmissionService.daily_digest
         @email = ActionMailer::Base.deliveries.last
       end
@@ -109,7 +109,7 @@ describe PartnerSubmissionService do
                                title: 'Approved artwork with minimum price',
                                year: '1992')
         expect(NotificationService).to receive(:post_submission_event).once.with(@approved1.id, 'approved')
-        SubmissionService.update_submission(@approved1, state: 'approved')
+        SubmissionService.update_submission(@approved1, { state: 'approved' }, true)
       end
 
       it 'does not display any min price-related text' do
@@ -145,9 +145,9 @@ describe PartnerSubmissionService do
         expect(NotificationService).to receive(:post_submission_event).once.with(@approved1.id, 'approved')
         expect(NotificationService).to receive(:post_submission_event).once.with(@approved2.id, 'approved')
         expect(NotificationService).to receive(:post_submission_event).once.with(@approved3.id, 'approved')
-        SubmissionService.update_submission(@approved1, state: 'approved')
-        SubmissionService.update_submission(@approved2, state: 'approved')
-        SubmissionService.update_submission(@approved3, state: 'approved')
+        SubmissionService.update_submission(@approved1, { state: 'approved' }, true)
+        SubmissionService.update_submission(@approved2, { state: 'approved' }, true)
+        SubmissionService.update_submission(@approved3, { state: 'approved' }, true)
         ActionMailer::Base.deliveries = []
         expect(@partner.partner_submissions.count).to eq 3
       end

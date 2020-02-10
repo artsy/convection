@@ -61,7 +61,8 @@ module Admin
     def edit; end
 
     def update
-      if SubmissionService.update_submission(@submission, submission_params, @current_user)
+      include_in_digest = params[:include_in_digest] == 'true'
+      if SubmissionService.update_submission(@submission, submission_params, include_in_digest, @current_user)
         redirect_to admin_submission_path(@submission)
       else
         render 'edit'

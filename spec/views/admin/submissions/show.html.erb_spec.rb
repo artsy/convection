@@ -99,7 +99,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       expect(NotificationService).to receive(:post_submission_event).once.with(@submission.id, 'approved')
       partner1 = Fabricate(:partner, gravity_partner_id: 'partnerid')
       partner2 = Fabricate(:partner, gravity_partner_id: 'phillips')
-      SubmissionService.update_submission(@submission, state: 'approved')
+      SubmissionService.update_submission(@submission, { state: 'approved' }, true)
       expect(@submission.partner_submissions.count).to eq 2
       page.visit "/admin/submissions/#{@submission.id}"
 
@@ -130,7 +130,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
             'Content-Type' => 'application/json'
           }
         )
-      SubmissionService.update_submission(@submission, state: 'approved')
+      SubmissionService.update_submission(@submission, { state: 'approved' }, true)
       stub_gravity_partner(id: 'partnerid')
       stub_gravity_partner(id: 'phillips')
       stub_gravity_partner_contacts(partner_id: 'partnerid')
@@ -215,6 +215,23 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         expect(page).to have_content('Create Offer')
       end
 
+      it 'approves a submission but does not include in digest when the Approve without digest button is clicked' do
+        Fabricate(:partner)
+        expect(PartnerSubmission.count).to eq 0
+        expect(NotificationService).to receive(:post_submission_event).once.with(@submission.id, 'approved')
+        expect(page).to_not have_content('Create Offer')
+        expect(page).to have_content('submitted')
+
+        click_link 'Approve without digest'
+
+        emails = ActionMailer::Base.deliveries
+        expect(emails.length).to eq 1
+        expect(page).to have_content 'Approved by Jon Jonson'
+        expect(PartnerSubmission.count).to eq 0
+        ActionMailer::Base.deliveries = []
+        expect { PartnerSubmissionService.daily_digest }.to_not change { ActionMailer::Base.deliveries.length }
+      end
+
       it 'rejects a submission when the Reject button is clicked' do
         expect(page).to have_content('submitted')
         click_link 'Reject'
@@ -263,8 +280,8 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         it 'removes the work from the digest when Undo approval is clicked' do
           expect(NotificationService).to receive(:post_submission_event).once.with(@submission.id, 'approved')
           expect(NotificationService).to receive(:post_submission_event).once.with(submission2.id, 'approved')
-          SubmissionService.update_submission(@submission, state: 'approved')
-          SubmissionService.update_submission(submission2, state: 'approved')
+          SubmissionService.update_submission(@submission, { state: 'approved' }, true)
+          SubmissionService.update_submission(submission2, { state: 'approved' }, true)
           expect(@submission.partner_submissions.count).to eq 2
           expect(submission2.partner_submissions.count).to eq 2
           page.visit "/admin/submissions/#{@submission.id}"
