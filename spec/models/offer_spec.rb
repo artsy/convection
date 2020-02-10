@@ -125,6 +125,11 @@ describe Offer do
       expect(offer.low_estimate_dollars).to eq 100
       expect(offer.low_estimate_display).to eq '$100'
     end
+
+    it 'ignores commas' do
+      offer = Offer.new(price_dollars: '7,000')
+      expect(offer.price_cents).to eq 7_000_00
+    end
   end
 
   describe 'Percentize' do
