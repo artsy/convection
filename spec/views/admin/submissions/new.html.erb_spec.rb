@@ -25,7 +25,7 @@ describe 'admin/submissions/new.html.erb', type: :feature do
       find_button('Create').click
       expect(page).to have_content('Submission #')
       expect(page).to have_content('my new artwork title')
-      expect(page).to have_content('Gob Bluth')
+      expect(page).to have_content('Gob Bluth'.upcase)
       expect(page).to have_content('Jon Jonson')
     end
   end

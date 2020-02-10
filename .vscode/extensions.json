@@ -1,7 +1,8 @@
 {
   "recommendations": [
-    "rebornix.ruby",
+    "castwide.solargraph", // intellisense
     "jemmyw.rails-fast-nav",
-    "kumar-harsh.graphql-for-vscode"
+    "kumar-harsh.graphql-for-vscode", // syntax highlighting
+    "rebornix.ruby", // ruby support
   ]
 }

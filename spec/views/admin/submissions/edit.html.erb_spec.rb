@@ -34,7 +34,7 @@ describe 'admin/submissions/edit.html.erb', type: :feature do
       fill_in('submission_title', with: 'my new artwork title')
       find_button('Save').click
       expect(@submission.reload.title).to eq('my new artwork title')
-      expect(page).to have_content('Gob Bluth')
+      expect(page).to have_content('Gob Bluth'.upcase)
       expect(page).to have_content('Add New')
     end
   end

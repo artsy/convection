@@ -3,7 +3,7 @@
     Artist/Designer
   </div>
   <div class='overview-item-value'>
-    <%= @submission.artist_name %>
+    <%= @submission.artist_name.upcase %>
   </div>
 </div>
 
@@ -12,16 +12,16 @@
     Title
   </div>
   <div class='overview-item-value'>
-    <%= @submission.title %>
+    <em><%= @submission.title %></em>
   </div>
 </div>
 
 <div class='overview-item'>
   <div class='overview-item-title'>
-    Year
+    Signature
   </div>
   <div class='overview-item-value'>
-    <%= @submission.year %>
+    <%= @submission.signature %>
   </div>
 </div>
 
@@ -54,19 +54,10 @@
 
 <div class='overview-item'>
   <div class='overview-item-title'>
-    Location
+    Year
   </div>
   <div class='overview-item-value'>
-    <%= formatted_location(@submission) %>
-  </div>
-</div>
-
-<div class='overview-item'>
-  <div class='overview-item-title'>
-    Edition No./Size
-  </div>
-  <div class='overview-item-value'>
-    <%= formatted_editions(@submission) %>
+    <%= @submission.year %>
   </div>
 </div>
 
@@ -75,16 +66,7 @@
     Provenance
   </div>
   <div class='overview-item-value'>
-    <%= @submission.provenance %>
-  </div>
-</div>
-
-<div class='overview-item'>
-  <div class='overview-item-title'>
-    Signature
-  </div>
-  <div class='overview-item-value'>
-    <%= @submission.signature %>
+    <strong><%= @submission.provenance %></strong>
   </div>
 </div>
 
@@ -99,28 +81,10 @@
 
 <div class='overview-item'>
   <div class='overview-item-title'>
-    Created At
+    Location
   </div>
   <div class='overview-item-value'>
-    <%= @submission.created_at&.strftime('%b %-d @ %l:%M %p %Z') %>
-  </div>
-</div>
-
-<div class='overview-item'>
-  <div class='overview-item-title'>
-    Receipt Sent At
-  </div>
-  <div class='overview-item-value'>
-    <%= @submission.receipt_sent_at&.strftime('%b %-d @ %l:%M %p %Z') %>
-  </div>
-</div>
-
-<div class='overview-item'>
-  <div class='overview-item-title'>
-    Reminders Sent
-  </div>
-  <div class='overview-item-value'>
-    <%= @submission.reminders_sent_count %>
+    <%= formatted_location(@submission) %>
   </div>
 </div>
 
@@ -135,6 +99,15 @@
 
 <div class='overview-item'>
   <div class='overview-item-title'>
+    Auction Score
+  </div>
+  <div class='overview-item-value auction-score'>
+    <%= formatted_score(@submission.auction_score) %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
     Artist Score
   </div>
   <div class='overview-item-value artist-score'>
@@ -144,9 +117,9 @@
 
 <div class='overview-item'>
   <div class='overview-item-title'>
-    Auction Score
+    Created At
   </div>
-  <div class='overview-item-value auction-score'>
-    <%= formatted_score(@submission.auction_score) %>
+  <div class='overview-item-value'>
+    <%= @submission.created_at&.strftime('%b %-d @ %l:%M %p %Z') %>
   </div>
 </div>
