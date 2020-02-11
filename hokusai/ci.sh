@@ -24,8 +24,9 @@ retry() {
   # set up test database
   bundle exec rake db:setup
 
-  # run specs
-  bundle exec rake
+  yarn prettier-check
+  bundle exec rake rubocop
+  bundle exec rake spec
 }
 
 retry 1>&2 ${MAX_ATTEMPTS:-5} ${RETRY_DELAY_SECONDS:-1} psql ${DATABASE_URL} -c '\l'
