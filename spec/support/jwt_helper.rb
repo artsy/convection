@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def stub_jwt_header(user_id = nil)
   id = user_id || 'userid'
   payload_data = { sub: id, aud: 'convection' }

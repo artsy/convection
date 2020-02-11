@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module Api
   class SubmissionsController < BaseController
     before_action :require_authentication
-    before_action :set_submission, only: [:show, :update]
-    before_action :require_authorized_submission, only: [:show, :update]
+    before_action :set_submission, only: %i[show update]
+    before_action :require_authorized_submission, only: %i[show update]
 
     def show
       render json: @submission.to_json, status: :ok
@@ -10,7 +12,8 @@ module Api
 
     def create
       param! :artist_id, String, required: true
-      submission = SubmissionService.create_submission(submission_params, current_user)
+      submission =
+        SubmissionService.create_submission(submission_params, current_user)
       render json: submission.to_json, status: :created
     end
 
@@ -25,7 +28,8 @@ module Api
       user = User.where(gravity_user_id: current_user).first
       submissions = Submission.where(user: user)
       if params.include? :completed
-        submissions = params[:completed] ? submissions.completed : submissions.draft
+        submissions =
+          params[:completed] ? submissions.completed : submissions.draft
       end
 
       submissions = submissions.order(created_at: :desc).page(page).per(size)
@@ -59,7 +63,8 @@ module Api
         :title,
         :width,
         :year
-      ).merge(user_agent: request.user_agent)
+      )
+        .merge(user_agent: request.user_agent)
     end
   end
 end

@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 module Admin
   class ConsignmentsController < ApplicationController
     include GraphqlHelper
 
-    before_action :set_consignment, only: [:show, :edit, :update]
+    before_action :set_consignment, only: %i[show edit update]
 
-    expose(:consignment) do
-      PartnerSubmission.consigned.find(params[:id])
-    end
+    expose(:consignment) { PartnerSubmission.consigned.find(params[:id]) }
 
     expose(:consignments) do
       matching_consignments = PartnerSubmission.consigned
-      matching_consignments = matching_consignments.search(term) if term.present?
+      if term.present?
+        matching_consignments = matching_consignments.search(term)
+      end
 
       if params[:partner].present?
         partner = Partner.find(params[:partner])
@@ -19,20 +21,29 @@ module Admin
 
       if params[:user].present?
         user = User.find(params[:user])
-        matching_consignments = matching_consignments.where(submission: user.submissions)
+        matching_consignments =
+          matching_consignments.where(submission: user.submissions)
       end
 
-      matching_consignments = matching_consignments.where(state: params[:state]) if params[:state].present?
+      if params[:state].present?
+        matching_consignments =
+          matching_consignments.where(state: params[:state])
+      end
 
       sort = params[:sort].presence || 'id'
       direction = params[:direction].presence || 'desc'
-      matching_consignments = if sort.include?('partners')
-                                matching_consignments.includes(:partner).reorder("#{sort} #{direction}, partner_submissions.id desc")
-                              elsif sort.include?('offers')
-                                matching_consignments.joins(:accepted_offer).reorder("#{sort} #{direction}, partner_submissions.id desc")
-                              else
-                                matching_consignments.reorder("#{sort} #{direction}")
-                              end
+      matching_consignments =
+        if sort.include?('partners')
+          matching_consignments.includes(:partner).reorder(
+            "#{sort} #{direction}, partner_submissions.id desc"
+          )
+        elsif sort.include?('offers')
+          matching_consignments.joins(:accepted_offer).reorder(
+            "#{sort} #{direction}, partner_submissions.id desc"
+          )
+        else
+          matching_consignments.reorder("#{sort} #{direction}")
+        end
 
       matching_consignments.page(page).per(size)
     end
@@ -46,20 +57,20 @@ module Admin
     end
 
     expose(:filters) do
-      { state: params[:state], partner: params[:partner], user: params[:user], sort: params[:sort], direction: params[:direction] }
+      {
+        state: params[:state],
+        partner: params[:partner],
+        user: params[:user],
+        sort: params[:sort],
+        direction: params[:direction]
+      }
     end
 
-    expose(:counts) do
-      PartnerSubmission.consigned.group(:state).count
-    end
+    expose(:counts) { PartnerSubmission.consigned.group(:state).count }
 
-    expose(:consignments_count) do
-      PartnerSubmission.consigned.count
-    end
+    expose(:consignments_count) { PartnerSubmission.consigned.count }
 
-    expose(:term) do
-      params[:term]
-    end
+    expose(:term) { params[:term] }
 
     def show
       @artist_details = artists_query([@consignment.submission.artist_id])

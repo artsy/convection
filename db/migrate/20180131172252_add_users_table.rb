@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddUsersTable < ActiveRecord::Migration[5.1]
   def change
     create_table :users do |t|
@@ -7,6 +9,6 @@ class AddUsersTable < ActiveRecord::Migration[5.1]
       t.timestamps
     end
 
-    add_index :users, [:gravity_user_id], unique: true
+    add_index :users, %i[gravity_user_id], unique: true
   end
 end

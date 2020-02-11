@@ -1,10 +1,14 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require 'support/gravity_helper'
 
 describe 'admin/submissions/new.html.erb', type: :feature do
   context 'always' do
     before do
-      allow_any_instance_of(Admin::SubmissionsController).to receive(:require_artsy_authentication)
+      allow_any_instance_of(Admin::SubmissionsController).to receive(
+        :require_artsy_authentication
+      )
       page.visit '/admin/submissions/new'
     end
 

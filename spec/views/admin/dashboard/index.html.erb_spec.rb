@@ -1,27 +1,28 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require 'support/gravity_helper'
 
 describe 'admin/dashboard/index.html.erb', type: :feature do
   context 'always' do
     before do
-      allow_any_instance_of(ApplicationController).to receive(:require_artsy_authentication)
+      allow_any_instance_of(ApplicationController).to receive(
+        :require_artsy_authentication
+      )
 
-      allow(Convection.config).to receive(:gravity_xapp_token).and_return('xapp_token')
+      allow(Convection.config).to receive(:gravity_xapp_token).and_return(
+        'xapp_token'
+      )
       gravql_artists_response = {
-        data: {
-          artists: [
-            { id: 'artist1', name: 'Andy Warhol' }
-          ]
-        }
+        data: { artists: [{ id: 'artist1', name: 'Andy Warhol' }] }
       }
       stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
         .to_return(body: gravql_artists_response.to_json)
         .with(
-          headers: {
-            'X-XAPP-TOKEN' => 'xapp_token',
-            'Content-Type' => 'application/json'
-          }
-        )
+        headers: {
+          'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
+        }
+      )
 
       page.visit '/'
     end
@@ -108,7 +109,9 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
         consignment = PartnerSubmission.consigned.order(id: :desc).first
         stub_gravity_root
         stub_gravity_user(id: consignment.submission.user.gravity_user_id)
-        stub_gravity_user_detail(id: consignment.submission.user.gravity_user_id)
+        stub_gravity_user_detail(
+          id: consignment.submission.user.gravity_user_id
+        )
         stub_gravity_artist(id: consignment.submission.artist_id)
 
         find(".list-item--consignment[data-id='#{consignment.id}']").click
@@ -117,9 +120,7 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
       end
 
       it 'lets you view all consignments' do
-        within(:css, '.active-consignments') do
-          click_link('See All')
-        end
+        within(:css, '.active-consignments') { click_link('See All') }
 
         expect(page.current_path).to eq admin_consignments_path
       end

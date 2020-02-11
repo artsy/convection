@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Offer < ApplicationRecord
   include ReferenceId
   include PgSearch::Model
@@ -6,31 +8,19 @@ class Offer < ApplicationRecord
   include Percentize
 
   pg_search_scope :search,
-                  against: [:id, :reference_id],
-                  associated_against: {
-                    partner: [:name]
-                  },
-                  using: {
-                    tsearch: { prefix: true }
-                  }
+                  against: %i[id reference_id],
+                  associated_against: { partner: %i[name] },
+                  using: { tsearch: { prefix: true } }
 
   OFFER_TYPES = [
-    AUCTION_CONSIGNMENT = 'auction consignment'.freeze,
-    NET_PRICE = 'net price'.freeze,
-    RETAIL = 'retail'.freeze,
-    PURCHASE = 'purchase'.freeze
+    AUCTION_CONSIGNMENT = 'auction consignment',
+    NET_PRICE = 'net price',
+    RETAIL = 'retail',
+    PURCHASE = 'purchase'
   ].freeze
 
   # FIXME: deprecate 'accepted' state
-  STATES = %w[
-    draft
-    sent
-    accepted
-    rejected
-    lapsed
-    review
-    consigned
-  ].freeze
+  STATES = %w[draft sent accepted rejected lapsed review consigned].freeze
 
   REJECTION_REASONS = [
     'Low estimate',
@@ -48,7 +38,8 @@ class Offer < ApplicationRecord
 
   validates :state, inclusion: { in: STATES }
   validates :offer_type, inclusion: { in: OFFER_TYPES }, allow_nil: true
-  validates :rejection_reason, inclusion: { in: REJECTION_REASONS }, allow_nil: true
+  validates :rejection_reason,
+            inclusion: { in: REJECTION_REASONS }, allow_nil: true
 
   before_validation :set_state, on: :create
   before_create :set_submission
@@ -81,7 +72,8 @@ class Offer < ApplicationRecord
   end
 
   def locked?
-    submission.consigned_partner_submission_id.present? && submission.consigned_partner_submission.accepted_offer_id != id
+    submission.consigned_partner_submission_id.present? &&
+      submission.consigned_partner_submission.accepted_offer_id != id
   end
 
   def rejected_by_user

@@ -1,15 +1,11 @@
+# frozen_string_literal: true
+
 class SubmissionEvent < Events::BaseEvent
-  TOPIC = 'consignments'.freeze
-  ACTIONS = [
-    SUBMITTED = 'submitted'.freeze,
-    APPROVED = 'approved'.freeze
-  ].freeze
+  TOPIC = 'consignments'
+  ACTIONS = [SUBMITTED = 'submitted', APPROVED = 'approved'].freeze
 
   def object
-    {
-      id: @object.id,
-      display: "#{@object.id} (#{@object.state})"
-    }
+    { id: @object.id, display: "#{@object.id} (#{@object.state})" }
   end
 
   def subject

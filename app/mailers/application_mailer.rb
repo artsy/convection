@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationMailer < ActionMailer::Base
   default from: 'Artsy <consign@artsy.net>'
   default bcc: Convection.config.bcc_email_address
@@ -10,10 +12,6 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   def utm_params(source:, campaign:)
-    {
-      utm_campaign: campaign,
-      utm_medium: 'email',
-      utm_source: source
-    }
+    { utm_campaign: campaign, utm_medium: 'email', utm_source: source }
   end
 end

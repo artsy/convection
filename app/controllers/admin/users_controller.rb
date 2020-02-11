@@ -1,19 +1,19 @@
+# frozen_string_literal: true
+
 module Admin
   class UsersController < ApplicationController
     expose(:users) do
       matching_users = User.all
-      matching_users = matching_users.search(params[:term]) if params[:term].present?
+      if params[:term].present?
+        matching_users = matching_users.search(params[:term])
+      end
       matching_users.page(page).per(size)
     end
 
-    expose(:term) do
-      params[:term]
-    end
+    expose(:term) { params[:term] }
 
     def index
-      respond_to do |format|
-        format.json { render json: users || [] }
-      end
+      respond_to { |format| format.json { render json: users || [] } }
     end
   end
 end

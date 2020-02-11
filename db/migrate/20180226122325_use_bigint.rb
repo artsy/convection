@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UseBigint < ActiveRecord::Migration[5.1]
   def change
     change_column :partner_submissions, :sale_price_cents, :bigint

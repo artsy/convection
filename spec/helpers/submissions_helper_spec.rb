@@ -1,40 +1,49 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require 'support/gravity_helper'
 
 describe SubmissionsHelper, type: :helper do
   context 'formatted_location' do
     it 'correctly formats location fields' do
-      submission = Fabricate(:submission,
-                             location_city: 'Brooklyn',
-                             location_state: 'New York',
-                             location_country: 'USA')
-      expect(helper.formatted_location(submission)).to eq 'Brooklyn, New York, USA'
+      submission =
+        Fabricate(
+          :submission,
+          location_city: 'Brooklyn',
+          location_state: 'New York',
+          location_country: 'USA'
+        )
+      expect(
+        helper.formatted_location(submission)
+      ).to eq 'Brooklyn, New York, USA'
     end
 
     it 'returns empty string when location values are nil' do
-      submission = Fabricate(:submission,
-                             location_city: '',
-                             location_state: '',
-                             location_country: '')
+      submission =
+        Fabricate(
+          :submission,
+          location_city: '', location_state: '', location_country: ''
+        )
       expect(helper.formatted_location(submission)).to be_blank
     end
 
     it 'works if the location has no city' do
-      submission = Fabricate(:submission,
-                             location_city: '',
-                             location_state: 'Tokyo',
-                             location_country: 'Japan')
+      submission =
+        Fabricate(
+          :submission,
+          location_city: '', location_state: 'Tokyo', location_country: 'Japan'
+        )
       expect(helper.formatted_location(submission)).to eq('Tokyo, Japan')
     end
   end
 
   context 'formatted_dimensions' do
     it 'correctly formats dimension fields' do
-      submission = Fabricate(:submission,
-                             width: '10',
-                             height: '12',
-                             depth: '1.75',
-                             dimensions_metric: 'in')
+      submission =
+        Fabricate(
+          :submission,
+          width: '10', height: '12', depth: '1.75', dimensions_metric: 'in'
+        )
       expect(helper.formatted_dimensions(submission)).to eq '12x10x1.75in'
     end
 
@@ -46,53 +55,44 @@ describe SubmissionsHelper, type: :helper do
 
   context 'formatted_editions' do
     it 'it correctly formats the editions fields' do
-      submission = Fabricate(:submission,
-                             edition_size: 200,
-                             edition_number: '10a')
+      submission =
+        Fabricate(:submission, edition_size: 200, edition_number: '10a')
       expect(helper.formatted_editions(submission)).to eq '10a/200'
     end
 
     it 'returns nil if there is no edition_number' do
-      submission = Fabricate(:submission,
-                             edition_size: 200,
-                             edition_number: nil)
+      submission =
+        Fabricate(:submission, edition_size: 200, edition_number: nil)
       expect(helper.formatted_editions(submission)).to eq nil
     end
   end
 
   context 'formatted_category' do
     it 'correctly formats category and medium fields if both are present' do
-      submission = Fabricate(:submission,
-                             category: 'Painting',
-                             medium: 'Oil on linen')
-      expect(helper.formatted_category(submission)).to eq 'Painting, Oil on linen'
+      submission =
+        Fabricate(:submission, category: 'Painting', medium: 'Oil on linen')
+      expect(
+        helper.formatted_category(submission)
+      ).to eq 'Painting, Oil on linen'
     end
 
     it 'correctly formats category and medium fields if category is nil' do
-      submission = Fabricate(:submission,
-                             category: nil,
-                             medium: 'Oil on linen')
+      submission = Fabricate(:submission, category: nil, medium: 'Oil on linen')
       expect(helper.formatted_category(submission)).to eq 'Oil on linen'
     end
 
     it 'correctly formats category and medium fields if medium is nil' do
-      submission = Fabricate(:submission,
-                             category: 'Painting',
-                             medium: nil)
+      submission = Fabricate(:submission, category: 'Painting', medium: nil)
       expect(helper.formatted_category(submission)).to eq 'Painting'
     end
 
     it 'correctly formats category and medium fields if category is empty' do
-      submission = Fabricate(:submission,
-                             category: nil,
-                             medium: 'Oil on linen')
+      submission = Fabricate(:submission, category: nil, medium: 'Oil on linen')
       expect(helper.formatted_category(submission)).to eq 'Oil on linen'
     end
 
     it 'correctly formats category and medium fields if medium is empty' do
-      submission = Fabricate(:submission,
-                             category: 'Painting',
-                             medium: '')
+      submission = Fabricate(:submission, category: 'Painting', medium: '')
       expect(helper.formatted_category(submission)).to eq 'Painting'
     end
   end
@@ -111,16 +111,19 @@ describe SubmissionsHelper, type: :helper do
       )
     end
     it 'displays the correct text when all info is present' do
-      expect(helper.formatted_medium_metadata(submission)).to eq 'Oil on linen, 10x10x15cm, Edition 10a/100'
+      expect(
+        helper.formatted_medium_metadata(submission)
+      ).to eq 'Oil on linen, 10x10x15cm, Edition 10a/100'
     end
     it 'truncates the medium correctly' do
       submission.update!(
-        medium: 'Since the late 1990s, KAWS has produced art toys to be circulated as global commodities. '\
-                'By engaging directly with branding, production, and distribution, his toys compel their '\
-                'collectors to consider what the commodity status of art objects is today. Seen here, the '\
-                "\"Accomplice” characters from KAWS are appropriately branded with the artist's trademark \"X\" "\
-                "to replace each of the figure's original eyes. The black example is from an edition of 500 "\
-                'and the pink example is from an edition of 1000'
+        medium:
+          'Since the late 1990s, KAWS has produced art toys to be circulated as global commodities. ' \
+            'By engaging directly with branding, production, and distribution, his toys compel their ' \
+            'collectors to consider what the commodity status of art objects is today. Seen here, the ' \
+            "\"Accomplice” characters from KAWS are appropriately branded with the artist's trademark \"X\" " \
+            "to replace each of the figure's original eyes. The black example is from an edition of 500 " \
+            'and the pink example is from an edition of 1000'
       )
       expect(helper.formatted_medium_metadata(submission)).to eq(
         'Since the late 1990s, KAWS has produced art toys to be circulated as global commodities. By engag..., 10x10x15cm, Edition 10a/100'
@@ -128,30 +131,51 @@ describe SubmissionsHelper, type: :helper do
     end
     it 'displays the correct text when there is no medium' do
       submission.update!(medium: nil)
-      expect(helper.formatted_medium_metadata(submission)).to eq '10x10x15cm, Edition 10a/100'
+      expect(
+        helper.formatted_medium_metadata(submission)
+      ).to eq '10x10x15cm, Edition 10a/100'
     end
     it 'displays the correct text when there is no edition number/size' do
       submission.update!(edition_number: nil, edition_size: nil)
-      expect(helper.formatted_medium_metadata(submission)).to eq 'Oil on linen, 10x10x15cm'
+      expect(
+        helper.formatted_medium_metadata(submission)
+      ).to eq 'Oil on linen, 10x10x15cm'
     end
     it 'displays the correct text when there are no dimensions' do
       submission.update!(height: nil, width: nil, depth: nil)
-      expect(helper.formatted_medium_metadata(submission)).to eq 'Oil on linen, Edition 10a/100'
+      expect(
+        helper.formatted_medium_metadata(submission)
+      ).to eq 'Oil on linen, Edition 10a/100'
     end
     it 'displays the correct text when there is only a medium' do
-      submission.update!(height: nil, width: nil, depth: nil, edition_number: nil, edition_size: nil)
+      submission.update!(
+        height: nil,
+        width: nil,
+        depth: nil,
+        edition_number: nil,
+        edition_size: nil
+      )
       expect(helper.formatted_medium_metadata(submission)).to eq 'Oil on linen'
     end
     it 'displays the correct text when there is only an edition number/size' do
       submission.update!(height: nil, width: nil, depth: nil, medium: nil)
-      expect(helper.formatted_medium_metadata(submission)).to eq 'Edition 10a/100'
+      expect(
+        helper.formatted_medium_metadata(submission)
+      ).to eq 'Edition 10a/100'
     end
     it 'displays the correct text when there are only dimensions' do
       submission.update!(medium: nil, edition_number: nil, edition_size: nil)
       expect(helper.formatted_medium_metadata(submission)).to eq '10x10x15cm'
     end
     it 'displays the correct text when there is no info' do
-      submission.update!(medium: nil, edition_number: nil, edition_size: nil, height: nil, width: nil, depth: nil)
+      submission.update!(
+        medium: nil,
+        edition_number: nil,
+        edition_size: nil,
+        height: nil,
+        width: nil,
+        depth: nil
+      )
       expect(helper.formatted_medium_metadata(submission)).to eq ''
     end
   end
@@ -160,13 +184,15 @@ describe SubmissionsHelper, type: :helper do
     it 'shows the correct label for an approved submission' do
       stub_gravity_root
       stub_gravity_user
-      submission = Fabricate(:submission, state: 'approved', approved_by: 'userid')
+      submission =
+        Fabricate(:submission, state: 'approved', approved_by: 'userid')
       expect(helper.reviewer_byline(submission)).to eq 'Approved by Jon Jonson'
     end
     it 'shows the correct label for a rejected submissions' do
       stub_gravity_root
       stub_gravity_user
-      submission = Fabricate(:submission, state: 'rejected', rejected_by: 'userid')
+      submission =
+        Fabricate(:submission, state: 'rejected', rejected_by: 'userid')
       expect(helper.reviewer_byline(submission)).to eq 'Rejected by Jon Jonson'
     end
     it 'shows the correct label for an approved submission with no user' do
