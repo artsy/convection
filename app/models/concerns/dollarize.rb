@@ -16,12 +16,15 @@ module Dollarize
         end
 
         define_method "#{method_name.to_s.gsub(/_cents$/, '_dollars')}=" do |dollars|
-          if dollars.blank?
-            self[method_name] = nil
-          else
-            cents = dollars.to_f * 100
-            self[method_name] = cents
-          end
+          cents = if dollars.blank?
+                    nil
+                  elsif dollars.is_a?(String)
+                    dollars.gsub(',', '').to_f * 100
+                  else
+                    dollars.to_f * 100
+                  end
+
+          self[method_name] = cents
         end
 
         define_method method_name.to_s.gsub(/_cents$/, '_display') do
