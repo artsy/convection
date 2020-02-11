@@ -4,11 +4,17 @@ module SubmissionsHelper
   end
 
   def formatted_location(submission)
-    [submission.location_city, submission.location_state, submission.location_country].select(&:present?).join(', ')
+    [
+      submission.location_city,
+      submission.location_state,
+      submission.location_country
+    ].select(&:present?)
+      .join(', ')
   end
 
   def formatted_dimensions(submission)
-    values = [submission.height, submission.width, submission.depth].select(&:present?)
+    values =
+      [submission.height, submission.width, submission.depth].select(&:present?)
     return if values.empty?
 
     "#{values.join('x')}#{submission.dimensions_metric.try(:downcase)}"
@@ -19,16 +25,26 @@ module SubmissionsHelper
   end
 
   def formatted_editions(submission)
-    submission.edition_number.present? ? "#{submission.edition_number}/#{submission.edition_size}" : nil
+    if submission.edition_number.present?
+      "#{submission.edition_number}/#{submission.edition_size}"
+    else
+      nil
+    end
   end
 
   def formatted_medium_metadata(submission)
-    edition_text = formatted_editions(submission).present? ? "Edition #{formatted_editions(submission)}" : nil
+    edition_text =
+      if formatted_editions(submission).present?
+        "Edition #{formatted_editions(submission)}"
+      else
+        nil
+      end
     [
       submission.medium.try(:truncate, 100),
       formatted_dimensions(submission),
       edition_text
-    ].compact.join(', ')
+    ].compact
+      .join(', ')
   end
 
   def reviewer_byline(submission)
@@ -44,11 +60,19 @@ module SubmissionsHelper
   end
 
   def preferred_image(submission)
-    (submission.primary_image.presence || submission.processed_images.min_by(&:id)).image_urls['square']
+    (
+      submission.primary_image.presence ||
+        submission.processed_images.min_by(&:id)
+    )
+      .image_urls[
+      'square'
+    ]
   end
 
   def formatted_current_time
-    Time.now.in_time_zone('Eastern Time (US & Canada)').strftime('%l:%M %Z %B %-d, %Y')
+    Time.now.in_time_zone('Eastern Time (US & Canada)').strftime(
+      '%l:%M %Z %B %-d, %Y'
+    )
   end
 
   def formatted_minimum_price(submission)

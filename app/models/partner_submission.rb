@@ -6,25 +6,16 @@ class PartnerSubmission < ApplicationRecord
   include Percentize
 
   pg_search_scope :search,
-                  against: [:id, :reference_id],
-                  associated_against: {
-                    partner: [:name]
-                  },
-                  using: {
-                    tsearch: { prefix: true }
-                  }
+                  against: %i[id reference_id],
+                  associated_against: { partner: %i[name] },
+                  using: { tsearch: { prefix: true } }
 
   belongs_to :partner
   belongs_to :submission
   has_many :offers, dependent: :destroy
   belongs_to :accepted_offer, class_name: 'Offer'
 
-  STATES = [
-    'open',
-    'sold',
-    'bought in',
-    'canceled'
-  ].freeze
+  STATES = ['open', 'sold', 'bought in', 'canceled'].freeze
 
   scope :group_by_day, -> { group("date_trunc('day', notified_at) ") }
   scope :consigned, -> { where.not(accepted_offer_id: nil) }

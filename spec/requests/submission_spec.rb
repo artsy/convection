@@ -2,7 +2,9 @@ require 'rails_helper'
 require 'support/gravity_helper'
 
 describe 'Submission Flow' do
-  let(:jwt_token) { JWT.encode({ aud: 'gravity', sub: 'userid' }, Convection.config.jwt_secret) }
+  let(:jwt_token) do
+    JWT.encode({ aud: 'gravity', sub: 'userid' }, Convection.config.jwt_secret)
+  end
   let(:headers) { { 'Authorization' => "Bearer #{jwt_token}" } }
 
   before do
@@ -17,40 +19,42 @@ describe 'Submission Flow' do
     stub_gravity_artist
 
     # first create the submission, without a location_city
-    post '/api/submissions', params: {
-      artist_id: 'artistid',
-      user: Fabricate(:user, gravity_user_id: 'userid'),
-      title: 'My Artwork',
-      medium: 'painting',
-      year: '1992',
-      height: '12',
-      width: '14',
-      dimensions_metric: 'in',
-      location_state: 'Tokyo',
-      location_country: 'Japan',
-      category: 'Painting'
-    }, headers: headers
+    post '/api/submissions',
+         params: {
+           artist_id: 'artistid',
+           user: Fabricate(:user, gravity_user_id: 'userid'),
+           title: 'My Artwork',
+           medium: 'painting',
+           year: '1992',
+           height: '12',
+           width: '14',
+           dimensions_metric: 'in',
+           location_state: 'Tokyo',
+           location_country: 'Japan',
+           category: 'Painting'
+         },
+         headers: headers
 
     expect(response.status).to eq 201
     submission = Submission.find(JSON.parse(response.body)['id'])
     expect(submission.assets.count).to eq 0
 
-    put "/api/submissions/#{submission.id}", params: {
-      state: 'submitted'
-    }, headers: headers
+    put "/api/submissions/#{submission.id}",
+        params: { state: 'submitted' }, headers: headers
     expect(response.status).to eq 201
     expect(submission.reload.state).to eq 'submitted'
 
     emails = ActionMailer::Base.deliveries
     expect(emails.length).to eq 4
-    expect(emails.first.to).to eq(['consign@artsy.net'])
+    expect(emails.first.to).to eq(%w[consign@artsy.net])
     expect(emails[1].subject).to include("You're Almost Done")
-    expect(emails[1].to).to eq(['michael@bluth.com'])
-    # sidekiq flushes everything at once
+    expect(emails[1].to).to eq(%w[michael@bluth.com]) # sidekiq flushes everything at once
     expect(emails[2].subject).to include("You're Almost Done")
-    expect(emails[2].to).to eq(['michael@bluth.com'])
-    expect(emails.last.subject).to include('Last chance to complete your consignment')
-    expect(emails.last.to).to eq(['michael@bluth.com'])
+    expect(emails[2].to).to eq(%w[michael@bluth.com])
+    expect(emails.last.subject).to include(
+      'Last chance to complete your consignment'
+    )
+    expect(emails.last.to).to eq(%w[michael@bluth.com])
   end
 
   describe 'Creating a submission without a photo initially' do
@@ -61,40 +65,42 @@ describe 'Submission Flow' do
       stub_gravity_artist
 
       # first create the submission
-      post '/api/submissions', params: {
-        artist_id: 'artistid',
-        user: Fabricate(:user, gravity_user_id: 'userid'),
-        title: 'My Artwork',
-        medium: 'painting',
-        year: '1992',
-        height: '12',
-        width: '14',
-        dimensions_metric: 'in',
-        location_city: 'New York',
-        category: 'Painting'
-      }, headers: headers
+      post '/api/submissions',
+           params: {
+             artist_id: 'artistid',
+             user: Fabricate(:user, gravity_user_id: 'userid'),
+             title: 'My Artwork',
+             medium: 'painting',
+             year: '1992',
+             height: '12',
+             width: '14',
+             dimensions_metric: 'in',
+             location_city: 'New York',
+             category: 'Painting'
+           },
+           headers: headers
 
       expect(response.status).to eq 201
       @submission = Submission.find(JSON.parse(response.body)['id'])
 
       expect(@submission.assets.count).to eq 0
 
-      put "/api/submissions/#{@submission.id}", params: {
-        state: 'submitted'
-      }, headers: headers
+      put "/api/submissions/#{@submission.id}",
+          params: { state: 'submitted' }, headers: headers
       expect(response.status).to eq 201
       expect(@submission.reload.state).to eq 'submitted'
 
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 4
-      expect(emails.first.to).to eq(['consign@artsy.net'])
+      expect(emails.first.to).to eq(%w[consign@artsy.net])
       expect(emails[1].subject).to include("You're Almost Done")
-      expect(emails[1].to).to eq(['michael@bluth.com'])
-      # sidekiq flushes everything at once
+      expect(emails[1].to).to eq(%w[michael@bluth.com]) # sidekiq flushes everything at once
       expect(emails[2].subject).to include("You're Almost Done")
-      expect(emails[2].to).to eq(['michael@bluth.com'])
-      expect(emails.last.subject).to include('Last chance to complete your consignment')
-      expect(emails.last.to).to eq(['michael@bluth.com'])
+      expect(emails[2].to).to eq(%w[michael@bluth.com])
+      expect(emails.last.subject).to include(
+        'Last chance to complete your consignment'
+      )
+      expect(emails.last.to).to eq(%w[michael@bluth.com])
     end
   end
 
@@ -106,59 +112,70 @@ describe 'Submission Flow' do
       stub_gravity_artist
 
       # first create the submission
-      post '/api/submissions', params: {
-        artist_id: 'artistid',
-        user: Fabricate(:user, gravity_user_id: 'userid'),
-        title: 'My Artwork',
-        medium: 'painting',
-        year: '1992',
-        height: '12',
-        width: '14',
-        dimensions_metric: 'in',
-        location_city: 'New York',
-        category: 'Painting'
-      }, headers: headers
+      post '/api/submissions',
+           params: {
+             artist_id: 'artistid',
+             user: Fabricate(:user, gravity_user_id: 'userid'),
+             title: 'My Artwork',
+             medium: 'painting',
+             year: '1992',
+             height: '12',
+             width: '14',
+             dimensions_metric: 'in',
+             location_city: 'New York',
+             category: 'Painting'
+           },
+           headers: headers
 
       expect(response.status).to eq 201
       submission = Submission.find(JSON.parse(response.body)['id'])
 
       # upload assets to that submission
-      post '/api/assets', params: {
-        submission_id: submission.id,
-        gemini_token: 'gemini-token'
-      }, headers: headers
+      post '/api/assets',
+           params: {
+             submission_id: submission.id, gemini_token: 'gemini-token'
+           },
+           headers: headers
 
-      post '/api/assets', params: {
-        submission_id: submission.id,
-        gemini_token: 'gemini-token2'
-      }, headers: headers
+      post '/api/assets',
+           params: {
+             submission_id: submission.id, gemini_token: 'gemini-token2'
+           },
+           headers: headers
 
       expect(submission.assets.count).to eq 2
       expect(submission.assets.map(&:image_urls).uniq).to eq([{}])
 
       # accept gemini callbacks for image urls
-      post '/api/callbacks/gemini', params: {
-        access_token: 'auth-token',
-        token: 'gemini-token',
-        image_url: { square: 'https://new-image.jpg' },
-        metadata: { id: submission.id }
-      }
+      post '/api/callbacks/gemini',
+           params: {
+             access_token: 'auth-token',
+             token: 'gemini-token',
+             image_url: { square: 'https://new-image.jpg' },
+             metadata: { id: submission.id }
+           }
 
-      post '/api/callbacks/gemini', params: {
-        access_token: 'auth-token',
-        token: 'gemini-token2',
-        image_url: { square: 'https://another-image.jpg' },
-        metadata: { id: submission.id }
-      }
-      expect(submission.assets.detect { |a| a.gemini_token == 'gemini-token' }.reload.image_urls)
-        .to eq('square' => 'https://new-image.jpg')
-      expect(submission.assets.detect { |a| a.gemini_token == 'gemini-token2' }.reload.image_urls)
-        .to eq('square' => 'https://another-image.jpg')
+      post '/api/callbacks/gemini',
+           params: {
+             access_token: 'auth-token',
+             token: 'gemini-token2',
+             image_url: { square: 'https://another-image.jpg' },
+             metadata: { id: submission.id }
+           }
+      expect(
+        submission.assets.detect { |a| a.gemini_token == 'gemini-token' }.reload
+          .image_urls
+      ).to eq('square' => 'https://new-image.jpg')
+      expect(
+        submission.assets.detect { |a|
+          a.gemini_token == 'gemini-token2'
+        }.reload
+          .image_urls
+      ).to eq('square' => 'https://another-image.jpg')
 
       # update the submission status and notify
-      put "/api/submissions/#{submission.id}", params: {
-        state: 'submitted'
-      }, headers: headers
+      put "/api/submissions/#{submission.id}",
+          params: { state: 'submitted' }, headers: headers
       expect(response.status).to eq 201
       expect(submission.reload.state).to eq 'submitted'
       emails = ActionMailer::Base.deliveries
@@ -166,10 +183,12 @@ describe 'Submission Flow' do
       expect(emails.first.html_part.body).to include('https://new-image.jpg')
 
       # GET to retrieve the image url for the submission
-      get '/api/assets', params: { submission_id: submission.id }, headers: headers
+      get '/api/assets',
+          params: { submission_id: submission.id }, headers: headers
       expect(response.status).to eq 200
-      expect(JSON.parse(response.body).map { |a| a['gemini_token'] })
-        .to include('gemini-token', 'gemini-token2')
+      expect(
+        JSON.parse(response.body).map { |a| a['gemini_token'] }
+      ).to include('gemini-token', 'gemini-token2')
     end
   end
 end

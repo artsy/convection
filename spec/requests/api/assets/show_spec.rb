@@ -2,12 +2,15 @@ require 'rails_helper'
 require 'support/gravity_helper'
 
 describe 'Show Asset' do
-  let(:jwt_token) { JWT.encode({ aud: 'gravity', sub: 'userid' }, Convection.config.jwt_secret) }
+  let(:jwt_token) do
+    JWT.encode({ aud: 'gravity', sub: 'userid' }, Convection.config.jwt_secret)
+  end
   let(:headers) { { 'Authorization' => "Bearer #{jwt_token}" } }
 
   describe 'GET /assets/:id' do
     it 'rejects unauthorized requests' do
-      get '/api/assets/foo', headers: { 'Authorization' => 'Bearer foo.bar.baz' }
+      get '/api/assets/foo',
+          headers: { 'Authorization' => 'Bearer foo.bar.baz' }
       expect(response.status).to eq 401
     end
 
@@ -19,14 +22,24 @@ describe 'Show Asset' do
     end
 
     it "rejects requests for someone else's submission" do
-      submission = Fabricate(:submission, artist_id: 'andy-warhol', user: Fabricate(:user, gravity_user_id: 'buster-bluth'))
+      submission =
+        Fabricate(
+          :submission,
+          artist_id: 'andy-warhol',
+          user: Fabricate(:user, gravity_user_id: 'buster-bluth')
+        )
       asset = Fabricate(:image, submission: submission)
       get "/api/assets/#{asset.id}", headers: headers
       expect(response.status).to eq 401
     end
 
     it 'accepts requests for your own submission' do
-      submission = Fabricate(:submission, artist_id: 'andy-warhol', user: Fabricate(:user, gravity_user_id: 'userid'))
+      submission =
+        Fabricate(
+          :submission,
+          artist_id: 'andy-warhol',
+          user: Fabricate(:user, gravity_user_id: 'userid')
+        )
       asset = Fabricate(:image, submission: submission)
       get "/api/assets/#{asset.id}", headers: headers
       expect(response.status).to eq 200

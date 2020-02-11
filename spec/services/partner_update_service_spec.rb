@@ -3,9 +3,18 @@ require 'support/gravity_helper'
 
 describe PartnerUpdateService do
   describe '#update_partners_from_gravity' do
-    let!(:partner1) { Fabricate(:partner, gravity_partner_id: 'phillips', name: 'Phillips') }
-    let!(:partner2) { Fabricate(:partner, gravity_partner_id: 'gagosian', name: 'Gagosian Gallery') }
-    let!(:partner3) { Fabricate(:partner, gravity_partner_id: 'pace', name: 'Pace Gallery') }
+    let!(:partner1) do
+      Fabricate(:partner, gravity_partner_id: 'phillips', name: 'Phillips')
+    end
+    let!(:partner2) do
+      Fabricate(
+        :partner,
+        gravity_partner_id: 'gagosian', name: 'Gagosian Gallery'
+      )
+    end
+    let!(:partner3) do
+      Fabricate(:partner, gravity_partner_id: 'pace', name: 'Pace Gallery')
+    end
 
     before do
       stub_gravity_root

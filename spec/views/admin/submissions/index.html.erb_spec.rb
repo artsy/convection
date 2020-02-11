@@ -9,23 +9,22 @@ describe 'admin/submissions/index.html.erb', type: :feature do
       stub_gravity_user(id: 'userid2')
       stub_gravity_user_detail(id: 'userid2')
 
-      allow_any_instance_of(ApplicationController).to receive(:require_artsy_authentication)
-      allow(Convection.config).to receive(:gravity_xapp_token).and_return('xapp_token')
+      allow_any_instance_of(ApplicationController).to receive(
+        :require_artsy_authentication
+      )
+      allow(Convection.config).to receive(:gravity_xapp_token).and_return(
+        'xapp_token'
+      )
       gravql_artists_response = {
-        data: {
-          artists: [
-            { id: 'artist1', name: 'Andy Warhol' }
-          ]
-        }
+        data: { artists: [{ id: 'artist1', name: 'Andy Warhol' }] }
       }
       stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
         .to_return(body: gravql_artists_response.to_json)
         .with(
-          headers: {
-            'X-XAPP-TOKEN' => 'xapp_token',
-            'Content-Type' => 'application/json'
-          }
-        )
+        headers: {
+          'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
+        }
+      )
       page.visit admin_submissions_path
     end
 
@@ -47,7 +46,12 @@ describe 'admin/submissions/index.html.erb', type: :feature do
     context 'with submissions' do
       before do
         user = Fabricate(:user, gravity_user_id: 'userid')
-        3.times { Fabricate(:submission, user: user, artist_id: 'artistid', state: 'submitted') }
+        3.times do
+          Fabricate(
+            :submission,
+            user: user, artist_id: 'artistid', state: 'submitted'
+          )
+        end
         page.visit admin_submissions_path
       end
 
@@ -80,30 +84,44 @@ describe 'admin/submissions/index.html.erb', type: :feature do
 
     context 'with a variety of submissions' do
       before do
-        @user1 = Fabricate(:user, gravity_user_id: 'userid', email: 'jon-jonson@test.com')
-        @user2 = Fabricate(:user, gravity_user_id: 'userid2', email: 'percy@test.com')
+        @user1 =
+          Fabricate(
+            :user,
+            gravity_user_id: 'userid', email: 'jon-jonson@test.com'
+          )
+        @user2 =
+          Fabricate(:user, gravity_user_id: 'userid2', email: 'percy@test.com')
         3.times do
-          Fabricate(:submission,
-                    user: @user1,
-                    artist_id: 'artistid',
-                    state: 'submitted',
-                    title: 'blah')
+          Fabricate(
+            :submission,
+            user: @user1,
+            artist_id: 'artistid',
+            state: 'submitted',
+            title: 'blah'
+          )
         end
-        @submission = Fabricate(:submission,
-                                user: @user2,
-                                artist_id: 'artistid2',
-                                state: 'approved',
-                                title: 'my work')
-        Fabricate(:submission,
-                  user: @user2,
-                  artist_id: 'artistid4',
-                  state: 'rejected',
-                  title: 'title')
-        Fabricate(:submission,
-                  user: @user2,
-                  artist_id: 'artistid4',
-                  state: 'draft',
-                  title: 'blah blah')
+        @submission =
+          Fabricate(
+            :submission,
+            user: @user2,
+            artist_id: 'artistid2',
+            state: 'approved',
+            title: 'my work'
+          )
+        Fabricate(
+          :submission,
+          user: @user2,
+          artist_id: 'artistid4',
+          state: 'rejected',
+          title: 'title'
+        )
+        Fabricate(
+          :submission,
+          user: @user2,
+          artist_id: 'artistid4',
+          state: 'draft',
+          title: 'blah blah'
+        )
 
         gravql_artists_response = {
           data: {
@@ -118,11 +136,10 @@ describe 'admin/submissions/index.html.erb', type: :feature do
         stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
           .to_return(body: gravql_artists_response.to_json)
           .with(
-            headers: {
-              'X-XAPP-TOKEN' => 'xapp_token',
-              'Content-Type' => 'application/json'
-            }
-          )
+          headers: {
+            'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
+          }
+        )
         page.visit admin_submissions_path
       end
 
@@ -175,7 +192,8 @@ describe 'admin/submissions/index.html.erb', type: :feature do
         expect(page).to have_content 'blah blah'
       end
 
-      it 'allows you to search by user email, filter by state, and sort by ID', js: true do
+      it 'allows you to search by user email, filter by state, and sort by ID',
+         js: true do
         select('approved', from: 'state')
         fill_in('term', with: 'percy')
         expect(page).to have_selector('.ui-autocomplete')
@@ -183,7 +201,12 @@ describe 'admin/submissions/index.html.erb', type: :feature do
         click_link("user-#{@user2.id}")
         expect(current_url).to include("user=#{@user2.id}", 'state=approved')
         click_link('ID')
-        expect(current_url).to include("user=#{@user2.id}", 'state=approved', 'sort=id', 'direction=desc')
+        expect(current_url).to include(
+          "user=#{@user2.id}",
+          'state=approved',
+          'sort=id',
+          'direction=desc'
+        )
       end
     end
   end

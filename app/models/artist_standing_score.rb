@@ -1,2 +1,1 @@
-class ArtistStandingScore < ApplicationRecord
-end
+class ArtistStandingScore < ApplicationRecord; end

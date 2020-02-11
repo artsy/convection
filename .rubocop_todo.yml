@@ -9,6 +9,10 @@
 # Offense count: 5
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: slashes, arguments
+
+inherit_gem:
+  rubocop-config-prettier: config/rubocop.yml
+
 Rails/FilePath:
   Exclude:
     - 'config/application.rb'

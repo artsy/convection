@@ -13,13 +13,9 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery prepend: true, with: :exception
 
-  expose(:page) do
-    (params[:page] || 1).to_i
-  end
+  expose(:page) { (params[:page] || 1).to_i }
 
-  expose(:size) do
-    (params[:size] || 10).to_i
-  end
+  expose(:size) { (params[:size] || 10).to_i }
 
   # override application to decode token and allow only users with `admin` role
   def authorized_artsy_token?(token)

@@ -6,10 +6,7 @@ class SubmissionEvent < Events::BaseEvent
   ].freeze
 
   def object
-    {
-      id: @object.id,
-      display: "#{@object.id} (#{@object.state})"
-    }
+    { id: @object.id, display: "#{@object.id} (#{@object.state})" }
   end
 
   def subject

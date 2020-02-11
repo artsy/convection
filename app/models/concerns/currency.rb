@@ -1,13 +1,7 @@
 module Currency
   extend ActiveSupport::Concern
 
-  SUPPORTED = %w[
-    USD
-    EUR
-    GBP
-    CAD
-    HKD
-  ].freeze
+  SUPPORTED = %w[USD EUR GBP CAD HKD].freeze
 
   included do
     validates :currency, inclusion: { in: SUPPORTED }, allow_nil: true

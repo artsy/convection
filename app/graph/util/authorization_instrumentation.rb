@@ -4,18 +4,23 @@ module Util
       return field unless requires_authorization?(field)
 
       old_resolve_proc = field.resolve_proc
-      new_resolve_proc = ->(obj, args, ctx) do
-        # Handle fields with permissions
+      new_resolve_proc = lambda do |obj, args, ctx|
         if field.metadata[:permit].present? && !can_access?(field, ctx)
           err = GraphQL::ExecutionError.new("Can't access #{field.name}")
           ctx.add_error(err)
         end
 
         # Handle args with permissions
-        auth_args = field.arguments.values.select { |arg| arg.metadata && arg.metadata[:permit] }
+        auth_args =
+          field.arguments.values.select do |arg|
+            arg.metadata && arg.metadata[:permit]
+          end
         failing_args = auth_args.reject { |arg| can_access?(arg, ctx) }
         unless failing_args.empty?
-          err = GraphQL::ExecutionError.new("Can't access arguments: #{failing_args.map(&:name).join(',')}")
+          err =
+            GraphQL::ExecutionError.new(
+              "Can't access arguments: #{failing_args.map(&:name).join(',')}"
+            )
           ctx.add_error(err)
         end
 
@@ -24,14 +29,16 @@ module Util
           resolved
         end
       end
+      # Handle fields with permissions
 
-      field.redefine do
-        resolve(new_resolve_proc)
-      end
+      field.redefine { resolve(new_resolve_proc) }
     end
 
     def requires_authorization?(field)
-      field.metadata[:permit].present? || field.arguments.values.find { |arg| arg.metadata && arg.metadata[:permit] }
+      field.metadata[:permit].present? ||
+        field.arguments.values.find do |arg|
+          arg.metadata && arg.metadata[:permit]
+        end
     end
 
     def can_access?(attribute, ctx)

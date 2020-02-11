@@ -14,7 +14,7 @@ AllCops:
     - bin/**/*
     - Gemfile
 
-# prevent warnings from         
+# prevent warnings from
 #   expect { PartnerSubmissionService.daily_digest }.to change { ActionMailer::Base.deliveries.length }
 # see https://github.com/rubocop-hq/rubocop/issues/4222
 
@@ -29,7 +29,7 @@ Layout/LineLength:
   Exclude:
     - config/environments/*
     - config/initializers/*
-  Max: 165
+  Max: 80
   IgnoreCopDirectives: true
 
 Layout/ParameterAlignment:

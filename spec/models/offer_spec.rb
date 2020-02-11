@@ -3,7 +3,9 @@ require 'support/gravity_helper'
 
 describe Offer do
   let(:offer) { Fabricate(:offer) }
-  let(:approved_submission) { Fabricate(:submission, state: Submission::APPROVED) }
+  let(:approved_submission) do
+    Fabricate(:submission, state: Submission::APPROVED)
+  end
 
   context 'state' do
     it 'correctly sets the initial state to sent' do
@@ -83,9 +85,21 @@ describe Offer do
     before do
       partner1 = Fabricate(:partner, name: 'Gagosian')
       partner2 = Fabricate(:partner, name: 'Heritage Auctions')
-      @offer1 = Fabricate(:offer, partner_submission: Fabricate(:partner_submission, partner: partner1))
-      @offer2 = Fabricate(:offer, partner_submission: Fabricate(:partner_submission, partner: partner1))
-      @offer3 = Fabricate(:offer, partner_submission: Fabricate(:partner_submission, partner: partner2))
+      @offer1 =
+        Fabricate(
+          :offer,
+          partner_submission: Fabricate(:partner_submission, partner: partner1)
+        )
+      @offer2 =
+        Fabricate(
+          :offer,
+          partner_submission: Fabricate(:partner_submission, partner: partner1)
+        )
+      @offer3 =
+        Fabricate(
+          :offer,
+          partner_submission: Fabricate(:partner_submission, partner: partner2)
+        )
     end
 
     it 'allows you to search for offers by reference_id' do

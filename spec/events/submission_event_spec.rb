@@ -2,60 +2,70 @@ require 'rails_helper'
 
 describe SubmissionEvent do
   let(:submission) do
-    Fabricate(:submission,
-              artist_id: 'artistid',
-              user: Fabricate(:user, gravity_user_id: 'userid'),
-              title: 'My Artwork',
-              state: 'submitted',
-              medium: 'painting',
-              year: '1992',
-              height: '12',
-              width: '14',
-              depth: '2',
-              dimensions_metric: 'in',
-              location_city: 'New York',
-              location_state: 'NY',
-              location_country: 'US',
-              category: 'Painting',
-              signature: true,
-              authenticity_certificate: true,
-              provenance: 'This is the provenance')
+    Fabricate(
+      :submission,
+      artist_id: 'artistid',
+      user: Fabricate(:user, gravity_user_id: 'userid'),
+      title: 'My Artwork',
+      state: 'submitted',
+      medium: 'painting',
+      year: '1992',
+      height: '12',
+      width: '14',
+      depth: '2',
+      dimensions_metric: 'in',
+      location_city: 'New York',
+      location_state: 'NY',
+      location_country: 'US',
+      category: 'Painting',
+      signature: true,
+      authenticity_certificate: true,
+      provenance: 'This is the provenance'
+    )
   end
 
   let!(:image1) do
-    Fabricate(:image,
-              submission: submission,
-              image_urls: {
-                'square' => 'http://square1.jpg',
-                'large' => 'http://foo1.jpg',
-                'thumbnail' => 'http://thumb1.jpg'
-              })
+    Fabricate(
+      :image,
+      submission: submission,
+      image_urls: {
+        'square' => 'http://square1.jpg',
+        'large' => 'http://foo1.jpg',
+        'thumbnail' => 'http://thumb1.jpg'
+      }
+    )
   end
 
   let!(:image2) do
-    Fabricate(:image,
-              submission: submission,
-              image_urls: {
-                'square' => 'http://square2.jpg',
-                'large' => 'http://foo2.jpg',
-                'thumbnail' => 'http://thumb2.jpg'
-              })
+    Fabricate(
+      :image,
+      submission: submission,
+      image_urls: {
+        'square' => 'http://square2.jpg',
+        'large' => 'http://foo2.jpg',
+        'thumbnail' => 'http://thumb2.jpg'
+      }
+    )
   end
 
   let!(:image3) do
-    Fabricate(:image,
-              submission: submission,
-              image_urls: {
-                'square' => 'http://square3.jpg',
-                'large' => 'http://foo3.jpg',
-                'thumbnail' => 'http://thumb3.jpg'
-              })
+    Fabricate(
+      :image,
+      submission: submission,
+      image_urls: {
+        'square' => 'http://square3.jpg',
+        'large' => 'http://foo3.jpg',
+        'thumbnail' => 'http://thumb3.jpg'
+      }
+    )
   end
 
   let(:event) { SubmissionEvent.new(model: submission, action: 'submitted') }
 
   before do
-    allow(Convection.config).to receive(:auction_offer_form_url).and_return('https://google.com/auction')
+    allow(Convection.config).to receive(:auction_offer_form_url).and_return(
+      'https://google.com/auction'
+    )
     submission.update!(primary_image: image2)
   end
 
@@ -92,13 +102,25 @@ describe SubmissionEvent do
       expect(event.properties[:signature]).to eq true
       expect(event.properties[:authenticity_certificate]).to eq true
       expect(event.properties[:thumbnail]).to eq 'http://thumb2.jpg'
-      expect(event.properties[:image_urls]).to match_array ['http://foo1.jpg', 'http://foo2.jpg', 'http://foo3.jpg']
+      expect(event.properties[:image_urls]).to match_array %w[
+                    http://foo1.jpg
+                    http://foo2.jpg
+                    http://foo3.jpg
+                  ]
       expect(event.properties[:offer_link]).to eq 'https://google.com/auction'
     end
 
     it 'returns proper properties for a submission with no processed images and few properties' do
-      minimal_submission = Fabricate(:submission, title: 'My Artwork', artist_id: 'artistid', year: '1992', state: 'approved')
-      minimal_event = SubmissionEvent.new(model: minimal_submission, action: 'approved')
+      minimal_submission =
+        Fabricate(
+          :submission,
+          title: 'My Artwork',
+          artist_id: 'artistid',
+          year: '1992',
+          state: 'approved'
+        )
+      minimal_event =
+        SubmissionEvent.new(model: minimal_submission, action: 'approved')
 
       expect(minimal_event.properties[:title]).to eq 'My Artwork'
       expect(minimal_event.properties[:artist_id]).to eq 'artistid'
@@ -110,7 +132,9 @@ describe SubmissionEvent do
       expect(minimal_event.properties[:authenticity_certificate]).to eq false
       expect(minimal_event.properties[:thumbnail]).to eq nil
       expect(minimal_event.properties[:image_urls]).to eq []
-      expect(minimal_event.properties[:offer_link]).to eq 'https://google.com/auction'
+      expect(
+        minimal_event.properties[:offer_link]
+      ).to eq 'https://google.com/auction'
     end
   end
 end

@@ -1,9 +1,7 @@
 module ReferenceId
   extend ActiveSupport::Concern
 
-  included do
-    before_create :create_reference_id
-  end
+  included { before_create :create_reference_id }
 
   def create_reference_id
     loop do

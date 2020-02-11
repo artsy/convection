@@ -8,11 +8,8 @@ class Submission < ApplicationRecord
   scope :not_deleted, -> { where(deleted_at: nil) }
 
   pg_search_scope :search,
-                  against: [:id, :title],
-                  using: {
-                    tsearch: { prefix: true },
-                    trigram: {}
-                  }
+                  against: %i[id title],
+                  using: { tsearch: { prefix: true }, trigram: {} }
 
   STATES = [
     DRAFT = 'draft'.freeze,
@@ -60,7 +57,8 @@ class Submission < ApplicationRecord
 
   validates :state, inclusion: { in: STATES }
   validates :category, inclusion: { in: CATEGORIES }, allow_nil: true
-  validates :dimensions_metric, inclusion: { in: DIMENSION_METRICS }, allow_nil: true
+  validates :dimensions_metric,
+            inclusion: { in: DIMENSION_METRICS }, allow_nil: true
   validate :validate_primary_image
 
   before_validation :set_state, on: :create
@@ -95,7 +93,8 @@ class Submission < ApplicationRecord
 
   def thumbnail
     possible_thumbnails = images.to_a.unshift(primary_image).compact
-    thumbnails = possible_thumbnails.map { |image| image.image_urls['thumbnail'] }.compact
+    thumbnails =
+      possible_thumbnails.map { |image| image.image_urls['thumbnail'] }.compact
     thumbnails.first
   end
 
@@ -112,7 +111,11 @@ class Submission < ApplicationRecord
 
   def ready?
     finished_processing_images_for_email? ||
-      receipt_sent_at && (Time.now.utc > receipt_sent_at + Convection.config.processing_grace_seconds)
+      receipt_sent_at &&
+        (
+          Time.now.utc >
+            receipt_sent_at + Convection.config.processing_grace_seconds
+        )
   end
 
   def reviewed_by_user
@@ -148,6 +151,8 @@ class Submission < ApplicationRecord
   def validate_primary_image
     return if primary_image.blank?
 
-    errors.add(:primary_image, 'Primary image must have asset_type=image') unless primary_image.asset_type == 'image'
+    unless primary_image.asset_type == 'image'
+      errors.add(:primary_image, 'Primary image must have asset_type=image')
+    end
   end
 end

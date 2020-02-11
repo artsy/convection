@@ -10,15 +10,33 @@ class OfferService
       raise OfferError, e.message
     end
 
-    def create_offer(submission_id, partner_id, offer_params = {}, current_user = nil)
+    def create_offer(
+      submission_id, partner_id, offer_params = {}, current_user = nil
+    )
       submission = Submission.find(submission_id)
-      raise OfferError, 'Invalid submission state for offer creation' if [Submission::DRAFT, Submission::REJECTED].include? submission.state
+      if [Submission::DRAFT, Submission::REJECTED].include? submission.state
+        raise OfferError, 'Invalid submission state for offer creation'
+      end
 
-      submission.update!(state: Submission::APPROVED, approved_by: current_user, approved_at: Time.now.utc) if submission.state == Submission::SUBMITTED
+      if submission.state == Submission::SUBMITTED
+        submission.update!(
+          state: Submission::APPROVED,
+          approved_by: current_user,
+          approved_at: Time.now.utc
+        )
+      end
       partner = Partner.find(partner_id)
-      partner_submission = PartnerSubmission.find_or_create_by!(submission_id: submission.id, partner_id: partner.id)
-      partner_submission.update!(notified_at: Time.now.utc) if partner_submission.notified_at.blank?
-      offer = partner_submission.offers.new(offer_params.merge(state: 'draft', created_by_id: current_user))
+      partner_submission =
+        PartnerSubmission.find_or_create_by!(
+          submission_id: submission.id, partner_id: partner.id
+        )
+      if partner_submission.notified_at.blank?
+        partner_submission.update!(notified_at: Time.now.utc)
+      end
+      offer =
+        partner_submission.offers.new(
+          offer_params.merge(state: 'draft', created_by_id: current_user)
+        )
       offer.save!
       offer
     rescue ActiveRecord::RecordNotFound => e
@@ -27,10 +45,14 @@ class OfferService
 
     def update_offer_state(offer, current_user)
       case offer.state
-      when 'sent' then send_offer!(offer, current_user)
-      when 'review' then review!(offer)
-      when 'consigned' then consign!(offer)
-      when 'rejected' then reject!(offer, current_user)
+      when 'sent'
+        send_offer!(offer, current_user)
+      when 'review'
+        review!(offer)
+      when 'consigned'
+        consign!(offer)
+      when 'rejected'
+        reject!(offer, current_user)
       end
     end
 
@@ -39,10 +61,15 @@ class OfferService
     end
 
     def consign!(offer)
-      raise OfferError, 'Cannot complete consignment on non-approved submission' unless offer.submission.state == Submission::APPROVED
+      unless offer.submission.state == Submission::APPROVED
+        raise OfferError,
+              'Cannot complete consignment on non-approved submission'
+      end
 
       offer.update!(consigned_at: Time.now.utc)
-      offer.submission.update!(consigned_partner_submission: offer.partner_submission)
+      offer.submission.update!(
+        consigned_partner_submission: offer.partner_submission
+      )
 
       offer.partner_submission.update!(
         accepted_offer: offer,
@@ -75,10 +102,9 @@ class OfferService
       artist = Gravity.client.artist(id: offer.submission.artist_id)._get
 
       PartnerMailer.offer_introduction(
-        offer: offer,
-        artist: artist,
-        email: email
-      ).deliver_now
+        offer: offer, artist: artist, email: email
+      )
+        .deliver_now
     end
 
     def deliver_rejection_notification(offer_id)
@@ -92,11 +118,8 @@ class OfferService
       offer = Offer.find(offer_id)
       artist = Gravity.client.artist(id: offer.submission.artist_id)._get
 
-      PartnerMailer.offer_rejection(
-        offer: offer,
-        artist: artist,
-        email: email
-      ).deliver_now
+      PartnerMailer.offer_rejection(offer: offer, artist: artist, email: email)
+        .deliver_now
     end
 
     def deliver_offer(offer_id, current_user)
@@ -110,11 +133,9 @@ class OfferService
       artist = Gravity.client.artist(id: offer.submission.artist_id)._get
 
       UserMailer.offer(
-        offer: offer,
-        artist: artist,
-        user: user,
-        user_detail: user_detail
-      ).deliver_now
+        offer: offer, artist: artist, user: user, user_detail: user_detail
+      )
+        .deliver_now
 
       offer.update!(sent_at: Time.now.utc, sent_by: current_user)
     end

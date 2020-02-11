@@ -1,9 +1,7 @@
 module PartnerUpdateService
   class << self
     def update_partners_from_gravity
-      Partner.all.each do |partner|
-        delay.update_partner!(partner.id)
-      end
+      Partner.all.each { |partner| delay.update_partner!(partner.id) }
     end
 
     def update_partner!(partner_id)
@@ -15,7 +13,9 @@ module PartnerUpdateService
 
       gravity_partner = Gravity.client.partner(id: partner.gravity_partner_id)
       new_partner_name = gravity_partner.name
-      partner.update!(name: new_partner_name) unless partner.name == new_partner_name
+      unless partner.name == new_partner_name
+        partner.update!(name: new_partner_name)
+      end
     end
   end
 end

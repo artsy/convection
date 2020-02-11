@@ -38,8 +38,10 @@ gem 'sidekiq', '<6' # for sending emails in the background (<6 necessary for Red
 gem 'uglifier'
 
 group :development, :test do
+  gem 'prettier'
   gem 'pry-byebug'
   gem 'rspec-rails'
+  gem 'rubocop-config-prettier'
   gem 'rubocop-rails'
   gem 'webdrivers', '~> 4.2'
 end

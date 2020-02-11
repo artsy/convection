@@ -1,5 +1,4 @@
-Fabricator(:asset) do
-end
+Fabricator(:asset) {}
 
 Fabricator(:image, from: :asset) do
   asset_type 'image'

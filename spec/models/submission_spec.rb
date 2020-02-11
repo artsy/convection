@@ -37,17 +37,26 @@ describe Submission do
     let(:artist_id) { 'artistid' }
 
     let!(:artist_standing_score) do
-      Fabricate(:artist_standing_score, artist_id: artist_id, artist_score: 0.50, auction_score: 1.0)
+      Fabricate(
+        :artist_standing_score,
+        artist_id: artist_id, artist_score: 0.50, auction_score: 1.0
+      )
     end
 
     let!(:other_standing_score) do
-      Fabricate(:artist_standing_score, artist_id: 'other', artist_score: 0.33, auction_score: 0.66)
+      Fabricate(
+        :artist_standing_score,
+        artist_id: 'other', artist_score: 0.33, auction_score: 0.66
+      )
     end
 
     let(:submission_state) { 'draft' }
 
     let(:submission) do
-      Fabricate(:submission, artist_id: artist_id, medium: 'Painting', state: submission_state)
+      Fabricate(
+        :submission,
+        artist_id: artist_id, medium: 'Painting', state: submission_state
+      )
     end
 
     it 'is set on create' do
@@ -68,7 +77,8 @@ describe Submission do
         submission.update(artist_id: 'other')
 
         expect(submission.artist_score).to eq other_standing_score.artist_score
-        expect(submission.auction_score).to eq other_standing_score.auction_score
+        expect(submission.auction_score).to eq other_standing_score
+             .auction_score
       end
 
       it 'does not re-calcuate when unrelated things change' do
@@ -84,7 +94,8 @@ describe Submission do
         submission.update(artist_id: 'other')
 
         expect(submission.artist_score).to eq artist_standing_score.artist_score
-        expect(submission.auction_score).to eq artist_standing_score.auction_score
+        expect(submission.auction_score).to eq artist_standing_score
+             .auction_score
       end
     end
 
@@ -93,7 +104,8 @@ describe Submission do
         submission.update(artist_id: 'other', state: 'approved')
 
         expect(submission.artist_score).to eq artist_standing_score.artist_score
-        expect(submission.auction_score).to eq artist_standing_score.auction_score
+        expect(submission.auction_score).to eq artist_standing_score
+             .auction_score
       end
     end
   end
@@ -157,7 +169,10 @@ describe Submission do
   context 'artist' do
     it 'returns nil if it cannot find the object' do
       stub_gravity_root
-      stub_request(:get, "#{Convection.config.gravity_api_url}/artists/#{submission.artist_id}")
+      stub_request(
+        :get,
+        "#{Convection.config.gravity_api_url}/artists/#{submission.artist_id}"
+      )
         .to_raise(Faraday::ResourceNotFound)
       expect(submission.artist).to be_nil
       expect(submission.artist_name).to be_nil
@@ -178,7 +193,11 @@ describe Submission do
       expect(submission.thumbnail).to eq nil
     end
     it 'returns the first image with a thumbnail url' do
-      Fabricate(:image, submission: submission, image_urls: { 'thumbnail' => 'https://thumb.jpg' })
+      Fabricate(
+        :image,
+        submission: submission,
+        image_urls: { 'thumbnail' => 'https://thumb.jpg' }
+      )
       expect(submission.thumbnail).to eq 'https://thumb.jpg'
     end
   end
@@ -187,11 +206,9 @@ describe Submission do
     it 'deletes associated partner submissions and offers' do
       Fabricate(:partner_submission, submission: submission)
       Fabricate(:offer, submission: submission)
-      expect do
-        submission.destroy
-      end
-        .to change { PartnerSubmission.count }.by(-1)
-                                              .and change { Offer.count }.by(-1)
+      expect { submission.destroy }.to change { PartnerSubmission.count }.by(
+        -1
+      ).and change { Offer.count }.by(-1)
     end
   end
 end

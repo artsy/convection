@@ -10,6 +10,6 @@ RSpec.configure do |config|
   end
 
   config.expect_with :rspec do |c|
-    c.syntax = [:expect]
+    c.syntax = %i[expect]
   end
 end

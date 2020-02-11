@@ -228,6 +228,7 @@ GEM
     premailer-rails (1.10.3)
       actionmailer (>= 3)
       premailer (~> 1.7, >= 1.7.9)
+    prettier (0.17.0)
     pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
@@ -314,6 +315,7 @@ GEM
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
+    rubocop-config-prettier (0.1.2)
     rubocop-rails (2.4.2)
       rack (>= 1.1)
       rubocop (>= 0.72.0)
@@ -424,6 +426,7 @@ DEPENDENCIES
   pg
   pg_search
   premailer-rails
+  prettier
   pry-byebug
   puma
   rack-cors
@@ -433,6 +436,7 @@ DEPENDENCIES
   rails_param
   redcarpet
   rspec-rails
+  rubocop-config-prettier
   rubocop-rails
   sass-rails
   selenium-webdriver
