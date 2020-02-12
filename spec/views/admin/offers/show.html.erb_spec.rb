@@ -7,7 +7,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
     let(:submission) { Fabricate(:submission, state: Submission::APPROVED) }
     let(:partner) { Fabricate(:partner) }
     let(:partner_submission) { Fabricate(:partner_submission, submission: submission, partner: partner) }
-    let(:offer) { Fabricate(:offer, partner_submission: partner_submission, offer_type: 'purchase', state: 'draft') }
+    let(:offer) { Fabricate(:offer, partner_submission: partner_submission, offer_type: 'purchase', state: 'draft', partner_info: 'Testing partner info') }
 
     before do
       allow_any_instance_of(ApplicationController).to receive(:require_artsy_authentication)
@@ -41,6 +41,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
     it 'displays the page title and content' do
       expect(page).to have_content("Offer ##{offer.reference_id}")
       expect(page).to have_content('Offer type purchase')
+      expect(page).to have_content('Testing partner info')
     end
 
     it 'lets you delete the offer' do
@@ -195,6 +196,8 @@ describe 'admin/offers/show.html.erb', type: :feature do
         expect(page).to have_content("Offer ##{offer.reference_id}")
         expect(page).to_not have_content('Complete Consignment')
         expect(page).to have_selector('.list-item--consignment')
+
+        # FIXME: Why do these two lines cause test to fail
         find('.list-item--consignment').click
         expect(page.current_path).to include('/admin/consignment')
       end

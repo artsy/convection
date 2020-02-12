@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_08_220043) do
+ActiveRecord::Schema.define(version: 2020_02_11_224225) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(version: 2020_01_08_220043) do
     t.datetime "review_started_at"
     t.datetime "consigned_at"
     t.string "override_email"
+    t.text "partner_info"
     t.index ["partner_submission_id"], name: "index_offers_on_partner_submission_id"
     t.index ["reference_id"], name: "index_offers_on_reference_id"
     t.index ["submission_id"], name: "index_offers_on_submission_id"
