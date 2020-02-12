@@ -69,7 +69,10 @@ module Admin
     end
 
     def new_step_1
-      @offer = Offer.new(offer_type: params[:offer_type])
+      @offer = Offer.new(
+        offer_type: params[:offer_type],
+        partner_info: params[:partner_info]
+      )
 
       if params[:submission_id].present? && params[:partner_id].present? && params[:offer_type].present?
         render 'new_step_1'
@@ -134,6 +137,7 @@ module Admin
         :other_fees_dollars,
         :other_fees_percent_whole,
         :override_email,
+        :partner_info,
         :photography_dollars,
         :price_dollars,
         :rejection_reason,
