@@ -146,16 +146,14 @@ module Admin
         :created_by_id,
         :currency,
         :high_estimate_dollars,
-        :insurance_dollars,
-        :insurance_percent_whole,
+        :insurance_info,
         :low_estimate_dollars,
         :notes,
         :offer_type,
-        :other_fees_dollars,
-        :other_fees_percent_whole,
+        :other_fees_info,
         :override_email,
         :partner_info,
-        :photography_dollars,
+        :photography_info,
         :price_dollars,
         :rejection_reason,
         :rejection_note,
@@ -163,7 +161,7 @@ module Admin
         :sale_name,
         :sale_period_end,
         :sale_period_start,
-        :shipping_dollars,
+        :shipping_info,
         :state
       )
     end
