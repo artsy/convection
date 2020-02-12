@@ -215,6 +215,23 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         expect(page).to have_content('Create Offer')
       end
 
+      it 'approves a submission but does not include in digest when the Approve without digest button is clicked' do
+        Fabricate(:partner)
+        expect(PartnerSubmission.count).to eq 0
+        expect(NotificationService).to receive(:post_submission_event).once.with(@submission.id, 'approved')
+        expect(page).to_not have_content('Create Offer')
+        expect(page).to have_content('submitted')
+
+        click_link 'Approve without digest'
+
+        emails = ActionMailer::Base.deliveries
+        expect(emails.length).to eq 1
+        expect(page).to have_content 'Approved by Jon Jonson'
+        expect(PartnerSubmission.count).to eq 0
+        ActionMailer::Base.deliveries = []
+        expect { PartnerSubmissionService.daily_digest }.to_not change { ActionMailer::Base.deliveries.length }
+      end
+
       it 'rejects a submission when the Reject button is clicked' do
         expect(page).to have_content('submitted')
         click_link 'Reject'

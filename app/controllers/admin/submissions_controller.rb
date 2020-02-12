@@ -61,7 +61,8 @@ module Admin
     def edit; end
 
     def update
-      if SubmissionService.update_submission(@submission, submission_params, @current_user)
+      hide_from_partners = params[:hide_from_partners] == 'true'
+      if SubmissionService.update_submission(@submission, submission_params, current_user: @current_user, hide_from_partners: hide_from_partners)
         redirect_to admin_submission_path(@submission)
       else
         render 'edit'
