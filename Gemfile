@@ -48,6 +48,8 @@ end
 
 group :development do
   gem 'foreman'
+  gem 'guard-livereload', require: false
+  gem 'rack-livereload'
   gem 'solargraph' # VSCode language server for autocompletion
 end
 
