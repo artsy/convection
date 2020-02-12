@@ -99,7 +99,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       expect(NotificationService).to receive(:post_submission_event).once.with(@submission.id, 'approved')
       partner1 = Fabricate(:partner, gravity_partner_id: 'partnerid')
       partner2 = Fabricate(:partner, gravity_partner_id: 'phillips')
-      SubmissionService.update_submission(@submission, { state: 'approved' }, true)
+      SubmissionService.update_submission(@submission, state: 'approved')
       expect(@submission.partner_submissions.count).to eq 2
       page.visit "/admin/submissions/#{@submission.id}"
 
@@ -130,7 +130,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
             'Content-Type' => 'application/json'
           }
         )
-      SubmissionService.update_submission(@submission, { state: 'approved' }, true)
+      SubmissionService.update_submission(@submission, state: 'approved')
       stub_gravity_partner(id: 'partnerid')
       stub_gravity_partner(id: 'phillips')
       stub_gravity_partner_contacts(partner_id: 'partnerid')
@@ -280,8 +280,8 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         it 'removes the work from the digest when Undo approval is clicked' do
           expect(NotificationService).to receive(:post_submission_event).once.with(@submission.id, 'approved')
           expect(NotificationService).to receive(:post_submission_event).once.with(submission2.id, 'approved')
-          SubmissionService.update_submission(@submission, { state: 'approved' }, true)
-          SubmissionService.update_submission(submission2, { state: 'approved' }, true)
+          SubmissionService.update_submission(@submission, state: 'approved')
+          SubmissionService.update_submission(submission2, state: 'approved')
           expect(@submission.partner_submissions.count).to eq 2
           expect(submission2.partner_submissions.count).to eq 2
           page.visit "/admin/submissions/#{@submission.id}"

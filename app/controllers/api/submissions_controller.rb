@@ -15,7 +15,7 @@ module Api
     end
 
     def update
-      SubmissionService.update_submission(@submission, submission_params, true)
+      SubmissionService.update_submission(@submission, submission_params)
       render json: @submission.to_json, status: :created
     end
 

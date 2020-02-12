@@ -13,7 +13,7 @@ class SubmissionService
       raise SubmissionError, e.message
     end
 
-    def update_submission(submission, params, hide_from_partners, current_user = nil)
+    def update_submission(submission, params, current_user: nil, hide_from_partners: false)
       submission.assign_attributes(params)
       update_submission_state(submission, current_user, hide_from_partners) if submission.state_changed?
       submission.save!
@@ -57,7 +57,7 @@ class SubmissionService
       submission.update!(approved_by: current_user, approved_at: Time.now.utc)
       delay.deliver_approval_notification(submission.id)
       NotificationService.delay.post_submission_event(submission.id, SubmissionEvent::APPROVED)
-      PartnerSubmissionService.delay.generate_for_all_partners(submission.id) if hide_from_partners
+      PartnerSubmissionService.delay.generate_for_all_partners(submission.id) unless hide_from_partners
     end
 
     def reject!(submission, current_user)

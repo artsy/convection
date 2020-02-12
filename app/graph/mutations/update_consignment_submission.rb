@@ -41,7 +41,7 @@ module Mutations
       is_admin = context[:current_user_roles].include?(:admin)
       raise(GraphQL::ExecutionError, 'Submission Not Found') unless is_same_as_user || is_admin
 
-      SubmissionService.update_submission(submission, params.except('id'), true)
+      SubmissionService.update_submission(submission, params.except('id'))
       OpenStruct.new(consignment_submission: submission, client_mutation_id: client_mutation_id)
     end
   end
