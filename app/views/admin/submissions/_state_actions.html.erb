@@ -9,14 +9,14 @@
     <div class='bold-label'>Internal Approval</div>
     <div class='single-padding-top'>
       <%= link_to('Approve without digest',
-                  admin_submission_path(@submission, submission: { state: 'approved' }, include_in_digest: false),
+                  admin_submission_path(@submission, submission: { state: 'approved' }, hide_from_partners: 'true'),
                   method: :put,
                   class: 'btn btn-secondary btn-approve btn-small btn-full-width',
                   data: { confirm: 'An email will be sent to the consignor, letting them know that their submission will be sent to our partner network but thats not really true because this submission will be excluded from the digests. This action cannot be undone.' }) %>
     </div>
     <div class='single-padding-top'>
       <%= link_to('Approve',
-                  admin_submission_path(@submission, submission: { state: 'approved' }, include_in_digest: true),
+                  admin_submission_path(@submission, submission: { state: 'approved' }, hide_from_partners: 'false'),
                   method: :put,
                   class: 'btn btn-secondary btn-approve btn-small btn-full-width',
                   data: { confirm: 'An email will be sent to the consignor, letting them know that their submission will be sent to our partner network. This action cannot be undone.' }) %>
