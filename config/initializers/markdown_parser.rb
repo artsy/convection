@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MarkdownParser
   def self.render(string)
     parser.render(string)

@@ -1,62 +1,364 @@
-require: rubocop-rails
-
 inherit_from: .rubocop_todo.yml
 
-Style/Documentation:
+require: rubocop-rails
+
+Layout/AccessModifierIndentation:
   Enabled: false
 
-AllCops:
-  TargetRubyVersion: 2.5
-  Exclude:
-    - db/**/*
-    - tmp/**/*
-    - vendor/**/*
-    - bin/**/*
-    - Gemfile
+Layout/ArgumentAlignment:
+  Enabled: false
 
-# prevent warnings from         
-#   expect { PartnerSubmissionService.daily_digest }.to change { ActionMailer::Base.deliveries.length }
-# see https://github.com/rubocop-hq/rubocop/issues/4222
+Layout/ArrayAlignment:
+  Enabled: false
 
-Lint/AmbiguousBlockAssociation:
-  Exclude:
-    - "spec/**/*"
+Layout/AssignmentIndentation:
+  Enabled: false
+
+Layout/BlockAlignment:
+  Enabled: false
+
+Layout/BlockEndNewline:
+  Enabled: false
+
+Layout/CaseIndentation:
+  Enabled: false
+
+# Layout/ClassStructure
+
+# Layout/ClosingHeredocIndentation
+
+Layout/ClosingParenthesisIndentation:
+  Enabled: false
+
+Layout/CommentIndentation:
+  Enabled: false
+
+Layout/ConditionPosition:
+  Enabled: false
+
+Layout/DefEndAlignment:
+  Enabled: false
+
+Layout/DotPosition:
+  Enabled: false
+
+Layout/ElseAlignment:
+  Enabled: false
+
+# Layout/EmptyComment
+
+# Layout/EmptyLineAfterGuardClause
+
+# Layout/EmptyLineAfterMagicComment
+
+# Layout/EmptyLineBetweenDefs
+
+Layout/EmptyLines:
+  Enabled: false
+
+Layout/EmptyLinesAroundAccessModifier:
+  Enabled: false
+
+Layout/EmptyLinesAroundArguments:
+  Enabled: false
+
+Layout/EmptyLinesAroundBeginBody:
+  Enabled: false
+
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+Layout/EmptyLinesAroundClassBody:
+  Enabled: false
+
+Layout/EmptyLinesAroundExceptionHandlingKeywords:
+  Enabled: false
+
+Layout/EmptyLinesAroundMethodBody:
+  Enabled: false
+
+Layout/EmptyLinesAroundModuleBody:
+  Enabled: false
+
+Layout/EndAlignment:
+  Enabled: false
+
+Layout/EndOfLine:
+  Enabled: false
+
+Layout/ExtraSpacing:
+  Enabled: false
+
+Layout/FirstArgumentIndentation:
+  Enabled: false
+
+Layout/FirstArrayElementIndentation:
+  Enabled: false
+
+Layout/FirstArrayElementLineBreak:
+  Enabled: false
+
+Layout/FirstHashElementIndentation:
+  Enabled: false
+
+Layout/FirstHashElementLineBreak:
+  Enabled: false
+
+Layout/FirstMethodArgumentLineBreak:
+  Enabled: false
+
+Layout/FirstMethodParameterLineBreak:
+  Enabled: false
+
+Layout/FirstParameterIndentation:
+  Enabled: false
+
+# Layout/HeredocArgumentClosingParenthesis
+
+Layout/HashAlignment:
+  Enabled: false
+
+# Layout/HeredocIndentation
+
+Layout/IndentationConsistency:
+  Enabled: false
+
+Layout/IndentationWidth:
+  Enabled: false
+
+Layout/InitialIndentation:
+  Enabled: false
+
+Layout/LeadingEmptyLines:
+  Enabled: false
+
+# Layout/LeadingCommentSpace
+
+Layout/MultilineArrayBraceLayout:
+  Enabled: false
+
+Layout/MultilineArrayLineBreaks:
+  Enabled: false
+
+Layout/MultilineAssignmentLayout:
+  Enabled: false
+
+Layout/MultilineBlockLayout:
+  Enabled: false
+
+
+Layout/MultilineHashBraceLayout:
+  Enabled: false
+
+Layout/MultilineHashKeyLineBreaks:
+  Enabled: false
+
+Layout/MultilineMethodArgumentLineBreaks:
+  Enabled: false
+
+Layout/MultilineMethodCallBraceLayout:
+  Enabled: false
+
+Layout/MultilineMethodCallIndentation:
+  Enabled: false
+
+Layout/MultilineMethodDefinitionBraceLayout:
+  Enabled: false
+
+Layout/MultilineOperationIndentation:
+  Enabled: false
+
+Layout/ParameterAlignment:
+  Enabled: false
+
+Layout/RescueEnsureAlignment:
+  Enabled: false
+
+Layout/SpaceAfterColon:
+  Enabled: false
+
+Layout/SpaceAfterComma:
+  Enabled: false
+
+Layout/SpaceAfterMethodName:
+  Enabled: false
+
+Layout/SpaceAfterNot:
+  Enabled: false
+
+Layout/SpaceAfterSemicolon:
+  Enabled: false
+
+Layout/SpaceAroundBlockParameters:
+  Enabled: false
+
+Layout/SpaceAroundEqualsInParameterDefault:
+  Enabled: false
+
+Layout/SpaceAroundKeyword:
+  Enabled: false
+
+Layout/SpaceAroundOperators:
+  Enabled: false
+
+Layout/SpaceBeforeBlockBraces:
+  Enabled: false
+
+Layout/SpaceBeforeComma:
+  Enabled: false
+
+Layout/SpaceBeforeComment:
+  Enabled: false
+
+Layout/SpaceBeforeFirstArg:
+  Enabled: false
+
+Layout/SpaceBeforeSemicolon:
+  Enabled: false
+
+Layout/SpaceInLambdaLiteral:
+  Enabled: false
+
+Layout/SpaceInsideArrayLiteralBrackets:
+  Enabled: false
+
+Layout/SpaceInsideArrayPercentLiteral:
+  Enabled: false
+
+Layout/SpaceInsideBlockBraces:
+  Enabled: false
+
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: false
+
+Layout/SpaceInsideParens:
+  Enabled: false
+
+Layout/SpaceInsidePercentLiteralDelimiters:
+  Enabled: false
+
+Layout/SpaceInsideRangeLiteral:
+  Enabled: false
+
+Layout/SpaceInsideReferenceBrackets:
+  Enabled: false
+
+Layout/SpaceInsideStringInterpolation:
+  Enabled: false
+
+Layout/Tab:
+  Enabled: false
+
+Layout/TrailingEmptyLines:
+  Enabled: false
+
+Layout/LineLength:
+  Enabled: false
+
+Layout/TrailingWhitespace:
+  Enabled: false
+
+Style/BlockDelimiters:
+  Enabled: false
+
+Style/CommandLiteral:
+  Enabled: false
+
+Style/HashSyntax:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/IfWithSemicolon:
+  Enabled: false
 
 Style/Lambda:
   Enabled: false
 
-Layout/LineLength:
-  Exclude:
-    - config/environments/*
-    - config/initializers/*
-  Max: 165
-  IgnoreCopDirectives: true
-
-Layout/ParameterAlignment:
-  EnforcedStyle: with_fixed_indentation
-
-Style/FrozenStringLiteralComment:
+Style/LambdaCall:
   Enabled: false
 
-Metrics/BlockLength:
+Style/MethodCallWithoutArgsParentheses:
   Enabled: false
 
-Metrics/AbcSize:
-  Max: 62
+Style/MethodDefParentheses:
+  Enabled: false
 
-Metrics/MethodLength:
-  Max: 33
-  Exclude:
-    - spec/mailers/previews/*
+Style/MultilineIfModifier:
+  Enabled: false
 
-Metrics/CyclomaticComplexity:
-  Max: 8
+Style/MultilineIfThen:
+  Enabled: false
 
-Metrics/ClassLength:
-  Max: 142
+Style/MultilineMethodSignature:
+  Enabled: false
 
-Metrics/ModuleLength:
-  Max: 110
+Style/MultilineTernaryOperator:
+  Enabled: false
+
+Style/NestedTernaryOperator:
+  Enabled: false
+
+Style/NumericLiterals:
+  Enabled: false
+
+Style/RedundantBegin:
+  Enabled: false
+
+Style/RescueModifier:
+  Enabled: false
+
+Style/Semicolon:
+  Enabled: false
+
+Style/SingleLineMethods:
+  Enabled: false
+
+Style/StabbyLambdaParentheses:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/StringLiteralsInInterpolation:
+  Enabled: false
 
 Style/SymbolArray:
+  Enabled: false
+
+Style/SymbolProc:
+  Enabled: false
+
+Style/TrailingBodyOnClass:
+  Enabled: false
+
+Style/TrailingBodyOnMethodDefinition:
+  Enabled: false
+
+Style/TrailingBodyOnModule:
+  Enabled: false
+
+Style/TrailingCommaInArguments:
+  Enabled: false
+
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
+
+Style/TrailingMethodEndStatement:
+  Enabled: false
+
+Style/VariableInterpolation:
+  Enabled: false
+
+Style/WhileUntilDo:
+  Enabled: false
+
+Style/WhileUntilModifier:
+  Enabled: false
+
+Style/WordArray:
   Enabled: false

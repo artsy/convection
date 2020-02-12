@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe Admin::PartnersController, type: :controller do
@@ -9,7 +11,9 @@ describe Admin::PartnersController, type: :controller do
     let!(:partner5) { Fabricate(:partner, name: 'gagosian') }
 
     before do
-      allow_any_instance_of(Admin::PartnersController).to receive(:require_artsy_authentication)
+      allow_any_instance_of(Admin::PartnersController).to receive(
+        :require_artsy_authentication
+      )
     end
 
     describe '#index' do
@@ -25,41 +29,51 @@ describe Admin::PartnersController, type: :controller do
         it 'orders the partners correctly' do
           get :index, params: { page: 1 }
           expect(controller.partners.count).to eq 5
-          expect(controller.partners.map(&:name)).to eq(['abracadabra', 'animal prints', 'bubbles', 'gagosian', 'zz top'])
+          expect(controller.partners.map(&:name)).to eq(
+            ['abracadabra', 'animal prints', 'bubbles', 'gagosian', 'zz top']
+          )
         end
       end
     end
 
     describe '#create' do
       it 'does nothing if there is no gravity_partner_id' do
-        expect do
-          post :create, params: {}
-        end.to_not change(Partner, :count)
+        expect { post :create, params: {} }.to_not change(Partner, :count)
       end
 
       it 'redirects to the index view on success' do
-        expect do
-          post :create, params: { gravity_partner_id: '123', name: 'New Gallery' }
+        expect {
+          post :create,
+               params: { gravity_partner_id: '123', name: 'New Gallery' }
           expect(Partner.reorder(id: :desc).first.name).to eq 'New Gallery'
           expect(response).to redirect_to(:admin_partners)
-        end.to change(Partner, :count).by(1)
+        }.to change(Partner, :count).by(1)
       end
 
       it 'renders the index view with an error on failure' do
         allow_any_instance_of(Partner).to receive(:save).and_return(false)
-        expect do
-          post :create, params: { gravity_partner_id: '123', name: 'New Gallery' }
-          expect(controller.flash[:error]).to include('Error creating gravity partner.')
+        expect {
+          post :create,
+               params: { gravity_partner_id: '123', name: 'New Gallery' }
+          expect(controller.flash[:error]).to include(
+            'Error creating gravity partner.'
+          )
           expect(response).to render_template(:index)
-        end.to_not change(Partner, :count)
+        }.to_not change(Partner, :count)
       end
 
       it 'does not allow you to create a partner with a duplicate gravity_partner_id' do
-        expect do
-          post :create, params: { gravity_partner_id: partner1.gravity_partner_id, name: 'New Gallery' }
-          expect(controller.flash[:error]).to eq('Error creating gravity partner. Gravity partner has already been taken')
+        expect {
+          post :create,
+               params: {
+                 gravity_partner_id: partner1.gravity_partner_id,
+                 name: 'New Gallery'
+               }
+          expect(controller.flash[:error]).to eq(
+            'Error creating gravity partner. Gravity partner has already been taken'
+          )
           expect(response).to render_template(:index)
-        end.to_not change(Partner, :count)
+        }.to_not change(Partner, :count)
       end
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AdminMailer < ApplicationMailer
   helper :submissions
 
@@ -7,11 +9,11 @@ class AdminMailer < ApplicationMailer
     @user_detail = user_detail
     @artist = artist
 
-    smtpapi category: ['submission'], unique_args: {
-      submission_id: submission.id
-    }
-    mail(to: Convection.config.admin_email_address, subject: "Submission ##{@submission.id}") do |format|
-      format.html { render layout: 'mailer_no_footer' }
-    end
+    smtpapi category: %w[submission],
+            unique_args: { submission_id: submission.id }
+    mail(
+      to: Convection.config.admin_email_address,
+      subject: "Submission ##{@submission.id}"
+    ) { |format| format.html { render layout: 'mailer_no_footer' } }
   end
 end

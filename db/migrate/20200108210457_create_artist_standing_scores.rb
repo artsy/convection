@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateArtistStandingScores < ActiveRecord::Migration[5.2]
   def change
     create_table :artist_standing_scores do |t|

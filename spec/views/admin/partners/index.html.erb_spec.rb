@@ -1,9 +1,13 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe 'admin/partners/index.html.erb', type: :feature do
   context 'always' do
     before do
-      allow_any_instance_of(ApplicationController).to receive(:require_artsy_authentication)
+      allow_any_instance_of(ApplicationController).to receive(
+        :require_artsy_authentication
+      )
       Fabricate(:partner, name: 'Gagosian Gallery')
       Fabricate(:partner, name: 'Alan Cristea Gallery')
       Fabricate(:partner, name: 'Rosier Gallery')
@@ -13,7 +17,14 @@ describe 'admin/partners/index.html.erb', type: :feature do
 
     it 'displays all of the partners when no term is set' do
       partner_names = page.all('.list-item--partner--name').map(&:text)
-      expect(partner_names).to eq(['Alan Cristea Gallery', 'Auction House', 'Gagosian Gallery', 'Rosier Gallery'])
+      expect(partner_names).to eq(
+        [
+          'Alan Cristea Gallery',
+          'Auction House',
+          'Gagosian Gallery',
+          'Rosier Gallery'
+        ]
+      )
     end
 
     it 'allows for searching by prefix' do
@@ -27,7 +38,9 @@ describe 'admin/partners/index.html.erb', type: :feature do
       fill_in('term', with: 'gallery')
       click_button('Search')
       partner_names = page.all('.list-item--partner--name').map(&:text)
-      expect(partner_names).to eq(['Alan Cristea Gallery', 'Gagosian Gallery', 'Rosier Gallery'])
+      expect(partner_names).to eq(
+        ['Alan Cristea Gallery', 'Gagosian Gallery', 'Rosier Gallery']
+      )
     end
   end
 end

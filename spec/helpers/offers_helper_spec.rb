@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require 'support/gravity_helper'
 
@@ -14,17 +16,30 @@ describe OffersHelper, type: :helper do
     end
 
     it 'shows the correct label for a rejected offer with a rejection_reason' do
-      offer = Fabricate(:offer, state: 'rejected', rejected_by: 'userid', rejection_reason: 'Low estimate')
-      expect(helper.reviewed_byline(offer)).to eq 'Rejected by Jon Jonson. Low estimate'
+      offer =
+        Fabricate(
+          :offer,
+          state: 'rejected',
+          rejected_by: 'userid',
+          rejection_reason: 'Low estimate'
+        )
+      expect(
+        helper.reviewed_byline(offer)
+      ).to eq 'Rejected by Jon Jonson. Low estimate'
     end
 
     it 'shows the correct label for a rejected offer with a rejection_reason and rejection_note' do
-      offer = Fabricate(:offer,
-                        state: 'rejected',
-                        rejected_by: 'userid',
-                        rejection_reason: 'Other',
-                        rejection_note: 'User not a fan of this partner.')
-      expect(helper.reviewed_byline(offer)).to eq 'Rejected by Jon Jonson. Other: User not a fan of this partner.'
+      offer =
+        Fabricate(
+          :offer,
+          state: 'rejected',
+          rejected_by: 'userid',
+          rejection_reason: 'Other',
+          rejection_note: 'User not a fan of this partner.'
+        )
+      expect(
+        helper.reviewed_byline(offer)
+      ).to eq 'Rejected by Jon Jonson. Other: User not a fan of this partner.'
     end
 
     it 'shows the correct label for a rejected offer with no user' do
@@ -35,19 +50,28 @@ describe OffersHelper, type: :helper do
 
   context 'display_fields' do
     it 'returns an array containing only the fields that are present, with minimal fields present' do
-      offer = Fabricate(:offer, offer_type: 'auction consignment', price_cents: nil, commission_percent: 0.1)
+      offer =
+        Fabricate(
+          :offer,
+          offer_type: 'auction consignment',
+          price_cents: nil,
+          commission_percent: 0.1
+        )
       expect(helper.display_fields(offer)).to eq('Commission' => '10.0%')
     end
 
     it 'does not include empty values' do
-      offer = Fabricate(:offer,
-                        offer_type: 'auction consignment',
-                        price_cents: nil,
-                        sale_name: '',
-                        commission_percent: 0.1,
-                        low_estimate_cents: 10_000,
-                        high_estimate_cents: 40_000,
-                        sale_date: Date.new(2018, 10, 30))
+      offer =
+        Fabricate(
+          :offer,
+          offer_type: 'auction consignment',
+          price_cents: nil,
+          sale_name: '',
+          commission_percent: 0.1,
+          low_estimate_cents: 10_000,
+          high_estimate_cents: 40_000,
+          sale_date: Date.new(2_018, 10, 30)
+        )
       expect(helper.display_fields(offer)).to eq(
         'Estimate' => 'USD $100 - 400',
         'Sale Date' => 'Oct 30, 2018',
@@ -56,13 +80,16 @@ describe OffersHelper, type: :helper do
     end
 
     it 'returns an array containing only the present fields with many fields present' do
-      offer = Fabricate(:offer,
-                        offer_type: 'auction consignment',
-                        price_cents: nil,
-                        commission_percent: 0.1,
-                        low_estimate_cents: 10_000,
-                        high_estimate_cents: 40_000,
-                        sale_date: Date.new(2018, 10, 30))
+      offer =
+        Fabricate(
+          :offer,
+          offer_type: 'auction consignment',
+          price_cents: nil,
+          commission_percent: 0.1,
+          low_estimate_cents: 10_000,
+          high_estimate_cents: 40_000,
+          sale_date: Date.new(2_018, 10, 30)
+        )
       expect(helper.display_fields(offer)).to eq(
         'Estimate' => 'USD $100 - 400',
         'Sale Date' => 'Oct 30, 2018',
@@ -79,7 +106,9 @@ describe OffersHelper, type: :helper do
 
     it 'returns the correct string for a retail offer' do
       offer = double('offer', offer_type: 'retail')
-      expect(helper.formatted_offer_type(offer)).to eq 'Private Sale: Retail Price'
+      expect(
+        helper.formatted_offer_type(offer)
+      ).to eq 'Private Sale: Retail Price'
     end
 
     it 'returns the correct string for a net price offer' do
@@ -96,49 +125,81 @@ describe OffersHelper, type: :helper do
   context 'offer_type_description' do
     it 'returns the correct string for an auction consignment offer' do
       offer = double('offer', offer_type: 'auction consignment')
-      expect(helper.offer_type_description(offer)).to include 'This work will be offered in an auction.'
+      expect(
+        helper.offer_type_description(offer)
+      ).to include 'This work will be offered in an auction.'
     end
 
     it 'returns the correct string for a retail offer' do
       offer = double('offer', offer_type: 'retail')
-      expect(helper.offer_type_description(offer)).to include 'This work will be offered privately'
+      expect(
+        helper.offer_type_description(offer)
+      ).to include 'This work will be offered privately'
     end
 
     it 'returns the correct string for a net price offer' do
       offer = double('offer', offer_type: 'net price')
-      expect(helper.offer_type_description(offer)).to include 'This work will be offered privately'
+      expect(
+        helper.offer_type_description(offer)
+      ).to include 'This work will be offered privately'
     end
 
     it 'returns the correct string for a direct purchase offer' do
       offer = double('offer', offer_type: 'purchase')
-      expect(helper.offer_type_description(offer)).to include 'The work will be purchased directly from you by the '\
-      'partner for the specified price.'
+      expect(
+        helper.offer_type_description(offer)
+      ).to include 'The work will be purchased directly from you by the ' \
+                'partner for the specified price.'
     end
   end
 
   context 'estimate_display' do
     it 'works for an offer in USD' do
-      offer = double('offer', low_estimate_cents: 10_000, high_estimate_cents: 30_000, currency: 'USD')
+      offer =
+        double(
+          'offer',
+          low_estimate_cents: 10_000,
+          high_estimate_cents: 30_000,
+          currency: 'USD'
+        )
       expect(helper.estimate_display(offer)).to eq 'USD $100 - 300'
     end
 
     it 'works for EUR' do
-      offer = double('offer', low_estimate_cents: 10_000, high_estimate_cents: 30_000, currency: 'EUR')
+      offer =
+        double(
+          'offer',
+          low_estimate_cents: 10_000,
+          high_estimate_cents: 30_000,
+          currency: 'EUR'
+        )
       expect(helper.estimate_display(offer)).to eq 'EUR €100 - 300'
     end
 
     it 'works when there is only a low estimate' do
-      offer = double('offer', low_estimate_cents: 10_000, high_estimate_cents: nil, currency: 'EUR')
+      offer =
+        double(
+          'offer',
+          low_estimate_cents: 10_000, high_estimate_cents: nil, currency: 'EUR'
+        )
       expect(helper.estimate_display(offer)).to eq 'EUR €100'
     end
 
     it 'works when there is only a high estimate' do
-      offer = double('offer', low_estimate_cents: nil, high_estimate_cents: 30_000, currency: 'EUR')
+      offer =
+        double(
+          'offer',
+          low_estimate_cents: nil, high_estimate_cents: 30_000, currency: 'EUR'
+        )
       expect(helper.estimate_display(offer)).to eq 'EUR €300'
     end
 
     it 'returns nil if both values are nil' do
-      offer = double('offer', low_estimate_cents: nil, high_estimate_cents: nil, currency: 'EUR')
+      offer =
+        double(
+          'offer',
+          low_estimate_cents: nil, high_estimate_cents: nil, currency: 'EUR'
+        )
       expect(helper.estimate_display(offer)).to eq nil
     end
   end
@@ -146,12 +207,16 @@ describe OffersHelper, type: :helper do
   context 'price_display' do
     it 'works for a price in USD' do
       offer = double('offer', price_cents: 10_000, currency: 'USD')
-      expect(helper.price_display(offer.currency, offer.price_cents)).to eq 'USD $100'
+      expect(
+        helper.price_display(offer.currency, offer.price_cents)
+      ).to eq 'USD $100'
     end
 
     it 'works for a price in CAD' do
       offer = double('offer', price_cents: 10_000, currency: 'CAD')
-      expect(helper.price_display(offer.currency, offer.price_cents)).to eq 'CAD $100'
+      expect(
+        helper.price_display(offer.currency, offer.price_cents)
+      ).to eq 'CAD $100'
     end
 
     it 'returns nil if there is no price_cents' do
@@ -162,17 +227,32 @@ describe OffersHelper, type: :helper do
 
   context 'sale_period_display' do
     it 'works for an offer with a sale period' do
-      offer = double('offer', sale_period_start: Date.new(2017, 1, 10), sale_period_end: Date.new(2017, 3, 10))
-      expect(helper.sale_period_display(offer)).to eq 'Jan 10, 2017 - Mar 10, 2017'
+      offer =
+        double(
+          'offer',
+          sale_period_start: Date.new(2_017, 1, 10),
+          sale_period_end: Date.new(2_017, 3, 10)
+        )
+      expect(
+        helper.sale_period_display(offer)
+      ).to eq 'Jan 10, 2017 - Mar 10, 2017'
     end
 
     it 'works for an offer with only a sale_period_start' do
-      offer = double('offer', sale_period_start: Date.new(2017, 1, 10), sale_period_end: nil)
+      offer =
+        double(
+          'offer',
+          sale_period_start: Date.new(2_017, 1, 10), sale_period_end: nil
+        )
       expect(helper.sale_period_display(offer)).to eq 'Starts Jan 10, 2017'
     end
 
     it 'works for an offer with only a sale_period_end' do
-      offer = double('offer', sale_period_start: nil, sale_period_end: Date.new(2017, 3, 10))
+      offer =
+        double(
+          'offer',
+          sale_period_start: nil, sale_period_end: Date.new(2_017, 3, 10)
+        )
       expect(helper.sale_period_display(offer)).to eq 'Ends Mar 10, 2017'
     end
 
@@ -184,7 +264,7 @@ describe OffersHelper, type: :helper do
 
   context 'sale_date_display' do
     it 'works for an offer with a sale_date' do
-      offer = double('offer', sale_date: Date.new(2017, 1, 10))
+      offer = double('offer', sale_date: Date.new(2_017, 1, 10))
       expect(helper.sale_date_display(offer)).to eq 'Jan 10, 2017'
     end
 
@@ -242,17 +322,29 @@ describe OffersHelper, type: :helper do
 
   context 'insurance_display' do
     it 'works if the offer has an insurance_cents' do
-      offer = double('offer', insurance_cents: 12_000, insurance_percent: nil, currency: 'USD')
+      offer =
+        double(
+          'offer',
+          insurance_cents: 12_000, insurance_percent: nil, currency: 'USD'
+        )
       expect(helper.insurance_display(offer)).to eq 'USD $120.00'
     end
 
     it 'works if the offer has an insurance_percent' do
-      offer = double('offer', insurance_cents: nil, insurance_percent: 0.12, currency: 'USD')
+      offer =
+        double(
+          'offer',
+          insurance_cents: nil, insurance_percent: 0.12, currency: 'USD'
+        )
       expect(helper.insurance_display(offer)).to eq '12.0%'
     end
 
     it 'returns nil if the offer has no insurance' do
-      offer = double('offer', insurance_percent: nil, insurance_cents: nil, currency: 'USD')
+      offer =
+        double(
+          'offer',
+          insurance_percent: nil, insurance_cents: nil, currency: 'USD'
+        )
       expect(helper.insurance_display(offer)).to eq nil
     end
   end
@@ -264,12 +356,20 @@ describe OffersHelper, type: :helper do
     end
 
     it 'works if the offer has an other_fees_percent' do
-      offer = double('offer', other_fees_cents: nil, other_fees_percent: 0.12, currency: 'USD')
+      offer =
+        double(
+          'offer',
+          other_fees_cents: nil, other_fees_percent: 0.12, currency: 'USD'
+        )
       expect(helper.other_fees_display(offer)).to eq '12.0%'
     end
 
     it 'returns nil if the offer has no other fees' do
-      offer = double('offer', other_fees_percent: nil, other_fees_cents: nil, currency: 'USD')
+      offer =
+        double(
+          'offer',
+          other_fees_percent: nil, other_fees_cents: nil, currency: 'USD'
+        )
       expect(helper.other_fees_display(offer)).to eq nil
     end
   end

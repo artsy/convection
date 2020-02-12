@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePartners < ActiveRecord::Migration[5.0]
   def change
     create_table :partners do |t|
@@ -5,6 +7,6 @@ class CreatePartners < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
-    add_index :partners, [:external_partner_id], unique: true
+    add_index :partners, %i[external_partner_id], unique: true
   end
 end

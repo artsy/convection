@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddOfferStateFields < ActiveRecord::Migration[5.1]
   def change
     add_column :offers, :review_started_at, :datetime

@@ -11,7 +11,7 @@ Rails.application.routes.draw do
         post :multiple, on: :collection
       end
     end
-    resources :partners, only: [:index, :create] do
+    resources :partners, only: %i[index create] do
       resources :submissions, only: :index, controller: 'partner_submissions'
     end
     resources :offers do
@@ -20,7 +20,7 @@ Rails.application.routes.draw do
         get 'new_step_1'
       end
     end
-    resources :consignments, only: [:show, :edit, :update, :index]
+    resources :consignments, only: %i[show edit update index]
     resources :users, only: :index
     root to: 'dashboard#index'
   end
@@ -32,14 +32,16 @@ Rails.application.routes.draw do
   root to: redirect('/admin')
 
   namespace :api do
-    resources :submissions, only: [:create, :update, :show, :index]
-    resources :assets, only: [:create, :show, :index, :destroy]
+    resources :submissions, only: %i[create update show index]
+    resources :assets, only: %i[create show index destroy]
     post '/callbacks/gemini', to: 'callbacks#gemini'
     post '/graphql', to: 'graphql#execute'
     put '/anonymize_user_email', to: 'users#anonymize_user_email'
   end
 
-  mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/api/graphql' if Rails.env.development?
+  if Rails.env.development?
+    mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/api/graphql'
+  end
 
   mount ArtsyAuth::Engine => '/'
 
@@ -48,8 +50,12 @@ Rails.application.routes.draw do
     # Protect against timing attacks: (https://codahale.com/a-lesson-in-timing-attacks/)
     # - Use & (do not use &&) so that it doesn't short circuit.
     # - Use `secure_compare` to stop length information leaking
-    ActiveSupport::SecurityUtils.secure_compare(username, Convection.config.sidekiq_username) &
-      ActiveSupport::SecurityUtils.secure_compare(password, Convection.config.sidekiq_password)
+    ActiveSupport::SecurityUtils
+      .secure_compare(username, Convection.config.sidekiq_username) &
+      ActiveSupport::SecurityUtils.secure_compare(
+        password,
+        Convection.config.sidekiq_password
+      )
   end
 
   mount Sidekiq::Web => '/admin/sidekiq'

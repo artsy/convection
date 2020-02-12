@@ -11,6 +11,6 @@ module ApplicationHelper
     return if text.blank?
 
     markdown = MarkdownParser.render(text)
-    markdown.html_safe # rubocop:disable Rails/OutputSafety
+    markdown.html_safe
   end
 end

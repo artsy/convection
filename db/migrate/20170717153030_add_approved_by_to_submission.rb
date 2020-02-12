@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddApprovedByToSubmission < ActiveRecord::Migration[5.0]
   def change
     add_column :submissions, :approved_by, :string

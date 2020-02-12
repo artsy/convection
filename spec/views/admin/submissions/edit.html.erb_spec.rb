@@ -1,18 +1,25 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require 'support/gravity_helper'
 
 describe 'admin/submissions/edit.html.erb', type: :feature do
   context 'always' do
     before do
-      allow_any_instance_of(Admin::SubmissionsController).to receive(:require_artsy_authentication)
-      @submission = Fabricate(:submission,
-                              title: 'my artwork',
-                              artist_id: 'artistid',
-                              edition: true,
-                              edition_size: 100,
-                              edition_number: '23a',
-                              category: 'Painting',
-                              user: Fabricate(:user, gravity_user_id: 'userid'))
+      allow_any_instance_of(Admin::SubmissionsController).to receive(
+        :require_artsy_authentication
+      )
+      @submission =
+        Fabricate(
+          :submission,
+          title: 'my artwork',
+          artist_id: 'artistid',
+          edition: true,
+          edition_size: 100,
+          edition_number: '23a',
+          category: 'Painting',
+          user: Fabricate(:user, gravity_user_id: 'userid')
+        )
 
       stub_gravity_root
       stub_gravity_user

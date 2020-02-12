@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Api
   class UsersController < BaseController
     before_action :require_trusted_app

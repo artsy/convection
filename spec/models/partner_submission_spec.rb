@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require 'support/gravity_helper'
 
@@ -33,12 +35,14 @@ describe PartnerSubmission do
 
   context 'deletion' do
     it 'deletes associated offers, but not the submission' do
-      Fabricate(:offer, submission: partner_submission.submission, partner_submission: partner_submission)
-      expect do
-        partner_submission.destroy
-      end
-        .to change { Submission.count }.by(0)
-                                       .and change { Offer.count }.by(-1)
+      Fabricate(
+        :offer,
+        submission: partner_submission.submission,
+        partner_submission: partner_submission
+      )
+      expect { partner_submission.destroy }.to change { Submission.count }.by(
+        0
+      ).and change { Offer.count }.by(-1)
     end
 
     it 'nullifies consigned_partner_submission_id on offer' do

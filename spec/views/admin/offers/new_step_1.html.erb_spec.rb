@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require 'support/gravity_helper'
 
@@ -5,20 +7,30 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
   context 'with an offer' do
     let(:partner) { Fabricate(:partner, name: 'Gagosian Gallery') }
     let(:submission) { Fabricate(:submission, state: Submission::APPROVED) }
-    let(:partner_submission) { Fabricate(:partner_submission, partner: partner, submission: submission) }
+    let(:partner_submission) do
+      Fabricate(:partner_submission, partner: partner, submission: submission)
+    end
 
     before do
-      allow_any_instance_of(Admin::OffersController).to receive(:require_artsy_authentication)
+      allow_any_instance_of(Admin::OffersController).to receive(
+        :require_artsy_authentication
+      )
     end
 
     describe 'auction consignment offer' do
       before do
-        page.visit "/admin/offers/new_step_1?submission_id=#{submission.id}&partner_id=#{partner.id}&offer_type=auction+consignment"
+        page.visit "/admin/offers/new_step_1?submission_id=#{
+                     submission.id
+                   }&partner_id=#{partner.id}&offer_type=auction+consignment"
       end
 
       it 'displays the page title and content' do
         expect(page).to have_content('New Offer')
-        expect(page).to have_content("Auction consignment offer for Submission ##{submission.id} by Gagosian Gallery")
+        expect(page).to have_content(
+          "Auction consignment offer for Submission ##{
+            submission.id
+          } by Gagosian Gallery"
+        )
       end
 
       it 'displays all of the shared fields' do
@@ -46,7 +58,9 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         stub_gravity_user(id: submission.user.gravity_user_id)
         stub_gravity_user_detail(id: submission.user.gravity_user_id)
 
-        allow(Convection.config).to receive(:gravity_xapp_token).and_return('xapp_token')
+        allow(Convection.config).to receive(:gravity_xapp_token).and_return(
+          'xapp_token'
+        )
         gravql_artists_response = {
           data: {
             artists: [
@@ -58,11 +72,10 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
           .to_return(body: gravql_artists_response.to_json)
           .with(
-            headers: {
-              'X-XAPP-TOKEN' => 'xapp_token',
-              'Content-Type' => 'application/json'
-            }
-          )
+          headers: {
+            'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
+          }
+        )
         fill_in('offer_commission_percent_whole', with: '10')
         fill_in('offer_low_estimate_dollars', with: '100')
         fill_in('offer_high_estimate_dollars', with: '300')
@@ -90,12 +103,16 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
 
     describe 'purchase offer' do
       before do
-        page.visit "/admin/offers/new_step_1?submission_id=#{submission.id}&partner_id=#{partner.id}&offer_type=purchase"
+        page.visit "/admin/offers/new_step_1?submission_id=#{
+                     submission.id
+                   }&partner_id=#{partner.id}&offer_type=purchase"
       end
 
       it 'displays the page title and content' do
         expect(page).to have_content('New Offer')
-        expect(page).to have_content("Purchase offer for Submission ##{submission.id} by Gagosian Gallery")
+        expect(page).to have_content(
+          "Purchase offer for Submission ##{submission.id} by Gagosian Gallery"
+        )
       end
 
       it 'displays all of the shared fields' do
@@ -120,7 +137,9 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         stub_gravity_user(id: submission.user.gravity_user_id)
         stub_gravity_user_detail(id: submission.user.gravity_user_id)
 
-        allow(Convection.config).to receive(:gravity_xapp_token).and_return('xapp_token')
+        allow(Convection.config).to receive(:gravity_xapp_token).and_return(
+          'xapp_token'
+        )
         gravql_artists_response = {
           data: {
             artists: [
@@ -132,11 +151,10 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
           .to_return(body: gravql_artists_response.to_json)
           .with(
-            headers: {
-              'X-XAPP-TOKEN' => 'xapp_token',
-              'Content-Type' => 'application/json'
-            }
-          )
+          headers: {
+            'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
+          }
+        )
         fill_in('offer_price_dollars', with: '700')
         fill_in('offer_photography_dollars', with: '50')
         fill_in('offer_shipping_dollars', with: '70')
@@ -160,12 +178,16 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
 
     describe 'retail offer' do
       before do
-        page.visit "/admin/offers/new_step_1?submission_id=#{submission.id}&partner_id=#{partner.id}&offer_type=retail"
+        page.visit "/admin/offers/new_step_1?submission_id=#{
+                     submission.id
+                   }&partner_id=#{partner.id}&offer_type=retail"
       end
 
       it 'displays the page title and content' do
         expect(page).to have_content('New Offer')
-        expect(page).to have_content("Retail offer for Submission ##{submission.id} by Gagosian Gallery")
+        expect(page).to have_content(
+          "Retail offer for Submission ##{submission.id} by Gagosian Gallery"
+        )
       end
 
       it 'displays all of the shared fields' do
@@ -192,7 +214,9 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         stub_gravity_user(id: submission.user.gravity_user_id)
         stub_gravity_user_detail(id: submission.user.gravity_user_id)
 
-        allow(Convection.config).to receive(:gravity_xapp_token).and_return('xapp_token')
+        allow(Convection.config).to receive(:gravity_xapp_token).and_return(
+          'xapp_token'
+        )
         gravql_artists_response = {
           data: {
             artists: [
@@ -204,11 +228,10 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
           .to_return(body: gravql_artists_response.to_json)
           .with(
-            headers: {
-              'X-XAPP-TOKEN' => 'xapp_token',
-              'Content-Type' => 'application/json'
-            }
-          )
+          headers: {
+            'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
+          }
+        )
 
         fill_in('offer_price_dollars', with: '700')
         fill_in('offer_commission_percent_whole', with: '12.5')
@@ -235,12 +258,16 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
 
     describe 'net price offer' do
       before do
-        page.visit "/admin/offers/new_step_1?submission_id=#{submission.id}&partner_id=#{partner.id}&offer_type=net+price"
+        page.visit "/admin/offers/new_step_1?submission_id=#{
+                     submission.id
+                   }&partner_id=#{partner.id}&offer_type=net+price"
       end
 
       it 'displays the page title and content' do
         expect(page).to have_content('New Offer')
-        expect(page).to have_content("Net price offer for Submission ##{submission.id} by Gagosian Gallery")
+        expect(page).to have_content(
+          "Net price offer for Submission ##{submission.id} by Gagosian Gallery"
+        )
       end
 
       it 'displays all of the shared fields' do
@@ -267,7 +294,9 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         stub_gravity_user(id: submission.user.gravity_user_id)
         stub_gravity_user_detail(id: submission.user.gravity_user_id)
 
-        allow(Convection.config).to receive(:gravity_xapp_token).and_return('xapp_token')
+        allow(Convection.config).to receive(:gravity_xapp_token).and_return(
+          'xapp_token'
+        )
         gravql_artists_response = {
           data: {
             artists: [
@@ -279,11 +308,10 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
           .to_return(body: gravql_artists_response.to_json)
           .with(
-            headers: {
-              'X-XAPP-TOKEN' => 'xapp_token',
-              'Content-Type' => 'application/json'
-            }
-          )
+          headers: {
+            'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
+          }
+        )
 
         fill_in('offer_price_dollars', with: '700')
         fill_in('offer_photography_dollars', with: '50')

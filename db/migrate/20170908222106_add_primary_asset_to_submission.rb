@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddPrimaryAssetToSubmission < ActiveRecord::Migration[5.0]
   def change
     add_reference :submissions, :primary_image, references: :assets, index: true

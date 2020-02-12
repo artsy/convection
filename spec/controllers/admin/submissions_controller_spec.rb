@@ -1,10 +1,16 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe Admin::SubmissionsController, type: :controller do
   describe 'with some submisisons' do
     before do
-      allow_any_instance_of(Admin::SubmissionsController).to receive(:require_artsy_authentication)
-      allow(Convection.config).to receive(:gravity_xapp_token).and_return('xapp_token')
+      allow_any_instance_of(Admin::SubmissionsController).to receive(
+        :require_artsy_authentication
+      )
+      allow(Convection.config).to receive(:gravity_xapp_token).and_return(
+        'xapp_token'
+      )
       gravql_artists_response = {
         data: {
           artists: [
@@ -16,23 +22,43 @@ describe Admin::SubmissionsController, type: :controller do
       stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
         .to_return(body: gravql_artists_response.to_json)
         .with(
-          headers: {
-            'X-XAPP-TOKEN' => 'xapp_token',
-            'Content-Type' => 'application/json'
-          }
-        )
+        headers: {
+          'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
+        }
+      )
     end
 
     context 'with many submissions' do
       before do
         @user1 = Fabricate(:user, email: 'sarah@artsymail.com')
         @user2 = Fabricate(:user, email: 'lucille@bluth.com')
-        @submission1 = Fabricate(:submission, state: 'submitted', title: 'hi hi', user: @user1)
-        @submission2 = Fabricate(:submission, state: 'submitted', title: 'my artwork', user: @user1)
-        @submission3 = Fabricate(:submission, state: 'submitted', title: 'another artwork', user: @user2)
-        @submission4 = Fabricate(:submission, state: 'approved', title: 'zzz', user: @user2)
-        @submission5 = Fabricate(:submission, state: 'approved', title: 'aaa', user: @user2)
-        @deleted_submission = Fabricate(:submission, state: 'submitted', title: 'deleted submission', user: @user2, deleted_at: Time.now.utc)
+        @submission1 =
+          Fabricate(
+            :submission,
+            state: 'submitted', title: 'hi hi', user: @user1
+          )
+        @submission2 =
+          Fabricate(
+            :submission,
+            state: 'submitted', title: 'my artwork', user: @user1
+          )
+        @submission3 =
+          Fabricate(
+            :submission,
+            state: 'submitted', title: 'another artwork', user: @user2
+          )
+        @submission4 =
+          Fabricate(:submission, state: 'approved', title: 'zzz', user: @user2)
+        @submission5 =
+          Fabricate(:submission, state: 'approved', title: 'aaa', user: @user2)
+        @deleted_submission =
+          Fabricate(
+            :submission,
+            state: 'submitted',
+            title: 'deleted submission',
+            user: @user2,
+            deleted_at: Time.now.utc
+          )
       end
 
       it 'does not return deleted submissions' do
@@ -52,47 +78,95 @@ describe Admin::SubmissionsController, type: :controller do
         end
         it 'sets the artist details correctly' do
           get :index
-          expect(controller.artist_details).to eq('artist1' => 'Andy Warhol',
-                                                  'artist2' => 'Kara Walker')
+          expect(controller.artist_details).to eq(
+            'artist1' => 'Andy Warhol', 'artist2' => 'Kara Walker'
+          )
         end
       end
 
       describe '#sorting and filtering' do
         it 'allows you to filter by state = approved' do
           get :index, params: { state: 'approved' }
-          expect(controller.submissions.pluck(:id)).to eq [@submission5.id, @submission4.id]
+          expect(controller.submissions.pluck(:id)).to eq [
+               @submission5.id,
+               @submission4.id
+             ]
         end
 
         it 'allows you to filter by state = submitted' do
           get :index, params: { state: 'submitted' }
-          expect(controller.submissions.pluck(:id)).to eq [@submission3.id, @submission2.id, @submission1.id]
+          expect(controller.submissions.pluck(:id)).to eq [
+               @submission3.id,
+               @submission2.id,
+               @submission1.id
+             ]
         end
 
         it 'allows you to sort by user email' do
           get :index, params: { sort: 'users.email', direction: 'asc' }
           expect(controller.submissions.pluck(:id)).to eq(
-            [@submission5.id, @submission4.id, @submission3.id, @submission2.id, @submission1.id]
+            [
+              @submission5.id,
+              @submission4.id,
+              @submission3.id,
+              @submission2.id,
+              @submission1.id
+            ]
           )
         end
 
         it 'allows you to sort by offers_count' do
-          Fabricate(:offer, partner_submission: Fabricate(:partner_submission, submission: @submission2))
-          Fabricate(:offer, partner_submission: Fabricate(:partner_submission, submission: @submission2))
-          Fabricate(:offer, partner_submission: Fabricate(:partner_submission, submission: @submission3))
+          Fabricate(
+            :offer,
+            partner_submission:
+              Fabricate(:partner_submission, submission: @submission2)
+          )
+          Fabricate(
+            :offer,
+            partner_submission:
+              Fabricate(:partner_submission, submission: @submission2)
+          )
+          Fabricate(
+            :offer,
+            partner_submission:
+              Fabricate(:partner_submission, submission: @submission3)
+          )
           get :index, params: { sort: 'offers_count', direction: 'desc' }
           expect(controller.submissions.pluck(:id)).to eq(
-            [@submission2.id, @submission3.id, @submission1.id, @submission4.id, @submission5.id]
+            [
+              @submission2.id,
+              @submission3.id,
+              @submission1.id,
+              @submission4.id,
+              @submission5.id
+            ]
           )
         end
 
         it 'allows you to filter by state and sort by user email' do
-          get :index, params: { sort: 'users.email', direction: 'desc', state: 'submitted' }
-          expect(controller.submissions.pluck(:id)).to eq [@submission2.id, @submission1.id, @submission3.id]
+          get :index,
+              params: {
+                sort: 'users.email', direction: 'desc', state: 'submitted'
+              }
+          expect(controller.submissions.pluck(:id)).to eq [
+               @submission2.id,
+               @submission1.id,
+               @submission3.id
+             ]
         end
 
         it 'allows you to filter by state, search for user, and sort by ID' do
-          get :index, params: { sort: 'id', direction: 'desc', state: 'submitted', user: @user1.id }
-          expect(controller.submissions.pluck(:id)).to eq [@submission2.id, @submission1.id]
+          get :index,
+              params: {
+                sort: 'id',
+                direction: 'desc',
+                state: 'submitted',
+                user: @user1.id
+              }
+          expect(controller.submissions.pluck(:id)).to eq [
+               @submission2.id,
+               @submission1.id
+             ]
         end
       end
 
@@ -109,13 +183,20 @@ describe Admin::SubmissionsController, type: :controller do
           get :index, format: 'json', params: { term: 'art' }
           submissions = JSON.parse(response.body)
           expect(submissions.length).to eq 2
-          expect(submissions.map { |sub| sub['id'] }).to eq [@submission3.id, @submission2.id]
+          expect(submissions.map { |sub| sub['id'] }).to eq [
+               @submission3.id,
+               @submission2.id
+             ]
         end
 
         it 'merges in the thumbnail url' do
-          Fabricate(:image,
-                    submission: @submission1,
-                    image_urls: { square: 'https://square.jpg', thumbnail: 'https://thumbnail-1.jpg' })
+          Fabricate(
+            :image,
+            submission: @submission1,
+            image_urls: {
+              square: 'https://square.jpg', thumbnail: 'https://thumbnail-1.jpg'
+            }
+          )
 
           get :index, format: 'json', params: { term: 'hi' }
           submissions = JSON.parse(response.body)

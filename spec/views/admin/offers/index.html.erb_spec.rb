@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require 'support/gravity_helper'
 
@@ -6,24 +8,23 @@ describe 'admin/offers/index.html.erb', type: :feature do
     before do
       stub_gravity_root
 
-      allow_any_instance_of(ApplicationController).to receive(:require_artsy_authentication)
+      allow_any_instance_of(ApplicationController).to receive(
+        :require_artsy_authentication
+      )
 
-      allow(Convection.config).to receive(:gravity_xapp_token).and_return('xapp_token')
+      allow(Convection.config).to receive(:gravity_xapp_token).and_return(
+        'xapp_token'
+      )
       gravql_artists_response = {
-        data: {
-          artists: [
-            { id: 'artist1', name: 'Andy Warhol' }
-          ]
-        }
+        data: { artists: [{ id: 'artist1', name: 'Andy Warhol' }] }
       }
       stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
         .to_return(body: gravql_artists_response.to_json)
         .with(
-          headers: {
-            'X-XAPP-TOKEN' => 'xapp_token',
-            'Content-Type' => 'application/json'
-          }
-        )
+        headers: {
+          'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
+        }
+      )
 
       page.visit admin_offers_path
     end
@@ -76,7 +77,11 @@ describe 'admin/offers/index.html.erb', type: :feature do
       end
 
       it 'displays a lock symbol if the offer is locked' do
-        ps = Fabricate(:partner_submission, submission: Fabricate(:submission, state: Submission::APPROVED))
+        ps =
+          Fabricate(
+            :partner_submission,
+            submission: Fabricate(:submission, state: Submission::APPROVED)
+          )
         accepted_offer = Fabricate(:offer, partner_submission: ps)
         Fabricate(:offer, partner_submission: ps)
         OfferService.consign!(accepted_offer)
@@ -89,10 +94,31 @@ describe 'admin/offers/index.html.erb', type: :feature do
       before do
         @partner1 = Fabricate(:partner, name: 'Gagosian')
         @partner2 = Fabricate(:partner, name: 'Heritage Auctions')
-        3.times { Fabricate(:offer, state: 'sent', partner_submission: Fabricate(:partner_submission, partner: @partner1)) }
-        @offer1 = Fabricate(:offer, state: 'accepted', partner_submission: Fabricate(:partner_submission, partner: @partner2))
-        Fabricate(:offer, state: 'rejected', partner_submission: Fabricate(:partner_submission, partner: @partner2))
-        Fabricate(:offer, state: 'draft', partner_submission: Fabricate(:partner_submission, partner: @partner1))
+        3.times do
+          Fabricate(
+            :offer,
+            state: 'sent',
+            partner_submission:
+              Fabricate(:partner_submission, partner: @partner1)
+          )
+        end
+        @offer1 =
+          Fabricate(
+            :offer,
+            state: 'accepted',
+            partner_submission:
+              Fabricate(:partner_submission, partner: @partner2)
+          )
+        Fabricate(
+          :offer,
+          state: 'rejected',
+          partner_submission: Fabricate(:partner_submission, partner: @partner2)
+        )
+        Fabricate(
+          :offer,
+          state: 'draft',
+          partner_submission: Fabricate(:partner_submission, partner: @partner1)
+        )
 
         stub_gravity_user(id: @offer1.submission.user.gravity_user_id)
         stub_gravity_user_detail(id: @offer1.submission.user.gravity_user_id)
@@ -143,7 +169,8 @@ describe 'admin/offers/index.html.erb', type: :feature do
         expect(page).to have_content('draft', count: 1)
       end
 
-      it 'allows you to search by partner name, filter by state, and sort by price_cents', js: true do
+      it 'allows you to search by partner name, filter by state, and sort by price_cents',
+         js: true do
         select('sent', from: 'state')
         fill_in('term', with: 'Gag')
         expect(page).to have_selector('.ui-autocomplete')
@@ -151,7 +178,12 @@ describe 'admin/offers/index.html.erb', type: :feature do
         click_link("partner-#{@partner1.id}")
         expect(current_url).to include "state=sent&partner=#{@partner1.id}"
         click_link('Price')
-        expect(current_url).to include("partner=#{@partner1.id}", 'state=sent', 'sort=price_cents', 'direction=desc')
+        expect(current_url).to include(
+          "partner=#{@partner1.id}",
+          'state=sent',
+          'sort=price_cents',
+          'direction=desc'
+        )
       end
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Api
   class BaseController < ApplicationController
     skip_before_action :verify_authenticity_token
@@ -26,15 +28,22 @@ module Api
     end
 
     def require_trusted_app
-      raise ApplicationController::NotAuthorized unless current_app.present? && current_user.blank? && current_user_roles.include?(:trusted)
+      unless current_app.present? && current_user.blank? &&
+               current_user_roles.include?(:trusted)
+        raise ApplicationController::NotAuthorized
+      end
     end
 
     def require_authentication
-      raise ApplicationController::NotAuthorized unless current_app && current_user
+      unless current_app && current_user
+        raise ApplicationController::NotAuthorized
+      end
     end
 
     def require_authorized_submission
-      raise ApplicationController::NotAuthorized unless current_user && current_user == @submission.user&.gravity_user_id
+      unless current_user && current_user == @submission.user&.gravity_user_id
+        raise ApplicationController::NotAuthorized
+      end
     end
 
     private
@@ -57,7 +66,8 @@ module Api
     end
 
     def current_user_roles
-      @current_user_roles ||= jwt_payload&.fetch('roles', nil)&.split(',')&.map(&:to_sym) || []
+      @current_user_roles ||=
+        jwt_payload&.fetch('roles', nil)&.split(',')&.map(&:to_sym) || []
     end
   end
 end

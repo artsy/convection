@@ -1,19 +1,28 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require 'support/gravity_helper'
 
 describe 'Show Submission' do
   let!(:user) { Fabricate(:user, gravity_user_id: 'userid') }
-  let(:jwt_token) { JWT.encode({ aud: 'gravity', sub: 'userid' }, Convection.config.jwt_secret) }
+  let(:jwt_token) do
+    JWT.encode({ aud: 'gravity', sub: 'userid' }, Convection.config.jwt_secret)
+  end
   let(:headers) { { 'Authorization' => "Bearer #{jwt_token}" } }
 
   describe 'GET /submissions' do
     it 'rejects unauthorized requests' do
-      get '/api/submissions', headers: { 'Authorization' => 'Bearer foo.bar.baz' }
+      get '/api/submissions',
+          headers: { 'Authorization' => 'Bearer foo.bar.baz' }
       expect(response.status).to eq 401
     end
 
     it "doesn't return other people's submissions" do
-      Fabricate(:submission, user: Fabricate(:user, gravity_user_id: 'buster-bluth'), state: 'approved')
+      Fabricate(
+        :submission,
+        user: Fabricate(:user, gravity_user_id: 'buster-bluth'),
+        state: 'approved'
+      )
       get '/api/submissions', headers: headers
       expect(response.status).to eq 200
       body = JSON.parse(response.body)
@@ -22,7 +31,11 @@ describe 'Show Submission' do
 
     it 'returns your own submissions' do
       submission = Fabricate(:submission, user: user, state: 'approved')
-      Fabricate(:submission, user: Fabricate(:user, gravity_user_id: 'buster-bluth'), state: 'approved')
+      Fabricate(
+        :submission,
+        user: Fabricate(:user, gravity_user_id: 'buster-bluth'),
+        state: 'approved'
+      )
 
       get '/api/submissions', headers: headers
       expect(response.status).to eq 200

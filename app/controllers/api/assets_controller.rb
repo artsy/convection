@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module Api
   class AssetsController < BaseController
     before_action :require_authentication
-    before_action :set_submission_and_asset, only: [:show]
-    before_action :set_submission, only: [:create, :index]
+    before_action :set_submission_and_asset, only: %i[show]
+    before_action :set_submission, only: %i[create index]
     before_action :require_authorized_submission
 
     def index
@@ -36,11 +38,7 @@ module Api
     end
 
     def asset_params
-      params.permit(
-        :asset_type,
-        :gemini_token,
-        :submission_id
-      )
+      params.permit(:asset_type, :gemini_token, :submission_id)
     end
   end
 end
