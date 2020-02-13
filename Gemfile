@@ -41,7 +41,7 @@ gem 'uglifier'
 
 group :development, :test do
   gem 'pry-byebug'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '4.0.0.beta4'
   gem 'rubocop-rails'
   gem 'webdrivers', '~> 4.2'
 end
