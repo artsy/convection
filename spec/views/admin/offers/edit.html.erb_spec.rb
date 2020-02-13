@@ -40,9 +40,7 @@ describe 'admin/offers/edit.html.erb', type: :feature do
         expect(page).to have_content('Photography')
         expect(page).to have_content('Shipping')
         expect(page).to have_content('Insurance')
-        expect(page).to have_content('Insurance %')
         expect(page).to have_content('Other fees')
-        expect(page).to have_content('Other fees %')
         expect(page).to have_content('Notes')
         expect(page).to have_content('Partner Info')
       end
@@ -79,9 +77,7 @@ describe 'admin/offers/edit.html.erb', type: :feature do
         expect(page).to have_content('Photography')
         expect(page).to have_content('Shipping')
         expect(page).to have_content('Insurance')
-        expect(page).to have_content('Insurance %')
         expect(page).to have_content('Other fees')
-        expect(page).to have_content('Other fees %')
         expect(page).to have_content('Notes')
         expect(page).to have_content('Partner Info')
       end
@@ -114,9 +110,7 @@ describe 'admin/offers/edit.html.erb', type: :feature do
         expect(page).to have_content('Photography')
         expect(page).to have_content('Shipping')
         expect(page).to have_content('Insurance')
-        expect(page).to have_content('Insurance %')
         expect(page).to have_content('Other fees')
-        expect(page).to have_content('Other fees %')
         expect(page).to have_content('Notes')
         expect(page).to have_content('Partner Info')
       end
@@ -151,9 +145,7 @@ describe 'admin/offers/edit.html.erb', type: :feature do
         expect(page).to have_content('Photography')
         expect(page).to have_content('Shipping')
         expect(page).to have_content('Insurance')
-        expect(page).to have_content('Insurance %')
         expect(page).to have_content('Other fees')
-        expect(page).to have_content('Other fees %')
         expect(page).to have_content('Notes')
         expect(page).to have_content('Partner Info')
       end
