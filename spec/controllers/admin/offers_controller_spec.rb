@@ -242,11 +242,11 @@ describe Admin::OffersController, type: :controller do
           sale_name: 'Fun sale',
           sale_date: Date.new(2_017, 10, 1),
           currency: 'GBP',
-          photography_info: "about 10,000",
-          shipping_info: "$20,000 or so",
-          insurance_info: "1000 or best offer",
-          deadline_to_consign: "next week",
-          other_fees_info: "a couple grand, give or take",
+          photography_info: 'about 10,000',
+          shipping_info: '$20,000 or so',
+          insurance_info: '1000 or best offer',
+          deadline_to_consign: 'next week',
+          other_fees_info: 'a couple grand, give or take',
           notes: 'New notes.'
         }
         put :update, params: { id: auction_offer.id, offer: new_params }
@@ -259,11 +259,11 @@ describe Admin::OffersController, type: :controller do
           price_dollars: 10_000,
           commission_percent_whole: 10.0,
           currency: 'GBP',
-          photography_info: "about 10,000",
-          shipping_info: "$20,000 or so",
-          insurance_info: "1000 or best offer",
-          deadline_to_consign: "next week",
-          other_fees_info: "a couple grand, give or take",
+          photography_info: 'about 10,000',
+          shipping_info: '$20,000 or so',
+          insurance_info: '1000 or best offer',
+          deadline_to_consign: 'next week',
+          other_fees_info: 'a couple grand, give or take',
           notes: 'New notes.'
         }
         put :update, params: { id: purchase_offer.id, offer: new_params }
@@ -278,11 +278,11 @@ describe Admin::OffersController, type: :controller do
           sale_period_start: Date.new(2_017, 1, 1),
           sale_period_end: Date.new(2_017, 10, 1),
           currency: 'GBP',
-          photography_info: "about 10,000",
-          shipping_info: "$20,000 or so",
-          insurance_info: "1000 or best offer",
-          deadline_to_consign: "next week",
-          other_fees_info: "a couple grand, give or take",
+          photography_info: 'about 10,000',
+          shipping_info: '$20,000 or so',
+          insurance_info: '1000 or best offer',
+          deadline_to_consign: 'next week',
+          other_fees_info: 'a couple grand, give or take',
           notes: 'New notes.'
         }
         put :update, params: { id: retail_offer.id, offer: new_params }
@@ -293,15 +293,11 @@ describe Admin::OffersController, type: :controller do
         retail_offer =
           Fabricate(
             :offer,
-            offer_type: 'retail',
-            insurance_info: "1000 or best offer"
+            offer_type: 'retail', insurance_info: '1000 or best offer'
           )
         put :update,
-            params: {
-              id: retail_offer.id,
-              offer: { insurance_info: nil }
-            }
-        expect(retail_offer.reload.insurance_info).to eq ""
+            params: { id: retail_offer.id, offer: { insurance_info: nil } }
+        expect(retail_offer.reload.insurance_info).to eq ''
       end
 
       it 'remains on the edit view and shows an error on failure' do
@@ -320,11 +316,11 @@ describe Admin::OffersController, type: :controller do
           sale_period_start: Date.new(2_017, 1, 1),
           sale_period_end: Date.new(2_017, 10, 1),
           currency: 'GBP',
-          photography_info: "about 10,000",
-          shipping_info: "$20,000 or so",
-          insurance_info: "1000 or best offer",
-          deadline_to_consign: "next week",
-          other_fees_info: "a couple grand, give or take",
+          photography_info: 'about 10,000',
+          shipping_info: '$20,000 or so',
+          insurance_info: '1000 or best offer',
+          deadline_to_consign: 'next week',
+          other_fees_info: 'a couple grand, give or take',
           notes: 'New notes.'
         }
         put :update, params: { id: net_price_offer.id, offer: new_params }

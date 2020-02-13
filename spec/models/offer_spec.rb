@@ -144,7 +144,7 @@ describe Offer do
     it 'has all of the correct attributes' do
       expect(Offer.new.attributes.keys).to include(
         'commission_percent',
-        'commission_percent_whole',
+        'commission_percent_whole'
       )
     end
 
