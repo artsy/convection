@@ -12,7 +12,7 @@ Convection is the application that powers our consignments workflow, enabling us
 
 ## Contributing Pull Requests
 
-Rosalind accepts PRs from branches on the main artsy/rosalind repo. PRs from forks will not be built in the CI environment and cannot be merged directly.
+Convection accepts PRs from branches on the main artsy/convection repo. PRs from forks will not be built in the CI environment and cannot be merged directly.
 
 ## Setup
 
