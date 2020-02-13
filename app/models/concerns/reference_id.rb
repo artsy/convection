@@ -8,7 +8,7 @@ module ReferenceId
   def create_reference_id
     loop do
       self.reference_id = SecureRandom.hex(5)
-      break unless self.class.exists?(reference_id: reference_id)
+      break unless self.class.unscoped.exists?(reference_id: reference_id)
     end
   end
 end
