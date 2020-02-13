@@ -145,6 +145,7 @@ module Admin
         :commission_percent_whole,
         :created_by_id,
         :currency,
+        :deadline_to_consign,
         :high_estimate_dollars,
         :insurance_info,
         :low_estimate_dollars,

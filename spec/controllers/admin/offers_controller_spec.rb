@@ -245,6 +245,7 @@ describe Admin::OffersController, type: :controller do
           photography_info: "about 10,000",
           shipping_info: "$20,000 or so",
           insurance_info: "1000 or best offer",
+          deadline_to_consign: "next week",
           other_fees_info: "a couple grand, give or take",
           notes: 'New notes.'
         }
@@ -261,6 +262,7 @@ describe Admin::OffersController, type: :controller do
           photography_info: "about 10,000",
           shipping_info: "$20,000 or so",
           insurance_info: "1000 or best offer",
+          deadline_to_consign: "next week",
           other_fees_info: "a couple grand, give or take",
           notes: 'New notes.'
         }
@@ -279,6 +281,7 @@ describe Admin::OffersController, type: :controller do
           photography_info: "about 10,000",
           shipping_info: "$20,000 or so",
           insurance_info: "1000 or best offer",
+          deadline_to_consign: "next week",
           other_fees_info: "a couple grand, give or take",
           notes: 'New notes.'
         }
@@ -320,6 +323,7 @@ describe Admin::OffersController, type: :controller do
           photography_info: "about 10,000",
           shipping_info: "$20,000 or so",
           insurance_info: "1000 or best offer",
+          deadline_to_consign: "next week",
           other_fees_info: "a couple grand, give or take",
           notes: 'New notes.'
         }
