@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :partners do
   desc 'Sends daily email to partners with newly approved submissons.'
   task daily_digest: :environment do

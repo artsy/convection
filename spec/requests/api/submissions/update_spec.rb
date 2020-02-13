@@ -1,34 +1,50 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require 'support/gravity_helper'
 
 describe 'Update Submission' do
-  let(:jwt_token) { JWT.encode({ aud: 'gravity', sub: 'userid' }, Convection.config.jwt_secret) }
+  let(:jwt_token) do
+    JWT.encode({ aud: 'gravity', sub: 'userid' }, Convection.config.jwt_secret)
+  end
   let(:headers) { { 'Authorization' => "Bearer #{jwt_token}" } }
 
   describe 'PUT /submissions' do
     it 'rejects unauthorized requests' do
-      put '/api/submissions/foo', headers: { 'Authorization' => 'Bearer foo.bar.baz' }
+      put '/api/submissions/foo',
+          headers: { 'Authorization' => 'Bearer foo.bar.baz' }
       expect(response.status).to eq 401
     end
 
     it 'returns an error if it cannot find the submission' do
-      Fabricate(:submission, user: Fabricate(:user, gravity_user_id: 'buster-bluth'))
+      Fabricate(
+        :submission,
+        user: Fabricate(:user, gravity_user_id: 'buster-bluth')
+      )
       put '/api/submissions/foo', headers: headers
       expect(response.status).to eq 404
       expect(JSON.parse(response.body)['error']).to eq 'Not Found'
     end
 
     it "rejects requests for someone else's submission" do
-      submission = Fabricate(:submission, user: Fabricate(:user, gravity_user_id: 'buster-bluth'))
+      submission =
+        Fabricate(
+          :submission,
+          user: Fabricate(:user, gravity_user_id: 'buster-bluth')
+        )
       put "/api/submissions/#{submission.id}", headers: headers
       expect(response.status).to eq 401
     end
 
     it 'accepts requests for your own submission' do
-      submission = Fabricate(:submission, artist_id: 'andy-warhol', user: Fabricate(:user, gravity_user_id: 'userid'))
-      put "/api/submissions/#{submission.id}", params: {
-        artist_id: 'kara-walker'
-      }, headers: headers
+      submission =
+        Fabricate(
+          :submission,
+          artist_id: 'andy-warhol',
+          user: Fabricate(:user, gravity_user_id: 'userid')
+        )
+      put "/api/submissions/#{submission.id}",
+          params: { artist_id: 'kara-walker' }, headers: headers
       expect(response.status).to eq 201
       body = JSON.parse(response.body)
       expect(body['id']).to eq submission.id
@@ -38,12 +54,19 @@ describe 'Update Submission' do
     describe 'submitting' do
       describe 'with a valid submission' do
         before do
-          @submission = Fabricate(:submission, user: Fabricate(:user, gravity_user_id: 'userid'), artist_id: 'artistid')
+          @submission =
+            Fabricate(
+              :submission,
+              user: Fabricate(:user, gravity_user_id: 'userid'),
+              artist_id: 'artistid'
+            )
         end
 
         it 'sends a receipt when your state is updated to submitted' do
           expect(NotificationService).to receive(:post_submission_event).once
-          allow(Convection.config).to receive(:admin_email_address).and_return('lucille@bluth.com')
+          allow(Convection.config).to receive(:admin_email_address).and_return(
+            'lucille@bluth.com'
+          )
           stub_gravity_root
           stub_gravity_user
           stub_gravity_user_detail(email: 'michael@bluth.com')
@@ -51,9 +74,8 @@ describe 'Update Submission' do
 
           Fabricate(:image, submission: @submission)
 
-          put "/api/submissions/#{@submission.id}", params: {
-            state: 'submitted'
-          }, headers: headers
+          put "/api/submissions/#{@submission.id}",
+              params: { state: 'submitted' }, headers: headers
 
           expect(response.status).to eq 201
           expect(@submission.reload.receipt_sent_at).to_not be_nil
@@ -74,25 +96,28 @@ describe 'Update Submission' do
           @submission.update!(receipt_sent_at: Time.now.utc)
           @submission.update!(admin_receipt_sent_at: Time.now.utc)
 
-          put "/api/submissions/#{@submission.id}", params: {
-            state: 'submitted'
-          }, headers: headers
+          put "/api/submissions/#{@submission.id}",
+              params: { state: 'submitted' }, headers: headers
           expect(ActionMailer::Base.deliveries.length).to eq 0
         end
       end
 
       it 'returns an error if you try to submit without all of the relevant fields' do
-        submission = Fabricate(:submission,
-                               artist_id: 'andy-warhol',
-                               user: Fabricate(:user, gravity_user_id: 'userid'),
-                               title: nil)
-        put "/api/submissions/#{submission.id}", params: {
-          artist_id: 'kara-walker',
-          state: 'submitted'
-        }, headers: headers
+        submission =
+          Fabricate(
+            :submission,
+            artist_id: 'andy-warhol',
+            user: Fabricate(:user, gravity_user_id: 'userid'),
+            title: nil
+          )
+        put "/api/submissions/#{submission.id}",
+            params: { artist_id: 'kara-walker', state: 'submitted' },
+            headers: headers
 
         expect(response.status).to eq 400
-        expect(JSON.parse(response.body)['error']).to eq('Missing fields for submission.')
+        expect(JSON.parse(response.body)['error']).to eq(
+          'Missing fields for submission.'
+        )
         expect(submission.reload.artist_id).to eq 'andy-warhol'
       end
     end

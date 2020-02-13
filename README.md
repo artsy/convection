@@ -10,6 +10,10 @@ Convection is the application that powers our consignments workflow, enabling us
 - **CI/Deploys:** [CircleCi](https://circleci.com/gh/artsy/convection); PRs merged to `artsy/convection#master` are automatically deployed to staging; PRs from `staging` to `release` are automatically deployed to production. Create such a PR with [`deploy_pr`][deploy_pr] or [this handy link][deploy].
 - **Cron Tasks:** A daily digest is sent to partners at 10am EST. The production database is exported daily at 12am EST, and imported to staging daily at 1am EST. 
 
+## Contributing Pull Requests
+
+Convection accepts PRs from branches on the main artsy/convection repo. PRs from forks will not be built in the CI environment and cannot be merged directly.
+
 ## Setup
 
 - Fork the project to your GitHub account

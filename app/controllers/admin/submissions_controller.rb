@@ -1,39 +1,58 @@
+# frozen_string_literal: true
+
 module Admin
   class SubmissionsController < ApplicationController
     include GraphqlHelper
 
-    before_action :set_submission, only: [:show, :edit, :update, :undo_approval, :undo_rejection]
+    before_action :set_submission,
+                  only: %i[show edit update undo_approval undo_rejection]
 
     expose(:submissions) do
       matching_submissions = Submission.not_deleted
-      matching_submissions = matching_submissions.search(params[:term]) if params[:term].present?
-      matching_submissions = matching_submissions.where(state: params[:state]) if params[:state].present?
-      matching_submissions = matching_submissions.where(user_id: params[:user]) if params[:user].present?
+      if params[:term].present?
+        matching_submissions = matching_submissions.search(params[:term])
+      end
+      if params[:state].present?
+        matching_submissions = matching_submissions.where(state: params[:state])
+      end
+      if params[:user].present?
+        matching_submissions =
+          matching_submissions.where(user_id: params[:user])
+      end
 
       sort = params[:sort].presence || 'id'
       direction = params[:direction].presence || 'desc'
 
-      matching_submissions = if sort.include?('users')
-                               matching_submissions.includes(:user).reorder("#{sort} #{direction}, submissions.id desc")
-                             else
-                               matching_submissions.reorder("#{sort} #{direction}")
-                             end
+      matching_submissions =
+        if sort.include?('users')
+          matching_submissions.includes(:user).reorder(
+            "#{sort} #{direction}, submissions.id desc"
+          )
+        else
+          matching_submissions.reorder("#{sort} #{direction}")
+        end
       matching_submissions.page(page).per(size)
     end
 
-    expose(:artist_details) do
-      artists_query(submissions.map(&:artist_id))
-    end
+    expose(:artist_details) { artists_query(submissions.map(&:artist_id)) }
 
     expose(:filters) do
-      { state: params[:state], user: params[:user], sort: params[:sort], direction: params[:direction] }
+      {
+        state: params[:state],
+        user: params[:user],
+        sort: params[:sort],
+        direction: params[:direction]
+      }
     end
 
     def index
       respond_to do |format|
         format.html
         format.json do
-          submissions_with_thumbnails = submissions.map { |submission| submission.as_json.merge(thumbnail: submission.thumbnail) }
+          submissions_with_thumbnails =
+            submissions.map do |submission|
+              submission.as_json.merge(thumbnail: submission.thumbnail)
+            end
           render json: submissions_with_thumbnails || []
         end
       end
@@ -44,7 +63,11 @@ module Admin
     end
 
     def create
-      @submission = SubmissionService.create_submission(submission_params.merge(state: 'submitted'), params[:submission][:user_id])
+      @submission =
+        SubmissionService.create_submission(
+          submission_params.merge(state: 'submitted'),
+          params[:submission][:user_id]
+        )
       redirect_to admin_submission_path(@submission)
     rescue SubmissionService::SubmissionError => e
       @submission = Submission.new(submission_params)
@@ -53,15 +76,25 @@ module Admin
     end
 
     def show
-      notified_partner_submissions = @submission.partner_submissions.where.not(notified_at: nil)
-      @partner_submissions_count = notified_partner_submissions.group_by_day.count
+      notified_partner_submissions =
+        @submission.partner_submissions.where.not(notified_at: nil)
+      @partner_submissions_count =
+        notified_partner_submissions.group_by_day.count
       @offers = @submission.offers
     end
 
     def edit; end
 
     def update
-      if SubmissionService.update_submission(@submission, submission_params, @current_user)
+      hide_from_partners = params[:hide_from_partners] == 'true'
+      result =
+        SubmissionService.update_submission(
+          @submission,
+          submission_params,
+          current_user: @current_user, hide_from_partners: hide_from_partners
+        )
+
+      if result
         redirect_to admin_submission_path(@submission)
       else
         render 'edit'
@@ -86,9 +119,7 @@ module Admin
         term = params[:term]
         artists = Gravity.client.artists(term: term).artists
       end
-      respond_to do |format|
-        format.json { render json: artists || [] }
-      end
+      respond_to { |format| format.json { render json: artists || [] } }
     end
 
     def match_user
@@ -96,9 +127,7 @@ module Admin
         term = params[:term]
         users = Gravity.client.users(term: term).users
       end
-      respond_to do |format|
-        format.json { render json: users || [] }
-      end
+      respond_to { |format| format.json { render json: users || [] } }
     end
 
     private

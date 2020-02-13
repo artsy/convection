@@ -1,6 +1,11 @@
+# frozen_string_literal: true
+
 class ChangeImageUrlsType < ActiveRecord::Migration[5.0]
   def self.up
-    change_column :assets, :image_urls, 'jsonb USING CAST(image_urls AS jsonb)', default: {}
+    change_column :assets,
+                  :image_urls,
+                  'jsonb USING CAST(image_urls AS jsonb)',
+                  default: {}
   end
 
   def self.down

@@ -1,14 +1,18 @@
+# frozen_string_literal: true
+
 module Admin
   class OffersController < ApplicationController
     include GraphqlHelper
 
-    before_action :set_offer, only: [:show, :edit, :update, :destroy]
+    before_action :set_offer, only: %i[show edit update destroy]
 
     expose :offer
 
     expose(:offers) do
       matching_offers = Offer.all
-      matching_offers = matching_offers.search(params[:term]) if params[:term].present?
+      if params[:term].present?
+        matching_offers = matching_offers.search(params[:term])
+      end
 
       if params[:partner].present?
         partner = Partner.find(params[:partner])
@@ -20,32 +24,38 @@ module Admin
         matching_offers = matching_offers.where(submission: user.submissions)
       end
 
-      matching_offers = matching_offers.where(state: params[:state]) if params[:state].present?
+      if params[:state].present?
+        matching_offers = matching_offers.where(state: params[:state])
+      end
 
       sort = params[:sort].presence || 'id'
       direction = params[:direction].presence || 'desc'
-      matching_offers = if sort.include?('partners')
-                          matching_offers.includes(:partner_submission).includes(:partner).reorder("#{sort} #{direction}")
-                        elsif sort.include?('submissions')
-                          matching_offers.includes(:submission).reorder("#{sort} #{direction}")
-                        else
-                          matching_offers.reorder("#{sort} #{direction}")
-                        end
+      matching_offers =
+        if sort.include?('partners')
+          matching_offers.includes(:partner_submission).includes(:partner)
+            .reorder("#{sort} #{direction}")
+        elsif sort.include?('submissions')
+          matching_offers.includes(:submission).reorder("#{sort} #{direction}")
+        else
+          matching_offers.reorder("#{sort} #{direction}")
+        end
 
       matching_offers.page(page).per(size)
     end
 
     expose(:filters) do
-      { state: params[:state], partner: params[:partner], user: params[:user], sort: params[:sort], direction: params[:direction] }
+      {
+        state: params[:state],
+        partner: params[:partner],
+        user: params[:user],
+        sort: params[:sort],
+        direction: params[:direction]
+      }
     end
 
-    expose(:counts) do
-      Offer.group(:state).count
-    end
+    expose(:counts) { Offer.group(:state).count }
 
-    expose(:offers_count) do
-      Offer.count
-    end
+    expose(:offers_count) { Offer.count }
 
     expose(:partner) do
       Partner.find(params[:partner_id]) if params[:partner_id].present?
@@ -55,9 +65,7 @@ module Admin
       Submission.find(params[:submission_id]) if params[:submission_id].present?
     end
 
-    expose(:term) do
-      params[:term]
-    end
+    expose(:term) { params[:term] }
 
     expose(:artist) do
       artists_query([offer.submission.artist_id])&.values&.first
@@ -65,13 +73,19 @@ module Admin
 
     def new_step_0
       @offer = Offer.new
-      @submission = Submission.find(params[:submission_id]) if params[:submission_id]
+      if params[:submission_id]
+        @submission = Submission.find(params[:submission_id])
+      end
     end
 
     def new_step_1
-      @offer = Offer.new(offer_type: params[:offer_type])
+      @offer =
+        Offer.new(
+          offer_type: params[:offer_type], partner_info: params[:partner_info]
+        )
 
-      if params[:submission_id].present? && params[:partner_id].present? && params[:offer_type].present?
+      if params[:submission_id].present? && params[:partner_id].present? &&
+           params[:offer_type].present?
         render 'new_step_1'
       else
         flash.now[:error] = 'Offer requires type, submission, and partner.'
@@ -80,7 +94,13 @@ module Admin
     end
 
     def create
-      @offer = OfferService.create_offer(params[:submission_id], params[:partner_id], offer_params, @current_user)
+      @offer =
+        OfferService.create_offer(
+          params[:submission_id],
+          params[:partner_id],
+          offer_params,
+          @current_user
+        )
       redirect_to admin_offer_path(@offer)
     rescue OfferService::OfferError => e
       flash.now[:error] = e.message
@@ -134,6 +154,7 @@ module Admin
         :other_fees_dollars,
         :other_fees_percent_whole,
         :override_email,
+        :partner_info,
         :photography_dollars,
         :price_dollars,
         :rejection_reason,

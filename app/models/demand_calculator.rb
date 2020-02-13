@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NullArtistStandingScore
   def artist_score
     0
@@ -10,9 +12,7 @@ end
 
 class DemandCalculator
   CATEGORY_MODIFIERS = {
-    'Default' => 0.5,
-    'Painting' => 1,
-    'Print' => 0.75
+    'Default' => 0.5, 'Painting' => 1, 'Print' => 0.75
   }.freeze
 
   def self.score(artist_id, category)
@@ -22,14 +22,15 @@ class DemandCalculator
   def initialize(artist_id, category)
     @artist_id = artist_id
     @category = category
-    @artist_standing_score = ArtistStandingScore.where(artist_id: artist_id).order(created_at: :asc).limit(1).first || NullArtistStandingScore.new
+    @artist_standing_score =
+      ArtistStandingScore.where(artist_id: artist_id).order(created_at: :asc)
+        .limit(1)
+        .first ||
+        NullArtistStandingScore.new
   end
 
   def score
-    {
-      artist_score: artist_score,
-      auction_score: auction_score
-    }
+    { artist_score: artist_score, auction_score: auction_score }
   end
 
   private
@@ -45,7 +46,8 @@ class DemandCalculator
   def calculate_demand_score(base_score)
     return 0 unless base_score.positive?
 
-    modifier = CATEGORY_MODIFIERS.fetch(@category, CATEGORY_MODIFIERS['Default'])
+    modifier =
+      CATEGORY_MODIFIERS.fetch(@category, CATEGORY_MODIFIERS['Default'])
     base_score * modifier
   end
 end

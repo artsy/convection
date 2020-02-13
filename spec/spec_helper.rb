@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'yarjuf'
 
 RSpec.configure do |config|
@@ -10,6 +12,6 @@ RSpec.configure do |config|
   end
 
   config.expect_with :rspec do |c|
-    c.syntax = [:expect]
+    c.syntax = %i[expect]
   end
 end

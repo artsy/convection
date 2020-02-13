@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ArtsyAdminAuth
   class << self
     def decode_token(token)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddRemindersSentCount < ActiveRecord::Migration[5.0]
   def change
     add_column :submissions, :reminders_sent_count, :integer, default: 0

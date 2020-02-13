@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Artsy::EventService.configure do |config|
   config.app_name = 'artsy-convection'
   config.event_stream_enabled = true

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ActionMailer::Base.smtp_settings = {
   user_name: Convection.config.smtp_user,
   password: Convection.config.smtp_password,

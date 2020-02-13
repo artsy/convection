@@ -15,6 +15,7 @@ RUN apk update && apk --no-cache --quiet add \
   postgresql-dev \
   postgresql-client \
   tzdata \
+  yarn \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
   && adduser -D -g '' deploy
 
@@ -28,6 +29,9 @@ RUN bundle install -j4 && \
   mkdir -p /shared/pids && \
   mkdir /shared/sockets && \
   chown -R deploy:deploy /shared
+
+COPY package.json yarn.lock ./
+RUN yarn install
 
 COPY . ./
 

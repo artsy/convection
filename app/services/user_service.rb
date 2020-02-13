@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserService
   class << self
     def update_email(user_id)

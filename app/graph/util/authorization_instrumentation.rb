@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Util
   class AuthorizationInstrumentation
     def instrument(_type, field)

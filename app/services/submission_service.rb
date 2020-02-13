@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SubmissionService
   class ParamError < StandardError; end
   class SubmissionError < StandardError; end
@@ -13,22 +15,32 @@ class SubmissionService
       raise SubmissionError, e.message
     end
 
-    def update_submission(submission, params, current_user = nil)
+    def update_submission(
+      submission, params, current_user: nil, hide_from_partners: false
+    )
       submission.assign_attributes(params)
-      update_submission_state(submission, current_user) if submission.state_changed?
+      if submission.state_changed?
+        update_submission_state(submission, current_user, hide_from_partners)
+      end
       submission.save!
     end
 
-    def update_submission_state(submission, current_user)
+    def update_submission_state(submission, current_user, hide_from_partners)
       case submission.state
-      when 'submitted' then submit!(submission)
-      when 'approved' then approve!(submission, current_user)
-      when 'rejected' then reject!(submission, current_user)
+      when 'submitted'
+        submit!(submission)
+      when 'approved'
+        approve!(submission, current_user, hide_from_partners)
+      when 'rejected'
+        reject!(submission, current_user)
       end
     end
 
     def undo_approval(submission)
-      raise SubmissionError, 'Undoing approval of a submission with offers is not allowed!' if submission.offers.count.positive?
+      if submission.offers.count.positive?
+        raise SubmissionError,
+              'Undoing approval of a submission with offers is not allowed!'
+      end
 
       return_to_submitted_state(submission)
       submission.partner_submissions.each(&:destroy)
@@ -39,25 +51,41 @@ class SubmissionService
     end
 
     def return_to_submitted_state(submission)
-      submission.update!(state: 'submitted', approved_at: nil, approved_by: nil, rejected_at: nil, rejected_by: nil)
+      submission.update!(
+        state: 'submitted',
+        approved_at: nil,
+        approved_by: nil,
+        rejected_at: nil,
+        rejected_by: nil
+      )
     end
 
     def submit!(submission)
-      raise ParamError, 'Missing fields for submission.' unless submission.can_submit?
+      unless submission.can_submit?
+        raise ParamError, 'Missing fields for submission.'
+      end
 
       notify_admin(submission.id)
       notify_user(submission.id)
       return if submission.images.count.positive?
 
-      delay_until(Convection.config.second_reminder_days_after.days.from_now).notify_user(submission.id)
-      delay_until(Convection.config.third_reminder_days_after.days.from_now).notify_user(submission.id)
+      delay_until(Convection.config.second_reminder_days_after.days.from_now)
+        .notify_user(submission.id)
+      delay_until(Convection.config.third_reminder_days_after.days.from_now)
+        .notify_user(submission.id)
     end
 
-    def approve!(submission, current_user)
+    def approve!(submission, current_user, hide_from_partners)
       submission.update!(approved_by: current_user, approved_at: Time.now.utc)
       delay.deliver_approval_notification(submission.id)
-      NotificationService.delay.post_submission_event(submission.id, SubmissionEvent::APPROVED)
-      PartnerSubmissionService.delay.generate_for_all_partners(submission.id)
+      NotificationService.delay.post_submission_event(
+        submission.id,
+        SubmissionEvent::APPROVED
+      )
+
+      unless hide_from_partners
+        PartnerSubmissionService.delay.generate_for_all_partners(submission.id)
+      end
     end
 
     def reject!(submission, current_user)
@@ -70,7 +98,10 @@ class SubmissionService
       return if submission.admin_receipt_sent_at
 
       delay.deliver_submission_notification(submission.id)
-      NotificationService.delay.post_submission_event(submission_id, SubmissionEvent::SUBMITTED)
+      NotificationService.delay.post_submission_event(
+        submission_id,
+        SubmissionEvent::SUBMITTED
+      )
       submission.update!(admin_receipt_sent_at: Time.now.utc)
     end
 
@@ -97,9 +128,7 @@ class SubmissionService
       raise 'User lacks email.' if user_detail.email.blank?
 
       email_args = {
-        submission: submission,
-        user: user,
-        user_detail: user_detail
+        submission: submission, user: user, user_detail: user_detail
       }
 
       if submission.reminders_sent_count == 1
@@ -127,7 +156,8 @@ class SubmissionService
         user: user,
         user_detail: user_detail,
         artist: artist
-      ).deliver_now
+      )
+        .deliver_now
     end
 
     def deliver_submission_notification(submission_id)
@@ -143,7 +173,8 @@ class SubmissionService
         user: user,
         user_detail: user_detail,
         artist: artist
-      ).deliver_now
+      )
+        .deliver_now
     end
 
     def deliver_approval_notification(submission_id)
@@ -157,7 +188,8 @@ class SubmissionService
         user: user,
         user_detail: user_detail,
         artist: artist
-      ).deliver_now
+      )
+        .deliver_now
     end
 
     def deliver_rejection_notification(submission_id)
@@ -171,7 +203,8 @@ class SubmissionService
         user: user,
         user_detail: user_detail,
         artist: artist
-      ).deliver_now
+      )
+        .deliver_now
     end
   end
 end

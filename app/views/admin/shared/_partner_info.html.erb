@@ -1,6 +1,10 @@
 <div class='overview-section'>
   <div class='bold-label'>Partner info</div>
   <div class='single-padding-top'>
-    <%= partner.name %>
+    <%= offer.partner.name %>
+  </div>
+
+  <div class='single-padding-top'>
+    <%= markdown_formatted(offer.partner_info) %>
   </div>
 </div>

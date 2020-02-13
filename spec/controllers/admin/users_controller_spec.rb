@@ -1,9 +1,13 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe Admin::UsersController, type: :controller do
   describe 'with some users' do
     before do
-      allow_any_instance_of(Admin::UsersController).to receive(:require_artsy_authentication)
+      allow_any_instance_of(Admin::UsersController).to receive(
+        :require_artsy_authentication
+      )
     end
 
     describe '#index' do
@@ -28,7 +32,10 @@ describe Admin::UsersController, type: :controller do
       it 'matches on the user email' do
         get :index, params: { term: 'sarah', format: 'json' }
         expect(controller.users.count).to eq 2
-        expect(controller.users.pluck(:email)).to include('sarah@test.com', 'sarah@sarah.com')
+        expect(controller.users.pluck(:email)).to include(
+          'sarah@test.com',
+          'sarah@sarah.com'
+        )
       end
     end
   end

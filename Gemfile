@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 ruby File.read('.ruby-version')
 
-gem 'rails', '5.2.3'
+gem 'rails', '6.0.2.1'
 
 gem 'pg'
 gem 'puma'
@@ -39,13 +41,15 @@ gem 'uglifier'
 
 group :development, :test do
   gem 'pry-byebug'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '4.0.0.beta4'
   gem 'rubocop-rails'
   gem 'webdrivers', '~> 4.2'
 end
 
 group :development do
   gem 'foreman'
+  gem 'guard-livereload', require: false
+  gem 'rack-livereload'
   gem 'solargraph' # VSCode language server for autocompletion
 end
 

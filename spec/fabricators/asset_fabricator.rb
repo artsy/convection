@@ -1,5 +1,6 @@
-Fabricator(:asset) do
-end
+# frozen_string_literal: true
+
+Fabricator(:asset) {}
 
 Fabricator(:image, from: :asset) do
   asset_type 'image'

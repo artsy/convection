@@ -1,0 +1,12 @@
+{
+  "name": "convection",
+  "version": "1.0.0",
+  "scripts": {
+    "prettier": "prettier --write '**/*.rb'",
+    "prettier-check": "prettier --check '**/*.rb'"
+  },
+  "devDependencies": {
+    "@prettier/plugin-ruby": "0.17.0",
+    "prettier": "1.19.1"
+  }
+}
