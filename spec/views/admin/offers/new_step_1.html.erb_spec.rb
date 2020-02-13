@@ -38,6 +38,7 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         expect(page).to have_content('Photography')
         expect(page).to have_content('Shipping')
         expect(page).to have_content('Insurance')
+        expect(page).to have_content('Deadline to consign')
         expect(page).to have_content('Other fees')
         expect(page).to have_content('Notes')
       end
@@ -80,6 +81,7 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         fill_in('offer_photography_info', with: '$50')
         fill_in('offer_shipping_info', with: '$70')
         fill_in('offer_insurance_info', with: '$10')
+        fill_in('offer_deadline_to_consign', with: 'next week')
         fill_in('offer_other_fees_info', with: '$5')
 
         click_button('Create')
@@ -91,6 +93,7 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         expect(page).to have_content('Shipping $70')
         expect(page).to have_content('Photography $50')
         expect(page).to have_content('Insurance $10')
+        expect(page).to have_content('Deadline to consign next week')
         expect(page).to have_content('Other fees $5')
       end
     end
@@ -114,6 +117,7 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         expect(page).to have_content('Photography')
         expect(page).to have_content('Shipping')
         expect(page).to have_content('Insurance')
+        expect(page).to have_content('Deadline to consign')
         expect(page).to have_content('Other fees')
         expect(page).to have_content('Notes')
       end
@@ -151,6 +155,7 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         fill_in('offer_photography_info', with: '$50')
         fill_in('offer_shipping_info', with: '$70')
         fill_in('offer_insurance_info', with: '$10')
+        fill_in('offer_deadline_to_consign', with: 'next week')
         fill_in('offer_other_fees_info', with: '$5')
 
         click_button('Create')
@@ -160,6 +165,7 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         expect(page).to have_content('Shipping $70')
         expect(page).to have_content('Photography $50')
         expect(page).to have_content('Insurance $10')
+        expect(page).to have_content('Deadline to consign next week')
         expect(page).to have_content('Other fees $5')
       end
     end
@@ -183,6 +189,7 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         expect(page).to have_content('Photography')
         expect(page).to have_content('Shipping')
         expect(page).to have_content('Insurance')
+        expect(page).to have_content('Deadline to consign')
         expect(page).to have_content('Other fees')
         expect(page).to have_content('Notes')
       end
@@ -224,6 +231,7 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         fill_in('offer_photography_info', with: '$50')
         fill_in('offer_shipping_info', with: '$70')
         fill_in('offer_insurance_info', with: '$10')
+        fill_in('offer_deadline_to_consign', with: 'next week')
         fill_in('offer_other_fees_info', with: '$5')
 
         click_button('Create')
@@ -234,6 +242,7 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         expect(page).to have_content('Shipping $70')
         expect(page).to have_content('Photography $50')
         expect(page).to have_content('Insurance $10')
+        expect(page).to have_content('Deadline to consign next week')
         expect(page).to have_content('Other fees $5')
       end
     end
@@ -257,6 +266,7 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         expect(page).to have_content('Photography')
         expect(page).to have_content('Shipping')
         expect(page).to have_content('Insurance')
+        expect(page).to have_content('Deadline to consign')
         expect(page).to have_content('Other fees')
         expect(page).to have_content('Notes')
       end
@@ -297,6 +307,7 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         fill_in('offer_photography_info', with: '$50')
         fill_in('offer_shipping_info', with: '$70')
         fill_in('offer_insurance_info', with: '$10')
+        fill_in('offer_deadline_to_consign', with: 'next week')
         fill_in('offer_other_fees_info', with: '$5')
 
         click_button('Create')
@@ -306,6 +317,7 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         expect(page).to have_content('Shipping $70')
         expect(page).to have_content('Photography $50')
         expect(page).to have_content('Insurance $10')
+        expect(page).to have_content('Deadline to consign next week')
         expect(page).to have_content('Other fees $5')
       end
     end
