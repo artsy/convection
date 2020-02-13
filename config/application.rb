@@ -9,6 +9,9 @@ require_relative '../lib/middleware/jwt_middleware'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# Do not display warnings about Ruby 2.7 keyword arguments.
+Warning[:deprecated] = false
+
 module Convection
   class Application < Rails::Application # -- all .rb files in that directory are automatically loaded. # Application configuration should go into files in config/initializers # Settings in config/environments/* take precedence over those specified here.
     config.paths.add 'app', glob: '**/*.rb'
