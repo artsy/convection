@@ -390,11 +390,11 @@ GEM
       faraday (>= 0.7.6, < 1.0)
     sexp_processor (4.14.1)
     shellany (0.0.1)
-    sidekiq (5.2.7)
-      connection_pool (~> 2.2, >= 2.2.2)
-      rack (>= 1.5.0)
-      rack-protection (>= 1.5.0)
-      redis (>= 3.3.5, < 5)
+    sidekiq (6.0.5)
+      connection_pool (>= 2.2.2)
+      rack (~> 2.0)
+      rack-protection (>= 2.0.0)
+      redis (>= 4.1.0)
     solargraph (0.38.5)
       backport (~> 1.1)
       benchmark
@@ -487,7 +487,7 @@ DEPENDENCIES
   sass-rails
   selenium-webdriver
   sentry-raven
-  sidekiq (< 6)
+  sidekiq (< 7)
   solargraph
   uglifier
   watt!
