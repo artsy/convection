@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ModifyOffersTable < ActiveRecord::Migration[5.2]
   def up
     change_table :offers, bulk: true do |t|
