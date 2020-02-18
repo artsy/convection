@@ -26,10 +26,10 @@ module OffersHelper
       'Sale Date' => sale_date_display(offer),
       'Sale Name' => offer.sale_name,
       'Commission' => commission_display(offer),
-      'Shipping' => shipping_display(offer),
-      'Photography' => photography_display(offer),
-      'Insurance' => insurance_display(offer),
-      'Other fees' => other_fees_display(offer)
+      'Shipping' => offer.shipping_info,
+      'Photography' => offer.photography_info,
+      'Insurance' => offer.insurance_info,
+      'Other fees' => offer.other_fees_info
     }.select { |_key, value| value.present? }
   end
 
@@ -101,50 +101,6 @@ module OffersHelper
     return if offer.commission_percent.blank?
 
     "#{(offer.commission_percent * 100).round(2)}%"
-  end
-
-  def shipping_display(offer)
-    return if offer.shipping_cents.blank?
-
-    "#{offer.currency} #{
-      Money.new(offer.shipping_cents, offer.currency).format
-    }"
-  end
-
-  def photography_display(offer)
-    return if offer.photography_cents.blank?
-
-    "#{offer.currency} #{
-      Money.new(offer.photography_cents, offer.currency).format
-    }"
-  end
-
-  def insurance_display(offer)
-    unless offer.insurance_cents.present? || offer.insurance_percent.present?
-      return
-    end
-
-    if offer.insurance_cents.present?
-      "#{offer.currency} #{
-        Money.new(offer.insurance_cents, offer.currency).format
-      }"
-    else
-      "#{offer.insurance_percent * 100}%"
-    end
-  end
-
-  def other_fees_display(offer)
-    unless offer.other_fees_cents.present? || offer.other_fees_percent.present?
-      return
-    end
-
-    if offer.other_fees_cents.present?
-      "#{offer.currency} #{
-        Money.new(offer.other_fees_cents, offer.currency).format
-      }"
-    else
-      "#{offer.other_fees_percent * 100}%"
-    end
   end
 
   def formatted_date_offer(date)

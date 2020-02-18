@@ -46,15 +46,9 @@ class Offer < ApplicationRecord
 
   scope :sent, -> { where(state: 'sent') }
 
-  dollarize :price_cents,
-            :low_estimate_cents,
-            :high_estimate_cents,
-            :photography_cents,
-            :shipping_cents,
-            :insurance_cents,
-            :other_fees_cents
+  dollarize :price_cents, :low_estimate_cents, :high_estimate_cents
 
-  percentize :commission_percent, :insurance_percent, :other_fees_percent
+  percentize :commission_percent
 
   def set_state
     self.state ||= 'draft'
