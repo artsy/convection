@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_11_224225) do
+ActiveRecord::Schema.define(version: 2020_02_11_225056) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_trgm'
   enable_extension 'plpgsql'
@@ -44,12 +44,10 @@ ActiveRecord::Schema.define(version: 2020_02_11_224225) do
     t.text 'notes'
     t.float 'commission_percent'
     t.bigint 'price_cents'
-    t.integer 'shipping_cents'
-    t.integer 'photography_cents'
-    t.integer 'other_fees_cents'
-    t.float 'other_fees_percent'
-    t.float 'insurance_percent'
-    t.integer 'insurance_cents'
+    t.string 'shipping_info'
+    t.string 'photography_info'
+    t.string 'other_fees_info'
+    t.string 'insurance_info'
     t.string 'state'
     t.string 'created_by_id'
     t.string 'reference_id'
@@ -68,6 +66,7 @@ ActiveRecord::Schema.define(version: 2020_02_11_224225) do
     t.datetime 'consigned_at'
     t.string 'override_email'
     t.text 'partner_info'
+    t.string 'deadline_to_consign'
     t.index %w[partner_submission_id],
             name: 'index_offers_on_partner_submission_id'
     t.index %w[reference_id], name: 'index_offers_on_reference_id'
@@ -147,8 +146,8 @@ ActiveRecord::Schema.define(version: 2020_02_11_224225) do
     t.integer 'primary_image_id'
     t.integer 'consigned_partner_submission_id'
     t.string 'user_email'
-    t.integer 'offers_count', default: 0
     t.integer 'user_id'
+    t.integer 'offers_count', default: 0
     t.bigint 'minimum_price_cents'
     t.string 'currency'
     t.string 'user_agent'

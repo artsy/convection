@@ -123,15 +123,7 @@ describe Offer do
         'low_estimate_dollars',
         'low_estimate_cents',
         'high_estimate_dollars',
-        'high_estimate_cents',
-        'photography_dollars',
-        'photography_cents',
-        'shipping_dollars',
-        'shipping_cents',
-        'insurance_dollars',
-        'insurance_cents',
-        'other_fees_dollars',
-        'other_fees_cents'
+        'high_estimate_cents'
       )
     end
 
@@ -152,11 +144,7 @@ describe Offer do
     it 'has all of the correct attributes' do
       expect(Offer.new.attributes.keys).to include(
         'commission_percent',
-        'commission_percent_whole',
-        'insurance_percent',
-        'insurance_percent_whole',
-        'other_fees_percent',
-        'other_fees_percent_whole'
+        'commission_percent_whole'
       )
     end
 

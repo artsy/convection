@@ -1,8 +1,4 @@
 {
-  "extends": [
-    "@artsy:app"
-  ],
-  "assignees": [
-    "sweir27"
-  ]
+  "extends": ["@artsy:app"],
+  "assignees": ["jonallured"]
 }
