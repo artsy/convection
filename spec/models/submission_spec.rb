@@ -33,6 +33,26 @@ describe Submission do
         expect(Submission.completed.count).to eq(0)
       end
     end
+
+    describe 'available' do
+      it 'returns only approved submissions without an accepted offer' do
+        consigned_submission = Fabricate(:submission, state: 'approved')
+        partner_submission =
+          Fabricate(:partner_submission, submission: consigned_submission)
+        offer = Fabricate(:offer, partner_submission: partner_submission)
+
+        OfferService.consign!(offer)
+
+        approved_submission = Fabricate(:submission, state: 'approved')
+        Fabricate(:submission, state: 'rejected')
+        Fabricate(:submission, state: 'draft')
+        Fabricate(:submission, state: 'submitted')
+
+        available_submissions = Submission.available
+        expect(available_submissions.count).to eq(1)
+        expect(available_submissions.first).to eq(approved_submission)
+      end
+    end
   end
 
   context 'demand scores' do
