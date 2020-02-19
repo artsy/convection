@@ -70,6 +70,8 @@ class Submission < ApplicationRecord
   scope :completed, -> { where.not(state: 'draft') }
   scope :draft, -> { where(state: 'draft') }
   scope :submitted, -> { where(state: 'submitted') }
+  scope :available,
+        -> { where(state: APPROVED, consigned_partner_submission_id: nil) }
 
   dollarize :minimum_price_cents
 
