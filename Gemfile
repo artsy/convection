@@ -23,6 +23,7 @@ gem 'decent_exposure' # for safely referencing variables in views
 gem 'gemini_upload-rails' # for admins to upload images
 gem 'graphiql-rails', '1.7.0' # A lovely interface to the API
 gem 'graphql' # A lovely API
+gem 'graphql-rails_logger' # Adds pretty-print logging support to queries
 gem 'haml-rails' # required for watt layouts
 gem 'hyperclient' # consume Gravity's v2 API
 gem 'jquery-rails'
