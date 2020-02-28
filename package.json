@@ -7,6 +7,17 @@
   },
   "devDependencies": {
     "@prettier/plugin-ruby": "0.17.0",
+    "husky": ">=4",
+    "lint-staged": ">=10",
     "prettier": "1.19.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "{app,test}/**/*.rb": "bundle exec rubocop -a",
+    "*.{rb,js,jsx,ts,tsx,css,md}": "prettier --write"
   }
 }
