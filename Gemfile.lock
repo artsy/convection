@@ -148,6 +148,11 @@ GEM
       railties
       sprockets-rails
     graphql (1.10.3)
+    graphql-rails_logger (1.2.2)
+      actionpack (> 5.0)
+      activesupport (> 5.0)
+      railties (> 5.0)
+      rouge (~> 3.0)
     guard (2.16.1)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
@@ -333,6 +338,7 @@ GEM
     reverse_markdown (1.4.0)
       nokogiri
     rexml (3.2.4)
+    rouge (3.16.0)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
       rspec-expectations (~> 3.9.0)
@@ -465,6 +471,7 @@ DEPENDENCIES
   gemini_upload-rails
   graphiql-rails (= 1.7.0)
   graphql
+  graphql-rails_logger
   guard-livereload
   haml-rails
   hyperclient
