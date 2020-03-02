@@ -37,7 +37,7 @@ gem 'rails_param' # validate and coerce API parameters
 gem 'redcarpet'
 gem 'sass-rails'
 gem 'sentry-raven' # for error reporting
-gem 'sidekiq', '<6' # for sending emails in the background (<6 necessary for Redis 3 compatibility)
+gem 'sidekiq'
 gem 'uglifier'
 
 group :development, :test do
