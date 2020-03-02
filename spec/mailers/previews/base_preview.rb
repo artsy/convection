@@ -13,7 +13,7 @@ class BasePreview < ActionMailer::Preview
       rejection_note: 'Not my type either',
       low_estimate_cents: 12_300,
       high_estimate_cents: 15_000,
-      notes: 'We would love to sell your work!',
+      notes: 'We would **love** to sell your work!',
       partner_submission:
         OpenStruct.new(
           partner: OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery')
