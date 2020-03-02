@@ -4,6 +4,7 @@ orbs:
   yarn: artsy/yarn@4.0.2
   hokusai: artsy/hokusai@0.7.2
   node: artsy/node@1.0.0
+  slack: circleci/slack@3.4.1
 
 not_staging_or_release: &not_staging_or_release
   filters:
@@ -41,6 +42,14 @@ workflows:
           project-name: convection
           requires:
             - push-staging-image
+          post-steps:
+            - slack/status:
+                fail_only: true
+                failure_message: Convection staging deploy has failed!
 
       - hokusai/deploy-production:
           <<: *only_release
+          post-steps:
+            - slack/status:
+                success_message: Convection production has been deployed!
+                failure_message: Convection production deploy has failed!
