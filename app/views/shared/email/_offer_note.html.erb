@@ -12,7 +12,7 @@
         </tr>
         <tr>
           <td class='email-content-serif email-content-serif--small bottom-element top-element'>
-            <%= @offer.notes %>
+            <%= markdown_formatted(@offer.notes) %>
           </td>
         </tr>
       </table>
