@@ -12,6 +12,9 @@ class BasePreview < ActionMailer::Preview
       rejection_reason: 'High shipping/marketing costs',
       rejection_note: 'Not my type either',
       low_estimate_cents: 12_300,
+      sale_date: Time.zone.today,
+      sale_name: 'Some great sale',
+      deadline_to_consign: 'next week',
       high_estimate_cents: 15_000,
       notes: 'We would **love** to sell your work!',
       partner_submission:
