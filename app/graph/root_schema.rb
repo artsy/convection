@@ -13,5 +13,8 @@ RootSchema =
     mutation Types::MutationType
 
     instrument(:field, Util::AuthorizationInstrumentation.new)
-    max_depth 5
+
+    # FIXME: Determine why this was added, as the root submission request returns
+    # a depth of 13 (which, either way, seems incorrect).
+    # max_depth 5
   end
