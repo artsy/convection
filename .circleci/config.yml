@@ -4,7 +4,7 @@ orbs:
   yarn: artsy/yarn@4.0.2
   hokusai: artsy/hokusai@0.7.2
   node: artsy/node@1.0.0
-  slack: circleci/slack@3.4.1
+  slack: circleci/slack@3.4.2
 
 not_staging_or_release: &not_staging_or_release
   filters:
