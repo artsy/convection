@@ -232,7 +232,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         expect(page).to have_content('Create Offer')
       end
 
-      it 'approves a submission but does not include in digest when the Approve without digest button is clicked' do
+      it 'approves a submission but does not include in digest or send consignor an email when the Approve without digest button is clicked' do
         Fabricate(:partner)
         expect(PartnerSubmission.count).to eq 0
         expect(NotificationService).to receive(:post_submission_event).once
@@ -243,7 +243,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         click_link 'Approve without digest'
 
         emails = ActionMailer::Base.deliveries
-        expect(emails.length).to eq 1
+        expect(emails.length).to eq 0
         expect(page).to have_content 'Approved by Jon Jonson'
         expect(PartnerSubmission.count).to eq 0
         ActionMailer::Base.deliveries = []
