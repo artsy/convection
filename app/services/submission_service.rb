@@ -77,13 +77,13 @@ class SubmissionService
 
     def approve!(submission, current_user, hide_from_partners)
       submission.update!(approved_by: current_user, approved_at: Time.now.utc)
-      delay.deliver_approval_notification(submission.id)
       NotificationService.delay.post_submission_event(
         submission.id,
         SubmissionEvent::APPROVED
       )
 
       unless hide_from_partners
+        delay.deliver_approval_notification(submission.id)
         PartnerSubmissionService.delay.generate_for_all_partners(submission.id)
       end
     end
