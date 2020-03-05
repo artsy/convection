@@ -41,6 +41,7 @@ gem 'sidekiq'
 gem 'uglifier'
 
 group :development, :test do
+  gem 'guard-rspec', require: false
   gem 'pry-byebug'
   gem 'rspec-rails', '4.0.0.beta4'
   gem 'rubocop-rails'
