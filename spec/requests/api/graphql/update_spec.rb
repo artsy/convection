@@ -26,9 +26,9 @@ describe 'Update Submission With Graphql' do
     mutation {
       updateConsignmentSubmission(input: { state: DRAFT, category: JEWELRY, clientMutationId: "test", id: #{
       submission.id
-    }, artist_id: "andy-warhol", title: "soup" }){
+    }, artistID: "andy-warhol", title: "soup" }){
         clientMutationId
-        consignment_submission {
+        consignmentSubmission {
           category
           state
           id
@@ -43,9 +43,9 @@ describe 'Update Submission With Graphql' do
   let(:update_mutation_random_id) do
     <<-GRAPHQL
     mutation {
-      updateConsignmentSubmission(input: { clientMutationId: "test", id: 999999, artist_id: "andy-warhol", title: "soup" }){
+      updateConsignmentSubmission(input: { clientMutationId: "test", id: 999999, artistID: "andy-warhol", title: "soup" }){
         clientMutationId
-        consignment_submission {
+        consignmentSubmission {
           id
           artist_id
           title
@@ -114,28 +114,28 @@ describe 'Update Submission With Graphql' do
       expect(response.status).to eq 200
       body = JSON.parse(response.body)
       expect(
-        body['data']['updateConsignmentSubmission']['consignment_submission'][
+        body['data']['updateConsignmentSubmission']['consignmentSubmission'][
           'id'
         ]
           .to_i
       ).to eq submission.id
       expect(
-        body['data']['updateConsignmentSubmission']['consignment_submission'][
+        body['data']['updateConsignmentSubmission']['consignmentSubmission'][
           'title'
         ]
       ).to eq 'soup'
       expect(
-        body['data']['updateConsignmentSubmission']['consignment_submission'][
+        body['data']['updateConsignmentSubmission']['consignmentSubmission'][
           'artist_id'
         ]
       ).to eq 'andy-warhol'
       expect(
-        body['data']['updateConsignmentSubmission']['consignment_submission'][
+        body['data']['updateConsignmentSubmission']['consignmentSubmission'][
           'category'
         ]
       ).to eq 'JEWELRY'
       expect(
-        body['data']['updateConsignmentSubmission']['consignment_submission'][
+        body['data']['updateConsignmentSubmission']['consignmentSubmission'][
           'state'
         ]
       ).to eq 'DRAFT'
