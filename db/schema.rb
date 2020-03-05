@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_11_225056) do
+ActiveRecord::Schema.define(version: 2020_03_05_193734) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_trgm'
   enable_extension 'plpgsql'
@@ -154,6 +154,7 @@ ActiveRecord::Schema.define(version: 2020_02_11_225056) do
     t.datetime 'deleted_at'
     t.float 'artist_score'
     t.float 'auction_score'
+    t.string 'assigned_to'
     t.index %w[consigned_partner_submission_id],
             name: 'index_submissions_on_consigned_partner_submission_id'
     t.index %w[ext_user_id], name: 'index_submissions_on_ext_user_id'

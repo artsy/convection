@@ -32,6 +32,8 @@ RSpec.configure do |config|
     Sidekiq::Worker.clear_all
     ActionMailer::Base.deliveries.clear
   end
+
+  config.before(:each, type: :system) { driven_by :headless_chrome }
 end
 
 Capybara.server = :puma, { Silent: true }
