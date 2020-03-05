@@ -6,9 +6,9 @@ module Mutations
       GraphQL::Relay::Mutation.define do
         name 'AddAssetToConsignmentSubmission'
 
-        input_field :submission_id, !types.ID
-        input_field :gemini_token, !types.String
-        input_field :asset_type, types.String
+        input_field :submissionID, !types.ID
+        input_field :geminiToken, !types.String
+        input_field :assetType, types.String
 
         return_field :asset, Types::AssetType
       end
@@ -17,7 +17,7 @@ module Mutations
       params = args.to_h['input'].except('clientMutationId')
       client_mutation_id = args.to_h['input']['clientMutationId']
 
-      submission = Submission.find_by(id: params['submission_id'])
+      submission = Submission.find_by(id: params['submissionID'])
       unless submission
         raise(GraphQL::ExecutionError, 'Submission from ID Not Found')
       end
@@ -30,7 +30,11 @@ module Mutations
         raise(GraphQL::ExecutionError, 'Submission from ID Not Found')
       end
 
-      params['asset_type'] ||= 'image'
+      params['assetType'] ||= 'image'
+
+      # Metaphysics uses camelCase properties and inputs
+      params = params.transform_keys(&:underscore)
+
       asset = submission.assets.create!(params)
       SubmissionService.notify_user(submission.id) if submission.submitted?
       OpenStruct.new(asset: asset, client_mutation_id: client_mutation_id)

@@ -15,9 +15,9 @@ describe 'Create Submission With Graphql' do
   let(:create_mutation) do
     <<-GRAPHQL
     mutation {
-      createConsignmentSubmission(input: { state: REJECTED, clientMutationId: "2", artist_id: "andy", title: "soup", category: JEWELRY, minimum_price_dollars: 50000, currency: "GBP" }){
+      createConsignmentSubmission(input: { state: REJECTED, clientMutationId: "2", artistID: "andy", title: "soup", category: JEWELRY, minimumPriceDollars: 50000, currency: "GBP" }){
         clientMutationId
-        consignment_submission {
+        consignmentSubmission {
           id
           title
           category
@@ -34,7 +34,7 @@ describe 'Create Submission With Graphql' do
     <<-GRAPHQL
     mutation {
       createConsignmentSubmission(input: { title: "soup" }){
-        consignment_submission {
+        consignmentSubmission {
           id
           title
         }
@@ -90,32 +90,32 @@ describe 'Create Submission With Graphql' do
         expect(response.status).to eq 200
         body = JSON.parse(response.body)
         expect(
-          body['data']['createConsignmentSubmission']['consignment_submission'][
+          body['data']['createConsignmentSubmission']['consignmentSubmission'][
             'id'
           ]
         ).not_to be_nil
         expect(
-          body['data']['createConsignmentSubmission']['consignment_submission'][
+          body['data']['createConsignmentSubmission']['consignmentSubmission'][
             'title'
           ]
         ).to eq 'soup'
         expect(
-          body['data']['createConsignmentSubmission']['consignment_submission'][
+          body['data']['createConsignmentSubmission']['consignmentSubmission'][
             'category'
           ]
         ).to eq 'JEWELRY'
         expect(
-          body['data']['createConsignmentSubmission']['consignment_submission'][
+          body['data']['createConsignmentSubmission']['consignmentSubmission'][
             'state'
           ]
         ).to eq 'REJECTED'
         expect(
-          body['data']['createConsignmentSubmission']['consignment_submission'][
+          body['data']['createConsignmentSubmission']['consignmentSubmission'][
             'minimum_price_dollars'
           ]
         ).to eq 50_000
         expect(
-          body['data']['createConsignmentSubmission']['consignment_submission'][
+          body['data']['createConsignmentSubmission']['consignmentSubmission'][
             'currency'
           ]
         ).to eq 'GBP'
@@ -135,9 +135,9 @@ describe 'Create Submission With Graphql' do
 
         create_asset = <<-GRAPHQL
         mutation {
-          addAssetToConsignmentSubmission(input: { clientMutationId: "test", submission_id: #{
+          addAssetToConsignmentSubmission(input: { clientMutationId: "test", submissionID: #{
           submission.id
-        }, gemini_token: "gemini-token-hash" }){
+        }, geminiToken: "gemini-token-hash" }){
             clientMutationId
             asset {
               id
@@ -150,7 +150,7 @@ describe 'Create Submission With Graphql' do
         post '/api/graphql', params: { query: create_asset }, headers: headers
         expect(response.status).to eq 200
 
-        body = JSON.parse(response.body)
+        body = JSON.parse(response.body) # byebug
         expect(
           body['data']['addAssetToConsignmentSubmission']['asset']['id']
         ).not_to be_nil

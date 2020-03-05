@@ -10,5 +10,6 @@ module Types
       field :asset_type, !types.String, 'type of this Asset'
       field :gemini_token, types.String, 'gemini token for asset'
       field :submission_id, !types.ID
+      field :submissionID, types.ID, property: :submission_id # Alias for MPv2 compatability
     end
 end
