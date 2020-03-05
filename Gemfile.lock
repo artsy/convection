@@ -114,7 +114,7 @@ GEM
     css_parser (1.7.1)
       addressable
     database_cleaner (1.8.3)
-    ddtrace (0.32.0)
+    ddtrace (0.33.0)
       msgpack
     decent_exposure (3.0.2)
       activesupport (>= 4.0)
@@ -468,7 +468,7 @@ DEPENDENCIES
   capybara (~> 3.31.0)
   coffee-rails
   database_cleaner
-  ddtrace (~> 0.32.0)
+  ddtrace (~> 0.33.0)
   decent_exposure
   fabrication
   foreman
