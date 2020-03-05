@@ -139,6 +139,7 @@ module Admin
     def submission_params
       params.require(:submission).permit(
         :artist_id,
+        :assigned_to,
         :authenticity_certificate,
         :category,
         :currency,

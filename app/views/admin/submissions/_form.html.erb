@@ -215,6 +215,17 @@
             </div>
           </div>
 
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
+                Assigned To:
+              </label>
+              <div class='col-sm-10'>
+                <%= f.select :assigned_to, options_for_select(Convection.config.admin_names), {}, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
           <div class='row triple-padding-top'>
             <div class='col-sm-12'>
               <%= f.submit @submission.persisted? ? 'Save' : 'Create', class: 'btn btn-primary btn-full-width' %>
