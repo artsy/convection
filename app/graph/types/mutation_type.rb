@@ -7,13 +7,13 @@ module Types
       description 'Mutation root for this schema'
 
       field :createConsignmentSubmission,
-            Mutations::CreateConsignmentSubmission::Definition.return_type do
+            Mutations::CreateSubmissionMutation::Definition.return_type do
         permit :user
         argument :input,
-                 Mutations::CreateConsignmentSubmission::Definition.input_type
+                 Mutations::CreateSubmissionMutation::Definition.input_type
 
         resolve lambda { |obj, args, context|
-                  Mutations::CreateConsignmentSubmission.resolve(
+                  Mutations::CreateSubmissionMutation.resolve(
                     obj,
                     args,
                     context
@@ -22,13 +22,13 @@ module Types
       end
 
       field :updateConsignmentSubmission,
-            Mutations::UpdateConsignmentSubmission::Definition.return_type do
+            Mutations::UpdateSubmissionMutation::Definition.return_type do
         permit :user
         argument :input,
-                 Mutations::UpdateConsignmentSubmission::Definition.input_type
+                 Mutations::UpdateSubmissionMutation::Definition.input_type
 
         resolve lambda { |obj, args, context|
-                  Mutations::UpdateConsignmentSubmission.resolve(
+                  Mutations::UpdateSubmissionMutation.resolve(
                     obj,
                     args,
                     context

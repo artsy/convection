@@ -7,6 +7,7 @@ module Types
       description 'Consignment Submission'
 
       field :id, !types.ID, 'Uniq ID for this submission'
+      field :internalID, types.ID, property: :id # Alias for MPv2 compatability
       field :additional_info, types.String
       field :user_id, !types.String
       field :artist_id, !types.String
