@@ -18,7 +18,7 @@ gem 'bootsnap', require: false # Speed up boot time by caching expensive operati
 gem 'bootstrap-sass' # required for watt
 gem 'bourbon', '4.2.3' # required for watt
 gem 'coffee-rails' # required for watt
-gem 'ddtrace', '~> 0.33.0'
+gem 'ddtrace', '~> 0.33.1'
 gem 'decent_exposure' # for safely referencing variables in views
 gem 'gemini_upload-rails' # for admins to upload images
 gem 'graphiql-rails', '1.7.0' # A lovely interface to the API
