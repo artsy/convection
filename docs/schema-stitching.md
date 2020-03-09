@@ -5,7 +5,7 @@ Convection takes advantage of [schema stitching](https://artsy.github.io/blog/20
 ### Adding or modifying Convection GraphQL schema
 
 1. Make change to convection GraphQL schema, open PR and merge, and be sure its fully deployed to staging
-1. In Metaphysics, open PR and run `yarn dump-remote-schema`. This will fetch Convection's schema and do some stitching magic. Merge PR, and make sure it gets to staging
+1. In Metaphysics, run `yarn dump-remote-schema` and open a PR. This script fetches Convection's staging schema and does some stitching magic. Merge PR, and make sure it gets to staging.
 1. In Eigen (if needed) - run `yarn sync-schema`. Merge PR. An Eigen bot will then go back over to MP and update persisted queries
 1. In Volt (if needed) run `foreman run bundle exec rake graphql:schema:update SERVICE=metaphysics`
 1. In Reaction (if needed) run `yarn sync-schema`. PR and merge, and make sure an `auto` release has been deployed to NPM
