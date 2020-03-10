@@ -101,5 +101,84 @@ describe 'submissions query' do
         expect(submissions_response['edges'].count).to eq 2
       end
     end
+
+    context 'with an asset that has image urls' do
+      let(:image_urls) do
+        {
+          'large' => 'http://wwww.example.com/large.jpg',
+          'medium' => 'http://wwww.example.com/medium.jpg',
+          'square' => 'http://wwww.example.com/square.jpg',
+          'thumbnail' => 'http://wwww.example.com/thumbnail.jpg'
+        }
+      end
+
+      let!(:asset) do
+        Fabricate :image, submission: submission, image_urls: image_urls
+      end
+
+      let(:query) do
+        <<-GRAPHQL
+        query {
+          submissions(#{query_inputs}) {
+            edges {
+              node {
+                assets {
+                  image_urls
+                }
+              }
+            }
+          }
+        }
+        GRAPHQL
+      end
+
+      it 'returns those image urls' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submissions_response = body['data']['submissions']
+        expect(submissions_response['edges'].count).to eq 1
+
+        node_response = submissions_response['edges'][0]['node']
+        asset_response = node_response['assets'][0]
+        expect(asset_response['image_urls']).to eq image_urls
+      end
+    end
+
+    context 'with an asset that has not been processed' do
+      let!(:asset) { Fabricate :unprocessed_image, submission: submission }
+
+      let(:query) do
+        <<-GRAPHQL
+        query {
+          submissions(#{query_inputs}) {
+            edges {
+              node {
+                assets {
+                  image_urls
+                }
+              }
+            }
+          }
+        }
+        GRAPHQL
+      end
+
+      it 'returns an empty object' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submissions_response = body['data']['submissions']
+        expect(submissions_response['edges'].count).to eq 1
+
+        node_response = submissions_response['edges'][0]['node']
+        asset_response = node_response['assets'][0]
+        expect(asset_response['image_urls']).to eq({})
+      end
+    end
   end
 end
