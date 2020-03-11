@@ -53,6 +53,16 @@ $ hokusai test
 
 Note: the default rake task is setup to run tests and RuboCop.
 
+## Did You Change the GraphQL Schema?
+
+If you have changed Convection GraphQL schema, make sure to run:
+
+```shell
+$ rake graphql:schema:idl
+```
+
+See [docs/schema-stitching.md][] for more.
+
 ## Starting Server
 
 ```
