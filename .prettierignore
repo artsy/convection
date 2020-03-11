@@ -1,1 +1,1 @@
-app/graph/util/authorization_instrumentation.rb
+app/graphql/util/authorization_instrumentation.rb
