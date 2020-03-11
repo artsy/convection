@@ -101,12 +101,17 @@ describe 'createConsignmentSubmission mutation' do
       create_response = body['data']['createConsignmentSubmission']
 
       submission_response = create_response['consignmentSubmission']
-      expect(submission_response['id']).not_to be_nil
-      expect(submission_response['title']).to eq 'soup'
-      expect(submission_response['category']).to eq 'JEWELRY'
-      expect(submission_response['state']).to eq 'REJECTED'
-      expect(submission_response['minimum_price_dollars']).to eq 50_000
-      expect(submission_response['currency']).to eq 'GBP'
+      expect(submission_response).to include(
+        {
+          'id' => be,
+          # this ensures it's not nil
+          'title' => 'soup',
+          'category' => 'JEWELRY',
+          'state' => 'REJECTED',
+          'minimum_price_dollars' => 50_000,
+          'currency' => 'GBP'
+        }
+      )
 
       mutation_id = create_response['clientMutationId']
       expect(mutation_id).to eq '2'

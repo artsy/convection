@@ -132,11 +132,15 @@ describe 'updateConsignmentSubmission mutation' do
 
         submission_response =
           body['data']['updateConsignmentSubmission']['consignmentSubmission']
-        expect(submission_response['id'].to_i).to eq submission.id
-        expect(submission_response['title']).to eq 'soup'
-        expect(submission_response['artist_id']).to eq 'andy-warhol'
-        expect(submission_response['category']).to eq 'JEWELRY'
-        expect(submission_response['state']).to eq 'DRAFT'
+        expect(submission_response).to include(
+          {
+            'id' => submission.id.to_s,
+            'title' => 'soup',
+            'artist_id' => 'andy-warhol',
+            'category' => 'JEWELRY',
+            'state' => 'DRAFT'
+          }
+        )
       end
     end
   end
