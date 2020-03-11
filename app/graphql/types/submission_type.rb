@@ -6,19 +6,20 @@ module Types
       name 'Submission'
       description 'Consignment Submission'
 
-      field :id, !types.ID, 'Uniq ID for this submission'
       field :additional_info, types.String
-      field :user_id, !types.String
       field :artist_id, !types.String
       field :authenticity_certificate, types.Boolean
       field :category, Types::CategoryType
+      field :created_at, GraphQL::Types::ISO8601DateTime
       field :currency, types.String
       field :depth, types.String
       field :dimensions_metric, types.String
-      field :edition, types.String
       field :edition_number, types.String
       field :edition_size, types.Int
+      field :edition, types.String
       field :height, types.String
+      field :id, !types.ID, 'Uniq ID for this submission'
+      field :internalID, types.ID, property: :id # Alias for MPv2 compatability
       field :location_city, types.String
       field :location_country, types.String
       field :location_state, types.String
@@ -28,6 +29,7 @@ module Types
       field :signature, types.Boolean
       field :state, Types::StateType
       field :title, types.String
+      field :user_id, !types.String
       field :width, types.String
       field :year, types.String
 

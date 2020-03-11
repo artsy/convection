@@ -114,7 +114,7 @@ GEM
     css_parser (1.7.1)
       addressable
     database_cleaner (1.8.3)
-    ddtrace (0.32.0)
+    ddtrace (0.33.0)
       msgpack
     decent_exposure (3.0.2)
       activesupport (>= 4.0)
@@ -168,6 +168,10 @@ GEM
       guard (~> 2.8)
       guard-compat (~> 1.0)
       multi_json (~> 1.8)
+    guard-rspec (4.7.3)
+      guard (~> 2.1)
+      guard-compat (~> 1.1)
+      rspec (>= 2.99.0, < 4.0)
     haml (5.1.2)
       temple (>= 0.8.0)
       tilt
@@ -464,7 +468,7 @@ DEPENDENCIES
   capybara (~> 3.31.0)
   coffee-rails
   database_cleaner
-  ddtrace (~> 0.32.0)
+  ddtrace (~> 0.33.0)
   decent_exposure
   fabrication
   foreman
@@ -473,6 +477,7 @@ DEPENDENCIES
   graphql
   graphql-rails_logger
   guard-livereload
+  guard-rspec
   haml-rails
   hyperclient
   jquery-rails

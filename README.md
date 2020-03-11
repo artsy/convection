@@ -1,14 +1,16 @@
-# Convection 
+# Convection
+
 Convection is the application that powers our consignments workflow, enabling users to submit works to consign through Artsy partners. For now, it encapsulates logic from [rothko-api] and [rothko-web-public].
 
 ## Meta [![CircleCI][badge]][circleci]
+
 - **State:** production
 - **Production:** [https://convection.artsy.net][production] | [Kubernetes][production_k8]
 - **Staging:** [https://convection-staging.artsy.net][staging] | [Kubernetes][staging_k8]
 - **GitHub:** [https://github.com/artsy/convection](https://github.com/artsy/convection)
 - **Point People:** [@jonallured]
 - **CI/Deploys:** [CircleCi](https://circleci.com/gh/artsy/convection); PRs merged to `artsy/convection#master` are automatically deployed to staging; PRs from `staging` to `release` are automatically deployed to production. Create such a PR with [`deploy_pr`][deploy_pr] or [this handy link][deploy].
-- **Cron Tasks:** A daily digest is sent to partners at 10am EST. The production database is exported daily at 12am EST, and imported to staging daily at 1am EST. 
+- **Cron Tasks:** A daily digest is sent to partners at 10am EST. The production database is exported Sunday mornings at 12am EST, and imported to staging Sunday mornings at 1am EST. 
 
 ## Contributing Pull Requests
 
@@ -25,6 +27,7 @@ Convection accepts PRs from branches on the main artsy/convection repo. PRs from
   ```
 
 - Read and run setup script:
+
   ```
   $ cat bin/setup
   $ bin/setup
@@ -60,24 +63,55 @@ $ hokusai dev start
 
 See the Procfile and Hokusai configuration to understand other services launched.
 
-## API
+## GraphQL
 
 When running in development, this API has a GraphiQL instance at http://localhost:5000/graphiql
+
+> See [schema stitching](docs/schema-stitching.md) for more info about propagating changes through the Artsy application ecosystem.
 
 ## Creating a Submission
 
 Generate a valid JWT token in a Convection console:
 
 ```ruby
-payload =  { aud: 'app', sub: '<valid user id>', roles: 'user,admin' }
+payload = { aud: 'app', sub: '<valid user id>', roles: 'user,admin' }
 token = JWT.encode payload, Convection.config.jwt_secret, 'HS256'
 ```
+
+### Via API:
 
 Use `curl` to generate a submission with an `artist_id` (emails will appear in
 mailtrap).
 
 ```
 curl -H 'Authorization: Bearer <token>' -H 'Accept: application/json' -d 'artist_id=5059d82a1fc9fa00020008ff' https://convection-staging.artsy.net/api/submissions
+```
+
+### Via [Metaphysics](http://metaphysics-staging.artsy.net/):
+
+Be sure a valid `X-Access-Token` is set (can be `jwt` from above) and submit the following GraphQL mutation:
+
+```json
+{
+  "input": {
+    "artistID": "5059d82a1fc9fa00020008ff"
+  }
+}
+```
+
+```graphql
+mutation createConsignmentSubmissionMutation(
+  $input: CreateSubmissionMutationInput!
+) {
+  createConsignmentSubmission(input: $input) {
+    consignmentSubmission {
+      id
+      artist {
+        id
+      }
+    }
+  }
+}
 ```
 
 [badge]: https://circleci.com/gh/artsy/convection.svg?style=svg&circle-token=cf452a49d5399e749ebbb85a0843d6111b79c9aa

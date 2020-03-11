@@ -228,7 +228,7 @@ kind: CronJob
 metadata:
   name: convection-data-import
 spec:
-  schedule: "0 6 * * *"
+  schedule: "0 6 * * 0"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
