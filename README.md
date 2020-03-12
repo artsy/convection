@@ -132,6 +132,6 @@ mutation createConsignmentSubmissionMutation(
 [production_k8]: https://kubernetes.artsy.net/#!/deployment/default/convection-web
 [staging]: https://convection-staging.artsy.net
 [staging_k8]: https://kubernetes-staging.artsy.net/#!/deployment/default/convection-web
-[@sweir27]: https://github.com/sweir27
+[@jonallured]: https://github.com/jonallured
 [deploy_pr]: https://github.com/jonallured/deploy_pr
 [deploy]: https://github.com/artsy/convection/compare/release...staging?expand=1
