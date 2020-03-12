@@ -61,7 +61,7 @@ If you have changed Convection GraphQL schema, make sure to run:
 $ rake graphql:schema:idl
 ```
 
-See [docs/schema-stitching.md][] for more.
+See [docs/schema-stitching.md][schema-doc] for more.
 
 ## Starting Server
 
@@ -77,7 +77,7 @@ See the Procfile and Hokusai configuration to understand other services launched
 
 When running in development, this API has a GraphiQL instance at http://localhost:5000/graphiql
 
-> See [schema stitching](docs/schema-stitching.md) for more info about propagating changes through the Artsy application ecosystem.
+> See [schema stitching][schema-doc] for more info about propagating changes through the Artsy application ecosystem.
 
 ## Creating a Submission
 
@@ -132,6 +132,7 @@ mutation createConsignmentSubmissionMutation(
 [production_k8]: https://kubernetes.artsy.net/#!/deployment/default/convection-web
 [staging]: https://convection-staging.artsy.net
 [staging_k8]: https://kubernetes-staging.artsy.net/#!/deployment/default/convection-web
-[@sweir27]: https://github.com/sweir27
+[@jonallured]: https://github.com/jonallured
 [deploy_pr]: https://github.com/jonallured/deploy_pr
 [deploy]: https://github.com/artsy/convection/compare/release...staging?expand=1
+[schema-doc]: docs/schema-stitching.md
