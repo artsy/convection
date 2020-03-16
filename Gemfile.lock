@@ -147,7 +147,7 @@ GEM
     graphiql-rails (1.7.0)
       railties
       sprockets-rails
-    graphql (1.10.4)
+    graphql (1.10.5)
     graphql-rails_logger (1.2.2)
       actionpack (> 5.0)
       activesupport (> 5.0)
@@ -349,13 +349,13 @@ GEM
       rspec-mocks (~> 3.9.0)
     rspec-core (3.9.1)
       rspec-support (~> 3.9.1)
-    rspec-expectations (3.9.0)
+    rspec-expectations (3.9.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
     rspec-mocks (3.9.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
-    rspec-rails (4.0.0.beta4)
+    rspec-rails (4.0.0.rc1)
       actionpack (>= 4.2)
       activesupport (>= 4.2)
       railties (>= 4.2)
@@ -378,7 +378,7 @@ GEM
     ruby-progressbar (1.10.1)
     ruby_parser (3.14.2)
       sexp_processor (~> 4.9)
-    rubyzip (2.2.0)
+    rubyzip (2.3.0)
     safe_yaml (1.0.5)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
@@ -465,15 +465,15 @@ DEPENDENCIES
   bootsnap
   bootstrap-sass
   bourbon (= 4.2.3)
-  capybara (~> 3.31.0)
+  capybara
   coffee-rails
   database_cleaner
-  ddtrace (~> 0.33.0)
+  ddtrace
   decent_exposure
   fabrication
   foreman
   gemini_upload-rails
-  graphiql-rails (= 1.7.0)
+  graphiql-rails
   graphql
   graphql-rails_logger
   guard-livereload
@@ -496,7 +496,7 @@ DEPENDENCIES
   rails-controller-testing
   rails_param
   redcarpet
-  rspec-rails (= 4.0.0.beta4)
+  rspec-rails (= 4.0.0.rc1)
   rubocop-rails
   sass-rails
   selenium-webdriver
@@ -505,7 +505,7 @@ DEPENDENCIES
   solargraph
   uglifier
   watt!
-  webdrivers (~> 4.2)
+  webdrivers
   webmock
   yarjuf
 
