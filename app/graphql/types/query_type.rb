@@ -10,7 +10,13 @@ module Types
         argument :id, types.ID
         permit :admin
 
-        resolve ->(_object, args, _context) { Submission.find(args[:id]) }
+        resolve lambda { |_object, args, _context|
+                  begin
+                    Submission.find(args[:id])
+                  rescue ActiveRecord::RecordNotFound
+                    raise GraphQL::ExecutionError, 'Submission not found'
+                  end
+                }
       end
 
       connection :submissions, Types::SubmissionType.define_connection do
