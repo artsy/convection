@@ -31,12 +31,12 @@ type Asset {
   """
   type of this Asset
   """
-  asset_type: String!
+  assetType: String!
 
   """
   gemini token for asset
   """
-  gemini_token: String
+  geminiToken: String
 
   """
   Uniq ID for this asset
@@ -46,9 +46,9 @@ type Asset {
   """
   known image urls
   """
-  image_urls: JSON
+  imageUrls: JSON
   submissionID: ID
-  submission_id: ID!
+  submissionId: ID!
 }
 
 enum Category {
@@ -221,35 +221,35 @@ enum State {
 Consignment Submission
 """
 type Submission {
-  additional_info: String
-  artist_id: String!
+  additionalInfo: String
+  artistId: String!
   assets: [Asset]
-  authenticity_certificate: Boolean
+  authenticityCertificate: Boolean
   category: Category
-  created_at: ISO8601DateTime
+  createdAt: ISO8601DateTime
   currency: String
   depth: String
-  dimensions_metric: String
+  dimensionsMetric: String
   edition: String
-  edition_number: String
-  edition_size: Int
+  editionNumber: String
+  editionSize: Int
   height: String
 
   """
   Uniq ID for this submission
   """
   id: ID!
-  internalID: ID
-  location_city: String
-  location_country: String
-  location_state: String
+  internalId: ID
+  locationCity: String
+  locationCountry: String
+  locationState: String
   medium: String
-  minimum_price_dollars: Int
+  minimumPriceDollars: Int
   provenance: String
   signature: Boolean
   state: State
   title: String
-  user_id: String!
+  userId: String!
   width: String
   year: String
 }

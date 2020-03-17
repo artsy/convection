@@ -23,7 +23,7 @@ describe 'submissions query' do
         edges {
           node {
             id,
-            artist_id,
+            artistId,
             title
           }
         }
@@ -177,7 +177,7 @@ describe 'submissions query' do
             edges {
               node {
                 assets {
-                  image_urls
+                  imageUrls
                 }
               }
             }
@@ -197,7 +197,7 @@ describe 'submissions query' do
 
         node_response = submissions_response['edges'][0]['node']
         asset_response = node_response['assets'][0]
-        expect(asset_response['image_urls']).to eq image_urls
+        expect(asset_response['imageUrls']).to eq image_urls
       end
     end
 
@@ -211,7 +211,7 @@ describe 'submissions query' do
             edges {
               node {
                 assets {
-                  image_urls
+                  imageUrls
                 }
               }
             }
@@ -231,7 +231,7 @@ describe 'submissions query' do
 
         node_response = submissions_response['edges'][0]['node']
         asset_response = node_response['assets'][0]
-        expect(asset_response['image_urls']).to eq({})
+        expect(asset_response['imageUrls']).to eq({})
       end
     end
   end

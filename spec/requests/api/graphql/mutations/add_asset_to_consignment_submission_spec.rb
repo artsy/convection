@@ -27,7 +27,7 @@ describe 'addAssetToConsignmentSubmission mutation' do
           clientMutationId
           asset {
             id
-            submission_id
+            submissionId
           }
         }
       }
@@ -46,7 +46,7 @@ describe 'addAssetToConsignmentSubmission mutation' do
 
       asset_response = body['data']['addAssetToConsignmentSubmission']['asset']
       expect(asset_response['id']).not_to be_nil
-      expect(asset_response['submission_id'].to_i).to eq submission.id
+      expect(asset_response['submissionId'].to_i).to eq submission.id
     end
   end
 end

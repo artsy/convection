@@ -21,7 +21,7 @@ describe 'submission query' do
     query {
       submission(#{query_inputs}) {
         id,
-        artist_id,
+        artistId,
         title
       }
     }
@@ -96,7 +96,7 @@ describe 'submission query' do
         expect(submission_response).to match(
           {
             'id' => submission.id.to_s,
-            'artist_id' => submission.artist_id,
+            'artistId' => submission.artist_id,
             'title' => submission.title
           }
         )
