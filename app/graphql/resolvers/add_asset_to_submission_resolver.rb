@@ -6,13 +6,7 @@ class AddAssetToSubmissionResolver < BaseResolver
   end
 
   def run
-    input = @arguments.to_h['input'] || {}
-    params = input.except('clientMutationId').transform_keys(&:underscore)
-    params['asset_type'] ||= 'image'
-
-    client_mutation_id = input['clientMutationId']
-
-    submission = Submission.find_by(id: params['submission_id'])
+    submission = Submission.find_by(id: @arguments[:submission_id])
     unless submission
       raise(GraphQL::ExecutionError, 'Submission from ID Not Found')
     end
@@ -23,9 +17,11 @@ class AddAssetToSubmissionResolver < BaseResolver
       raise(GraphQL::ExecutionError, 'Submission from ID Not Found')
     end
 
-    asset = submission.assets.create!(params)
+    @arguments[:asset_type] ||= 'image'
+
+    asset = submission.assets.create!(@arguments)
     SubmissionService.notify_user(submission.id) if submission.submitted?
 
-    OpenStruct.new(asset: asset, client_mutation_id: client_mutation_id)
+    { asset: asset }
   end
 end

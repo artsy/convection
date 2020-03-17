@@ -1,38 +1,34 @@
 # frozen_string_literal: true
 
 module Mutations
-  module CreateSubmissionMutation
-    Definition =
-      GraphQL::Relay::Mutation.define do
-        name 'CreateSubmissionMutation'
+  class CreateSubmissionMutation < Mutations::BaseMutation
+    argument :artist_id, String, required: true
 
-        input_field :additionalInfo, types.String
-        input_field :artistID, !types.String
-        input_field :authenticityCertificate, types.Boolean
-        input_field :category, Types::CategoryType
-        input_field :currency, types.String
-        input_field :depth, types.String
-        input_field :dimensionsMetric, types.String
-        input_field :edition, types.Boolean
-        input_field :editionNumber, types.String
-        input_field :editionSize, types.Int
-        input_field :height, types.String
-        input_field :locationCity, types.String
-        input_field :locationCountry, types.String
-        input_field :locationState, types.String
-        input_field :medium, types.String
-        input_field :minimumPriceDollars, types.Int
-        input_field :provenance, types.String
-        input_field :signature, types.Boolean
-        input_field :state, Types::StateType
-        input_field :title, types.String
-        input_field :width, types.String
-        input_field :year, types.String
+    argument :additional_info, String, required: false
+    argument :authenticity_certificate, Boolean, required: false
+    argument :category, Types::CategoryType, required: false
+    argument :currency, String, required: false
+    argument :depth, String, required: false
+    argument :dimensions_metric, String, required: false
+    argument :edition, Boolean, required: false
+    argument :edition_number, String, required: false
+    argument :edition_size, Integer, required: false
+    argument :height, String, required: false
+    argument :location_city, String, required: false
+    argument :location_country, String, required: false
+    argument :location_state, String, required: false
+    argument :medium, String, required: false
+    argument :minimum_price_dollars, Integer, required: false
+    argument :provenance, String, required: false
+    argument :signature, Boolean, required: false
+    argument :state, Types::StateType, required: false
+    argument :title, String, required: false
+    argument :width, String, required: false
+    argument :year, String, required: false
 
-        return_field :consignmentSubmission, Types::SubmissionType
-      end
+    field :consignment_submission, Types::SubmissionType, null: true
 
-    def self.resolve(object, arguments, context)
+    def resolve(arguments)
       resolve_options = {
         arguments: arguments, context: context, object: object
       }

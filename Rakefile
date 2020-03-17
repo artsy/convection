@@ -5,7 +5,7 @@ require 'graphql/rake_task'
 
 Rails.application.load_tasks
 
-GraphQL::RakeTask.new(schema_name: 'RootSchema', idl_outfile: '_schema.graphql')
+GraphQL::RakeTask.new(schema_name: 'ConvectionSchema', idl_outfile: '_schema.graphql')
 
 if Rails.env.development? || Rails.env.test?
   require 'rubocop/rake_task'
@@ -15,7 +15,7 @@ if Rails.env.development? || Rails.env.test?
   desc 'prints out the schema file'
   task print_schema: :environment do
     require 'graphql/schema/printer'
-    puts GraphQL::Schema::Printer.new(RootSchema).print_schema
+    puts GraphQL::Schema::Printer.new(ConvectionSchema).print_schema
   end
 
   desc 'run prettier check'

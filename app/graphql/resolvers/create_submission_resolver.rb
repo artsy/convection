@@ -11,16 +11,8 @@ class CreateSubmissionResolver < BaseResolver
   end
 
   def run
-    input = @arguments.to_h['input'] || {}
-    params = input.except('clientMutationId').transform_keys(&:underscore)
-
-    client_mutation_id = input['clientMutationId']
-
     submission =
-      SubmissionService.create_submission(params, @context[:current_user])
-
-    OpenStruct.new(
-      consignmentSubmission: submission, client_mutation_id: client_mutation_id
-    )
+      SubmissionService.create_submission(@arguments, @context[:current_user])
+    { consignment_submission: submission }
   end
 end

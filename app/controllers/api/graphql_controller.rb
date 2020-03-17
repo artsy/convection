@@ -3,7 +3,8 @@
 module Api
   class GraphqlController < BaseController
     def execute
-      result = RootSchema.execute(query, variables: variables, context: context)
+      result =
+        ConvectionSchema.execute(query, variables: variables, context: context)
       render json: result, status: :ok
     end
 

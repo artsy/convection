@@ -1,19 +1,15 @@
 # frozen_string_literal: true
 
 module Mutations
-  module AddAssetToConsignmentSubmission
-    Definition =
-      GraphQL::Relay::Mutation.define do
-        name 'AddAssetToConsignmentSubmission'
+  class AddAssetToConsignmentSubmission < Mutations::BaseMutation
+    argument :gemini_token, String, required: true
+    argument :submission_id, ID, required: true
 
-        input_field :submissionID, !types.ID
-        input_field :geminiToken, !types.String
-        input_field :assetType, types.String
+    argument :asset_type, String, required: false
 
-        return_field :asset, Types::AssetType
-      end
+    field :asset, Types::AssetType, null: true
 
-    def self.resolve(object, arguments, context)
+    def resolve(arguments)
       resolve_options = {
         arguments: arguments, context: context, object: object
       }

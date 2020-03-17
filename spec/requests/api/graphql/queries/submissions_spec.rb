@@ -105,7 +105,7 @@ describe 'submissions query' do
     context 'with a user' do
       let!(:submission2) { Fabricate :submission }
 
-      let(:query_inputs) { "user_id: [\"#{submission.user.id}\", \"invalid\"]" }
+      let(:query_inputs) { "userId: [\"#{submission.user.id}\", \"invalid\"]" }
 
       it 'returns only the submissions for that user' do
         post '/api/graphql', params: { query: query }, headers: headers

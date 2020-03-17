@@ -1,46 +1,42 @@
 # frozen_string_literal: true
 
 module Types
-  QueryType =
-    GraphQL::ObjectType.define do
-      name 'Query'
-      description 'Query root for this schema'
-      field :submission, Types::SubmissionType do
-        description 'Get a Submission'
-        argument :id, types.ID
+  class QueryType < GraphQL::Schema::Object
+    field :submission, SubmissionType, null: true do
+      description 'Get a Submission'
+      argument :id, ID, required: true
+    end
 
-        resolve lambda { |object, arguments, context|
-                  resolve_options = {
-                    arguments: arguments, context: context, object: object
-                  }
-                  resolver = SubmissionResolver.new(resolve_options)
-                  raise resolver.error unless resolver.valid?
+    def submission(arguments)
+      query_options = { arguments: arguments, context: context, object: object }
+      resolver = SubmissionResolver.new(query_options)
+      raise resolver.error unless resolver.valid?
 
-                  resolver.run
-                }
+      resolver.run
+    end
+
+    field :submissions, SubmissionType.connection_type, null: true do
+      description 'Filter all submission'
+
+      argument :ids, [ID], required: false do
+        description 'Get all submissions with these IDs'
       end
 
-      connection :submissions, Types::SubmissionType.define_connection do
-        description 'Filter all submission'
+      argument :user_id, [ID], required: false do
+        description 'Get all submissions with these user IDs'
+      end
 
-        argument :ids, types[types.ID], 'Get all submissions with these IDs'
-        argument :user_id,
-                 types[types.ID],
-                 'Only get submission by this user_id'
-
-        argument :completed,
-                 types.Boolean,
-                 'If present return either completed or not completed submissions'
-
-        resolve lambda { |object, arguments, context|
-                  resolve_options = {
-                    arguments: arguments, context: context, object: object
-                  }
-                  resolver = SubmissionsResolver.new(resolve_options)
-                  raise resolver.error unless resolver.valid?
-
-                  resolver.run
-                }
+      argument :completed, Boolean, required: false do
+        description 'If present return either completed or not completed submissions'
       end
     end
+
+    def submissions(arguments)
+      query_options = { arguments: arguments, context: context, object: object }
+      resolver = SubmissionsResolver.new(query_options)
+      raise resolver.error unless resolver.valid?
+
+      resolver.run
+    end
+  end
 end

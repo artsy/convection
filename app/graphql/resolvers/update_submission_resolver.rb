@@ -11,11 +11,7 @@ class UpdateSubmissionResolver < BaseResolver
   end
 
   def run
-    input = @arguments.to_h['input'] || {}
-    params = input.except('clientMutationId').transform_keys(&:underscore)
-    client_mutation_id = input['clientMutationId']
-
-    submission = Submission.find_by(id: params['id'])
+    submission = Submission.find_by(id: @arguments[:id])
 
     unless submission
       raise(GraphQL::ExecutionError, 'Submission from ID Not Found')
@@ -31,10 +27,8 @@ class UpdateSubmissionResolver < BaseResolver
     #
     # params.delete('dimensions_metric')
 
-    SubmissionService.update_submission(submission, params.except(:id))
+    SubmissionService.update_submission(submission, @arguments.except(:id))
 
-    OpenStruct.new(
-      consignmentSubmission: submission, client_mutation_id: client_mutation_id
-    )
+    { consignment_submission: submission }
   end
 end
