@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Api
-  class CallbacksController < BaseController
+  class CallbacksController < RestController
     before_action :require_token
 
     def gemini
