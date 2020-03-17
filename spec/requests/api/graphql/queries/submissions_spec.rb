@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 describe 'submissions query' do
-  let(:submission) { Fabricate :submission }
+  let!(:submission) { Fabricate :submission }
 
   let(:token) do
     JWT.encode(
@@ -99,6 +99,60 @@ describe 'submissions query' do
 
         submissions_response = body['data']['submissions']
         expect(submissions_response['edges'].count).to eq 2
+      end
+    end
+
+    context 'with a user' do
+      let!(:submission2) { Fabricate :submission }
+
+      let(:query_inputs) { "user_id: [\"#{submission.user.id}\", \"invalid\"]" }
+
+      it 'returns only the submissions for that user' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submissions_response = body['data']['submissions']
+        expect(submissions_response['edges'].count).to eq 1
+      end
+    end
+
+    context 'when asking for completed submissions' do
+      let!(:submission2) { Fabricate :submission, state: 'submitted' }
+
+      let(:query_inputs) { 'completed: true' }
+
+      it 'returns only the completed submissions' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submissions_response = body['data']['submissions']
+        expect(submissions_response['edges'].count).to eq 1
+
+        ids = submissions_response['edges'].map { |edge| edge['node']['id'] }
+        expect(ids).to eq [submission2.id.to_s]
+      end
+    end
+
+    context 'when asking for incomplete submissions' do
+      let!(:submission2) { Fabricate :submission, state: 'submitted' }
+
+      let(:query_inputs) { 'completed: false' }
+
+      it 'returns only the incomplete submissions' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submissions_response = body['data']['submissions']
+        expect(submissions_response['edges'].count).to eq 1
+
+        ids = submissions_response['edges'].map { |edge| edge['node']['id'] }
+        expect(ids).to eq [submission.id.to_s]
       end
     end
 
