@@ -8,73 +8,38 @@ module Types
       field :submission, Types::SubmissionType do
         description 'Get a Submission'
         argument :id, types.ID
-        permit :admin
 
-        resolve lambda { |_object, args, _context|
-                  begin
-                    Submission.find(args[:id])
-                  rescue ActiveRecord::RecordNotFound
-                    raise GraphQL::ExecutionError, 'Submission not found'
-                  end
+        resolve lambda { |object, arguments, context|
+                  resolve_options = {
+                    arguments: arguments, context: context, object: object
+                  }
+                  resolver = SubmissionResolver.new(resolve_options)
+                  raise resolver.error unless resolver.valid?
+
+                  resolver.run
                 }
       end
 
       connection :submissions, Types::SubmissionType.define_connection do
         description 'Filter all submission'
 
-        argument :ids,
-                 types[types.ID],
-                 'Get all submissions with these IDs',
-                 permit: :admin
+        argument :ids, types[types.ID], 'Get all submissions with these IDs'
         argument :user_id,
                  types[types.ID],
-                 'Only get submission by this user_id',
-                 prepare: lambda { |obj, context|
-                   is_same_as_user = obj == context[:current_user]
-                   if !is_same_as_user &&
-                        !context[:current_user_roles].include?(:admin)
-                     GraphQL::ExecutionError.new(
-                       'Only Admins can use the user_id for another user.'
-                     )
-                   end
-                   obj
-                 }
+                 'Only get submission by this user_id'
 
         argument :completed,
                  types.Boolean,
                  'If present return either completed or not completed submissions'
 
-        resolve lambda { |_object, args, context|
-                  get_all_submissions = !args[:ids] && !args[:user_id]
-                  if !get_all_submissions &&
-                       !context[:current_user_roles].include?(:admin)
-                    return(
-                      GraphQL::ExecutionError.new(
-                        'Only Admins can look at all submissions.'
-                      )
-                    )
-                  end
+        resolve lambda { |object, arguments, context|
+                  resolve_options = {
+                    arguments: arguments, context: context, object: object
+                  }
+                  resolver = SubmissionsResolver.new(resolve_options)
+                  raise resolver.error unless resolver.valid?
 
-                  submissions = Submission.order(id: :desc)
-                  submissions =
-                    if args[:ids]
-                      submissions.where(id: args[:ids])
-                    elsif args[:user_id]
-                      submissions.where(user_id: args[:user_id])
-                    else
-                      submissions
-                    end
-
-                  if args.key?('completed')
-                    submissions =
-                      if args[:completed]
-                        submissions.completed
-                      else
-                        submissions.draft
-                      end
-                  end
-
-                  submissions
+                  resolver.run
                 }
       end
     end

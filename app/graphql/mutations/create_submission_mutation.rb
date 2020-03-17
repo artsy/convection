@@ -32,19 +32,14 @@ module Mutations
         return_field :consignmentSubmission, Types::SubmissionType
       end
 
-    def self.resolve(_obj, args, context)
-      params = args.to_h['input'].except('clientMutationId')
-      client_mutation_id = args.to_h['input']['clientMutationId']
+    def self.resolve(object, arguments, context)
+      resolve_options = {
+        arguments: arguments, context: context, object: object
+      }
+      resolver = CreateSubmissionResolver.new(resolve_options)
+      raise resolver.error unless resolver.valid?
 
-      # Metaphysics uses camelCase properties and inputs
-      params = params.transform_keys(&:underscore)
-
-      submission =
-        SubmissionService.create_submission(params, context[:current_user])
-      OpenStruct.new(
-        consignmentSubmission: submission,
-        client_mutation_id: client_mutation_id
-      )
+      resolver.run
     end
   end
 end

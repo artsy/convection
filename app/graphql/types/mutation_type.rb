@@ -8,7 +8,6 @@ module Types
 
       field :createConsignmentSubmission,
             Mutations::CreateSubmissionMutation::Definition.return_type do
-        permit :user
         argument :input,
                  Mutations::CreateSubmissionMutation::Definition.input_type
 
@@ -23,7 +22,6 @@ module Types
 
       field :updateConsignmentSubmission,
             Mutations::UpdateSubmissionMutation::Definition.return_type do
-        permit :user
         argument :input,
                  Mutations::UpdateSubmissionMutation::Definition.input_type
 

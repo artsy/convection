@@ -33,33 +33,14 @@ module Mutations
         return_field :consignmentSubmission, Types::SubmissionType
       end
 
-    def self.resolve(_obj, args, context)
-      params = args.to_h['input'].except('clientMutationId')
-      client_mutation_id = args.to_h['input']['clientMutationId']
+    def self.resolve(object, arguments, context)
+      resolve_options = {
+        arguments: arguments, context: context, object: object
+      }
+      resolver = UpdateSubmissionResolver.new(resolve_options)
+      raise resolver.error unless resolver.valid?
 
-      # Metaphysics uses camelCase properties and inputs
-      params = params.transform_keys(&:underscore)
-
-      submission = Submission.find_by(id: params['id'])
-      unless submission
-        raise(GraphQL::ExecutionError, 'Submission from ID Not Found')
-      end
-
-      is_same_as_user =
-        submission&.user&.gravity_user_id == context[:current_user]
-      is_admin = context[:current_user_roles].include?(:admin)
-      unless is_same_as_user || is_admin
-        raise(GraphQL::ExecutionError, 'Submission Not Found')
-      end
-
-      # FIXME: Why does the API reject this property?
-      params.delete('dimensions_metric')
-
-      SubmissionService.update_submission(submission, params.except('id'))
-      OpenStruct.new(
-        consignmentSubmission: submission,
-        client_mutation_id: client_mutation_id
-      )
+      resolver.run
     end
   end
 end
