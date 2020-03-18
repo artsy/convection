@@ -26,7 +26,7 @@ describe 'updateConsignmentSubmission mutation' do
   let(:mutation_inputs) do
     "{ state: DRAFT, category: JEWELRY, clientMutationId: \"test\", id: #{
       submission.id
-    }, artistId: \"andy-warhol\", title: \"soup\" }"
+    }, artistID: \"andy-warhol\", title: \"soup\" }"
   end
 
   let(:mutation) do
@@ -106,7 +106,7 @@ describe 'updateConsignmentSubmission mutation' do
 
     context 'with an invalid submission id' do
       let(:mutation_inputs) do
-        '{ clientMutationId: "test", id: 999999, artistId: "andy-warhol", title: "soup" }'
+        '{ clientMutationId: "test", id: 999999, artistID: "andy-warhol", title: "soup" }'
       end
 
       it 'returns an error for that request' do

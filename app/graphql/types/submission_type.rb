@@ -18,7 +18,7 @@ module Types
     field :edition_size, Integer, null: true
     field :height, String, null: true
     field :id, ID, 'Uniq ID for this submission', null: false
-    field :internal_id, ID, method: :id, null: true # Alias for MPv2 compatability
+    field :internalID, ID, method: :id, null: true
     field :location_city, String, null: true
     field :location_country, String, null: true
     field :location_state, String, null: true

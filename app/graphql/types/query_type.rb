@@ -4,7 +4,7 @@ module Types
   class QueryType < GraphQL::Schema::Object
     field :submission, SubmissionType, null: true do
       description 'Get a Submission'
-      argument :id, ID, required: true
+      argument :id, ID, required: false
     end
 
     def submission(arguments)

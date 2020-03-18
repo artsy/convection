@@ -12,7 +12,7 @@ describe 'createConsignmentSubmission mutation' do
   let(:headers) { { 'Authorization' => "Bearer #{token}" } }
 
   let(:mutation_inputs) do
-    '{ state: REJECTED, clientMutationId: "2", artistId: "andy", title: "soup", category: JEWELRY, minimumPriceDollars: 50000, currency: "GBP" }'
+    '{ state: REJECTED, clientMutationId: "2", artistID: "andy", title: "soup", category: JEWELRY, minimumPriceDollars: 50000, currency: "GBP" }'
   end
 
   let(:mutation) do

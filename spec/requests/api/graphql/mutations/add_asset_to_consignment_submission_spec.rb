@@ -15,7 +15,7 @@ describe 'addAssetToConsignmentSubmission mutation' do
   let(:headers) { { 'Authorization' => "Bearer #{token}" } }
 
   let(:mutation_inputs) do
-    "{ clientMutationId: \"test\", submissionId: #{
+    "{ clientMutationId: \"test\", submissionID: #{
       submission.id
     }, geminiToken: \"gemini-token-hash\" }"
   end

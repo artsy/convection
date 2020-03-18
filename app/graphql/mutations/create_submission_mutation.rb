@@ -2,14 +2,16 @@
 
 module Mutations
   class CreateSubmissionMutation < Mutations::BaseMutation
-    argument :artist_id, String, required: true
+    argument :artistID, String, required: true
 
     argument :additional_info, String, required: false
     argument :authenticity_certificate, Boolean, required: false
     argument :category, Types::CategoryType, required: false
     argument :currency, String, required: false
     argument :depth, String, required: false
-    argument :dimensions_metric, String, required: false
+    argument :dimensions_metric,
+             String,
+             required: false, prepare: ->(value, _context) { value.downcase }
     argument :edition, Boolean, required: false
     argument :edition_number, String, required: false
     argument :edition_size, Integer, required: false
