@@ -118,31 +118,21 @@ describe 'submissions query' do
       end
     end
 
-    context 'when asking for completed submissions' do
-      let!(:submission2) { Fabricate :submission, state: 'submitted' }
+    context 'when asking for only available submissions' do
+      let!(:submitted_submission) { Fabricate :submission, state: 'submitted' }
+      let!(:approved_submission) { Fabricate :submission, state: 'approved' }
 
-      let(:query_inputs) { 'completed: true' }
+      let(:partner_submission) { Fabricate :partner_submission }
 
-      it 'returns only the completed submissions' do
-        post '/api/graphql', params: { query: query }, headers: headers
-
-        expect(response.status).to eq 200
-        body = JSON.parse(response.body)
-
-        submissions_response = body['data']['submissions']
-        expect(submissions_response['edges'].count).to eq 1
-
-        ids = submissions_response['edges'].map { |edge| edge['node']['id'] }
-        expect(ids).to eq [submission2.id.to_s]
+      let!(:consigned_submission) do
+        Fabricate :submission,
+                  state: 'approved',
+                  consigned_partner_submission_id: partner_submission.id
       end
-    end
 
-    context 'when asking for incomplete submissions' do
-      let!(:submission2) { Fabricate :submission, state: 'submitted' }
+      let(:query_inputs) { 'available: true' }
 
-      let(:query_inputs) { 'completed: false' }
-
-      it 'returns only the incomplete submissions' do
+      it 'returns only the available submissions' do
         post '/api/graphql', params: { query: query }, headers: headers
 
         expect(response.status).to eq 200
@@ -152,7 +142,7 @@ describe 'submissions query' do
         expect(submissions_response['edges'].count).to eq 1
 
         ids = submissions_response['edges'].map { |edge| edge['node']['id'] }
-        expect(ids).to eq [submission.id.to_s]
+        expect(ids).to eq [approved_submission.id.to_s]
       end
     end
 
