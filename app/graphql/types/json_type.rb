@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
 module Types
-  JsonType =
-    GraphQL::ScalarType.define do
-      name 'JSON'
-      coerce_input ->(x, _ctx) { JSON.parse(x) }
-      coerce_result ->(x, _ctx) { JSON.dump(x) }
+  class JsonType < Types::BaseScalar
+    graphql_name 'JSON'
+
+    def self.coerce_input(value, _ctx)
+      JSON.parse(value)
     end
+
+    def self.coerce_result(value, _ctx)
+      JSON.dump(value)
+    end
+  end
 end
