@@ -25,7 +25,7 @@ describe 'createConsignmentSubmission mutation' do
           title
           category
           state
-          minimum_price_dollars
+          minimumPriceDollars
           currency
         }
       }
@@ -108,7 +108,7 @@ describe 'createConsignmentSubmission mutation' do
           'title' => 'soup',
           'category' => 'JEWELRY',
           'state' => 'REJECTED',
-          'minimum_price_dollars' => 50_000,
+          'minimumPriceDollars' => 50_000,
           'currency' => 'GBP'
         }
       )

@@ -1,38 +1,35 @@
 # frozen_string_literal: true
 
 module Types
-  SubmissionType =
-    GraphQL::ObjectType.define do
-      name 'Submission'
-      description 'Consignment Submission'
+  class SubmissionType < Types::BaseObject
+    description 'Consignment Submission'
 
-      field :additional_info, types.String
-      field :artist_id, !types.String
-      field :authenticity_certificate, types.Boolean
-      field :category, Types::CategoryType
-      field :created_at, GraphQL::Types::ISO8601DateTime
-      field :currency, types.String
-      field :depth, types.String
-      field :dimensions_metric, types.String
-      field :edition_number, types.String
-      field :edition_size, types.Int
-      field :edition, types.String
-      field :height, types.String
-      field :id, !types.ID, 'Uniq ID for this submission'
-      field :internalID, types.ID, property: :id # Alias for MPv2 compatability
-      field :location_city, types.String
-      field :location_country, types.String
-      field :location_state, types.String
-      field :medium, types.String
-      field :minimum_price_dollars, types.Int
-      field :provenance, types.String
-      field :signature, types.Boolean
-      field :state, Types::StateType
-      field :title, types.String
-      field :user_id, !types.String
-      field :width, types.String
-      field :year, types.String
-
-      field :assets, types[Types::AssetType]
-    end
+    field :additional_info, String, null: true
+    field :artist_id, String, null: false
+    field :assets, [Types::AssetType, null: true], null: true
+    field :authenticity_certificate, Boolean, null: true
+    field :category, Types::CategoryType, null: true
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: true
+    field :currency, String, null: true
+    field :depth, String, null: true
+    field :dimensions_metric, String, null: true
+    field :edition, String, null: true
+    field :edition_number, String, null: true
+    field :edition_size, Integer, null: true
+    field :height, String, null: true
+    field :id, ID, 'Uniq ID for this submission', null: false
+    field :internalID, ID, method: :id, null: true
+    field :location_city, String, null: true
+    field :location_country, String, null: true
+    field :location_state, String, null: true
+    field :medium, String, null: true
+    field :minimum_price_dollars, Integer, null: true
+    field :provenance, String, null: true
+    field :signature, Boolean, null: true
+    field :state, Types::StateType, null: true
+    field :title, String, null: true
+    field :user_id, String, null: false
+    field :width, String, null: true
+    field :year, String, null: true
+  end
 end

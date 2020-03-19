@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Api
-  class UsersController < BaseController
+  class UsersController < RestController
     before_action :require_trusted_app
     def anonymize_user_email
       param! :email, String, required: true

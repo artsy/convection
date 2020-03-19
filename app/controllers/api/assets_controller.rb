@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Api
-  class AssetsController < BaseController
+  class AssetsController < RestController
     before_action :require_authentication
     before_action :set_submission_and_asset, only: %i[show]
     before_action :set_submission, only: %i[create index]

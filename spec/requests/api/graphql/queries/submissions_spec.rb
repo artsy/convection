@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 describe 'submissions query' do
-  let(:submission) { Fabricate :submission }
+  let!(:submission) { Fabricate :submission }
 
   let(:token) do
     JWT.encode(
@@ -23,7 +23,7 @@ describe 'submissions query' do
         edges {
           node {
             id,
-            artist_id,
+            artistId,
             title
           }
         }
@@ -102,6 +102,60 @@ describe 'submissions query' do
       end
     end
 
+    context 'with a user' do
+      let!(:submission2) { Fabricate :submission }
+
+      let(:query_inputs) { "userId: [\"#{submission.user.id}\", \"invalid\"]" }
+
+      it 'returns only the submissions for that user' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submissions_response = body['data']['submissions']
+        expect(submissions_response['edges'].count).to eq 1
+      end
+    end
+
+    context 'when asking for completed submissions' do
+      let!(:submission2) { Fabricate :submission, state: 'submitted' }
+
+      let(:query_inputs) { 'completed: true' }
+
+      it 'returns only the completed submissions' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submissions_response = body['data']['submissions']
+        expect(submissions_response['edges'].count).to eq 1
+
+        ids = submissions_response['edges'].map { |edge| edge['node']['id'] }
+        expect(ids).to eq [submission2.id.to_s]
+      end
+    end
+
+    context 'when asking for incomplete submissions' do
+      let!(:submission2) { Fabricate :submission, state: 'submitted' }
+
+      let(:query_inputs) { 'completed: false' }
+
+      it 'returns only the incomplete submissions' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submissions_response = body['data']['submissions']
+        expect(submissions_response['edges'].count).to eq 1
+
+        ids = submissions_response['edges'].map { |edge| edge['node']['id'] }
+        expect(ids).to eq [submission.id.to_s]
+      end
+    end
+
     context 'with an asset that has image urls' do
       let(:image_urls) do
         {
@@ -123,7 +177,7 @@ describe 'submissions query' do
             edges {
               node {
                 assets {
-                  image_urls
+                  imageUrls
                 }
               }
             }
@@ -143,7 +197,7 @@ describe 'submissions query' do
 
         node_response = submissions_response['edges'][0]['node']
         asset_response = node_response['assets'][0]
-        expect(asset_response['image_urls']).to eq image_urls
+        expect(asset_response['imageUrls']).to eq image_urls
       end
     end
 
@@ -157,7 +211,7 @@ describe 'submissions query' do
             edges {
               node {
                 assets {
-                  image_urls
+                  imageUrls
                 }
               }
             }
@@ -177,7 +231,7 @@ describe 'submissions query' do
 
         node_response = submissions_response['edges'][0]['node']
         asset_response = node_response['assets'][0]
-        expect(asset_response['image_urls']).to eq({})
+        expect(asset_response['imageUrls']).to eq({})
       end
     end
   end

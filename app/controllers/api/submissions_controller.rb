@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Api
-  class SubmissionsController < BaseController
+  class SubmissionsController < RestController
     before_action :require_authentication
     before_action :set_submission, only: %i[show update]
     before_action :require_authorized_submission, only: %i[show update]

@@ -6,46 +6,6 @@ module Api
     skip_before_action :require_artsy_authentication
     skip_before_action :set_current_user
 
-    rescue_from RailsParam::Param::InvalidParameterError do |ex|
-      render json: { error: ex.message, param: ex.param }, status: :bad_request
-    end
-
-    rescue_from ActiveRecord::RecordNotFound do |_ex|
-      render json: { error: 'Not Found' }, status: :not_found
-    end
-
-    rescue_from ApplicationController::NotAuthorized do |_ex|
-      render json: { error: 'Unauthorized' }, status: :unauthorized
-    end
-
-    rescue_from SubmissionService::ParamError do |ex|
-      render json: { error: ex.message }, status: :bad_request
-    end
-
-    def set_submission
-      submission_id = params[:id] || params[:submission_id]
-      @submission = Submission.find(submission_id)
-    end
-
-    def require_trusted_app
-      unless current_app.present? && current_user.blank? &&
-               current_user_roles.include?(:trusted)
-        raise ApplicationController::NotAuthorized
-      end
-    end
-
-    def require_authentication
-      unless current_app && current_user
-        raise ApplicationController::NotAuthorized
-      end
-    end
-
-    def require_authorized_submission
-      unless current_user && current_user == @submission.user&.gravity_user_id
-        raise ApplicationController::NotAuthorized
-      end
-    end
-
     private
 
     # For now, require that signature is valid by verifying payload w/ secret.

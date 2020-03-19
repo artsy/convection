@@ -38,7 +38,7 @@ describe 'updateConsignmentSubmission mutation' do
           category
           state
           id
-          artist_id
+          artistId
           title
         }
       }
@@ -136,7 +136,7 @@ describe 'updateConsignmentSubmission mutation' do
           {
             'id' => submission.id.to_s,
             'title' => 'soup',
-            'artist_id' => 'andy-warhol',
+            'artistId' => 'andy-warhol',
             'category' => 'JEWELRY',
             'state' => 'DRAFT'
           }
