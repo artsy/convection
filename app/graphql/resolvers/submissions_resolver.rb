@@ -44,9 +44,7 @@ class SubmissionsResolver < BaseResolver
   private
 
   def base_submissions
-    return Submission.all unless @arguments.key?(:completed)
-
-    @arguments[:completed] ? Submission.completed : Submission.draft
+    @arguments[:available] ? Submission.available : Submission.all
   end
 
   def conditions

@@ -26,8 +26,8 @@ module Types
         description 'Get all submissions with these user IDs'
       end
 
-      argument :completed, Boolean, required: false do
-        description 'If present return either completed or not completed submissions'
+      argument :available, Boolean, required: false do
+        description 'If true return only available submissions'
       end
     end
 
