@@ -157,5 +157,51 @@ describe 'createConsignmentOffer mutation' do
         expect(offer_response).to include({ 'id' => be })
       end
     end
+
+    context 'with an auction offer' do
+      let(:mutation_inputs) do
+        <<-INPUTS
+        {
+          commissionPercentWhole: 10,
+          createdById: "foo",
+          currency: "#{Currency::SUPPORTED.first}",
+          deadlineToConsign: "ASAP",
+          gravityPartnerId: "#{partner.gravity_partner_id}",
+          highEstimateDollars: 1000,
+          insuranceInfo: "1.50%",
+          lowEstimateDollars: 500,
+          notes: "We would be honored to offer this work in our May sale in Los Angeles.",
+          offerType: "#{Offer::AUCTION_CONSIGNMENT}",
+          otherFeesInfo: "50 USD",
+          partnerInfo: "user@example.com",
+          photographyInfo: "100 USD",
+          saleDate: "2018-01-01",
+          saleName: "Our best sale",
+          shippingInfo: "Shipping to be absorbed by consignor.",
+          state: "draft",
+          submissionId: #{submission.id}
+        }
+        INPUTS
+      end
+
+      it 'creates an offer' do
+        stub_gravity_root
+        stub_gravity_user
+        stub_gravity_user_detail(email: 'michael@bluth.com')
+
+        expect {
+          post '/api/graphql', params: { query: mutation }, headers: headers
+        }.to change(Offer, :count).by(1)
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+        create_response = body['data']['createConsignmentOffer']
+
+        offer = Offer.last
+
+        offer_response = create_response['consignmentOffer']
+        expect(offer_response).to include({ 'id' => offer.id.to_s })
+      end
+    end
   end
 end
