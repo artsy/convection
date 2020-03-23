@@ -43,8 +43,7 @@ describe SubmissionService do
       stub_request(
         :get,
         "#{Convection.config.gravity_api_url}/user_details/foo"
-      )
-        .to_raise(Faraday::ResourceNotFound)
+      ).to_raise(Faraday::ResourceNotFound)
 
       expect {
         SubmissionService.create_submission(params, 'foo')

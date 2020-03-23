@@ -10,8 +10,7 @@ module SubmissionsHelper
       submission.location_city,
       submission.location_state,
       submission.location_country
-    ].select(&:present?)
-      .join(', ')
+    ].select(&:present?).join(', ')
   end
 
   def formatted_dimensions(submission)
@@ -41,8 +40,7 @@ module SubmissionsHelper
       submission.medium.try(:truncate, 100),
       formatted_dimensions(submission),
       edition_text
-    ].compact
-      .join(', ')
+    ].compact.join(', ')
   end
 
   def reviewer_byline(submission)
@@ -61,8 +59,7 @@ module SubmissionsHelper
     (
       submission.primary_image.presence ||
         submission.processed_images.min_by(&:id)
-    )
-      .image_urls[
+    ).image_urls[
       'square'
     ]
   end

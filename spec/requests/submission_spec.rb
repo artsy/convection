@@ -171,8 +171,7 @@ describe 'Submission Flow' do
       expect(
         submission.assets.detect { |a|
           a.gemini_token == 'gemini-token2'
-        }.reload
-          .image_urls
+        }.reload.image_urls
       ).to eq('square' => 'https://another-image.jpg')
 
       # update the submission status and notify
