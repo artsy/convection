@@ -24,8 +24,7 @@ class DemandCalculator
     @category = category
     @artist_standing_score =
       ArtistStandingScore.where(artist_id: artist_id).order(created_at: :asc)
-        .limit(1)
-        .first ||
+        .limit(1).first ||
         NullArtistStandingScore.new
   end
 

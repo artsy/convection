@@ -50,8 +50,10 @@ Rails.application.routes.draw do
     # Protect against timing attacks: (https://codahale.com/a-lesson-in-timing-attacks/)
     # - Use & (do not use &&) so that it doesn't short circuit.
     # - Use `secure_compare` to stop length information leaking
-    ActiveSupport::SecurityUtils
-      .secure_compare(username, Convection.config.sidekiq_username) &
+    ActiveSupport::SecurityUtils.secure_compare(
+      username,
+      Convection.config.sidekiq_username
+    ) &
       ActiveSupport::SecurityUtils.secure_compare(
         password,
         Convection.config.sidekiq_password

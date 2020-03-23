@@ -9,10 +9,7 @@ module OffersHelper
           offer.rejection_reason
         }",
         offer.rejection_note
-      ].compact
-        .reject(&:blank?)
-        .join(': ')
-        .strip
+      ].compact.reject(&:blank?).join(': ').strip
     elsif offer.lapsed?
       'Offer lapsed.'
     end

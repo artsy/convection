@@ -156,8 +156,7 @@ class SubmissionService
         user: user,
         user_detail: user_detail,
         artist: artist
-      )
-        .deliver_now
+      ).deliver_now
     end
 
     def deliver_submission_notification(submission_id)
@@ -173,8 +172,7 @@ class SubmissionService
         user: user,
         user_detail: user_detail,
         artist: artist
-      )
-        .deliver_now
+      ).deliver_now
     end
 
     def deliver_approval_notification(submission_id)
@@ -188,8 +186,7 @@ class SubmissionService
         user: user,
         user_detail: user_detail,
         artist: artist
-      )
-        .deliver_now
+      ).deliver_now
     end
 
     def deliver_rejection_notification(submission_id)
@@ -203,8 +200,7 @@ class SubmissionService
         user: user,
         user_detail: user_detail,
         artist: artist
-      )
-        .deliver_now
+      ).deliver_now
     end
   end
 end

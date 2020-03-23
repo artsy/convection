@@ -194,8 +194,7 @@ describe Submission do
       stub_request(
         :get,
         "#{Convection.config.gravity_api_url}/artists/#{submission.artist_id}"
-      )
-        .to_raise(Faraday::ResourceNotFound)
+      ).to_raise(Faraday::ResourceNotFound)
       expect(submission.artist).to be_nil
       expect(submission.artist_name).to be_nil
     end

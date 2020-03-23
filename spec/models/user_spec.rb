@@ -29,8 +29,7 @@ describe User do
       stub_request(
         :get,
         "#{Convection.config.gravity_api_url}/users/#{user.gravity_user_id}"
-      )
-        .to_raise(Faraday::ResourceNotFound)
+      ).to_raise(Faraday::ResourceNotFound)
       expect(user.gravity_user).to be_nil
       expect(user.name).to be_nil
     end
@@ -51,8 +50,7 @@ describe User do
         "#{Convection.config.gravity_api_url}/user_details/#{
           user.gravity_user_id
         }"
-      )
-        .to_raise(Faraday::ResourceNotFound)
+      ).to_raise(Faraday::ResourceNotFound)
       expect(user.name).to eq 'Buster Bluth'
       expect(user.user_detail).to be_nil
       expect(user.user_detail&.email).to be_nil
@@ -73,8 +71,7 @@ describe User do
       stub_request(
         :get,
         "#{Convection.config.gravity_api_url}/users/#{user.gravity_user_id}"
-      )
-        .to_raise(Faraday::ResourceNotFound)
+      ).to_raise(Faraday::ResourceNotFound)
       expect(user.user_detail).to be_nil
     end
   end

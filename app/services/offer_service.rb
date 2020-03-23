@@ -105,8 +105,7 @@ class OfferService
 
       PartnerMailer.offer_introduction(
         offer: offer, artist: artist, email: email
-      )
-        .deliver_now
+      ).deliver_now
     end
 
     def deliver_rejection_notification(offer_id)
@@ -136,8 +135,7 @@ class OfferService
 
       UserMailer.offer(
         offer: offer, artist: artist, user: user, user_detail: user_detail
-      )
-        .deliver_now
+      ).deliver_now
 
       offer.update!(sent_at: Time.now.utc, sent_by: current_user)
     end

@@ -22,8 +22,7 @@ class PartnerSubmissionService
       partner_communication =
         Gravity.client.partner_communications(
           name: Convection.config.consignment_communication_name
-        )
-          .first
+        ).first
       partner_contacts =
         Gravity.fetch_all(
           partner_communication,
@@ -71,8 +70,7 @@ class PartnerSubmissionService
         partner_type: partner_type,
         email: email,
         submissions_count: submissions.count
-      )
-        .deliver_now
+      ).deliver_now
     end
 
     def generate_for_all_partners(submission_id)

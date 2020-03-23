@@ -42,8 +42,7 @@ def stub_gravity_request(gravity_resource, body, more_headers = {})
     stub_request(
       :get,
       "#{Convection.config.gravity_api_url}#{gravity_resource}"
-    )
-      .to_return(body: body.to_json, headers: HEADERS)
+    ).to_return(body: body.to_json, headers: HEADERS)
   stub.with(headers: more_headers) unless more_headers.empty?
 end
 
