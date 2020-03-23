@@ -236,7 +236,7 @@ spec:
         spec:
           containers:
             - name: convection-data-import
-              image: artsy/pg-data-sync
+              image: artsy/pg-data-sync:9.6
               imagePullPolicy: Always
               env:
                 - name: APP_NAME
