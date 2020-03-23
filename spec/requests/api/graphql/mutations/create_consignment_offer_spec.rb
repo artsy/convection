@@ -153,8 +153,10 @@ describe 'createConsignmentOffer mutation' do
         body = JSON.parse(response.body)
         create_response = body['data']['createConsignmentOffer']
 
+        offer = Offer.last
+
         offer_response = create_response['consignmentOffer']
-        expect(offer_response).to include({ 'id' => be })
+        expect(offer_response).to include({ 'id' => offer.id.to_s })
       end
     end
 
