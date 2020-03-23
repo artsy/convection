@@ -7,8 +7,7 @@ module PartnerService
       partner_communication =
         Gravity.client.partner_communications(
           name: Convection.config.consignment_communication_name
-        )
-          .first
+        ).first
 
       partner_contacts =
         Gravity.fetch_all(

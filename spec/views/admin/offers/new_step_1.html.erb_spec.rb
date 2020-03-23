@@ -69,8 +69,7 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
           }
         }
         stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
-          .to_return(body: gravql_artists_response.to_json)
-          .with(
+          .to_return(body: gravql_artists_response.to_json).with(
           headers: {
             'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
           }
@@ -145,8 +144,7 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
           }
         }
         stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
-          .to_return(body: gravql_artists_response.to_json)
-          .with(
+          .to_return(body: gravql_artists_response.to_json).with(
           headers: {
             'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
           }
@@ -219,8 +217,7 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
           }
         }
         stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
-          .to_return(body: gravql_artists_response.to_json)
-          .with(
+          .to_return(body: gravql_artists_response.to_json).with(
           headers: {
             'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
           }
@@ -296,8 +293,7 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
           }
         }
         stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
-          .to_return(body: gravql_artists_response.to_json)
-          .with(
+          .to_return(body: gravql_artists_response.to_json).with(
           headers: {
             'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
           }
