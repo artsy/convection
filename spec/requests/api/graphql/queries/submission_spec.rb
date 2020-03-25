@@ -125,6 +125,8 @@ describe 'submission query' do
             title
             offers(gravityPartnerId: "#{partner.gravity_partner_id}") {
               id
+              state
+              commissionPercent
             }
           }
         }
