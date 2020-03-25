@@ -43,7 +43,7 @@ gem 'uglifier'
 group :development, :test do
   gem 'guard-rspec', require: false
   gem 'pry-byebug'
-  gem 'rspec-rails', '4.0.0.rc1'
+  gem 'rspec-rails', '4.0.0'
   gem 'rubocop-rails'
   gem 'webdrivers'
 end
