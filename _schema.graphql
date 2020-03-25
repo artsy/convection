@@ -294,6 +294,7 @@ type Submission {
   locationState: String
   medium: String
   minimumPriceDollars: Int
+  offers(gravityPartnerId: ID!): [Offer!]!
   provenance: String
   signature: Boolean
   state: State
