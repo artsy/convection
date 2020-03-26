@@ -120,13 +120,10 @@ describe 'submission query' do
         <<-GRAPHQL
         query {
           submission(#{query_inputs}) {
-            id,
-            artistId,
-            title
             offers(gravityPartnerId: "#{partner.gravity_partner_id}") {
               id
               state
-              commissionPercent
+              commissionPercentWhole
             }
           }
         }
@@ -142,8 +139,15 @@ describe 'submission query' do
         submission_response = body['data']['submission']
         offers_response = submission_response['offers']
         expect(offers_response.count).to eq 1
-        offer_response_id = offers_response.first['id']
-        expect(offer_response_id).to eq offer.id.to_s
+
+        offer_response = offers_response.first
+        expect(offer_response).to match(
+          {
+            'id' => offer.id.to_s,
+            'state' => offer.state,
+            'commissionPercentWhole' => offer.commission_percent_whole
+          }
+        )
       end
     end
   end

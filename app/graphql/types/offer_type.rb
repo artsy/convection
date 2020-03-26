@@ -6,7 +6,7 @@ module Types
 
     field :id, ID, 'Uniq ID for this submission', null: false
 
-    field :commission_percent, Integer, null: true
+    field :commission_percent_whole, Integer, null: true
     field :created_by_id, ID, null: true
     field :currency, String, null: true
     field :deadline_to_consign, String, null: true

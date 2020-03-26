@@ -181,7 +181,7 @@ type Mutation {
 Consignment Offer
 """
 type Offer {
-  commissionPercent: Int
+  commissionPercentWhole: Int
   createdById: ID
   currency: String
   deadlineToConsign: String
