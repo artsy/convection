@@ -31,5 +31,14 @@ module Types
     field :user_id, String, null: false
     field :width, String, null: true
     field :year, String, null: true
+
+    field :offers, [Types::OfferType], null: false do
+      argument :gravity_partner_id, ID, required: true
+    end
+
+    def offers(gravity_partner_id:)
+      partner = Partner.find_by(gravity_partner_id: gravity_partner_id)
+      object.partner_submissions.find_by(partner: partner).offers
+    end
   end
 end

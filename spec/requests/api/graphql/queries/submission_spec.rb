@@ -102,5 +102,53 @@ describe 'submission query' do
         )
       end
     end
+
+    context 'including offers' do
+      let(:partner) { Fabricate :partner }
+      let(:partner_submission) do
+        Fabricate :partner_submission, partner: partner, submission: submission
+      end
+      let!(:offer) { Fabricate :offer, partner_submission: partner_submission }
+
+      let!(:another_offer) do
+        partner_submission =
+          Fabricate :partner_submission, submission: submission
+        Fabricate :offer, partner_submission: partner_submission
+      end
+
+      let(:query) do
+        <<-GRAPHQL
+        query {
+          submission(#{query_inputs}) {
+            offers(gravityPartnerId: "#{partner.gravity_partner_id}") {
+              id
+              state
+              commissionPercentWhole
+            }
+          }
+        }
+        GRAPHQL
+      end
+
+      it 'returns the offers for that submission' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submission_response = body['data']['submission']
+        offers_response = submission_response['offers']
+        expect(offers_response.count).to eq 1
+
+        offer_response = offers_response.first
+        expect(offer_response).to match(
+          {
+            'id' => offer.id.to_s,
+            'state' => offer.state,
+            'commissionPercentWhole' => offer.commission_percent_whole
+          }
+        )
+      end
+    end
   end
 end
