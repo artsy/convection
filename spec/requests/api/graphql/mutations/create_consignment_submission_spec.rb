@@ -106,7 +106,7 @@ describe 'createConsignmentSubmission mutation' do
           'id' => be,
           # this ensures it's not nil
           'title' => 'soup',
-          'category' => 'JEWELRY',
+          'category' => 'Jewelry',
           'state' => 'REJECTED',
           'minimumPriceDollars' => 50_000,
           'currency' => 'GBP'
