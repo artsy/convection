@@ -127,7 +127,7 @@ GEM
     erubis (2.7.0)
     eventmachine (1.2.7)
     execjs (2.7.0)
-    fabrication (2.21.0)
+    fabrication (2.21.1)
     faraday (0.17.3)
       multipart-post (>= 1.2, < 3)
     faraday-digestauth (0.3.0)
