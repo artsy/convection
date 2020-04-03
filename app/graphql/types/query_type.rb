@@ -15,7 +15,7 @@ module Types
       resolver.run
     end
 
-    field :submissions, SubmissionType.connection_type, null: true do
+    field :submissions, SubmissionConnectionType, null: true do
       description 'Filter all submission'
 
       argument :ids, [ID], required: false do
