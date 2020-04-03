@@ -108,6 +108,7 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.1.6)
     connection_pool (2.2.2)
+    console_color (0.0.4)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.6)
@@ -468,6 +469,7 @@ DEPENDENCIES
   bourbon (= 4.2.3)
   capybara
   coffee-rails
+  console_color
   database_cleaner
   ddtrace
   decent_exposure
