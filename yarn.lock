@@ -444,10 +444,10 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
-lint-staged@10.1.0:
-  version "10.1.0"
-  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-10.1.0.tgz#18785bb005d5ed404f1c1db6563e082f7a7baac2"
-  integrity sha512-WzZ/T+O/aEaaT679sMgI4JqK5mnG69V5KQSouzVsShzZ8wGWte39HT3z61LsxjVNeCf8m/ChhvWJa2wTiQLy5A==
+lint-staged@10.1.1:
+  version "10.1.1"
+  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-10.1.1.tgz#1c8569b66d684e6e3553cd760c03053f41fca152"
+  integrity sha512-wAeu/ePaBAOfwM2+cVbgPWDtn17B0Sxiv0NvNEqDAIvB8Yhvl60vafKFiK4grcYn87K1iK+a0zVoETvKbdT9/Q==
   dependencies:
     chalk "^3.0.0"
     commander "^4.0.1"
@@ -725,9 +725,9 @@ restore-cursor@^2.0.0:
     signal-exit "^3.0.2"
 
 rxjs@^6.3.3:
-  version "6.5.4"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.5.4.tgz#e0777fe0d184cec7872df147f303572d414e211c"
-  integrity sha512-naMQXcgEo3csAEGvw/NydRA0fuS2nDZJiw1YUWFKU7aPPAPGZEsD4Iimit96qwCieH6y614MCLYwdkrWx7z/7Q==
+  version "6.5.5"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.5.5.tgz#c5c884e3094c8cfee31bf27eb87e54ccfc87f9ec"
+  integrity sha512-WfQI+1gohdf0Dai/Bbmk5L5ItH5tYqm3ki2c5GdWhKjalzjg93N3avFjVStyZZz+A2Em+ZxKH5bNghw9UeylGQ==
   dependencies:
     tslib "^1.9.0"
 
