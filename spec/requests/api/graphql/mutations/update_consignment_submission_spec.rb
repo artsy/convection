@@ -137,7 +137,7 @@ describe 'updateConsignmentSubmission mutation' do
             'id' => submission.id.to_s,
             'title' => 'soup',
             'artistId' => 'andy-warhol',
-            'category' => 'JEWELRY',
+            'category' => 'Jewelry',
             'state' => 'DRAFT'
           }
         )
