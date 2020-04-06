@@ -30,6 +30,6 @@ bundle update
 yarn upgrade --latest
 bundle exec rake
 git add .
-git commmit --message "$message"
+git commit --message "$message"
 git push upstream updates
 hub pull-request --message "$message" --reviewer $team --assign $github_user --labels "$mog_label"
