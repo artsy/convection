@@ -28,6 +28,10 @@ class BaseResolver
     @context[:current_user_roles].include?(:user)
   end
 
+  def partner?
+    @context[:current_user_roles].include?(:partner)
+  end
+
   def admin?
     @context[:current_user_roles].include?(:admin)
   end

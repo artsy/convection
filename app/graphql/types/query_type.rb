@@ -31,7 +31,7 @@ module Types
       end
     end
 
-    def submissions(arguments)
+    def submissions(arguments = {})
       query_options = { arguments: arguments, context: context, object: object }
       resolver = SubmissionsResolver.new(query_options)
       raise resolver.error unless resolver.valid?

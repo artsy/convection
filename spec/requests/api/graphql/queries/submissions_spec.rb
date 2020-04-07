@@ -118,6 +118,39 @@ describe 'submissions query' do
       end
     end
 
+    context 'with a request from a partner' do
+      let(:token) do
+        payload = { aud: 'gravity', sub: 'userid', roles: 'partner' }
+        JWT.encode(payload, Convection.config.jwt_secret)
+      end
+
+      let(:query) do
+        <<-GRAPHQL
+        query {
+          submissions {
+            edges {
+              node {
+                id,
+                artistId,
+                title
+              }
+            }
+          }
+        }
+        GRAPHQL
+      end
+
+      it 'returns all submissions' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submissions_response = body['data']['submissions']
+        expect(submissions_response['edges'].count).to eq 1
+      end
+    end
+
     context 'when asking for only available submissions' do
       let!(:submitted_submission) { Fabricate :submission, state: 'submitted' }
       let!(:approved_submission) { Fabricate :submission, state: 'approved' }
