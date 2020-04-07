@@ -2,7 +2,9 @@
 
 class SubmissionsResolver < BaseResolver
   AllSubmissionsError =
-    GraphQL::ExecutionError.new('Only Admins can look at all submissions.')
+    GraphQL::ExecutionError.new(
+      'Only Admins and Partners can look at all submissions.'
+    )
 
   UserMismatchError =
     GraphQL::ExecutionError.new(
@@ -27,7 +29,7 @@ class SubmissionsResolver < BaseResolver
   def compute_error
     if @arguments.key?(:ids)
       BadArgumentError
-    elsif return_all_submissions?
+    elsif return_all_submissions? && !partner?
       AllSubmissionsError
     elsif user_mismatch?
       UserMismatchError
