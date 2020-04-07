@@ -9,31 +9,12 @@ class SubmissionsResolver < BaseResolver
       'Only Admins can use the user_id for another user.'
     )
 
+  BadArgumentError = GraphQL::ExecutionError.new("Can't access arguments: ids")
+
   def valid?
     return true if admin?
 
-    if @arguments.key?(:ids)
-      bad_argument_error =
-        GraphQL::ExecutionError.new("Can't access arguments: ids")
-      @error = bad_argument_error
-      return
-    end
-
-    get_all_submissions = @arguments[:ids].empty? && @arguments[:user_id].empty?
-    user_mismatch =
-      @arguments.key?(:user_id) &&
-        @arguments[:user_id] != @context[:current_user]
-
-    if get_all_submissions
-      @error = AllSubmissionsError
-      return
-    end
-
-    if user_mismatch
-      @error = UserMismatchError
-      return
-    end
-
+    @error = compute_error
     @error.nil?
   end
 
@@ -43,11 +24,39 @@ class SubmissionsResolver < BaseResolver
 
   private
 
+  def compute_error
+    if @arguments.key?(:ids)
+      BadArgumentError
+    elsif return_all_submissions?
+      AllSubmissionsError
+    elsif user_mismatch?
+      UserMismatchError
+    end
+  end
+
   def base_submissions
     @arguments[:available] ? Submission.available : Submission.all
   end
 
   def conditions
-    { id: @arguments[:ids], user_id: @arguments[:user_id] }.compact
+    { id: submission_ids.presence, user_id: user_ids.presence }.compact
+  end
+
+  def submission_ids
+    @arguments.fetch(:ids, [])
+  end
+
+  def user_ids
+    @arguments.fetch(:user_id, [])
+  end
+
+  def return_all_submissions?
+    submission_ids.empty? && user_ids.empty?
+  end
+
+  def user_mismatch?
+    return false unless @arguments.key(:user_id)
+
+    user_ids != [@context[:current_user]]
   end
 end
