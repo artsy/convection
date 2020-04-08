@@ -103,6 +103,29 @@ describe 'submission query' do
       end
     end
 
+    context 'with a valid submission id from a partner' do
+      let(:token) do
+        payload = { aud: 'gravity', sub: 'userid', roles: 'partner' }
+        JWT.encode(payload, Convection.config.jwt_secret)
+      end
+
+      it 'returns that submission' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submission_response = body['data']['submission']
+        expect(submission_response).to match(
+          {
+            'id' => submission.id.to_s,
+            'artistId' => submission.artist_id,
+            'title' => submission.title
+          }
+        )
+      end
+    end
+
     context 'including offers' do
       let(:partner) { Fabricate :partner }
       let(:partner_submission) do
