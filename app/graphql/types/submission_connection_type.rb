@@ -5,11 +5,7 @@ module Types
     node_type(Types::SubmissionType)
   end
 
-  class PageableConnection < GraphQL::Types::Relay::BaseConnection
-    field :hicks, String, null: true
-  end
-
-  class SubmissionConnectionType < Types::PageableConnection
+  class SubmissionConnectionType < Types::Pagination::PageableConnection
     edge_type(Types::SubmissionEdgeType)
   end
 end
