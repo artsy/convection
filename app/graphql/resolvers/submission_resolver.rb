@@ -8,7 +8,7 @@ class SubmissionResolver < BaseResolver
       @error = bad_argument_error
     end
 
-    admin?
+    admin? || partner?
   end
 
   def run
