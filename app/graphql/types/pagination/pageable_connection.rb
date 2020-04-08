@@ -27,14 +27,14 @@ module Types
       end
 
       def total_pages
-        return 0 if object.nodes.size.zero?
+        return 0 if object.items.size.zero?
         return 1 if nodes_per_page.nil?
 
-        (object.nodes.size.to_f / nodes_per_page).ceil
+        (object.items.size.to_f / nodes_per_page).ceil
       end
 
       def total_count
-        object.nodes.size
+        object.items.size
       end
 
       private
@@ -51,7 +51,7 @@ module Types
         return '' if page_num == 1
 
         after_cursor = (page_num - 1) * nodes_per_page
-        object.encode(after_cursor.to_s)
+        encode(after_cursor.to_s)
       end
 
       def current_page
@@ -80,11 +80,19 @@ module Types
 
       def node_offset(node)
         # this was previously accomplished by calling a private method: object.send(:offset_from_cursor, object.cursor_from_node(object.edge_nodes.first))
-        object.nodes.index(node) + 1
+        object.items.index(node) + 1
       end
 
       def nodes_per_page
         object.first || object.last
+      end
+
+      # borrowed from https://graphql-ruby.org/api-doc/1.10.6/Base64Bp.html
+      def encode(value)
+        str = Base64.strict_encode64(value)
+        str.tr!('+/', '-_')
+        str.delete!('=')
+        str
       end
     end
   end
