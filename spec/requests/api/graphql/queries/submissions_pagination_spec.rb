@@ -12,7 +12,7 @@ describe 'submissions query with pagination' do
 
   let(:headers) { { 'Authorization' => "Bearer #{token}" } }
 
-  def buildQuery(criteria = 'first: 10')
+  def build_query(criteria = 'first: 10')
     <<-GRAPHQL
     query {
       submissions(#{criteria}) {
@@ -53,7 +53,7 @@ describe 'submissions query with pagination' do
 
   context 'with 0 submissions' do
     let(:results) do
-      post('/api/graphql', params: { query: buildQuery }, headers: headers)
+      post('/api/graphql', params: { query: build_query }, headers: headers)
       JSON.parse(response.body, object_class: OpenStruct)
     end
 
@@ -71,7 +71,7 @@ describe 'submissions query with pagination' do
     before { Fabricate(:submission) }
 
     let(:results) do
-      post('/api/graphql', params: { query: buildQuery }, headers: headers)
+      post('/api/graphql', params: { query: build_query }, headers: headers)
       JSON.parse(response.body, object_class: OpenStruct)
     end
 
@@ -89,7 +89,7 @@ describe 'submissions query with pagination' do
     before { 20.times.each { |i| Fabricate(:submission, id: i) } }
 
     let(:results) do
-      post('/api/graphql', params: { query: buildQuery }, headers: headers)
+      post('/api/graphql', params: { query: build_query }, headers: headers)
       JSON.parse(response.body, object_class: OpenStruct)
     end
 
@@ -118,7 +118,7 @@ describe 'submissions query with pagination' do
     before { 100.times.each { |i| Fabricate(:submission, id: i) } }
 
     let(:page_one) do
-      post('/api/graphql', params: { query: buildQuery }, headers: headers)
+      post('/api/graphql', params: { query: build_query }, headers: headers)
       JSON.parse(response.body, object_class: OpenStruct)
     end
 
@@ -139,12 +139,11 @@ describe 'submissions query with pagination' do
         page_three_cursor =
           page_one.data.submissions.pageCursors.around.select do |c|
             c.page == 3
-          end.first
-            .cursor
+          end.first.cursor
         query_inputs = "first: 10, after: \"#{page_three_cursor}\""
         post(
           '/api/graphql',
-          params: { query: buildQuery(query_inputs) }, headers: headers
+          params: { query: build_query(query_inputs) }, headers: headers
         )
         JSON.parse(response.body, object_class: OpenStruct)
       end
@@ -169,12 +168,11 @@ describe 'submissions query with pagination' do
           next_page_cursor =
             current_page.data.submissions.pageCursors.around.select do |c|
               c.page == next_page_number
-            end.first
-              .cursor
+            end.first.cursor
           query_inputs = "first: 10, after: \"#{next_page_cursor}\""
           post(
             '/api/graphql',
-            params: { query: buildQuery(query_inputs) }, headers: headers
+            params: { query: build_query(query_inputs) }, headers: headers
           )
           current_page = JSON.parse(response.body, object_class: OpenStruct)
         end
@@ -203,12 +201,11 @@ describe 'submissions query with pagination' do
           next_page_cursor =
             current_page.data.submissions.pageCursors.around.select do |c|
               c.page == next_page_number
-            end.first
-              .cursor
+            end.first.cursor
           query_inputs = "first: 10, after: \"#{next_page_cursor}\""
           post(
             '/api/graphql',
-            params: { query: buildQuery(query_inputs) }, headers: headers
+            params: { query: build_query(query_inputs) }, headers: headers
           )
           current_page = JSON.parse(response.body, object_class: OpenStruct)
         end
