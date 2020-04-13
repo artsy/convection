@@ -65,7 +65,7 @@ GEM
       zeitwerk (~> 2.2)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
-    amq-protocol (2.3.0)
+    amq-protocol (2.3.1)
     artsy-auth (0.1.8)
       omniauth-artsy (>= 0.2.2)
       omniauth-oauth2
@@ -73,7 +73,7 @@ GEM
     artsy-eventservice (1.0.9)
       bunny
     ast (2.4.0)
-    autoprefixer-rails (9.7.5)
+    autoprefixer-rails (9.7.6)
       execjs
     backport (1.1.2)
     benchmark (0.1.0)
@@ -86,8 +86,8 @@ GEM
       sass (~> 3.4)
       thor
     builder (3.2.4)
-    bunny (2.14.4)
-      amq-protocol (~> 2.3, >= 2.3.0)
+    bunny (2.15.0)
+      amq-protocol (~> 2.3, >= 2.3.1)
     byebug (11.1.1)
     capybara (3.32.1)
       addressable
@@ -115,7 +115,7 @@ GEM
     css_parser (1.7.1)
       addressable
     database_cleaner (1.8.4)
-    ddtrace (0.34.1)
+    ddtrace (0.34.2)
       msgpack
     decent_exposure (3.0.2)
       activesupport (>= 4.0)
@@ -148,7 +148,7 @@ GEM
     graphiql-rails (1.7.0)
       railties
       sprockets-rails
-    graphql (1.10.5)
+    graphql (1.10.6)
     graphql-rails_logger (1.2.2)
       actionpack (> 5.0)
       activesupport (> 5.0)
@@ -277,10 +277,10 @@ GEM
       addressable
       css_parser (>= 1.6.0)
       htmlentities (>= 4.0.0)
-    premailer-rails (1.11.0)
+    premailer-rails (1.11.1)
       actionmailer (>= 3)
       premailer (~> 1.7, >= 1.7.9)
-    pry (0.13.0)
+    pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
     pry-byebug (3.9.0)
@@ -373,7 +373,7 @@ GEM
       rexml
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 2.0)
-    rubocop-rails (2.5.1)
+    rubocop-rails (2.5.2)
       activesupport
       rack (>= 1.1)
       rubocop (>= 0.72.0)

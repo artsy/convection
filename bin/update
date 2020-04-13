@@ -18,17 +18,17 @@ $ ./bin/update
 END
 )
 
-current_branch=$(git branch --show-current)
-if [ "$current_branch" != "master" ]; then
-  echo "must be on master branch"
-  exit 1
-fi
+# current_branch=$(git branch --show-current)
+# if [ "$current_branch" != "master" ]; then
+#   echo "must be on master branch"
+#   exit 1
+# fi
 
-git fetch --all --quiet
-git checkout -b updates
-bundle update
-yarn upgrade --latest
-bundle exec rake
+# git fetch --all --quiet
+# git checkout -b updates
+# bundle update
+# yarn upgrade --latest
+# bundle exec rake
 git add .
 git commit --message "$message"
 git push upstream updates
