@@ -16,6 +16,7 @@ class StateActions
     actions << approve_action if submission.submitted?
     actions << publish_action if submission.submitted? || submission.approved?
     actions << reject_action if submission.submitted?
+    actions << close_action if submission.submitted?
     actions
   end
 
@@ -54,6 +55,15 @@ class StateActions
       text: 'Reject'
     }
   end
+
+  def close_action
+    {
+      class: default_classes << 'btn-delete',
+      confirm: 'No email will be sent.',
+      state: 'closed',
+      text: 'Close'
+    }
+  end
 end
 
 module Admin
@@ -68,6 +78,7 @@ module Admin
                     undo_approval
                     undo_publish
                     undo_rejection
+                    undo_close
                   ]
 
     expose(:submissions) do
@@ -182,6 +193,11 @@ module Admin
 
     def undo_rejection
       SubmissionService.undo_rejection(@submission)
+      redirect_to admin_submission_path(@submission)
+    end
+
+    def undo_close
+      SubmissionService.undo_close(@submission)
       redirect_to admin_submission_path(@submission)
     end
 

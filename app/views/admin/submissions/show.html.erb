@@ -62,6 +62,9 @@
               <% if @submission.state == Submission::REJECTED %>
                 <%= link_to 'Undo rejection', undo_rejection_admin_submission_path(@submission), method: :put, class: 'sidebar-link' %>
               <% end %>
+              <% if @submission.state == Submission::CLOSED %>
+                <%= link_to 'Undo close', undo_close_admin_submission_path(@submission), method: :put, class: 'sidebar-link' %>
+              <% end %>
             </div>
           </div>
           <%= render 'collector_info', submission: @submission %>

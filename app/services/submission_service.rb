@@ -33,6 +33,8 @@ class SubmissionService
         publish!(submission, current_user)
       when 'rejected'
         reject!(submission, current_user)
+      when 'closed'
+        close!(submission)
       end
     end
 
@@ -57,6 +59,10 @@ class SubmissionService
     end
 
     def undo_rejection(submission)
+      return_to_submitted_state(submission)
+    end
+
+    def undo_close(submission)
       return_to_submitted_state(submission)
     end
 
@@ -107,6 +113,10 @@ class SubmissionService
     def reject!(submission, current_user)
       submission.update!(rejected_by: current_user, rejected_at: Time.now.utc)
       delay.deliver_rejection_notification(submission.id)
+    end
+
+    def close!(submission)
+      # noop
     end
 
     def notify_admin(submission_id)

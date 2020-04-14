@@ -18,7 +18,8 @@ class Submission < ApplicationRecord
     SUBMITTED = 'submitted',
     APPROVED = 'approved',
     PUBLISHED = 'published',
-    REJECTED = 'rejected'
+    REJECTED = 'rejected',
+    CLOSED = 'closed'
   ].freeze
 
   DIMENSION_METRICS = %w[in cm].freeze
@@ -111,7 +112,7 @@ class Submission < ApplicationRecord
   end
 
   def reviewed?
-    approved? || published? || rejected?
+    approved? || published? || rejected? || closed?
   end
 
   def ready?
