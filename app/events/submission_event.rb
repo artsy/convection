@@ -2,7 +2,12 @@
 
 class SubmissionEvent < Events::BaseEvent
   TOPIC = 'consignments'
-  ACTIONS = [SUBMITTED = 'submitted', APPROVED = 'approved'].freeze
+
+  ACTIONS = [
+    APPROVED = 'approved',
+    PUBLISHED = 'published',
+    SUBMITTED = 'submitted'
+  ].freeze
 
   def object
     { id: @object.id, display: "#{@object.id} (#{@object.state})" }

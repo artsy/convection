@@ -1,6 +1,19 @@
 <% if @submission.approved? %>
   <div class='overview-section'>
-      <%= link_to 'Create Offer', new_step_0_admin_offers_path(submission_id: @submission.id), class: 'btn btn-primary btn-small btn-full-width' %>
+    <%= link_to 'Create Offer', new_step_0_admin_offers_path(submission_id: @submission.id), class: 'btn btn-primary btn-small btn-full-width' %>
+    <div class='single-padding-top'>
+      <%= link_to('Publish (CMS + digest)',
+                  admin_submission_path(@submission, submission: { state: 'published' }),
+                  method: :put,
+                  class: 'btn btn-secondary btn-approve btn-small btn-full-width',
+                  data: { confirm: 'An email will be sent to the consignor, letting them know that their submission will be sent to our partner network and this work will appear in the digests and CMS. This action cannot be undone.' }) %>
+    </div>
+  </div>
+<% end %>
+
+<% if @submission.published? %>
+  <div class='overview-section'>
+    <%= link_to 'Create Offer', new_step_0_admin_offers_path(submission_id: @submission.id), class: 'btn btn-primary btn-small btn-full-width' %>
   </div>
 <% end %>
 
@@ -8,18 +21,18 @@
   <div class='overview-section'>
     <div class='bold-label'>Internal Approval</div>
     <div class='single-padding-top'>
-      <%= link_to('Approve without digest',
-                  admin_submission_path(@submission, submission: { state: 'approved' }, hide_from_partners: 'true'),
+      <%= link_to('Approve (convection only)',
+                  admin_submission_path(@submission, submission: { state: 'approved' }),
                   method: :put,
                   class: 'btn btn-secondary btn-approve btn-small btn-full-width',
-                  data: { confirm: 'No email will be sent to the consignor and this submission will be excluded from the digests.' }) %>
+                  data: { confirm: 'No email will be sent to the consignor and this submission will be excluded from both the digests and CMS.' }) %>
     </div>
     <div class='single-padding-top'>
-      <%= link_to('Approve',
-                  admin_submission_path(@submission, submission: { state: 'approved' }, hide_from_partners: 'false'),
+      <%= link_to('Publish (CMS + digest)',
+                  admin_submission_path(@submission, submission: { state: 'published' }),
                   method: :put,
                   class: 'btn btn-secondary btn-approve btn-small btn-full-width',
-                  data: { confirm: 'An email will be sent to the consignor, letting them know that their submission will be sent to our partner network. This action cannot be undone.' }) %>
+                  data: { confirm: 'An email will be sent to the consignor, letting them know that their submission will be sent to our partner network and this work will appear in the digests and CMS. This action cannot be undone.' }) %>
     </div>
     <div class='single-padding-top'>
       <%= link_to('Reject',

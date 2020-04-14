@@ -56,6 +56,9 @@
               <% if @submission.state == Submission::APPROVED %>
                 <%= link_to 'Undo approval', undo_approval_admin_submission_path(@submission), method: :put, class: 'sidebar-link' %>
               <% end %>
+              <% if @submission.state == Submission::PUBLISHED %>
+                <%= link_to 'Undo publish', undo_publish_admin_submission_path(@submission), method: :put, class: 'sidebar-link' %>
+              <% end %>
               <% if @submission.state == Submission::REJECTED %>
                 <%= link_to 'Undo rejection', undo_rejection_admin_submission_path(@submission), method: :put, class: 'sidebar-link' %>
               <% end %>

@@ -35,22 +35,23 @@ describe Submission do
     end
 
     describe 'available' do
-      it 'returns only approved submissions without an accepted offer' do
-        consigned_submission = Fabricate(:submission, state: 'approved')
+      it 'returns only published submissions without an accepted offer' do
+        consigned_submission = Fabricate(:submission, state: 'published')
         partner_submission =
           Fabricate(:partner_submission, submission: consigned_submission)
         offer = Fabricate(:offer, partner_submission: partner_submission)
 
         OfferService.consign!(offer)
 
-        approved_submission = Fabricate(:submission, state: 'approved')
+        Fabricate(:submission, state: 'approved')
+        published_submission = Fabricate(:submission, state: 'published')
         Fabricate(:submission, state: 'rejected')
         Fabricate(:submission, state: 'draft')
         Fabricate(:submission, state: 'submitted')
 
         available_submissions = Submission.available
         expect(available_submissions.count).to eq(1)
-        expect(available_submissions.first).to eq(approved_submission)
+        expect(available_submissions.first).to eq(published_submission)
       end
     end
   end

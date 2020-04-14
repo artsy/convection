@@ -104,7 +104,7 @@ describe SubmissionService do
       expect(submission.approved_at).to be_nil
     end
 
-    it 'sends no emails if the state is not being changed to approved or rejected' do
+    it 'sends no emails if the state is not being changed to published or rejected' do
       SubmissionService.update_submission(
         submission,
         { state: 'draft' },
@@ -128,13 +128,7 @@ describe SubmissionService do
         { state: 'approved' },
         current_user: 'userid'
       )
-      emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 1
-      expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
-      expect(emails.first.to).to eq(%w[michael@bluth.com])
-      expect(emails.first.html_part.body).to include(
-        'Your work is currently being reviewed for consignment by our network of trusted partners'
-      )
+      expect(ActionMailer::Base.deliveries.length).to eq 0
       expect(submission.state).to eq 'approved'
       expect(submission.approved_by).to eq 'userid'
       expect(submission.approved_at).to_not be_nil
@@ -143,16 +137,31 @@ describe SubmissionService do
     end
 
     it 'generates partner submissions on an approval' do
-      expect(NotificationService).to receive(:post_submission_event).once.with(
-        submission.id,
-        'approved'
-      )
+      allow(NotificationService).to receive(:post_submission_event)
       partner1 = Fabricate(:partner, gravity_partner_id: 'partner1')
       partner2 = Fabricate(:partner, gravity_partner_id: 'partner2')
 
       SubmissionService.update_submission(
         submission,
         { state: 'approved' },
+        current_user: 'userid'
+      )
+      expect(ActionMailer::Base.deliveries.length).to eq 0
+      expect(partner1.partner_submissions.length).to eq 0
+      expect(partner2.partner_submissions.length).to eq 0
+    end
+
+    it 'generates partner submissions on publish' do
+      expect(NotificationService).to receive(:post_submission_event).once.with(
+        submission.id,
+        'published'
+      )
+      partner1 = Fabricate(:partner, gravity_partner_id: 'partner1')
+      partner2 = Fabricate(:partner, gravity_partner_id: 'partner2')
+
+      SubmissionService.update_submission(
+        submission,
+        { state: 'published' },
         current_user: 'userid'
       )
       expect(ActionMailer::Base.deliveries.length).to eq 1
@@ -186,16 +195,18 @@ describe SubmissionService do
 
   context 'undo' do
     describe 'with approved submission' do
+      let!(:partner) { Fabricate(:partner, gravity_partner_id: 'partner1') }
+
       before do
         expect(NotificationService).to receive(:post_submission_event).once
           .with(submission.id, 'approved')
-        Fabricate(:partner, gravity_partner_id: 'partner1')
         Fabricate(:image, submission: submission)
         SubmissionService.update_submission(
           submission,
           { state: 'approved' },
           current_user: 'userid'
         )
+        Fabricate(:partner_submission, partner: partner, submission: submission)
       end
 
       it 'deletes partner submissions and sends no emails on an undo approval' do
@@ -222,6 +233,47 @@ describe SubmissionService do
         expect { SubmissionService.undo_approval(submission) }.to raise_error(
           SubmissionService::SubmissionError,
           'Undoing approval of a submission with offers is not allowed!'
+        )
+      end
+    end
+
+    describe 'with published submission' do
+      before do
+        expect(NotificationService).to receive(:post_submission_event).once
+          .with(submission.id, 'published')
+        Fabricate(:partner, gravity_partner_id: 'partner1')
+        Fabricate(:image, submission: submission)
+        SubmissionService.update_submission(
+          submission,
+          { state: 'published' },
+          current_user: 'userid'
+        )
+      end
+
+      it 'deletes partner submissions and sends no emails on an undo publish' do
+        expect(submission.partner_submissions.length).to eq 1
+
+        expect { SubmissionService.undo_publish(submission) }.to_not change {
+                        ActionMailer::Base.deliveries.length
+                      }
+
+        submission.reload
+        expect(submission.partner_submissions.length).to eq 0
+        expect(submission.state).to eq 'submitted'
+        expect(submission.approved_by).to be_nil
+        expect(submission.approved_at).to be_nil
+        expect(submission.rejected_by).to be_nil
+        expect(submission.rejected_at).to be_nil
+      end
+
+      it 'fails to undo a publish if there are any offers' do
+        Fabricate(
+          :offer,
+          partner_submission: submission.partner_submissions.first
+        )
+        expect { SubmissionService.undo_publish(submission) }.to raise_error(
+          SubmissionService::SubmissionError,
+          'Undoing publish of a submission with offers is not allowed!'
         )
       end
     end

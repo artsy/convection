@@ -63,7 +63,8 @@ class OfferService
     end
 
     def consign!(offer)
-      unless offer.submission.state == Submission::APPROVED
+      consignable_states = [Submission::APPROVED, Submission::PUBLISHED]
+      unless consignable_states.include?(offer.submission.state)
         raise OfferError,
               'Cannot complete consignment on non-approved submission'
       end
