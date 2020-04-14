@@ -30,7 +30,7 @@ class SubmissionStateActions
     {
       class: default_classes << 'btn-approve',
       confirm:
-        'An email will be sent to the consignor, letting them know that their submission will be sent to our partner network and this work will appear in the digests and CMS. This action cannot be undone.',
+        'No email will be sent to the consignor and this submission will be excluded from the digests.',
       state: 'approved',
       text: 'Approve (convection only)'
     }
@@ -65,4 +65,3 @@ class SubmissionStateActions
     }
   end
 end
-

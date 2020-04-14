@@ -136,7 +136,7 @@ describe SubmissionService do
       expect(submission.rejected_at).to be_nil
     end
 
-    it 'generates partner submissions on an approval' do
+    it 'does not generate partner submissions on an approval' do
       allow(NotificationService).to receive(:post_submission_event)
       partner1 = Fabricate(:partner, gravity_partner_id: 'partner1')
       partner2 = Fabricate(:partner, gravity_partner_id: 'partner2')
