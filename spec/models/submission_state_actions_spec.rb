@@ -30,7 +30,7 @@ describe SubmissionStateActions do
     it 'returns the publish action' do
       actions = SubmissionStateActions.for(submission)
       states = actions.map { |action| action[:state] }
-      expect(states).to eq %w[published]
+      expect(states).to eq %w[published closed]
     end
   end
 
