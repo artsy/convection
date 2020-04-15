@@ -32,7 +32,7 @@ class SubmissionStateActions
       confirm:
         'No email will be sent to the consignor and this submission will be excluded from the digests.',
       state: 'approved',
-      text: 'Approve (convection only)'
+      text: 'Approve without CMS'
     }
   end
 
@@ -42,7 +42,7 @@ class SubmissionStateActions
       confirm:
         'An email will be sent to the consignor, letting them know that their submission will be sent to our partner network and this work will appear in the digests and CMS. This action cannot be undone.',
       state: 'published',
-      text: 'Publish (CMS + digest)'
+      text: 'Publish'
     }
   end
 
