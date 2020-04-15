@@ -16,7 +16,7 @@ class SubmissionStateActions
     actions << approve_action if submission.submitted?
     actions << publish_action if submission.submitted? || submission.approved?
     actions << reject_action if submission.submitted?
-    actions << close_action if submission.submitted?
+    actions << close_action if submission.submitted? || submission.approved?
     actions
   end
 
