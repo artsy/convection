@@ -44,7 +44,7 @@ module SubmissionsHelper
   end
 
   def reviewer_byline(submission)
-    if submission.approved?
+    if submission.approved? || submission.published?
       "Approved by #{submission.reviewed_by_user.try(:name)}"
     elsif submission.rejected?
       "Rejected by #{submission.reviewed_by_user.try(:name)}"

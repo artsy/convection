@@ -17,7 +17,9 @@ class Submission < ApplicationRecord
     DRAFT = 'draft',
     SUBMITTED = 'submitted',
     APPROVED = 'approved',
-    REJECTED = 'rejected'
+    PUBLISHED = 'published',
+    REJECTED = 'rejected',
+    CLOSED = 'closed'
   ].freeze
 
   DIMENSION_METRICS = %w[in cm].freeze
@@ -71,7 +73,7 @@ class Submission < ApplicationRecord
   scope :draft, -> { where(state: 'draft') }
   scope :submitted, -> { where(state: 'submitted') }
   scope :available,
-        -> { where(state: APPROVED, consigned_partner_submission_id: nil) }
+        -> { where(state: PUBLISHED, consigned_partner_submission_id: nil) }
 
   dollarize :minimum_price_cents
 
@@ -110,7 +112,7 @@ class Submission < ApplicationRecord
   end
 
   def reviewed?
-    approved? || rejected?
+    approved? || published? || rejected? || closed?
   end
 
   def ready?

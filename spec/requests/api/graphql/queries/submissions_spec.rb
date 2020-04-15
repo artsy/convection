@@ -154,12 +154,13 @@ describe 'submissions query' do
     context 'when asking for only available submissions' do
       let!(:submitted_submission) { Fabricate :submission, state: 'submitted' }
       let!(:approved_submission) { Fabricate :submission, state: 'approved' }
+      let!(:published_submission) { Fabricate :submission, state: 'published' }
 
       let(:partner_submission) { Fabricate :partner_submission }
 
       let!(:consigned_submission) do
         Fabricate :submission,
-                  state: 'approved',
+                  state: 'published',
                   consigned_partner_submission_id: partner_submission.id
       end
 
@@ -175,7 +176,7 @@ describe 'submissions query' do
         expect(submissions_response['edges'].count).to eq 1
 
         ids = submissions_response['edges'].map { |edge| edge['node']['id'] }
-        expect(ids).to eq [approved_submission.id.to_s]
+        expect(ids).to eq [published_submission.id.to_s]
       end
     end
 

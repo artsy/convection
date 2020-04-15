@@ -5,7 +5,15 @@ module Admin
     include GraphqlHelper
 
     before_action :set_submission,
-                  only: %i[show edit update undo_approval undo_rejection]
+                  only: %i[
+                    show
+                    edit
+                    update
+                    undo_approval
+                    undo_publish
+                    undo_rejection
+                    undo_close
+                  ]
 
     expose(:submissions) do
       matching_submissions = Submission.not_deleted
@@ -81,17 +89,17 @@ module Admin
       @partner_submissions_count =
         notified_partner_submissions.group_by_day.count
       @offers = @submission.offers
+      @actions = SubmissionStateActions.for(@submission)
     end
 
     def edit; end
 
     def update
-      hide_from_partners = params[:hide_from_partners] == 'true'
       result =
         SubmissionService.update_submission(
           @submission,
           submission_params,
-          current_user: @current_user, hide_from_partners: hide_from_partners
+          current_user: @current_user
         )
 
       if result
@@ -109,8 +117,21 @@ module Admin
       redirect_to admin_submission_path(@submission)
     end
 
+    def undo_publish
+      SubmissionService.undo_publish(@submission)
+      redirect_to admin_submission_path(@submission)
+    rescue SubmissionService::SubmissionError => e
+      flash[:error] = e.message
+      redirect_to admin_submission_path(@submission)
+    end
+
     def undo_rejection
       SubmissionService.undo_rejection(@submission)
+      redirect_to admin_submission_path(@submission)
+    end
+
+    def undo_close
+      SubmissionService.undo_close(@submission)
       redirect_to admin_submission_path(@submission)
     end
 

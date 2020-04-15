@@ -11,7 +11,9 @@ class PartnerSubmissionService
     def deliver_digest(partner_id)
       partner = Partner.find(partner_id)
       partner_submissions = partner.partner_submissions.where(notified_at: nil)
-      submissions = Submission.find(partner_submissions.pluck(:submission_id))
+      ids = partner_submissions.pluck(:submission_id)
+      submissions = Submission.where(state: Submission::PUBLISHED, id: ids)
+
       if submissions.empty?
         Rails.logger.info "Skipping digest for #{partner_id}... no submissions."
         return
@@ -81,7 +83,7 @@ class PartnerSubmissionService
     end
 
     def generate_for_new_partner(partner)
-      Submission.where(state: 'approved').each do |submission|
+      Submission.where(state: 'published').each do |submission|
         partner.partner_submissions.find_or_create_by!(
           submission_id: submission.id
         )
