@@ -15,24 +15,26 @@ class SubmissionService
       raise SubmissionError, e.message
     end
 
-    def update_submission(
-      submission, params, current_user: nil, hide_from_partners: false
-    )
+    def update_submission(submission, params, current_user: nil)
       submission.assign_attributes(params)
       if submission.state_changed?
-        update_submission_state(submission, current_user, hide_from_partners)
+        update_submission_state(submission, current_user)
       end
       submission.save!
     end
 
-    def update_submission_state(submission, current_user, hide_from_partners)
+    def update_submission_state(submission, current_user)
       case submission.state
       when 'submitted'
         submit!(submission)
       when 'approved'
-        approve!(submission, current_user, hide_from_partners)
+        approve!(submission, current_user)
+      when 'published'
+        publish!(submission, current_user)
       when 'rejected'
         reject!(submission, current_user)
+      when 'closed'
+        close!(submission)
       end
     end
 
@@ -46,7 +48,21 @@ class SubmissionService
       submission.partner_submissions.each(&:destroy)
     end
 
+    def undo_publish(submission)
+      if submission.offers.count.positive?
+        raise SubmissionError,
+              'Undoing publish of a submission with offers is not allowed!'
+      end
+
+      return_to_submitted_state(submission)
+      submission.partner_submissions.each(&:destroy)
+    end
+
     def undo_rejection(submission)
+      return_to_submitted_state(submission)
+    end
+
+    def undo_close(submission)
       return_to_submitted_state(submission)
     end
 
@@ -75,22 +91,32 @@ class SubmissionService
         .notify_user(submission.id)
     end
 
-    def approve!(submission, current_user, hide_from_partners)
+    def approve!(submission, current_user)
       submission.update!(approved_by: current_user, approved_at: Time.now.utc)
       NotificationService.delay.post_submission_event(
         submission.id,
         SubmissionEvent::APPROVED
       )
+    end
 
-      unless hide_from_partners
-        delay.deliver_approval_notification(submission.id)
-        PartnerSubmissionService.delay.generate_for_all_partners(submission.id)
-      end
+    def publish!(submission, current_user)
+      submission.update!(approved_by: current_user, approved_at: Time.now.utc)
+      NotificationService.delay.post_submission_event(
+        submission.id,
+        SubmissionEvent::PUBLISHED
+      )
+
+      delay.deliver_approval_notification(submission.id)
+      PartnerSubmissionService.delay.generate_for_all_partners(submission.id)
     end
 
     def reject!(submission, current_user)
       submission.update!(rejected_by: current_user, rejected_at: Time.now.utc)
       delay.deliver_rejection_notification(submission.id)
+    end
+
+    def close!(submission)
+      # noop
     end
 
     def notify_admin(submission_id)

@@ -25,7 +25,7 @@ describe PartnerSubmissionService do
 
   describe '#generate_for_new_partner' do
     it 'generates partner submissions if the partner has no existing partner submissions' do
-      submission = Fabricate(:submission, state: 'approved')
+      submission = Fabricate(:submission, state: 'published')
       Fabricate(:submission, state: 'submitted')
       partner = Fabricate(:partner)
       PartnerSubmissionService.generate_for_new_partner(partner)
@@ -44,13 +44,12 @@ describe PartnerSubmissionService do
         )
       expect(NotificationService).to receive(:post_submission_event).once.with(
         submission.id,
-        'approved'
+        'published'
       )
-      SubmissionService.update_submission(submission, state: 'approved')
-      expect(
-        PartnerSubmission.where(submission: submission, partner: partner).count
-      ).to eq 1
-      Fabricate(:submission, state: 'approved')
+      SubmissionService.update_submission(submission, state: 'published')
+      expect(partner.partner_submissions.count).to eq 1
+      expect(partner.partner_submissions.first.submission).to eq submission
+      Fabricate(:submission, state: 'published')
       PartnerSubmissionService.generate_for_new_partner(partner)
       expect(partner.partner_submissions.count).to eq 2
     end
@@ -108,8 +107,8 @@ describe PartnerSubmissionService do
             currency: 'USD'
           )
         expect(NotificationService).to receive(:post_submission_event).once
-          .with(@approved1.id, 'approved')
-        SubmissionService.update_submission(@approved1, state: 'approved')
+          .with(@approved1.id, 'published')
+        SubmissionService.update_submission(@approved1, state: 'published')
         PartnerSubmissionService.daily_digest
         @email = ActionMailer::Base.deliveries.last
       end
@@ -133,8 +132,8 @@ describe PartnerSubmissionService do
             year: '1992'
           )
         expect(NotificationService).to receive(:post_submission_event).once
-          .with(@approved1.id, 'approved')
-        SubmissionService.update_submission(@approved1, state: 'approved')
+          .with(@approved1.id, 'published')
+        SubmissionService.update_submission(@approved1, state: 'published')
       end
 
       it 'does not display any min price-related text' do
@@ -177,14 +176,14 @@ describe PartnerSubmissionService do
           )
         Fabricate(:submission, state: 'rejected')
         expect(NotificationService).to receive(:post_submission_event).once
-          .with(@approved1.id, 'approved')
+          .with(@approved1.id, 'published')
         expect(NotificationService).to receive(:post_submission_event).once
-          .with(@approved2.id, 'approved')
+          .with(@approved2.id, 'published')
         expect(NotificationService).to receive(:post_submission_event).once
-          .with(@approved3.id, 'approved')
-        SubmissionService.update_submission(@approved1, state: 'approved')
-        SubmissionService.update_submission(@approved2, state: 'approved')
-        SubmissionService.update_submission(@approved3, state: 'approved')
+          .with(@approved3.id, 'published')
+        SubmissionService.update_submission(@approved1, state: 'published')
+        SubmissionService.update_submission(@approved2, state: 'published')
+        SubmissionService.update_submission(@approved3, state: 'published')
         ActionMailer::Base.deliveries = []
         expect(@partner.partner_submissions.count).to eq 3
       end

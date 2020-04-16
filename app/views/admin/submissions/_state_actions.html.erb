@@ -1,39 +1,16 @@
-<% if @submission.approved? %>
-  <div class='overview-section'>
+<div class='overview-section'>
+  <div class='bold-label'>Actions</div>
+    <% if @submission.approved? || @submission.published? %>
       <%= link_to 'Create Offer', new_step_0_admin_offers_path(submission_id: @submission.id), class: 'btn btn-primary btn-small btn-full-width' %>
-  </div>
-<% end %>
-
-<% if @submission.submitted? %>
-  <div class='overview-section'>
-    <div class='bold-label'>Internal Approval</div>
-    <div class='single-padding-top'>
-      <%= link_to('Approve without digest',
-                  admin_submission_path(@submission, submission: { state: 'approved' }, hide_from_partners: 'true'),
-                  method: :put,
-                  class: 'btn btn-secondary btn-approve btn-small btn-full-width',
-                  data: { confirm: 'No email will be sent to the consignor and this submission will be excluded from the digests.' }) %>
-    </div>
-    <div class='single-padding-top'>
-      <%= link_to('Approve',
-                  admin_submission_path(@submission, submission: { state: 'approved' }, hide_from_partners: 'false'),
-                  method: :put,
-                  class: 'btn btn-secondary btn-approve btn-small btn-full-width',
-                  data: { confirm: 'An email will be sent to the consignor, letting them know that their submission will be sent to our partner network. This action cannot be undone.' }) %>
-    </div>
-    <div class='single-padding-top'>
-      <%= link_to('Reject',
-                  admin_submission_path(@submission, submission: { state: 'rejected' }),
-                  method: :put,
-                  class: 'btn btn-secondary btn-delete btn-small btn-full-width',
-                  data: { confirm: 'An email will be sent to the consignor, letting them know that we are not accepting their submission. This action cannot be undone.' }) %>
-    </div>
-  </div>
-<% elsif @submission.reviewed? %>
-  <div class='overview-section'>
-    <div class='bold-label'>Internal Approval</div>
-    <div class='single-padding-top'>
-      <%= reviewer_byline(@submission) %>
-    </div>
-  </div>
-<% end %>
+    <% end %>
+    <% @actions.each do |action| %>
+      <div class='single-padding-top'>
+        <%= link_to(action[:text], admin_submission_path(@submission, submission: { state: action[:state] }), method: :put, class: action[:class], data: { confirm: action[:confirm] }) %>
+      </div>
+    <% end %>
+    <% if @submission.reviewed? %>
+      <div class='single-padding-top'>
+          <%= reviewer_byline(@submission) %>
+      </div>
+    <% end %>
+</div>

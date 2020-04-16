@@ -5,7 +5,9 @@ Rails.application.routes.draw do
     resources :submissions do
       member do
         put 'undo_approval'
+        put 'undo_publish'
         put 'undo_rejection'
+        put 'undo_close'
       end
       resources :assets do
         post :multiple, on: :collection

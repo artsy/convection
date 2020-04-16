@@ -113,11 +113,11 @@ describe 'admin/submissions/show.html.erb', type: :feature do
     it 'does not display partners who have not been notified' do
       expect(NotificationService).to receive(:post_submission_event).once.with(
         @submission.id,
-        'approved'
+        'published'
       )
       partner1 = Fabricate(:partner, gravity_partner_id: 'partnerid')
       partner2 = Fabricate(:partner, gravity_partner_id: 'phillips')
-      SubmissionService.update_submission(@submission, state: 'approved')
+      SubmissionService.update_submission(@submission, state: 'published')
       expect(@submission.partner_submissions.count).to eq 2
       page.visit "/admin/submissions/#{@submission.id}"
 
@@ -129,7 +129,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
     it 'displays the partners that a submission has been shown to' do
       expect(NotificationService).to receive(:post_submission_event).once.with(
         @submission.id,
-        'approved'
+        'published'
       )
       stub_gravity_partner_communications
       stub_gravity_partner_contacts
@@ -149,7 +149,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
           'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
         }
       )
-      SubmissionService.update_submission(@submission, state: 'approved')
+      SubmissionService.update_submission(@submission, state: 'published')
       stub_gravity_partner(id: 'partnerid')
       stub_gravity_partner(id: 'phillips')
       stub_gravity_partner_contacts(partner_id: 'partnerid')
@@ -209,8 +209,9 @@ describe 'admin/submissions/show.html.erb', type: :feature do
     end
 
     context 'unreviewed submission' do
-      it 'displays buttons to approve/reject if the submission is not yet reviewed' do
+      it 'displays buttons to approve/publish/reject if the submission is not yet reviewed' do
         expect(page).to have_content('Approve')
+        expect(page).to have_content('Publish')
         expect(page).to have_content('Reject')
       end
 
@@ -219,27 +220,13 @@ describe 'admin/submissions/show.html.erb', type: :feature do
           .with(@submission.id, 'approved')
         expect(page).to_not have_content('Create Offer')
         expect(page).to have_content('submitted')
+
         click_link 'Approve'
-        emails = ActionMailer::Base.deliveries
-        expect(emails.length).to eq 1
-        expect(emails.first.html_part.body).to include(
-          'Your work is currently being reviewed for consignment by our network of trusted partners'
-        )
+
         expect(page).to have_content 'Approved by Jon Jonson'
         expect(page).to_not have_content 'Reject'
         expect(page).to have_content('approved')
         expect(page).to have_content('Create Offer')
-      end
-
-      it 'approves a submission but does not include in digest or send consignor an email when the Approve without digest button is clicked' do
-        Fabricate(:partner)
-        expect(PartnerSubmission.count).to eq 0
-        expect(NotificationService).to receive(:post_submission_event).once
-          .with(@submission.id, 'approved')
-        expect(page).to_not have_content('Create Offer')
-        expect(page).to have_content('submitted')
-
-        click_link 'Approve without digest'
 
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 0
@@ -249,6 +236,25 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         expect { PartnerSubmissionService.daily_digest }.to_not change {
                         ActionMailer::Base.deliveries.length
                       }
+      end
+
+      it 'publishes a submission when the Publish button is clicked' do
+        expect(NotificationService).to receive(:post_submission_event).once
+          .with(@submission.id, 'published')
+        expect(page).to_not have_content('Create Offer')
+        expect(page).to have_content('submitted')
+
+        click_link 'Publish'
+
+        emails = ActionMailer::Base.deliveries
+        expect(emails.length).to eq 1
+        expect(emails.first.html_part.body).to include(
+          'Your work is currently being reviewed for consignment by our network of trusted partners'
+        )
+        expect(page).to have_content 'Approved by Jon Jonson'
+        expect(page).to_not have_content 'Reject'
+        expect(page).to have_content('published')
+        expect(page).to have_content('Create Offer')
       end
 
       it 'rejects a submission when the Reject button is clicked' do
@@ -266,6 +272,8 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       end
 
       describe 'undo actions' do
+        let(:partner) { Fabricate(:partner, gravity_partner_id: 'partnerid') }
+
         let(:submission2) do
           Fabricate(
             :submission,
@@ -279,21 +287,18 @@ describe 'admin/submissions/show.html.erb', type: :feature do
             state: 'submitted'
           )
         end
+
+        let(:partner_contacts) do
+          [{ email: 'contact1@partner.com' }, { email: 'contact2@partner.com' }]
+        end
+
         before do
-          partner = Fabricate(:partner, gravity_partner_id: 'partnerid')
-          Fabricate(:partner, gravity_partner_id: 'phillips')
           stub_gravity_user(id: 'userid3')
           stub_gravity_user_detail(id: 'userid3')
-          stub_gravity_partner(id: 'partnerid')
-          stub_gravity_partner(id: 'phillips')
-          stub_gravity_partner_contacts(partner_id: 'partnerid')
-          stub_gravity_partner_contacts(partner_id: 'phillips')
+          stub_gravity_partner(id: partner.gravity_partner_id)
           stub_gravity_partner_contacts(
             partner_id: partner.gravity_partner_id,
-            override_body: [
-              { email: 'contact1@partner.com' },
-              { email: 'contact2@partner.com' }
-            ]
+            override_body: partner_contacts
           )
           stub_gravity_partner_communications
         end
@@ -305,20 +310,47 @@ describe 'admin/submissions/show.html.erb', type: :feature do
             .with(submission2.id, 'approved')
           SubmissionService.update_submission(@submission, state: 'approved')
           SubmissionService.update_submission(submission2, state: 'approved')
-          expect(@submission.partner_submissions.count).to eq 2
-          expect(submission2.partner_submissions.count).to eq 2
+          Fabricate(
+            :partner_submission,
+            partner: partner, submission: @submission
+          )
+          Fabricate(
+            :partner_submission,
+            partner: partner, submission: submission2
+          )
+          expect(@submission.partner_submissions.count).to eq Partner.count
+          expect(submission2.partner_submissions.count).to eq Partner.count
           page.visit "/admin/submissions/#{@submission.id}"
 
           click_link 'Undo approval'
+
           expect(page).to have_content 'Approve'
+          expect(page).to have_content 'submitted'
           expect(@submission.partner_submissions.count).to eq 0
+        end
+
+        it 'removes the work from the digest when Undo publish is clicked' do
+          expect(NotificationService).to receive(:post_submission_event).once
+            .with(@submission.id, 'published')
+          expect(NotificationService).to receive(:post_submission_event).once
+            .with(submission2.id, 'published')
+          SubmissionService.update_submission(@submission, state: 'published')
+          SubmissionService.update_submission(submission2, state: 'published')
+          expect(@submission.partner_submissions.count).to eq Partner.count
+          expect(submission2.partner_submissions.count).to eq Partner.count
+          page.visit "/admin/submissions/#{@submission.id}"
+
+          click_link 'Undo publish'
+
+          expect(page).to have_content 'Publish'
+          expect(page).to have_content 'submitted'
+          expect(@submission.partner_submissions.count).to eq 0
+
           ActionMailer::Base.deliveries = []
-          expect { PartnerSubmissionService.daily_digest }.to change {
-            ActionMailer::Base.deliveries.length
-          }
-
+          PartnerSubmissionService.daily_digest
+          expect(ActionMailer::Base.deliveries.count).to eq partner_contacts
+               .count
           email = ActionMailer::Base.deliveries.first
-
           expect(email.html_part.body).to include(submission2.title)
           expect(email.html_part.body).to_not include(@submission.title)
         end
