@@ -39,7 +39,8 @@ describe SubmissionStateActions do
 
     it 'returns an empty array of actions' do
       actions = SubmissionStateActions.for(submission)
-      expect(actions).to eq []
+      states = actions.map { |action| action[:state] }
+      expect(states).to eq %w[closed]
     end
   end
 
