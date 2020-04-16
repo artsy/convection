@@ -12,12 +12,16 @@ class SubmissionStateActions
   end
 
   def run
-    actions = []
-    actions << approve_action if submission.submitted?
-    actions << publish_action if submission.submitted? || submission.approved?
-    actions << reject_action if submission.submitted?
-    actions << close_action if submission.submitted? || submission.approved?
-    actions
+    case submission.state
+    when Submission::SUBMITTED
+      [approve_action, publish_action, reject_action, close_action]
+    when Submission::APPROVED
+      [publish_action, close_action]
+    when Submission::PUBLISHED
+      [close_action]
+    else
+      []
+    end
   end
 
   private
