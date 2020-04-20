@@ -108,7 +108,7 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.1.6)
     connection_pool (2.2.2)
-    console_color (0.0.4)
+    console_color (0.0.5)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.6)
