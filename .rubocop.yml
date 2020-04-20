@@ -233,7 +233,7 @@ Layout/SpaceInsideReferenceBrackets:
 Layout/SpaceInsideStringInterpolation:
   Enabled: false
 
-Layout/Tab:
+Layout/IndentationStyle:
   Enabled: false
 
 Layout/TrailingEmptyLines:
@@ -357,4 +357,10 @@ Style/WhileUntilModifier:
   Enabled: false
 
 Style/WordArray:
+  Enabled: false
+
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: false
+
+Style/ExponentialNotation:
   Enabled: false

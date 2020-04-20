@@ -27,7 +27,7 @@ describe SubmissionStateActions do
   context 'with an approved submission' do
     let(:state) { 'approved' }
 
-    it 'returns the publish action' do
+    it 'returns the publish and close actions' do
       actions = SubmissionStateActions.for(submission)
       states = actions.map { |action| action[:state] }
       expect(states).to eq %w[published closed]
@@ -37,7 +37,7 @@ describe SubmissionStateActions do
   context 'with a published submission' do
     let(:state) { 'published' }
 
-    it 'returns an empty array of actions' do
+    it 'returns the close action' do
       actions = SubmissionStateActions.for(submission)
       states = actions.map { |action| action[:state] }
       expect(states).to eq %w[closed]
