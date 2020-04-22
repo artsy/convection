@@ -100,7 +100,10 @@ class SubmissionService
     end
 
     def publish!(submission, current_user)
-      submission.update!(approved_by: current_user, approved_at: Time.now.utc)
+      unless submission.approved_at
+        submission.update!(approved_by: current_user, approved_at: Time.now.utc)
+      end
+
       NotificationService.delay.post_submission_event(
         submission.id,
         SubmissionEvent::PUBLISHED
