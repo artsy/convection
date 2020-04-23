@@ -328,7 +328,7 @@ describe SubmissionService do
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.html_part.body).to include(
-          'Thank you for submitting your work to our consignments network'
+          'Thank you! We have received your submission.'
         )
         expect(emails.first.to).to eq(%w[michael@bluth.com])
         expect(submission.reload.receipt_sent_at).to_not be nil
@@ -484,7 +484,7 @@ describe SubmissionService do
         'lucille@bluth.com'
       )
       expect(emails.first.html_part.body).to include(
-        'Thank you for submitting your work to our consignments network'
+        'Thank you! We have received your submission.'
       )
     end
   end
