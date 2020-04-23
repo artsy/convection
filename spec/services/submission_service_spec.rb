@@ -171,6 +171,19 @@ describe SubmissionService do
       expect(partner2.partner_submissions.first.notified_at).to be_nil
     end
 
+    it 'does not update already approved submissions on publish' do
+      allow(NotificationService).to receive(:post_submission_event)
+      approved_at = 1.day.ago.beginning_of_day
+      submission.update!(state: 'approved', approved_at: approved_at)
+      SubmissionService.update_submission(
+        submission,
+        { state: 'published' },
+        current_user: 'userid'
+      )
+
+      expect(submission.reload.approved_at).to eq approved_at
+    end
+
     it 'sends a rejection notification if the submission state is changed to rejected' do
       SubmissionService.update_submission(
         submission,
