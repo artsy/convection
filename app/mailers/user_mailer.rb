@@ -83,7 +83,7 @@ class UserMailer < ApplicationMailer
 
     smtpapi category: %w[submission_approved],
             unique_args: { submission_id: submission.id }
-    mail(to: user_detail.email, subject: 'Your consignment has been approved')
+    mail(to: user_detail.email, subject: 'Consignment next steps')
   end
 
   def submission_rejected(submission:, user:, user_detail:, artist:)
