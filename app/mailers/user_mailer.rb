@@ -100,7 +100,7 @@ class UserMailer < ApplicationMailer
             unique_args: { submission_id: submission.id }
     mail(
       to: user_detail.email,
-      subject: 'An important update about your consignment submission'
+      subject: 'Your consignment submission status has changed'
     )
   end
 

@@ -263,7 +263,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.html_part.body).to include(
-          'they do not have a market for this work at the moment'
+          'do not feel that it is right for our partners'
         )
         expect(page).to have_content 'Rejected by Jon Jonson'
         expect(page).to_not have_content 'Approve'
