@@ -222,7 +222,7 @@ describe OfferService do
 
         email_body = emails.first.html_part.body
         expect(email_body).to include(
-          'Great news, an offer has been made for your work.'
+          'Great news! A new offer on your consignment has been made.'
         )
         expect(email_body).to include(
           'The work will be purchased directly from you by the partner'
