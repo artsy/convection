@@ -225,6 +225,103 @@ describe 'submissions query' do
       end
     end
 
+    context 'with a primary asset' do
+      let(:image_urls) do
+        {
+          'large' => 'http://wwww.example.com/large.jpg',
+          'medium' => 'http://wwww.example.com/medium.jpg',
+          'square' => 'http://wwww.example.com/square.jpg',
+          'thumbnail' => 'http://wwww.example.com/thumbnail.jpg'
+        }
+      end
+
+      let!(:primary_asset) { Fabricate :image, submission: submission }
+      let!(:another_asset) { Fabricate :image, submission: submission }
+
+      let(:query) do
+        <<-GRAPHQL
+        query {
+          submissions(#{query_inputs}) {
+            edges {
+              node {
+                assets {
+                  id
+                }
+                primaryImage {
+                  id
+                }
+              }
+            }
+          }
+        }
+        GRAPHQL
+      end
+
+      before { submission.update(primary_image_id: primary_asset.id) }
+
+      it 'returns that primary image and includes it in assets array' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submissions_response = body['data']['submissions']
+        expect(submissions_response['edges'].count).to eq 1
+
+        node_response = submissions_response['edges'][0]['node']
+        asset_ids = node_response['assets'].map { |asset| asset['id'] }
+        expected_ids =
+          [primary_asset, another_asset].map { |asset| asset.id.to_s }
+        expect(asset_ids).to eq expected_ids
+
+        primary_image_response = node_response['primaryImage']
+        expect(primary_image_response['id']).to eq primary_asset.id.to_s
+      end
+    end
+
+    context 'without a primary asset' do
+      let(:image_urls) do
+        {
+          'large' => 'http://wwww.example.com/large.jpg',
+          'medium' => 'http://wwww.example.com/medium.jpg',
+          'square' => 'http://wwww.example.com/square.jpg',
+          'thumbnail' => 'http://wwww.example.com/thumbnail.jpg'
+        }
+      end
+
+      let!(:asset) { Fabricate :image, submission: submission }
+
+      let(:query) do
+        <<-GRAPHQL
+        query {
+          submissions(#{query_inputs}) {
+            edges {
+              node {
+                primaryImage {
+                  id
+                }
+              }
+            }
+          }
+        }
+        GRAPHQL
+      end
+
+      it 'returns nil for the primary image' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submissions_response = body['data']['submissions']
+        expect(submissions_response['edges'].count).to eq 1
+
+        node_response = submissions_response['edges'][0]['node']
+        primary_image_response = node_response['primaryImage']
+        expect(primary_image_response).to be_nil
+      end
+    end
+
     context 'with an asset that has not been processed' do
       let!(:asset) { Fabricate :unprocessed_image, submission: submission }
 
