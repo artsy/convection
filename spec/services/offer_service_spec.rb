@@ -218,13 +218,11 @@ describe OfferService do
         expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
         expect(emails.first.to).to eq(%w[michael@bluth.com])
         expect(emails.first.from).to eq(%w[consign@artsy.net])
-        expect(emails.first.subject).to eq(
-          'An offer for your consignment submission'
-        )
+        expect(emails.first.subject).to eq('Great news! You have a new offer.')
 
         email_body = emails.first.html_part.body
         expect(email_body).to include(
-          'Great news, an offer has been made for your work.'
+          'Great news! A new offer on your consignment has been made.'
         )
         expect(email_body).to include(
           'The work will be purchased directly from you by the partner'

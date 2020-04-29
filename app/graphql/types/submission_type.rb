@@ -24,6 +24,7 @@ module Types
     field :location_state, String, null: true
     field :medium, String, null: true
     field :minimum_price_dollars, Integer, null: true
+    field :primary_image, Types::AssetType, null: true
     field :provenance, String, null: true
     field :signature, Boolean, null: true
     field :state, Types::StateType, null: true

@@ -100,7 +100,7 @@ class UserMailer < ApplicationMailer
             unique_args: { submission_id: submission.id }
     mail(
       to: user_detail.email,
-      subject: 'An important update about your consignment submission'
+      subject: 'Your consignment submission status has changed'
     )
   end
 
@@ -114,8 +114,6 @@ class UserMailer < ApplicationMailer
       utm_params(source: 'consignment-offer', campaign: 'consignment-offer')
 
     smtpapi category: %w[offer], unique_args: { offer_id: offer.id }
-    mail(
-      to: user_detail.email, subject: 'An offer for your consignment submission'
-    )
+    mail(to: user_detail.email, subject: 'Great news! You have a new offer.')
   end
 end
