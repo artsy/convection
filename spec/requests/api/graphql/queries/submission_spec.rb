@@ -128,22 +128,13 @@ describe 'submission query' do
 
     context 'including offers' do
       let(:partner) { Fabricate :partner }
-      let(:partner_submission) do
-        Fabricate :partner_submission, partner: partner, submission: submission
-      end
-      let!(:offer) { Fabricate :offer, partner_submission: partner_submission }
-
-      let!(:another_offer) do
-        partner_submission =
-          Fabricate :partner_submission, submission: submission
-        Fabricate :offer, partner_submission: partner_submission
-      end
+      let(:gravity_partner_id) { partner.gravity_partner_id }
 
       let(:query) do
         <<-GRAPHQL
         query {
           submission(#{query_inputs}) {
-            offers(gravityPartnerId: "#{partner.gravity_partner_id}") {
+            offers(gravityPartnerId: "#{gravity_partner_id}") {
               id
               state
               commissionPercentWhole
@@ -153,24 +144,69 @@ describe 'submission query' do
         GRAPHQL
       end
 
-      it 'returns the offers for that submission' do
-        post '/api/graphql', params: { query: query }, headers: headers
+      context 'with an invalid gravity partner id and some offers' do
+        let(:gravity_partner_id) { 'invalid' }
 
-        expect(response.status).to eq 200
-        body = JSON.parse(response.body)
+        it 'returns an empty array of offers' do
+          post '/api/graphql', params: { query: query }, headers: headers
 
-        submission_response = body['data']['submission']
-        offers_response = submission_response['offers']
-        expect(offers_response.count).to eq 1
+          expect(response.status).to eq 200
+          body = JSON.parse(response.body)
 
-        offer_response = offers_response.first
-        expect(offer_response).to match(
-          {
-            'id' => offer.id.to_s,
-            'state' => offer.state,
-            'commissionPercentWhole' => offer.commission_percent_whole
-          }
-        )
+          submission_response = body['data']['submission']
+          offers_response = submission_response['offers']
+          expect(offers_response.count).to eq 0
+        end
+      end
+
+      context 'with a valid gravity partner id but no join model' do
+        it 'returns an empty array of offers' do
+          post '/api/graphql', params: { query: query }, headers: headers
+
+          expect(response.status).to eq 200
+          body = JSON.parse(response.body)
+
+          submission_response = body['data']['submission']
+          offers_response = submission_response['offers']
+          expect(offers_response.count).to eq 0
+        end
+      end
+
+      context 'with a valid gravity partner id and some offers' do
+        let(:partner_submission) do
+          Fabricate :partner_submission,
+                    partner: partner, submission: submission
+        end
+
+        let!(:offer) do
+          Fabricate :offer, partner_submission: partner_submission
+        end
+
+        let!(:another_offer) do
+          partner_submission =
+            Fabricate :partner_submission, submission: submission
+          Fabricate :offer, partner_submission: partner_submission
+        end
+
+        it 'returns the offers for that partner and submission' do
+          post '/api/graphql', params: { query: query }, headers: headers
+
+          expect(response.status).to eq 200
+          body = JSON.parse(response.body)
+
+          submission_response = body['data']['submission']
+          offers_response = submission_response['offers']
+          expect(offers_response.count).to eq 1
+
+          offer_response = offers_response.first
+          expect(offer_response).to match(
+            {
+              'id' => offer.id.to_s,
+              'state' => offer.state,
+              'commissionPercentWhole' => offer.commission_percent_whole
+            }
+          )
+        end
       end
     end
   end

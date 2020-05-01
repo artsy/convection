@@ -39,7 +39,12 @@ module Types
 
     def offers(gravity_partner_id:)
       partner = Partner.find_by(gravity_partner_id: gravity_partner_id)
-      object.partner_submissions.find_by(partner: partner).offers
+      return [] unless partner
+
+      partner_submission = object.partner_submissions.find_by(partner: partner)
+      return [] unless partner_submission
+
+      partner_submission.offers
     end
   end
 end
