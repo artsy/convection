@@ -68,7 +68,7 @@ class UserMailer < ApplicationMailer
     smtpapi category: %w[third_upload_reminder],
             unique_args: { submission_id: submission.id }
     mail to: user_detail.email,
-         subject: 'Last chance to complete your consignment'
+         subject: 'Artsy Consignments - complete your submission'
   end
 
   def submission_approved(submission:, user:, user_detail:, artist:)
