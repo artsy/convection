@@ -54,7 +54,7 @@ describe 'Submission Flow' do
     expect(emails[2].subject).to include("You're Almost Done")
     expect(emails[2].to).to eq(%w[michael@bluth.com])
     expect(emails.last.subject).to include(
-      'Last chance to complete your consignment'
+      'Artsy Consignments - complete your submission'
     )
     expect(emails.last.to).to eq(%w[michael@bluth.com])
   end
@@ -100,7 +100,7 @@ describe 'Submission Flow' do
       expect(emails[2].subject).to include("You're Almost Done")
       expect(emails[2].to).to eq(%w[michael@bluth.com])
       expect(emails.last.subject).to include(
-        'Last chance to complete your consignment'
+        'Artsy Consignments - complete your submission'
       )
       expect(emails.last.to).to eq(%w[michael@bluth.com])
     end
