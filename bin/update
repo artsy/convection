@@ -10,11 +10,17 @@ message=$(cat <<END
 Library Updates
 
 This commit updates our libraries like this:
+
+```
 $ bundle update
 $ yarn upgrade --latest
+```
 
 It was automatically run with this script:
+
+```
 $ ./bin/update
+```
 END
 )
 
