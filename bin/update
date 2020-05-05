@@ -6,7 +6,7 @@ github_user=$(git config --global --get github.user)
 mog_label="Merge On Green"
 team="artsy/csgn-devs"
 
-message=$(cat <<END
+message=$(cat <<"END"
 Library Updates
 
 This commit updates our libraries like this:
