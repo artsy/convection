@@ -1,6 +1,6 @@
 ---
 project-name: convection
-hokusai-required-version: ">=0.5.8"
+hokusai-required-version: "==0.5.8"
 pre-deploy: "bundle exec rake db:migrate"
 git-remote: git@github.com:artsy/convection.git
 template-config-files:
