@@ -68,7 +68,7 @@ class UserMailer < ApplicationMailer
     smtpapi category: %w[third_upload_reminder],
             unique_args: { submission_id: submission.id }
     mail to: user_detail.email,
-         subject: 'Last chance to complete your consignment'
+         subject: 'Artsy Consignments - complete your submission'
   end
 
   def submission_approved(submission:, user:, user_detail:, artist:)
@@ -83,7 +83,10 @@ class UserMailer < ApplicationMailer
 
     smtpapi category: %w[submission_approved],
             unique_args: { submission_id: submission.id }
-    mail(to: user_detail.email, subject: 'Consignment next steps')
+    mail(
+      to: user_detail.email,
+      subject: "Your consignment is approved. Find out what's next."
+    )
   end
 
   def submission_rejected(submission:, user:, user_detail:, artist:)
@@ -98,10 +101,7 @@ class UserMailer < ApplicationMailer
 
     smtpapi category: %w[submission_rejected],
             unique_args: { submission_id: submission.id }
-    mail(
-      to: user_detail.email,
-      subject: 'Your consignment submission status has changed'
-    )
+    mail(to: user_detail.email, subject: 'An update about your submission')
   end
 
   def offer(offer:, artist:, user:, user_detail:)
