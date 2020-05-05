@@ -249,7 +249,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.html_part.body).to include(
-          'Your work is currently being reviewed by our trusted network of partners.'
+          "Your work is currently being reviewed by Artsy's partners and specialists."
         )
         expect(page).to have_content 'Approved by Jon Jonson'
         expect(page).to_not have_content 'Reject'
