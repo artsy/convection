@@ -19,7 +19,7 @@ gem 'bootstrap-sass' # required for watt
 gem 'bourbon', '4.2.3' # required for watt
 gem 'coffee-rails' # required for watt
 gem 'console_color'
-gem 'ddtrace'
+gem 'ddtrace', '0.34.2'
 gem 'decent_exposure' # for safely referencing variables in views
 gem 'gemini_upload-rails' # for admins to upload images
 gem 'graphiql-rails' # A lovely interface to the API
