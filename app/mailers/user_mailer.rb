@@ -101,10 +101,7 @@ class UserMailer < ApplicationMailer
 
     smtpapi category: %w[submission_rejected],
             unique_args: { submission_id: submission.id }
-    mail(
-      to: user_detail.email,
-      subject: 'Your consignment submission status has changed'
-    )
+    mail(to: user_detail.email, subject: 'An update about your submission')
   end
 
   def offer(offer:, artist:, user:, user_detail:)
