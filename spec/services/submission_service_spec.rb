@@ -377,7 +377,7 @@ describe SubmissionService do
           'utm_campaign=consignment-complete'
         )
         expect(emails.first.html_part.body).to include(
-          'utm_source=drip-consignment-reminder-e02'
+          'utm_source=drip-consignment-reminder-e02-v2'
         )
         expect(emails.first.to).to eq(%w[michael@bluth.com])
         expect(emails.first.from).to eq(%w[consign@artsy.net])

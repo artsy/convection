@@ -46,7 +46,7 @@ class UserMailer < ApplicationMailer
     @user_detail = user_detail
     @utm_params =
       utm_params(
-        source: 'drip-consignment-reminder-e02',
+        source: 'drip-consignment-reminder-e02-v2',
         campaign: 'consignment-complete'
       )
 
