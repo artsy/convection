@@ -46,26 +46,11 @@ class UserMailer < ApplicationMailer
     @user_detail = user_detail
     @utm_params =
       utm_params(
-        source: 'drip-consignment-reminder-e02',
+        source: 'drip-consignment-reminder-e02-v2',
         campaign: 'consignment-complete'
       )
 
     smtpapi category: %w[second_upload_reminder],
-            unique_args: { submission_id: submission.id }
-    mail to: user_detail.email, subject: "You're Almost Done"
-  end
-
-  def third_upload_reminder(submission:, user:, user_detail:)
-    @submission = submission
-    @user = user
-    @user_detail = user_detail
-    @utm_params =
-      utm_params(
-        source: 'drip-consignment-reminder-e03',
-        campaign: 'consignment-complete'
-      )
-
-    smtpapi category: %w[third_upload_reminder],
             unique_args: { submission_id: submission.id }
     mail to: user_detail.email,
          subject: 'Artsy Consignments - complete your submission'

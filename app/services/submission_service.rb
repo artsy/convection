@@ -87,8 +87,6 @@ class SubmissionService
 
       delay_until(Convection.config.second_reminder_days_after.days.from_now)
         .notify_user(submission.id)
-      delay_until(Convection.config.third_reminder_days_after.days.from_now)
-        .notify_user(submission.id)
     end
 
     def approve!(submission, current_user)
@@ -142,7 +140,7 @@ class SubmissionService
         delay.deliver_submission_receipt(submission.id)
         submission.update!(receipt_sent_at: Time.now.utc)
       else
-        return if submission.reminders_sent_count >= 3
+        return if submission.reminders_sent_count >= 2
 
         delay.deliver_upload_reminder(submission.id)
       end
@@ -162,8 +160,6 @@ class SubmissionService
 
       if submission.reminders_sent_count == 1
         UserMailer.second_upload_reminder(email_args).deliver_now
-      elsif submission.reminders_sent_count == 2
-        UserMailer.third_upload_reminder(email_args).deliver_now
       else
         UserMailer.first_upload_reminder(email_args).deliver_now
       end
