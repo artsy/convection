@@ -35,7 +35,6 @@ Convection.config =
     gravity_url: ENV['GRAVITY_URL'] || 'https://stagingapi.artsy.net',
     jwt_secret: ENV['JWT_SECRET'] || 'replace-me',
     processing_grace_seconds: (ENV['PROCESSING_GRACE_SECONDS'] || 600).to_i,
-    second_reminder_days_after: (ENV['SECOND_REMINDER_DAYS_AFTER'] || 1).to_i,
     sentry_dsn: ENV['SENTRY_DSN'],
     sidekiq_username: ENV['SIDEKIQ_USERNAME'] || 'admin',
     sidekiq_password: ENV['SIDEKIQ_PASSWORD'] || 'replace-me',
@@ -44,7 +43,7 @@ Convection.config =
     smtp_password: ENV['SMTP_PASSWORD'],
     smtp_port: ENV['SMTP_PORT'],
     smtp_user: ENV['SMTP_USER'],
-    third_reminder_days_after: (ENV['THIRD_REMINDER_DAYS_AFTER'] || 7).to_i,
+    second_reminder_days_after: (ENV['SECOND_REMINDER_DAYS_AFTER'] || 7).to_i,
     vibrations_url:
       ENV['VIBRATIONS_URL'] || 'https://admin-partners-staging.artsy.net'
   )

@@ -1,8 +1,8 @@
 $sans-serif: HelveticaNeue, Helvetica, 'Helvetica', sans-serif;
 $serif: TimesNewRoman, 'Times New Roman', Times, serif;
-$purple: #6E1FFF;
-$red: #F7625A;
-$green: #0EDA83;
+$purple: #6e1fff;
+$red: #f7625a;
+$green: #0eda83;
 
 body {
   margin: 0px;
@@ -62,8 +62,8 @@ table.bordered-email {
     font-family: $sans-serif;
   }
 
-
-  table.first-upload-reminder-email, table.second-upload-reminder-email, table.third-upload-reminder-email {
+  table.first-upload-reminder-email,
+  table.second-upload-reminder-email {
     border-collapse: collapse;
   }
 
@@ -238,7 +238,7 @@ table.bordered-email {
   }
 
   table.email-gray-bordered-section {
-    border: 1px solid #E5E5E5;
+    border: 1px solid #e5e5e5;
     width: 100%;
     border-collapse: collapse;
     padding: 0;
@@ -298,7 +298,9 @@ table.bordered-email {
     font-family: $sans-serif;
   }
 
-  .artwork-title, .artwork-category-medium, .dimensions {
+  .artwork-title,
+  .artwork-category-medium,
+  .dimensions {
     font-size: 16px;
   }
 
@@ -306,7 +308,9 @@ table.bordered-email {
     padding-top: 20px;
   }
 
-  .upload-photo-button, .submit-proposal-button, .offer-response-button {
+  .upload-photo-button,
+  .submit-proposal-button,
+  .offer-response-button {
     background-color: black;
     padding-top: 15px;
     padding-bottom: 15px;
@@ -518,14 +522,14 @@ table.bordered-email {
         color: #000000;
         font-weight: bold;
         margin-top: 30px;
-        margin-bottom: 4px;  
+        margin-bottom: 4px;
       }
     }
 
     td.consignor-border {
       margin-bottom: 20px;
     }
- 
+
     .email-title {
       padding-bottom: 0px;
     }
@@ -636,20 +640,20 @@ table.bordered-email {
     }
   }
 
-    table.submission-info {
-      td {
-        font-size: 14px !important;
-      }
+  table.submission-info {
+    td {
+      font-size: 14px !important;
+    }
 
-      .first-column {
+    .first-column {
+      width: 100% !important;
+      max-width: 230px !important;
+      img {
         width: 100% !important;
-        max-width: 230px !important;
-        img {
-          width: 100% !important;
-          max-width: none !important;
-        }
+        max-width: none !important;
       }
     }
+  }
 
   table.footer-contact {
     table.contents--left {

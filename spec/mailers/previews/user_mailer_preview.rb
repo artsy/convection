@@ -13,10 +13,6 @@ class UserMailerPreview < BasePreview
     UserMailer.second_upload_reminder(reminder_mail_params)
   end
 
-  def third_upload_reminder
-    UserMailer.third_upload_reminder(reminder_mail_params)
-  end
-
   def submission_approved
     UserMailer.submission_approved(receipt_mail_params)
   end
