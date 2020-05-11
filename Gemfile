@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 
 ruby File.read('.ruby-version')
 
-gem 'rails', '6.0.2.2'
+gem 'rails', '6.0.3'
 
 gem 'pg'
 gem 'puma'
@@ -21,6 +21,7 @@ gem 'coffee-rails' # required for watt
 gem 'console_color'
 gem 'ddtrace'
 gem 'decent_exposure' # for safely referencing variables in views
+gem 'faraday', '< 1'
 gem 'gemini_upload-rails' # for admins to upload images
 gem 'graphiql-rails' # A lovely interface to the API
 gem 'graphql' # A lovely API
