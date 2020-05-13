@@ -4,7 +4,7 @@ require 'rails_helper'
 require 'support/gravity_helper'
 
 describe OfferService do
-  let!(:user) { Fabricate(:user) }
+  let(:user) { Fabricate(:user) }
   let(:partner) { Fabricate(:partner, name: 'Gagosian Gallery') }
   let(:submission) { Fabricate(:submission, state: submission_state) }
 
