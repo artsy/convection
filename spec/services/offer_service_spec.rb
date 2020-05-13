@@ -5,14 +5,12 @@ require 'support/gravity_helper'
 
 describe OfferService do
   let!(:user) { Fabricate(:user) }
-  let(:submitted_submission) { Fabricate(:submission, state: 'submitted') }
-  let(:submission) { Fabricate(:submission, state: 'approved') }
-  let(:draft_submission) { Fabricate(:submission) }
   let(:partner) { Fabricate(:partner, name: 'Gagosian Gallery') }
-  let(:rejected_submission) { Fabricate(:submission, state: 'rejected') }
 
   context 'create_offer' do
     describe 'with a submission in submitted state' do
+      let(:submitted_submission) { Fabricate(:submission, state: 'submitted') }
+
       it 'updates the submission state to approved' do
         OfferService.create_offer(
           submitted_submission.id,
@@ -26,6 +24,8 @@ describe OfferService do
       end
     end
     describe 'with a submission in a draft state' do
+      let(:draft_submission) { Fabricate(:submission) }
+
       it 'raises an error' do
         expect {
           OfferService.create_offer(
@@ -43,6 +43,8 @@ describe OfferService do
       end
     end
     describe 'with a submission in a rejected state' do
+      let(:rejected_submission) { Fabricate(:submission, state: 'rejected') }
+
       it 'raises an error' do
         expect {
           OfferService.create_offer(
@@ -60,6 +62,8 @@ describe OfferService do
       end
     end
     describe 'with no initial partner submission' do
+      let(:submission) { Fabricate(:submission, state: 'approved') }
+
       it 'creates a draft offer' do
         expect(
           PartnerSubmission.where(submission: submission, partner: partner)
@@ -80,6 +84,8 @@ describe OfferService do
     end
 
     describe 'with an initial partner submission' do
+      let(:submission) { Fabricate(:submission, state: 'approved') }
+
       before do
         @partner_submission =
           Fabricate(
