@@ -9,27 +9,27 @@ describe OfferService do
 
   context 'create_offer' do
     describe 'with a submission in submitted state' do
-      let(:submitted_submission) { Fabricate(:submission, state: 'submitted') }
+      let(:submission) { Fabricate(:submission, state: 'submitted') }
 
       it 'updates the submission state to approved' do
         OfferService.create_offer(
-          submitted_submission.id,
+          submission.id,
           partner.id,
           {},
           user.id
         )
-        expect(submitted_submission.reload.state).to eq 'approved'
-        expect(submitted_submission.reload.approved_by).to eq user.id.to_s
-        expect(submitted_submission.reload.approved_at).to_not be_nil
+        expect(submission.reload.state).to eq 'approved'
+        expect(submission.reload.approved_by).to eq user.id.to_s
+        expect(submission.reload.approved_at).to_not be_nil
       end
     end
     describe 'with a submission in a draft state' do
-      let(:draft_submission) { Fabricate(:submission) }
+      let(:submission) { Fabricate(:submission) }
 
       it 'raises an error' do
         expect {
           OfferService.create_offer(
-            draft_submission.id,
+            submission.id,
             partner.id,
             {},
             user.id
@@ -43,12 +43,12 @@ describe OfferService do
       end
     end
     describe 'with a submission in a rejected state' do
-      let(:rejected_submission) { Fabricate(:submission, state: 'rejected') }
+      let(:submission) { Fabricate(:submission, state: 'rejected') }
 
       it 'raises an error' do
         expect {
           OfferService.create_offer(
-            rejected_submission.id,
+            submission.id,
             partner.id,
             {},
             user.id
