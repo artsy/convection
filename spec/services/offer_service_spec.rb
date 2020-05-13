@@ -52,16 +52,14 @@ describe OfferService do
     describe 'with no initial partner submission' do
       let(:submission_state) { Submission::APPROVED }
 
-      it 'creates a draft offer' do
-        expect(
+      it 'creates a draft offer and a partner submission' do
+        expect {
+          OfferService.create_offer(submission.id, partner.id)
+        }.to change {
           PartnerSubmission.where(submission: submission, partner: partner)
             .count
-        ).to eq 0
-        OfferService.create_offer(submission.id, partner.id)
-        expect(
-          PartnerSubmission.where(submission: submission, partner: partner)
-            .count
-        ).to eq 1
+        }.from(0).to(1)
+
         ps =
           PartnerSubmission.where(submission: submission, partner: partner)
             .first
