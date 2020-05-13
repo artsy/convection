@@ -9,6 +9,24 @@ describe OfferService do
   let(:submission) { Fabricate(:submission, state: submission_state) }
 
   describe 'create_offer' do
+    context 'with an id for created by but no current user' do
+      let(:submission_state) { Submission::APPROVED }
+
+      it 'sets that id on the offer' do
+        offer_params = { created_by_id: 'just-some-user-id' }
+
+        offer =
+          OfferService.create_offer(
+            submission.id,
+            partner.id,
+            offer_params,
+            nil
+          )
+
+        expect(offer.created_by_id).to eq offer_params[:created_by_id]
+      end
+    end
+
     context 'with a submission in submitted state' do
       let(:submission_state) { Submission::SUBMITTED }
 

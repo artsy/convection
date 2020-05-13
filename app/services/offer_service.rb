@@ -37,7 +37,7 @@ class OfferService
       end
 
       default_offer_attrs = { state: 'draft', created_by_id: current_user }
-      offer_attrs = offer_params.merge(default_offer_attrs)
+      offer_attrs = default_offer_attrs.merge(offer_params)
       offer = partner_submission.offers.new(offer_attrs)
       offer.save!
       offer
