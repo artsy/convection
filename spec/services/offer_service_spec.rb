@@ -6,10 +6,11 @@ require 'support/gravity_helper'
 describe OfferService do
   let!(:user) { Fabricate(:user) }
   let(:partner) { Fabricate(:partner, name: 'Gagosian Gallery') }
+  let(:submission) { Fabricate(:submission, state: submission_state) }
 
   context 'create_offer' do
     describe 'with a submission in submitted state' do
-      let(:submission) { Fabricate(:submission, state: 'submitted') }
+      let(:submission_state) { 'submitted' }
 
       it 'updates the submission state to approved' do
         OfferService.create_offer(
@@ -24,7 +25,7 @@ describe OfferService do
       end
     end
     describe 'with a submission in a draft state' do
-      let(:submission) { Fabricate(:submission) }
+      let(:submission_state) { 'draft' }
 
       it 'raises an error' do
         expect {
@@ -43,7 +44,7 @@ describe OfferService do
       end
     end
     describe 'with a submission in a rejected state' do
-      let(:submission) { Fabricate(:submission, state: 'rejected') }
+      let(:submission_state) { 'rejected' }
 
       it 'raises an error' do
         expect {
@@ -62,7 +63,7 @@ describe OfferService do
       end
     end
     describe 'with no initial partner submission' do
-      let(:submission) { Fabricate(:submission, state: 'approved') }
+      let(:submission_state) { 'approved' }
 
       it 'creates a draft offer' do
         expect(
@@ -84,7 +85,7 @@ describe OfferService do
     end
 
     describe 'with an initial partner submission' do
-      let(:submission) { Fabricate(:submission, state: 'approved') }
+      let(:submission_state) { 'approved' }
 
       before do
         @partner_submission =
@@ -176,7 +177,7 @@ describe OfferService do
 
   context 'with an offer' do
     let(:partner) { Fabricate(:partner, name: 'Happy Gallery') }
-    let(:submission) { Fabricate(:submission) }
+    let(:submission_state) { 'draft' }
     let(:partner_submission) do
       Fabricate(:partner_submission, partner: partner, submission: submission)
     end
@@ -291,11 +292,10 @@ describe OfferService do
         end
       end
       context 'with an offer on an approved submission' do
-        let(:approved_submission) do
-          Fabricate(:submission, state: Submission::APPROVED)
-        end
+        let(:submission_state) { Submission::APPROVED }
+
         let(:ps) do
-          Fabricate(:partner_submission, submission: approved_submission)
+          Fabricate(:partner_submission, submission: submission)
         end
         let(:consignable_offer) { Fabricate(:offer, partner_submission: ps) }
         it 'sets fields on submission and partner submission' do
