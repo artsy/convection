@@ -70,26 +70,19 @@ describe OfferService do
     end
 
     describe 'with an initial partner submission' do
+      let!(:partner_submission) do
+        Fabricate(:partner_submission, partner: partner, submission: submission)
+      end
       let(:submission_state) { Submission::APPROVED }
 
-      before do
-        @partner_submission =
-          Fabricate(
-            :partner_submission,
-            partner: partner, submission: submission
-          )
-      end
-
       it 'creates multiple draft offers' do
-        OfferService.create_offer(submission.id, partner.id)
-        expect(@partner_submission.offers.count).to eq 1
-        expect(@partner_submission.offers.first.state).to eq Offer::DRAFT
+        expect {
+          OfferService.create_offer(submission.id, partner.id)
+          OfferService.create_offer(submission.id, partner.id)
+        }.to change { partner_submission.offers.count }.from(0).to(2)
 
-        OfferService.create_offer(submission.id, partner.id)
-        expect(@partner_submission.offers.count).to eq 2
-        expect(@partner_submission.offers.pluck(:state).uniq).to eq [
-             Offer::DRAFT
-           ]
+        states = partner_submission.offers.pluck(:state)
+        expect(states.uniq).to eq [Offer::DRAFT]
       end
 
       it 'fails if the partner does not exist' do
