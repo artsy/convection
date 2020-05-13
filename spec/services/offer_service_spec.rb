@@ -29,12 +29,10 @@ describe OfferService do
       it 'raises an error' do
         expect {
           OfferService.create_offer(submission.id, partner.id, {}, user.id)
-        }.to raise_error do |error|
-          expect(error).to be_a OfferService::OfferError
-          expect(
-            error.message
-          ).to eq 'Invalid submission state for offer creation'
-        end
+        }.to raise_error(
+          OfferService::OfferError,
+          'Invalid submission state for offer creation'
+        )
       end
     end
 
@@ -44,12 +42,10 @@ describe OfferService do
       it 'raises an error' do
         expect {
           OfferService.create_offer(submission.id, partner.id, {}, user.id)
-        }.to raise_error do |error|
-          expect(error).to be_a OfferService::OfferError
-          expect(
-            error.message
-          ).to eq 'Invalid submission state for offer creation'
-        end
+        }.to raise_error(
+          OfferService::OfferError,
+          'Invalid submission state for offer creation'
+        )
       end
     end
 
@@ -279,12 +275,10 @@ describe OfferService do
         it 'raises an error' do
           expect {
             OfferService.update_offer(offer, 'userid', state: Offer::CONSIGNED)
-          }.to raise_error do |error|
-            expect(error).to be_a OfferService::OfferError
-            expect(
-              error.message
-            ).to eq 'Cannot complete consignment on non-approved submission'
-          end
+          }.to raise_error(
+            OfferService::OfferError,
+            'Cannot complete consignment on non-approved submission'
+          )
         end
       end
       context 'with an offer on an approved submission' do
