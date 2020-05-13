@@ -15,9 +15,11 @@ describe OfferService do
       it 'updates the submission state to approved' do
         OfferService.create_offer(submission.id, partner.id, {}, user.id)
 
-        expect(submission.reload.state).to eq 'approved'
-        expect(submission.reload.approved_by).to eq user.id.to_s
-        expect(submission.reload.approved_at).to_not be_nil
+        submission.reload
+
+        expect(submission.state).to eq Submission::APPROVED
+        expect(submission.approved_by).to eq user.id.to_s
+        expect(submission.approved_at).to_not be_nil
       end
     end
 
@@ -137,8 +139,8 @@ describe OfferService do
         'userid',
         high_estimate_cents: 30_000, notes: 'New offer notes!'
       )
-      expect(offer.reload.high_estimate_cents).to eq 30_000
-      expect(offer.reload.notes).to eq 'New offer notes!'
+      expect(offer.high_estimate_cents).to eq 30_000
+      expect(offer.notes).to eq 'New offer notes!'
     end
 
     it 'raises an error if validation fails' do
@@ -231,7 +233,10 @@ describe OfferService do
             submission.id
           }&amp;entry.2=Happy%20Gallery"
         )
-        expect(offer.reload.state).to eq Offer::SENT
+
+        offer.reload
+
+        expect(offer.state).to eq Offer::SENT
         expect(offer.sent_by).to eq 'userid'
         expect(offer.sent_at).to_not be_nil
       end
@@ -264,7 +269,7 @@ describe OfferService do
         expect(emails.first.html_part.body).to_not include(
                                                      'The work will be purchased directly from you by the partner'
                                                    )
-        expect(offer.reload.state).to eq Offer::REVIEW
+        expect(offer.state).to eq Offer::REVIEW
         expect(offer.review_started_at).to_not be_nil
       end
     end
@@ -331,7 +336,7 @@ describe OfferService do
         expect(email_body).to include(
           "https://google.com/offer_form?entry.1=#{submission.id}"
         )
-        expect(offer.reload.state).to eq Offer::REJECTED
+        expect(offer.state).to eq Offer::REJECTED
         expect(offer.rejected_by).to eq 'userid'
         expect(offer.rejected_at).to_not be_nil
       end
