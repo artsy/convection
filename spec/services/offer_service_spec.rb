@@ -10,7 +10,7 @@ describe OfferService do
 
   context 'create_offer' do
     describe 'with a submission in submitted state' do
-      let(:submission_state) { 'submitted' }
+      let(:submission_state) { Submission::SUBMITTED }
 
       it 'updates the submission state to approved' do
         OfferService.create_offer(
@@ -25,7 +25,7 @@ describe OfferService do
       end
     end
     describe 'with a submission in a draft state' do
-      let(:submission_state) { 'draft' }
+      let(:submission_state) { Submission::DRAFT }
 
       it 'raises an error' do
         expect {
@@ -44,7 +44,7 @@ describe OfferService do
       end
     end
     describe 'with a submission in a rejected state' do
-      let(:submission_state) { 'rejected' }
+      let(:submission_state) { Submission::REJECTED }
 
       it 'raises an error' do
         expect {
@@ -63,7 +63,7 @@ describe OfferService do
       end
     end
     describe 'with no initial partner submission' do
-      let(:submission_state) { 'approved' }
+      let(:submission_state) { Submission::APPROVED }
 
       it 'creates a draft offer' do
         expect(
@@ -85,7 +85,7 @@ describe OfferService do
     end
 
     describe 'with an initial partner submission' do
-      let(:submission_state) { 'approved' }
+      let(:submission_state) { Submission::APPROVED }
 
       before do
         @partner_submission =
@@ -177,7 +177,7 @@ describe OfferService do
 
   context 'with an offer' do
     let(:partner) { Fabricate(:partner, name: 'Happy Gallery') }
-    let(:submission_state) { 'draft' }
+    let(:submission_state) { Submission::DRAFT }
     let(:partner_submission) do
       Fabricate(:partner_submission, partner: partner, submission: submission)
     end
