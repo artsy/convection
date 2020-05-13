@@ -35,10 +35,10 @@ class OfferService
       if partner_submission.notified_at.blank?
         partner_submission.update!(notified_at: Time.now.utc)
       end
-      offer =
-        partner_submission.offers.new(
-          offer_params.merge(state: 'draft', created_by_id: current_user)
-        )
+
+      default_offer_attrs = { state: 'draft', created_by_id: current_user }
+      offer_attrs = offer_params.merge(default_offer_attrs)
+      offer = partner_submission.offers.new(offer_attrs)
       offer.save!
       offer
     rescue ActiveRecord::RecordNotFound => e

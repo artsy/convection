@@ -188,7 +188,8 @@ describe OfferService do
             { email: 'contact2@partner.com' }
           ]
         )
-        allow(Convection.config).to receive(:offer_response_form_url).and_return(
+        allow(Convection.config).to receive(:offer_response_form_url)
+          .and_return(
           'https://google.com/response_form?entry.1=SUBMISSION_NUMBER&entry.2=PARTNER_NAME'
         )
         allow(Convection.config).to receive(:auction_offer_form_url).and_return(
@@ -204,7 +205,9 @@ describe OfferService do
           expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
           expect(emails.first.to).to eq(%w[michael@bluth.com])
           expect(emails.first.from).to eq(%w[consign@artsy.net])
-          expect(emails.first.subject).to eq('Great news! You have a new offer.')
+          expect(emails.first.subject).to eq(
+            'Great news! You have a new offer.'
+          )
 
           email_body = emails.first.html_part.body
           expect(email_body).to include(
@@ -264,7 +267,11 @@ describe OfferService do
         context 'with an offer on a non-approved submission' do
           it 'raises an error' do
             expect {
-              OfferService.update_offer(offer, 'userid', state: Offer::CONSIGNED)
+              OfferService.update_offer(
+                offer,
+                'userid',
+                state: Offer::CONSIGNED
+              )
             }.to raise_error(
               OfferService::OfferError,
               'Cannot complete consignment on non-approved submission'
