@@ -13,12 +13,8 @@ describe OfferService do
       let(:submission_state) { Submission::SUBMITTED }
 
       it 'updates the submission state to approved' do
-        OfferService.create_offer(
-          submission.id,
-          partner.id,
-          {},
-          user.id
-        )
+        OfferService.create_offer(submission.id, partner.id, {}, user.id)
+
         expect(submission.reload.state).to eq 'approved'
         expect(submission.reload.approved_by).to eq user.id.to_s
         expect(submission.reload.approved_at).to_not be_nil
@@ -30,12 +26,7 @@ describe OfferService do
 
       it 'raises an error' do
         expect {
-          OfferService.create_offer(
-            submission.id,
-            partner.id,
-            {},
-            user.id
-          )
+          OfferService.create_offer(submission.id, partner.id, {}, user.id)
         }.to raise_error do |error|
           expect(error).to be_a OfferService::OfferError
           expect(
@@ -44,17 +35,13 @@ describe OfferService do
         end
       end
     end
+
     describe 'with a submission in a rejected state' do
       let(:submission_state) { Submission::REJECTED }
 
       it 'raises an error' do
         expect {
-          OfferService.create_offer(
-            submission.id,
-            partner.id,
-            {},
-            user.id
-          )
+          OfferService.create_offer(submission.id, partner.id, {}, user.id)
         }.to raise_error do |error|
           expect(error).to be_a OfferService::OfferError
           expect(
@@ -298,9 +285,7 @@ describe OfferService do
       context 'with an offer on an approved submission' do
         let(:submission_state) { Submission::APPROVED }
 
-        let(:ps) do
-          Fabricate(:partner_submission, submission: submission)
-        end
+        let(:ps) { Fabricate(:partner_submission, submission: submission) }
         let(:consignable_offer) { Fabricate(:offer, partner_submission: ps) }
         it 'sets fields on submission and partner submission' do
           OfferService.update_offer(
