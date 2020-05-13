@@ -24,6 +24,7 @@ describe OfferService do
         expect(submission.reload.approved_at).to_not be_nil
       end
     end
+
     describe 'with a submission in a draft state' do
       let(:submission_state) { Submission::DRAFT }
 
@@ -62,6 +63,7 @@ describe OfferService do
         end
       end
     end
+
     describe 'with no initial partner submission' do
       let(:submission_state) { Submission::APPROVED }
 
@@ -79,7 +81,7 @@ describe OfferService do
           PartnerSubmission.where(submission: submission, partner: partner)
             .first
         expect(ps.offers.count).to eq 1
-        expect(ps.offers.first.state).to eq 'draft'
+        expect(ps.offers.first.state).to eq Offer::DRAFT
         expect(ps.notified_at).to_not be_nil
       end
     end
@@ -98,11 +100,13 @@ describe OfferService do
       it 'creates multiple draft offers' do
         OfferService.create_offer(submission.id, partner.id)
         expect(@partner_submission.offers.count).to eq 1
-        expect(@partner_submission.offers.first.state).to eq 'draft'
+        expect(@partner_submission.offers.first.state).to eq Offer::DRAFT
 
         OfferService.create_offer(submission.id, partner.id)
         expect(@partner_submission.offers.count).to eq 2
-        expect(@partner_submission.offers.pluck(:state).uniq).to eq %w[draft]
+        expect(@partner_submission.offers.pluck(:state).uniq).to eq [
+             Offer::DRAFT
+           ]
       end
 
       it 'fails if the partner does not exist' do
@@ -186,7 +190,7 @@ describe OfferService do
         :offer,
         offer_type: 'purchase',
         price_cents: 10_000,
-        state: 'draft',
+        state: Offer::DRAFT,
         partner_submission: partner_submission
       )
     end
@@ -219,7 +223,7 @@ describe OfferService do
 
     describe 'sending an offer' do
       it 'sends an email to a user with offer information' do
-        OfferService.update_offer(offer, 'userid', state: 'sent')
+        OfferService.update_offer(offer, 'userid', state: Offer::SENT)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
@@ -240,14 +244,14 @@ describe OfferService do
             submission.id
           }&amp;entry.2=Happy%20Gallery"
         )
-        expect(offer.reload.state).to eq 'sent'
+        expect(offer.reload.state).to eq Offer::SENT
         expect(offer.sent_by).to eq 'userid'
         expect(offer.sent_at).to_not be_nil
       end
 
       it 'does not send an email if the email has already been sent' do
         offer.update!(sent_at: Time.now.utc)
-        OfferService.update_offer(offer, 'userid', state: 'sent')
+        OfferService.update_offer(offer, 'userid', state: Offer::SENT)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 0
       end
@@ -255,7 +259,7 @@ describe OfferService do
 
     describe 'introducing an offer' do
       it 'sends an email saying the user is interested in the offer' do
-        OfferService.update_offer(offer, 'userid', state: 'review')
+        OfferService.update_offer(offer, 'userid', state: Offer::REVIEW)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 2
         expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
@@ -273,7 +277,7 @@ describe OfferService do
         expect(emails.first.html_part.body).to_not include(
                                                      'The work will be purchased directly from you by the partner'
                                                    )
-        expect(offer.reload.state).to eq 'review'
+        expect(offer.reload.state).to eq Offer::REVIEW
         expect(offer.review_started_at).to_not be_nil
       end
     end
@@ -282,7 +286,7 @@ describe OfferService do
       context 'with an offer on a non-approved submission' do
         it 'raises an error' do
           expect {
-            OfferService.update_offer(offer, 'userid', state: 'consigned')
+            OfferService.update_offer(offer, 'userid', state: Offer::CONSIGNED)
           }.to raise_error do |error|
             expect(error).to be_a OfferService::OfferError
             expect(
@@ -302,7 +306,7 @@ describe OfferService do
           OfferService.update_offer(
             consignable_offer,
             'userid',
-            state: 'consigned'
+            state: Offer::CONSIGNED
           )
           expect(ActionMailer::Base.deliveries.count).to eq 0
           expect(ps.state).to eq 'open'
@@ -319,7 +323,7 @@ describe OfferService do
 
     describe 'rejecting an offer' do
       it 'sends an email saying the offer has been rejected' do
-        OfferService.update_offer(offer, 'userid', state: 'rejected')
+        OfferService.update_offer(offer, 'userid', state: Offer::REJECTED)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 2
         expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
@@ -342,13 +346,13 @@ describe OfferService do
         expect(email_body).to include(
           "https://google.com/offer_form?entry.1=#{submission.id}"
         )
-        expect(offer.reload.state).to eq 'rejected'
+        expect(offer.reload.state).to eq Offer::REJECTED
         expect(offer.rejected_by).to eq 'userid'
         expect(offer.rejected_at).to_not be_nil
       end
 
       it 'does not set consignment-related fields on an offer rejecton' do
-        OfferService.update_offer(offer, 'userid', state: 'rejected')
+        OfferService.update_offer(offer, 'userid', state: Offer::REJECTED)
         ps = offer.partner_submission
         expect(ps.state).to eq 'open'
         expect(ps.accepted_offer_id).to be_nil

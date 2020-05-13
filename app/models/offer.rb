@@ -20,7 +20,15 @@ class Offer < ApplicationRecord
   ].freeze
 
   # FIXME: deprecate 'accepted' state
-  STATES = %w[draft sent accepted rejected lapsed review consigned].freeze
+  STATES = [
+    DRAFT = 'draft',
+    SENT = 'sent',
+    ACCEPTED = 'accepted',
+    REJECTED = 'rejected',
+    LAPSED = 'lapsed',
+    REVIEW = 'review',
+    CONSIGNED = 'consigned'
+  ].freeze
 
   REJECTION_REASONS = [
     'Low estimate',
