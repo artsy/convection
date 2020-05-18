@@ -25,7 +25,8 @@ class CreateOfferResolver < BaseResolver
 
   def partner_id
     gravity_partner_id = @arguments[:gravity_partner_id]
-    Partner.find_by(gravity_partner_id: gravity_partner_id).id
+    partner = Partner.find_by(gravity_partner_id: gravity_partner_id)
+    partner.id
   end
 
   def offer_attributes
