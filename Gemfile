@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 
 ruby File.read('.ruby-version')
 
-gem 'rails', '6.0.3'
+gem 'rails', '6.0.3.1'
 
 gem 'pg'
 gem 'puma'
