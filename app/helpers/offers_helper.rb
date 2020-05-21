@@ -22,6 +22,7 @@ module OffersHelper
       'Sale Period' => sale_period_display(offer),
       'Sale Date' => sale_date_display(offer),
       'Sale Name' => offer.sale_name,
+      'Sale Location' => offer.sale_location,
       'Deadline' => offer.deadline_to_consign,
       'Commission' => commission_display(offer),
       'Shipping' => offer.shipping_info,
