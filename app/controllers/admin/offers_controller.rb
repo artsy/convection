@@ -159,6 +159,7 @@ module Admin
         :rejection_reason,
         :rejection_note,
         :sale_date,
+        :sale_location,
         :sale_name,
         :sale_period_end,
         :sale_period_start,
