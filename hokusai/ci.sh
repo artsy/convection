@@ -21,7 +21,7 @@ retry() {
     sleep ${retry_delay_seconds}
   done
 
-  bundle exec rake db:setup
+  bundle exec rake db:schema:load
 }
 
 retry 1>&2 ${MAX_ATTEMPTS:-5} ${RETRY_DELAY_SECONDS:-1} psql ${DATABASE_URL} -c '\l'
