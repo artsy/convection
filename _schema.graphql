@@ -91,6 +91,7 @@ input CreateOfferMutationInput {
   partnerInfo: String
   photographyInfo: String
   saleDate: Date
+  saleLocation: String
   saleName: String
   shippingInfo: String
   state: String
