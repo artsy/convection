@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_05_193734) do
+ActiveRecord::Schema.define(version: 2020_05_20_221322) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_trgm'
   enable_extension 'plpgsql'
+  enable_extension 'unaccent'
 
   create_table 'artist_standing_scores', force: :cascade do |t|
     t.string 'artist_id'
@@ -67,6 +68,7 @@ ActiveRecord::Schema.define(version: 2020_03_05_193734) do
     t.string 'override_email'
     t.text 'partner_info'
     t.string 'deadline_to_consign'
+    t.string 'sale_location'
     t.index %w[partner_submission_id],
             name: 'index_offers_on_partner_submission_id'
     t.index %w[reference_id], name: 'index_offers_on_reference_id'
@@ -146,8 +148,8 @@ ActiveRecord::Schema.define(version: 2020_03_05_193734) do
     t.integer 'primary_image_id'
     t.integer 'consigned_partner_submission_id'
     t.string 'user_email'
-    t.integer 'user_id'
     t.integer 'offers_count', default: 0
+    t.integer 'user_id'
     t.bigint 'minimum_price_cents'
     t.string 'currency'
     t.string 'user_agent'

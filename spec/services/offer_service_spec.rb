@@ -184,7 +184,8 @@ describe OfferService do
           offer_type: 'purchase',
           price_cents: 10_000,
           state: Offer::DRAFT,
-          partner_submission: partner_submission
+          partner_submission: partner_submission,
+          sale_location: 'Marrakesh, Morocco'
         )
       end
 
@@ -240,6 +241,7 @@ describe OfferService do
               submission.id
             }&amp;entry.2=Happy%20Gallery"
           )
+          expect(email_body).to include('Marrakesh, Morocco')
 
           offer.reload
 
