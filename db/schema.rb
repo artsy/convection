@@ -11,7 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 2020_05_20_221322) do
-
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_trgm'
   enable_extension 'plpgsql'
@@ -30,7 +29,7 @@ ActiveRecord::Schema.define(version: 2020_05_20_221322) do
     t.string 'gemini_token'
     t.jsonb 'image_urls', default: {}
     t.integer 'submission_id'
-    t.index ['submission_id'], name: 'index_assets_on_submission_id'
+    t.index %w[submission_id], name: 'index_assets_on_submission_id'
   end
 
   create_table 'offers', id: :serial, force: :cascade do |t|
@@ -70,9 +69,10 @@ ActiveRecord::Schema.define(version: 2020_05_20_221322) do
     t.text 'partner_info'
     t.string 'deadline_to_consign'
     t.string 'sale_location'
-    t.index ['partner_submission_id'], name: 'index_offers_on_partner_submission_id'
-    t.index ['reference_id'], name: 'index_offers_on_reference_id'
-    t.index ['submission_id'], name: 'index_offers_on_submission_id'
+    t.index %w[partner_submission_id],
+            name: 'index_offers_on_partner_submission_id'
+    t.index %w[reference_id], name: 'index_offers_on_reference_id'
+    t.index %w[submission_id], name: 'index_offers_on_submission_id'
   end
 
   create_table 'partner_submissions', id: :serial, force: :cascade do |t|
@@ -96,9 +96,11 @@ ActiveRecord::Schema.define(version: 2020_05_20_221322) do
     t.string 'state'
     t.string 'reference_id'
     t.text 'canceled_reason'
-    t.index ['accepted_offer_id'], name: 'index_partner_submissions_on_accepted_offer_id'
-    t.index ['partner_id'], name: 'index_partner_submissions_on_partner_id'
-    t.index ['submission_id'], name: 'index_partner_submissions_on_submission_id'
+    t.index %w[accepted_offer_id],
+            name: 'index_partner_submissions_on_accepted_offer_id'
+    t.index %w[partner_id], name: 'index_partner_submissions_on_partner_id'
+    t.index %w[submission_id],
+            name: 'index_partner_submissions_on_submission_id'
   end
 
   create_table 'partners', id: :serial, force: :cascade do |t|
@@ -106,7 +108,8 @@ ActiveRecord::Schema.define(version: 2020_05_20_221322) do
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
     t.string 'name'
-    t.index ['gravity_partner_id'], name: 'index_partners_on_gravity_partner_id', unique: true
+    t.index %w[gravity_partner_id],
+            name: 'index_partners_on_gravity_partner_id', unique: true
   end
 
   create_table 'submissions', id: :serial, force: :cascade do |t|
@@ -154,10 +157,11 @@ ActiveRecord::Schema.define(version: 2020_05_20_221322) do
     t.float 'artist_score'
     t.float 'auction_score'
     t.string 'assigned_to'
-    t.index ['consigned_partner_submission_id'], name: 'index_submissions_on_consigned_partner_submission_id'
-    t.index ['ext_user_id'], name: 'index_submissions_on_ext_user_id'
-    t.index ['primary_image_id'], name: 'index_submissions_on_primary_image_id'
-    t.index ['user_id'], name: 'index_submissions_on_user_id'
+    t.index %w[consigned_partner_submission_id],
+            name: 'index_submissions_on_consigned_partner_submission_id'
+    t.index %w[ext_user_id], name: 'index_submissions_on_ext_user_id'
+    t.index %w[primary_image_id], name: 'index_submissions_on_primary_image_id'
+    t.index %w[user_id], name: 'index_submissions_on_user_id'
   end
 
   create_table 'users', force: :cascade do |t|
@@ -165,16 +169,23 @@ ActiveRecord::Schema.define(version: 2020_05_20_221322) do
     t.string 'email'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
-    t.index ['gravity_user_id'], name: 'index_users_on_gravity_user_id', unique: true
+    t.index %w[gravity_user_id],
+            name: 'index_users_on_gravity_user_id', unique: true
   end
 
   add_foreign_key 'assets', 'submissions'
   add_foreign_key 'offers', 'partner_submissions', on_delete: :cascade
   add_foreign_key 'offers', 'submissions', on_delete: :cascade
-  add_foreign_key 'partner_submissions', 'offers', column: 'accepted_offer_id', on_delete: :nullify
+  add_foreign_key 'partner_submissions',
+                  'offers',
+                  column: 'accepted_offer_id', on_delete: :nullify
   add_foreign_key 'partner_submissions', 'partners'
   add_foreign_key 'partner_submissions', 'submissions'
-  add_foreign_key 'submissions', 'assets', column: 'primary_image_id', on_delete: :nullify
-  add_foreign_key 'submissions', 'partner_submissions', column: 'consigned_partner_submission_id', on_delete: :nullify
+  add_foreign_key 'submissions',
+                  'assets',
+                  column: 'primary_image_id', on_delete: :nullify
+  add_foreign_key 'submissions',
+                  'partner_submissions',
+                  column: 'consigned_partner_submission_id', on_delete: :nullify
   add_foreign_key 'submissions', 'users'
 end
