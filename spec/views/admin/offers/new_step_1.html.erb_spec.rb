@@ -48,6 +48,7 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         expect(page).to have_content('High estimate')
         expect(page).to have_content('Commission %')
         expect(page).to have_content('Sale name')
+        expect(page).to have_content('Sale location')
         expect(page).to have_content('Sale date')
         expect(page).to_not have_content('Price')
       end

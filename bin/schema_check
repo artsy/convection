@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e
+
+mv _schema.graphql _schema.graphql.bak
+rake graphql:schema:idl
+
+# either we err and trap and move files back
+trap "mv _schema.graphql.bak _schema.graphql" ERR
+diff -q _schema.graphql _schema.graphql.bak
+# or we don't err and we move files back
+mv _schema.graphql.bak _schema.graphql

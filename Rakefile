@@ -26,10 +26,8 @@ if Rails.env.development? || Rails.env.test?
 
   desc 'check for schema drift'
   task schema_check: :environment do
-    system 'rake graphql:schema:idl'
-    abort 'schema export failed' unless $CHILD_STATUS.exitstatus.zero?
-    system 'git status --porcelain | grep -q "_schema.graphql"'
-    abort 'schema-check failed' if $CHILD_STATUS.exitstatus.zero?
+    system './bin/schema_check'
+    abort 'schema-check failed' unless $CHILD_STATUS.exitstatus.zero?
   end
 
   Rake::Task[:default].clear

@@ -21,6 +21,7 @@ module Mutations
     argument :sale_name, String, required: false
     argument :shipping_info, String, required: false
     argument :state, String, required: false
+    argument :sale_location, String, required: false
 
     field :consignment_offer, Types::OfferType, null: true
 
