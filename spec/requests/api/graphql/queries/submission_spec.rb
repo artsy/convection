@@ -204,6 +204,7 @@ describe 'submission query' do
             {
               'id' => offer.id.to_s,
               'state' => offer.state,
+              'saleLocation' => offer.sale_location,
               'commissionPercentWhole' => offer.commission_percent_whole
             }
           )
