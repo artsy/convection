@@ -137,6 +137,7 @@ describe 'submission query' do
             offers(gravityPartnerId: "#{gravity_partner_id}") {
               id
               state
+              saleLocation
               commissionPercentWhole
             }
           }
@@ -203,6 +204,7 @@ describe 'submission query' do
             {
               'id' => offer.id.to_s,
               'state' => offer.state,
+              'saleLocation' => offer.sale_location,
               'commissionPercentWhole' => offer.commission_percent_whole
             }
           )
