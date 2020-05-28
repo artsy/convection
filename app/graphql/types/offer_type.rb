@@ -20,6 +20,7 @@ module Types
     field :photography_info, String, null: true
     field :sale_date, String, null: true
     field :sale_name, String, null: true
+    field :sale_location, String, null: true
     field :shipping_info, String, null: true
     field :state, String, null: true
   end
