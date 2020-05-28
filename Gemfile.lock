@@ -340,7 +340,7 @@ GEM
     redcarpet (3.5.0)
     redis (4.1.4)
     regexp_parser (1.7.0)
-    reverse_markdown (1.4.0)
+    reverse_markdown (2.0.0)
       nokogiri
     rexml (3.2.4)
     rouge (3.19.0)
@@ -411,7 +411,7 @@ GEM
       rack (~> 2.0)
       rack-protection (>= 2.0.0)
       redis (>= 4.1.0)
-    solargraph (0.39.7)
+    solargraph (0.39.8)
       backport (~> 1.1)
       benchmark
       bundler (>= 1.17.2)
@@ -420,7 +420,7 @@ GEM
       maruku (~> 0.7, >= 0.7.3)
       nokogiri (~> 1.9, >= 1.9.1)
       parser (~> 2.3)
-      reverse_markdown (~> 1.0, >= 1.0.5)
+      reverse_markdown (>= 1.0.5, < 3)
       rubocop (~> 0.52)
       thor (~> 1.0)
       tilt (~> 2.0)
