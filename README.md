@@ -10,7 +10,7 @@ Convection is the application that powers our consignments workflow, enabling us
 - **GitHub:** [https://github.com/artsy/convection](https://github.com/artsy/convection)
 - **Point People:** [@jonallured]
 - **CI/Deploys:** [CircleCi](https://circleci.com/gh/artsy/convection); PRs merged to `artsy/convection#master` are automatically deployed to staging; PRs from `staging` to `release` are automatically deployed to production. Create such a PR with [`deploy_pr`][deploy_pr] or [this handy link][deploy].
-- **Cron Tasks:** A daily digest is sent to partners at 10am EST. The production database is exported Sunday mornings at 12am EST, and imported to staging Sunday mornings at 1am EST. 
+- **Cron Tasks:** A daily digest is sent to partners at 10am EST. The production database is exported Sunday mornings at 12am EST, and imported to staging Sunday mornings at 1am EST.
 
 ## Contributing Pull Requests
 
@@ -55,13 +55,17 @@ Note: the default rake task is setup to run tests and RuboCop.
 
 ## Did You Change the GraphQL Schema?
 
-If you have changed Convection GraphQL schema, make sure to run:
+If you have changed Convection GraphQL schema, make sure to do the following:
+
+Step 1: In convection, run:
 
 ```shell
 $ rake graphql:schema:idl
 ```
 
-See [docs/schema-stitching.md][schema-doc] for more.
+Step 2: Copy the generated `_schema.graphql` file to the [convection.graphql](https://github.com/artsy/metaphysics/blob/master/src/data/convection.graphql) file in [metaphysics](https://github.com/artsy/metaphysics).
+
+This file is used for stitching. See [docs/schema-stitching.md][schema-doc] for additional step you might need to do.
 
 ## Starting Server
 
