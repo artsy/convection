@@ -13,13 +13,15 @@ class SubmissionsResolver < BaseResolver
 
   BadArgumentError = GraphQL::ExecutionError.new("Can't access arguments: ids")
 
+  InvalidSortError = GraphQL::ExecutionError.new('Invalid sort column.')
+
   def valid?
     @error = compute_error
     @error.nil?
   end
 
   def run
-    base_submissions.where(conditions).order(id: :desc)
+    base_submissions.where(conditions).order(sort_order)
   end
 
   private
@@ -31,6 +33,8 @@ class SubmissionsResolver < BaseResolver
       AllSubmissionsError
     elsif user_mismatch?
       UserMismatchError
+    elsif invalid_sort?
+      InvalidSortError
     end
   end
 
@@ -71,5 +75,22 @@ class SubmissionsResolver < BaseResolver
     return false unless @arguments.key(:user_id)
 
     user_ids != [@context[:current_user]]
+  end
+
+  def invalid_sort?
+    return false if @arguments[:sort].blank?
+
+    column_name = @arguments[:sort].tr('-', '')
+    !Submission.column_names.include?(column_name)
+  end
+
+  def sort_order
+    default_sort = { id: :desc }
+    return default_sort unless @arguments[:sort]
+
+    direction = @arguments[:sort].first == '-' ? :desc : :asc
+    column = @arguments[:sort].tr('-', '')
+
+    { column => direction }
   end
 end

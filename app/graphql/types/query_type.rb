@@ -31,6 +31,10 @@ module Types
       argument :available, Boolean, required: false do
         description 'If true return only available submissions'
       end
+
+      argument :sort, String, required: false do
+        description 'Return submissions sorted by this field'
+      end
     end
 
     def submissions(arguments = {})

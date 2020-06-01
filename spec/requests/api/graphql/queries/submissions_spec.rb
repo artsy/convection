@@ -355,5 +355,92 @@ describe 'submissions query' do
         expect(asset_response['imageUrls']).to eq({})
       end
     end
+
+    describe 'sorting' do
+      let!(:submission) { Fabricate :submission, id: 7, created_at: 1.day.ago }
+      let!(:middle_submission) do
+        Fabricate :submission, id: 8, created_at: 3.days.ago
+      end
+      let!(:last_submission) do
+        Fabricate :submission, id: 9, created_at: 2.days.ago
+      end
+
+      let(:query) do
+        <<-GRAPHQL
+        query {
+          submissions(#{query_inputs}) {
+            edges {
+              node {
+                id
+                createdAt
+              }
+            }
+          }
+        }
+        GRAPHQL
+      end
+
+      context 'without a sort column' do
+        let(:query_inputs) { 'sort: null' }
+
+        it 'returns the submissions sorted ascending by the id column' do
+          post '/api/graphql', params: { query: query }, headers: headers
+
+          expect(response.status).to eq 200
+          body = JSON.parse(response.body)
+
+          submissions_response = body['data']['submissions']
+          ids =
+            submissions_response['edges'].map { |edge| edge.dig('node', 'id') }
+          expect(ids).to eq %w[9 8 7]
+        end
+      end
+
+      context 'with an invalid sort column' do
+        let(:query_inputs) { 'sort: "invalid"' }
+
+        it 'returns an error' do
+          post '/api/graphql', params: { query: query }, headers: headers
+
+          expect(response.status).to eq 200
+          body = JSON.parse(response.body)
+
+          error_message = body['errors'][0]['message']
+          expect(error_message).to eq 'Invalid sort column.'
+        end
+      end
+
+      context 'with a valid sort column' do
+        let(:query_inputs) { 'sort: "created_at"' }
+
+        it 'returns the submissions sorted ascending by that column' do
+          post '/api/graphql', params: { query: query }, headers: headers
+
+          expect(response.status).to eq 200
+          body = JSON.parse(response.body)
+
+          submissions_response = body['data']['submissions']
+          ids =
+            submissions_response['edges'].map { |edge| edge.dig('node', 'id') }
+          expect(ids).to eq %w[8 9 7]
+        end
+      end
+
+      context 'with a descending direction prefix' do
+        let(:query_inputs) { 'sort: "-created_at"' }
+
+        it 'returns the submissions sorted descending by that column' do
+          post '/api/graphql', params: { query: query }, headers: headers
+
+          expect(response.status).to eq 200
+          body = JSON.parse(response.body)
+
+          submissions_response = body['data']['submissions']
+          ids =
+            submissions_response['edges'].map { |edge| edge.dig('node', 'id') }
+          expect(ids).to eq %w[7 9 8]
+        end
+      end
+    end
   end
 end

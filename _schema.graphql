@@ -304,6 +304,11 @@ type Query {
     last: Int
 
     """
+    Return submissions sorted by this field
+    """
+    sort: String
+
+    """
     Get all submissions with these user IDs
     """
     userId: [ID!]
