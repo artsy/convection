@@ -14,8 +14,6 @@ class SubmissionsResolver < BaseResolver
   BadArgumentError = GraphQL::ExecutionError.new("Can't access arguments: ids")
 
   def valid?
-    return true if admin?
-
     @error = compute_error
     @error.nil?
   end
@@ -27,9 +25,9 @@ class SubmissionsResolver < BaseResolver
   private
 
   def compute_error
-    if @arguments.key?(:ids)
+    if not_allowed_ids?
       BadArgumentError
-    elsif return_all_submissions? && !partner?
+    elsif not_allowed_all_submissions?
       AllSubmissionsError
     elsif user_mismatch?
       UserMismatchError
@@ -52,11 +50,24 @@ class SubmissionsResolver < BaseResolver
     @arguments.fetch(:user_id, [])
   end
 
+  def not_allowed_ids?
+    return false if admin?
+
+    @arguments.key?(:ids)
+  end
+
+  def not_allowed_all_submissions?
+    return false if admin?
+
+    return_all_submissions? && !partner?
+  end
+
   def return_all_submissions?
     submission_ids.empty? && user_ids.empty?
   end
 
   def user_mismatch?
+    return false if admin?
     return false unless @arguments.key(:user_id)
 
     user_ids != [@context[:current_user]]
