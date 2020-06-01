@@ -383,7 +383,7 @@ describe 'submissions query' do
       context 'without a sort column' do
         let(:query_inputs) { 'sort: null' }
 
-        it 'returns the submissions sorted ascending by the id column' do
+        it 'returns the submissions sorted descending by the id column' do
           post '/api/graphql', params: { query: query }, headers: headers
 
           expect(response.status).to eq 200
