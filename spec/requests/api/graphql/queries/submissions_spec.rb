@@ -396,22 +396,8 @@ describe 'submissions query' do
         end
       end
 
-      context 'with an invalid sort column' do
-        let(:query_inputs) { 'sort: "invalid"' }
-
-        it 'returns an error' do
-          post '/api/graphql', params: { query: query }, headers: headers
-
-          expect(response.status).to eq 200
-          body = JSON.parse(response.body)
-
-          error_message = body['errors'][0]['message']
-          expect(error_message).to eq 'Invalid sort column.'
-        end
-      end
-
       context 'with a valid sort column' do
-        let(:query_inputs) { 'sort: "created_at"' }
+        let(:query_inputs) { 'sort: CREATED_AT_ASC' }
 
         it 'returns the submissions sorted ascending by that column' do
           post '/api/graphql', params: { query: query }, headers: headers
@@ -427,7 +413,7 @@ describe 'submissions query' do
       end
 
       context 'with a descending direction prefix' do
-        let(:query_inputs) { 'sort: "-created_at"' }
+        let(:query_inputs) { 'sort: CREATED_AT_DESC' }
 
         it 'returns the submissions sorted descending by that column' do
           post '/api/graphql', params: { query: query }, headers: headers

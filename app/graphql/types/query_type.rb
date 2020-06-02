@@ -32,8 +32,10 @@ module Types
         description 'If true return only available submissions'
       end
 
-      argument :sort, String, required: false do
-        description 'Return submissions sorted by this field'
+      argument :sort,
+               SubmissionSortType,
+               required: false, prepare: SubmissionSortType.prepare do
+        description 'Return submissions sorted this way'
       end
     end
 

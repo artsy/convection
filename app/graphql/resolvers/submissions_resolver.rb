@@ -80,7 +80,7 @@ class SubmissionsResolver < BaseResolver
   def invalid_sort?
     return false if @arguments[:sort].blank?
 
-    column_name = @arguments[:sort].tr('-', '')
+    column_name = @arguments[:sort].keys.first
     !Submission.column_names.include?(column_name)
   end
 
@@ -88,9 +88,6 @@ class SubmissionsResolver < BaseResolver
     default_sort = { id: :desc }
     return default_sort unless @arguments[:sort]
 
-    direction = @arguments[:sort].first == '-' ? :desc : :asc
-    column = @arguments[:sort].tr('-', '')
-
-    { column => direction }
+    @arguments[:sort]
   end
 end
