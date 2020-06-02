@@ -4,9 +4,10 @@ module Types
   class OfferType < Types::BaseObject
     description 'Consignment Offer'
 
-    field :id, ID, 'Uniq ID for this submission', null: false
+    field :id, ID, 'Uniq ID for this offer', null: false
 
     field :commission_percent_whole, Integer, null: true
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: true
     field :created_by_id, ID, null: true
     field :currency, String, null: true
     field :deadline_to_consign, String, null: true
@@ -23,5 +24,7 @@ module Types
     field :sale_location, String, null: true
     field :shipping_info, String, null: true
     field :state, String, null: true
+
+    field :submission, Types::SubmissionType, null: false
   end
 end

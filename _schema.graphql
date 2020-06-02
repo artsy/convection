@@ -183,13 +183,14 @@ Consignment Offer
 """
 type Offer {
   commissionPercentWhole: Int
+  createdAt: ISO8601DateTime
   createdById: ID
   currency: String
   deadlineToConsign: String
   highEstimateCents: Int
 
   """
-  Uniq ID for this submission
+  Uniq ID for this offer
   """
   id: ID!
   insuranceInfo: String
@@ -204,6 +205,417 @@ type Offer {
   saleName: String
   shippingInfo: String
   state: String
+  submission: Submission!
+}
+
+"""
+The connection type for Offer.
+"""
+type OfferConnection {
+  """
+  A list of edges.
+  """
+  edges: [OfferEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [Offer]
+  pageCursors: PageCursors
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  totalCount: Int
+  totalPages: Int
+}
+
+"""
+An edge in a connection.
+"""
+type OfferEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: Offer
+}
+
+enum OfferSort {
+  """
+  sort by accepted_at in ascending order
+  """
+  ACCEPTED_AT_ASC
+
+  """
+  sort by accepted_at in descending order
+  """
+  ACCEPTED_AT_DESC
+
+  """
+  sort by accepted_by in ascending order
+  """
+  ACCEPTED_BY_ASC
+
+  """
+  sort by accepted_by in descending order
+  """
+  ACCEPTED_BY_DESC
+
+  """
+  sort by commission_percent in ascending order
+  """
+  COMMISSION_PERCENT_ASC
+
+  """
+  sort by commission_percent in descending order
+  """
+  COMMISSION_PERCENT_DESC
+
+  """
+  sort by consigned_at in ascending order
+  """
+  CONSIGNED_AT_ASC
+
+  """
+  sort by consigned_at in descending order
+  """
+  CONSIGNED_AT_DESC
+
+  """
+  sort by created_at in ascending order
+  """
+  CREATED_AT_ASC
+
+  """
+  sort by created_at in descending order
+  """
+  CREATED_AT_DESC
+
+  """
+  sort by created_by_id in ascending order
+  """
+  CREATED_BY_ID_ASC
+
+  """
+  sort by created_by_id in descending order
+  """
+  CREATED_BY_ID_DESC
+
+  """
+  sort by currency in ascending order
+  """
+  CURRENCY_ASC
+
+  """
+  sort by currency in descending order
+  """
+  CURRENCY_DESC
+
+  """
+  sort by deadline_to_consign in ascending order
+  """
+  DEADLINE_TO_CONSIGN_ASC
+
+  """
+  sort by deadline_to_consign in descending order
+  """
+  DEADLINE_TO_CONSIGN_DESC
+
+  """
+  sort by high_estimate_cents in ascending order
+  """
+  HIGH_ESTIMATE_CENTS_ASC
+
+  """
+  sort by high_estimate_cents in descending order
+  """
+  HIGH_ESTIMATE_CENTS_DESC
+
+  """
+  sort by id in ascending order
+  """
+  ID_ASC
+
+  """
+  sort by id in descending order
+  """
+  ID_DESC
+
+  """
+  sort by insurance_info in ascending order
+  """
+  INSURANCE_INFO_ASC
+
+  """
+  sort by insurance_info in descending order
+  """
+  INSURANCE_INFO_DESC
+
+  """
+  sort by low_estimate_cents in ascending order
+  """
+  LOW_ESTIMATE_CENTS_ASC
+
+  """
+  sort by low_estimate_cents in descending order
+  """
+  LOW_ESTIMATE_CENTS_DESC
+
+  """
+  sort by notes in ascending order
+  """
+  NOTES_ASC
+
+  """
+  sort by notes in descending order
+  """
+  NOTES_DESC
+
+  """
+  sort by offer_type in ascending order
+  """
+  OFFER_TYPE_ASC
+
+  """
+  sort by offer_type in descending order
+  """
+  OFFER_TYPE_DESC
+
+  """
+  sort by other_fees_info in ascending order
+  """
+  OTHER_FEES_INFO_ASC
+
+  """
+  sort by other_fees_info in descending order
+  """
+  OTHER_FEES_INFO_DESC
+
+  """
+  sort by override_email in ascending order
+  """
+  OVERRIDE_EMAIL_ASC
+
+  """
+  sort by override_email in descending order
+  """
+  OVERRIDE_EMAIL_DESC
+
+  """
+  sort by partner_info in ascending order
+  """
+  PARTNER_INFO_ASC
+
+  """
+  sort by partner_info in descending order
+  """
+  PARTNER_INFO_DESC
+
+  """
+  sort by partner_submission_id in ascending order
+  """
+  PARTNER_SUBMISSION_ID_ASC
+
+  """
+  sort by partner_submission_id in descending order
+  """
+  PARTNER_SUBMISSION_ID_DESC
+
+  """
+  sort by photography_info in ascending order
+  """
+  PHOTOGRAPHY_INFO_ASC
+
+  """
+  sort by photography_info in descending order
+  """
+  PHOTOGRAPHY_INFO_DESC
+
+  """
+  sort by price_cents in ascending order
+  """
+  PRICE_CENTS_ASC
+
+  """
+  sort by price_cents in descending order
+  """
+  PRICE_CENTS_DESC
+
+  """
+  sort by reference_id in ascending order
+  """
+  REFERENCE_ID_ASC
+
+  """
+  sort by reference_id in descending order
+  """
+  REFERENCE_ID_DESC
+
+  """
+  sort by rejected_at in ascending order
+  """
+  REJECTED_AT_ASC
+
+  """
+  sort by rejected_at in descending order
+  """
+  REJECTED_AT_DESC
+
+  """
+  sort by rejected_by in ascending order
+  """
+  REJECTED_BY_ASC
+
+  """
+  sort by rejected_by in descending order
+  """
+  REJECTED_BY_DESC
+
+  """
+  sort by rejection_note in ascending order
+  """
+  REJECTION_NOTE_ASC
+
+  """
+  sort by rejection_note in descending order
+  """
+  REJECTION_NOTE_DESC
+
+  """
+  sort by rejection_reason in ascending order
+  """
+  REJECTION_REASON_ASC
+
+  """
+  sort by rejection_reason in descending order
+  """
+  REJECTION_REASON_DESC
+
+  """
+  sort by review_started_at in ascending order
+  """
+  REVIEW_STARTED_AT_ASC
+
+  """
+  sort by review_started_at in descending order
+  """
+  REVIEW_STARTED_AT_DESC
+
+  """
+  sort by sale_date in ascending order
+  """
+  SALE_DATE_ASC
+
+  """
+  sort by sale_date in descending order
+  """
+  SALE_DATE_DESC
+
+  """
+  sort by sale_location in ascending order
+  """
+  SALE_LOCATION_ASC
+
+  """
+  sort by sale_location in descending order
+  """
+  SALE_LOCATION_DESC
+
+  """
+  sort by sale_name in ascending order
+  """
+  SALE_NAME_ASC
+
+  """
+  sort by sale_name in descending order
+  """
+  SALE_NAME_DESC
+
+  """
+  sort by sale_period_end in ascending order
+  """
+  SALE_PERIOD_END_ASC
+
+  """
+  sort by sale_period_end in descending order
+  """
+  SALE_PERIOD_END_DESC
+
+  """
+  sort by sale_period_start in ascending order
+  """
+  SALE_PERIOD_START_ASC
+
+  """
+  sort by sale_period_start in descending order
+  """
+  SALE_PERIOD_START_DESC
+
+  """
+  sort by sent_at in ascending order
+  """
+  SENT_AT_ASC
+
+  """
+  sort by sent_at in descending order
+  """
+  SENT_AT_DESC
+
+  """
+  sort by sent_by in ascending order
+  """
+  SENT_BY_ASC
+
+  """
+  sort by sent_by in descending order
+  """
+  SENT_BY_DESC
+
+  """
+  sort by shipping_info in ascending order
+  """
+  SHIPPING_INFO_ASC
+
+  """
+  sort by shipping_info in descending order
+  """
+  SHIPPING_INFO_DESC
+
+  """
+  sort by state in ascending order
+  """
+  STATE_ASC
+
+  """
+  sort by state in descending order
+  """
+  STATE_DESC
+
+  """
+  sort by submission_id in ascending order
+  """
+  SUBMISSION_ID_ASC
+
+  """
+  sort by submission_id in descending order
+  """
+  SUBMISSION_ID_DESC
+
+  """
+  sort by updated_at in ascending order
+  """
+  UPDATED_AT_ASC
+
+  """
+  sort by updated_at in descending order
+  """
+  UPDATED_AT_DESC
 }
 
 type PageCursor {
@@ -264,6 +676,46 @@ type PageInfo {
 }
 
 type Query {
+  """
+  List offers
+  """
+  offers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Return offers for the given partner
+    """
+    gravityPartnerId: ID!
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Return offers sorted this way
+    """
+    sort: OfferSort
+
+    """
+    Return only offers with matching states
+    """
+    states: [String!]
+  ): OfferConnection
+
   """
   Get a Submission
   """

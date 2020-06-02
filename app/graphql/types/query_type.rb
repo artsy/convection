@@ -2,6 +2,32 @@
 
 module Types
   class QueryType < GraphQL::Schema::Object
+    field :offers, OfferConnectionType, null: true, connection: true do
+      description 'List offers'
+
+      argument :gravity_partner_id, ID, required: true do
+        description 'Return offers for the given partner'
+      end
+
+      argument :states, [String], required: false do
+        description 'Return only offers with matching states'
+      end
+
+      argument :sort,
+               OfferSortType,
+               required: false, prepare: OfferSortType.prepare do
+        description 'Return offers sorted this way'
+      end
+    end
+
+    def offers(arguments = {})
+      query_options = { arguments: arguments, context: context, object: object }
+      resolver = OffersResolver.new(query_options)
+      raise resolver.error unless resolver.valid?
+
+      resolver.run
+    end
+
     field :submission, SubmissionType, null: true do
       description 'Get a Submission'
       argument :id, ID, required: false
