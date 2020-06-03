@@ -31,6 +31,12 @@ module Types
       argument :available, Boolean, required: false do
         description 'If true return only available submissions'
       end
+
+      argument :sort,
+               SubmissionSortType,
+               required: false, prepare: SubmissionSortType.prepare do
+        description 'Return submissions sorted this way'
+      end
     end
 
     def submissions(arguments = {})
