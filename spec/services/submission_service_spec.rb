@@ -102,6 +102,7 @@ describe SubmissionService do
       expect(submission.rejected_at).to be_nil
       expect(submission.approved_by).to be_nil
       expect(submission.approved_at).to be_nil
+      expect(submission.published_at).to be_nil
     end
 
     it 'sends no emails if the state is not being changed to published or rejected' do
@@ -116,6 +117,7 @@ describe SubmissionService do
       expect(submission.rejected_at).to be_nil
       expect(submission.approved_by).to be_nil
       expect(submission.approved_at).to be_nil
+      expect(submission.published_at).to be_nil
     end
 
     it 'sends an approval notification if the submission state is changed to approved' do
@@ -134,6 +136,7 @@ describe SubmissionService do
       expect(submission.approved_at).to_not be_nil
       expect(submission.rejected_by).to be_nil
       expect(submission.rejected_at).to be_nil
+      expect(submission.published_at).to be_nil
     end
 
     it 'does not generate partner submissions on an approval' do
@@ -164,6 +167,7 @@ describe SubmissionService do
         { state: 'published' },
         current_user: 'userid'
       )
+
       expect(ActionMailer::Base.deliveries.length).to eq 1
       expect(partner1.partner_submissions.length).to eq 1
       expect(partner2.partner_submissions.length).to eq 1
@@ -171,10 +175,23 @@ describe SubmissionService do
       expect(partner2.partner_submissions.first.notified_at).to be_nil
     end
 
-    it 'does not update already approved submissions on publish' do
+    it 'sets published_at date on publish' do
+      allow(NotificationService).to receive(:post_submission_event)
+      SubmissionService.update_submission(
+        submission,
+        { state: 'published' },
+        current_user: 'userid'
+      )
+
+      expect(submission.published_at).to_not be_nil
+    end
+
+    it 'only updates published_at for already approved submissions on publish' do
       allow(NotificationService).to receive(:post_submission_event)
       approved_at = 1.day.ago.beginning_of_day
-      submission.update!(state: 'approved', approved_at: approved_at)
+      submission.update!(
+        state: 'approved', approved_at: approved_at, published_at: approved_at
+      )
       SubmissionService.update_submission(
         submission,
         { state: 'published' },
@@ -182,6 +199,7 @@ describe SubmissionService do
       )
 
       expect(submission.reload.approved_at).to eq approved_at
+      expect(submission.reload.published_at).to_not be_nil
     end
 
     it 'sends a rejection notification if the submission state is changed to rejected' do
@@ -203,6 +221,7 @@ describe SubmissionService do
       expect(submission.rejected_at).to_not be_nil
       expect(submission.approved_by).to be_nil
       expect(submission.approved_at).to be_nil
+      expect(submission.published_at).to be_nil
     end
   end
 
@@ -236,6 +255,7 @@ describe SubmissionService do
         expect(submission.approved_at).to be_nil
         expect(submission.rejected_by).to be_nil
         expect(submission.rejected_at).to be_nil
+        expect(submission.published_at).to be_nil
       end
 
       it 'fails to undo an approval if there are any offers' do
@@ -277,6 +297,7 @@ describe SubmissionService do
         expect(submission.approved_at).to be_nil
         expect(submission.rejected_by).to be_nil
         expect(submission.rejected_at).to be_nil
+        expect(submission.published_at).to be_nil
       end
 
       it 'fails to undo a publish if there are any offers' do
@@ -312,6 +333,7 @@ describe SubmissionService do
         expect(submission.approved_at).to be_nil
         expect(submission.rejected_by).to be_nil
         expect(submission.rejected_at).to be_nil
+        expect(submission.published_at).to be_nil
 
         # no new emails
         expect(ActionMailer::Base.deliveries.length).to eq 1
