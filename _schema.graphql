@@ -677,6 +677,17 @@ type PageInfo {
 
 type Query {
   """
+  Get an Offer
+  """
+  offer(
+    """
+    Return offers for the given partner
+    """
+    gravityPartnerId: ID!
+    id: ID!
+  ): Offer
+
+  """
   List offers
   """
   offers(
