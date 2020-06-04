@@ -808,6 +808,7 @@ type Submission {
   signature: Boolean
   state: State
   title: String
+  userAgent: String
   userId: String!
   width: String
   year: String
