@@ -29,6 +29,7 @@ module Types
     field :signature, Boolean, null: true
     field :state, Types::StateType, null: true
     field :title, String, null: true
+    field :user_agent, String, null: true
     field :user_id, String, null: false
     field :width, String, null: true
     field :year, String, null: true
