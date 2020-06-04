@@ -1164,6 +1164,16 @@ enum SubmissionSort {
   PROVENANCE_DESC
 
   """
+  sort by published_at in ascending order
+  """
+  PUBLISHED_AT_ASC
+
+  """
+  sort by published_at in descending order
+  """
+  PUBLISHED_AT_DESC
+
+  """
   sort by qualified in ascending order
   """
   QUALIFIED_ASC
