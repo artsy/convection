@@ -189,7 +189,9 @@ describe SubmissionService do
     it 'only updates published_at for already approved submissions on publish' do
       allow(NotificationService).to receive(:post_submission_event)
       approved_at = 1.day.ago.beginning_of_day
-      submission.update!(state: 'approved', approved_at: approved_at, published_at: approved_at)
+      submission.update!(
+        state: 'approved', approved_at: approved_at, published_at: approved_at
+      )
       SubmissionService.update_submission(
         submission,
         { state: 'published' },

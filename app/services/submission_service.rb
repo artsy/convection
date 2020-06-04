@@ -99,7 +99,11 @@ class SubmissionService
     end
 
     def publish!(submission, current_user)
-      submission.update!(approved_by: submission.approved_by || current_user, approved_at: submission.approved_at || Time.now.utc, published_at: Time.now.utc)
+      submission.update!(
+        approved_by: submission.approved_by || current_user,
+        approved_at: submission.approved_at || Time.now.utc,
+        published_at: Time.now.utc
+      )
 
       NotificationService.delay.post_submission_event(
         submission.id,
