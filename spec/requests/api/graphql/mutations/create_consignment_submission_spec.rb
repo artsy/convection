@@ -130,7 +130,6 @@ describe 'createConsignmentSubmission mutation' do
         post '/api/graphql', params: { query: mutation }, headers: headers
 
         expect(response.status).to eq 200
-        body = JSON.parse(response.body)
         submission = Submission.first
         expect(submission.user_agent).to eq 'something, something'
       end
