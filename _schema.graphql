@@ -138,6 +138,7 @@ input CreateSubmissionMutationInput {
   signature: Boolean
   state: State
   title: String
+  userAgent: String
   width: String
   year: String
 }
