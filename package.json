@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "prettier": "prettier --write '**/*.rb'",
-    "prettier-check": "prettier --check '**/*.rb'"
+    "prettier-check": "prettier --check '**/*.rb'",
+    "sync-schema": "rake graphql:schema:idl && cp _schema.graphql ../metaphysics/src/data/convection.graphql"
   },
   "devDependencies": {
     "@prettier/plugin-ruby": "0.18.2",
@@ -17,7 +18,7 @@
     }
   },
   "lint-staged": {
-    "{app,test}/**/*.rb": "bundle exec rubocop -a",
+    "{app,spec}/**/*.rb": "bundle exec rubocop -a",
     "*.{rb,js,jsx,ts,tsx,css,md}": "prettier --write"
   }
 }
