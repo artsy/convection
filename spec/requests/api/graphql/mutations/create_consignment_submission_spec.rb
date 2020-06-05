@@ -103,8 +103,8 @@ describe 'createConsignmentSubmission mutation' do
       submission_response = create_response['consignmentSubmission']
       expect(submission_response).to include(
         {
-          'id' => be,
           # this ensures it's not nil
+          'id' => be,
           'title' => 'soup',
           'category' => 'Jewelry',
           'state' => 'REJECTED',
@@ -115,6 +115,24 @@ describe 'createConsignmentSubmission mutation' do
 
       mutation_id = create_response['clientMutationId']
       expect(mutation_id).to eq '2'
+    end
+
+    context 'with a user agent string' do
+      let(:mutation_inputs) do
+        '{ artistID: "andy", userAgent: "something, something" }'
+      end
+
+      it 'sets that UA on the submission' do
+        stub_gravity_root
+        stub_gravity_user
+        stub_gravity_user_detail(email: 'michael@bluth.com')
+
+        post '/api/graphql', params: { query: mutation }, headers: headers
+
+        expect(response.status).to eq 200
+        submission = Submission.first
+        expect(submission.user_agent).to eq 'something, something'
+      end
     end
   end
 end

@@ -25,6 +25,7 @@ module Mutations
     argument :signature, Boolean, required: false
     argument :state, Types::StateType, required: false
     argument :title, String, required: false
+    argument :user_agent, String, required: false
     argument :width, String, required: false
     argument :year, String, required: false
 

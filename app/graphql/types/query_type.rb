@@ -2,6 +2,24 @@
 
 module Types
   class QueryType < GraphQL::Schema::Object
+    field :offer, OfferType, null: true do
+      description 'Get an Offer'
+
+      argument :id, ID, required: true
+
+      argument :gravity_partner_id, ID, required: true do
+        description 'Return offers for the given partner'
+      end
+    end
+
+    def offer(arguments = {})
+      query_options = { arguments: arguments, context: context, object: object }
+      resolver = OfferResolver.new(query_options)
+      raise resolver.error unless resolver.valid?
+
+      resolver.run
+    end
+
     field :offers, OfferConnectionType, null: true, connection: true do
       description 'List offers'
 
