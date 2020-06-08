@@ -373,3 +373,6 @@ Style/SlicingWithRange:
 
 Lint/DeprecatedOpenSSLConstant:
   Enabled: true
+
+AllCops:
+  NewCops: enable
