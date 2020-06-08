@@ -9,7 +9,7 @@
   "devDependencies": {
     "@prettier/plugin-ruby": "0.18.2",
     "husky": "4.2.5",
-    "lint-staged": "10.2.7",
+    "lint-staged": "10.2.9",
     "prettier": "2.0.5"
   },
   "husky": {
