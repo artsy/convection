@@ -54,29 +54,6 @@ describe Offer do
     end
   end
 
-  describe 'editable?' do
-    let(:allowed_states) { %w[draft sent] }
-
-    context 'when state is draft or sent' do
-      it 'returns true' do
-        allowed_states.each do |state|
-          offer = Fabricate(:offer, state: state)
-          expect(offer).to be_editable
-        end
-      end
-    end
-
-    context 'when state is any other value' do
-      it 'returns false' do
-        not_editable_states = Offer::STATES - allowed_states
-        not_editable_states.each do |state|
-          offer = Fabricate(:offer, state: state)
-          expect(offer).to_not be_editable
-        end
-      end
-    end
-  end
-
   context 'locked?' do
     it 'returns true if this offer is not the accepted_offer and the partner submission is consigned' do
       ps = Fabricate(:partner_submission, submission: approved_submission)
