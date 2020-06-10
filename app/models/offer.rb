@@ -73,11 +73,6 @@ class Offer < ApplicationRecord
     !draft? && !sent? && !review?
   end
 
-  def editable?
-    allowed_states = %w[draft sent]
-    allowed_states.include?(state)
-  end
-
   def locked?
     submission.consigned_partner_submission_id.present? &&
       submission.consigned_partner_submission.accepted_offer_id != id

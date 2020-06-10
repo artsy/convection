@@ -6,11 +6,9 @@
           <div class='overview-section'>
             <div class='overview-section-title--inline'>
               Details
-              <% if offer.editable? %>
-                <span class='overview-section-title--inline__link'>
-                  <%= link_to 'Edit', edit_admin_offer_path(offer) %>
-                </span>
-              <% end %>
+              <span class='overview-section-title--inline__link'>
+                <%= link_to 'Edit', edit_admin_offer_path(offer) %>
+              </span>
             </div>
             <%= render "#{offer.offer_type.downcase.tr(' ', '_')}", offer: offer %>
           </div>
