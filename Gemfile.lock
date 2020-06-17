@@ -480,7 +480,7 @@ DEPENDENCIES
   foreman
   gemini_upload-rails
   graphiql-rails
-  graphql
+  graphql (= 1.10.10)
   graphql-rails_logger
   guard-livereload
   guard-rspec
