@@ -23,6 +23,7 @@
           </div>
           <%= render 'admin/consignments/consignment_section', consignment: @submission.consigned_partner_submission, artist: @submission.artist&.name %>
           <%= render 'admin/offers/offers_section', offers: @offers, truncated: true %>
+          <%= render 'admin/submissions/notes_section', notes: @notes, truncated: true %>
         </div>
       </div>
     </div>

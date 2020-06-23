@@ -1,0 +1,8 @@
+<% if notes && notes.length > 0 %>
+  <div class='overview-section'>
+    <div class='overview-section-title--inline'>
+      Notes
+    </div>
+    <%= render partial: 'admin/submissions/note', collection: @notes %>
+  </div>
+<% end %>
