@@ -27,6 +27,8 @@ spec:
               value: "true"
             - name: PUMA_BIND
               value: "tcp://0.0.0.0:8080"
+            - name: MALLOC_ARENA_MAX
+              value: "2"
             - name: DATADOG_TRACE_AGENT_HOSTNAME
               valueFrom:
                 fieldRef:
@@ -191,6 +193,13 @@ spec:
     spec:
       containers:
         - name: convection-sidekiq
+          env:
+            - name: MALLOC_ARENA_MAX
+              value: "2"
+            - name: DD_TRACE_AGENT_HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
           envFrom:
             - configMapRef:
                 name: convection-environment
