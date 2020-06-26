@@ -1,6 +1,10 @@
-  <div class='list-group-item list-item-note'>
-    <div class='list-group-item-info'>
-      <%= note.created_by %>
+  <div class='list-group-item--note'>
+    <div class='list-group-item--byline'>
+      <%= note.byline %>
     </div>
-    <textarea><%= note.body %></textarea>
+    <div class='list-group-item--body'>
+      <textarea >
+      <%= note.body %>
+    </textarea>
+    </div>
   </div>
