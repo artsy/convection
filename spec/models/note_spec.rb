@@ -15,6 +15,19 @@ RSpec.describe Note, type: :model do
     expect(note.author.email).to eq "admin@art.sy"
   end
 
+  it 'requires a body' do
+    note = Note.new
+    expect(note).not_to be_valid
+    expect(note.errors.messages[:body]).to eq ["can't be blank"]
+    
+    note.body = ''
+    expect(note).not_to be_valid
+    expect(note.errors.messages[:body]).to eq ["can't be blank"]
+
+    note.body = "f"
+    expect(note).to be_valid
+  end
+
   context '#byline' do
     after(:each) { travel_back }
     it 'if there is an author' do

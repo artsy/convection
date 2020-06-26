@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 2020_06_25_153607) do
 
   create_table "notes", force: :cascade do |t|
     t.string "created_by"
-    t.text "body"
+    t.text "body", null: false
     t.bigint "submission_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
