@@ -2,6 +2,10 @@ inherit_from: .rubocop_todo.yml
 
 require: rubocop-rails
 
+Rails/InverseOf:
+  Exclude:
+    - app/models/note.rb
+
 Lint/RaiseException:
   Enabled: true
 

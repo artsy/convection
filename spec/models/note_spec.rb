@@ -2,67 +2,21 @@
 
 require 'rails_helper'
 RSpec.describe Note, type: :model do
-  include ActiveSupport::Testing::TimeHelpers
-
   let(:author) { Fabricate(:user, email: 'admin@art.sy') }
   let(:submission) { Fabricate(:submission) }
-  let(:note) do
-    Note.create(
-      submission: submission, created_by: author.id, body: 'Im a note'
-    )
-  end
 
   it 'belongs to an author' do
     note =
-      Note.new(submission: submission, created_by: author.id, body: 'Im a note')
+      Note.create(submission: submission, author: author, body: 'Im a note')
 
     expect(note).to be_valid
     expect(note.author.email).to eq 'admin@art.sy'
   end
 
-  it 'requires a body' do
-    note = Note.new
-    expect(note).not_to be_valid
-    expect(note.errors.messages[:body]).to eq ["can't be blank"]
-
-    note.body = ''
-    expect(note).not_to be_valid
-    expect(note.errors.messages[:body]).to eq ["can't be blank"]
-
-    note.body = 'f'
+  it 'belongs to nil if the gravity_user_id is nil' do
+    note =
+      Note.new(submission: submission, gravity_user_id: nil, body: 'Im a note')
     expect(note).to be_valid
-  end
-
-  context '#byline' do
-    after(:each) { travel_back }
-    it 'if there is an author' do
-      travel_to Time.zone.local(2004, 11, 24, 0o1, 0o4, 44)
-      note =
-        Note.create(
-          submission: submission, created_by: author.id, body: 'Im a note'
-        )
-
-      expect(note.byline).to eq('admin@art.sy - November 24, 2004 01:04')
-    end
-    it 'if the author is missing' do
-      travel_to Time.zone.local(2004, 11, 24, 0o1, 0o4, 44)
-      note =
-        Note.create(submission: submission, created_by: nil, body: 'Im a note')
-
-      expect(note.byline).to eq('November 24, 2004 01:04')
-    end
-    it 'if the note was updated' do
-      travel_to Time.zone.local(2004, 11, 24, 0o1, 0o4, 44)
-      note =
-        Note.create(
-          submission: submission, created_by: author.id, body: 'Im a note'
-        )
-      travel_to Time.zone.local(2012, 12, 21, 0o1, 0o4, 44)
-      note.update(body: "I'm* a note")
-
-      expect(note.byline).to eq(
-        'admin@art.sy - Updated December 21, 2012 01:04'
-      )
-    end
+    expect(note.author).to be_nil
   end
 end

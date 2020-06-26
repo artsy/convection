@@ -4,6 +4,8 @@ require 'rails_helper'
 require 'support/gravity_helper'
 
 describe SubmissionsHelper, type: :helper do
+  include ActiveSupport::Testing::TimeHelpers
+
   context 'formatted_location' do
     it 'correctly formats location fields' do
       submission =
@@ -202,6 +204,35 @@ describe SubmissionsHelper, type: :helper do
     it 'shows the correct label for a rejected submission with no user' do
       submission = Fabricate(:submission, state: 'rejected')
       expect(helper.reviewer_byline(submission)).to eq 'Rejected by '
+    end
+  end
+  context 'note_byline' do
+    let(:author) { Fabricate(:user, email: 'admin@art.sy') }
+    after(:each) { travel_back }
+
+    it 'if there is an author' do
+      travel_to Time.zone.local(2004, 11, 24, 0o1, 0o4, 44)
+      note = Fabricate(:note, gravity_user_id: author.id, body: 'Im a note')
+
+      expect(note_byline(note)).to eq('admin@art.sy - November 23, 2004 20:04')
+    end
+
+    it 'if the author is missing' do
+      travel_to Time.zone.local(2004, 11, 24, 0o1, 0o4, 44)
+      note = Fabricate(:note, gravity_user_id: nil, body: 'Im a note')
+
+      expect(note_byline(note)).to eq('November 23, 2004 20:04')
+    end
+
+    it 'if the note was updated' do
+      travel_to Time.zone.local(2004, 11, 24, 0o1, 0o4, 44)
+      note = Fabricate(:note, gravity_user_id: author.id, body: 'Im a note')
+      travel_to Time.zone.local(2012, 12, 21, 0o1, 0o4, 44)
+      note.update(body: "I'm* a note")
+
+      expect(note_byline(note)).to eq(
+        'admin@art.sy - Updated December 20, 2012 20:04'
+      )
     end
   end
 end

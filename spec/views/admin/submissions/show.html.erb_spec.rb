@@ -182,11 +182,9 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       before do
         @admin = Fabricate(:user, email: 'admin@art.sy')
         3.times do |i|
-          Fabricate(
-            :note,
-            submission: @submission,
-            created_by: @admin.id,
-            body: "Note #{i + 1}"
+          # @submission.notes.create(author: @admin, body: "Note #{i + 1}")
+          @submission.notes.create!(
+            gravity_user_id: @admin.gravity_user_id, body: "Note #{i + 1}"
           )
         end
         page.visit "/admin/submissions/#{@submission.id}"

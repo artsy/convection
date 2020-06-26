@@ -23,14 +23,6 @@ describe User do
     end
   end
 
-  context 'authored_notes' do
-    it 'returns all authored_notes for the user' do
-      expect(user.authored_notes).to be_empty
-      note = Fabricate(:note, created_by: user.id)
-      expect(user.authored_notes).to match_array [note]
-    end
-  end
-
   context 'gravity_user' do
     it 'returns nil if it cannot find the object' do
       stub_gravity_root
