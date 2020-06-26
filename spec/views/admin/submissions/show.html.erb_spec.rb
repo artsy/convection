@@ -180,13 +180,20 @@ describe 'admin/submissions/show.html.erb', type: :feature do
 
     context 'notes' do
       before do
-        @admin = Fabricate(:user, email: "admin@art.sy")
-        3.times { |i| Fabricate(:note, submission: @submission, created_by: @admin.id, body: "Note #{i + 1}") }
+        @admin = Fabricate(:user, email: 'admin@art.sy')
+        3.times do |i|
+          Fabricate(
+            :note,
+            submission: @submission,
+            created_by: @admin.id,
+            body: "Note #{i + 1}"
+          )
+        end
         page.visit "/admin/submissions/#{@submission.id}"
       end
 
       it 'shows a list of notes' do
-        expect(page).to have_content("Notes")
+        expect(page).to have_content('Notes')
         within(:css, '.notes-section') do
           expect(page).to have_content('admin@art.sy', count: 3)
           expect(page).to have_content('Note 1')
@@ -194,8 +201,6 @@ describe 'admin/submissions/show.html.erb', type: :feature do
           expect(page).to have_content('Note 3')
         end
       end
-
-
     end
 
     context 'scores' do
