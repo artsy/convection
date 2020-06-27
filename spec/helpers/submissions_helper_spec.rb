@@ -212,7 +212,11 @@ describe SubmissionsHelper, type: :helper do
 
     it 'if there is an author' do
       travel_to Time.zone.local(2004, 11, 24, 0o1, 0o4, 44)
-      note = Fabricate(:note, gravity_user_id: author.id, body: 'Im a note')
+      note =
+        Fabricate(
+          :note,
+          gravity_user_id: author.gravity_user_id, body: 'Im a note'
+        )
 
       expect(note_byline(note)).to eq('admin@art.sy - November 23, 2004 20:04')
     end
@@ -226,7 +230,11 @@ describe SubmissionsHelper, type: :helper do
 
     it 'if the note was updated' do
       travel_to Time.zone.local(2004, 11, 24, 0o1, 0o4, 44)
-      note = Fabricate(:note, gravity_user_id: author.id, body: 'Im a note')
+      note =
+        Fabricate(
+          :note,
+          gravity_user_id: author.gravity_user_id, body: 'Im a note'
+        )
       travel_to Time.zone.local(2012, 12, 21, 0o1, 0o4, 44)
       note.update(body: "I'm* a note")
 
