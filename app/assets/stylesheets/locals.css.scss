@@ -140,6 +140,42 @@ a.make-primary-link {
     flex: 1;
   }
 }
+.notes-section {
+  margin-left: -15px;
+  margin-right: -15px;
+
+  .notes-section-title {
+    font-size: 25px;
+    margin-bottom: 10px;
+
+    &__link {
+      a {
+        color: $purple;
+        font-size: 15px;
+        font-family: $sans-serif;
+        text-decoration: none;
+      }
+    }
+  }
+  .list-group-item--note {
+    .list-group-item--byline {
+      font-family: $serif;
+      text-transform: none;
+      color: #666666;
+      font-size: 16px;
+      margin-left: 20px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    .list-group-item--body {
+      margin-left: 20px;
+      margin-right: 20px;
+      textarea {
+        width: 100%;
+      }
+    }
+  }
+}
 
 .spacer {
   width: 16px;

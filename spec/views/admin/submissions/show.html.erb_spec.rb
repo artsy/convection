@@ -47,6 +47,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       expect(page).to have_content('Jon Jonson')
       expect(page).to have_content('user@example.com')
       expect(page).to have_content('Painting')
+      expect(page).not_to have_content('Notes')
     end
 
     it 'displays no undo links' do
@@ -175,6 +176,28 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       page.visit "/admin/submissions/#{@submission.id}"
       click_link 'Undelete submission'
       expect(@submission.reload.deleted_at).to be_nil
+    end
+
+    context 'notes' do
+      before do
+        @admin = Fabricate(:user, email: 'admin@art.sy')
+        3.times do |i|
+          @submission.notes.create!(
+            gravity_user_id: @admin.gravity_user_id, body: "Note #{i + 1}"
+          )
+        end
+        page.visit "/admin/submissions/#{@submission.id}"
+      end
+
+      it 'shows a list of notes' do
+        expect(page).to have_content('Notes')
+        within(:css, '.notes-section') do
+          expect(page).to have_content('admin@art.sy', count: 3)
+          expect(page).to have_content('Note 1')
+          expect(page).to have_content('Note 2')
+          expect(page).to have_content('Note 3')
+        end
+      end
     end
 
     context 'scores' do
