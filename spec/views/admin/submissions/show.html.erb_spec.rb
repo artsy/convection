@@ -182,7 +182,6 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       before do
         @admin = Fabricate(:user, email: 'admin@art.sy')
         3.times do |i|
-          # @submission.notes.create(author: @admin, body: "Note #{i + 1}")
           @submission.notes.create!(
             gravity_user_id: @admin.gravity_user_id, body: "Note #{i + 1}"
           )
