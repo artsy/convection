@@ -12,12 +12,12 @@ module Types
       def page_cursors
         return if total_pages <= 1
 
-        cursors = {}
-        cursors[:around] = around_cursors
-        cursors[:first] = first_cursor
-        cursors[:last] = last_cursor
-        cursors[:previous] = previous_cursor
-        cursors.compact
+        {
+          around: around_cursors,
+          first: first_cursor,
+          last: last_cursor,
+          previous: previous_cursor
+        }.compact
       end
 
       def total_pages
