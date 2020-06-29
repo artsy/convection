@@ -3,8 +3,8 @@
 module Admin
   class NotesController < ApplicationController
     def create
-      @submission = Submission.find(note_params[:submission_id]) # require 'pry'; binding.pry
-      note = Note.create(gravity_user_id: @current_user, **note_params) # This doesn't actually seem to render in our layout.
+      @submission = Submission.find(note_params[:submission_id])
+      note = Note.create(gravity_user_id: @current_user, **note_params)
       unless note.persisted?
         flash[:notice] =
           "Could not create note: #{note.errors.full_messages.join(', ')}"
