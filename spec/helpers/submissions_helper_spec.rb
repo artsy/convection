@@ -206,6 +206,7 @@ describe SubmissionsHelper, type: :helper do
       expect(helper.reviewer_byline(submission)).to eq 'Rejected by '
     end
   end
+
   context 'note_byline' do
     let(:author) { Fabricate(:user, email: 'admin@art.sy') }
     after(:each) { travel_back }
@@ -227,9 +228,14 @@ describe SubmissionsHelper, type: :helper do
 
     it 'if the author is missing' do
       travel_to Time.zone.local(2004, 11, 24, 0o1, 0o4, 44)
-      note = Fabricate(:note, gravity_user_id: nil, body: 'Im a note')
+      note =
+        Fabricate(
+          :note,
+          gravity_user_id: author.gravity_user_id, body: 'Im a note'
+        )
+      author.delete
 
-      expect(note_byline(note)).to eq('November 23, 2004 20:04')
+      expect(note_byline(note)).to eq('User deleted - November 23, 2004 20:04')
     end
 
     it 'if the note was updated' do
