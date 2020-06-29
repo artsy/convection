@@ -18,15 +18,10 @@ module Types
         include_previous_cursor = current_page > 1
 
         cursors = {}
-        if include_first_cursor
-          cursors[:first] = page_cursor(1)
-        end
         cursors[:around] = around_page_numbers.map { |pn| page_cursor(pn) }
-        if include_last_cursor
-          cursors[:last] = page_cursor(total_pages)
-        end
+        cursors[:first] = page_cursor(1) if include_first_cursor
+        cursors[:last] = page_cursor(total_pages) if include_last_cursor
         cursors[:previous] = page_cursor(current_page - 1) if include_previous_cursor
-
         cursors
       end
 
