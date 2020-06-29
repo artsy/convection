@@ -144,6 +144,22 @@ a.make-primary-link {
   margin-left: -15px;
   margin-right: -15px;
 
+  .new-note {
+    margin-bottom: 30px;
+    legend {
+      font-size: 18px;
+    }
+    form {
+      > * {
+        margin-left: 20px;
+        margin-right: 20px;
+      }
+      textarea {
+        width: 100%;
+      }
+    }
+  }
+
   .notes-section-title {
     font-size: 25px;
     margin-bottom: 10px;
@@ -170,9 +186,6 @@ a.make-primary-link {
     .list-group-item--body {
       margin-left: 20px;
       margin-right: 20px;
-      textarea {
-        width: 100%;
-      }
     }
   }
 }

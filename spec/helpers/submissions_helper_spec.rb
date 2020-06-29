@@ -210,6 +210,10 @@ describe SubmissionsHelper, type: :helper do
     let(:author) { Fabricate(:user, email: 'admin@art.sy') }
     after(:each) { travel_back }
 
+    it 'is empty for a new note' do
+      expect(note_byline(Note.new)).to eq ''
+    end
+
     it 'if there is an author' do
       travel_to Time.zone.local(2004, 11, 24, 0o1, 0o4, 44)
       note =

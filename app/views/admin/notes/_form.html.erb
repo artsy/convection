@@ -1,0 +1,5 @@
+<%= form_with model: [:admin, note], local: true do |f| %>
+  <%= f.hidden_field :submission_id %>
+  <%= f.text_area :body %>
+  <%= f.submit 'Create' %>
+<% end %>

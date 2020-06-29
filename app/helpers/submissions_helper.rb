@@ -87,10 +87,14 @@ module SubmissionsHelper
   end
 
   def note_byline(note)
-    (note.author ? "#{note.author.email} - " : '') +
-      (note.created_at == note.updated_at ? '' : 'Updated ') +
+    return '' if note.created_at.blank?
+
+    byline = (note.author ? "#{note.author.email} - " : '')
+    byline += 'Updated ' if note.created_at == note.updated_at
+    byline +=
       note.updated_at.in_time_zone('Eastern Time (US & Canada)').to_formatted_s(
         :long
       )
+    byline
   end
 end
