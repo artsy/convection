@@ -12,16 +12,20 @@ module Types
       def page_cursors
         return if total_pages <= 1
 
+        exceeds_max_cursor_count = total_pages > MAX_CURSOR_COUNT
+        include_first_cursor = exceeds_max_cursor_count && around_page_numbers.exclude?(1)
+        include_last_cursor = exceeds_max_cursor_count && around_page_numbers.exclude?(total_pages)
+        include_previous_cursor = current_page > 1
+
         cursors = {}
-        if total_pages > MAX_CURSOR_COUNT && around_page_numbers.exclude?(1)
+        if include_first_cursor
           cursors[:first] = page_cursor(1)
         end
         cursors[:around] = around_page_numbers.map { |pn| page_cursor(pn) }
-        if total_pages > MAX_CURSOR_COUNT &&
-             around_page_numbers.exclude?(total_pages)
+        if include_last_cursor
           cursors[:last] = page_cursor(total_pages)
         end
-        cursors[:previous] = page_cursor(current_page - 1) if current_page > 1
+        cursors[:previous] = page_cursor(current_page - 1) if include_previous_cursor
 
         cursors
       end
