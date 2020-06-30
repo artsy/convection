@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 2020_06_25_153607) do
   end
 
   create_table 'notes', force: :cascade do |t|
-    t.string 'gravity_user_id'
+    t.string 'gravity_user_id', null: false
     t.text 'body', null: false
     t.bigint 'submission_id'
     t.datetime 'created_at', precision: 6, null: false

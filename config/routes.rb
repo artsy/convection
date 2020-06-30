@@ -13,6 +13,7 @@ Rails.application.routes.draw do
         post :multiple, on: :collection
       end
     end
+    resources :notes, only: %i[create]
     resources :partners, only: %i[index create] do
       resources :submissions, only: :index, controller: 'partner_submissions'
     end
