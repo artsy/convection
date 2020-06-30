@@ -294,8 +294,6 @@ GEM
       rack (>= 2.0.0)
     rack-livereload (0.3.17)
       rack
-    rack-protection (2.0.8.1)
-      rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rack_session_access (0.2.0)
@@ -407,11 +405,10 @@ GEM
       faraday (>= 1.0)
     sexp_processor (4.15.0)
     shellany (0.0.1)
-    sidekiq (6.0.7)
+    sidekiq (6.1.0)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
-      rack-protection (>= 2.0.0)
-      redis (>= 4.1.0)
+      redis (>= 4.2.0)
     solargraph (0.39.8)
       backport (~> 1.1)
       benchmark
