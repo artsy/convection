@@ -197,12 +197,6 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         end
       end
 
-      it 'shows a notes section even if there are no notes' do
-        page.visit "/admin/submissions/#{@submission.id}"
-
-        expect(page).to have_content('Notes')
-      end
-
       context 'creating a new note' do
         it 'user can create a new note' do
           page.visit "/admin/submissions/#{@submission.id}"
