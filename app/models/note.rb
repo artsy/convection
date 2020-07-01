@@ -4,12 +4,8 @@ class Note < ApplicationRecord
   validates :body, presence: true
   belongs_to :submission
 
-  attr_reader :author
-
-  after_initialize :set_author
-
-  def set_author
-    @author ||= load_author # rubocop:disable Naming/MemoizedInstanceVariableName
+  def author
+    @author ||= load_author
   end
 
   private
