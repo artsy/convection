@@ -218,7 +218,7 @@ describe SubmissionsHelper, type: :helper do
     end
 
     context 'with an invalid author' do
-      let(:gravity_user_id) { 'invalid' }
+      let(:gravity_user_id) { 'invalid-id' }
 
       before do
         user_url =
@@ -226,12 +226,12 @@ describe SubmissionsHelper, type: :helper do
         stub_request(:get, user_url).to_raise(Faraday::ResourceNotFound)
       end
 
-      it 'returns a byline with author deleted' do
+      it 'returns a byline with a missing author' do
         travel_to Time.zone.local(2004, 11, 24, 0o1, 0o4, 44)
         note = Fabricate(:note, gravity_user_id: gravity_user_id)
 
         expect(note_byline(note)).to eq(
-          'User deleted - November 23, 2004 20:04'
+          'User inval... - November 23, 2004 20:04'
         )
       end
     end

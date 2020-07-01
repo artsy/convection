@@ -6,7 +6,7 @@ class Note < ApplicationRecord
 
   attr_reader :author
 
-  after_initialize :set_author, if: :persisted?
+  after_initialize :set_author
 
   def set_author
     @author ||= load_author # rubocop:disable Naming/MemoizedInstanceVariableName
