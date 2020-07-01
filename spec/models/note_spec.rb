@@ -1,22 +1,61 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'support/gravity_helper'
+
 RSpec.describe Note, type: :model do
-  let(:author) { Fabricate(:user, email: 'admin@art.sy') }
-  let(:submission) { Fabricate(:submission) }
+  describe 'author' do
+    let(:submission) { Fabricate(:submission) }
 
-  it 'belongs to an author' do
-    note =
-      Note.create(submission: submission, author: author, body: 'Im a note')
+    let(:note_attrs) do
+      {
+        body: 'This is a note',
+        gravity_user_id: gravity_user_id,
+        submission: submission
+      }
+    end
 
-    expect(note).to be_valid
-    expect(note.author.email).to eq 'admin@art.sy'
-  end
+    before { stub_gravity_root }
 
-  it 'belongs to nil if the gravity_user_id is nil' do
-    note =
-      Note.new(submission: submission, gravity_user_id: nil, body: 'Im a note')
-    expect(note).to be_valid
-    expect(note.author).to be_nil
+    context 'with a valid gravity user id' do
+      let(:gravity_user_id) { 'abc123' }
+
+      before do
+        mocked_user_data = {
+          email: 'buster@example.com', id: gravity_user_id, name: 'Buster Bluth'
+        }
+
+        stub_gravity_user(mocked_user_data)
+      end
+
+      it 'returns that author' do
+        note = Note.create(note_attrs)
+        expect(note.author.email).to eq 'buster@example.com'
+        expect(note.author.name).to eq 'Buster Bluth'
+      end
+    end
+
+    context 'with an invalid gravity user id' do
+      let(:gravity_user_id) { 'invalid' }
+
+      before do
+        user_url = "#{Convection.config.gravity_api_url}/users/invalid"
+        stub_request(:get, user_url).to_raise(Faraday::ResourceNotFound)
+      end
+
+      it 'returns nil' do
+        note = Note.create(note_attrs)
+        expect(note.author).to eq nil
+      end
+    end
+
+    context 'without a gravity user id' do
+      let(:gravity_user_id) { nil }
+
+      it 'returns nil' do
+        note = Note.new(note_attrs)
+        expect(note.author).to eq nil
+      end
+    end
   end
 end

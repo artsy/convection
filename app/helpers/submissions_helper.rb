@@ -89,7 +89,10 @@ module SubmissionsHelper
   def note_byline(note)
     return '' if note.created_at.blank?
 
-    byline = (note.author ? "#{note.author.email} - " : 'User deleted - ')
+    author = note.author&.to_hash || {}
+    author_email = author['email']
+
+    byline = (author_email ? "#{author_email} - " : 'User deleted - ')
     byline += 'Updated ' if note.created_at < note.updated_at
     byline +=
       note.updated_at.in_time_zone('Eastern Time (US & Canada)').to_formatted_s(

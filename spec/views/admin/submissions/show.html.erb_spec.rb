@@ -178,19 +178,30 @@ describe 'admin/submissions/show.html.erb', type: :feature do
     end
 
     context 'notes' do
+      let(:submission) { @submission }
+      let(:gravity_user_id) { 'abc123' }
+
+      before do
+        mocked_user_data = {
+          email: 'buster@example.com', id: gravity_user_id, name: 'Buster Bluth'
+        }
+
+        stub_gravity_user(mocked_user_data)
+      end
+
       it 'shows a list of notes' do
-        @admin = Fabricate(:user, email: 'admin@art.sy')
         3.times do |i|
-          @submission.notes.create!(
-            gravity_user_id: @admin.gravity_user_id, body: "Note #{i + 1}"
+          submission.notes.create!(
+            gravity_user_id: gravity_user_id, body: "Note #{i + 1}"
           )
         end
 
-        page.visit "/admin/submissions/#{@submission.id}"
+        page.visit "/admin/submissions/#{submission.id}"
 
         expect(page).to have_content('Notes')
+
         within(:css, '.notes-section') do
-          expect(page).to have_content('admin@art.sy', count: 3)
+          expect(page).to have_content('buster@example.com', count: 3)
           expect(page).to have_content('Note 1')
           expect(page).to have_content('Note 2')
           expect(page).to have_content('Note 3')
@@ -199,7 +210,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
 
       context 'creating a new note' do
         it 'user can create a new note' do
-          page.visit "/admin/submissions/#{@submission.id}"
+          page.visit "/admin/submissions/#{submission.id}"
 
           within(:css, '.notes-section') do
             fill_in('note[body]', with: 'This is a really cool artwork. Wow!')
@@ -212,7 +223,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         end
 
         it 'user sees an error if the note cannot be created' do
-          page.visit "/admin/submissions/#{@submission.id}"
+          page.visit "/admin/submissions/#{submission.id}"
 
           within(:css, '.notes-section') { click_button 'Create' }
 

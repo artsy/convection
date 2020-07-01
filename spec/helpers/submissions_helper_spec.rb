@@ -208,49 +208,69 @@ describe SubmissionsHelper, type: :helper do
   end
 
   context 'note_byline' do
-    let(:author) { Fabricate(:user, email: 'admin@art.sy') }
+    before { stub_gravity_root }
     after(:each) { travel_back }
 
-    it 'is empty for a new note' do
-      expect(note_byline(Note.new)).to eq ''
+    context 'with no author' do
+      it 'returns an empty string' do
+        expect(note_byline(Note.new)).to eq ''
+      end
     end
 
-    it 'if there is an author' do
-      travel_to Time.zone.local(2004, 11, 24, 0o1, 0o4, 44)
-      note =
-        Fabricate(
-          :note,
-          gravity_user_id: author.gravity_user_id, body: 'Im a note'
-        )
+    context 'with an invalid author' do
+      let(:gravity_user_id) { 'invalid' }
 
-      expect(note_byline(note)).to eq('admin@art.sy - November 23, 2004 20:04')
+      before do
+        user_url =
+          "#{Convection.config.gravity_api_url}/users/#{gravity_user_id}"
+        stub_request(:get, user_url).to_raise(Faraday::ResourceNotFound)
+      end
+
+      it 'returns a byline with author deleted' do
+        travel_to Time.zone.local(2004, 11, 24, 0o1, 0o4, 44)
+        note = Fabricate(:note, gravity_user_id: gravity_user_id)
+
+        expect(note_byline(note)).to eq(
+          'User deleted - November 23, 2004 20:04'
+        )
+      end
     end
 
-    it 'if the author is missing' do
-      travel_to Time.zone.local(2004, 11, 24, 0o1, 0o4, 44)
-      note =
-        Fabricate(
-          :note,
-          gravity_user_id: author.gravity_user_id, body: 'Im a note'
-        )
-      author.delete
+    context 'with a valid author' do
+      let(:gravity_user_id) { 'abc123' }
 
-      expect(note_byline(note)).to eq('User deleted - November 23, 2004 20:04')
-    end
+      before do
+        mocked_user_data = {
+          email: 'buster@example.com', id: gravity_user_id, name: 'Buster Bluth'
+        }
 
-    it 'if the note was updated' do
-      travel_to Time.zone.local(2004, 11, 24, 0o1, 0o4, 44)
-      note =
-        Fabricate(
-          :note,
-          gravity_user_id: author.gravity_user_id, body: 'Im a note'
-        )
-      travel_to Time.zone.local(2012, 12, 21, 0o1, 0o4, 44)
-      note.update(body: "I'm* a note")
+        stub_gravity_user(mocked_user_data)
+      end
 
-      expect(note_byline(note)).to eq(
-        'admin@art.sy - Updated December 20, 2012 20:04'
-      )
+      context 'with a note that has not been updated' do
+        it 'returns a byline with the created at timestamp' do
+          travel_to Time.zone.local(2004, 11, 24, 0o1, 0o4, 44)
+          note = Fabricate(:note, gravity_user_id: gravity_user_id)
+
+          expect(note_byline(note)).to eq(
+            'buster@example.com - November 23, 2004 20:04'
+          )
+        end
+      end
+
+      context 'with a note that has been updated' do
+        it 'returns a byline with the updated at timestamp' do
+          travel_to Time.zone.local(2004, 11, 24, 0o1, 0o4, 44)
+          note = Fabricate(:note, gravity_user_id: gravity_user_id)
+
+          travel_to Time.zone.local(2012, 12, 21, 0o1, 0o4, 44)
+          note.update(body: 'wow such note')
+
+          expect(note_byline(note)).to eq(
+            'buster@example.com - Updated December 20, 2012 20:04'
+          )
+        end
+      end
     end
   end
 end

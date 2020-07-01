@@ -4,8 +4,21 @@ class Note < ApplicationRecord
   validates :body, presence: true
   belongs_to :submission
 
-  belongs_to :author,
-             foreign_key: :gravity_user_id,
-             class_name: 'User',
-             primary_key: :gravity_user_id
+  attr_reader :author
+
+  after_initialize :set_author, if: :persisted?
+
+  def set_author
+    @author ||= load_author # rubocop:disable Naming/MemoizedInstanceVariableName
+  end
+
+  private
+
+  def load_author
+    return nil unless gravity_user_id
+
+    Gravity.client.user(id: gravity_user_id)._get
+  rescue Faraday::ResourceNotFound
+    nil
+  end
 end
