@@ -3,9 +3,9 @@
 module Admin
   class NotesController < ApplicationController
     def create
-      note_attrs = note_params.merge(gravity_user_id: @current_user)
-      note = Note.new(note_attrs)
-      path = admin_submission_path(note.submission)
+      submission = Submission.find(params.dig(:note, :submission_id))
+      note = submission.notes.new(note_params)
+      path = admin_submission_path(submission)
 
       if note.save
         redirect_to path, notice: 'Note has successfully been created.'
@@ -21,7 +21,7 @@ module Admin
     private
 
     def note_params
-      params.require(:note).permit(:submission_id, :body)
+      params.require(:note).permit(:body).merge(gravity_user_id: @current_user)
     end
   end
 end

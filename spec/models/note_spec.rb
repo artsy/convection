@@ -25,7 +25,7 @@ RSpec.describe Note, type: :model do
           email: 'buster@example.com', id: gravity_user_id, name: 'Buster Bluth'
         }
 
-        stub_gravity_user(mocked_user_data)
+        @stub = stub_gravity_user(mocked_user_data)
       end
 
       it 'returns that author' do
@@ -35,7 +35,7 @@ RSpec.describe Note, type: :model do
       end
     end
 
-    context 'with an invalid gravity user id' do
+    context 'with a failed request for the gravity user' do
       let(:gravity_user_id) { 'invalid' }
 
       before do

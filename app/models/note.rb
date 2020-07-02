@@ -5,16 +5,18 @@ class Note < ApplicationRecord
   belongs_to :submission
 
   def author
-    @author ||= load_author
-  end
-
-  private
-
-  def load_author
-    return nil unless gravity_user_id
-
-    Gravity.client.user(id: gravity_user_id)._get
-  rescue Faraday::ResourceNotFound
-    nil
+    if defined?(@author)
+      @author
+    else
+      @author =
+        gravity_user_id &&
+          (
+            begin
+              Gravity.client.user(id: gravity_user_id)._get
+            rescue Faraday::ResourceNotFound
+              nil
+            end
+          )
+    end
   end
 end

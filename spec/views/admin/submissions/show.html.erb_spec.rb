@@ -201,35 +201,10 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         expect(page).to have_content('Notes')
 
         within(:css, '.notes-section') do
-          expect(page).to have_content('buster@example.com', count: 3)
+          expect(page).to have_content('Buster Bluth added a note at', count: 3)
           expect(page).to have_content('Note 1')
           expect(page).to have_content('Note 2')
           expect(page).to have_content('Note 3')
-        end
-      end
-
-      context 'creating a new note' do
-        it 'user can create a new note' do
-          page.visit "/admin/submissions/#{submission.id}"
-
-          within(:css, '.notes-section') do
-            fill_in('note[body]', with: 'This is a really cool artwork. Wow!')
-            click_button 'Create'
-          end
-
-          within(:css, '.notes-section .list-group-item--body p') do
-            expect(page).to have_content('This is a really cool artwork. Wow!')
-          end
-        end
-
-        it 'user sees an error if the note cannot be created' do
-          page.visit "/admin/submissions/#{submission.id}"
-
-          within(:css, '.notes-section') { click_button 'Create' }
-
-          expect(page).to have_content(
-            "Could not create note: Body can't be blank"
-          )
         end
       end
     end
