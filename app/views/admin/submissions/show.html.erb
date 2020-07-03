@@ -28,10 +28,10 @@
               Notes
             </div>
             <%= render @notes %>
-            <fieldset class='new-note'>
-              <legend>New note</legend>
+            <div class='new-note'>
+              <h4>New note</h4>
               <%= render 'admin/notes/form', note: Note.new(submission: @submission) %>
-            </fieldset>
+            </div>
           </div>
         </div>
       </div>
