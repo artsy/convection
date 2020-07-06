@@ -23,6 +23,16 @@
           </div>
           <%= render 'admin/consignments/consignment_section', consignment: @submission.consigned_partner_submission, artist: @submission.artist&.name %>
           <%= render 'admin/offers/offers_section', offers: @offers, truncated: true %>
+            <div class='notes-section'>
+              <div class='notes-section-title'>
+                Notes
+              </div>
+              <%= render @notes %>
+              <fieldset class='new-note'>
+                <legend>New note</legend>
+                <%= render 'admin/notes/form', note: Note.new(submission: @submission) %>
+              </fieldset>
+            </div>
         </div>
       </div>
     </div>

@@ -177,6 +177,58 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       expect(@submission.reload.deleted_at).to be_nil
     end
 
+    context 'notes' do
+      it 'shows a list of notes' do
+        @admin = Fabricate(:user, email: 'admin@art.sy')
+        3.times do |i|
+          @submission.notes.create!(
+            gravity_user_id: @admin.gravity_user_id, body: "Note #{i + 1}"
+          )
+        end
+
+        page.visit "/admin/submissions/#{@submission.id}"
+
+        expect(page).to have_content('Notes')
+        within(:css, '.notes-section') do
+          expect(page).to have_content('admin@art.sy', count: 3)
+          expect(page).to have_content('Note 1')
+          expect(page).to have_content('Note 2')
+          expect(page).to have_content('Note 3')
+        end
+      end
+
+      it 'shows a notes section even if there are no notes' do
+        page.visit "/admin/submissions/#{@submission.id}"
+
+        expect(page).to have_content('Notes')
+      end
+
+      context 'creating a new note' do
+        it 'user can create a new note' do
+          page.visit "/admin/submissions/#{@submission.id}"
+
+          within(:css, '.notes-section') do
+            fill_in('note[body]', with: 'This is a really cool artwork. Wow!')
+            click_button 'Create'
+          end
+
+          within(:css, '.notes-section .list-group-item--body p') do
+            expect(page).to have_content('This is a really cool artwork. Wow!')
+          end
+        end
+
+        it 'user sees an error if the note cannot be created' do
+          page.visit "/admin/submissions/#{@submission.id}"
+
+          within(:css, '.notes-section') { click_button 'Create' }
+
+          expect(page).to have_content(
+            "Could not create note: Body can't be blank"
+          )
+        end
+      end
+    end
+
     context 'scores' do
       context 'with scores' do
         before do

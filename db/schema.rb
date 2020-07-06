@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_04_164331) do
+ActiveRecord::Schema.define(version: 2020_06_25_153607) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_trgm'
   enable_extension 'plpgsql'
@@ -30,6 +30,15 @@ ActiveRecord::Schema.define(version: 2020_06_04_164331) do
     t.jsonb 'image_urls', default: {}
     t.integer 'submission_id'
     t.index %w[submission_id], name: 'index_assets_on_submission_id'
+  end
+
+  create_table 'notes', force: :cascade do |t|
+    t.string 'gravity_user_id', null: false
+    t.text 'body', null: false
+    t.bigint 'submission_id'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index %w[submission_id], name: 'index_notes_on_submission_id'
   end
 
   create_table 'offers', id: :serial, force: :cascade do |t|
@@ -175,6 +184,7 @@ ActiveRecord::Schema.define(version: 2020_06_04_164331) do
   end
 
   add_foreign_key 'assets', 'submissions'
+  add_foreign_key 'notes', 'submissions'
   add_foreign_key 'offers', 'partner_submissions', on_delete: :cascade
   add_foreign_key 'offers', 'submissions', on_delete: :cascade
   add_foreign_key 'partner_submissions',
