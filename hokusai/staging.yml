@@ -216,10 +216,7 @@ spec:
             periodSeconds: 30
           resources:
             requests:
-              cpu: 200m
-              memory: 512Mi
-            limits:
-              memory: 1Gi
+              cpu: "1"
       dnsPolicy: ClusterFirst
       dnsConfig:
         options:
