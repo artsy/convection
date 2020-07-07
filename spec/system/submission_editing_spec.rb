@@ -2,21 +2,51 @@
 
 require 'rails_helper'
 require 'support/gravity_helper'
+require 'support/jwt_helper'
 
-describe 'Editing a submission' do
+describe 'Editing a submission', type: :feature do
+  let(:submission) do
+    Fabricate(
+      :submission,
+      title: 'my sartwork',
+      artist_id: 'artistid',
+      edition: true,
+      edition_size: 100,
+      edition_number: '23a',
+      category: 'Painting',
+      user: Fabricate(:user, gravity_user_id: 'userid'),
+      state: 'submitted'
+    )
+  end
+  let(:admin_id) { 'adminid' }
+
+  before do
+    stub_gravity_root
+    allow(Convection.config).to receive(:auction_offer_form_url).and_return(
+      'https://google.com/auction'
+    )
+
+    # Skip roles check
+    allow_any_instance_of(ApplicationController).to receive(
+      :require_artsy_authentication
+    )
+
+    # Set current user
+    stub_jwt_header(admin_id)
+
+    # Stub gravity representation of current user
+    stub_gravity_user(
+      id: admin_id, email: 'admin@art.sy', name: 'Blake Adminmeier'
+    )
+
+    # Stub gravity
+    stub_gravity_user(id: submission.user.gravity_user_id)
+    stub_gravity_user_detail(id: submission.user.gravity_user_id)
+    stub_gravity_artist(id: submission.artist_id)
+  end
+
   context 'adding an admin to a submission' do
     it 'displays that admin on the submission detail page' do
-      allow_any_instance_of(Admin::SubmissionsController).to receive(
-        :require_artsy_authentication
-      )
-
-      submission = Fabricate :submission
-
-      stub_gravity_root
-      stub_gravity_user(id: submission.user.gravity_user_id)
-      stub_gravity_user_detail(id: submission.user.gravity_user_id)
-      stub_gravity_artist(id: submission.artist_id)
-
       visit admin_submission_path(submission)
       expect(page).to have_content('Unassigned')
 
@@ -28,6 +58,26 @@ describe 'Editing a submission' do
 
       expect(page).to have_current_path(admin_submission_path(submission))
       expect(page).to have_content('Alice')
+    end
+  end
+
+  context 'creating a new note' do
+    before { visit admin_submission_path(submission) }
+    it 'user can create a new note' do
+      within(:css, '.notes-section') do
+        fill_in('note[body]', with: 'This is a really cool artwork. Wow!')
+        click_button 'Create'
+      end
+
+      within(:css, '.notes-section .list-group-item--body p') do
+        expect(page).to have_content('This is a really cool artwork. Wow!')
+      end
+    end
+
+    it 'user sees an error if the note cannot be created' do
+      within(:css, '.notes-section') { click_button 'Create' }
+
+      expect(page).to have_content("Could not create note: Body can't be blank")
     end
   end
 end

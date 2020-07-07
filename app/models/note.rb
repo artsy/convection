@@ -4,8 +4,19 @@ class Note < ApplicationRecord
   validates :body, presence: true
   belongs_to :submission
 
-  belongs_to :author,
-             foreign_key: :gravity_user_id,
-             class_name: 'User',
-             primary_key: :gravity_user_id
+  def author
+    if defined?(@author)
+      @author
+    else
+      @author =
+        gravity_user_id &&
+          (
+            begin
+              Gravity.client.user(id: gravity_user_id)._get
+            rescue Faraday::ResourceNotFound
+              nil
+            end
+          )
+    end
+  end
 end

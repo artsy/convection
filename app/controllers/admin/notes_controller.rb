@@ -3,14 +3,14 @@
 module Admin
   class NotesController < ApplicationController
     def create
-      @submission = Submission.find(note_params[:submission_id])
-      note = Note.new(gravity_user_id: @current_user, **note_params)
+      submission = Submission.find(params.dig(:note, :submission_id))
+      note = submission.notes.new(note_params)
+      path = admin_submission_path(submission)
 
       if note.save
-        redirect_to admin_submission_path(@submission),
-                    notice: 'Note has successfully been created.'
+        redirect_to path, notice: 'Note has successfully been created.'
       else
-        redirect_to admin_submission_path(@submission),
+        redirect_to path,
                     alert:
                       "Could not create note: #{
                         note.errors.full_messages.join(', ')
@@ -21,7 +21,7 @@ module Admin
     private
 
     def note_params
-      params.require(:note).permit(:submission_id, :body)
+      params.require(:note).permit(:body).merge(gravity_user_id: @current_user)
     end
   end
 end
