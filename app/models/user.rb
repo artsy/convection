@@ -10,9 +10,19 @@ class User < ApplicationRecord
   pg_search_scope :search, against: :email, using: { tsearch: { prefix: true } }
 
   def gravity_user
-    Gravity.client.user(id: gravity_user_id)._get
-  rescue Faraday::ResourceNotFound
-    nil
+    if defined?(@gravity_user)
+      @gravity_user
+    else
+      @gravity_user =
+        gravity_user_id &&
+          (
+            begin
+              Gravity.client.user(id: gravity_user_id)._get
+            rescue Faraday::ResourceNotFound
+              nil
+            end
+          )
+    end
   end
 
   def name
