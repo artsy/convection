@@ -159,31 +159,35 @@ module Admin
     end
 
     def submission_params
-      params.require(:submission).permit(
-        :artist_id,
-        :assigned_to,
-        :authenticity_certificate,
-        :category,
-        :currency,
-        :deleted_at,
-        :depth,
-        :dimensions_metric,
-        :edition_number,
-        :edition_size,
-        :height,
-        :location_city,
-        :location_country,
-        :location_state,
-        :medium,
-        :minimum_price_dollars,
-        :primary_image_id,
-        :provenance,
-        :signature,
-        :state,
-        :title,
-        :width,
-        :year
-      )
+      safelist = %i[
+        artist_id
+        authenticity_certificate
+        category
+        currency
+        deleted_at
+        depth
+        dimensions_metric
+        edition_number
+        edition_size
+        height
+        location_city
+        location_country
+        location_state
+        medium
+        minimum_price_dollars
+        primary_image_id
+        provenance
+        signature
+        state
+        title
+        width
+        year
+      ]
+
+      permitted_params = params.require(:submission).permit(safelist)
+      permitted_params[:assigned_to] =
+        params.dig(:submission, :assigned_to).presence
+      permitted_params
     end
   end
 end
