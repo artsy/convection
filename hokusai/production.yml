@@ -44,9 +44,9 @@ spec:
           resources:
             requests:
               cpu: 200m
-              memory: 512Mi
+              memory: 256Mi
             limits:
-              memory: 1Gi
+              memory: 512Mi
           readinessProbe:
             httpGet:
               port: convection-http
@@ -229,8 +229,8 @@ spec:
     apiVersion: extensions/v1beta1
     kind: Deployment
     name: convection-sidekiq
-  minReplicas: 2
-  maxReplicas: 3
+  minReplicas: 1
+  maxReplicas: 2
   targetCPUUtilizationPercentage: 80
 
 ---
@@ -279,9 +279,9 @@ spec:
           resources:
             requests:
               cpu: 200m
-              memory: 512Mi
+              memory: 256Mi
             limits:
-              memory: 1Gi
+              memory: 512Mi
       dnsPolicy: ClusterFirst
       dnsConfig:
         options:
