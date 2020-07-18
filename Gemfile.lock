@@ -409,7 +409,7 @@ GEM
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
-    solargraph (0.39.11)
+    solargraph (0.39.12)
       backport (~> 1.1)
       benchmark
       bundler (>= 1.17.2)
