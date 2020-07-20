@@ -6,7 +6,7 @@ module Types
 
     field :additional_info, String, null: true
     field :artist_id, String, null: false
-    field :assets, [Types::AssetType, null: true], null: true
+    field :assets, [Types::AssetType, { null: true }], null: true
     field :authenticity_certificate, Boolean, null: true
     field :category, String, null: true
     field :created_at, GraphQL::Types::ISO8601DateTime, null: true

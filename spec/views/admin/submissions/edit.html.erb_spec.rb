@@ -44,5 +44,14 @@ describe 'admin/submissions/edit.html.erb', type: :feature do
       expect(page).to have_content('Gob Bluth'.upcase)
       expect(page).to have_content('Add New')
     end
+
+    it 'lets you update the submission and not affect the assigned user' do
+      expect(@submission.assigned_to).to eq nil
+      fill_in('submission_title', with: 'my new artwork title')
+      find_button('Save').click
+      @submission.reload
+      expect(@submission.title).to eq('my new artwork title')
+      expect(@submission.assigned_to).to eq nil
+    end
   end
 end
