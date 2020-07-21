@@ -115,7 +115,7 @@ GEM
     css_parser (1.7.1)
       addressable
     database_cleaner (1.8.5)
-    ddtrace (0.37.0)
+    ddtrace (0.38.0)
       msgpack
     decent_exposure (3.0.2)
       activesupport (>= 4.0)
