@@ -19,7 +19,7 @@ describe SubmissionStateActions do
 
     it 'returns approve, publish, reject and close actions' do
       actions = SubmissionStateActions.for(submission)
-      states = actions.map { |action| action[:state] }
+      states = actions.pluck(:state)
       expect(states).to eq %w[approved published rejected closed]
     end
   end
@@ -29,7 +29,7 @@ describe SubmissionStateActions do
 
     it 'returns the publish and close actions' do
       actions = SubmissionStateActions.for(submission)
-      states = actions.map { |action| action[:state] }
+      states = actions.pluck(:state)
       expect(states).to eq %w[published closed]
     end
   end
@@ -39,7 +39,7 @@ describe SubmissionStateActions do
 
     it 'returns the close action' do
       actions = SubmissionStateActions.for(submission)
-      states = actions.map { |action| action[:state] }
+      states = actions.pluck(:state)
       expect(states).to eq %w[closed]
     end
   end
