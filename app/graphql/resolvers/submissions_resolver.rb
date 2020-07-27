@@ -81,7 +81,7 @@ class SubmissionsResolver < BaseResolver
     return false if @arguments[:sort].blank?
 
     column_name = @arguments[:sort].keys.first
-    !Submission.column_names.include?(column_name)
+    Submission.column_names.exclude?(column_name)
   end
 
   def sort_order

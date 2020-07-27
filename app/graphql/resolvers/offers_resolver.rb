@@ -25,7 +25,7 @@ class OffersResolver < BaseResolver
     return false if @arguments[:sort].blank?
 
     column_name = @arguments[:sort].keys.first
-    !Offer.column_names.include?(column_name)
+    Offer.column_names.exclude?(column_name)
   end
 
   def partner
