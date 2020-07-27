@@ -204,6 +204,14 @@ describe Submission do
       stub_gravity_artist(id: submission.artist_id, name: 'Andy Warhol')
       expect(submission.artist_name).to eq 'Andy Warhol'
     end
+
+    context 'with an empty string for artist id' do
+      let(:submission) { Fabricate :submission, artist_id: '' }
+
+      it 'returns nil' do
+        expect(submission.artist).to eq nil
+      end
+    end
   end
 
   context 'thumbnail' do

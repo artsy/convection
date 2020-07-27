@@ -133,7 +133,7 @@ class Submission < ApplicationRecord
   end
 
   def artist
-    Gravity.client.artist(id: artist_id)._get if artist_id
+    Gravity.client.artist(id: artist_id)._get if artist_id.present?
   rescue Faraday::ResourceNotFound
     nil
   end
