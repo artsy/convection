@@ -5,7 +5,7 @@ module Types
     DIRECTIONS = %w[asc desc].freeze
 
     def self.generate_values(columns)
-      columns.each do |column_name|
+      columns.sort.each do |column_name|
         asc_value, desc_value =
           DIRECTIONS.map do |direction|
             [column_name, direction].join('_').upcase
