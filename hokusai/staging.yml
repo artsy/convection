@@ -157,6 +157,45 @@ spec:
   type: LoadBalancer
 
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: convection
+    component: web
+    layer: application
+  name: convection-web-internal
+  namespace: default
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      name: http
+      targetPort: 8080
+  selector:
+    app: convection
+    layer: application
+    component: web
+  type: ClusterIP
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: convection
+  annotations:
+    nginx.ingress.kubernetes.io/whitelist-source-range: "{{ cloudflareIpSourceRanges|join(',') }}"
+spec:
+  rules:
+    - host: convection-staging.artsy.net
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: convection-web-internal
+              servicePort: http
+
+---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
