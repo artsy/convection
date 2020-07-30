@@ -81,6 +81,10 @@ module Types
                required: false, prepare: SubmissionSortType.prepare do
         description 'Return submissions sorted this way'
       end
+
+      argument :filterByCategory, CategoryType, required: false do
+        description 'Get submissions filtered by category'
+      end
     end
 
     def submissions(arguments = {})
