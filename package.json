@@ -2,7 +2,7 @@
   "name": "convection",
   "version": "1.0.0",
   "scripts": {
-    "prettier": "prettier --write '**/*.rb'",
+    "prettier-write": "prettier --write '**/*.rb'",
     "prettier-check": "prettier --check '**/*.rb'",
     "sync-schema": "rake graphql:schema:idl && cp _schema.graphql ../metaphysics/src/data/convection.graphql"
   },

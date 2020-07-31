@@ -28,6 +28,10 @@ only_release: &only_release
 workflows:
   build-deploy:
     jobs:
+      - yarn/run:
+          name: prettier-check
+          script: "prettier-check"
+
       - hokusai/test:
           <<: *not_staging_or_release
 
