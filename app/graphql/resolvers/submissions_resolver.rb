@@ -43,7 +43,11 @@ class SubmissionsResolver < BaseResolver
   end
 
   def conditions
-    { id: submission_ids.presence, user_id: user_ids.presence }.compact
+    {
+      id: submission_ids.presence,
+      user_id: user_ids.presence,
+      category: filter_by_category.presence
+    }.compact
   end
 
   def submission_ids
@@ -52,6 +56,10 @@ class SubmissionsResolver < BaseResolver
 
   def user_ids
     @arguments.fetch(:user_id, [])
+  end
+
+  def filter_by_category
+    @arguments.fetch(:filter_by_category, [])
   end
 
   def not_allowed_ids?

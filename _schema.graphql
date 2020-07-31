@@ -753,6 +753,11 @@ type Query {
     before: String
 
     """
+    Get submissions filtered by category
+    """
+    filterByCategory: Category
+
+    """
     Returns the first _n_ elements from the list.
     """
     first: Int

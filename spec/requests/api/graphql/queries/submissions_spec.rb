@@ -356,6 +356,60 @@ describe 'submissions query' do
       end
     end
 
+    describe 'filter' do
+      let!(:submission) { Fabricate :submission, category: 'Painting' }
+      let!(:middle_submission) { Fabricate :submission, category: 'Sculpture' }
+      let!(:last_submission) { Fabricate :submission, category: 'Photography' }
+
+      let(:query) do
+        <<-GRAPHQL
+        query {
+          submissions(#{query_inputs}) {
+            edges {
+              node {
+                category
+              }
+            }
+          }
+        }
+        GRAPHQL
+      end
+
+      context 'without filterByCategory argument' do
+        let(:query_inputs) { 'filterByCategory: null' }
+
+        it 'returns an unfiltered list of submissions in decending order' do
+          post '/api/graphql', params: { query: query }, headers: headers
+          expect(response.status).to eq 200
+
+          body = JSON.parse(response.body)
+          submissions_response = body['data']['submissions']
+          categories =
+            submissions_response['edges'].map do |edge|
+              edge.dig('node', 'category')
+            end
+          expect(categories).to eq %w[Photography Sculpture Painting]
+        end
+      end
+
+      context 'with a filterByCategory argument' do
+        let(:query_inputs) { 'filterByCategory: PAINTING' }
+
+        it 'returns a filtered list of submissions' do
+          post '/api/graphql', params: { query: query }, headers: headers
+          expect(response.status).to eq 200
+
+          body = JSON.parse(response.body)
+          submissions_response = body['data']['submissions']
+          categories =
+            submissions_response['edges'].map do |edge|
+              edge.dig('node', 'category')
+            end
+          expect(categories).to eq %w[Painting]
+        end
+      end
+    end
+
     describe 'sorting' do
       let!(:submission) { Fabricate :submission, id: 7, created_at: 1.day.ago }
       let!(:middle_submission) do
