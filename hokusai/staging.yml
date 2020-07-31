@@ -61,37 +61,6 @@ spec:
             preStop:
               exec:
                 command: ["sh", "-c", "sleep 10"]
-        - name: convection-nginx
-          image: artsy/docker-nginx:1.14.2
-          ports:
-            - name: nginx-http
-              containerPort: 80
-            - name: nginx-https
-              containerPort: 443
-          readinessProbe:
-            tcpSocket:
-              port: nginx-http
-            initialDelaySeconds: 5
-            periodSeconds: 15
-            timeoutSeconds: 5
-          lifecycle:
-            preStop:
-              exec:
-                command: ["sh", "-c", "sleep 5 && /usr/sbin/nginx -s quit"]
-          env:
-            - name: "NGINX_DEFAULT_CONF"
-              valueFrom:
-                configMapKeyRef:
-                  name: nginx-config
-                  key: default
-          volumeMounts:
-            - name: nginx-secrets
-              mountPath: /etc/nginx/ssl
-      volumes:
-        - name: nginx-secrets
-          secret:
-            secretName: nginx-secrets
-            defaultMode: 420
       dnsPolicy: ClusterFirst
       dnsConfig:
         options:
@@ -121,40 +90,6 @@ spec:
   minReplicas: 1
   maxReplicas: 3
   targetCPUUtilizationPercentage: 70
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: convection
-    component: web
-    layer: application
-  name: convection-web
-  namespace: default
-  annotations:
-    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: {{ artsyNetWildcardSSLCert }}
-    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
-    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
-    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
-    service.beta.kubernetes.io/aws-load-balancer-connection-draining-enabled: "true"
-    service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "5"
-spec:
-  ports:
-    - port: 80
-      protocol: TCP
-      name: http
-      targetPort: nginx-http
-    - port: 443
-      protocol: TCP
-      name: https
-      targetPort: nginx-http
-  selector:
-    app: convection
-    layer: application
-    component: web
-  sessionAffinity: None
-  type: LoadBalancer
 
 ---
 apiVersion: v1
