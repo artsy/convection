@@ -8,7 +8,7 @@ target_database="convection_development"
 
 url=$(hokusai $environment env get DATABASE_URL | cut -d '=' -f 2)
 
-dropdb $target_database
+dropdb $target_database --if-exists
 createdb $target_database
 pg_dump $url -O -Fc -x -f $dump_file
 pg_restore $dump_file -Fc --no-owner -d $target_database
