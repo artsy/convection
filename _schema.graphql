@@ -822,6 +822,7 @@ type Submission {
   offers(gravityPartnerId: ID!): [Offer!]!
   primaryImage: Asset
   provenance: String
+  publishedAt: ISO8601DateTime
   signature: Boolean
   state: State
   title: String
