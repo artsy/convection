@@ -26,6 +26,7 @@ module Types
     field :minimum_price_dollars, Integer, null: true
     field :primary_image, Types::AssetType, null: true
     field :provenance, String, null: true
+    field :published_at, GraphQL::Types::ISO8601DateTime, null: true
     field :signature, Boolean, null: true
     field :state, Types::StateType, null: true
     field :title, String, null: true
