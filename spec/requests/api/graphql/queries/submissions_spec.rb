@@ -20,6 +20,7 @@ describe 'submissions query' do
     <<-GRAPHQL
     query {
       submissions(#{query_inputs}) {
+        totalCount
         edges {
           node {
             id,
@@ -99,6 +100,20 @@ describe 'submissions query' do
 
         submissions_response = body['data']['submissions']
         expect(submissions_response['edges'].count).to eq 2
+      end
+    end
+
+    context 'with totalCount' do
+      let!(:submission) { Fabricate :submission, state: 'submitted' }
+
+      it 'returns the number of published submissions' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submissions_response = body['data']['submissions']
+        expect(submissions_response['totalCount']).to eq 0
       end
     end
 

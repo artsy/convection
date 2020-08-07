@@ -28,7 +28,9 @@ module Types
       end
 
       def total_count
-        object.items.size
+        published_items =
+          object.items.filter { |item| item.state == 'published' }
+        published_items.count
       end
 
       private
