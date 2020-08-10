@@ -8,6 +8,18 @@ class PartnerSubmissionService
       Partner.all.each { |partner| delay.deliver_digest(partner.id) }
     end
 
+    def compute_contacts(partner)
+      gravity_partner_id = partner.gravity_partner_id
+      comm_name = Convection.config.consignment_communication_name
+      partner_communication =
+        Gravity.client.partner_communications(name: comm_name).first
+      Gravity.fetch_all(
+        partner_communication,
+        :partner_contacts,
+        partner_id: gravity_partner_id
+      )
+    end
+
     def deliver_digest(partner_id)
       partner = Partner.find(partner_id)
       partner_submissions = partner.partner_submissions.where(notified_at: nil)
@@ -19,18 +31,7 @@ class PartnerSubmissionService
         return
       end
 
-      gravity_partner_id = partner.gravity_partner_id
-      gravity_partner = Gravity.client.partner(id: gravity_partner_id)._get
-      partner_communication =
-        Gravity.client.partner_communications(
-          name: Convection.config.consignment_communication_name
-        ).first
-      partner_contacts =
-        Gravity.fetch_all(
-          partner_communication,
-          :partner_contacts,
-          partner_id: gravity_partner_id
-        )
+      partner_contacts = compute_contacts(partner)
 
       unless partner_contacts.any?
         Rails.logger.info "Skipping digest for #{
@@ -45,6 +46,8 @@ class PartnerSubmissionService
         } (#{partner.gravity_partner_id})."
       )
 
+      gravity_partner_id = partner.gravity_partner_id
+      gravity_partner = Gravity.client.partner(id: gravity_partner_id)._get
       submission_ids = submissions.pluck(:id)
       partner_contacts.map(&:email).each do |email|
         delay.deliver_partner_contact_email(
