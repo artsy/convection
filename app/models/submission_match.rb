@@ -25,7 +25,16 @@ class SubmissionMatch
   end
 
   def query
-    { state: params[:state].presence, user_id: params[:user].presence }.compact
+    attributes = {
+      state: params[:state].presence, user_id: params[:user].presence
+    }.compact
+    attributes.merge!(assigned_to: assigned_to) if filtering_by_assigned_to?
+    attributes
+  end
+
+  def filtering_by_assigned_to?
+    params.keys.map(&:to_sym).include?(:assigned_to) &&
+      params[:assigned_to] != 'all'
   end
 
   def sorting_by_users?
@@ -46,5 +55,9 @@ class SubmissionMatch
 
   def direction
     params[:direction].presence || 'desc'
+  end
+
+  def assigned_to
+    params[:assigned_to].presence
   end
 end

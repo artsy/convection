@@ -39,6 +39,40 @@ describe SubmissionMatch do
       end
     end
 
+    context 'filtering by assigned_to' do
+      let!(:unassigned) { Fabricate :submission, id: 1, assigned_to: nil }
+      let!(:alice_assigned) do
+        Fabricate :submission, id: 2, assigned_to: 'Alice'
+      end
+      let!(:betty_assigned) do
+        Fabricate :submission, id: 3, assigned_to: 'Betty'
+      end
+
+      context 'with a valid assigned username' do
+        it 'returns only matching submissions' do
+          params = { assigned_to: 'Alice' }
+          matching = SubmissionMatch.find_all(params).to_a
+          expect(matching).to eq [alice_assigned]
+        end
+      end
+
+      context "with 'all' for assigned to" do
+        it 'returns all submissions' do
+          params = { assigned_to: 'all' }
+          matching = SubmissionMatch.find_all(params).to_a
+          expect(matching).to eq [betty_assigned, alice_assigned, unassigned]
+        end
+      end
+
+      context 'with nil for assigned to' do
+        it 'returns unassigned submisisons' do
+          params = { assigned_to: nil }
+          matching = SubmissionMatch.find_all(params).to_a
+          expect(matching).to eq [unassigned]
+        end
+      end
+    end
+
     context 'searching with term' do
       let(:query) { 'mushroom' }
       let!(:submission) do

@@ -24,6 +24,7 @@ module Admin
 
     expose(:filters) do
       {
+        assigned_to: params[:assigned_to],
         state: params[:state],
         user: params[:user],
         sort: params[:sort],
