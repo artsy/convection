@@ -190,4 +190,33 @@ describe Admin::ConsignmentsController, type: :controller do
       end
     end
   end
+
+  describe '#update' do
+    let(:consignment) do
+      Fabricate(
+        :partner_submission,
+        state: 'open',
+        submission: Fabricate(:submission, state: 'approved'),
+        partner: Fabricate(:partner, name: 'Gagosian Gallery'),
+        sale_price_cents: 100_000
+      )
+    end
+
+    let(:offer) do
+      Fabricate(
+        :offer,
+        state: 'sent', partner_submission: consignment, offer_type: 'purchase'
+      )
+    end
+
+    before { consignment.update!(accepted_offer: offer) }
+
+    it 'sets offer state to draft if consignment state is cancelled' do
+      put :update,
+          params: {
+            id: consignment.id, partner_submission: consignment, as: :json
+          }
+      expect(consignment.state).to eq 'cancelled'
+    end
+  end
 end

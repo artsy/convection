@@ -80,6 +80,9 @@ module Admin
 
     def update
       if @consignment.update(consignment_params)
+        if consignment_params[:state] == 'canceled'
+          @consignment.offers.each { |offer| offer.update(state: Offer::DRAFT) }
+        end
         redirect_to admin_consignment_path(@consignment)
       else
         flash.now[:error] = @consignment.errors.full_messages
