@@ -148,7 +148,7 @@ GEM
     graphiql-rails (1.7.0)
       railties
       sprockets-rails
-    graphql (1.10.10)
+    graphql (1.11.3)
     graphql-rails_logger (1.2.2)
       actionpack (> 5.0)
       activesupport (> 5.0)
@@ -477,7 +477,7 @@ DEPENDENCIES
   foreman
   gemini_upload-rails
   graphiql-rails
-  graphql (= 1.10.10)
+  graphql (= 1.11.3)
   graphql-rails_logger
   guard-livereload
   guard-rspec
