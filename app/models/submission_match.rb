@@ -2,29 +2,49 @@
 
 class SubmissionMatch
   def self.find_all(params)
-    matching_submissions = Submission.not_deleted
+    new(params).find_all
+  end
 
-    if params[:term].present?
-      matching_submissions = matching_submissions.search(params[:term])
-    end
+  attr_reader :params
 
-    if params[:state].present?
-      matching_submissions = matching_submissions.where(state: params[:state])
-    end
+  def initialize(params)
+    @params = params
+  end
 
-    if params[:user].present?
-      matching_submissions = matching_submissions.where(user_id: params[:user])
-    end
+  def find_all
+    submissions =
+      Submission.not_deleted.where(query).includes(:user).order(order_by)
+    submissions = submissions.search(term) if term
+    submissions
+  end
 
-    sort = params[:sort].presence || 'id'
-    direction = params[:direction].presence || 'desc'
+  private
 
-    if sort.include?('users')
-      matching_submissions.includes(:user).reorder(
-        "#{sort} #{direction}, submissions.id desc"
-      )
+  def term
+    params[:term].presence
+  end
+
+  def query
+    { state: params[:state].presence, user_id: params[:user].presence }.compact
+  end
+
+  def sorting_by_users?
+    sort.include?('users')
+  end
+
+  def order_by
+    if sorting_by_users?
+      "#{sort} #{direction}, submissions.id desc"
     else
-      matching_submissions.reorder("#{sort} #{direction}")
+      "#{sort} #{direction}"
     end
+  end
+
+  def sort
+    params[:sort].presence || 'id'
+  end
+
+  def direction
+    params[:direction].presence || 'desc'
   end
 end
