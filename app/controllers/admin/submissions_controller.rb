@@ -16,29 +16,7 @@ module Admin
                   ]
 
     expose(:submissions) do
-      matching_submissions = Submission.not_deleted
-      if params[:term].present?
-        matching_submissions = matching_submissions.search(params[:term])
-      end
-      if params[:state].present?
-        matching_submissions = matching_submissions.where(state: params[:state])
-      end
-      if params[:user].present?
-        matching_submissions =
-          matching_submissions.where(user_id: params[:user])
-      end
-
-      sort = params[:sort].presence || 'id'
-      direction = params[:direction].presence || 'desc'
-
-      matching_submissions =
-        if sort.include?('users')
-          matching_submissions.includes(:user).reorder(
-            "#{sort} #{direction}, submissions.id desc"
-          )
-        else
-          matching_submissions.reorder("#{sort} #{direction}")
-        end
+      matching_submissions = SubmissionMatch.find_all(params)
       matching_submissions.page(page).per(size)
     end
 
@@ -46,6 +24,7 @@ module Admin
 
     expose(:filters) do
       {
+        assigned_to: params[:assigned_to],
         state: params[:state],
         user: params[:user],
         sort: params[:sort],

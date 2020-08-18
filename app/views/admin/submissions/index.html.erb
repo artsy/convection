@@ -1,4 +1,5 @@
 <div class='page-title'>
+  <%= link_to 'Create New', new_admin_submission_path, class: 'btn btn-small btn-primary pull-right' %>
   <h2>
     Submissions
   </h2>
@@ -7,27 +8,31 @@
 <div class='container double-padding-top'>
   <div class='row'>
     <div class='row col-md-12'>
+      <%= text_field_tag 'term', '', class: 'form-control', placeholder: 'Search by ID, title, or user email', id: 'submission-search-form' %>
+    </div>
+    <div class='row col-md-12' style="padding: 25px 15px 25px 0;">
       <%= form_tag admin_submissions_url, method: 'get', id: 'submission-filter-form' do %>
-        <div class='col-md-3'>
-          <div class='form-group'>
-            <%= select_tag 'state',
-                          options_for_select(
-                            Submission::STATES.map{ |state| [state, state] }.unshift(['all', nil]),
-                            filters[:state]
-                          ),
-                          class: 'form-control',
-                          onchange: ("$('#submission-filter-form').submit()") %>
-          </div>
+        <div class='col-md-6'>
+          <label>State</label>
+          <%= select_tag 'state',
+                        options_for_select(
+                          Submission::STATES.map{ |state| [state, state] }.unshift(['all', nil]),
+                          filters[:state]
+                        ),
+                        class: 'form-control',
+                        onchange: ("$('#submission-filter-form').submit()") %>
+        </div>
+        <div class='col-md-6' style="padding: 0;">
+          <label>Assigned to</label>
+          <%= select_tag 'assigned_to',
+                        options_for_select(
+                          Convection.config.admin_names.map { |name| [name, name] }.unshift(['all', 'all'], ['none', nil]),
+                          filters[:assigned_to]
+                        ),
+                        class: 'form-control',
+                        onchange: ("$('#submission-filter-form').submit()") %>
         </div>
       <% end %>
-      <div class='col-md-7'>
-        <div class='form-group'>
-          <%= text_field_tag 'term', '', class: 'form-control', placeholder: 'Search by ID, title, or user email', id: 'submission-search-form' %>
-        </div>
-      </div>
-      <div class='col-md-2'>
-        <%= link_to 'Create New', new_admin_submission_path, class: 'btn btn-small btn-primary btn-full-width' %>
-      </div>
     </div>
     <div class='row col-md-12'>
       <div class='list-group-item list-item--submission'>
