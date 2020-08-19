@@ -47,13 +47,13 @@ class OfferService
 
     def update_offer_state(offer, current_user)
       case offer.state
-      when 'sent'
+      when Offer::SENT
         send_offer!(offer, current_user)
-      when 'review'
+      when Offer::REVIEW
         review!(offer)
-      when 'consigned'
+      when Offer::ACCEPTED
         consign!(offer)
-      when 'rejected'
+      when Offer::REJECTED
         reject!(offer, current_user)
       end
     end
