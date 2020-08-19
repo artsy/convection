@@ -19,7 +19,7 @@ class Offer < ApplicationRecord
     PURCHASE = 'purchase'
   ].freeze
 
-  # FIXME: deprecate 'accepted' state
+  # FIXME: deprecate 'consigned' state
   STATES = [
     DRAFT = 'draft',
     SENT = 'sent',
