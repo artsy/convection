@@ -482,5 +482,91 @@ describe 'submissions query' do
         end
       end
     end
+
+    describe 'max page size' do
+      before do
+        Fabricate.times 100, :submission
+        expect(Submission.count).to eq 101
+      end
+
+      context 'with no page size specified' do
+        let(:query) do
+          <<-GRAPHQL
+          query {
+            submissions {
+              edges {
+                node {
+                  id,
+                  artistId,
+                  title
+                }
+              }
+            }
+          }
+          GRAPHQL
+        end
+
+        it 'returns 100 submissions' do
+          post '/api/graphql', params: { query: query }, headers: headers
+
+          body = JSON.parse(response.body)
+          edges = body['data']['submissions']['edges']
+
+          expect(edges.count).to eq 100
+        end
+      end
+
+      context 'with the default max page size' do
+        let(:query_inputs) { 'first: 20' }
+
+        it 'returns 20 submissions' do
+          post '/api/graphql', params: { query: query }, headers: headers
+
+          body = JSON.parse(response.body)
+          edges = body['data']['submissions']['edges']
+
+          expect(edges.count).to eq 20
+        end
+      end
+
+      context 'with an in-between page size' do
+        let(:query_inputs) { 'first: 77' }
+
+        it 'returns 77 submissions' do
+          post '/api/graphql', params: { query: query }, headers: headers
+
+          body = JSON.parse(response.body)
+          edges = body['data']['submissions']['edges']
+
+          expect(edges.count).to eq 77
+        end
+      end
+
+      context 'with the max page size for submissions' do
+        let(:query_inputs) { 'first: 100' }
+
+        it 'returns 100 submissions' do
+          post '/api/graphql', params: { query: query }, headers: headers
+
+          body = JSON.parse(response.body)
+          edges = body['data']['submissions']['edges']
+
+          expect(edges.count).to eq 100
+        end
+      end
+
+      context 'with 1 more than the max page size for submissions' do
+        let(:query_inputs) { 'first: 101' }
+
+        it 'returns only 100 submissions' do
+          post '/api/graphql', params: { query: query }, headers: headers
+
+          body = JSON.parse(response.body)
+          edges = body['data']['submissions']['edges']
+
+          expect(edges.count).to eq 100
+        end
+      end
+    end
   end
 end
