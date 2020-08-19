@@ -61,7 +61,7 @@ module Types
 
     field :submissions,
           SubmissionConnectionType,
-          null: true, connection: true do
+          null: true, connection: true, max_page_size: 100 do
       description 'Filter all submission'
 
       argument :ids, [ID], required: false do
