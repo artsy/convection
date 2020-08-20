@@ -287,11 +287,7 @@ describe OfferService do
         context 'with an offer on a non-approved submission' do
           it 'raises an error' do
             expect {
-              OfferService.update_offer(
-                offer,
-                'userid',
-                state: Offer::CONSIGNED
-              )
+              OfferService.update_offer(offer, 'userid', state: Offer::ACCEPTED)
             }.to raise_error(
               OfferService::OfferError,
               'Cannot complete consignment on non-approved submission'
@@ -307,7 +303,7 @@ describe OfferService do
             OfferService.update_offer(
               consignable_offer,
               'userid',
-              state: Offer::CONSIGNED
+              state: Offer::ACCEPTED
             )
             expect(ActionMailer::Base.deliveries.count).to eq 0
             expect(ps.state).to eq 'open'

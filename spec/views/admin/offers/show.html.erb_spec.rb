@@ -202,8 +202,8 @@ describe 'admin/offers/show.html.erb', type: :feature do
         page.visit "/admin/offers/#{offer.id}"
       end
 
-      it 'shows the complete consignment button' do
-        expect(page).to have_content('Complete Consignment')
+      it 'shows the accept offer button' do
+        expect(page).to have_content('Accept Offer')
         expect(page).to_not have_selector('.offer-draft-actions')
         expect(page).to have_selector('.offer-actions')
       end
@@ -218,7 +218,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
         find('.offer-consign-button').click
         page.driver.browser.switch_to.alert.accept
         expect(page).to have_content("Offer ##{offer.reference_id}")
-        expect(page).to_not have_content('Complete Consignment')
+        expect(page).to_not have_content('Accept Offer')
         expect(page).to have_selector('.list-item--consignment')
 
         # FIXME: Why do these two lines cause test to fail
