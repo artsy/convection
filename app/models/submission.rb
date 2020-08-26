@@ -19,6 +19,7 @@ class Submission < ApplicationRecord
     APPROVED = 'approved',
     PUBLISHED = 'published',
     REJECTED = 'rejected',
+    HOLD = 'hold',
     CLOSED = 'closed'
   ].freeze
 

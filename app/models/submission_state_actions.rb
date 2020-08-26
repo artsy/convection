@@ -14,11 +14,13 @@ class SubmissionStateActions
   def run
     case submission.state
     when Submission::SUBMITTED
-      [approve_action, publish_action, reject_action, close_action]
+      [approve_action, publish_action, hold_action, reject_action, close_action]
     when Submission::APPROVED
-      [publish_action, close_action]
+      [publish_action, hold_action, close_action]
     when Submission::PUBLISHED
       [close_action]
+    when Submission::HOLD
+      [approve_action, publish_action, reject_action, close_action]
     else
       []
     end
@@ -66,6 +68,15 @@ class SubmissionStateActions
       confirm: 'No email will be sent.',
       state: 'closed',
       text: 'Close'
+    }
+  end
+
+  def hold_action
+    {
+      class: default_classes << 'btn-delete',
+      confirm: 'No email will be sent to the consignor.',
+      state: 'hold',
+      text: 'Hold'
     }
   end
 end
