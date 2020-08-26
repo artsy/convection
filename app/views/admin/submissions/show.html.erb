@@ -60,7 +60,11 @@
             </div>
             <div class='bold-label single-padding-top'>Assigned To:</div>
             <div class='single-padding-top'>
-              <%= @submission.assigned_to || 'Unassigned' %>
+              <%= form_with model: [:admin, @submission] do |f| %>
+                <% options = [['Please select one', '']] + Convection.config.admin_names %>
+                <%= f.select :assigned_to, options %>
+                <%= f.submit 'Update' %>
+              <% end %>
             </div>
             <div class='single-padding-top'>
               <% if @submission.state == Submission::APPROVED %>
