@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_25_153607) do
+ActiveRecord::Schema.define(version: 2020_08_26_154051) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_trgm'
   enable_extension 'plpgsql'
@@ -70,8 +70,6 @@ ActiveRecord::Schema.define(version: 2020_06_25_153607) do
     t.text 'rejection_note'
     t.string 'rejected_by'
     t.datetime 'rejected_at'
-    t.string 'accepted_by'
-    t.datetime 'accepted_at'
     t.datetime 'review_started_at'
     t.datetime 'consigned_at'
     t.string 'override_email'
