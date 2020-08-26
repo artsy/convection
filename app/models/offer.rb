@@ -19,15 +19,13 @@ class Offer < ApplicationRecord
     PURCHASE = 'purchase'
   ].freeze
 
-  # FIXME: deprecate 'consigned' state
   STATES = [
     DRAFT = 'draft',
     SENT = 'sent',
     ACCEPTED = 'accepted',
     REJECTED = 'rejected',
     LAPSED = 'lapsed',
-    REVIEW = 'review',
-    CONSIGNED = 'consigned'
+    REVIEW = 'review'
   ].freeze
 
   REJECTION_REASONS = [
