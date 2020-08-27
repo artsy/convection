@@ -5,6 +5,9 @@
       <%= submission.user&.name %>
     </div>
     <div>
+      <%= submission.user&.submissions&.count || 0 %> submissions made
+    </div>
+    <div>
       <%= submission.user&.user_detail&.email %>
     </div>
     <div>

@@ -46,18 +46,45 @@ describe 'Editing a submission', type: :feature do
   end
 
   context 'adding an admin to a submission' do
-    it 'displays that admin on the submission detail page' do
-      visit admin_submission_path(submission)
-      expect(page).to have_content('Unassigned')
+    context 'from the edit screen' do
+      it 'displays that admin on the submission detail page' do
+        visit admin_submission_path(submission)
+        expect(page).to_not have_select(
+                              'submission[assigned_to]',
+                              selected: 'Alice'
+                            )
 
-      click_on 'Edit'
-      expect(page).to have_content 'Assigned To:'
+        click_on 'Edit'
+        expect(page).to have_content 'Assigned To:'
 
-      select 'Alice', from: 'submission[assigned_to]'
-      click_button 'Save'
+        select 'Alice', from: 'submission[assigned_to]'
+        click_button 'Save'
 
-      expect(page).to have_current_path(admin_submission_path(submission))
-      expect(page).to have_content('Alice')
+        expect(page).to have_current_path(admin_submission_path(submission))
+        expect(page).to have_select(
+          'submission[assigned_to]',
+          selected: 'Alice'
+        )
+      end
+    end
+
+    context 'from the detail screen' do
+      it 'displays that admin on the submission detail page' do
+        visit admin_submission_path(submission)
+        expect(page).to_not have_select(
+                              'submission[assigned_to]',
+                              selected: 'Alice'
+                            )
+
+        select 'Alice', from: 'submission[assigned_to]'
+        click_button 'Update'
+
+        expect(page).to have_current_path(admin_submission_path(submission))
+        expect(page).to have_select(
+          'submission[assigned_to]',
+          selected: 'Alice'
+        )
+      end
     end
   end
 
