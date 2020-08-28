@@ -30,7 +30,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
           title: 'my sartwork',
           artist_id: 'artistid',
           edition: true,
-          edition_size: 100,
+          edition_size: 77,
           edition_number: '23a',
           category: 'Painting',
           user: Fabricate(:user, gravity_user_id: 'userid'),
@@ -47,6 +47,8 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       expect(page).to have_content('Jon Jonson')
       expect(page).to have_content('user@example.com')
       expect(page).to have_content('Painting')
+      expect(page).to have_content('77')
+      expect(page).to have_content('23a')
     end
 
     it 'displays no undo links' do
