@@ -17,20 +17,20 @@ describe SubmissionStateActions do
   context 'with a submitted submission' do
     let(:state) { 'submitted' }
 
-    it 'returns approve, publish, reject and close actions' do
+    it 'returns approve, publish, hold, reject and close actions' do
       actions = SubmissionStateActions.for(submission)
       states = actions.pluck(:state)
-      expect(states).to eq %w[approved published rejected closed]
+      expect(states).to eq %w[approved published hold rejected closed]
     end
   end
 
   context 'with an approved submission' do
     let(:state) { 'approved' }
 
-    it 'returns the publish and close actions' do
+    it 'returns the publish, hold and close actions' do
       actions = SubmissionStateActions.for(submission)
       states = actions.pluck(:state)
-      expect(states).to eq %w[published closed]
+      expect(states).to eq %w[published hold closed]
     end
   end
 
@@ -41,6 +41,16 @@ describe SubmissionStateActions do
       actions = SubmissionStateActions.for(submission)
       states = actions.pluck(:state)
       expect(states).to eq %w[closed]
+    end
+  end
+
+  context 'with an on hold submission' do
+    let(:state) { 'hold' }
+
+    it 'returns approve, publish, reject and close actions' do
+      actions = SubmissionStateActions.for(submission)
+      states = actions.pluck(:state)
+      expect(states).to eq %w[approved published rejected closed]
     end
   end
 
