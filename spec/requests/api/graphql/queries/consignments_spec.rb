@@ -28,6 +28,22 @@ describe 'consignments query' do
     )
    }
 
+   let!(:consignment_4) {
+    Fabricate(
+      :partner_submission,
+      state: 'bought in',
+      partner: partner,
+    )
+   }
+
+   let!(:consignment_5) {
+    Fabricate(
+      :partner_submission,
+      state: 'sold',
+      partner: partner,
+    )
+   }
+
   let(:token) do
     JWT.encode(
       { aud: 'gravity', sub: 'userid', roles: 'partner' },
@@ -94,7 +110,6 @@ describe 'consignments query' do
   end
 
   describe 'valid requests' do
-    context 'with a request from a partner' do
       it 'returns the expected graphql response' do
         post '/api/graphql', params: { query: query }, headers: headers
         
@@ -104,8 +119,20 @@ describe 'consignments query' do
         expect(body['data']).to eq(
           {
             consignments: {
-              totalCount: 2,
+              totalCount: 4,
               edges: [
+                {
+                  node: {
+                    currency: "USD",
+                    state: "SOLD",
+                  }
+                },
+                {
+                  node: {
+                    currency: "USD",
+                    state: "BOUGHT_IN",
+                  }
+                },
                 {
                   node: {
                     currency: "USD",
@@ -125,7 +152,7 @@ describe 'consignments query' do
 
 
       end
-      it 'returns only returns sold or bought in consignments' do
+      it 'returns only sold or bought consignments' do
         post '/api/graphql', params: { query: query }, headers: headers
 
         expect(response.status).to eq 200
@@ -134,61 +161,17 @@ describe 'consignments query' do
         total_count = body.dig('data', 'consignments', 'totalCount')
         state1 = body.dig('data', 'consignments', 'edges', 0, 'node', 'state')
         state2 = body.dig('data', 'consignments', 'edges', 1, 'node', 'state')
+        state3 = body.dig('data', 'consignments', 'edges', 2, 'node', 'state')
+        state4 = body.dig('data', 'consignments', 'edges', 3, 'node', 'state')
 
-        expect(total_count).to eq 2
-
-        expect(state1). not_to eq 'OPEN'
-        expect(state1). not_to eq 'CANCELLED'
+        expect(total_count).to eq 4
         expect(state1). to eq 'SOLD'
-
-        expect(state2). not_to eq 'OPEN'
-        expect(state2). not_to eq 'CANCELLED'
         expect(state2). to eq 'BOUGHT_IN'
+        expect(state3). to eq 'SOLD'
+        expect(state4). to eq 'BOUGHT_IN'
       end
-    end
-
-    context 'when asking for only sent consignments' do
-      let(:consigned_partner_submission) do
-        Fabricate :partner_submission, partner: partner
-      end
-      let!(:consigned_offer) do
-        Fabricate :offer,
-                  partner_submission: consigned_partner_submission,
-                  state: 'consigned'
-      end
-
-      let(:query_inputs) do
-        "gravityPartnerId: \"#{
-          partner.gravity_partner_id
-        }\""
-      end
-
-      it 'returns only the requested consignments' do
-        post '/api/graphql', params: { query: query }, headers: headers
-
-        expect(response.status).to eq 200
-        body = JSON.parse(response.body)
-
-        total = body.dig('data', 'consignments', 'totalCount')
-
-        expect(total).to eq 2
-      end
-    end
 
     describe 'sorting' do
-      let!(:offer) do
-        ps = Fabricate :partner_submission, partner: partner
-        Fabricate :offer, partner_submission: ps, id: 7, created_at: 1.day.ago
-      end
-      let!(:middle_offer) do
-        ps = Fabricate :partner_submission, partner: partner
-        Fabricate :offer, partner_submission: ps, id: 8, created_at: 3.days.ago
-      end
-      let!(:last_offer) do
-        ps = Fabricate :partner_submission, partner: partner
-        Fabricate :offer, partner_submission: ps, id: 9, created_at: 2.days.ago
-      end
-
       let(:query) do
         <<-GRAPHQL
         query {
@@ -216,12 +199,13 @@ describe 'consignments query' do
         GRAPHQL
       end
 
-      context 'without a sort column' do
+      context 'without a sort parameter' do
         let(:query_inputs) do
           "gravityPartnerId: \"#{
             partner.gravity_partner_id
           }\""
         end
+
         it 'returns the consignments sorted ascending by the id column' do
           post '/api/graphql', params: { query: query }, headers: headers
 
@@ -232,7 +216,7 @@ describe 'consignments query' do
           ids = edges.map { |edge| edge.dig('node', 'id') }
 
 
-          expect(ids).to eq %w[2 1]
+          expect(ids).to eq %w[5 4 2 1]
         end
       end
 
@@ -243,7 +227,7 @@ describe 'consignments query' do
           }\", sort: CREATED_AT_ASC"
         end
 
-        it 'returns the consignments sorted ascending by that column' do
+        it 'returns the consignments sorted ascending by created at column' do
           post '/api/graphql', params: { query: query }, headers: headers
 
           expect(response.status).to eq 200
@@ -251,7 +235,7 @@ describe 'consignments query' do
 
           edges = body.dig('data', 'consignments', 'edges')
           ids = edges.map { |edge| edge.dig('node', 'id') }
-          expect(ids).to eq %w[1 2]
+          expect(ids).to eq %w[1 2 4 5]
         end
       end
 
@@ -262,7 +246,7 @@ describe 'consignments query' do
           }\", sort: CREATED_AT_DESC"
         end
 
-        it 'returns the consignments sorted descending by that column' do
+        it 'returns the consignments sorted descending by created at column' do
           post '/api/graphql', params: { query: query }, headers: headers
 
           expect(response.status).to eq 200
@@ -270,7 +254,7 @@ describe 'consignments query' do
 
           edges = body.dig('data', 'consignments', 'edges')
           ids = edges.map { |edge| edge.dig('node', 'id') }
-          expect(ids).to eq %w[2 1]
+          expect(ids).to eq %w[5 4 2 1]
         end
       end
     end
