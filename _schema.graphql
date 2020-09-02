@@ -526,26 +526,6 @@ type OfferEdge {
 
 enum OfferSort {
   """
-  sort by accepted_at in ascending order
-  """
-  ACCEPTED_AT_ASC
-
-  """
-  sort by accepted_at in descending order
-  """
-  ACCEPTED_AT_DESC
-
-  """
-  sort by accepted_by in ascending order
-  """
-  ACCEPTED_BY_ASC
-
-  """
-  sort by accepted_by in descending order
-  """
-  ACCEPTED_BY_DESC
-
-  """
   sort by commission_percent in ascending order
   """
   COMMISSION_PERCENT_ASC
