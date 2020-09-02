@@ -16,4 +16,3 @@ module Types
     field :submission, Types::SubmissionType, null: false
   end
 end
-  
