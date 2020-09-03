@@ -7,10 +7,10 @@
     "sync-schema": "rake graphql:schema:idl && cp _schema.graphql ../metaphysics/src/data/convection.graphql"
   },
   "devDependencies": {
-    "@prettier/plugin-ruby": "0.19.1",
+    "@prettier/plugin-ruby": "0.20.0",
     "husky": "4.2.5",
-    "lint-staged": "10.2.11",
-    "prettier": "2.1.0"
+    "lint-staged": "10.3.0",
+    "prettier": "2.1.1"
   },
   "husky": {
     "hooks": {
