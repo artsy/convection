@@ -94,5 +94,29 @@ module Types
 
       resolver.run
     end
+
+    field :consignments,
+          ConsignmentConnectionType,
+          null: true, connection: true, max_page_size: 100 do
+      description 'Sold or bought-in consignments'
+
+      argument :gravity_partner_id, ID, required: true do
+        description 'Return sold or bought-in consignments for the given partner'
+      end
+
+      argument :sort,
+               ConsignmentSortType,
+               required: false, prepare: ConsignmentSortType.prepare do
+        description 'Return consignments sorted by input (default sort by id)'
+      end
+    end
+
+    def consignments(arguments = {})
+      query_options = { arguments: arguments, context: context, object: object }
+      resolver = ConsignmentsResolver.new(query_options)
+      raise resolver.error unless resolver.valid?
+
+      resolver.run
+    end
   end
 end
