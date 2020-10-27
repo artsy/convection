@@ -3,9 +3,7 @@ version: "2"
 services:
   convection:
     env_file: ../.env
-    extends:
-      file: build.yml
-      service: convection
+{% include 'templates/docker-compose-service.yml.j2' %}
     ports:
       - 3000:3000
     volumes:
