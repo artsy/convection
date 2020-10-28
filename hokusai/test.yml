@@ -7,9 +7,7 @@ services:
       - RAILS_ENV=test
       - DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true
       - DATABASE_URL=postgresql://postgres:@convection-postgres/convection_test
-    extends:
-      file: build.yml
-      service: convection
+{% include 'templates/docker-compose-service.yml.j2' %}
     depends_on:
       - convection-postgres
   convection-postgres:
