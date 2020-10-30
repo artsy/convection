@@ -39,6 +39,7 @@ gem 'redcarpet'
 gem 'sass-rails'
 gem 'sentry-raven' # for error reporting
 gem 'sidekiq'
+gem 'tzinfo-data' # overrides system time zone data
 gem 'uglifier'
 
 group :development, :test do
