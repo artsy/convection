@@ -4,7 +4,7 @@ set -ex
 
 github_user=$(git config --global --get github.user)
 labels="Merge On Green,lib update"
-team="artsy/csgn-devs"
+team="artsy/collector-experience"
 
 message=$(cat <<"END"
 Library Updates
