@@ -14,7 +14,6 @@ RUN apk update && apk --no-cache --quiet add \
   nodejs \
   postgresql-dev \
   postgresql-client \
-  tzdata \
   yarn \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
   && adduser -D -g '' deploy
