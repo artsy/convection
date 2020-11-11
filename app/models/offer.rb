@@ -41,6 +41,7 @@ class Offer < ApplicationRecord
   belongs_to :partner_submission
   belongs_to :submission, counter_cache: true
   has_one :partner, through: :partner_submission
+  has_many :offer_responses, dependent: :destroy
 
   validates :state, inclusion: { in: STATES }
   validates :offer_type, inclusion: { in: OFFER_TYPES }, allow_nil: true

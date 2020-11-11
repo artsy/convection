@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_26_154051) do
+ActiveRecord::Schema.define(version: 2020_11_11_212135) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_trgm'
   enable_extension 'plpgsql'
@@ -39,6 +39,17 @@ ActiveRecord::Schema.define(version: 2020_08_26_154051) do
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.index %w[submission_id], name: 'index_notes_on_submission_id'
+  end
+
+  create_table 'offer_responses', force: :cascade do |t|
+    t.bigint 'offer_id'
+    t.string 'intended_state', null: false
+    t.string 'phone_number'
+    t.text 'comments'
+    t.string 'rejection_reason'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index %w[offer_id], name: 'index_offer_responses_on_offer_id'
   end
 
   create_table 'offers', id: :serial, force: :cascade do |t|
@@ -183,6 +194,7 @@ ActiveRecord::Schema.define(version: 2020_08_26_154051) do
 
   add_foreign_key 'assets', 'submissions'
   add_foreign_key 'notes', 'submissions'
+  add_foreign_key 'offer_responses', 'offers'
   add_foreign_key 'offers', 'partner_submissions', on_delete: :cascade
   add_foreign_key 'offers', 'submissions', on_delete: :cascade
   add_foreign_key 'partner_submissions',
