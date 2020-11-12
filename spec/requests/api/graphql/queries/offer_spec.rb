@@ -154,7 +154,7 @@ describe 'offer query' do
     context 'with a user accessing their own offer' do
       let(:token) do
         user_id = offer.submission.user.gravity_user_id
-        payload = { aud: 'gravity', sub: user_id, roles: 'admin' }
+        payload = { aud: 'gravity', sub: user_id, roles: 'user' }
         JWT.encode(payload, Convection.config.jwt_secret)
       end
 
@@ -198,6 +198,53 @@ describe 'offer query' do
 
         error_message = body['errors'][0]['message']
         expect(error_message).to eq 'Offer not found'
+      end
+    end
+
+    context 'with a draft offer' do
+      before { offer.update!(state: Offer::DRAFT) }
+
+      context 'as an admin' do
+        let(:token) do
+          payload = { aud: 'gravity', sub: 'adminid', roles: 'admin' }
+          JWT.encode(payload, Convection.config.jwt_secret)
+        end
+
+        it 'returns that offer' do
+          post '/api/graphql', params: { query: query }, headers: headers
+
+          expect(response.status).to eq 200
+          body = JSON.parse(response.body)
+
+          offer_response = body.dig('data', 'offer')
+          expect(offer_response).to match(
+            {
+              'id' => offer.id.to_s,
+              'commissionPercentWhole' => offer.commission_percent_whole
+            }
+          )
+        end
+      end
+
+      context 'as a valid user' do
+        let(:token) do
+          user_id = offer.submission.user.gravity_user_id
+          payload = { aud: 'gravity', sub: user_id, roles: 'user' }
+          JWT.encode(payload, Convection.config.jwt_secret)
+        end
+
+        it 'returns an error' do
+          post '/api/graphql', params: { query: query }, headers: headers
+
+          expect(response.status).to eq 200
+          body = JSON.parse(response.body)
+
+          offer_response = body.dig('data', 'offer')
+          expect(offer_response).to eq nil
+
+          error_message = body['errors'][0]['message']
+          expect(error_message).to eq 'Offer not found'
+        end
       end
     end
   end
