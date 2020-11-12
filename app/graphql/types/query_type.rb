@@ -7,7 +7,7 @@ module Types
 
       argument :id, ID, required: true
 
-      argument :gravity_partner_id, ID, required: true do
+      argument :gravity_partner_id, ID, required: false do
         description 'Return offers for the given partner'
       end
     end
