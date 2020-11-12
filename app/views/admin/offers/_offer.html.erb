@@ -12,10 +12,24 @@
     <% end %>
   </span>
   <div class='list-group-item-info'>
-    <%= offer.state %>
-  </div>
-  <div class='list-group-item-info'>
-    #<%= offer.reference_id %>
+    <% if offer.state != Offer::SENT || offer.offer_responses.empty? %>
+      <%= offer.state %>
+    <% else %>
+      <% offer_response = offer.offer_responses.order(created_at: :desc).first %>
+      <% if offer_response.intended_state == Offer::ACCEPTED %>
+        <div class='green'>
+          Response: Accept
+        </div>
+      <% elsif offer_response.intended_state == Offer::REJECTED %>
+        <div class='red'>
+          Response: Reject
+        </div>
+      <% else %>
+        <div class='purple-label'>
+          Response: Interested
+        </div>
+      <% end %>
+    <% end %>
   </div>
   <div class='list-group-item-info'>
     <%= offer.created_at.strftime('%m/%d/%Y') %>
