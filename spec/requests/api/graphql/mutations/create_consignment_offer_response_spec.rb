@@ -55,6 +55,26 @@ describe 'createConsignmentOfferResponse mutation' do
       end
     end
 
+    context "with a request for someone else's offer" do
+      let(:token) do
+        payload = { aud: 'gravity', sub: 'userid', roles: 'user' }
+        JWT.encode(payload, Convection.config.jwt_secret)
+      end
+
+      it 'returns an error for that request' do
+        post '/api/graphql', params: { query: mutation }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        create_response = body['data']['createConsignmentOfferResponse']
+        expect(create_response).to eq nil
+
+        error_message = body['errors'][0]['message']
+        expect(error_message).to eq 'Offer not found'
+      end
+    end
+
     context 'with a request missing an offer id' do
       let(:mutation_inputs) do
         <<-INPUTS
