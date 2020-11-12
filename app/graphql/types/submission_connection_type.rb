@@ -5,7 +5,7 @@ module Types
     node_type(Types::SubmissionType)
   end
 
-  class SubmissionConnectionType < Types::Pagination::PageableConnection
+  class SubmissionConnectionType < GraphQL::PageCursorConnection
     edge_type(Types::SubmissionEdgeType)
   end
 end

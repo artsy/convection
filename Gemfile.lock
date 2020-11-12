@@ -149,6 +149,8 @@ GEM
       railties
       sprockets-rails
     graphql (1.10.10)
+    graphql-page_cursors (0.0.1)
+      graphql
     graphql-rails_logger (1.2.2)
       actionpack (> 5.0)
       activesupport (> 5.0)
@@ -480,6 +482,7 @@ DEPENDENCIES
   gemini_upload-rails
   graphiql-rails
   graphql (= 1.10.10)
+  graphql-page_cursors
   graphql-rails_logger
   guard-livereload
   guard-rspec

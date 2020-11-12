@@ -5,7 +5,7 @@ module Types
     node_type(Types::ConsignmentType)
   end
 
-  class ConsignmentConnectionType < Types::Pagination::PageableConnection
+  class ConsignmentConnectionType < GraphQL::PageCursorConnection
     edge_type(Types::ConsignmentEdgeType)
   end
 end
