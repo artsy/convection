@@ -12,12 +12,24 @@ $green: #0eda83;
   text-transform: uppercase;
 }
 
+.bold {
+  font-weight: bold;
+}
+
 .gray-label {
   color: #999999;
 }
 
 .purple-label {
   color: $purple;
+}
+
+.red {
+  color: $red;
+}
+
+.green {
+  color: $green;
 }
 
 .flex-label {
