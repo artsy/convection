@@ -5,7 +5,7 @@ module Types
     node_type(Types::OfferType)
   end
 
-  class OfferConnectionType < Types::Pagination::PageableConnection
+  class OfferConnectionType < GraphQL::PageCursorConnection
     edge_type(Types::OfferEdgeType)
   end
 end
