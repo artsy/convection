@@ -205,6 +205,31 @@ describe Admin::OffersController, type: :controller do
                @offer1.id
              ]
         end
+
+        describe 'sent with response' do
+          it 'allows you to filter by state = sent with response' do
+            Fabricate(:offer_response, offer: @offer1)
+
+            get :index, params: { state: 'sent with response' }
+
+            expect(controller.offers.pluck(:id)).to eq [@offer1.id]
+          end
+
+          it 'allows you to filter by state = sent with response, search for partner, and sort by date' do
+            Fabricate(:offer_response, offer: @offer1)
+            Fabricate(:offer_response, offer: @offer2)
+            Fabricate(:offer_response, offer: @offer4)
+
+            get :index,
+                params: {
+                  state: 'sent with response',
+                  direction: 'desc',
+                  partner: @partner1.id
+                }
+
+            expect(controller.offers.pluck(:id)).to eq [@offer2.id, @offer1.id]
+          end
+        end
       end
     end
 

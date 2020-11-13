@@ -5,7 +5,7 @@ $ ->
       source: (request, response) ->
         compiledData = []
         currentStateFilter = $('#state :selected').val()
-        baseURL = "/admin/offers?state=#{currentStateFilter}"
+        baseURL = encodeURI("/admin/offers?state=#{currentStateFilter}")
         respond = _.after 3, ->
           response compiledData
         $.getJSON '/admin/offers', { term: request.term, size: 5, format: 'json' }, (data) ->
