@@ -80,6 +80,10 @@ describe 'admin/offers/show.html.erb', type: :feature do
       end
     end
 
+    it 'does not show an offer responses section if there are not any' do
+      expect(page).to_not have_content('Offer responses')
+    end
+
     describe 'save & send' do
       it 'shows the save & send button when offer is in draft state' do
         offer.update!(state: 'draft')
@@ -334,6 +338,86 @@ describe 'admin/offers/show.html.erb', type: :feature do
         expect(emails.first.subject).to eq(
           'A response to your consignment offer'
         )
+      end
+    end
+
+    describe 'offer with responses' do
+      it 'shows a rejected response' do
+        Fabricate(
+          :offer_response,
+          offer: offer,
+          intended_state: Offer::REJECTED,
+          rejection_reason: 'Low estimate'
+        )
+        page.visit "/admin/offers/#{offer.id}"
+        expect(page).to have_content('Offer responses')
+        expect(page).to_not have_content('Comments:')
+        expect(page).to_not have_content('Phone number:')
+        expect(page).to have_content('Reject offer')
+        expect(page).to have_content('Reason: Low estimate')
+
+        # In the sidebar
+        expect(page).to have_content('Most recent offer response Reject offer')
+      end
+
+      it 'shows an accepted response' do
+        Fabricate(
+          :offer_response,
+          offer: offer, intended_state: Offer::ACCEPTED
+        )
+        page.visit "/admin/offers/#{offer.id}"
+        expect(page).to have_content('Offer responses')
+        expect(page).to_not have_content('Comments:')
+        expect(page).to_not have_content('Phone number:')
+        expect(page).to have_content('Accept offer')
+        expect(page).to_not have_content('Reason: ')
+
+        # In the sidebar
+        expect(page).to have_content('Most recent offer response Accept offer')
+      end
+
+      it 'shows an interested response' do
+        Fabricate(
+          :offer_response,
+          offer: offer,
+          intended_state: Offer::REVIEW,
+          comments: 'Super interested but have questions.',
+          phone_number: '123-456-789'
+        )
+        page.visit "/admin/offers/#{offer.id}"
+        expect(page).to have_content('Offer responses')
+        expect(page).to have_content(
+          'Comments: Super interested but have questions.'
+        )
+        expect(page).to have_content('Phone number: 123-456-789')
+        expect(page).to have_content('Interested in offer')
+        expect(page).to_not have_content('Reason: ')
+
+        # In the sidebar
+        expect(page).to have_content(
+          'Most recent offer response Interested in offer'
+        )
+      end
+
+      it 'shows multiple responses' do
+        Fabricate(
+          :offer_response,
+          offer: offer,
+          intended_state: Offer::REVIEW,
+          comments: 'Super interested but have questions.',
+          phone_number: '123-456-789'
+        )
+        Fabricate(
+          :offer_response,
+          offer: offer, intended_state: Offer::ACCEPTED
+        )
+        page.visit "/admin/offers/#{offer.id}"
+        expect(page).to have_content('Offer responses')
+        expect(page).to have_content('Interested in offer')
+        expect(page).to have_content('Accept offer')
+
+        # In the sidebar
+        expect(page).to have_content('Most recent offer response Accept offer')
       end
     end
   end

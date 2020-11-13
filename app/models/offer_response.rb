@@ -3,7 +3,7 @@
 class OfferResponse < ApplicationRecord
   INTENDED_STATES = [Offer::ACCEPTED, Offer::REJECTED, Offer::REVIEW].freeze
 
-  belongs_to :offer
+  belongs_to :offer, counter_cache: true
 
   validates :intended_state, inclusion: { in: INTENDED_STATES }
   validates :rejection_reason,

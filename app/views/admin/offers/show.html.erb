@@ -20,6 +20,7 @@
           </div>
           <%= render 'admin/consignments/consignment_section', consignment: offer.submission.consigned_partner_submission, artist: artist %>
           <%= render 'admin/submissions/submission_section', submission: offer.submission, artist: artist %>
+          <%= render 'admin/offer_responses/offer_responses_section', offer_responses: offer.offer_responses %>
         </div>
       </div>
     </div>
@@ -38,6 +39,14 @@
             </div>
           </div>
           <%= render 'state_actions' %>
+          <% if offer.offer_responses&.any? %>
+            <div class='overview-section'>
+              <div class='bold-label'>
+                Most recent offer response
+              </div>
+              <%= render 'admin/offer_responses/offer_response_section', truncated: true, offer_response: offer.offer_responses.order(created_at: :desc).first %>
+            </div>
+          <% end %>
           <div class='overview-section'>
             <div class='bold-label'>State</div>
             <div class='single-padding-top'>
