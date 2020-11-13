@@ -5,8 +5,8 @@ class SubmissionService
   class SubmissionError < StandardError; end
 
   class << self
-    def create_submission(submission_params, current_user)
-      user = User.find_or_create_by!(gravity_user_id: current_user)
+    def create_submission(submission_params, gravity_user_id)
+      user = User.find_or_create_by!(gravity_user_id: gravity_user_id)
       create_params = submission_params.merge(user_id: user.id)
       submission = Submission.create!(create_params)
       UserService.delay.update_email(user.id)
@@ -16,7 +16,9 @@ class SubmissionService
     end
 
     def update_submission(submission, params, current_user: nil)
-      submission.assign_attributes(params)
+      user = User.find_or_create_by!(gravity_user_id: params[:user_id])
+      create_params = params.merge(user_id: user.id)
+      submission.assign_attributes(create_params)
       if submission.state_changed?
         update_submission_state(submission, current_user)
       end
@@ -184,7 +186,8 @@ class SubmissionService
         user: user,
         user_detail: user_detail,
         artist: artist
-      ).deliver_now
+      )
+        .deliver_now
     end
 
     def deliver_submission_notification(submission_id)
@@ -200,7 +203,8 @@ class SubmissionService
         user: user,
         user_detail: user_detail,
         artist: artist
-      ).deliver_now
+      )
+        .deliver_now
     end
 
     def deliver_approval_notification(submission_id)
@@ -214,7 +218,8 @@ class SubmissionService
         user: user,
         user_detail: user_detail,
         artist: artist
-      ).deliver_now
+      )
+        .deliver_now
     end
 
     def deliver_rejection_notification(submission_id)
@@ -228,7 +233,8 @@ class SubmissionService
         user: user,
         user_detail: user_detail,
         artist: artist
-      ).deliver_now
+      )
+        .deliver_now
     end
   end
 end
