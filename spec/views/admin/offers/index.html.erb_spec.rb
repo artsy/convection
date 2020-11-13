@@ -189,7 +189,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
         click_link("partner-#{@partner1.id}")
         expect(current_url).to include "&partner=#{@partner1.id}"
         expect(page).to have_selector('.list-group-item', count: 5)
-        expect(page).to have_content('sent', count: 4)
+        expect(page).to have_content('sent', count: 5) # 3 items + "sent" and "sent with response" filters
         expect(page).to have_content('draft', count: 2)
       end
 
@@ -208,7 +208,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
         click_link("partner-#{@partner1.id}")
         expect(current_url).to include "state=sent&partner=#{@partner1.id}"
         expect(page).to have_selector('.list-group-item', count: 4)
-        expect(page).to have_content('sent', count: 4)
+        expect(page).to have_content('sent', count: 5) # 3 items + "sent" and "sent with response" filters
         expect(page).to have_content('draft', count: 1)
       end
 
