@@ -685,6 +685,16 @@ enum OfferSort {
   NOTES_DESC
 
   """
+  sort by offer_responses_count in ascending order
+  """
+  OFFER_RESPONSES_COUNT_ASC
+
+  """
+  sort by offer_responses_count in descending order
+  """
+  OFFER_RESPONSES_COUNT_DESC
+
+  """
   sort by offer_type in ascending order
   """
   OFFER_TYPE_ASC

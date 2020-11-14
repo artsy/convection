@@ -44,6 +44,50 @@ describe 'admin/offers/index.html.erb', type: :feature do
       end
     end
 
+    context 'offer state' do
+      let(:offer) { Fabricate(:offer) }
+
+      it 'displays the correct state when the offer has a "reject" response' do
+        Fabricate(
+          :offer_response,
+          offer: offer, intended_state: Offer::REJECTED
+        )
+        page.visit admin_offers_path
+        expect(page).to have_content('Response: Reject')
+      end
+
+      it 'displays the correct state when the offer has an "accept" response' do
+        Fabricate(
+          :offer_response,
+          offer: offer, intended_state: Offer::ACCEPTED
+        )
+        page.visit admin_offers_path
+        expect(page).to have_content('Response: Accept')
+      end
+
+      it 'displays the correct state when the offer has an "interested" response' do
+        Fabricate(:offer_response, offer: offer, intended_state: Offer::REVIEW)
+        page.visit admin_offers_path
+        expect(page).to have_content('Response: Interested')
+      end
+
+      it 'displays the correct state when the offer is sent' do
+        offer.update!(state: Offer::SENT)
+        page.visit admin_offers_path
+        within(:css, 'a.list-group-item') do
+          expect(page).to have_content('sent')
+        end
+      end
+
+      it 'displays the correct state when the offer is accepted' do
+        offer.update!(state: Offer::ACCEPTED)
+        page.visit admin_offers_path
+        within(:css, 'a.list-group-item') do
+          expect(page).to have_content('accepted')
+        end
+      end
+    end
+
     context 'with some offers' do
       before do
         3.times { Fabricate(:offer, state: 'sent') }
@@ -145,7 +189,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
         click_link("partner-#{@partner1.id}")
         expect(current_url).to include "&partner=#{@partner1.id}"
         expect(page).to have_selector('.list-group-item', count: 5)
-        expect(page).to have_content('sent', count: 4)
+        expect(page).to have_content('sent', count: 5) # 3 items + "sent" and "sent with response" filters
         expect(page).to have_content('draft', count: 2)
       end
 
@@ -164,7 +208,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
         click_link("partner-#{@partner1.id}")
         expect(current_url).to include "state=sent&partner=#{@partner1.id}"
         expect(page).to have_selector('.list-group-item', count: 4)
-        expect(page).to have_content('sent', count: 4)
+        expect(page).to have_content('sent', count: 5) # 3 items + "sent" and "sent with response" filters
         expect(page).to have_content('draft', count: 1)
       end
 

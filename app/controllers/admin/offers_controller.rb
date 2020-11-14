@@ -25,7 +25,15 @@ module Admin
       end
 
       if params[:state].present?
-        matching_offers = matching_offers.where(state: params[:state])
+        matching_offers =
+          if params[:state] == 'sent with response'
+            matching_offers.where(state: Offer::SENT).where(
+              'offer_responses_count > ?',
+              0
+            )
+          else
+            matching_offers.where(state: params[:state])
+          end
       end
 
       sort = params[:sort].presence || 'id'

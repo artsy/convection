@@ -1,0 +1,10 @@
+<% if offer_responses.present? && offer_responses.any? %>
+  <div class='overview-section'>
+    <div class='overview-section-title--inline'>
+      Offer responses
+    </div>
+    <% offer_responses.order(created_at: :desc).each do |offer_response| %>
+      <%= render 'admin/offer_responses/offer_response_section', offer_response: offer_response %>
+    <% end %>
+  </div>
+<% end %>

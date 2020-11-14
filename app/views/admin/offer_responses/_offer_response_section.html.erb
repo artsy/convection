@@ -1,0 +1,40 @@
+<% truncated = false if local_assigns[:truncated].nil? %>
+
+<div class='double-padding-top'>
+  <% if offer_response.intended_state == Offer::ACCEPTED %>
+    <div class="green">
+      Accept offer
+    </div>
+  <% elsif offer_response.intended_state == Offer::REVIEW %>
+    <div class="purple-label">
+      Interested in offer
+    </div>
+  <% else %>
+    <div class="red">
+      Reject offer
+    </div>
+    <% if offer_response.rejection_reason.present? %>
+      <div>
+        <span class="bold">Reason: </span><%= offer_response.rejection_reason %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <% unless truncated %>
+    <% if offer_response.comments.present? %>
+      <div>
+        <span class="bold">Comments: </span><%= offer_response.comments %>
+      </div>
+    <% end %>
+
+    <% if offer_response.phone_number.present? %>
+      <div>
+        <span class="bold">Phone number: </span><%= offer_response.phone_number %>
+      </div>
+    <% end %>
+
+    <div>
+      <span class="bold">Date: </span><%= offer_response.created_at.strftime('%b %-d %Y') %>
+    </div>
+  <% end %>
+</div>
