@@ -22,7 +22,7 @@
               </label>
               <div class='col-sm-10' id='user_selections_form'>
                 <%= f.text_field :user, class: 'form-control', id: 'user_search' %>
-                <%= f.hidden_field :user_id %>
+                <%= f.hidden_field :user_id, :value => @submission&.user&.gravity_user_id %>
               </div>
             </div>
           </div>
