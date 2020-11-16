@@ -30,12 +30,15 @@ if [ "$current_branch" != "master" ]; then
   exit 1
 fi
 
+today=$(date +'%Y-%m-%d')
+branch_name="updates-$today"
+
 git fetch --all --quiet
-git checkout -b updates
+git checkout -b $branch_name
 bundle update
 yarn upgrade --latest
 bundle exec rake
 git add .
 git commit --message "$message"
-git push upstream updates
+git push origin $branch_name
 hub pull-request --message "$message" --reviewer $team --assign $github_user --labels "$labels"
