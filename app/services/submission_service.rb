@@ -16,9 +16,14 @@ class SubmissionService
     end
 
     def update_submission(submission, params, current_user: nil)
-      user = User.find_or_create_by!(gravity_user_id: params[:user_id])
-      create_params = params.merge(user_id: user.id)
-      submission.assign_attributes(create_params)
+      if params[:user_id]
+        user = User.find_or_create_by!(gravity_user_id: params[:user_id])
+        create_params = params.merge(user_id: user.id)
+        submission.assign_attributes(create_params)
+      else
+        submission.assign_attributes(params)
+      end
+
       if submission.state_changed?
         update_submission_state(submission, current_user)
       end
