@@ -53,7 +53,7 @@ module Admin
       @submission =
         SubmissionService.create_submission(
           submission_params.merge(state: 'submitted'),
-          params[:submission][:user_id]
+          submission_params[:user_id]
         )
       redirect_to admin_submission_path(@submission)
     rescue SubmissionService::SubmissionError => e
@@ -159,6 +159,7 @@ module Admin
         signature
         state
         title
+        user_id
         width
         year
       ]

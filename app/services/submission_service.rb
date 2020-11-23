@@ -5,8 +5,8 @@ class SubmissionService
   class SubmissionError < StandardError; end
 
   class << self
-    def create_submission(submission_params, current_user)
-      user = User.find_or_create_by!(gravity_user_id: current_user)
+    def create_submission(submission_params, gravity_user_id)
+      user = User.find_or_create_by!(gravity_user_id: gravity_user_id)
       create_params = submission_params.merge(user_id: user.id)
       submission = Submission.create!(create_params)
       UserService.delay.update_email(user.id)
@@ -16,7 +16,14 @@ class SubmissionService
     end
 
     def update_submission(submission, params, current_user: nil)
-      submission.assign_attributes(params)
+      if params[:user_id]
+        user = User.find_or_create_by!(gravity_user_id: params[:user_id])
+        create_params = params.merge(user_id: user.id)
+        submission.assign_attributes(create_params)
+      else
+        submission.assign_attributes(params)
+      end
+
       if submission.state_changed?
         update_submission_state(submission, current_user)
       end
