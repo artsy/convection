@@ -23,6 +23,10 @@ module Mutations
     argument :minimum_price_dollars, Integer, required: false
     argument :provenance, String, required: false
     argument :signature, Boolean, required: false
+    argument :sourceArtworkID,
+             String,
+             required: false,
+             description: 'If this artwork exists in Gravity, its ID'
     argument :state, Types::StateType, required: false
     argument :title, String, required: false
     argument :user_agent, String, required: false
