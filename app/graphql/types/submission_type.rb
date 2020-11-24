@@ -28,6 +28,9 @@ module Types
     field :provenance, String, null: true
     field :published_at, GraphQL::Types::ISO8601DateTime, null: true
     field :signature, Boolean, null: true
+    field :sourceArtworkID,
+          String,
+          null: true, description: 'If this artwork exists in Gravity, its ID'
     field :state, Types::StateType, null: true
     field :title, String, null: true
     field :user_agent, String, null: true

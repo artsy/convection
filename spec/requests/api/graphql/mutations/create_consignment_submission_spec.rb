@@ -12,7 +12,7 @@ describe 'createConsignmentSubmission mutation' do
   let(:headers) { { 'Authorization' => "Bearer #{token}" } }
 
   let(:mutation_inputs) do
-    '{ state: REJECTED, clientMutationId: "2", artistID: "andy", title: "soup", category: JEWELRY, minimumPriceDollars: 50000, currency: "GBP" }'
+    '{ state: REJECTED, clientMutationId: "2", artistID: "andy", title: "soup", category: JEWELRY, minimumPriceDollars: 50000, currency: "GBP", sourceArtworkID: "gravity_artwork_id" }'
   end
 
   let(:mutation) do
@@ -27,6 +27,7 @@ describe 'createConsignmentSubmission mutation' do
           state
           minimumPriceDollars
           currency
+          sourceArtworkID
         }
       }
     }
@@ -109,12 +110,25 @@ describe 'createConsignmentSubmission mutation' do
           'category' => 'Jewelry',
           'state' => 'REJECTED',
           'minimumPriceDollars' => 50_000,
-          'currency' => 'GBP'
+          'currency' => 'GBP',
+          'sourceArtworkID' => 'gravity_artwork_id'
         }
       )
 
       mutation_id = create_response['clientMutationId']
       expect(mutation_id).to eq '2'
+
+      created_submission = Submission.find(submission_response['id'])
+      expect(submission_response['title']).to eq(created_submission.title)
+      expect(submission_response['category']).to eq(created_submission.category)
+      expect(created_submission.rejected?).to be true
+      expect(submission_response['minimumPriceDollars']).to eq(
+        created_submission.minimum_price_dollars
+      )
+      expect(submission_response['currency']).to eq(created_submission.currency)
+      expect(submission_response['sourceArtworkID']).to eq(
+        created_submission.source_artwork_id
+      )
     end
 
     context 'with a user agent string' do
