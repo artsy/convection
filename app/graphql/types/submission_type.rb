@@ -18,7 +18,7 @@ module Types
     field :edition_size, Integer, null: true
     field :height, String, null: true
     field :id, ID, 'Uniq ID for this submission', null: false
-    field :internalID, ID, method: :id, null: true
+    field :internalID, ID, null: true, method: :id
     field :location_city, String, null: true
     field :location_country, String, null: true
     field :location_state, String, null: true
@@ -30,7 +30,9 @@ module Types
     field :signature, Boolean, null: true
     field :sourceArtworkID,
           String,
-          null: true, description: 'If this artwork exists in Gravity, its ID'
+          null: true,
+          method: :source_artwork_id,
+          description: 'If this artwork exists in Gravity, its ID'
     field :state, Types::StateType, null: true
     field :title, String, null: true
     field :user_agent, String, null: true
