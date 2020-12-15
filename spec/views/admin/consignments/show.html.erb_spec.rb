@@ -81,7 +81,6 @@ describe 'admin/consignments/show.html.erb', type: :feature do
         expect(page).to have_selector('.list-item--offer')
         within(:css, '.list-item--offer') do
           expect(page).to have_content 'accepted'
-          expect(page).to have_content 'purchase'
         end
         find('.list-item--offer').click
         expect(page.current_path).to eq(admin_offer_path(offer))

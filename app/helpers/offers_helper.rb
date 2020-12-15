@@ -2,6 +2,7 @@
 
 module OffersHelper
   include ApplicationHelper
+  include GraphqlHelper
   def reviewed_byline(offer)
     if offer.rejected?
       [
@@ -104,5 +105,10 @@ module OffersHelper
 
   def formatted_date_offer(date)
     date.strftime('%b %-d, %Y')
+  end
+
+  def offer_artist(offer)
+    artists_query([offer&.partner_submission&.submission&.artist_id])&.values
+      &.first
   end
 end
