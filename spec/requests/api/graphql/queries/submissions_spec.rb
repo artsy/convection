@@ -272,7 +272,8 @@ describe 'submissions query' do
         asset_ids = node_response['assets'].map { |asset| asset['id'] }
         expected_ids =
           [primary_asset, another_asset].map { |asset| asset.id.to_s }
-        expect(asset_ids).to eq expected_ids
+
+        expect(asset_ids.to_set).to eq(expected_ids.to_set)
 
         primary_image_response = node_response['primaryImage']
         expect(primary_image_response['id']).to eq primary_asset.id.to_s

@@ -29,29 +29,34 @@
     <div class='row col-md-12'>
       <div class='list-group-item list-item--offer'>
         <div class='list-group-item-info bold-label'>
-          State
+          Offer Date
         </div>
         <div class='list-group-item-info bold-label'>
-          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'id', label: 'ID' %>
+          Status
         </div>
         <div class='list-group-item-info bold-label'>
-          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'sale_date', label: 'Sale date' %>
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'id', label: 'Submission ID' %>
+        </div>
+        <div class='list-group-item-info bold-label'>
+          Artist, Title
+        </div>
+        <div class='list-group-item-info bold-label'>
+          User Email
+        </div>
+        <div class='list-group-item-info bold-label'>
+          Artwork Location
         </div>
         <div class='list-group-item-info bold-label'>
           <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'partners.name', label: 'Partner' %>
         </div>
         <div class='list-group-item-info bold-label'>
-          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'sale_price_cents', label: 'Price' %>
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'offers.high_estimate_cents', label: 'Estimate' %>
         </div>
         <div class='list-group-item-info bold-label'>
-          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'offers.offer_type', label: 'Offer type' %>
+          Commission
         </div>
         <div class='list-group-item-info bold-label'>
-          Artist
-        </div>
-        <div class='list-group-item-info bold-label'>
-        </div>
-        <div class='spacer'>
+        Thumbnail
         </div>
       </div>
       <div class='list-group'>
