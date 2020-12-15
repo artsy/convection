@@ -2,6 +2,7 @@
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV['RAILS_ENV'] ||= 'test'
+ENV['GRAVITY_URL'] ||= 'https://stagingapi.artsy.net'
 require File.expand_path('../config/environment', __dir__)
 if Rails.env.production?
   abort('The Rails environment is running in production mode!')

@@ -21,7 +21,7 @@ describe 'admin/partner_submissions/digest.html.erb', type: :feature do
         .with do |request|
         parsed = JSON.parse(request.body)
         parsed['variables']['ids'] == [] &&
-          parsed['query'].include?('artistsDetails')
+          parsed['query'].include?('Gravql__ArtistsDetails')
       end.to_return(body: gravql_artists_response.to_json)
 
       page.visit "/admin/partners/#{@partner.id}/submissions?notified_at="
@@ -59,7 +59,7 @@ describe 'admin/partner_submissions/digest.html.erb', type: :feature do
           .with do |request|
           parsed = JSON.parse(request.body)
           parsed['variables']['ids'] == %w[artistid] &&
-            parsed['query'].include?('artistsDetails')
+            parsed['query'].include?('Gravql__ArtistsDetails')
         end.to_return(body: gravql_artists_response.to_json)
       end
 

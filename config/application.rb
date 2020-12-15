@@ -21,6 +21,7 @@ module Convection
         #{config.root}/lib
         #{Rails.root.join('app', 'events')}
         #{Rails.root.join('app', 'services')}
+        #{Rails.root.join('app', 'operations')}
         #{Rails.root.join('app', 'graphql')}
         #{Rails.root.join('app', 'graphql', 'resolvers')}
         #{Rails.root.join('app', 'controllers', 'concerns')}

@@ -1,0 +1,6 @@
+query ($term: String!) {
+  match_partners(term: $term){
+    id
+    given_name
+  }
+}

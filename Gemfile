@@ -12,6 +12,7 @@ gem 'puma'
 watt_gem_spec = { git: 'https://github.com/artsy/watt.git', branch: 'master' }
 gem 'watt', watt_gem_spec # artsy bootstrap
 
+gem 'artemis'
 gem 'artsy-auth'
 gem 'artsy-eventservice' # for posting events to artsy event stream
 gem 'bootsnap', require: false # Speed up boot time by caching expensive operations.
