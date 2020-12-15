@@ -36,26 +36,29 @@
     </div>
     <div class='row col-md-12'>
       <div class='list-group-item list-item--submission'>
+        <div class='list-group-item-info bold-label'>
+          Date Submitted
+        </div>
         <div class='list-group-item-info bold-label list-group-item-info--state'>
-          State
+          Status
         </div>
         <div class='list-group-item-info bold-label list-group-item-info--id'>
           <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'id', label: 'ID' %>
         </div>
-        <div class='list-group-item-info bold-label list-group-item-info--email'>
-          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'users.email', label: 'Email' %>
-        </div>
         <div class='list-group-item-info bold-label'>
-          Date
-        </div>
-        <div class='list-group-item-info bold-label'>
-          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'offers_count', label: 'Offers' %>
-        </div>
-        <div class='list-group-item-info bold-label'>
-          Artist
+          Artist Name
         </div>
         <div class='list-group-item-info bold-label'>
           Title
+        </div>
+        <div class='list-group-item-info bold-label list-group-item-info--email'>
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'users.email', label: 'User Email' %>
+        </div>
+        <div class='list-group-item-info bold-label'>
+          Artwork Location
+        </div>
+        <div class='list-group-item-info bold-label'>
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'offers_count', label: 'Number of Offers' %>
         </div>
         <div class='list-group-item-info bold-label'>
         </div>
