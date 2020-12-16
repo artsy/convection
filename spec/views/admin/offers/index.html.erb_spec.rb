@@ -212,7 +212,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
         expect(page).to have_content('draft', count: 1)
       end
 
-      it 'allows you to search by partner name, filter by state, and sort by price_cents',
+      it 'allows you to search by partner name, filter by state, and sort by estimate',
          js: true do
         select('sent', from: 'state')
         fill_in('term', with: 'Gag')
@@ -220,11 +220,11 @@ describe 'admin/offers/index.html.erb', type: :feature do
         expect(page).to have_content('Partner   Gagosian')
         click_link("partner-#{@partner1.id}")
         expect(current_url).to include "state=sent&partner=#{@partner1.id}"
-        click_link('Price')
+        click_link('Estimate')
         expect(current_url).to include(
           "partner=#{@partner1.id}",
           'state=sent',
-          'sort=price_cents',
+          'sort=offers.high_estimate_cents',
           'direction=desc'
         )
       end
