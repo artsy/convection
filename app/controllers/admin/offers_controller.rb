@@ -76,7 +76,8 @@ module Admin
     expose(:term) { params[:term] }
 
     expose(:artist) do
-      artists_query([offer.submission.artist_id])&.values&.first
+      artists_query([offer&.partner_submission&.submission&.artist_id])&.values
+        &.first
     end
 
     def new_step_0

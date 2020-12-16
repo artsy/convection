@@ -31,33 +31,35 @@
     </div>
     <div class='row col-md-12'>
       <div class='list-group-item list-item--offer'>
-        <div class='spacer'>
+        <div class='list-group-item-info bold-label'>
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'offers.created_at', label: 'Offer Date' %>
         </div>
         <div class='list-group-item-info bold-label'>
-          State
+          Status
         </div>
         <div class='list-group-item-info bold-label'>
-          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'offers.created_at', label: 'Date' %>
+          Submission ID
+        </div>
+        <div class='list-group-item-info bold-label'>
+          Artist, Title
+        </div>
+        <div class='list-group-item-info bold-label'>
+          User Email
+        </div>
+        <div class='list-group-item-info bold-label'>
+          Location
         </div>
         <div class='list-group-item-info bold-label'>
           <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'partners.name', label: 'Partner' %>
         </div>
         <div class='list-group-item-info bold-label'>
-          Email
-        </div>
-        <div class='list-group-item-info bold-label'>
-          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'price_cents', label: 'Price' %>
-        </div>
-        <div class='list-group-item-info bold-label'>
-          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'high_estimate_cents', label: 'Estimate' %>
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'offers.high_estimate_cents', label: 'Estimate' %>
         </div>
         <div class='list-group-item-info bold-label'>
           Commission
         </div>
         <div class='list-group-item-info bold-label'>
-          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'offer_type', label: 'Type' %>
-        </div>
-        <div class='spacer'>
+        Thumbnail
         </div>
       </div>
       <%= render offers %>

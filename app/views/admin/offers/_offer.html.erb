@@ -1,7 +1,7 @@
 <% truncated = false if local_assigns[:truncated].nil? %>
 
 <%= link_to admin_offer_path(offer), class: 'list-group-item list-item--offer', data: { id: offer.id } do %>
-  <span>
+  <div class='list-group-item-info'>
     <% if offer.locked? %>
       <div class='locked'>
         <%= image_tag(image_url('lock.svg'), id: 'lock') %>
@@ -10,7 +10,8 @@
       <div class='spacer'>
       </div>
     <% end %>
-  </span>
+    <%= offer.created_at.strftime('%m/%d/%Y') %>
+  </div>
   <div class='list-group-item-info'>
     <% if offer.state != Offer::SENT || offer.offer_responses.empty? %>
       <%= offer.state %>
@@ -32,21 +33,24 @@
     <% end %>
   </div>
   <div class='list-group-item-info'>
-    <%= offer.created_at.strftime('%m/%d/%Y') %>
+    <%= offer.partner_submission.submission.id %>
   </div>
   <div class='list-group-item-info'>
-    <%= offer.partner.name %>
+    <%= offer_artist(offer) %>, <%= offer.partner_submission.submission&.title&.truncate(30) %>
   </div>
   <% if truncated %>
     <div class='list-group-item-info'>
-      <%= offer.best_price_display || '-' %>
+      <%= offer.partner.name %>
     </div>
   <% else %>
     <div class='list-group-item-info'>
-      <%= offer.submission.user&.email %>
+      <%= offer.partner_submission.submission.user&.email %>
     </div>
     <div class='list-group-item-info'>
-      <%= offer.price_display %>
+      <%= formatted_location(offer.partner_submission.submission)  %>
+    </div>
+    <div class='list-group-item-info'>
+      <%= offer.partner.name %>
     </div>
     <div class='list-group-item-info'>
       <%= offer.high_estimate_display %>
@@ -58,9 +62,11 @@
       -
       <% end %>
     </div>
+    <div class='list-group-item-info asset-thumb'>
+      <% if offer.partner_submission.submission.thumbnail.present? %>
+        <%= image_tag offer.partner_submission.submission.thumbnail %>
+      <% end %>
+      <span style="margin-left: auto" class='icon-chevron-right'></span>
+    </div>     
   <% end %>
-  <div class='list-group-item-info'>
-    <%= offer.offer_type %>
-  </div>
-  <span class='icon-chevron-right'></span>
 <% end %>

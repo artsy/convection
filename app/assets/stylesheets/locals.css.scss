@@ -90,6 +90,8 @@ $green: #0eda83;
 }
 
 .asset-thumb {
+  display: flex;
+  align-items: center;
   img {
     width: 60px;
     max-height: 60px;
