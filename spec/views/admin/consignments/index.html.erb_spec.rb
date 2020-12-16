@@ -146,7 +146,7 @@ describe 'admin/consignments/index.html.erb', type: :feature do
         expect(page).to have_selector('.list-group-item', count: 2)
       end
 
-      it 'allows you to search by partner name, filter by state, and sort by sale_price_cents',
+      it 'allows you to search by partner name, filter by state, and sort by estimate',
          js: true do
         select('bought in', from: 'state')
         fill_in('term', with: 'herit')
@@ -154,11 +154,11 @@ describe 'admin/consignments/index.html.erb', type: :feature do
         expect(page).to have_content('Partner   Heritage Auctions')
         click_link("partner-#{@partner2.id}")
         expect(current_url).to include "state=bought+in&partner=#{@partner2.id}"
-        click_link('Price')
+        click_link('Estimate')
         expect(current_url).to include(
           "partner=#{@partner2.id}",
           'state=bought+in',
-          'sort=sale_price_cents',
+          'sort=offers.high_estimate_cents',
           'direction=desc'
         )
       end
