@@ -1,4 +1,5 @@
 <div class='page-title'>
+  <%= link_to 'Create New', new_admin_offer_path, class: 'btn btn-small btn-primary pull-right' %>
   <h2>
     Offers
   </h2>
@@ -7,27 +8,31 @@
 <div class='container double-padding-top'>
   <div class='row'>
     <div class='row col-md-12'>
+      <input type="text" name="term" id="offer-search-form" class="form-control" placeholder="Search by ID, partner name, or user email" />
+    </div>
+    <div class='row col-md-12' style="padding: 25px 15px 25px 0;">
       <%= form_tag admin_offers_url, method: 'get', id: 'offer-filter-form' do %>
-        <div class='col-md-3'>
-          <div class='form-group'>
-            <%= select_tag 'state',
-                          options_for_select(
+        <div class='col-md-6'>
+          <label>State</label>
+          <%= select_tag 'state',
+                        options_for_select(
                             Offer::STATES.map{ |state| [state, state] }.unshift(['all', nil], ['sent with response', 'sent with response']),
-                            filters[:state]
-                          ),
-                          class: 'form-control',
-                          onchange: ("$('#offer-filter-form').submit()") %>
-          </div>
+                          filters[:state]
+                        ),
+                        class: 'form-control',
+                        onchange: ("$('#offer-filter-form').submit()") %>
+        </div>
+        <div class='col-md-6' style="padding: 0;">
+          <label>Assigned to</label>
+          <%= select_tag 'assigned_to',
+                        options_for_select(
+                          Convection.config.admin_names.map { |name| [name, name] }.unshift(['all', 'all'], ['none', nil]),
+                          filters[:assigned_to]
+                        ),
+                        class: 'form-control',
+                        onchange: ("$('#offer-filter-form').submit()") %>
         </div>
       <% end %>
-      <div class='col-md-7'>
-        <div class='form-group'>
-          <%= text_field_tag 'term', term, class: 'form-control', placeholder: 'Search by ID, partner name, or user email', id: 'offer-search-form' %>
-        </div>
-      </div>
-      <div class='col-md-2'>
-        <%= link_to 'Create New', new_step_0_admin_offers_path, class: 'btn btn-small btn-primary btn-full-width' %>
-      </div>
     </div>
     <div class='row col-md-12'>
       <div class='list-group-item list-item--offer'>

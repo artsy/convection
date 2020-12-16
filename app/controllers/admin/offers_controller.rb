@@ -10,6 +10,14 @@ module Admin
 
     expose(:offers) do
       matching_offers = Offer.all
+
+      if filtering_by_assigned_to?
+        matching_offers =
+          matching_offers.joins(:submission).where(
+            'submissions.assigned_to' => params[:assigned_to]
+          )
+      end
+
       if params[:term].present?
         matching_offers = matching_offers.search(params[:term])
       end
@@ -53,6 +61,7 @@ module Admin
 
     expose(:filters) do
       {
+        assigned_to: params[:assigned_to],
         state: params[:state],
         partner: params[:partner],
         user: params[:user],
@@ -78,6 +87,11 @@ module Admin
     expose(:artist) do
       artists_query([offer&.partner_submission&.submission&.artist_id])&.values
         &.first
+    end
+
+    def filtering_by_assigned_to?
+      params.keys.map(&:to_sym).include?(:assigned_to) &&
+        params[:assigned_to] != 'all'
     end
 
     def new_step_0
