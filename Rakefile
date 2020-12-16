@@ -17,7 +17,7 @@ if Rails.env.development? || Rails.env.test?
     require 'graphql/schema/printer'
     puts GraphQL::Schema::Printer.new(ConvectionSchema).print_schema
   end
-
+  
   desc 'run prettier check'
   task prettier_check: :environment do
     system 'yarn run prettier-check'
@@ -31,5 +31,6 @@ if Rails.env.development? || Rails.env.test?
   end
 
   Rake::Task[:default].clear
-  task default: %i[prettier_check schema_check rubocop spec]
+  # skipping prettier_check, because it may be swallowing all later output
+  task default: %i[schema_check rubocop spec]
 end
