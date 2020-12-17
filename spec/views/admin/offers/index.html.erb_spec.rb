@@ -224,7 +224,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
         expect(current_url).to include(
           "partner=#{@partner1.id}",
           'state=sent',
-          'sort=offers.high_estimate_cents',
+          'sort=offers.low_estimate_cents',
           'direction=desc'
         )
       end
