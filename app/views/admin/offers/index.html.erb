@@ -1,5 +1,4 @@
 <div class='page-title'>
-  <%= link_to 'Create New', new_admin_offer_path, class: 'btn btn-small btn-primary pull-right' %>
   <h2>
     Offers
   </h2>
@@ -58,7 +57,7 @@
           <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'partners.name', label: 'Partner' %>
         </div>
         <div class='list-group-item-info bold-label'>
-          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'offers.high_estimate_cents', label: 'Estimate' %>
+          <%= render 'admin/shared/sort_label', filters: filters, sort_field: 'offers.low_estimate_cents', label: 'Estimate' %>
         </div>
         <div class='list-group-item-info bold-label'>
           Commission
