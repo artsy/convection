@@ -10,6 +10,14 @@ module Admin
 
     expose(:consignments) do
       matching_consignments = PartnerSubmission.consigned
+
+      if filtering_by_assigned_to?
+        matching_consignments =
+          matching_consignments.joins(:submission).where(
+            'submissions.assigned_to' => params[:assigned_to]
+          )
+      end
+
       if term.present?
         matching_consignments = matching_consignments.search(term)
       end
@@ -58,6 +66,7 @@ module Admin
 
     expose(:filters) do
       {
+        assigned_to: params[:assigned_to],
         state: params[:state],
         partner: params[:partner],
         user: params[:user],
@@ -98,6 +107,11 @@ module Admin
 
     def set_consignment
       @consignment = PartnerSubmission.consigned.find(params[:id])
+    end
+
+    def filtering_by_assigned_to?
+      params.keys.map(&:to_sym).include?(:assigned_to) &&
+        params[:assigned_to] != 'all'
     end
 
     def consignment_params
