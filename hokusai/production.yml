@@ -1,15 +1,24 @@
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: convection-web
   namespace: default
+  labels:
+    app: convection
+    component: web
+    layer: application
 spec:
   strategy:
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 0
     type: RollingUpdate
+  selector:
+    matchLabels:
+      app: convection
+      component: web
+      layer: application
   template:
     metadata:
       labels:
@@ -84,7 +93,7 @@ metadata:
   namespace: default
 spec:
   scaleTargetRef:
-    apiVersion: extensions/v1beta1
+    apiVersion: apps/v1
     kind: Deployment
     name: convection-web
   minReplicas: 2
@@ -114,18 +123,20 @@ spec:
   type: ClusterIP
 
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: convection
   annotations:
     nginx.ingress.kubernetes.io/whitelist-source-range: "{{ cloudflareIpSourceRanges|join(',') }}"
 spec:
+  ingressClassName: nginx
   rules:
     - host: convection.artsy.net
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
               serviceName: convection-web-internal
               servicePort: http
@@ -201,7 +212,7 @@ metadata:
   namespace: default
 spec:
   scaleTargetRef:
-    apiVersion: extensions/v1beta1
+    apiVersion: apps/v1
     kind: Deployment
     name: convection-sidekiq
   minReplicas: 1
@@ -209,9 +220,13 @@ spec:
   targetCPUUtilizationPercentage: 80
 
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
+  labels:
+    app: convection
+    layer: application
+    component: sidekiq
   name: convection-sidekiq
 spec:
   strategy:
@@ -219,6 +234,11 @@ spec:
       maxSurge: 1
       maxUnavailable: 0
     type: RollingUpdate
+  selector:
+    matchLabels:
+      app: convection
+      layer: application
+      component: sidekiq
   template:
     metadata:
       labels:
