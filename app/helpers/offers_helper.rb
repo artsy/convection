@@ -66,10 +66,14 @@ module OffersHelper
   end
 
   def estimate_display(offer)
+    return unless offer
+
     currency = Money::Currency.new(offer.currency)
     estimate =
       [offer.low_estimate_cents, offer.high_estimate_cents].compact
-        .map { |amt| (amt / currency.subunit_to_unit).round }.join(' - ')
+        .map do |amt|
+        number_with_delimiter(amt / currency.subunit_to_unit.round)
+      end.join(' - ')
     "#{offer.currency} #{currency.symbol}#{estimate}" if estimate.present?
   end
 

@@ -21,7 +21,7 @@
     <%= consignment.partner.name %>
   </div>
   <div class='list-group-item-info'>
-    <%= consignment.accepted_offer&.estimate_display %>
+    <%= estimate_display(consignment.accepted_offer) %>
   </div>
   <div class='list-group-item-info'>
     <% if consignment.accepted_offer&.commission_percent %>

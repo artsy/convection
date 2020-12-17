@@ -61,14 +61,6 @@ class Offer < ApplicationRecord
     self.state ||= 'draft'
   end
 
-  def estimate_display
-    if high_estimate_cents.present? && low_estimate_cents.present?
-      "#{low_estimate_display} - #{high_estimate_display}"
-    else
-      low_estimate_display
-    end
-  end
-
   # defines methods sent?, accepted?, etc. for each possible offer state
   STATES.each do |method|
     define_method "#{method}?".to_sym do
