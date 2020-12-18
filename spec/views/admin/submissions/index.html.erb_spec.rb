@@ -76,7 +76,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
 
       it 'lets you click a filter option', js: true do
         select('submitted', from: 'state')
-        expect(current_url).to include '&state=submitted'
+        expect(current_url).to include 'state=submitted'
         expect(page).to have_content('Submissions')
         expect(page).to have_selector('.list-group-item', count: 4)
         expect(current_path).to eq admin_submissions_path
@@ -152,7 +152,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
 
       it 'lets you click into a filter option', js: true do
         select('approved', from: 'state')
-        expect(current_url).to include '&state=approved'
+        expect(current_url).to include 'state=approved'
         expect(page).to have_content('Submissions')
         expect(page).to have_selector('.list-group-item', count: 2)
       end

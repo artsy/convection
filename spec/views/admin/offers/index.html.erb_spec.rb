@@ -113,7 +113,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
 
       it 'lets you click a filter option', js: true do
         select('sent', from: 'state')
-        expect(current_url).to include '&state=sent'
+        expect(current_url).to include 'state=sent'
         expect(page).to have_content('Offers')
         expect(page).to have_selector('.list-group-item', count: 4)
         expect(current_path).to eq admin_offers_path
@@ -171,7 +171,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
 
       it 'lets you click into a filter option', js: true do
         select('accepted', from: 'state')
-        expect(current_url).to include '&state=accepted'
+        expect(current_url).to include 'state=accepted'
         expect(page).to have_content('Offers')
         expect(page).to have_selector('.list-group-item', count: 2)
       end
