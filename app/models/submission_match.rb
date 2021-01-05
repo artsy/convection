@@ -15,7 +15,14 @@ class SubmissionMatch
     submissions =
       Submission.not_deleted.where(query).includes(:user).order(order_by)
     submissions = submissions.search(term) if term
-    submissions
+
+    # only show submissions that lack an accepted offer when filtering by assignee plus published or accepted [CX-812]
+    return submissions unless filtering_by_assigned_without_accepted_offer?
+
+    submissions.filter do |s|
+      s.partner_submissions.size.zero? ||
+        s.partner_submissions.none? { |ps| ps.accepted_offer.present? }
+    end
   end
 
   private
@@ -35,6 +42,10 @@ class SubmissionMatch
   def filtering_by_assigned_to?
     params.keys.map(&:to_sym).include?(:assigned_to) &&
       params[:assigned_to] != 'all'
+  end
+
+  def filtering_by_assigned_without_accepted_offer?
+    filtering_by_assigned_to? && %w[accepted published].include?(params[:state])
   end
 
   def sorting_by_users?
