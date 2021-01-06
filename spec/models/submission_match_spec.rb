@@ -40,19 +40,52 @@ describe SubmissionMatch do
     end
 
     context 'filtering by assigned_to' do
-      let!(:unassigned) { Fabricate :submission, id: 1, assigned_to: nil }
-      let!(:alice_assigned) do
-        Fabricate :submission, id: 2, assigned_to: 'Alice'
-      end
-      let!(:betty_assigned) do
-        Fabricate :submission, id: 3, assigned_to: 'Betty'
-      end
+      let!(:unassigned) { Fabricate :submission, assigned_to: nil }
+      let!(:alice_assigned) { Fabricate :submission, assigned_to: 'Alice' }
+      let!(:betty_assigned) { Fabricate :submission, assigned_to: 'Betty' }
 
       context 'with a valid assigned username' do
         it 'returns only matching submissions' do
           params = { assigned_to: 'Alice' }
           matching = SubmissionMatch.find_all(params).to_a
           expect(matching).to eq [alice_assigned]
+        end
+      end
+
+      context 'with a valid assigned username' do
+        context 'with published state' do
+          let!(:barry_assigned_published) do
+            Fabricate :submission, assigned_to: 'Barry', state: 'published'
+          end
+
+          let!(:barry_assigned_published_and_accepted) do
+            Fabricate :submission, assigned_to: 'Barry', state: 'published'
+          end
+
+          let!(:accepted_consignment) do
+            Fabricate(
+              :consignment,
+              submission: barry_assigned_published_and_accepted
+            )
+          end
+
+          it 'returns only matching submissions without accepted offers' do
+            params = { assigned_to: 'Barry', state: 'published' }
+            matching = SubmissionMatch.find_all(params).to_a
+            expect(matching).to eq [barry_assigned_published]
+          end
+        end
+
+        context 'with approved state' do
+          let!(:barry_assigned_approved) do
+            Fabricate :submission, assigned_to: 'James', state: 'approved'
+          end
+
+          it 'returns only matching submissions without accepted offers' do
+            params = { assigned_to: 'James', state: 'approved' }
+            matching = SubmissionMatch.find_all(params).to_a
+            expect(matching).to eq [barry_assigned_approved]
+          end
         end
       end
 
@@ -95,13 +128,13 @@ describe SubmissionMatch do
       let(:third_user) { Fabricate :user, email: 'a@example.com' }
 
       let!(:first_submission) do
-        Fabricate :submission, id: 1, user: first_user, offers_count: 20
+        Fabricate :submission, user: first_user, offers_count: 20
       end
       let!(:second_submission) do
-        Fabricate :submission, id: 2, user: second_user, offers_count: 10
+        Fabricate :submission, user: second_user, offers_count: 10
       end
       let!(:third_submission) do
-        Fabricate :submission, id: 3, user: third_user, offers_count: 30
+        Fabricate :submission, user: third_user, offers_count: 30
       end
 
       context 'with nothing specified' do
@@ -123,9 +156,7 @@ describe SubmissionMatch do
       end
 
       context 'when sorting by users.email' do
-        let!(:fourth_submission) do
-          Fabricate :submission, id: 4, user: first_user
-        end
+        let!(:fourth_submission) { Fabricate :submission, user: first_user }
 
         it 'breaks ties with submission id' do
           params = { sort: 'users.email', direction: 'asc' }
