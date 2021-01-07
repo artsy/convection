@@ -71,7 +71,7 @@ describe SubmissionMatch do
 
           it 'returns only matching submissions without accepted offers' do
             params = { assigned_to: 'Barry', state: 'published' }
-            matching = SubmissionMatch.find_all(params).to_a
+            matching = SubmissionMatch.find_all(params).page(1).per(10).to_a
             expect(matching).to eq [barry_assigned_published]
           end
         end
