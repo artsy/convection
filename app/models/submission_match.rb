@@ -29,7 +29,7 @@ class SubmissionMatch
 
   def submissions_assigned_without_accepted_offer
     sql = <<SQL.squish
-    WITH wrap AS (
+    WITH submissions_with_counts AS (
       SELECT s.id as submission_id,
              COUNT(DISTINCT ps.id) AS count_partner_submissions,
              COUNT(DISTINCT ps.accepted_offer_id) AS count_accepted_offers
@@ -38,8 +38,8 @@ class SubmissionMatch
       GROUP BY 1
       )
       SELECT submission_id
-      from wrap
-      where count_partner_submissions = 0 OR count_accepted_offers = 0
+      FROM submissions_with_counts
+      WHERE count_partner_submissions = 0 OR count_accepted_offers = 0
 SQL
 
     ids = ActiveRecord::Base.connection.select_all(sql).rows.flatten
