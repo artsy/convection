@@ -226,10 +226,10 @@ describe SubmissionService do
 
     it 'updates the user associated with the submission if a user ID is passed' do
       new_user =
-        Fabricate(
-          :user,
-          gravity_user_id: 'new_gravity_user_id', email: 'cool.cat@fatcat.com'
-        )
+        Fabricate(:user, gravity_user_id: 'new_gravity_user_id', email: nil)
+      stub_gravity_user_detail(
+        id: new_user.gravity_user_id, email: 'cool.cat@fatcat.com'
+      )
 
       SubmissionService.update_submission(
         submission,
@@ -237,6 +237,7 @@ describe SubmissionService do
       )
 
       expect(submission.user_id).to eq new_user.id
+      expect(submission.user.email).to eq 'cool.cat@fatcat.com'
     end
 
     it 'does not update the user associated with the submission if no ID is passed' do
