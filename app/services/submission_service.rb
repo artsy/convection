@@ -2,6 +2,7 @@
 
 class SubmissionService
   class ParamError < StandardError; end
+
   class SubmissionError < StandardError; end
 
   class << self

@@ -56,10 +56,7 @@ module OffersHelper
         'otherwise stated in the notes.'
     when Offer::PURCHASE
       'The work will be purchased directly from you by the partner for the specified price.'
-    when Offer::RETAIL
-      'This work will be offered privately to a small group of collectors that the partner has ' \
-        'relationships with. The work will sell if a collector agrees to your price.'
-    when Offer::NET_PRICE
+    when Offer::RETAIL, Offer::NET_PRICE
       'This work will be offered privately to a small group of collectors that the partner has ' \
         'relationships with. The work will sell if a collector agrees to your price.'
     end
