@@ -18,6 +18,7 @@ class SubmissionService
     def update_submission(submission, params, current_user: nil)
       if params[:user_id]
         user = User.find_or_create_by!(gravity_user_id: params[:user_id])
+        UserService.delay.update_email(user.id)
         create_params = params.merge(user_id: user.id)
         submission.assign_attributes(create_params)
       else
