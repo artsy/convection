@@ -140,7 +140,3 @@ mutation createConsignmentSubmissionMutation(
 [deploy_pr]: https://github.com/jonallured/deploy_pr
 [deploy]: https://github.com/artsy/convection/compare/release...staging?expand=1
 [schema-doc]: docs/schema-stitching.md
-
-
-
-
