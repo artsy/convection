@@ -36,6 +36,7 @@ workflows:
 
       - hokusai/test:
           <<: *not_staging_or_release
+          remote_docker_version: 19.03.12
 
       - hokusai/push:
           name: push-staging-image
