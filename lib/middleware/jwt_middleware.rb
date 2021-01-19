@@ -20,6 +20,6 @@ class JwtMiddleware
   end
 
   def parse_header(header)
-    header.split(' ').last
+    header.split.last
   end
 end

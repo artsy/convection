@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop:disable Naming/VariableNumber
+
 require 'rails_helper'
 
 describe Admin::OffersController, type: :controller do
@@ -363,3 +365,5 @@ describe Admin::OffersController, type: :controller do
     end
   end
 end
+
+# rubocop:enable Naming/VariableNumber

@@ -77,7 +77,7 @@ describe 'admin/consignments/index.html.erb', type: :feature do
       it 'lets you click a filter option', js: true do
         select('bought in', from: 'state')
         expect(page).to have_selector('.list-group-item', count: 1)
-        expect(current_url).to include '&state=bought+in'
+        expect(current_url).to include 'state=bought+in'
       end
     end
 
@@ -102,7 +102,7 @@ describe 'admin/consignments/index.html.erb', type: :feature do
         within(:css, '#consignment-filter-form') do
           select('bought in', from: 'state')
         end
-        expect(current_url).to include '&state=bought+in'
+        expect(current_url).to include 'state=bought+in'
         expect(page).to have_content('Consignments')
         expect(page).to have_selector('.list-group-item', count: 2)
       end
