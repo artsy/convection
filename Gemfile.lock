@@ -152,7 +152,7 @@ GEM
     graphiql-rails (1.7.0)
       railties
       sprockets-rails
-    graphql (1.11.6)
+    graphql (1.11.7)
     graphql-page_cursors (0.0.2)
       graphql
     graphql-rails_logger (1.2.2)
