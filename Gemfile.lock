@@ -110,7 +110,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
-    concurrent-ruby (1.1.7)
+    concurrent-ruby (1.1.8)
     connection_pool (2.2.3)
     console_color (0.0.5)
     crack (0.4.5)
@@ -121,7 +121,7 @@ GEM
     database_cleaner (1.8.5)
     ddtrace (0.44.0)
       msgpack
-    decent_exposure (3.0.2)
+    decent_exposure (3.0.4)
       activesupport (>= 4.0)
     diff-lcs (1.4.4)
     e2mmap (0.1.0)
