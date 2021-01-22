@@ -4,23 +4,23 @@ require 'rails_helper'
 
 describe 'consignments query' do
   let(:partner) { Fabricate :partner }
-  let!(:consignment_1) do
+  let!(:consignment1) do
     Fabricate(:partner_submission, state: 'bought in', partner: partner)
   end
 
-  let!(:consignment_2) do
+  let!(:consignment2) do
     Fabricate(:partner_submission, state: 'sold', partner: partner)
   end
 
-  let!(:consignment_3) do
+  let!(:consignment3) do
     Fabricate(:partner_submission, state: 'open', partner: partner)
   end
 
-  let!(:consignment_4) do
+  let!(:consignment4) do
     Fabricate(:partner_submission, state: 'bought in', partner: partner)
   end
 
-  let!(:consignment_5) do
+  let!(:consignment5) do
     Fabricate(:partner_submission, state: 'sold', partner: partner)
   end
 

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require File.expand_path('boot', __dir__)
+require_relative 'boot'
 
 require 'rails/all'
-require_relative '../lib/middleware/jwt_middleware'
+require_relative '../lib/jwt_middleware'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -15,6 +15,7 @@ Warning[:deprecated] = false
 module Convection
   class Application < Rails::Application # -- all .rb files in that directory are automatically loaded. # Application configuration should go into files in config/initializers # Settings in config/environments/* take precedence over those specified here.
     config.paths.add 'app', glob: '**/*.rb'
+    config.load_defaults 6.0
 
     config.eager_load_paths +=
       %W[

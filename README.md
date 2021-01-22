@@ -133,9 +133,9 @@ mutation createConsignmentSubmissionMutation(
 [rothko-api]: https://github.com/artsy/rothko-api
 [rothko-web-public]: https://github.com/artsy/rothko-web-public
 [production]: https://convection.artsy.net
-[production_k8]: https://kubernetes.artsy.net/#!/deployment/default/convection-web
+[production_k8]: https://kubernetes.prd.artsy.systems/#!/deployment/default/convection-web
 [staging]: https://convection-staging.artsy.net
-[staging_k8]: https://kubernetes-staging.artsy.net/#!/deployment/default/convection-web
+[staging_k8]: https://kubernetes.stg.artsy.systems/#!/deployment/default/convection-web
 [@jonallured]: https://github.com/jonallured
 [deploy_pr]: https://github.com/jonallured/deploy_pr
 [deploy]: https://github.com/artsy/convection/compare/release...staging?expand=1
