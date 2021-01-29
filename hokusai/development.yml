@@ -8,3 +8,9 @@ services:
       - 3000:3000
     volumes:
       - ../:/app
+    depends_on:
+      - convection-postgres
+  convection-postgres:
+    image: postgres:12.5-alpine
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
