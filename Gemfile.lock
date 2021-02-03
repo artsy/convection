@@ -487,7 +487,7 @@ DEPENDENCIES
   foreman
   gemini_upload-rails
   graphiql-rails
-  graphql
+  graphql (~> 1.11.6)
   graphql-page_cursors
   graphql-rails_logger
   guard-livereload
