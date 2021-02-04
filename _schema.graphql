@@ -487,11 +487,36 @@ scalar JSON
 Mutation root for this schema
 """
 type Mutation {
-  addAssetToConsignmentSubmission(input: AddAssetToConsignmentSubmissionInput!): AddAssetToConsignmentSubmissionPayload
-  createConsignmentOffer(input: CreateOfferMutationInput!): CreateOfferMutationPayload
-  createConsignmentOfferResponse(input: CreateOfferResponseMutationInput!): CreateOfferResponseMutationPayload
-  createConsignmentSubmission(input: CreateSubmissionMutationInput!): CreateSubmissionMutationPayload
-  updateConsignmentSubmission(input: UpdateSubmissionMutationInput!): UpdateSubmissionMutationPayload
+  addAssetToConsignmentSubmission(
+    """
+    Parameters for AddAssetToConsignmentSubmission
+    """
+    input: AddAssetToConsignmentSubmissionInput!
+  ): AddAssetToConsignmentSubmissionPayload
+  createConsignmentOffer(
+    """
+    Parameters for CreateOfferMutation
+    """
+    input: CreateOfferMutationInput!
+  ): CreateOfferMutationPayload
+  createConsignmentOfferResponse(
+    """
+    Parameters for CreateOfferResponseMutation
+    """
+    input: CreateOfferResponseMutationInput!
+  ): CreateOfferResponseMutationPayload
+  createConsignmentSubmission(
+    """
+    Parameters for CreateSubmissionMutation
+    """
+    input: CreateSubmissionMutationInput!
+  ): CreateSubmissionMutationPayload
+  updateConsignmentSubmission(
+    """
+    Parameters for UpdateSubmissionMutation
+    """
+    input: UpdateSubmissionMutationInput!
+  ): UpdateSubmissionMutationPayload
 }
 
 """
