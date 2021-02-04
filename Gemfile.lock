@@ -118,12 +118,12 @@ GEM
     crass (1.0.6)
     css_parser (1.8.0)
       addressable
-    database_cleaner (2.0.0)
+    database_cleaner (2.0.1)
       database_cleaner-active_record (~> 2.0.0)
     database_cleaner-active_record (2.0.0)
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
-    database_cleaner-core (2.0.0)
+    database_cleaner-core (2.0.1)
     ddtrace (0.45.0)
       msgpack
     decent_exposure (3.0.4)
