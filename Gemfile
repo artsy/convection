@@ -32,6 +32,7 @@ gem 'jquery-rails'
 gem 'kaminari' # for pagination
 gem 'money' # for currency/money formatting
 gem 'neat', '1.7.2' # required for watt
+gem 'omniauth', '< 2' # pinned to avoid breaking change with login in v2
 gem 'pg_search' # for searching within convection's database
 gem 'premailer-rails' # generate text parts from HTML automatically
 gem 'rack-cors' # to allow cross-origin requests
