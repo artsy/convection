@@ -81,7 +81,7 @@ GEM
       execjs
     backport (1.1.2)
     benchmark (0.1.1)
-    bootsnap (1.7.0)
+    bootsnap (1.7.2)
       msgpack (~> 1.0)
     bootstrap-sass (3.4.1)
       autoprefixer-rails (>= 5.2.1)
