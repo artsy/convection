@@ -160,7 +160,7 @@ GEM
     graphql (1.11.7)
     graphql-page_cursors (0.0.2)
       graphql
-    graphql-rails_logger (1.2.2)
+    graphql-rails_logger (1.2.3)
       actionpack (> 5.0)
       activesupport (> 5.0)
       railties (> 5.0)
