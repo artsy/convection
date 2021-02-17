@@ -157,7 +157,7 @@ GEM
     graphiql-rails (1.7.0)
       railties
       sprockets-rails
-    graphql (1.11.8)
+    graphql (1.12.4)
     graphql-page_cursors (0.0.2)
       graphql
     graphql-rails_logger (1.2.3)
@@ -492,7 +492,7 @@ DEPENDENCIES
   foreman
   gemini_upload-rails
   graphiql-rails
-  graphql (~> 1.11.6)
+  graphql (~> 1.12.4)
   graphql-page_cursors
   graphql-rails_logger
   guard-livereload
