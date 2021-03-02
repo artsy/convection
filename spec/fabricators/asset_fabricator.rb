@@ -8,9 +8,9 @@ Fabricator(:image, from: :asset) do
   image_urls do
     Fabricate.sequence(:gemini_token) do |i|
       {
-        square: "https://image-square-#{i}.jpg",
-        thumbnail: "https://image-thumb-#{i}.jpg",
-        large: "https://image-large-#{i}.jpg"
+        square: "https://placekitten.com/#{i}/#{i}.jpg",
+        thumbnail: "https://placekitten.com/#{i}/#{i}.jpg",
+        large: "https://placekitten.com/#{i}/#{i}.jpg"
       }
     end
   end
