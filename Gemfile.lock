@@ -273,7 +273,7 @@ GEM
     omniauth (1.9.1)
       hashie (>= 3.4.6)
       rack (>= 1.6.2, < 3)
-    omniauth-artsy (0.2.3)
+    omniauth-artsy (0.3.0)
       omniauth-oauth2 (>= 1.1.2)
     omniauth-oauth2 (1.7.1)
       oauth2 (~> 1.4)
@@ -299,7 +299,7 @@ GEM
       byebug (~> 11.0)
       pry (~> 0.13.0)
     public_suffix (4.0.6)
-    puma (5.2.1)
+    puma (5.2.2)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
@@ -423,7 +423,7 @@ GEM
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
-    solargraph (0.40.3)
+    solargraph (0.40.4)
       backport (~> 1.1)
       benchmark
       bundler (>= 1.17.2)
@@ -531,7 +531,7 @@ DEPENDENCIES
   yarjuf
 
 RUBY VERSION
-   ruby 2.7.1p83
+   ruby 2.7.2p137
 
 BUNDLED WITH
    2.1.4
