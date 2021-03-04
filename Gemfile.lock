@@ -124,7 +124,7 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
-    ddtrace (0.45.0)
+    ddtrace (0.46.0)
       msgpack
     decent_exposure (3.0.4)
       activesupport (>= 4.0)
