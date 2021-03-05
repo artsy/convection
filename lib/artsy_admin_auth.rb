@@ -13,7 +13,9 @@ class ArtsyAdminAuth
       decoded_token = decode_token(token)
       return false if decoded_token.nil?
 
-      decoded_token['roles'].include? 'admin'
+      # TODO: remove 'admin' once the connsignments team all have this new role
+      roles = decoded_token['roles']
+      roles.include?('consignments_manager') || roles.include?('admin')
     end
 
     def decode_user(token)
