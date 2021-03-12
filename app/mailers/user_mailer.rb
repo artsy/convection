@@ -18,10 +18,7 @@ class UserMailer < ApplicationMailer
     mail(
       to: user_detail.email,
       subject: "Consignment Submission Confirmation ##{@submission.id}",
-      bcc: [
-        Convection.config.admin_email_address,
-        Convection.config.bcc_email_address
-      ]
+      bcc: Convection.config.bcc_email_address
     )
   end
 

@@ -506,7 +506,6 @@ describe SubmissionService do
       expect(emails.length).to eq 1
       expect(emails.first.bcc).to include(
         'consignments-archive@artsymail.com',
-        'lucille@bluth.com'
       )
       expect(emails.first.html_part.body).to include(
         'Thank you! We have received your submission.'
