@@ -1,4 +1,8 @@
 {
+ "automerge": true,
+  "major": {
+    "automerge": false
+  },
   "extends": ["@artsy:app"],
-  "assignees": ["jonallured"]
+  "assignees": ["jonallured", "bhoggard"]
 }
