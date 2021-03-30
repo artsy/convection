@@ -30,12 +30,20 @@ spec:
       containers:
         - name: convection-web
           env:
+            - name: PORT
+              value: "8080"
+            - name: PUMA_WORKERS
+              value: "1"
+            - name: PUMA_THREAD_MIN
+              value: "5"
+            - name: PUMA_THREAD_MAX
+              value: "5"
             - name: RAILS_SERVE_STATIC_FILES
-              value: "true"
+              value: 'true'
             - name: RAILS_LOG_TO_STDOUT
-              value: "true"
+              value: 'true'
             - name: PUMA_BIND
-              value: "tcp://0.0.0.0:8080"
+              value: 'tcp://0.0.0.0:8080'
             - name: MALLOC_ARENA_MAX
               value: "2"
             - name: DATADOG_TRACE_AGENT_HOSTNAME
@@ -52,7 +60,7 @@ spec:
               containerPort: 8080
           resources:
             requests:
-              cpu: 100m
+              cpu: 50m
               memory: 256Mi
             limits:
               memory: 512Mi
@@ -69,7 +77,7 @@ spec:
           lifecycle:
             preStop:
               exec:
-                command: ["sh", "-c", "sleep 10"]
+                command: ["sh", "-c", "sleep 5"]
       dnsPolicy: ClusterFirst
       dnsConfig:
         options:
@@ -115,7 +123,7 @@ spec:
     - port: 8080
       protocol: TCP
       name: http
-      targetPort: 8080
+      targetPort: convection-http
   selector:
     app: convection
     layer: application
@@ -210,7 +218,7 @@ spec:
             periodSeconds: 30
           resources:
             requests:
-              cpu: 100m
+              cpu: 50m
               memory: 256Mi
             limits:
               memory: 512Mi
@@ -238,7 +246,11 @@ spec:
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
+      backoffLimit: 3
       template:
+        metadata:
+          annotations:
+            "cluster-autoscaler.kubernetes.io/safe-to-evict": "false"
         spec:
           containers:
             - name: convection-data-import
@@ -254,10 +266,9 @@ spec:
           restartPolicy: Never
           affinity:
             nodeAffinity:
-              preferredDuringSchedulingIgnoredDuringExecution:
-                - weight: 1
-                  preference:
-                    matchExpressions:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
                       - key: tier
                         operator: In
                         values:
