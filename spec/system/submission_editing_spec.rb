@@ -54,7 +54,7 @@ describe 'Editing a submission', type: :feature do
                               selected: 'Alice'
                             )
 
-        click_on 'Edit'
+        click_on 'Edit', match: :first
         expect(page).to have_content 'Assigned To:'
 
         select 'Alice', from: 'submission[assigned_to]'

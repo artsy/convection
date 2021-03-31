@@ -166,7 +166,7 @@ module Admin
 
       permitted_params = params.require(:submission).permit(safelist)
       permitted_params[:assigned_to] =
-        params.dig(:submission, :assigned_to).presence
+        params.dig(:submission, :assigned_to) if params[:submission][:assigned_to].present?
       permitted_params
     end
   end
