@@ -22,11 +22,19 @@ module Admin
 
     expose(:artist_details) { artists_query(submissions.map(&:artist_id)) }
 
+    expose(:display_term) do
+      if filters[:user].present?
+        User.where(id: filters[:user]).pick(:email)
+      elsif filters[:artist].present?
+        artists_query([filters[:artist]])&.values&.first
+      end
+    end
     expose(:filters) do
       {
         assigned_to: params[:assigned_to],
         state: params[:state],
         user: params[:user],
+        artist: params[:artist],
         sort: params[:sort],
         direction: params[:direction]
       }
