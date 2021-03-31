@@ -222,7 +222,7 @@
               </label>
               <div class='col-sm-10'>
                 <% options = [['Please select one', '']] + Convection.config.admin_names %>
-                <%= f.select :assigned_to, options_for_select(options), {}, class: 'form-control' %>
+                <%= f.select :assigned_to, options, {}, class: 'form-control' %>
               </div>
             </div>
           </div>
