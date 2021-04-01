@@ -69,10 +69,8 @@ def stub_gravity_artists(opts = {})
       _embedded: { artists: artist_items }
   }
 
-  stub_gravity_request(
-    "/artists?term=#{name}",
-    body
-  )
+  stub_request(:any, %r{#{Convection.config.gravity_api_url}/artists\?term=.*}).
+      to_return(body: body.to_json, headers: HEADERS)
 end
 
 def stub_gravity_user(opts = {})

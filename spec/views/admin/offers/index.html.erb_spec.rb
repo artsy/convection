@@ -7,6 +7,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
   context 'always' do
     before do
       stub_gravity_root
+      stub_gravity_artists
 
       allow_any_instance_of(ApplicationController).to receive(
         :require_artsy_authentication
@@ -185,7 +186,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
       end
 
       it 'allows you to search by artist name', js: true do
-        stub_gravity_artists(term: @artist[:name], override_body: [@artist])
+        stub_gravity_artists(override_body: [@artist])
 
         @offer1.submission.update!(artist_id: @artist[:id])
 
@@ -199,7 +200,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
       end
 
       it 'allows you to search by artist name and state', js: true do
-        stub_gravity_artists(term: @artist[:name], override_body: [@artist])
+        stub_gravity_artists(override_body: [@artist])
 
         @offer1.submission.update!(artist_id: @artist[:id])
 
@@ -216,8 +217,6 @@ describe 'admin/offers/index.html.erb', type: :feature do
       end
 
       it 'lets you search by partner name', js: true do
-        stub_gravity_artists(term: 'Gag')
-
         fill_in('term', with: 'Gag')
         expect(page).to have_selector('.ui-autocomplete')
         expect(page).to have_content('Partner   Gagosian')
@@ -230,8 +229,6 @@ describe 'admin/offers/index.html.erb', type: :feature do
       end
 
       it 'allows you to navigate to a specific offer', js: true do
-        stub_gravity_artists(term: @offer1.reference_id)
-
         fill_in('term', with: @offer1.reference_id)
         expect(page).to have_selector('.ui-autocomplete')
         click_link("offer-#{@offer1.id}")
@@ -239,8 +236,6 @@ describe 'admin/offers/index.html.erb', type: :feature do
       end
 
       it 'lets you search by state and partner name', js: true do
-        stub_gravity_artists(term: 'Gag')
-
         select('sent', from: 'state')
         fill_in('term', with: 'Gag')
         expect(page).to have_selector('.ui-autocomplete')
@@ -254,8 +249,6 @@ describe 'admin/offers/index.html.erb', type: :feature do
       end
 
       it 'allows you to search by partner name, filter by state, and sort by estimate', js: true do
-        stub_gravity_artists(term: 'Gag')
-
         select('sent', from: 'state')
         fill_in('term', with: 'Gag')
         expect(page).to have_selector('.ui-autocomplete')

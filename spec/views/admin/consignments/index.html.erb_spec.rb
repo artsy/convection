@@ -24,6 +24,7 @@ describe 'admin/consignments/index.html.erb', type: :feature do
           artists: @artists
         }
       }
+      stub_gravity_artists
       stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
         .to_return(body: gravql_artists_response.to_json).with(
         headers: {
@@ -116,8 +117,6 @@ describe 'admin/consignments/index.html.erb', type: :feature do
       end
 
       it 'allows you to search by partner name', js: true do
-        stub_gravity_artists(term: 'gallery')
-
         fill_in('term', with: 'gallery')
         expect(page).to have_selector('.ui-autocomplete')
         expect(page).to have_content('Partner   Gagosian Gallery')
@@ -131,8 +130,6 @@ describe 'admin/consignments/index.html.erb', type: :feature do
       end
 
       it 'allows you to navigate to a specific consignment', js: true do
-        stub_gravity_artists(term: @consignment1.reference_id)
-
         fill_in('term', with: @consignment1.reference_id)
         expect(page).to have_selector('.ui-autocomplete')
         click_link("consignment-#{@consignment1.id}")
@@ -140,8 +137,6 @@ describe 'admin/consignments/index.html.erb', type: :feature do
       end
 
       it 'allows you to search by partner name and state', js: true do
-        stub_gravity_artists(term: 'herit')
-
         select('bought in', from: 'state')
         fill_in('term', with: 'herit')
         expect(page).to have_selector('.ui-autocomplete')
@@ -160,7 +155,7 @@ describe 'admin/consignments/index.html.erb', type: :feature do
         artist = @artists.first
         @consignment1.submission.update!(artist_id: artist[:id])
 
-        stub_gravity_artists(term: artist[:name], override_body: [artist])
+        stub_gravity_artists(override_body: [artist])
 
         fill_in('term', with: artist[:name])
         expect(page).to have_selector('.ui-autocomplete')
@@ -174,7 +169,7 @@ describe 'admin/consignments/index.html.erb', type: :feature do
         artist = @artists.first
         @consignment1.submission.update!(artist_id: artist[:id])
 
-        stub_gravity_artists(term: artist[:name], override_body: [artist])
+        stub_gravity_artists(override_body: [artist])
 
         fill_in('term', with: artist[:name])
         expect(page).to have_selector('.ui-autocomplete')
@@ -188,8 +183,6 @@ describe 'admin/consignments/index.html.erb', type: :feature do
       end
 
       it 'allows you to search by partner name, filter by state, and sort by estimate', js: true do
-        stub_gravity_artists(term: 'herit')
-
         select('bought in', from: 'state')
         fill_in('term', with: 'herit')
         expect(page).to have_selector('.ui-autocomplete')

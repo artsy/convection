@@ -8,6 +8,8 @@ describe 'admin/submissions/index.html.erb', type: :feature do
     before do
       stub_gravity_root
       stub_gravity_artist(id: 'artistid2')
+      stub_gravity_artists
+
       stub_gravity_user(id: 'userid2')
       stub_gravity_user_detail(id: 'userid2')
 
@@ -166,8 +168,6 @@ describe 'admin/submissions/index.html.erb', type: :feature do
       end
 
       it 'allows you to search by user and state', js: true do
-        stub_gravity_artists(term: 'percy')
-
         select('draft', from: 'state')
         fill_in('term', with: 'percy')
         expect(page).to have_selector('.ui-autocomplete')
@@ -179,8 +179,6 @@ describe 'admin/submissions/index.html.erb', type: :feature do
       end
 
       it 'allows you to navigate to a specific submission', js: true do
-        stub_gravity_artists(term: @submission.id)
-
         fill_in('term', with: @submission.id)
         expect(page).to have_selector('.ui-autocomplete')
         expect(page).to have_selector('.ui-menu-item')
@@ -189,8 +187,6 @@ describe 'admin/submissions/index.html.erb', type: :feature do
       end
 
       it 'allows you to search by user email', js: true do
-        stub_gravity_artists(term: 'percy')
-
         fill_in('term', with: 'percy')
         expect(page).to have_selector('.ui-autocomplete')
         expect(page).to have_content('User   percy')
@@ -205,7 +201,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
       it 'allows you to search by artist name', js: true do
         artist = @artists.last
 
-        stub_gravity_artists(term: artist[:name], override_body: [artist])
+        stub_gravity_artists(override_body: [artist])
         stub_request(:post, "#{Convection.config.gravity_api_url}/graphql").
           to_return(body: { data: { artists: [artist] } }.to_json).
           with(headers: { 'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json' })
@@ -224,7 +220,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
       it 'allows you to search by artist name and state', js: true do
         artist = @artists.last
 
-        stub_gravity_artists(term: artist[:name], override_body: [artist])
+        stub_gravity_artists(override_body: [artist])
         stub_request(:post, "#{Convection.config.gravity_api_url}/graphql").
             to_return(body: { data: { artists: [artist] } }.to_json).
             with(headers: { 'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json' })
@@ -243,8 +239,6 @@ describe 'admin/submissions/index.html.erb', type: :feature do
       end
 
       it 'allows you to search by user email, filter by state, and sort by ID', js: true do
-        stub_gravity_artists(term: 'percy')
-
         select('approved', from: 'state')
         fill_in('term', with: 'percy')
         expect(page).to have_selector('.ui-autocomplete')
