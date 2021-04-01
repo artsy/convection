@@ -116,6 +116,8 @@ describe 'admin/consignments/index.html.erb', type: :feature do
       end
 
       it 'allows you to search by partner name', js: true do
+        stub_gravity_artists(term: 'gallery')
+
         fill_in('term', with: 'gallery')
         expect(page).to have_selector('.ui-autocomplete')
         expect(page).to have_content('Partner   Gagosian Gallery')
@@ -129,6 +131,8 @@ describe 'admin/consignments/index.html.erb', type: :feature do
       end
 
       it 'allows you to navigate to a specific consignment', js: true do
+        stub_gravity_artists(term: @consignment1.reference_id)
+
         fill_in('term', with: @consignment1.reference_id)
         expect(page).to have_selector('.ui-autocomplete')
         click_link("consignment-#{@consignment1.id}")
@@ -136,6 +140,8 @@ describe 'admin/consignments/index.html.erb', type: :feature do
       end
 
       it 'allows you to search by partner name and state', js: true do
+        stub_gravity_artists(term: 'herit')
+
         select('bought in', from: 'state')
         fill_in('term', with: 'herit')
         expect(page).to have_selector('.ui-autocomplete')
@@ -152,18 +158,38 @@ describe 'admin/consignments/index.html.erb', type: :feature do
 
       it 'allows you to search by artist name', js: true do
         artist = @artists.first
-        @consignment1.submission.update!(artist_id: artist.id)
+        @consignment1.submission.update!(artist_id: artist[:id])
 
-        fill_in('term', with: artist.name[0...5])
+        stub_gravity_artists(term: artist[:name], override_body: [artist])
+
+        fill_in('term', with: artist[:name])
         expect(page).to have_selector('.ui-autocomplete')
-        click_link("artist-#{artist.id}")
-        expect(current_url).to include "&artist=#{artist.id}"
-        expect(page).to have_content(artist.name)
-        expect(page).to have_selector('.list-group-item', count: 1)
+        click_link("artist-#{artist[:id]}")
+        expect(current_url).to include "&artist=#{artist[:id]}"
+        expect(page).to have_content(artist[:name])
+        expect(page).to have_selector('.list-group-item-info--artist', count: 1)
       end
 
-      it 'allows you to search by partner name, filter by state, and sort by estimate',
-         js: true do
+      it 'allows you to search by artist name and state', js: true do
+        artist = @artists.first
+        @consignment1.submission.update!(artist_id: artist[:id])
+
+        stub_gravity_artists(term: artist[:name], override_body: [artist])
+
+        fill_in('term', with: artist[:name])
+        expect(page).to have_selector('.ui-autocomplete')
+        click_link("artist-#{artist[:id]}")
+        select('bought in', from: 'state')
+        expect(current_url).to include("artist=#{artist[:id]}", 'state=bought+in')
+        expect(page).to have_content(artist[:name])
+        expect(page).to have_selector('.list-group-item-info--artist', count: 1)
+        select('sold', from: 'state')
+        expect(page).to have_selector('.list-group-item-info--artist', count: 0)
+      end
+
+      it 'allows you to search by partner name, filter by state, and sort by estimate', js: true do
+        stub_gravity_artists(term: 'herit')
+
         select('bought in', from: 'state')
         fill_in('term', with: 'herit')
         expect(page).to have_selector('.ui-autocomplete')

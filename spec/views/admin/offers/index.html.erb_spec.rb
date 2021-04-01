@@ -15,10 +15,10 @@ describe 'admin/offers/index.html.erb', type: :feature do
       allow(Convection.config).to receive(:gravity_xapp_token).and_return(
         'xapp_token'
       )
-      @artists = [{ id: 'artist1', name: 'Andy Warhol' }]
+      @artist = { id: 'artist1', name: 'Andy Warhol' }
 
       gravql_artists_response = {
-        data: { artists: @artists }
+        data: { artists: [@artist] }
       }
       stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
         .to_return(body: gravql_artists_response.to_json).with(
@@ -185,19 +185,39 @@ describe 'admin/offers/index.html.erb', type: :feature do
       end
 
       it 'allows you to search by artist name', js: true do
-        artist = @artists.first
-        @offer1.submission.update!(artist_id: artist.id)
+        stub_gravity_artists(term: @artist[:name], override_body: [@artist])
 
-        fill_in('term', with: artist.name[0...5])
+        @offer1.submission.update!(artist_id: @artist[:id])
+
+        fill_in('term', with: @artist[:name])
         expect(page).to have_selector('.ui-autocomplete')
-        expect(page).to have_content(artist.name)
-        click_link("artist-#{artist.id}")
-        expect(current_url).to include "&artist=#{artist.id}"
-        expect(page).to have_selector("input[value='#{artist.name}']")
-        expect(page).to have_selector('.list-group-item', count: 1)
+        expect(page).to have_content(@artist[:name])
+        click_link("artist-#{@artist[:id]}")
+        expect(current_url).to include "&artist=#{@artist[:id]}"
+        expect(page).to have_selector("input[value='#{@artist[:name]}']")
+        expect(page).to have_selector('.list-group-item-info--artist-title', count: 1)
+      end
+
+      it 'allows you to search by artist name and state', js: true do
+        stub_gravity_artists(term: @artist[:name], override_body: [@artist])
+
+        @offer1.submission.update!(artist_id: @artist[:id])
+
+        fill_in('term', with: @artist[:name])
+        expect(page).to have_selector('.ui-autocomplete')
+        expect(page).to have_content(@artist[:name])
+        click_link("artist-#{@artist[:id]}")
+        select('sent', from: 'state')
+        expect(current_url).to include("artist=#{@artist[:id]}", 'state=sent')
+        expect(page).to have_selector("input[value='#{@artist[:name]}']")
+        expect(page).to have_selector('.list-group-item-info--artist-title', count: 0)
+        select('accepted', from: 'state')
+        expect(page).to have_selector('.list-group-item-info--artist-title', count: 1)
       end
 
       it 'lets you search by partner name', js: true do
+        stub_gravity_artists(term: 'Gag')
+
         fill_in('term', with: 'Gag')
         expect(page).to have_selector('.ui-autocomplete')
         expect(page).to have_content('Partner   Gagosian')
@@ -210,6 +230,8 @@ describe 'admin/offers/index.html.erb', type: :feature do
       end
 
       it 'allows you to navigate to a specific offer', js: true do
+        stub_gravity_artists(term: @offer1.reference_id)
+
         fill_in('term', with: @offer1.reference_id)
         expect(page).to have_selector('.ui-autocomplete')
         click_link("offer-#{@offer1.id}")
@@ -217,6 +239,8 @@ describe 'admin/offers/index.html.erb', type: :feature do
       end
 
       it 'lets you search by state and partner name', js: true do
+        stub_gravity_artists(term: 'Gag')
+
         select('sent', from: 'state')
         fill_in('term', with: 'Gag')
         expect(page).to have_selector('.ui-autocomplete')
@@ -229,8 +253,9 @@ describe 'admin/offers/index.html.erb', type: :feature do
         expect(page).to have_content('draft', count: 1)
       end
 
-      it 'allows you to search by partner name, filter by state, and sort by estimate',
-         js: true do
+      it 'allows you to search by partner name, filter by state, and sort by estimate', js: true do
+        stub_gravity_artists(term: 'Gag')
+
         select('sent', from: 'state')
         fill_in('term', with: 'Gag')
         expect(page).to have_selector('.ui-autocomplete')

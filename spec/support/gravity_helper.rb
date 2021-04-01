@@ -5,6 +5,9 @@ GRAVITY_ROOT = {
     artist: {
       href: "#{Convection.config.gravity_api_url}/artists/{id}", templated: true
     },
+    artists: {
+      href: "#{Convection.config.gravity_api_url}/artists{?term}", templated: true
+    },
     partner: {
       href: "#{Convection.config.gravity_api_url}/partners/{id}",
       templated: true
@@ -51,6 +54,25 @@ def stub_gravity_artist(opts = {})
   body =
     { id: 'artistid', name: name, slug: name.parameterize }.deep_merge(opts)
   stub_gravity_request("/artists/#{body[:id]}", body)
+end
+
+def stub_gravity_artists(opts = {})
+  name = opts[:term] || 'Gob Bluth'
+  id = opts[:id] || 'artist1'
+
+  artist = { id: id, name: name }.deep_merge(opts)
+  artist_items = opts.key?(:override_body) ? opts[:override_body] : [artist]
+
+  body = {
+      total_count: nil,
+      next: "#{Convection.config.gravity_api_url}/artists?cursor=next-cursor",
+      _embedded: { artists: artist_items }
+  }
+
+  stub_gravity_request(
+    "/artists?term=#{name}",
+    body
+  )
 end
 
 def stub_gravity_user(opts = {})
