@@ -53,7 +53,9 @@ SQL
 
   def query
     attributes = {
-      state: params[:state].presence, user_id: params[:user].presence
+      state: params[:state].presence,
+      user_id: params[:user].presence,
+      artist_id: params[:artist].presence,
     }.compact
     attributes.merge!(assigned_to: assigned_to) if filtering_by_assigned_to?
     attributes

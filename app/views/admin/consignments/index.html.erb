@@ -7,10 +7,13 @@
 <div class='container double-padding-top'>
   <div class='row'>
     <div class='row col-md-12'>
-      <%= text_field_tag 'term', term, class: 'form-control', placeholder: 'Search by ID, user name, or partner', id: 'consignments-search-form' %>
+      <%= text_field_tag 'term', display_term, class: 'form-control', placeholder: 'Search by ID, user name, partner, or artist', id: 'consignments-search-form' %>
     </div>
     <div class='row col-md-12' style="padding: 25px 15px 25px 0;">
       <%= form_tag admin_consignments_url, method: 'get', id: 'consignment-filter-form' do %>
+        <%= hidden_field_tag :user, filters[:user] %>
+        <%= hidden_field_tag :partner, filters[:partner] %>
+        <%= hidden_field_tag :artist, filters[:artist] %>
         <div class='col-md-6'>
           <label>State</label>
           <%= select_tag 'state',

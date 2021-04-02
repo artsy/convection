@@ -6,6 +6,15 @@ module Admin
 
     before_action :set_consignment, only: %i[show edit update]
 
+    expose(:display_term) do
+      if filters[:user].present?
+        User.where(id: filters[:user]).pick(:email)
+      elsif filters[:partner].present?
+        Partner.where(id: filters[:partner]).pick(:name)
+      elsif filters[:artist].present?
+        artists_query([filters[:artist]])&.values&.first
+      end
+    end
     expose(:consignment) { PartnerSubmission.consigned.find(params[:id]) }
 
     expose(:consignments) do
@@ -31,6 +40,12 @@ module Admin
         user = User.find(params[:user])
         matching_consignments =
           matching_consignments.where(submission: user.submissions)
+      end
+
+      if params[:artist].present?
+        matching_consignments = matching_consignments.
+          joins(:submission).
+          where(submissions: { artist_id: params[:artist]})
       end
 
       if params[:state].present?
@@ -70,6 +85,7 @@ module Admin
         state: params[:state],
         partner: params[:partner],
         user: params[:user],
+        artist: params[:artist],
         sort: params[:sort],
         direction: params[:direction]
       }

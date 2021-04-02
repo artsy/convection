@@ -8,6 +8,8 @@ describe 'admin/submissions/index.html.erb', type: :feature do
     before do
       stub_gravity_root
       stub_gravity_artist(id: 'artistid2')
+      stub_gravity_artists
+
       stub_gravity_user(id: 'userid2')
       stub_gravity_user_detail(id: 'userid2')
 
@@ -124,14 +126,16 @@ describe 'admin/submissions/index.html.erb', type: :feature do
           title: 'blah blah'
         )
 
+        @artists = [
+            { id: 'artistid', name: 'Andy Warhol' },
+            { id: 'artistid2', name: 'Kara Walker' },
+            { id: 'artistid3', name: 'Chuck Close' },
+            { id: 'artistid4', name: 'Lucille Bluth' }
+        ]
+
         gravql_artists_response = {
           data: {
-            artists: [
-              { id: 'artistid', name: 'Andy Warhol' },
-              { id: 'artistid2', name: 'Kara Walker' },
-              { id: 'artistid3', name: 'Chuck Close' },
-              { id: 'artistid4', name: 'Lucille Bluth' }
-            ]
+            artists: @artists
           }
         }
         stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
@@ -169,6 +173,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
         expect(page).to have_selector('.ui-autocomplete')
         click_link("user-#{@user2.id}")
         expect(current_url).to include "state=draft&user=#{@user2.id}"
+        expect(page).to have_selector("input[value='#{@user2.email}']")
         expect(page).to have_selector('.list-group-item', count: 2)
         expect(page).to have_content('draft', count: 2)
       end
@@ -187,13 +192,53 @@ describe 'admin/submissions/index.html.erb', type: :feature do
         expect(page).to have_content('User   percy')
         click_link("user-#{@user2.id}")
         expect(current_url).to include "&user=#{@user2.id}"
+        expect(page).to have_selector("input[value='#{@user2.email}']")
         expect(page).to have_selector('.list-group-item', count: 4)
         expect(page).to have_content 'my work'
         expect(page).to have_content 'blah blah'
       end
 
-      it 'allows you to search by user email, filter by state, and sort by ID',
-         js: true do
+      it 'allows you to search by artist name', js: true do
+        artist = @artists.last
+
+        stub_gravity_artists(override_body: [artist])
+        stub_request(:post, "#{Convection.config.gravity_api_url}/graphql").
+          to_return(body: { data: { artists: [artist] } }.to_json).
+          with(headers: { 'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json' })
+
+        fill_in('term', with: artist[:name])
+        expect(page).to have_selector('.ui-autocomplete')
+        expect(page).to have_content(artist[:name])
+        click_link("artist-#{artist[:id]}")
+        expect(current_url).to include "&artist=#{artist[:id]}"
+        expect(page).to have_selector("input[value='#{artist[:name]}']")
+        expect(page).to have_selector('.list-group-item-info--artist', count: 2)
+        expect(page).to have_content 'title'
+        expect(page).to have_content 'blah blah'
+      end
+
+      it 'allows you to search by artist name and state', js: true do
+        artist = @artists.last
+
+        stub_gravity_artists(override_body: [artist])
+        stub_request(:post, "#{Convection.config.gravity_api_url}/graphql").
+            to_return(body: { data: { artists: [artist] } }.to_json).
+            with(headers: { 'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json' })
+
+        fill_in('term', with: artist[:name])
+        expect(page).to have_selector('.ui-autocomplete')
+        expect(page).to have_content(artist[:name])
+        click_link("artist-#{artist[:id]}")
+        select('draft', from: 'state')
+        expect(current_url).to include("artist=#{artist[:id]}", 'state=draft')
+        expect(page).to have_selector("input[value='#{artist[:name]}']")
+        expect(page).to have_selector('.list-group-item-info--artist', count: 1)
+        expect(page).to have_content 'blah blah'
+        select('approved', from: 'state')
+        expect(page).to have_selector('.list-group-item-info--artist', count: 0)
+      end
+
+      it 'allows you to search by user email, filter by state, and sort by ID', js: true do
         select('approved', from: 'state')
         fill_in('term', with: 'percy')
         expect(page).to have_selector('.ui-autocomplete')

@@ -29,22 +29,23 @@ describe Admin::SubmissionsController, type: :controller do
 
     context 'with many submissions' do
       before do
+        @artist = {id: 'artistId', name: 'Banksy'}
         @user1 = Fabricate(:user, email: 'sarah@artsymail.com')
         @user2 = Fabricate(:user, email: 'lucille@bluth.com')
         @submission1 =
           Fabricate(
             :submission,
-            state: 'submitted', title: 'hi hi', user: @user1
+            state: 'submitted', title: 'hi hi', user: @user1, artist_id: 'someArtistId'
           )
         @submission2 =
           Fabricate(
             :submission,
-            state: 'submitted', title: 'my artwork', user: @user1
+            state: 'submitted', title: 'my artwork', user: @user1, artist_id: @artist[:id]
           )
         @submission3 =
           Fabricate(
             :submission,
-            state: 'submitted', title: 'another artwork', user: @user2
+            state: 'submitted', title: 'another artwork', user: @user2, artist_id: @artist[:id]
           )
         @submission4 =
           Fabricate(:submission, state: 'approved', title: 'zzz', user: @user2)
@@ -151,6 +152,20 @@ describe Admin::SubmissionsController, type: :controller do
                @submission2.id,
                @submission1.id,
                @submission3.id
+             ]
+        end
+
+        it 'allows you to filter by state, search for artist, and sort by ID' do
+          get :index,
+              params: {
+                sort: 'id',
+                direction: 'desc',
+                state: 'submitted',
+                artist: @artist[:id]
+              }
+          expect(controller.submissions.pluck(:id)).to eq [
+               @submission3.id,
+               @submission2.id
              ]
         end
 
