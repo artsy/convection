@@ -14,14 +14,17 @@ describe 'admin/consignments/index.html.erb', type: :feature do
       allow(Convection.config).to receive(:gravity_xapp_token).and_return(
         'xapp_token'
       )
+      @artists = [
+          { id: 'artist1', name: 'Andy Warhol' },
+          { id: 'artist2', name: 'Kara Walker' }
+      ]
+
       gravql_artists_response = {
         data: {
-          artists: [
-            { id: 'artist1', name: 'Andy Warhol' },
-            { id: 'artist2', name: 'Kara Walker' }
-          ]
+          artists: @artists
         }
       }
+      stub_gravity_artists
       stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
         .to_return(body: gravql_artists_response.to_json).with(
         headers: {
@@ -119,6 +122,7 @@ describe 'admin/consignments/index.html.erb', type: :feature do
         expect(page).to have_content('Partner   Gagosian Gallery')
         click_link("partner-#{@partner1.id}")
         expect(current_url).to include "partner=#{@partner1.id}"
+        expect(page).to have_selector("input[value='#{@partner1.name}']")
         partner_names =
           page.all('.list-group-item-info--partner-name').map(&:text)
         expect(partner_names.count).to eq 3
@@ -143,17 +147,49 @@ describe 'admin/consignments/index.html.erb', type: :feature do
         expect(partner_names.count).to eq 1
         expect(partner_names.first).to eq('Heritage Auctions')
         expect(current_url).to include "state=bought+in&partner=#{@partner2.id}"
+        expect(page).to have_selector("input[value='#{@partner2.name}']")
         expect(page).to have_selector('.list-group-item', count: 2)
       end
 
-      it 'allows you to search by partner name, filter by state, and sort by estimate',
-         js: true do
+      it 'allows you to search by artist name', js: true do
+        artist = @artists.first
+        @consignment1.submission.update!(artist_id: artist[:id])
+
+        stub_gravity_artists(override_body: [artist])
+
+        fill_in('term', with: artist[:name])
+        expect(page).to have_selector('.ui-autocomplete')
+        click_link("artist-#{artist[:id]}")
+        expect(current_url).to include "&artist=#{artist[:id]}"
+        expect(page).to have_content(artist[:name])
+        expect(page).to have_selector('.list-group-item-info--artist', count: 1)
+      end
+
+      it 'allows you to search by artist name and state', js: true do
+        artist = @artists.first
+        @consignment1.submission.update!(artist_id: artist[:id])
+
+        stub_gravity_artists(override_body: [artist])
+
+        fill_in('term', with: artist[:name])
+        expect(page).to have_selector('.ui-autocomplete')
+        click_link("artist-#{artist[:id]}")
+        select('bought in', from: 'state')
+        expect(current_url).to include("artist=#{artist[:id]}", 'state=bought+in')
+        expect(page).to have_content(artist[:name])
+        expect(page).to have_selector('.list-group-item-info--artist', count: 1)
+        select('sold', from: 'state')
+        expect(page).to have_selector('.list-group-item-info--artist', count: 0)
+      end
+
+      it 'allows you to search by partner name, filter by state, and sort by estimate', js: true do
         select('bought in', from: 'state')
         fill_in('term', with: 'herit')
         expect(page).to have_selector('.ui-autocomplete')
         expect(page).to have_content('Partner   Heritage Auctions')
         click_link("partner-#{@partner2.id}")
         expect(current_url).to include "state=bought+in&partner=#{@partner2.id}"
+        expect(page).to have_selector("input[value='#{@partner2.name}']")
         click_link('Estimate')
         expect(current_url).to include(
           "partner=#{@partner2.id}",
@@ -161,6 +197,7 @@ describe 'admin/consignments/index.html.erb', type: :feature do
           'sort=offers.high_estimate_cents',
           'direction=desc'
         )
+        expect(page).to have_selector("input[value='#{@partner2.name}']")
       end
     end
   end

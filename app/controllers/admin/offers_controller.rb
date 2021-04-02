@@ -8,6 +8,15 @@ module Admin
 
     before_action :set_offer, only: %i[show edit update destroy]
 
+    expose(:display_term) do
+      if filters[:user].present?
+        User.where(id: filters[:user]).pick(:email)
+      elsif filters[:partner].present?
+        Partner.where(id: filters[:partner]).pick(:name)
+      elsif filters[:artist].present?
+        artists_query([filters[:artist]])&.values&.first
+      end
+    end
     expose :offer
 
     expose(:offers) do
@@ -32,6 +41,12 @@ module Admin
       if params[:user].present?
         user = User.find(params[:user])
         matching_offers = matching_offers.where(submission: user.submissions)
+      end
+
+      if params[:artist].present?
+        matching_offers = matching_offers.
+          joins(:submission).
+          where(submissions: { artist_id: params[:artist]})
       end
 
       if params[:state].present?
@@ -67,6 +82,7 @@ module Admin
         state: params[:state],
         partner: params[:partner],
         user: params[:user],
+        artist: params[:artist],
         sort: params[:sort],
         direction: params[:direction]
       }

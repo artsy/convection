@@ -44,6 +44,7 @@ describe Admin::OffersController, type: :controller do
 
     describe '#index' do
       before do
+        @artist = {id: 'artistId', name: 'Banksy'}
         @partner1 = Fabricate(:partner, name: 'Gagosian Gallery')
         partner2 = Fabricate(:partner, name: 'Heritage Auctions')
         @offer1 =
@@ -69,7 +70,7 @@ describe Admin::OffersController, type: :controller do
                 :partner_submission,
                 partner: @partner1,
                 submission:
-                  Fabricate(:submission, user_email: 'michael@bluth.com')
+                  Fabricate(:submission, user_email: 'michael@bluth.com', artist_id: @artist[:id])
               ),
             offer_type: 'purchase',
             price_cents: 200_00
@@ -83,7 +84,7 @@ describe Admin::OffersController, type: :controller do
                 :partner_submission,
                 partner: @partner1,
                 submission:
-                  Fabricate(:submission, user_email: 'lucille@bluth.com')
+                  Fabricate(:submission, user_email: 'lucille@bluth.com', artist_id: 'someArtistId')
               ),
             offer_type: 'purchase',
             price_cents: 300_00
@@ -97,7 +98,7 @@ describe Admin::OffersController, type: :controller do
                 :partner_submission,
                 partner: partner2,
                 submission:
-                  Fabricate(:submission, user_email: 'lucille@bluth.com')
+                  Fabricate(:submission, user_email: 'lucille@bluth.com', artist_id: @artist[:id])
               ),
             offer_type: 'auction consignment',
             high_estimate_cents: 400_00
@@ -190,6 +191,20 @@ describe Admin::OffersController, type: :controller do
                @offer3.id,
                @offer2.id,
                @offer1.id
+             ]
+        end
+
+        it 'allows you to filter by state, search for artist, and sort by price_cents' do
+          get :index,
+              params: {
+                sort: 'price_cents',
+                direction: 'desc',
+                state: 'sent',
+                artist: @artist[:id]
+              }
+          expect(controller.offers.pluck(:id)).to eq [
+               @offer4.id,
+               @offer2.id,
              ]
         end
 
