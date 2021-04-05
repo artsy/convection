@@ -6,5 +6,5 @@
   <input type='hidden' name='policy' />
   <input type='hidden' name='Content-Type' />
   <input type='hidden' name='signature' />
-  <input type='file' name='file' id='gemini-input' accept=<%= accept %> />
+  <input type='file' name='file' id='gemini-input' accept=<%= accept %> <%= multiple && 'multiple' %>/>
 </form>
