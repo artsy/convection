@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
 
   expose(:page) { (params[:page] || 1).to_i }
 
-  expose(:size) { (params[:size] || 10).to_i }
+  expose(:size) { (params[:size] || 100).to_i }
 
   # override application to decode token and allow only users with `admin` role
   def authorized_artsy_token?(token)
