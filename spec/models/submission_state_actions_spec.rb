@@ -8,9 +8,10 @@ describe SubmissionStateActions do
   context 'with a draft submission' do
     let(:state) { 'draft' }
 
-    it 'returns an empty array of actions' do
+    it 'returns approve, publish, hold, reject and close actions' do
       actions = SubmissionStateActions.for(submission)
-      expect(actions).to eq []
+      states = actions.pluck(:state)
+      expect(states).to eq %w[approved published hold rejected closed]
     end
   end
 

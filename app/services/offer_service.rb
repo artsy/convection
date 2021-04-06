@@ -16,11 +16,11 @@ class OfferService
       submission_id, partner_id, offer_params = {}, current_user = nil
     )
       submission = Submission.find(submission_id)
-      if [Submission::DRAFT, Submission::REJECTED].include? submission.state
+      if [Submission::REJECTED].include? submission.state
         raise OfferError, 'Invalid submission state for offer creation'
       end
 
-      if submission.state == Submission::SUBMITTED
+      if [Submission::DRAFT, Submission::SUBMITTED].include? submission.state
         submission.update!(
           state: Submission::APPROVED,
           approved_by: current_user,
