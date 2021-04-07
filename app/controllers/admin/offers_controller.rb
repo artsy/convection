@@ -6,7 +6,7 @@ module Admin
   class OffersController < ApplicationController
     include GraphqlHelper
 
-    before_action :set_offer, only: %i[show edit update destroy]
+    before_action :set_offer, only: %i[show edit update destroy undo_rejection]
 
     expose(:display_term) do
       if filters[:user].present?
@@ -162,6 +162,14 @@ module Admin
 
     def update
       OfferService.update_offer(@offer, @current_user, offer_params)
+      redirect_to admin_offer_path(@offer)
+    rescue OfferService::OfferError => e
+      flash.now[:error] = e.message
+      render 'edit'
+    end
+
+    def undo_rejection
+      OfferService.undo_rejection!(@offer, @current_user)
       redirect_to admin_offer_path(@offer)
     rescue OfferService::OfferError => e
       flash.now[:error] = e.message

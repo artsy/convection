@@ -91,6 +91,17 @@ class OfferService
       delay.deliver_rejection_notification(offer.id)
     end
 
+    def undo_rejection!(offer, current_user)
+      offer.update!(
+        state: Offer::SENT,
+        rejected_by: nil,
+        rejected_at: nil,
+        rejection_reason: nil,
+        rejection_note: nil,
+      )
+      send_offer!(offer, current_user)
+    end
+
     private
 
     def deliver_introduction(offer_id)
