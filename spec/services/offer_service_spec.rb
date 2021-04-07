@@ -44,13 +44,14 @@ describe OfferService do
     context 'with a submission in a draft state' do
       let(:submission_state) { Submission::DRAFT }
 
-      it 'raises an error' do
-        expect {
-          OfferService.create_offer(submission.id, partner.id, {}, user.id)
-        }.to raise_error(
-          OfferService::OfferError,
-          'Invalid submission state for offer creation'
-        )
+      it 'updates the submission state to approved' do
+        OfferService.create_offer(submission.id, partner.id, {}, user.id)
+
+        submission.reload
+
+        expect(submission.state).to eq Submission::APPROVED
+        expect(submission.approved_by).to eq user.id.to_s
+        expect(submission.approved_at).to_not be_nil
       end
     end
 
