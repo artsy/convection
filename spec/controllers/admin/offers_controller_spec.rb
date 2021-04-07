@@ -280,6 +280,7 @@ describe Admin::OffersController, type: :controller do
         new_params = {
           low_estimate_dollars: 10_000,
           high_estimate_dollars: 50_000,
+          starting_bid_dollars: 10_000,
           commission_percent_whole: 10.0,
           sale_name: 'Fun sale',
           sale_date: Date.new(2_017, 10, 1),

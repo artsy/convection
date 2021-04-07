@@ -205,7 +205,8 @@ module Admin
         :sale_period_end,
         :sale_period_start,
         :shipping_info,
-        :state
+        :state,
+        :starting_bid_dollars
       )
     end
   end

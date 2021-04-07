@@ -24,6 +24,7 @@ module Types
     field :sale_location, String, null: true
     field :shipping_info, String, null: true
     field :state, String, null: true
+    field :starting_bid_cents, Integer, null: true
 
     field :submission, Types::SubmissionType, null: false
   end
