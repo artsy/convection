@@ -123,7 +123,9 @@ describe Offer do
         'low_estimate_dollars',
         'low_estimate_cents',
         'high_estimate_dollars',
-        'high_estimate_cents'
+        'high_estimate_cents',
+        'starting_bid_dollars',
+        'starting_bid_cents',
       )
     end
 

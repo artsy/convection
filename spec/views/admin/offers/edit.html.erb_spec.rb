@@ -52,6 +52,7 @@ describe 'admin/offers/edit.html.erb', type: :feature do
         expect(page).to have_content('Commission %')
         expect(page).to have_content('Sale name')
         expect(page).to have_content('Sale date')
+        expect(page).to have_content('Starting Bid / Suggested Reserve price')
         expect(page).to_not have_content('Price')
       end
     end

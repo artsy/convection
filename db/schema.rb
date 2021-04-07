@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_20_231224) do
+ActiveRecord::Schema.define(version: 2021_04_06_185140) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_trgm'
   enable_extension 'plpgsql'
@@ -87,6 +88,7 @@ ActiveRecord::Schema.define(version: 2020_11_20_231224) do
     t.string 'deadline_to_consign'
     t.string 'sale_location'
     t.integer 'offer_responses_count'
+    t.bigint 'starting_bid_cents'
     t.index %w[partner_submission_id],
             name: 'index_offers_on_partner_submission_id'
     t.index %w[reference_id], name: 'index_offers_on_reference_id'
