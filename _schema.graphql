@@ -371,6 +371,7 @@ input CreateOfferMutationInput {
   saleLocation: String
   saleName: String
   shippingInfo: String
+  startingBidDollars: Int
   state: String
   submissionId: ID!
 }
@@ -545,6 +546,7 @@ type Offer {
   saleLocation: String
   saleName: String
   shippingInfo: String
+  startingBidCents: Int
   state: String
   submission: Submission!
 }
@@ -933,6 +935,16 @@ enum OfferSort {
   sort by shipping_info in descending order
   """
   SHIPPING_INFO_DESC
+
+  """
+  sort by starting_bid_cents in ascending order
+  """
+  STARTING_BID_CENTS_ASC
+
+  """
+  sort by starting_bid_cents in descending order
+  """
+  STARTING_BID_CENTS_DESC
 
   """
   sort by state in ascending order
