@@ -19,6 +19,7 @@ module OffersHelper
   def display_fields(offer)
     {
       'Estimate' => estimate_display(offer),
+      'Starting Bid / Suggested Reserve price' => offer.starting_bid_display,
       'Price' => price_display(offer.currency, offer.price_cents),
       'Sale Period' => sale_period_display(offer),
       'Sale Date' => sale_date_display(offer),
