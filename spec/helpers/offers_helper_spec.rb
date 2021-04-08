@@ -70,6 +70,7 @@ describe OffersHelper, type: :helper do
           commission_percent: 0.1,
           low_estimate_cents: 10_000,
           high_estimate_cents: 40_000,
+          starting_bid_cents: nil,
           sale_date: Date.new(2_018, 10, 30)
         )
       expect(helper.display_fields(offer)).to eq(
@@ -88,12 +89,14 @@ describe OffersHelper, type: :helper do
           commission_percent: 0.1,
           low_estimate_cents: 10_000,
           high_estimate_cents: 40_000,
+          starting_bid_cents: 10_000,
           sale_date: Date.new(2_018, 10, 30)
         )
       expect(helper.display_fields(offer)).to eq(
         'Estimate' => 'USD $100 - 400',
         'Sale Date' => 'Oct 30, 2018',
-        'Commission' => '10.0%'
+        'Commission' => '10.0%',
+        'Starting Bid / Suggested Reserve price' => '$100'
       )
     end
   end
