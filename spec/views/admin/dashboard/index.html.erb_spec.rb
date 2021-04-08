@@ -16,7 +16,7 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
       )
 
       stub_gravql_artists(body: {
-        data: { artists: [{ id: 'artist1', name: 'Andy Warhol', isP1: true, targetSupply: true }] }
+        data: { artists: [{ id: 'artist1', name: 'Andy Warhol', is_p1: true, target_supply: true }] }
       })
 
       page.visit '/'

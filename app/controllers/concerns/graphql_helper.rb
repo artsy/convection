@@ -7,7 +7,7 @@ module GraphqlHelper
     <<~GQL
       query artistsDetails($ids: [ID!]!){
         artists(ids: $ids){
-          #{fields.join(', ')}
+          #{[:id, *fields].join(', ')}
         }
       }
     GQL
@@ -26,7 +26,7 @@ module GraphqlHelper
   def artists_names_query(artist_ids)
     artist_details_response =
       Gravql::Schema.execute(
-        query: artist_query_builder(fields: [:id, :name]),
+        query: artist_query_builder(fields: [:name]),
         variables: { ids: artist_ids.compact.uniq }
       )
     if artist_details_response[:errors].present?
@@ -40,7 +40,11 @@ module GraphqlHelper
   def artists_details_query(artist_ids)
     artist_details_response =
       Gravql::Schema.execute(
-          query: artist_query_builder(fields: [:id, :name, :isP1, :targetSupply]),
+        query: artist_query_builder(fields: [
+          'name',
+          'is_p1: isP1',
+          'target_supply: targetSupply'
+        ]),
         variables: { ids: artist_ids.compact.uniq }
       )
     if artist_details_response[:errors].present?

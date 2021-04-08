@@ -41,7 +41,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       stub_gravql_artists(body: {
         data: {
           artists: [
-            { id: @submission.artist_id, name: 'Gob Bluth', isP1: false, targetSupply: true },
+            { id: @submission.artist_id, name: 'Gob Bluth', is_p1: false, target_supply: true },
           ]
         }
       })

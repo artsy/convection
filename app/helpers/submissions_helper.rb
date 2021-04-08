@@ -86,8 +86,8 @@ module SubmissionsHelper
     end
   end
 
-  def artist_supply_priority(isP1: false, targetSupply: false, **)
-    return 'P1' if isP1
-    return 'P2' if targetSupply
+  def artist_supply_priority(is_p1: false, target_supply: false, **)
+    return 'P1' if is_p1
+    return 'P2' if target_supply
   end
 end

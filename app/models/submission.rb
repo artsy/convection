@@ -5,6 +5,8 @@ class Submission < ApplicationRecord
   include Dollarize
   include PgSearch::Model
 
+  attr_accessor :artist_name
+
   alias_attribute :deleted?, :deleted_at
 
   scope :not_deleted, -> { where(deleted_at: nil) }
@@ -133,12 +135,6 @@ class Submission < ApplicationRecord
     nil
   end
 
-  def artist
-    Gravity.client.artist(id: artist_id)._get if artist_id.present?
-  rescue Faraday::ResourceNotFound
-    nil
-  end
-
   def calculate_demand_scores
     scores = DemandCalculator.score(artist_id, category)
     self.artist_score = scores[:artist_score]
@@ -150,10 +146,6 @@ class Submission < ApplicationRecord
     relevant_fields = %w[artist_id category]
     has_relevant_change = (changes.keys & relevant_fields).any?
     in_draft_state && has_relevant_change
-  end
-
-  def artist_name
-    artist.try(:name)
   end
 
   def validate_primary_image

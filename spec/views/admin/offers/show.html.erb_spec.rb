@@ -40,8 +40,8 @@ describe 'admin/offers/show.html.erb', type: :feature do
       stub_gravql_artists(body: {
         data: {
           artists: [
-            { id: 'artist1', name: 'Andy Warhol', isP1: true, targetSupply: true },
-            { id: 'artist2', name: 'Kara Walker', isP1: true, targetSupply: true }
+            { id: 'artist1', name: 'Andy Warhol', is_p1: true, target_supply: true },
+            { id: 'artist2', name: 'Kara Walker', is_p1: true, target_supply: true }
           ]
         }
       })
