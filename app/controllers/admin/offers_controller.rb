@@ -14,7 +14,7 @@ module Admin
       elsif filters[:partner].present?
         Partner.where(id: filters[:partner]).pick(:name)
       elsif filters[:artist].present?
-        artists_query([filters[:artist]])&.values&.first
+        artists_names_query([filters[:artist]])&.values&.first
       end
     end
     expose :offer
@@ -103,7 +103,7 @@ module Admin
     expose(:term) { params[:term] }
 
     expose(:artist) do
-      artists_query([offer&.partner_submission&.submission&.artist_id])&.values
+      artists_names_query([offer&.partner_submission&.submission&.artist_id])&.values
         &.first
     end
 
@@ -149,7 +149,7 @@ module Admin
     end
 
     def show
-      @artist_details = artists_query([@offer.submission.artist_id])
+      @artist_details = artists_names_query([@offer.submission.artist_id])
     end
 
     def edit; end

@@ -206,4 +206,21 @@ describe SubmissionsHelper, type: :helper do
       expect(helper.reviewer_byline(submission)).to eq 'Rejected by '
     end
   end
+
+  context 'artist_supply_priority' do
+    context 'when isP1' do
+      subject { helper.artist_supply_priority(isP1: true) }
+      it { is_expected.to eq 'P1' }
+    end
+
+    context 'when targetSupply' do
+      subject { helper.artist_supply_priority(isP1: true) }
+      it { is_expected.to eq 'P1' }
+    end
+
+    context 'none' do
+      subject { helper.artist_supply_priority(isP1: false, targetSupply: false) }
+      it { is_expected.to eq nil }
+    end
+  end
 end

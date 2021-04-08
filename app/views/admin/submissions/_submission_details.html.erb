@@ -3,7 +3,7 @@
     Artist/Designer
   </div>
   <div class='overview-item-value'>
-    <%= @submission.artist_name&.upcase %>
+    <%= @artist&.[](:name)&.upcase %>
   </div>
 </div>
 
@@ -112,6 +112,15 @@
   </div>
   <div class='overview-item-value minimum-price'>
     <%= formatted_minimum_price(@submission) %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Supply Priority
+  </div>
+  <div class='overview-item-value supply-priority'>
+    <%= @artist && artist_supply_priority(**@artist) %>
   </div>
 </div>
 

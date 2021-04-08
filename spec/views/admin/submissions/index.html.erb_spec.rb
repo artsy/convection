@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 require 'support/gravity_helper'
+require 'support/gravql_helper'
 
 describe 'admin/submissions/index.html.erb', type: :feature do
   context 'always' do
@@ -19,15 +20,11 @@ describe 'admin/submissions/index.html.erb', type: :feature do
       allow(Convection.config).to receive(:gravity_xapp_token).and_return(
         'xapp_token'
       )
-      gravql_artists_response = {
+
+      stub_gravql_artists(body: {
         data: { artists: [{ id: 'artist1', name: 'Andy Warhol' }] }
-      }
-      stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
-        .to_return(body: gravql_artists_response.to_json).with(
-        headers: {
-          'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
-        }
-      )
+      })
+
       page.visit admin_submissions_path
     end
 
@@ -133,17 +130,10 @@ describe 'admin/submissions/index.html.erb', type: :feature do
             { id: 'artistid4', name: 'Lucille Bluth' }
         ]
 
-        gravql_artists_response = {
-          data: {
-            artists: @artists
-          }
-        }
-        stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
-          .to_return(body: gravql_artists_response.to_json).with(
-          headers: {
-            'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
-          }
-        )
+        stub_gravql_artists(body: {
+          data: { artists: @artists }
+        })
+
         page.visit admin_submissions_path
       end
 
@@ -202,9 +192,10 @@ describe 'admin/submissions/index.html.erb', type: :feature do
         artist = @artists.last
 
         stub_gravity_artists(override_body: [artist])
-        stub_request(:post, "#{Convection.config.gravity_api_url}/graphql").
-          to_return(body: { data: { artists: [artist] } }.to_json).
-          with(headers: { 'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json' })
+
+        stub_gravql_artists(body: {
+          data: { artists: [artist] }
+        })
 
         fill_in('term', with: artist[:name])
         expect(page).to have_selector('.ui-autocomplete')
@@ -221,9 +212,10 @@ describe 'admin/submissions/index.html.erb', type: :feature do
         artist = @artists.last
 
         stub_gravity_artists(override_body: [artist])
-        stub_request(:post, "#{Convection.config.gravity_api_url}/graphql").
-            to_return(body: { data: { artists: [artist] } }.to_json).
-            with(headers: { 'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json' })
+
+        stub_gravql_artists(body: {
+          data: { artists: [artist] }
+        })
 
         fill_in('term', with: artist[:name])
         expect(page).to have_selector('.ui-autocomplete')

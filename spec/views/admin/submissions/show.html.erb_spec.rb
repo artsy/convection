@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 require 'support/gravity_helper'
+require 'support/gravql_helper'
 require 'support/jwt_helper'
 
 describe 'admin/submissions/show.html.erb', type: :feature do
@@ -36,6 +37,14 @@ describe 'admin/submissions/show.html.erb', type: :feature do
           user: Fabricate(:user, gravity_user_id: 'userid'),
           state: 'submitted'
         )
+
+      stub_gravql_artists(body: {
+        data: {
+          artists: [
+            { id: @submission.artist_id, name: 'Gob Bluth', isP1: false, targetSupply: true },
+          ]
+        }
+      })
 
       stub_jwt_header('userid')
       page.visit "/admin/submissions/#{@submission.id}"
@@ -137,20 +146,16 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       stub_gravity_partner_contacts
       partner1 = Fabricate(:partner, gravity_partner_id: 'partnerid')
       partner2 = Fabricate(:partner, gravity_partner_id: 'phillips')
-      gravql_partners_response = {
+
+      stub_gravql_match_partners(body: {
         data: {
           partners: [
             { id: partner1.gravity_partner_id, given_name: 'Partner 1' },
             { id: partner2.gravity_partner_id, given_name: 'Phillips' }
           ]
         }
-      }
-      stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
-        .to_return(body: gravql_partners_response.to_json).with(
-        headers: {
-          'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
-        }
-      )
+      })
+
       SubmissionService.update_submission(@submission, state: 'published')
       stub_gravity_partner(id: 'partnerid')
       stub_gravity_partner(id: 'phillips')
@@ -177,6 +182,12 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       page.visit "/admin/submissions/#{@submission.id}"
       click_link 'Undelete submission'
       expect(@submission.reload.deleted_at).to be_nil
+    end
+
+    it 'displays supply priority' do
+      within('.supply-priority') do
+        expect(page).to have_content('P2')
+      end
     end
 
     context 'notes' do

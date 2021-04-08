@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 require 'support/gravity_helper'
+require 'support/gravql_helper'
 
 describe 'admin/submissions/edit.html.erb', type: :feature do
   context 'always' do
@@ -25,6 +26,18 @@ describe 'admin/submissions/edit.html.erb', type: :feature do
       stub_gravity_user
       stub_gravity_user_detail
       stub_gravity_artist
+
+      allow(Convection.config).to receive(:gravity_xapp_token).and_return(
+        'xapp_token'
+      )
+      stub_gravql_artists(body: {
+        data: {
+          artists: [
+            { id: @submission.artist_id, name: 'Gob Bluth', isP1: false, targetSupply: true },
+          ]
+        }
+      })
+
       page.visit "/admin/submissions/#{@submission.id}/edit"
     end
 
@@ -32,6 +45,7 @@ describe 'admin/submissions/edit.html.erb', type: :feature do
       expect(page).to have_content("Submission ##{@submission.id}")
       expect(page.find('#submission_title').value).to eq('my artwork')
       expect(page).to_not have_content('Gob Bluth')
+      expect(page).to_not have_content('P2')
       expect(page).to_not have_content('Jon Jonson')
       expect(page).to_not have_content('user@example.com')
       expect(page).to have_content('Painting')
@@ -42,6 +56,7 @@ describe 'admin/submissions/edit.html.erb', type: :feature do
       find_button('Save').click
       expect(@submission.reload.title).to eq('my new artwork title')
       expect(page).to have_content('Gob Bluth'.upcase)
+      expect(page).to have_content('P2')
       expect(page).to have_content('Add New')
     end
 

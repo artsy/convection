@@ -20,13 +20,13 @@ module Admin
       matching_submissions.page(page).per(size)
     end
 
-    expose(:artist_details) { artists_query(submissions.map(&:artist_id)) }
+    expose(:artist_details) { artists_names_query(submissions.map(&:artist_id)) }
 
     expose(:display_term) do
       if filters[:user].present?
         User.where(id: filters[:user]).pick(:email)
       elsif filters[:artist].present?
-        artists_query([filters[:artist]])&.values&.first
+        artists_names_query([filters[:artist]])&.values&.first
       end
     end
     expose(:filters) do
@@ -78,6 +78,7 @@ module Admin
       @offers = @submission.offers
       @notes = @submission.notes
       @actions = SubmissionStateActions.for(@submission)
+      @artist = artists_details_query([@submission.artist_id]).first
     end
 
     def edit; end
