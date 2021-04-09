@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 require 'support/gravity_helper'
+require 'support/gravql_helper'
 require 'support/jwt_helper'
 
 describe 'Editing a submission', type: :feature do
@@ -43,6 +44,17 @@ describe 'Editing a submission', type: :feature do
     stub_gravity_user(id: submission.user.gravity_user_id)
     stub_gravity_user_detail(id: submission.user.gravity_user_id)
     stub_gravity_artist(id: submission.artist_id)
+
+    allow(Convection.config).to receive(:gravity_xapp_token).and_return(
+      'xapp_token'
+    )
+    stub_gravql_artists(body: {
+      data: {
+        artists: [
+          { id: submission.artist_id, name: 'Gob Bluth', is_p1: false, target_supply: true },
+        ]
+      }
+    })
   end
 
   context 'adding an admin to a submission' do

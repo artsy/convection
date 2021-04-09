@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 require 'support/gravity_helper'
+require 'support/gravql_helper'
 
 describe 'admin/submissions/new.html.erb', type: :feature do
   context 'always' do
@@ -22,6 +23,15 @@ describe 'admin/submissions/new.html.erb', type: :feature do
       stub_gravity_user
       stub_gravity_user_detail
       stub_gravity_artist
+
+      allow(Convection.config).to receive(:gravity_xapp_token).and_return(
+        'xapp_token'
+      )
+      stub_gravql_artists(body: {
+        data: {
+          artists: [{ id: 'artist1', name: 'Gob Bluth' }]
+        }
+      })
 
       fill_in('submission_title', with: 'my new artwork title')
       find('#submission_artist_id').set('artistid')

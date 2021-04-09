@@ -10,7 +10,7 @@
                 <%= link_to 'Edit', edit_admin_submission_path(@submission) %>
               </span>
             </div>
-            <%= render 'submission_details', submission: @submission %>
+            <%= render 'submission_details', submission: @submission, artist: @artist %>
           </div>
           <div class='overview-section'>
             <div class='overview-section-title--inline'>
@@ -21,7 +21,7 @@
             </div>
             <%= render @submission.assets %>
           </div>
-          <%= render 'admin/consignments/consignment_section', consignment: @submission.consigned_partner_submission, artist: @submission.artist&.name %>
+          <%= render 'admin/consignments/consignment_section', consignment: @submission.consigned_partner_submission, artist: @artist&.[](:name) %>
           <%= render 'admin/offers/offers_section', offers: @offers, truncated: true %>
           <div class='notes-section'>
             <div class='notes-section-title'>

@@ -8,9 +8,10 @@ class PartnerMailer < ApplicationMailer
     partner_name:,
     partner_type:,
     email:,
-    submissions_count:
+    **args
   )
     @users_to_submissions = users_to_submissions
+    @submissions_artists = args[:submissions_artists]
     @partner_type = partner_type
     @utm_params =
       utm_params(
@@ -24,7 +25,7 @@ class PartnerMailer < ApplicationMailer
       to: email,
       from: Convection.config.admin_email_address,
       subject:
-        "New Artsy Consignments #{current_date}: #{submissions_count} works"
+        "New Artsy Consignments #{current_date}: #{args[:submissions_count]} works"
     ) { |format| format.html { render layout: 'mailer_no_footer' } }
   end
 

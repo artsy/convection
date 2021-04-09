@@ -12,7 +12,7 @@ module Admin
       elsif filters[:partner].present?
         Partner.where(id: filters[:partner]).pick(:name)
       elsif filters[:artist].present?
-        artists_query([filters[:artist]])&.values&.first
+        artists_names_query([filters[:artist]])&.values&.first
       end
     end
     expose(:consignment) { PartnerSubmission.consigned.find(params[:id]) }
@@ -72,11 +72,11 @@ module Admin
     end
 
     expose(:artist_details) do
-      artists_query(consignments.map(&:submission).map(&:artist_id))
+      artists_names_query(consignments.map(&:submission).map(&:artist_id))
     end
 
     expose(:artist) do
-      artists_query([consignment.submission&.artist_id])&.values&.first
+      artists_names_query([consignment.submission&.artist_id])&.values&.first
     end
 
     expose(:filters) do
@@ -98,7 +98,7 @@ module Admin
     expose(:term) { params[:term] }
 
     def show
-      @artist_details = artists_query([@consignment.submission.artist_id])
+      @artist_details = artists_names_query([@consignment.submission.artist_id])
     end
 
     def edit; end

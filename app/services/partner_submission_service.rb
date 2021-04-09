@@ -2,6 +2,7 @@
 
 class PartnerSubmissionService
   class PartnerSubmissionError < StandardError; end
+  extend GraphqlHelper
 
   class << self
     def daily_digest
@@ -68,13 +69,16 @@ class PartnerSubmissionService
       submissions = Submission.find(submission_ids)
       return if submissions.empty?
 
+      submissions_artists = artists_names_query(ids: submissions.map(&:artist_id))
+
       users_to_submissions = submissions.group_by(&:user)
       PartnerMailer.submission_digest(
         users_to_submissions: users_to_submissions,
         partner_name: partner_name,
         partner_type: partner_type,
         email: email,
-        submissions_count: submissions.count
+        submissions_count: submissions.count,
+        submissions_artists: submissions_artists
       ).deliver_now
     end
 
