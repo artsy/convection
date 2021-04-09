@@ -18,6 +18,9 @@ Rails.application.routes.draw do
       resources :submissions, only: :index, controller: 'partner_submissions'
     end
     resources :offers do
+      member do
+        put 'undo_rejection'
+      end
       collection do
         get 'new_step_0'
         get 'new_step_1'
