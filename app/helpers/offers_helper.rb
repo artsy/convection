@@ -110,7 +110,7 @@ module OffersHelper
   end
 
   def offer_artist(offer)
-    artists_query([offer&.partner_submission&.submission&.artist_id])&.values
+    artists_names_query([offer&.partner_submission&.submission&.artist_id])&.values
       &.first
   end
 end

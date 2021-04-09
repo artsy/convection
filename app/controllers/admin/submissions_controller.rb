@@ -14,19 +14,20 @@ module Admin
                     undo_rejection
                     undo_close
                   ]
+    before_action :set_submission_artist, only: %i[show edit]
 
     expose(:submissions) do
       matching_submissions = SubmissionMatch.find_all(params)
       matching_submissions.page(page).per(size)
     end
 
-    expose(:artist_details) { artists_query(submissions.map(&:artist_id)) }
+    expose(:artist_details) { artists_names_query(submissions.map(&:artist_id)) }
 
     expose(:display_term) do
       if filters[:user].present?
         User.where(id: filters[:user]).pick(:email)
       elsif filters[:artist].present?
-        artists_query([filters[:artist]])&.values&.first
+        artists_names_query([filters[:artist]])&.values&.first
       end
     end
     expose(:filters) do
@@ -143,6 +144,10 @@ module Admin
 
     def set_submission
       @submission = Submission.find(params[:id])
+    end
+
+    def set_submission_artist
+      @artist = artists_details_query([@submission.artist_id]).first
     end
 
     def submission_params

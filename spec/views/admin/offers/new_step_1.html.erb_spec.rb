@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 require 'support/gravity_helper'
+require 'support/gravql_helper'
 
 describe 'admin/offers/new_step_1.html.erb', type: :feature do
   context 'with an offer' do
@@ -61,20 +62,16 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         allow(Convection.config).to receive(:gravity_xapp_token).and_return(
           'xapp_token'
         )
-        gravql_artists_response = {
+
+        stub_gravql_artists(body: {
           data: {
             artists: [
               { id: 'artist1', name: 'Andy Warhol' },
               { id: 'artist2', name: 'Kara Walker' }
             ]
           }
-        }
-        stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
-          .to_return(body: gravql_artists_response.to_json).with(
-          headers: {
-            'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
-          }
-        )
+        })
+
         fill_in('offer_commission_percent_whole', with: '10')
         fill_in('offer_low_estimate_dollars', with: '100')
         fill_in('offer_high_estimate_dollars', with: '300')
@@ -136,20 +133,15 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         allow(Convection.config).to receive(:gravity_xapp_token).and_return(
           'xapp_token'
         )
-        gravql_artists_response = {
+
+        stub_gravql_artists(body: {
           data: {
             artists: [
               { id: 'artist1', name: 'Andy Warhol' },
               { id: 'artist2', name: 'Kara Walker' }
             ]
           }
-        }
-        stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
-          .to_return(body: gravql_artists_response.to_json).with(
-          headers: {
-            'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
-          }
-        )
+        })
         fill_in('offer_price_dollars', with: '700')
         fill_in('offer_photography_info', with: '$50')
         fill_in('offer_shipping_info', with: '$70')
@@ -209,20 +201,15 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         allow(Convection.config).to receive(:gravity_xapp_token).and_return(
           'xapp_token'
         )
-        gravql_artists_response = {
+
+        stub_gravql_artists(body: {
           data: {
             artists: [
               { id: 'artist1', name: 'Andy Warhol' },
               { id: 'artist2', name: 'Kara Walker' }
             ]
           }
-        }
-        stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
-          .to_return(body: gravql_artists_response.to_json).with(
-          headers: {
-            'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
-          }
-        )
+        })
 
         fill_in('offer_price_dollars', with: '700')
         fill_in('offer_commission_percent_whole', with: '12.5')
@@ -285,20 +272,15 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
         allow(Convection.config).to receive(:gravity_xapp_token).and_return(
           'xapp_token'
         )
-        gravql_artists_response = {
+
+        stub_gravql_artists(body: {
           data: {
             artists: [
               { id: 'artist1', name: 'Andy Warhol' },
               { id: 'artist2', name: 'Kara Walker' }
             ]
           }
-        }
-        stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
-          .to_return(body: gravql_artists_response.to_json).with(
-          headers: {
-            'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
-          }
-        )
+        })
 
         fill_in('offer_price_dollars', with: '700')
         fill_in('offer_photography_info', with: '$50')

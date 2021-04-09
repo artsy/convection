@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 require 'support/gravity_helper'
+require 'support/gravql_helper'
 
 describe PartnerSubmissionService do
   before do
@@ -13,6 +14,15 @@ describe PartnerSubmissionService do
     stub_gravity_user_detail(id: 'userid2')
     stub_gravity_user_detail
     stub_gravity_artist
+
+    allow(Convection.config).to receive(:gravity_xapp_token).and_return(
+      'xapp_token'
+    )
+    stub_gravql_artists(body:{
+      data: {
+        artists: [{ id: 'artistid', name: 'Andy Warhol' }]
+      }
+    })
     stub_gravity_partner_communications
     stub_gravity_partner_contacts
     allow(Time).to receive(:now).and_return(

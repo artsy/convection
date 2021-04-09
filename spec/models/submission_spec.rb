@@ -189,31 +189,6 @@ describe Submission do
     end
   end
 
-  context 'artist' do
-    it 'returns nil if it cannot find the object' do
-      stub_gravity_root
-      stub_request(
-        :get,
-        "#{Convection.config.gravity_api_url}/artists/#{submission.artist_id}"
-      ).to_raise(Faraday::ResourceNotFound)
-      expect(submission.artist).to be_nil
-      expect(submission.artist_name).to be_nil
-    end
-    it 'returns the object if it can find it' do
-      stub_gravity_root
-      stub_gravity_artist(id: submission.artist_id, name: 'Andy Warhol')
-      expect(submission.artist_name).to eq 'Andy Warhol'
-    end
-
-    context 'with an empty string for artist id' do
-      let(:submission) { Fabricate :submission, artist_id: '' }
-
-      it 'returns nil' do
-        expect(submission.artist).to eq nil
-      end
-    end
-  end
-
   context 'thumbnail' do
     it 'returns nil if there is no thumbnail image' do
       Fabricate(:unprocessed_image, submission: submission)

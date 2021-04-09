@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'support/gravql_helper'
 require 'support/gravity_helper'
 
 describe 'admin/dashboard/index.html.erb', type: :feature do
@@ -13,15 +14,10 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
       allow(Convection.config).to receive(:gravity_xapp_token).and_return(
         'xapp_token'
       )
-      gravql_artists_response = {
-        data: { artists: [{ id: 'artist1', name: 'Andy Warhol' }] }
-      }
-      stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
-        .to_return(body: gravql_artists_response.to_json).with(
-        headers: {
-          'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
-        }
-      )
+
+      stub_gravql_artists(body: {
+        data: { artists: [{ id: 'artist1', name: 'Andy Warhol', is_p1: true, target_supply: true }] }
+      })
 
       page.visit '/'
     end
