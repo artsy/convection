@@ -379,6 +379,36 @@ describe Admin::OffersController, type: :controller do
         )
       end
     end
+
+    describe '#undo_rejection' do
+      subject { put :undo_rejection, params: { id: offer.id } }
+
+      let(:offer) do
+        Fabricate(
+          :offer,
+          state: Offer::REJECTED,
+          rejected_by: 'userid',
+          rejected_at: Time.now.utc,
+          rejection_reason: 'Low estimate',
+          rejection_note: 'Test Note',
+        )
+      end
+
+      before { allow(OfferService).to receive(:undo_rejection!) }
+
+      it 'redirects to the show view on success' do
+        expect(subject).to redirect_to(admin_offer_url(offer))
+      end
+
+      it 'remains on the edit view and shows an error on failure' do
+        allow(OfferService).to receive(:undo_rejection!).and_raise(
+          OfferService::OfferError, 'TestError'
+        )
+
+        expect(subject).to render_template(:edit)
+        expect(controller.flash[:error]).to include('TestError')
+      end
+    end
   end
 end
 

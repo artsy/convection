@@ -283,6 +283,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
           click_button('Save and Send')
         end
         expect(page).to have_content("Offer ##{offer.reference_id}")
+        expect(page).to have_content('Undo Offer Rejection')
         expect(page).to_not have_content('Reject Offer')
         expect(page).to have_content('Rejected by Lucille Bluth. Low estimate')
         expect(page).to_not have_selector('.offer-draft-actions')

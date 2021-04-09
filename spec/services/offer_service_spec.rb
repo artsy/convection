@@ -358,6 +358,37 @@ describe OfferService do
           expect(ps.submission.consigned_partner_submission).to be_nil
         end
       end
+
+      context 'undoing offer rejection' do
+        subject do
+          OfferService.undo_rejection!(offer)
+          offer.reload
+        end
+
+        let(:offer) do
+          Fabricate(
+            :offer,
+            partner_submission: partner_submission,
+            sale_location: 'Marrakesh, Morocco',
+            state: Offer::REJECTED,
+            rejected_by: 'userid',
+            rejected_at: Time.now.utc,
+            rejection_reason: 'Low estimate',
+            rejection_note: 'Test Note',
+          )
+        end
+
+        it { is_expected.to have_attributes({ state: Offer::SENT }) }
+
+        it 'nullifies rejection related fields' do
+          is_expected.to have_attributes({
+            rejected_by: nil,
+            rejected_at: nil,
+            rejection_reason: nil,
+            rejection_note: nil,
+          })
+        end
+      end
     end
   end
 end
