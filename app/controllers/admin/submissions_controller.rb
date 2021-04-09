@@ -14,6 +14,7 @@ module Admin
                     undo_rejection
                     undo_close
                   ]
+    before_action :set_submission_artist, only: %i[show edit]
 
     expose(:submissions) do
       matching_submissions = SubmissionMatch.find_all(params)
@@ -78,7 +79,6 @@ module Admin
       @offers = @submission.offers
       @notes = @submission.notes
       @actions = SubmissionStateActions.for(@submission)
-      @artist = artists_details_query([@submission.artist_id]).first
     end
 
     def edit; end
@@ -144,6 +144,10 @@ module Admin
 
     def set_submission
       @submission = Submission.find(params[:id])
+    end
+
+    def set_submission_artist
+      @artist = artists_details_query([@submission.artist_id]).first
     end
 
     def submission_params

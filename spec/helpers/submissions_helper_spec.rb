@@ -209,13 +209,13 @@ describe SubmissionsHelper, type: :helper do
 
   context 'artist_supply_priority' do
     context 'when is_p1' do
-      subject { helper.artist_supply_priority(is_p1: true) }
+      subject { helper.artist_supply_priority(is_p1: true, target_supply: true) }
       it { is_expected.to eq 'P1' }
     end
 
-    context 'when target_supply' do
-      subject { helper.artist_supply_priority(is_p1: true) }
-      it { is_expected.to eq 'P1' }
+    context 'when target_supply/p2' do
+      subject { helper.artist_supply_priority(is_p1: false, target_supply: true) }
+      it { is_expected.to eq 'P2' }
     end
 
     context 'none' do
