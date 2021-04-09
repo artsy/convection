@@ -169,7 +169,7 @@ module Admin
     end
 
     def undo_rejection
-      OfferService.undo_rejection!(@offer, @current_user)
+      OfferService.undo_rejection!(@offer)
       redirect_to admin_offer_path(@offer)
     rescue OfferService::OfferError => e
       flash.now[:error] = e.message

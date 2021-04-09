@@ -360,7 +360,11 @@ describe OfferService do
       end
 
       context 'undoing offer rejection' do
-        subject! { OfferService.undo_rejection!(offer, 'userid') }
+        subject do
+          OfferService.undo_rejection!(offer)
+          offer.reload
+        end
+
         let(:offer) do
           Fabricate(
             :offer,
@@ -374,48 +378,15 @@ describe OfferService do
           )
         end
 
-        it 'sets offer state to sent' do
-          expect(offer.reload).to have_attributes({ state: Offer::SENT })
-        end
+        it { is_expected.to have_attributes({ state: Offer::SENT }) }
 
         it 'nullifies rejection related fields' do
-          expect(offer.reload).to have_attributes({
+          is_expected.to have_attributes({
             rejected_by: nil,
             rejected_at: nil,
             rejection_reason: nil,
             rejection_note: nil,
           })
-        end
-
-        it 'sends an email to a user with offer information' do
-          emails = ActionMailer::Base.deliveries
-          expect(emails.length).to eq 1
-          expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
-          expect(emails.first.to).to eq(%w[michael@bluth.com])
-          expect(emails.first.from).to eq(%w[consign@artsy.net])
-          expect(emails.first.subject).to eq(
-                                              'Great news! You have a new offer.'
-                                          )
-
-          email_body = emails.first.html_part.body
-          expect(email_body).to include(
-                                    'Great news! A new offer has been made on your consignment.'
-                                )
-          expect(email_body).to include(
-                                    'The work will be purchased directly from you by the partner'
-                                )
-          expect(email_body).to include('Happy Gallery')
-          expect(email_body).to include(
-                                    "https://google.com/response_form?entry.1=#{
-                                    submission.id
-                                    }&amp;entry.2=Happy%20Gallery"
-                                )
-          expect(email_body).to include('Marrakesh, Morocco')
-
-          offer.reload
-
-          expect(offer.sent_by).to eq 'userid'
-          expect(offer.sent_at).to_not be_nil
         end
       end
     end
