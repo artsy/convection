@@ -230,7 +230,7 @@ describe PartnerSubmissionService do
           expect(email.html_part.body).to include(
             '<i>Third approved artwork</i><span>, 1997</span>'
           )
-          expect(email.html_part.body).to include('https://google.com/auction')
+          expect(email.html_part.body).to include('https://cms.artsy.net')
           expect(
             @partner.partner_submissions.map(&:notified_at).compact.length
           ).to eq 3
