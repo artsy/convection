@@ -93,6 +93,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
         page.visit "/admin/offers/#{offer.id}"
         expect(page).to_not have_content('Save & Send')
         expect(page).to_not have_selector('.offer-draft-actions')
+        expect(page).to_not have_selector('.offer-rejected-actions')
         expect(page).to have_selector('.offer-actions')
       end
 
@@ -129,6 +130,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
         expect(page).to have_content("Offer ##{offer.reference_id}")
         expect(page).to have_content('State lapsed')
         expect(page).to_not have_selector('.offer-draft-actions')
+        expect(page).to_not have_selector('.offer-rejected-actions')
         expect(page).to_not have_selector('.offer-actions')
       end
     end
@@ -160,6 +162,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
         expect(page).to_not have_content('Save & Send')
         expect(page).to have_content('Consignor Interested')
         expect(page).to_not have_selector('.offer-draft-actions')
+        expect(page).to_not have_selector('.offer-rejected-actions')
         expect(page).to have_selector('.offer-actions')
       end
 
@@ -205,6 +208,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
       it 'shows the accept offer button' do
         expect(page).to have_content('Accept Offer')
         expect(page).to_not have_selector('.offer-draft-actions')
+        expect(page).to_not have_selector('.offer-rejected-actions')
         expect(page).to have_selector('.offer-actions')
       end
 
@@ -241,6 +245,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
         expect(page).to have_content('State review')
         expect(page).to have_content('This offer is locked')
         expect(page).to_not have_selector('.offer-draft-actions')
+        expect(page).to_not have_selector('.offer-rejected-actions')
       end
     end
 
