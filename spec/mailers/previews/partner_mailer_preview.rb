@@ -42,6 +42,6 @@ class PartnerMailerPreview < BasePreview
     users_to_submissions =
       [sub1, sub2, base_submission_with_minimum_price].group_by(&:user)
 
-    { users_to_submissions: users_to_submissions, submissions_count: 3 }
+    { users_to_submissions: users_to_submissions, submissions_artists: submissions_artists, submissions_count: 3 }
   end
 end

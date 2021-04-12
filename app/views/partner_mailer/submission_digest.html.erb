@@ -52,7 +52,7 @@
               <% if @partner_type == 'Auction' %>
                 <tr>
                   <td class='email-sub-title email-sub-title--extra-padding-bottom email-sub-title--extra-padding-top'>
-                    Please click below to send one proposal per submission and respond directly to this email if you have any questions.
+                    Please click below to submit proposals through your Artsy CMS. If you do not have access to CMS yet please contact <%= mail_to(Convection.config.admin_email_address) %>
                   </td>
                 </tr>
                 <tr>
@@ -60,7 +60,7 @@
                       <table class='full-width-button'>
                         <tr>
                             <td class='submit-proposal-button'>
-                              <%= link_to('Submit Proposal', offer_form_url) %>
+                              <%= link_to('Send Proposal', Convection.config.artsy_cms_url) %>
                             </td>
                         </tr>
                       </table>
