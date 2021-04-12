@@ -46,7 +46,6 @@ class BasePreview < ActionMailer::Preview
           "\"Accomplice” characters from KAWS are appropriately branded with the artist's trademark \"X\" " \
           "to replace each of the figure's original eyes. The black example is from an edition of 500 " \
           'and the pink example is from an edition of 1000',
-      artist_name: 'Damien Hirst',
       location_city: 'New York',
       location_state: 'NY',
       location_country: 'USA',
@@ -73,5 +72,9 @@ class BasePreview < ActionMailer::Preview
     s.minimum_price_display =
       Money.new(s.minimum_price_cents, s.currency).format(no_cents: true)
     s
+  end
+
+  def submissions_artists
+    { id: 'artistid', name: 'Damien Hirst' }
   end
 end
