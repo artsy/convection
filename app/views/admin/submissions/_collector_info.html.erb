@@ -1,6 +1,11 @@
 <div class='overview-section'>
   <div class='bold-label'>Collector info</div>
   <div class='single-padding-top'>
+    <% if @partner_name %>
+      <div class="consigned-partner-name">
+        <%= @partner_name%>
+      </div>
+    <% end %>
     <div>
       <%= submission.user&.name %>
     </div>

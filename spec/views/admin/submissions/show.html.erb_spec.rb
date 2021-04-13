@@ -467,8 +467,9 @@ describe 'admin/submissions/show.html.erb', type: :feature do
 
     context 'with a consignment' do
       before do
+        partner = Fabricate(:partner, name: 'Artsy')
         consignment =
-          Fabricate(:partner_submission, submission: @submission, state: 'open')
+          Fabricate(:partner_submission, submission: @submission, state: 'open', partner: partner)
         @submission.update!(consigned_partner_submission: consignment)
         page.visit admin_submission_path(@submission)
       end
@@ -476,6 +477,11 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       it 'shows the consignment' do
         expect(page).to have_selector('.list-item--consignment')
         expect(page).to have_content('Consignment')
+        expect(page).to have_content("Collector info")
+
+        within('.consigned-partner-name') do
+          expect(page).to have_content('Artsy')
+        end
 
         within(:css, '.list-item--consignment') do
           expect(page).to have_content('Gob Bluth')
