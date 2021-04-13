@@ -79,6 +79,7 @@ module Admin
       @offers = @submission.offers
       @notes = @submission.notes
       @actions = SubmissionStateActions.for(@submission)
+      @partner_name = @submission.consigned_partner_submission&.partner&.name
     end
 
     def edit; end
