@@ -5,8 +5,6 @@ class Submission < ApplicationRecord
   include Dollarize
   include PgSearch::Model
 
-  attr_accessor :artist_name
-
   alias_attribute :deleted?, :deleted_at
 
   scope :not_deleted, -> { where(deleted_at: nil) }
