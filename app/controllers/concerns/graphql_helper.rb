@@ -27,7 +27,7 @@ module GraphqlHelper
     artist_details_response =
       Gravql::Schema.execute(
         query: artist_query_builder(fields: [:name]),
-        variables: { ids: artist_ids.compact.uniq }
+        variables: { ids: artist_ids.uniq.select(&:present?) }
       )
     if artist_details_response[:errors].present?
       flash.now[:error] = 'Error fetching artist details.'
