@@ -127,11 +127,43 @@ describe 'admin/offers/show.html.erb', type: :feature do
 
       it 'allows you to mark the offer as lapsed' do
         click_link('Offer Lapsed')
+        expect(page).to have_content('Undo lapse')
         expect(page).to have_content("Offer ##{offer.reference_id}")
         expect(page).to have_content('State lapsed')
         expect(page).to_not have_selector('.offer-draft-actions')
         expect(page).to_not have_selector('.offer-rejected-actions')
         expect(page).to_not have_selector('.offer-actions')
+      end
+    end
+
+    describe 'undo lapse' do
+      before do
+        offer.update!(state: 'review')
+        stub_gravity_artist(id: submission.artist_id)
+        page.visit "/admin/offers/#{offer.id}"
+      end
+
+      it 'shows the undo lapse button' do
+        expect(page).to have_content('Accept Offer')
+        expect(page).to_not have_selector('.offer-draft-actions')
+        expect(page).to have_selector('.offer-actions')
+      end
+
+      it 'allows you to mark the offer as consigned', js: true do
+        expect(find('input#terms_signed')).to_not be_checked
+        expect(page).to have_selector('.offer-consign-button.disabled-button')
+        find('input#terms_signed').click
+        expect(page).to_not have_selector(
+                              '.offer-consign-button.disabled-button'
+                            )
+        find('.offer-consign-button').click
+        page.driver.browser.switch_to.alert.accept
+        expect(page).to have_content("Offer ##{offer.reference_id}")
+        expect(page).to_not have_content('Accept Offer')
+        expect(page).to have_selector('.list-item--consignment')
+
+        find('.list-item--consignment').click
+        expect(page.current_path).to include('/admin/consignment')
       end
     end
 

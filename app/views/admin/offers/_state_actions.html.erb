@@ -35,7 +35,7 @@
         </div>
         <div class='single-padding-top'>
           <%= link_to('Offer Lapsed', admin_offer_path(@offer, offer: { state: 'lapsed' }), method: :put, class: 'btn btn-secondary btn-small btn-full-width',
-                data: { confirm: 'This action will mark the consignment as lapsed. This action cannot be undone.' }) %>
+                data: { confirm: 'This action will mark the consignment as lapsed.' }) %>
         </div>
         <% if @offer.locked? %>
           <div class='single-padding-top'>
@@ -70,6 +70,13 @@
         </div>
       </div>
     </div>
+<% end %>
+<% if @offer.lapsed? %>
+  <div class='overview-section single-padding-top'>
+    <%= link_to('Undo lapse', admin_offer_path(@offer, offer: { state: 'review' }),
+      method: :put, class: 'btn btn-secondary btn-small btn-full-width',
+      data: { confirm: 'This action will mark the consignment as reviewed.' })%>
+  </div>
 <% end %>
 <% if @offer.reviewed? %>
   <div class='overview-section'>
