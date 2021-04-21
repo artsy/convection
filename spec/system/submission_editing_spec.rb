@@ -67,16 +67,11 @@ describe 'Editing a submission', type: :feature do
                             )
 
         click_on 'Edit', match: :first
-        expect(page).to have_content 'Assigned To:'
+        expect(page).to_not have_content 'Assigned To:'
 
-        select 'Alice', from: 'submission[assigned_to]'
         click_button 'Save'
 
         expect(page).to have_current_path(admin_submission_path(submission))
-        expect(page).to have_select(
-          'submission[assigned_to]',
-          selected: 'Alice'
-        )
       end
     end
 

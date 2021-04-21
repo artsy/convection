@@ -215,17 +215,19 @@
             </div>
           </div>
 
-          <div class='row single-padding-top'>
-            <div class='col-sm-12'>
-              <label class='col-sm-2 control-label bold-label'>
-                Assigned To:
-              </label>
-              <div class='col-sm-10'>
-                <% options = [['Please select one', '']] + Convection.config.admin_names %>
-                <%= f.select :assigned_to, options, {}, class: 'form-control' %>
+          <% if action_name == 'new' %>
+            <div class='row single-padding-top'>
+              <div class='col-sm-12'>
+                <label class='col-sm-2 control-label bold-label'>
+                  Assigned To:
+                </label>
+                <div class='col-sm-10'>
+                  <% options = [['Please select one', '']] + Convection.config.admin_names %>
+                  <%= f.select :assigned_to, options, {}, class: 'form-control' %>
+                </div>
               </div>
             </div>
-          </div>
+          <% end %>
 
           <div class='row triple-padding-top'>
             <div class='col-sm-12'>
