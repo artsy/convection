@@ -32,6 +32,8 @@ describe 'admin/offers/show.html.erb', type: :feature do
       stub_gravity_user(name: 'Lucille Bluth')
       stub_gravity_user(id: submission.user.gravity_user_id)
       stub_gravity_user_detail(id: submission.user.gravity_user_id)
+      stub_gravity_partner_communications
+      stub_gravity_partner_contacts
 
       allow(Convection.config).to receive(:gravity_xapp_token).and_return(
         'xapp_token'
@@ -127,11 +129,30 @@ describe 'admin/offers/show.html.erb', type: :feature do
 
       it 'allows you to mark the offer as lapsed' do
         click_link('Offer Lapsed')
+        expect(page).to have_content('Undo lapse')
         expect(page).to have_content("Offer ##{offer.reference_id}")
         expect(page).to have_content('State lapsed')
         expect(page).to_not have_selector('.offer-draft-actions')
         expect(page).to_not have_selector('.offer-rejected-actions')
         expect(page).to_not have_selector('.offer-actions')
+      end
+    end
+
+    describe 'undo lapse' do
+      before do
+        offer.update!(state: 'lapsed')
+        stub_gravity_artist(id: submission.artist_id)
+        page.visit "/admin/offers/#{offer.id}"
+      end
+
+      it 'shows the undo lapse button' do
+        expect(page).to have_content('Undo lapse')
+        expect(page).to have_content('State lapsed')
+      end
+
+      it 'allows you to undo the offer lapsed state' do
+        click_link('Undo lapse')
+        expect(page).to have_content('State review')
       end
     end
 
