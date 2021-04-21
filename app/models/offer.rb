@@ -33,8 +33,10 @@ class Offer < ApplicationRecord
     'High commission',
     'High shipping/marketing costs',
     'Took competing offer',
-    'Lost interest',
+    'No longer interested in selling',
     'Inconvenient partner location',
+    'Only interested in Private Sale',
+    'Sold Independently',
     'Other'
   ].freeze
 
