@@ -32,6 +32,8 @@ describe 'admin/offers/show.html.erb', type: :feature do
       stub_gravity_user(name: 'Lucille Bluth')
       stub_gravity_user(id: submission.user.gravity_user_id)
       stub_gravity_user_detail(id: submission.user.gravity_user_id)
+      stub_gravity_partner_communications
+      stub_gravity_partner_contacts
 
       allow(Convection.config).to receive(:gravity_xapp_token).and_return(
         'xapp_token'
@@ -138,32 +140,19 @@ describe 'admin/offers/show.html.erb', type: :feature do
 
     describe 'undo lapse' do
       before do
-        offer.update!(state: 'review')
+        offer.update!(state: 'lapsed')
         stub_gravity_artist(id: submission.artist_id)
         page.visit "/admin/offers/#{offer.id}"
       end
 
       it 'shows the undo lapse button' do
-        expect(page).to have_content('Accept Offer')
-        expect(page).to_not have_selector('.offer-draft-actions')
-        expect(page).to have_selector('.offer-actions')
+        expect(page).to have_content('Undo lapse')
+        expect(page).to have_content('State lapsed')
       end
 
-      it 'allows you to mark the offer as consigned', js: true do
-        expect(find('input#terms_signed')).to_not be_checked
-        expect(page).to have_selector('.offer-consign-button.disabled-button')
-        find('input#terms_signed').click
-        expect(page).to_not have_selector(
-                              '.offer-consign-button.disabled-button'
-                            )
-        find('.offer-consign-button').click
-        page.driver.browser.switch_to.alert.accept
-        expect(page).to have_content("Offer ##{offer.reference_id}")
-        expect(page).to_not have_content('Accept Offer')
-        expect(page).to have_selector('.list-item--consignment')
-
-        find('.list-item--consignment').click
-        expect(page.current_path).to include('/admin/consignment')
+      it 'allows you to undo the offer lapsed state' do
+        click_link('Undo lapse')
+        expect(page).to have_content('State review')
       end
     end
 
