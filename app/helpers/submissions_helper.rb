@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module SubmissionsHelper
+  INCH_TO_CM = 2.54
+
   def formatted_score(score)
     (score || 0) * 100
   end
@@ -19,6 +21,33 @@ module SubmissionsHelper
     return if values.empty?
 
     "#{values.join('x')}#{submission.dimensions_metric.try(:downcase)}"
+  end
+
+  def formatted_dimensions_inch_cm(submission)
+    values = [submission.height, submission.width, submission.depth].select(&:present?)
+
+    return [] if values.empty?
+
+    case submission.dimensions_metric.try(:downcase)
+    when 'cm'
+      %W[
+        #{values.join(' x ')}\ cm
+        #{values.map{ |dimension| convert_cm_to_inch(dimension) }.join(' x ')}\ in
+      ]
+    when 'in'
+      %W[
+        #{values.join(' x ')}\ in
+        #{values.map{ |dimension| convert_inch_to_cm(dimension) }.join(' x ')}\ cm
+      ]
+    end
+  end
+
+  def convert_inch_to_cm(num)
+    (num.to_f * INCH_TO_CM).round(2)
+  end
+
+  def convert_cm_to_inch(num)
+    (num.to_f / INCH_TO_CM).round(2)
   end
 
   def formatted_category(submission)
