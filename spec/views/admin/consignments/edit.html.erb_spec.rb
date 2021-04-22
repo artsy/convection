@@ -105,8 +105,8 @@ describe 'admin/consignments/edit.html.erb', type: :feature do
            )
         expect(page).to have_content('Name August Sale')
         expect(page).to have_content('Price $700')
-        expect(page).to have_content('Partner Commission % 10.0')
-        expect(page).to have_content('Artsy Commission % 8.8')
+        expect(page).to have_content('Partner Commission (commission charged to seller) % 10.0')
+        expect(page).to have_content('Artsy Commission (commission charged to partner) % 8.8')
       end
 
       it 'shows the canceled reason box when canceled is selected', js: true do
