@@ -69,7 +69,7 @@ class PartnerSubmissionService
       submissions = Submission.find(submission_ids)
       return if submissions.empty?
 
-      submissions_artists = artists_names_query(ids: submissions.map(&:artist_id))
+      submissions_artists = artists_names_query(submissions.map(&:artist_id))
 
       users_to_submissions = submissions.group_by(&:user)
       PartnerMailer.submission_digest(
