@@ -39,6 +39,8 @@ module SubmissionsHelper
         #{values.join(' x ')}\ in
         #{values.map{ |dimension| convert_inch_to_cm(dimension) }.join(' x ')}\ cm
       ]
+    else
+      []
     end
   end
 
