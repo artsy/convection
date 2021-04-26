@@ -69,9 +69,14 @@ describe SubmissionsHelper, type: :helper do
       )
     end
 
-    it 'returns empty string when dimension values are nil' do
+    it 'returns empty array when dimension values are nil' do
       submission = Fabricate(:submission, width: nil, height: nil, depth: nil)
-      expect(helper.formatted_dimensions_inch_cm(submission)).to be_blank
+      expect(helper.formatted_dimensions_inch_cm(submission)).to eq([])
+    end
+    
+    it 'returns empty array when dimension metric is nil' do
+      submission = Fabricate(:submission, width: 10, height: 10, depth: 1, dimensions_metric: nil)
+      expect(helper.formatted_dimensions_inch_cm(submission)).to eq([])
     end
 
     it 'returns array of formatted dimensions for both metrics' do
