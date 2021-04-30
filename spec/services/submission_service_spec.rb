@@ -214,7 +214,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[consign@artsy.net])
       expect(emails.first.html_part.body).to include(
-        "unfortunately can't accept it at this time"
+        "Our team of Specialists carefully review each submission"
       )
       expect(submission.state).to eq 'rejected'
       expect(submission.rejected_by).to eq 'userid'
