@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     resources :offers do
       member do
         put 'undo_rejection'
+        put 'undo_lapse'
       end
       collection do
         get 'new_step_0'

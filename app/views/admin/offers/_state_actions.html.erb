@@ -73,9 +73,9 @@
 <% end %>
 <% if @offer.lapsed? %>
   <div class='overview-section single-padding-top'>
-    <%= link_to('Undo lapse', admin_offer_path(@offer, offer: { state: 'sent' }),
+    <%= link_to('Undo lapse', undo_lapse_admin_offer_path(@offer),
       method: :put, class: 'btn btn-secondary btn-small btn-full-width',
-      data: { confirm: 'This action will send the offer to the collector.' })%>
+      data: { confirm: 'This action will mark the consignment as sent.' })%>
   </div>
 <% end %>
 <% if @offer.reviewed? %>
