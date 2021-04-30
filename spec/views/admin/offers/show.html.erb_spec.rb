@@ -152,7 +152,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
 
       it 'allows you to undo the offer lapsed state' do
         click_link('Undo lapse')
-        expect(page).to have_content('State review')
+        expect(page).to have_content('State sent')
       end
     end
 
