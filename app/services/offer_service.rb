@@ -101,6 +101,10 @@ class OfferService
       )
     end
 
+    def undo_lapse!(offer)
+      offer.update!(state: Offer::SENT)
+    end
+
     private
 
     def deliver_introduction(offer_id)
