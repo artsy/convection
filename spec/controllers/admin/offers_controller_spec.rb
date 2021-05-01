@@ -409,6 +409,23 @@ describe Admin::OffersController, type: :controller do
         expect(controller.flash[:error]).to include('TestError')
       end
     end
+
+    describe '#undo_lapse' do
+      subject { put :undo_lapse, params: { id: offer.id } }
+
+      let(:offer) do
+        Fabricate(
+          :offer,
+          state: Offer::LAPSED
+          )
+      end
+
+    before { allow(OfferService).to receive(:undo_lapse!) }
+
+    it 'redirects to the show view on success' do
+      expect(subject).to redirect_to(admin_offer_url(offer))
+    end
+    end
   end
 end
 

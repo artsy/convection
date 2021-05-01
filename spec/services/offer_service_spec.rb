@@ -389,6 +389,20 @@ describe OfferService do
           })
         end
       end
+
+      context 'undo offer lapse' do
+        subject do
+          OfferService.undo_lapse!(offer)
+          offer.reload
+        end
+        let(:offer) do
+          Fabricate(
+            :offer,
+            state: Offer::LAPSED
+          )
+        end
+        it { is_expected.to have_attributes({ state: Offer::SENT }) }
+      end
     end
   end
 end
