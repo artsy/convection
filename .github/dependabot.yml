@@ -1,0 +1,87 @@
+version: 2
+registries:
+  git-github-com:
+    type: git
+    url: https://github.com
+    username: x-access-token
+    password: "${{secrets.GIT_GITHUB_COM_PASSWORD}}"
+
+updates:
+- package-ecosystem: bundler
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "08:00"
+    timezone: US/Eastern
+  open-pull-requests-limit: 10
+  reviewers:
+  - bhoggard
+  assignees:
+  - pepopowitz
+  ignore:
+  - dependency-name: bourbon
+    versions:
+    - "> 4.2.3"
+  - dependency-name: graphql
+    versions:
+    - 1.12.3
+    - 1.12.4
+    - 1.12.5
+    - 1.12.6
+    - 1.12.7
+  - dependency-name: rspec-rails
+    versions:
+    - 4.1.0
+    - 4.1.1
+  - dependency-name: webdrivers
+    versions:
+    - 4.5.0
+    - 4.6.0
+  - dependency-name: webmock
+    versions:
+    - 3.11.1
+    - 3.11.2
+    - 3.11.3
+  - dependency-name: rails
+    versions:
+    - 6.1.2
+    - 6.1.2.1
+  - dependency-name: graphql-rails_logger
+    versions:
+    - 1.2.3
+  - dependency-name: bootsnap
+    versions:
+    - 1.7.1
+    - 1.7.2
+  - dependency-name: solargraph
+    versions:
+    - 0.40.2
+    - 0.40.3
+  - dependency-name: puma
+    versions:
+    - 5.2.1
+  - dependency-name: database_cleaner
+    versions:
+    - 2.0.1
+  - dependency-name: capybara
+    versions:
+    - 3.35.1
+    - 3.35.3
+  - dependency-name: tzinfo-data
+    versions:
+    - 1.2021.1
+  - dependency-name: sidekiq
+    versions:
+    - 6.1.3
+  - dependency-name: decent_exposure
+    versions:
+    - 3.0.4
+  - dependency-name: money
+    versions:
+    - 6.14.0
+  - dependency-name: omniauth
+    versions:
+    - 2.0.1
+    - 2.0.2
+  registries:
+  - git-github-com
