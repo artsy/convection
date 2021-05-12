@@ -118,6 +118,16 @@
                 <% end %>
               </div>
             </div>
+            <% if @consignment.partner_invoiced_at %>
+              <div class='overview-item'>
+                <div class='overview-item-title'>
+                  Invoice number
+                </div>
+                <div class='overview-item-value'>
+                  <%= @consignment.invoice_number %>
+                </div>
+              </div>
+            <% end %>
             <div class='overview-item'>
               <div class='overview-item-title'>
                 Partner paid?
