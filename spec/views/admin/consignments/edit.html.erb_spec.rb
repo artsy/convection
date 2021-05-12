@@ -109,6 +109,26 @@ describe 'admin/consignments/edit.html.erb', type: :feature do
         expect(page).to have_content('Artsy Commission (commission charged to partner) % 8.8')
       end
 
+      context 'when the consignment has a partner invoice date' do
+        before do
+          partner_submission.update!(partner_invoiced_at: Time.zone.now)
+          page.visit edit_admin_consignment_path(partner_submission)
+        end
+
+        it 'allows you to edit the invoice number' do
+          fill_in(
+            'partner_submission_invoice_number',
+            with: '424242'
+          )
+
+          click_button('Save')
+          expect(page.current_path).to eq admin_consignment_path(
+             partner_submission
+          )
+          expect(page).to have_content('Invoice number 424242')
+        end
+      end
+
       it 'shows the canceled reason box when canceled is selected', js: true do
         select('canceled', from: 'partner_submission_state')
         expect(page).to have_content 'Canceled Reason'

@@ -142,6 +142,7 @@ module Admin
         :state,
         :partner_commission_percent_whole,
         :artsy_commission_percent_whole,
+        :invoice_number,
         :partner_invoiced_at,
         :partner_paid_at,
         :notes

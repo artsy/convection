@@ -77,6 +77,17 @@ describe 'admin/consignments/show.html.erb', type: :feature do
         expect(page).to_not have_content('Canceled Reason')
       end
 
+      context 'when the consignment has a partner invoice date' do
+        before do
+          partner_submission.update!(partner_invoiced_at: Time.zone.now, invoice_number: 424242)
+          page.visit admin_consignment_path(partner_submission)
+        end
+
+        it 'displays the invoice number' do
+          expect(page).to have_content('Invoice number 424242')
+        end
+      end
+
       it 'shows information about the offer and lets you navigate' do
         expect(page).to have_selector('.list-item--offer')
         within(:css, '.list-item--offer') do
