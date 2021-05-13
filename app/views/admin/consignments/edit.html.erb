@@ -132,6 +132,31 @@
         </div>
       </div>
     </div>
+    <% if @consignment.partner_invoiced_at %>
+      <div class='row double-padding-top'>
+        <div class='col-sm-12'>
+          <div class='col-md-9'>
+            <div class='unit bordered double-padding-top'>
+              <div class='col-md-3'>
+                <h5>
+                  Partner
+                </h5>
+              </div>
+              <div class='row single-padding-top'>
+                <div class='col-sm-12'>
+                  <label class='col-sm-3 control-label'>
+                    Invoice number
+                  </label>
+                  <div class='col-sm-9'>
+                    <%= f.text_field :invoice_number, class: 'form-control' %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
     <div class='row triple-padding-top'>
       <div class='col-md-12'>
         <%= f.submit 'Save', class: 'btn btn-primary btn-full-width' %>

@@ -189,6 +189,16 @@ enum ConsignmentSort {
   ID_DESC
 
   """
+  sort by invoice_number in ascending order
+  """
+  INVOICE_NUMBER_ASC
+
+  """
+  sort by invoice_number in descending order
+  """
+  INVOICE_NUMBER_DESC
+
+  """
   sort by notes in ascending order
   """
   NOTES_ASC
