@@ -13,4 +13,8 @@ module ApplicationHelper
     markdown = MarkdownParser.render(text)
     markdown.html_safe
   end
+
+  def filter_by_assigned_to_options
+    ADMINS.collect.map { |id, name| [name, id] }.unshift(%w[all all], ['none', nil])
+  end
 end

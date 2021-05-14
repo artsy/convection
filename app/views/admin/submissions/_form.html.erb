@@ -222,7 +222,7 @@
                   Assigned To:
                 </label>
                 <div class='col-sm-10'>
-                  <% options = [['Please select one', '']] + Convection.config.admin_names %>
+                  <% options = [['Please select one', '']] + ADMINS.collect { |id, name| [name, id] } %>
                   <%= f.select :assigned_to, options, {}, class: 'form-control' %>
                 </div>
               </div>
