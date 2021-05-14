@@ -83,13 +83,13 @@ describe 'Editing a submission', type: :feature do
                               selected: 'Alice'
                             )
 
-        select 'Alice', from: 'submission[assigned_to]'
+        select 'Agnieszka', from: 'submission[assigned_to]'
         click_button 'Update'
 
         expect(page).to have_current_path(admin_submission_path(submission))
         expect(page).to have_select(
           'submission[assigned_to]',
-          selected: 'Alice'
+          selected: 'Agnieszka'
         )
       end
     end

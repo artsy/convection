@@ -28,7 +28,7 @@
           <label>Assigned to</label>
           <%= select_tag 'assigned_to',
                         options_for_select(
-                          Convection.config.admin_names.map { |name| [name, name] }.unshift(['all', 'all'], ['none', nil]),
+                          filter_by_assigned_to_options,
                           filters[:assigned_to]
                         ),
                         class: 'form-control',
