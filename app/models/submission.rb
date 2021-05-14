@@ -153,4 +153,12 @@ class Submission < ApplicationRecord
       errors.add(:primary_image, 'Primary image must have asset_type=image')
     end
   end
+
+  def exchange_assigned_to_real_user!
+    admin_gravity_id = ADMINS.key assigned_to
+
+    return if assigned_to == admin_gravity_id
+
+    update(assigned_to: admin_gravity_id)
+  end
 end
