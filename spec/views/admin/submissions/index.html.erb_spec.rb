@@ -159,7 +159,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
 
       it 'allows you to search by user and state', js: true do
         select('draft', from: 'state')
-        fill_in('term', with: 'percy')
+        page.all(:fillable_field, 'term').last.set('percy')
         expect(page).to have_selector('.ui-autocomplete')
         click_link("user-#{@user2.id}")
         expect(current_url).to include "state=draft&user=#{@user2.id}"
@@ -169,7 +169,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
       end
 
       it 'allows you to navigate to a specific submission', js: true do
-        fill_in('term', with: @submission.id)
+        page.all(:fillable_field, 'term').last.set(@submission.id)
         expect(page).to have_selector('.ui-autocomplete')
         expect(page).to have_selector('.ui-menu-item')
         click_link("submission-#{@submission.id}")
@@ -177,7 +177,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
       end
 
       it 'allows you to search by user email', js: true do
-        fill_in('term', with: 'percy')
+        page.all(:fillable_field, 'term').last.set('percy')
         expect(page).to have_selector('.ui-autocomplete')
         expect(page).to have_content('User   percy')
         click_link("user-#{@user2.id}")
@@ -197,7 +197,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
           data: { artists: [artist] }
         })
 
-        fill_in('term', with: artist[:name])
+        page.all(:fillable_field, 'term').last.set(artist[:name])
         expect(page).to have_selector('.ui-autocomplete')
         expect(page).to have_content(artist[:name])
         click_link("artist-#{artist[:id]}")
@@ -217,7 +217,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
           data: { artists: [artist] }
         })
 
-        fill_in('term', with: artist[:name])
+        page.all(:fillable_field, 'term').last.set(artist[:name])
         expect(page).to have_selector('.ui-autocomplete')
         expect(page).to have_content(artist[:name])
         click_link("artist-#{artist[:id]}")
@@ -232,7 +232,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
 
       it 'allows you to search by user email, filter by state, and sort by ID', js: true do
         select('approved', from: 'state')
-        fill_in('term', with: 'percy')
+        page.all(:fillable_field, 'term').last.set('percy')
         expect(page).to have_selector('.ui-autocomplete')
         expect(page).to have_content('User   percy')
         click_link("user-#{@user2.id}")
