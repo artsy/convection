@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require 'support/gravql_helper'
-require 'support/gravity_helper'
 
 describe 'admin/dashboard/index.html.erb', type: :feature do
   context 'always' do
@@ -10,114 +8,116 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
       allow_any_instance_of(ApplicationController).to receive(
         :require_artsy_authentication
       )
+      allow(ArtsyAdminAuth).to receive(
+        :decode_user
+      ).and_return('me')
 
       allow(Convection.config).to receive(:gravity_xapp_token).and_return(
         'xapp_token'
       )
-
-      stub_gravql_artists(body: {
-        data: { artists: [{ id: 'artist1', name: 'Andy Warhol', is_p1: true, target_supply: true }] }
-      })
 
       page.visit '/'
     end
 
     it 'displays the section titles' do
       expect(page).to have_content('Unreviewed Submissions 0')
-      expect(page).to have_content('Open Offers 0')
-      expect(page).not_to have_selector('.list-group-item')
+      expect(page).to have_content('Unassigned Submissions : 0')
+      expect(page).to have_content('My Submissions : 0')
+      expect(page).to have_content('Approved 0')
+      expect(page).to have_content('Approved without CMS : 0')
+      expect(page).to have_content('Published to CMS : 0')
+      expect(page).to have_content('Offers 0')
+      expect(page).to have_content('Sent : 0')
+      expect(page).to have_content('Introduced : 0')
+      expect(page).to have_content('Upcoming Consignments 0')
+      expect(page).to have_content('Sold Consignments 0')
+      expect(page).to have_content('Auction House : 0').twice
+      expect(page).to have_content('Artsy Curated Auctions : 0').twice
+    end
+
+    it 'lets you click and go to filtered submissions page' do
+      expect(page).to have_selector(".unreviewed-submissions .unassigned-submissions a[href='#{admin_submissions_path(state: :submitted, assigned_to: '')}']")
+      expect(page).to have_selector(".unreviewed-submissions .my-submissions a[href='#{admin_submissions_path(state: :submitted, assigned_to: 'me')}']")
+
+      expect(page).to have_selector(".approved-submissions .approved-without-cms a[href='#{admin_submissions_path(state: :approved)}']")
+      expect(page).to have_selector(".approved-submissions .published-to-cms a[href='#{admin_submissions_path(state: :published)}']")
+    end
+
+    it 'lets you click and go to filtered offers page' do
+      expect(page).to have_selector(".offers .sent a[href='#{admin_offers_path(state: :sent)}']")
+      expect(page).to have_selector(".offers .introduced a[href='#{admin_offers_path(state: :review)}']")
+
+      expect(page).to have_selector(".upcoming-consignments .auction-house a[href='#{admin_consignments_path(state: :open, term: '!Artsy')}']")
+      expect(page).to have_selector(".upcoming-consignments .artsy-curated-auctions a[href='#{admin_consignments_path(state: :open, term: 'Artsy')}']")
+
+      expect(page).to have_selector(".sold-consignments .auction-house a[href='#{admin_consignments_path(state: :sold, term: '!Artsy')}']")
+      expect(page).to have_selector(".sold-consignments .artsy-curated-auctions a[href='#{admin_consignments_path(state: :sold, term: 'Artsy')}']")
+    end
+
+    it 'lets you click and go to filtered consignments page' do
+      expect(page).to have_selector(".upcoming-consignments .auction-house a[href='#{admin_consignments_path(state: :open, term: '!Artsy')}']")
+      expect(page).to have_selector(".upcoming-consignments .artsy-curated-auctions a[href='#{admin_consignments_path(state: :open, term: 'Artsy')}']")
+
+      expect(page).to have_selector(".sold-consignments .auction-house a[href='#{admin_consignments_path(state: :sold, term: '!Artsy')}']")
+      expect(page).to have_selector(".sold-consignments .artsy-curated-auctions a[href='#{admin_consignments_path(state: :sold, term: 'Artsy')}']")
     end
 
     context 'with just submissions' do
       before do
-        6.times { Fabricate(:submission, state: 'submitted') }
+        Fabricate(:submission, state: 'draft', assigned_to: nil)
+        Fabricate(:submission, state: 'approved', assigned_to: 'me')
+        2.times { Fabricate(:submission, state: 'submitted', assigned_to: nil) }
+        2.times { Fabricate(:submission, state: 'submitted', assigned_to: 'some_user') }
+        Fabricate(:submission, state: 'submitted', assigned_to: 'me')
         page.visit '/'
-      end
-
-      it 'displays four submissions' do
-        expect(page).to have_selector('.list-item--offer', count: 0)
-        expect(page).to have_selector('.list-item--submission', count: 4)
-        expect(page).to have_selector('.list-item--consignment', count: 0)
-        expect(page).to have_content('Unreviewed Submissions 6')
-        expect(page).to have_content('Open Offers 0')
-        expect(page).to have_content('Active Consignments 0')
-      end
-
-      it 'lets you click a submission' do
-        submission = Submission.submitted.order(id: :desc).first
-        stub_gravity_root
-        stub_gravity_user(id: submission.user.gravity_user_id)
-        stub_gravity_user_detail(id: submission.user.gravity_user_id)
-        stub_gravity_artist(id: submission.artist_id)
-
-        find(".list-item--submission[data-id='#{submission.id}']").click
-        expect(page).to have_content("Submission ##{submission.id}")
-        expect(page).to have_content('State submitted')
       end
     end
 
     context 'with some offers and submissions and consignments' do
       before do
-        5.times { Fabricate(:offer, state: 'sent') }
-        6.times { Fabricate(:submission, state: 'submitted') }
-        Fabricate(:submission, state: 'draft')
+        2.times { Fabricate(:offer, state: 'sent') }
+        Fabricate(:offer, state: 'review')
         Fabricate(:offer, state: 'draft')
-        5.times { Fabricate(:consignment, state: 'open') }
+
+        2.times { Fabricate(:submission, state: 'submitted', assigned_to: 'me') }
+        Fabricate(:submission, state: 'submitted', assigned_to: nil)
+        Fabricate(:submission, state: 'submitted', assigned_to: 'some_user')
+        Fabricate(:submission, state: 'approved', assigned_to: 'me')
+        2.times { Fabricate(:submission, state: 'published', assigned_to: nil) }
+        Fabricate(:submission, state: 'draft', assigned_to: 'me')
+
+        artsy = Fabricate(:partner, name: 'Artsy')
+        artsy_curated = Fabricate(:partner, name: 'Artsy x Gagosian Gallery')
+        non_artsy = Fabricate(:partner, name: 'Gagosian Gallery')
+
+        Fabricate(:consignment, state: 'open', partner: artsy)
+        Fabricate(:consignment, state: 'open', partner: non_artsy)
+
+        2.times { Fabricate(:consignment, state: 'sold', partner: artsy_curated) }
+        Fabricate(:consignment, state: 'sold', partner: non_artsy)
         page.visit '/'
       end
 
-      it 'displays four of each type' do
-        expect(page).to have_selector('.list-item--offer', count: 4)
-        expect(page).to have_selector('.list-item--submission', count: 4)
-        expect(page).to have_selector('.list-item--consignment', count: 4)
-        expect(page).to have_content('Unreviewed Submissions 6')
-        expect(page).to have_content('Open Offers 5')
-        expect(page).to have_content('Active Consignments 5')
-      end
+      it 'displays right counts for Unreviewed Submissions category' do
+        expect(page).to have_content('Unreviewed Submissions 4')
+        expect(page).to have_content('Unassigned Submissions : 1')
+        expect(page).to have_content('My Submissions : 2')
 
-      it 'lets you click an offer' do
-        offer = Offer.sent.order(id: :desc).first
-        stub_gravity_root
-        stub_gravity_user(id: offer.submission.user.gravity_user_id)
-        stub_gravity_user_detail(id: offer.submission.user.gravity_user_id)
-        stub_gravity_artist(id: offer.submission.artist_id)
+        expect(page).to have_content('Approved 3')
+        expect(page).to have_content('Approved without CMS : 1')
+        expect(page).to have_content('Published to CMS : 2')
 
-        find(".list-item--offer[data-id='#{offer.id}']").click
-        expect(page).to have_content("Offer ##{offer.reference_id}")
-        expect(page).to have_content('State sent')
-        expect(page).to have_content('Offer Lapsed')
-      end
+        expect(page).to have_content('Offers 9') # 5 from consignments
+        expect(page).to have_content('Sent : 2')
+        expect(page).to have_content('Introduced : 1')
 
-      it 'lets you click a submission' do
-        submission = Submission.submitted.order(id: :desc).first
-        stub_gravity_root
-        stub_gravity_user(id: submission.user.gravity_user_id)
-        stub_gravity_user_detail(id: submission.user.gravity_user_id)
-        stub_gravity_artist(id: submission.artist_id)
+        expect(page).to have_content('Upcoming Consignments 2')
+        expect(page).to have_content('Auction House : 1')
+        expect(page).to have_content('Artsy Curated Auctions : 1')
 
-        find(".list-item--submission[data-id='#{submission.id}']").click
-        expect(page).to have_content("Submission ##{submission.id}")
-        expect(page).to have_content('State submitted')
-      end
-
-      it 'lets you click a consignment' do
-        consignment = PartnerSubmission.consigned.order(id: :desc).first
-        stub_gravity_root
-        stub_gravity_user(id: consignment.submission.user.gravity_user_id)
-        stub_gravity_user_detail(
-          id: consignment.submission.user.gravity_user_id
-        )
-        stub_gravity_artist(id: consignment.submission.artist_id)
-
-        find(".list-item--consignment[data-id='#{consignment.id}']").click
-        expect(page).to have_content("Consignment ##{consignment.reference_id}")
-        expect(page).to have_content('State open')
-      end
-
-      it 'lets you view all consignments' do
-        within(:css, '.active-consignments') { click_link('See All') }
-
-        expect(page.current_path).to eq admin_consignments_path
+        expect(page).to have_content('Sold Consignments 3')
+        expect(page).to have_content('Auction House : 1')
+        expect(page).to have_content('Artsy Curated Auctions : 2')
       end
     end
   end

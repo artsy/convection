@@ -10,7 +10,7 @@ class PartnerSubmission < ApplicationRecord
   pg_search_scope :search,
                   against: %i[id reference_id],
                   associated_against: { partner: %i[name] },
-                  using: { tsearch: { prefix: true } }
+                  using: { tsearch: { prefix: true, negation: true } }
 
   belongs_to :partner
   belongs_to :submission
