@@ -6,10 +6,25 @@
   <%= link_to 'Convection', root_url %>
 </div>
 
-<div class='nav'>
+<div class='nav form-inline'>
+  <%= text_field_tag 'term', {}, class: "form-control clearable",
+     placeholder: 'Search by ID or title', id: 'search-bar' %>
   <%= link_to 'Submissions', admin_submissions_url %>
   <%= link_to 'Offers', admin_offers_url %>
   <%= link_to 'Consignments', admin_consignments_url %>
   <%= link_to 'Partners', admin_partners_url %>
   <%= link_to 'log out', '/sign_out' %>
 </div>
+
+<script>
+    function tog(v){return v ? "addClass" : "removeClass";}
+    $(document).on("input", ".clearable", function(){
+        $(this)[tog(this.value)]("x");
+    }).on("mousemove", ".x", function( e ){
+        $(this)[tog(this.offsetWidth-18 < e.clientX-this.getBoundingClientRect().left)]("onX");
+    }).on("touchstart click", ".onX", function( ev ){
+        ev.preventDefault();
+        $(this).removeClass("x onX").val("").change();
+        $('.ui-autocomplete').hide();
+    });
+</script>

@@ -32,3 +32,4 @@
 //= require match_submission
 //= require match_offer
 //= require match_consignment
+//= require search_bar

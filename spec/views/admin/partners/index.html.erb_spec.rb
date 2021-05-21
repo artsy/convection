@@ -28,14 +28,14 @@ describe 'admin/partners/index.html.erb', type: :feature do
     end
 
     it 'allows for searching by prefix' do
-      fill_in('term', with: 'gag')
+      page.all(:fillable_field, 'term').last.set('gag')
       click_button('Search')
       expect(page).to have_content('Gagosian Gallery')
       expect(page).to have_selector('.list-group-item', count: 1)
     end
 
     it 'allows for searching by a common term' do
-      fill_in('term', with: 'gallery')
+      page.all(:fillable_field, 'term').last.set('gallery')
       click_button('Search')
       partner_names = page.all('.list-item--partner--name').map(&:text)
       expect(partner_names).to eq(
