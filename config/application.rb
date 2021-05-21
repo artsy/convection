@@ -26,6 +26,7 @@ module Convection
         #{Rails.root.join('app', 'graphql', 'resolvers')}
         #{Rails.root.join('app', 'controllers', 'concerns')}
         #{Rails.root.join('app', 'models', 'concerns')}
+        #{Rails.root.join('app', 'queries')}
       ]
 
     # include JWT middleware

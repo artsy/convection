@@ -4,28 +4,15 @@ module Admin
   class DashboardController < ApplicationController
     include GraphqlHelper
 
-    expose(:submissions) do
-      Submission.not_deleted.submitted.order(id: :desc).take(4)
+    expose(:grouped_submissions) { DashboardReportingQuery::Submission.grouped_by_state }
+
+    expose(:unreviewed_submissions) do
+      DashboardReportingQuery::Submission.unreviewed_user_submissions(@current_user)
     end
 
-    expose(:offers) { Offer.sent.order(id: :desc).take(4) }
+    expose(:grouped_offers) { DashboardReportingQuery::Offer.grouped_by_state }
 
-    expose(:consignments) do
-      PartnerSubmission.consigned.order(id: :desc).take(4)
-    end
-
-    expose(:submissions_count) { Submission.not_deleted.submitted.count }
-
-    expose(:offers_count) { Offer.sent.count }
-
-    expose(:consignments_count) { PartnerSubmission.consigned.count }
-
-    expose(:artist_details) do
-      submission_artists = artists_names_query(submissions.map(&:artist_id)) || {}
-      consignment_artists =
-        artists_names_query(consignments.map(&:submission).map(&:artist_id)) || {}
-      submission_artists.merge(consignment_artists)
-    end
+    expose(:grouped_consignments) { DashboardReportingQuery::Consignment.grouped_by_state_and_partner }
 
     def index; end
   end

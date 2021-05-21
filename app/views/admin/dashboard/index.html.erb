@@ -1,5 +1,5 @@
 <div class='container'>
-  <div class='row unreviewed-submissions'>
+  <div class='row unreviewed-submissions dashboard_category_row'>
     <div class='row section-header col-sm-12'>
       <div class='col-sm-9'>
         <h3>
@@ -7,84 +7,146 @@
         </h3>
       </div>
       <div class='col-sm-3'>
-        <div class='pull-right gray-label'>
+        <div class='pull-right'>
           <h3>
-            <%= submissions_count %>
+            <%= unreviewed_submissions[:total] || 0 %>
           </h3>
         </div>
       </div>
     </div>
-    <div class='row col-sm-12'>
-      <div class='list-group'>
-        <% submissions.each do |submission| %>
-          <%= render 'admin/submissions/submission', submission: submission, artist: artist_details&.dig(submission.artist_id) %>
-        <% end %>
-      </div>
+    <div>
+      <%= render 'admin/dashboard/row',
+                 section_name: 'Unassigned Submissions',
+                 items_count: unreviewed_submissions[:unassigned],
+                 filtered_path: admin_submissions_path(state: :submitted, assigned_to: '')
+      %>
     </div>
-    <div class='row col-sm-12'>
-      <div class='section-actions'>
-        <div class='pull-right'>
-          <%= link_to 'See All', admin_submissions_path(state: 'submitted'), class: 'btn btn-secondary btn-small' %>
-        </div>
-      </div>
+    <div>
+      <%= render 'admin/dashboard/row',
+                 section_name: 'My Submissions',
+                 items_count: unreviewed_submissions[:self_assigned],
+                 filtered_path: admin_submissions_path(state: :submitted, assigned_to: @current_user)
+      %>
     </div>
   </div>
-  <div class='row open-offers'>
+  <div class='row approved-submissions dashboard_category_row'>
     <div class='row section-header col-sm-12'>
       <div class='col-sm-9'>
         <h3>
-          Open Offers
+          Approved
         </h3>
       </div>
       <div class='col-sm-3'>
-        <div class='pull-right gray-label'>
+        <div class='pull-right'>
           <h3>
-            <%= offers_count %>
+            <%= sum_up_approved_submissions(grouped_submissions) %>
           </h3>
         </div>
       </div>
     </div>
-    <div class='row col-sm-12'>
-      <div class='list-group'>
-        <%= render offers %>
-      </div>
+    <div>
+      <%= render 'admin/dashboard/row',
+                 section_name: 'Approved without CMS',
+                 items_count: grouped_submissions[:approved],
+                 filtered_path: admin_submissions_path(state: :approved)
+      %>
     </div>
-    <div class='row col-sm-12'>
-      <div class='section-actions'>
-        <div class='pull-right'>
-          <%= link_to 'See All', admin_offers_path(state: 'sent'), class: 'btn btn-secondary btn-small' %>
-        </div>
-      </div>
+    <div>
+      <%= render 'admin/dashboard/row',
+                 section_name: 'Published to CMS',
+                 items_count: grouped_submissions[:published],
+                 filtered_path: admin_submissions_path(state: :published)
+      %>
     </div>
   </div>
-  <div class='row active-consignments'>
+  <div class='row offers dashboard_category_row'>
     <div class='row section-header col-sm-12'>
       <div class='col-sm-9'>
         <h3>
-          Active Consignments
+          Offers
         </h3>
       </div>
       <div class='col-sm-3'>
-        <div class='pull-right gray-label'>
+        <div class='pull-right'>
           <h3>
-            <%= consignments_count %>
+            <%= grouped_offers[:total] || 0 %>
           </h3>
         </div>
       </div>
     </div>
-    <div class='row col-sm-12'>
-      <div class='list-group'>
-        <% consignments.each do |consignment| %>
-          <%= render 'admin/consignments/consignment', consignment: consignment, artist: artist_details&.dig(consignment.submission.artist_id) %>
-        <% end %>
-      </div>
+    <div>
+      <%= render 'admin/dashboard/row',
+                 section_name: 'Sent',
+                 items_count: grouped_offers[:sent],
+                 filtered_path: admin_offers_path(state: :sent)
+      %>
     </div>
-    <div class='row col-sm-12'>
-      <div class='section-actions'>
+    <div>
+      <%= render 'admin/dashboard/row',
+                 section_name: 'Introduced',
+                 items_count: grouped_offers[:review],
+                 filtered_path: admin_offers_path(state: :review)
+      %>
+    </div>
+  </div>
+  <div class='row upcoming-consignments dashboard_category_row'>
+    <div class='row section-header col-sm-12'>
+      <div class='col-sm-9'>
+        <h3>
+          Upcoming Consignments
+        </h3>
+      </div>
+      <div class='col-sm-3'>
         <div class='pull-right'>
-          <%= link_to 'See All', admin_consignments_path, class: 'btn btn-secondary btn-small' %>
+          <h3>
+            <%= grouped_consignments.dig(:open, :total) || 0 %>
+          </h3>
         </div>
       </div>
+    </div>
+    <div>
+      <%= render 'admin/dashboard/row',
+                 section_name: 'Auction House',
+                 items_count: grouped_consignments.dig(:open, :auction_house),
+                 filtered_path: admin_consignments_path(state: :open, term: '!Artsy')
+      %>
+    </div>
+    <div>
+      <%= render 'admin/dashboard/row',
+                 section_name: 'Artsy Curated Auctions',
+                 items_count: grouped_consignments.dig(:open, :artsy_curated),
+                 filtered_path: admin_consignments_path(state: :open, term: 'Artsy')
+      %>
+    </div>
+  </div>
+  <div class='row sold-consignments dashboard_category_row'>
+    <div class='row section-header col-sm-12'>
+      <div class='col-sm-9'>
+        <h3>
+          Sold Consignments
+        </h3>
+      </div>
+      <div class='col-sm-3'>
+        <div class='pull-right'>
+          <h3>
+            <%= grouped_consignments.dig(:sold, :total) || 0 %>
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div>
+      <%= render 'admin/dashboard/row',
+                 section_name: 'Auction House',
+                 items_count: grouped_consignments.dig(:sold, :auction_house),
+                 filtered_path: admin_consignments_path(state: :sold, term: '!Artsy')
+      %>
+    </div>
+    <div>
+      <%= render 'admin/dashboard/row',
+                 section_name: 'Artsy Curated Auctions',
+                 items_count: grouped_consignments.dig(:sold, :artsy_curated),
+                 filtered_path: admin_consignments_path(state: :sold, term: 'Artsy')
+      %>
     </div>
   </div>
 </div>
