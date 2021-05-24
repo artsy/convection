@@ -12,10 +12,6 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
         :decode_user
       ).and_return('me')
 
-      allow(Convection.config).to receive(:gravity_xapp_token).and_return(
-        'xapp_token'
-      )
-
       page.visit '/'
     end
 
@@ -36,30 +32,30 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
     end
 
     it 'lets you click and go to filtered submissions page' do
-      expect(page).to have_selector(".unreviewed-submissions .unassigned-submissions a[href='#{admin_submissions_path(state: :submitted, assigned_to: '')}']")
-      expect(page).to have_selector(".unreviewed-submissions .my-submissions a[href='#{admin_submissions_path(state: :submitted, assigned_to: 'me')}']")
+      expect(page).to have_selector(".unreviewed-submissions a.unassigned-submissions[href='#{admin_submissions_path(state: :submitted, assigned_to: '')}']")
+      expect(page).to have_selector(".unreviewed-submissions a.my-submissions[href='#{admin_submissions_path(state: :submitted, assigned_to: 'me')}']")
 
-      expect(page).to have_selector(".approved-submissions .approved-without-cms a[href='#{admin_submissions_path(state: :approved)}']")
-      expect(page).to have_selector(".approved-submissions .published-to-cms a[href='#{admin_submissions_path(state: :published)}']")
+      expect(page).to have_selector(".approved-submissions a.approved-without-cms[href='#{admin_submissions_path(state: :approved)}']")
+      expect(page).to have_selector(".approved-submissions a.published-to-cms[href='#{admin_submissions_path(state: :published)}']")
     end
 
     it 'lets you click and go to filtered offers page' do
-      expect(page).to have_selector(".offers .sent a[href='#{admin_offers_path(state: :sent)}']")
-      expect(page).to have_selector(".offers .introduced a[href='#{admin_offers_path(state: :review)}']")
+      expect(page).to have_selector(".offers a.sent[href='#{admin_offers_path(state: :sent)}']")
+      expect(page).to have_selector(".offers a.introduced[href='#{admin_offers_path(state: :review)}']")
 
-      expect(page).to have_selector(".upcoming-consignments .auction-house a[href='#{admin_consignments_path(state: :open, term: '!Artsy')}']")
-      expect(page).to have_selector(".upcoming-consignments .artsy-curated-auctions a[href='#{admin_consignments_path(state: :open, term: 'Artsy')}']")
+      expect(page).to have_selector(".upcoming-consignments a.auction-house[href='#{admin_consignments_path(state: :open, term: '!Artsy')}']")
+      expect(page).to have_selector(".upcoming-consignments a.artsy-curated-auctions[href='#{admin_consignments_path(state: :open, term: 'Artsy')}']")
 
-      expect(page).to have_selector(".sold-consignments .auction-house a[href='#{admin_consignments_path(state: :sold, term: '!Artsy')}']")
-      expect(page).to have_selector(".sold-consignments .artsy-curated-auctions a[href='#{admin_consignments_path(state: :sold, term: 'Artsy')}']")
+      expect(page).to have_selector(".sold-consignments a.auction-house[href='#{admin_consignments_path(state: :sold, term: '!Artsy')}']")
+      expect(page).to have_selector(".sold-consignments a.artsy-curated-auctions[href='#{admin_consignments_path(state: :sold, term: 'Artsy')}']")
     end
 
     it 'lets you click and go to filtered consignments page' do
-      expect(page).to have_selector(".upcoming-consignments .auction-house a[href='#{admin_consignments_path(state: :open, term: '!Artsy')}']")
-      expect(page).to have_selector(".upcoming-consignments .artsy-curated-auctions a[href='#{admin_consignments_path(state: :open, term: 'Artsy')}']")
+      expect(page).to have_selector(".upcoming-consignments a.auction-house[href='#{admin_consignments_path(state: :open, term: '!Artsy')}']")
+      expect(page).to have_selector(".upcoming-consignments a.artsy-curated-auctions[href='#{admin_consignments_path(state: :open, term: 'Artsy')}']")
 
-      expect(page).to have_selector(".sold-consignments .auction-house a[href='#{admin_consignments_path(state: :sold, term: '!Artsy')}']")
-      expect(page).to have_selector(".sold-consignments .artsy-curated-auctions a[href='#{admin_consignments_path(state: :sold, term: 'Artsy')}']")
+      expect(page).to have_selector(".sold-consignments a.auction-house[href='#{admin_consignments_path(state: :sold, term: '!Artsy')}']")
+      expect(page).to have_selector(".sold-consignments a.artsy-curated-auctions[href='#{admin_consignments_path(state: :sold, term: 'Artsy')}']")
     end
 
     context 'with just submissions' do
