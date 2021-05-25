@@ -259,4 +259,22 @@ describe SubmissionsHelper, type: :helper do
       it { is_expected.to eq nil }
     end
   end
+
+  context 'assignable_admin?' do
+    subject { helper.assignable_admin?(user) }
+
+    before do
+      stub_const('ADMINS', { admin: 'AdminName' })
+    end
+
+    context 'for non-admin user' do
+      let(:user) { 'non-admin' }
+      it { is_expected.to be_falsey }
+    end
+
+    context 'for admin user' do
+      let(:user) { 'admin' }
+      it { is_expected.to be_truthy }
+    end
+  end
 end
