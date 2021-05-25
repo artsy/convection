@@ -42,7 +42,10 @@ class SubmissionEvent < Events::BaseEvent
       authenticity_certificate: @object.authenticity_certificate,
       thumbnail: @object.thumbnail,
       image_urls: large_image_urls,
-      offer_link: Convection.config.auction_offer_form_url
+      offer_link: Convection.config.auction_offer_form_url,
+      utm_source: @object.utm_source,
+      utm_medium: @object.utm_medium,
+      utm_term: @object.utm_term
     }
   end
 
