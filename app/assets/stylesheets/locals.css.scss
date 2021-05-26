@@ -298,7 +298,7 @@ a.make-primary-link {
   .section-header {
     margin-bottom: 20px;
 
-    > div {
+    div {
       padding: 0;
     }
   }
@@ -307,11 +307,12 @@ a.make-primary-link {
 .dashboard_subcategory_row {
   margin-bottom: 20px;
   padding: 10px;
-  -webkit-box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.2);
-  box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.2);
-  background: #F9F9F9;
 
   > div {
+    padding: 0;
+  }
+
+  h4 {
     display: inline-block;
   }
 

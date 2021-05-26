@@ -117,7 +117,7 @@ describe 'admin/consignments/index.html.erb', type: :feature do
       end
 
       it 'allows you to search by partner name', js: true do
-        fill_in('term', with: 'gallery')
+        page.all(:fillable_field, 'term').last.set('gallery')
         expect(page).to have_selector('.ui-autocomplete')
         expect(page).to have_content('Partner   Gagosian Gallery')
         click_link("partner-#{@partner1.id}")
@@ -130,7 +130,7 @@ describe 'admin/consignments/index.html.erb', type: :feature do
       end
 
       it 'allows you to navigate to a specific consignment', js: true do
-        fill_in('term', with: @consignment1.reference_id)
+        page.all(:fillable_field, 'term').last.set(@consignment1.reference_id)
         expect(page).to have_selector('.ui-autocomplete')
         click_link("consignment-#{@consignment1.id}")
         expect(current_path).to eq admin_consignment_path(@consignment1)
@@ -138,7 +138,7 @@ describe 'admin/consignments/index.html.erb', type: :feature do
 
       it 'allows you to search by partner name and state', js: true do
         select('bought in', from: 'state')
-        fill_in('term', with: 'herit')
+        page.all(:fillable_field, 'term').last.set('herit')
         expect(page).to have_selector('.ui-autocomplete')
         expect(page).to have_content('Partner   Heritage Auctions')
         click_link("partner-#{@partner2.id}")
@@ -157,7 +157,7 @@ describe 'admin/consignments/index.html.erb', type: :feature do
 
         stub_gravity_artists(override_body: [artist])
 
-        fill_in('term', with: artist[:name])
+        page.all(:fillable_field, 'term').last.set(artist[:name])
         expect(page).to have_selector('.ui-autocomplete')
         click_link("artist-#{artist[:id]}")
         expect(current_url).to include "&artist=#{artist[:id]}"
@@ -171,7 +171,7 @@ describe 'admin/consignments/index.html.erb', type: :feature do
 
         stub_gravity_artists(override_body: [artist])
 
-        fill_in('term', with: artist[:name])
+        page.all(:fillable_field, 'term').last.set(artist[:name])
         expect(page).to have_selector('.ui-autocomplete')
         click_link("artist-#{artist[:id]}")
         select('bought in', from: 'state')
@@ -184,7 +184,7 @@ describe 'admin/consignments/index.html.erb', type: :feature do
 
       it 'allows you to search by partner name, filter by state, and sort by estimate', js: true do
         select('bought in', from: 'state')
-        fill_in('term', with: 'herit')
+        page.all(:fillable_field, 'term').last.set('herit')
         expect(page).to have_selector('.ui-autocomplete')
         expect(page).to have_content('Partner   Heritage Auctions')
         click_link("partner-#{@partner2.id}")

@@ -190,7 +190,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
 
         @offer1.submission.update!(artist_id: @artist[:id])
 
-        fill_in('term', with: @artist[:name])
+        page.all(:fillable_field, 'term').last.set(@artist[:name])
         expect(page).to have_selector('.ui-autocomplete')
         expect(page).to have_content(@artist[:name])
         click_link("artist-#{@artist[:id]}")
@@ -204,7 +204,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
 
         @offer1.submission.update!(artist_id: @artist[:id])
 
-        fill_in('term', with: @artist[:name])
+        page.all(:fillable_field, 'term').last.set(@artist[:name])
         expect(page).to have_selector('.ui-autocomplete')
         expect(page).to have_content(@artist[:name])
         click_link("artist-#{@artist[:id]}")
@@ -217,7 +217,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
       end
 
       it 'lets you search by partner name', js: true do
-        fill_in('term', with: 'Gag')
+        page.all(:fillable_field, 'term').last.set('Gag')
         expect(page).to have_selector('.ui-autocomplete')
         expect(page).to have_content('Partner   Gagosian')
         click_link("partner-#{@partner1.id}")
@@ -229,7 +229,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
       end
 
       it 'allows you to navigate to a specific offer', js: true do
-        fill_in('term', with: @offer1.reference_id)
+        page.all(:fillable_field, 'term').last.set(@offer1.reference_id)
         expect(page).to have_selector('.ui-autocomplete')
         click_link("offer-#{@offer1.id}")
         expect(current_path).to eq admin_offer_path(@offer1)
@@ -237,7 +237,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
 
       it 'lets you search by state and partner name', js: true do
         select('sent', from: 'state')
-        fill_in('term', with: 'Gag')
+        page.all(:fillable_field, 'term').last.set('Gag')
         expect(page).to have_selector('.ui-autocomplete')
         expect(page).to have_content('Partner   Gagosian')
         click_link("partner-#{@partner1.id}")
@@ -250,7 +250,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
 
       it 'allows you to search by partner name, filter by state, and sort by estimate', js: true do
         select('sent', from: 'state')
-        fill_in('term', with: 'Gag')
+        page.all(:fillable_field, 'term').last.set('Gag')
         expect(page).to have_selector('.ui-autocomplete')
         expect(page).to have_content('Partner   Gagosian')
         click_link("partner-#{@partner1.id}")
