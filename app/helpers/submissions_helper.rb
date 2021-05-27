@@ -121,4 +121,8 @@ module SubmissionsHelper
     return 'P1' if is_p1
     return 'P2' if target_supply
   end
+
+  def assignable_admin?(user)
+    ADMINS.keys.include?(user.to_sym)
+  end
 end

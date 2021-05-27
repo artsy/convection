@@ -21,13 +21,15 @@
                  filtered_path: admin_submissions_path(state: :submitted, assigned_to: '')
       %>
     </div>
-    <div>
-      <%= render 'admin/dashboard/row',
-                 section_name: 'My Submissions',
-                 items_count: unreviewed_submissions[:self_assigned],
-                 filtered_path: admin_submissions_path(state: :submitted, assigned_to: @current_user)
-      %>
-    </div>
+    <% if assignable_admin?(@current_user) %>
+      <div>
+        <%= render 'admin/dashboard/row',
+                   section_name: 'My Submissions',
+                   items_count: unreviewed_submissions[:self_assigned],
+                   filtered_path: admin_submissions_path(state: :submitted, assigned_to: @current_user)
+        %>
+      </div>
+    <% end %>
   </div>
   <div class='row approved-submissions dashboard_category_row'>
     <div class='row section-header col-sm-12'>
