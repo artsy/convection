@@ -100,10 +100,7 @@ class Submission < ApplicationRecord
   end
 
   def thumbnail
-    possible_thumbnails = images.to_a.unshift(primary_image).compact
-    thumbnails =
-      possible_thumbnails.map { |image| image.image_urls['thumbnail'] }.compact
-    thumbnails.first
+    primary_image&.image_urls&.fetch('thumbnail', nil)
   end
 
   # defines methods submitted?, approved?, etc. for each possible submission state

@@ -20,7 +20,7 @@ module Admin
     expose :offer
 
     expose(:offers) do
-      matching_offers = Offer.all
+      matching_offers = Offer.all.includes(:partner_submission, :partner, submission: [:user, :consigned_partner_submission, :primary_image])
 
       if filtering_by_assigned_to?
         matching_offers =
@@ -103,7 +103,7 @@ module Admin
     expose(:term) { params[:term] }
 
     expose(:artist) do
-      artists_names_query([offer&.partner_submission&.submission&.artist_id])&.values
+      artists_names_query([offer&.submission&.artist_id])&.values
         &.first
     end
 
