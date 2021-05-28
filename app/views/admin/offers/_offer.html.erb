@@ -41,16 +41,16 @@
     </div>
   <% else %>
     <div class='list-group-item-info'>
-      <%= offer.partner_submission.submission.id %>
+      <%= offer.submission_id %>
     </div>
     <div class='list-group-item-info list-group-item-info--artist-title'>
-      <%= offer_artist(offer) %>, <%= offer.partner_submission.submission&.title&.truncate(30) %>
+      <%= offer_artist(offer) %>, <%= offer.submission&.title&.truncate(30) %>
     </div>
     <div class='list-group-item-info'>
-      <%= offer.partner_submission.submission.user&.email %>
+      <%= offer.submission.user&.email %>
     </div>
     <div class='list-group-item-info'>
-      <%= formatted_location(offer.partner_submission.submission)  %>
+      <%= formatted_location(offer.submission)  %>
     </div>
     <div class='list-group-item-info'>
       <%= offer.partner.name %>
@@ -66,8 +66,8 @@
       <% end %>
     </div>
     <div class='list-group-item-info asset-thumb'>
-      <% if offer.partner_submission.submission.thumbnail.present? %>
-        <%= image_tag offer.partner_submission.submission.thumbnail %>
+      <% if offer.submission.thumbnail.present? %>
+        <%= image_tag offer.submission.thumbnail %>
       <% end %>
       <span style="margin-left: auto" class='icon-chevron-right'></span>
     </div>     

@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_12_082147) do
+ActiveRecord::Schema.define(version: 2021_05_26_211807) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
+  enable_extension "unaccent"
 
   create_table "artist_standing_scores", force: :cascade do |t|
     t.string "artist_id"
@@ -29,6 +30,7 @@ ActiveRecord::Schema.define(version: 2021_05_12_082147) do
     t.string "gemini_token"
     t.jsonb "image_urls", default: {}
     t.integer "submission_id"
+    t.index ["submission_id", "asset_type"], name: "index_assets_on_submission_id_and_asset_type"
     t.index ["submission_id"], name: "index_assets_on_submission_id"
   end
 

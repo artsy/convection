@@ -197,13 +197,10 @@ describe Submission do
     it 'returns nil if there are no assets' do
       expect(submission.thumbnail).to eq nil
     end
-    it 'returns the first image with a thumbnail url' do
-      Fabricate(
-        :image,
-        submission: submission,
-        image_urls: { 'thumbnail' => 'https://thumb.jpg' }
-      )
-      expect(submission.thumbnail).to eq 'https://thumb.jpg'
+    it 'returns the thumbnail url for the primary image' do
+      image = Fabricate :image, submission: submission
+      submission.update!(primary_image: image)
+      expect(submission.thumbnail).to eq image.image_urls['thumbnail']
     end
   end
 
