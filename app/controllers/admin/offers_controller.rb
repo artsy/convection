@@ -76,6 +76,11 @@ module Admin
       matching_offers.page(page).per(size)
     end
 
+    expose(:offers_artists) do
+      artists_ids = offers.filter_map { |offer| offer.submission&.artist_id }
+      artists_names_query(artists_ids)
+    end
+
     expose(:filters) do
       {
         assigned_to: params[:assigned_to],
