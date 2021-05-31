@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# rubocop:disable Lint/RedundantCopDisableDirective
+# rubocop:disable Rails/SkipsModelValidations
+
 namespace :offers do
   desc 'Lapse all offers that were sent before a certain date'
   task :lapse_sent, [:date] => :environment do |_task, args|
@@ -17,3 +20,6 @@ namespace :offers do
     Offer.where("state = ? AND review_started_at < ?", "review", datetime).update_all(state: "lapsed")
   end
 end
+
+# rubocop:enable Rails/SkipsModelValidations
+# rubocop:enable Lint/RedundantCopDisableDirective
