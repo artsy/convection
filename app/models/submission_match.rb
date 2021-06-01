@@ -12,12 +12,7 @@ class SubmissionMatch
   end
 
   def find_all
-    submissions =
-      if filtering_by_assigned_without_accepted_offer?
-        submissions_assigned_without_accepted_offer
-      else
-        Submission
-      end
+    submissions = custom_filtered_submissions
 
     submissions =
       submissions.not_deleted.where(query).includes(:user).order(order_by)
@@ -27,7 +22,20 @@ class SubmissionMatch
 
   private
 
-  def submissions_assigned_without_accepted_offer
+  def custom_filtered_submissions
+    submissions = Submission
+    submissions = submissions_assigned_without_accepted_offer(submissions) if filtering_by_assigned_without_accepted_offer?
+    submissions = submissions_approved_without_reviewed_or_accepted_offer(submissions) if params[:state] == Submission::APPROVED
+    submissions
+  end
+
+  def submissions_approved_without_reviewed_or_accepted_offer(submissions)
+    submissions.joins(
+      "LEFT OUTER JOIN offers on offers.submission_id = submissions.id AND offers.state IN ('#{Offer::ACCEPTED}', '#{Offer::REVIEW}')"
+    ).distinct.where(offers: { submission_id: nil })
+  end
+
+  def submissions_assigned_without_accepted_offer(submissions)
     sql = <<SQL.squish
     WITH submissions_with_counts AS (
       SELECT s.id as submission_id,
@@ -44,7 +52,7 @@ SQL
 
     ids = ActiveRecord::Base.connection.select_all(sql).rows.flatten
 
-    Submission.where(id: ids)
+    submissions.where(id: ids)
   end
 
   def term
