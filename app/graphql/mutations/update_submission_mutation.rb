@@ -28,6 +28,9 @@ module Mutations
     argument :title, String, required: false
     argument :width, String, required: false
     argument :year, String, required: false
+    argument :utm_source, String, required: false
+    argument :utm_medium, String, required: false
+    argument :utm_term, String, required: false
 
     field :consignment_submission, Types::SubmissionType, null: true
 
