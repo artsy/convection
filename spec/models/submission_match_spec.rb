@@ -39,6 +39,52 @@ describe SubmissionMatch do
       end
     end
 
+    context 'filtering by approved submissions' do
+      let!(:submission1) { Fabricate :submission, state: 'approved' }
+      let!(:submission2) { Fabricate :submission, state: 'approved' }
+      let(:params) { { state: 'approved' } }
+
+      context 'with offers in review or accepted' do
+        let!(:offer1) { Fabricate :offer, submission: submission1, state: 'review' }
+        let!(:offer2) { Fabricate :offer, submission: submission2, state: 'accepted' }
+
+        it 'returns an empty result' do
+          matching = SubmissionMatch.find_all(params).to_a
+          expect(matching).to eq []
+        end
+      end
+
+      context 'with other offer states ' do
+        let!(:offer1) { Fabricate :offer, submission: submission1, state: 'draft' }
+        let!(:offer2) { Fabricate :offer, submission: submission2, state: 'sent' }
+        let!(:offer3) { Fabricate :offer, submission: submission2, state: 'lapsed' }
+        let!(:offer4) { Fabricate :offer, submission: submission1, state: 'rejected' }
+
+        it 'returns the matching submissions' do
+          matching = SubmissionMatch.find_all(params).to_a
+          expect(matching).to eq [submission2, submission1]
+        end
+      end
+
+      context 'with more than one offer where at least one is in review' do
+        let!(:offer1) { Fabricate :offer, submission: submission1, state: 'draft' }
+        let!(:offer2) { Fabricate :offer, submission: submission2, state: 'sent' }
+        let!(:offer3) { Fabricate :offer, submission: submission2, state: 'review' }
+
+        it 'returns the matching submissions' do
+          matching = SubmissionMatch.find_all(params).to_a
+          expect(matching).to eq [submission1]
+        end
+      end
+
+      context 'with no offers' do
+        it 'returns the matching submissions' do
+          matching = SubmissionMatch.find_all(params).to_a
+          expect(matching).to eq [submission2, submission1]
+        end
+      end
+    end
+
     context 'filtering by assigned_to' do
       let!(:unassigned) { Fabricate :submission, assigned_to: nil }
       let!(:alice_assigned) { Fabricate :submission, assigned_to: 'Alice' }

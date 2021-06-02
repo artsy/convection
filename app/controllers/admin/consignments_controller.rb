@@ -72,7 +72,8 @@ module Admin
     end
 
     expose(:artist_details) do
-      artists_names_query(consignments.map(&:submission).map(&:artist_id))
+      artists_ids = consignments.filter_map { |consignment| consignment.submission&.artist_id }
+      artists_names_query(artists_ids)
     end
 
     expose(:artist) do

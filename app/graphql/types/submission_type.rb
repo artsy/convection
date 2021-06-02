@@ -39,6 +39,10 @@ module Types
     field :user_id, String, null: false
     field :width, String, null: true
     field :year, String, null: true
+    field :utm_source, String, null: true
+    field :utm_medium, String, null: true
+    field :utm_term, String, null: true
+
 
     field :offers, [Types::OfferType], null: false do
       argument :gravity_partner_id, ID, required: true
