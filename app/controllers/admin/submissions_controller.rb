@@ -154,23 +154,31 @@ module Admin
     def submission_params
       safelist = %i[
         artist_id
+        attribution_class
         authenticity_certificate
+        artist_proofs
+        additional_info
         category
         currency
+        condition_report
         deleted_at
         depth
         dimensions_metric
         edition_number
         edition_size
+        exhibition
         height
         location_city
         location_country
         location_state
+        literature
         medium
         minimum_price_dollars
         primary_image_id
         provenance
+        publisher
         signature
+        signature_detail
         state
         title
         user_id

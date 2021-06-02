@@ -51,15 +51,27 @@
 
           <div class='row single-padding-top'>
             <div class='col-sm-12'>
-                <label class='col-sm-2 control-label bold-label'>
-                  Medium
-                </label>
-                <div class='col-sm-10'>
-                  <%= f.text_field :medium, class: 'form-control' %>
-                </div>
+              <label class='col-sm-2 control-label bold-label'>
+                Medium
+              </label>
+              <div class='col-sm-10'>
+                <%= f.text_field :medium, class: 'form-control' %>
               </div>
             </div>
           </div>
+
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
+                Attribution Class
+              </label>
+              <div class='col-sm-10'>
+                <%= f.select :attribution_class, humanized_options_for_select(Submission.attribution_classes,
+                   selected: f.object.attribution_class), {}, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+        </div>
 
           <div class='row single-padding-top'>
             <div class='col-sm-12'>
@@ -170,6 +182,83 @@
               </div>
             </div>
           </div>
+
+        <div class='row single-padding-top'>
+          <div class='col-sm-12'>
+            <label class='col-sm-2 control-label bold-label'>
+              Publisher
+            </label>
+            <div class='col-sm-10'>
+              <%= f.text_field :publisher , class: 'form-control' %>
+            </div>
+          </div>
+        </div>
+
+        <div class='row single-padding-top'>
+          <div class='col-sm-12'>
+            <label class='col-sm-2 control-label bold-label'>
+              Artist Proofs
+            </label>
+            <div class='col-sm-10'>
+              <%= f.text_field :artist_proofs , class: 'form-control' %>
+            </div>
+          </div>
+        </div>
+
+        <div class='row single-padding-top'>
+          <div class='col-sm-12'>
+            <label class='col-sm-2 control-label bold-label'>
+              Signature
+            </label>
+            <div class='col-sm-10'>
+              <%= f.text_field :signature_detail , class: 'form-control' %>
+            </div>
+          </div>
+        </div>
+
+        <div class='row single-padding-top'>
+          <div class='col-sm-12'>
+            <label class='col-sm-2 control-label bold-label'>
+              Literature
+            </label>
+            <div class='col-sm-10'>
+              <%= f.text_field :literature , class: 'form-control' %>
+            </div>
+          </div>
+        </div>
+
+        <div class='row single-padding-top'>
+          <div class='col-sm-12'>
+            <label class='col-sm-2 control-label bold-label'>
+              Exhibition
+            </label>
+            <div class='col-sm-10'>
+              <%= f.text_field :exhibition  , class: 'form-control' %>
+            </div>
+          </div>
+        </div>
+
+        <div class='row single-padding-top'>
+          <div class='col-sm-12'>
+            <label class='col-sm-2 control-label bold-label'>
+              Additional Information
+            </label>
+            <div class='col-sm-10'>
+              <%= f.text_field :additional_info  , class: 'form-control' %>
+            </div>
+          </div>
+        </div>
+
+        <div class='row single-padding-top'>
+          <div class='col-sm-12'>
+            <label class='col-sm-2 control-label bold-label'>
+              Condition Report
+            </label>
+            <div class='col-sm-10'>
+              <%= f.text_field :condition_report  , class: 'form-control' %>
+            </div>
+          </div>
+        </div>
 
           <div class='row single-padding-top'>
             <div class='col-sm-12'>
