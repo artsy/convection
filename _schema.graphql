@@ -1336,6 +1336,16 @@ enum SubmissionSort {
   ARTIST_ID_DESC
 
   """
+  sort by artist_proofs in ascending order
+  """
+  ARTIST_PROOFS_ASC
+
+  """
+  sort by artist_proofs in descending order
+  """
+  ARTIST_PROOFS_DESC
+
+  """
   sort by artist_score in ascending order
   """
   ARTIST_SCORE_ASC
@@ -1354,6 +1364,16 @@ enum SubmissionSort {
   sort by assigned_to in descending order
   """
   ASSIGNED_TO_DESC
+
+  """
+  sort by attribution_class in ascending order
+  """
+  ATTRIBUTION_CLASS_ASC
+
+  """
+  sort by attribution_class in descending order
+  """
+  ATTRIBUTION_CLASS_DESC
 
   """
   sort by auction_score in ascending order
@@ -1384,6 +1404,16 @@ enum SubmissionSort {
   sort by category in descending order
   """
   CATEGORY_DESC
+
+  """
+  sort by condition_report in ascending order
+  """
+  CONDITION_REPORT_ASC
+
+  """
+  sort by condition_report in descending order
+  """
+  CONDITION_REPORT_DESC
 
   """
   sort by consigned_partner_submission_id in ascending order
@@ -1486,6 +1516,16 @@ enum SubmissionSort {
   EDITION_SIZE_DESC
 
   """
+  sort by exhibition in ascending order
+  """
+  EXHIBITION_ASC
+
+  """
+  sort by exhibition in descending order
+  """
+  EXHIBITION_DESC
+
+  """
   sort by ext_user_id in ascending order
   """
   EXT_USER_ID_ASC
@@ -1514,6 +1554,16 @@ enum SubmissionSort {
   sort by id in descending order
   """
   ID_DESC
+
+  """
+  sort by literature in ascending order
+  """
+  LITERATURE_ASC
+
+  """
+  sort by literature in descending order
+  """
+  LITERATURE_DESC
 
   """
   sort by location_city in ascending order
@@ -1606,6 +1656,16 @@ enum SubmissionSort {
   PUBLISHED_AT_DESC
 
   """
+  sort by publisher in ascending order
+  """
+  PUBLISHER_ASC
+
+  """
+  sort by publisher in descending order
+  """
+  PUBLISHER_DESC
+
+  """
   sort by qualified in ascending order
   """
   QUALIFIED_ASC
@@ -1664,6 +1724,16 @@ enum SubmissionSort {
   sort by signature in descending order
   """
   SIGNATURE_DESC
+
+  """
+  sort by signature_detail in ascending order
+  """
+  SIGNATURE_DETAIL_ASC
+
+  """
+  sort by signature_detail in descending order
+  """
+  SIGNATURE_DETAIL_DESC
 
   """
   sort by source_artwork_id in ascending order

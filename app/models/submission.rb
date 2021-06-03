@@ -23,6 +23,13 @@ class Submission < ApplicationRecord
     CLOSED = 'closed'
   ].freeze
 
+  enum attribution_class: {
+    unique: 0,
+    limited_edition: 1,
+    open_edition: 2,
+    unknown_edition: 3
+  }
+
   DIMENSION_METRICS = %w[in cm].freeze
 
   CATEGORIES = [
