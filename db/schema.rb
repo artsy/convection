@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_26_211807) do
+ActiveRecord::Schema.define(version: 2021_06_02_193423) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -178,6 +178,13 @@ ActiveRecord::Schema.define(version: 2021_05_26_211807) do
     t.string "assigned_to"
     t.datetime "published_at"
     t.string "source_artwork_id"
+    t.integer "attribution_class"
+    t.string "publisher"
+    t.string "artist_proofs"
+    t.string "literature"
+    t.string "exhibition"
+    t.string "condition_report"
+    t.string "signature_detail"
     t.string "utm_source"
     t.string "utm_medium"
     t.string "utm_term"
