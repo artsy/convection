@@ -8,4 +8,6 @@ ADMINS = { '5ba2872826cbf26b896b1d71': 'Agnieszka',
            '5e5694ad9bacb10013b47d22': 'Lauren',
            '606f1f0e30cc16000e6aad89': 'Simon',
            '593963389c18db5ce2ecdc70': 'Wendy',
-           '602692836c6a2c0011e96827': 'Robin' }.freeze
+           '602692836c6a2c0011e96827': 'Robin',
+           '60b62f317a4fa058b2a5044d': 'Daniela',
+           '60ba938a6e6d1d000f35e5f4': 'George' }.freeze
