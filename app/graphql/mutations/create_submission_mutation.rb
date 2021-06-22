@@ -7,6 +7,8 @@ module Mutations
     argument :additional_info, String, required: false
     argument :authenticity_certificate, Boolean, required: false
     argument :category, Types::CategoryType, required: false
+    argument :coaByAuthenticatingBody, Boolean, required: false
+    argument :coaByGallery, Boolean, required: false
     argument :currency, String, required: false
     argument :depth, String, required: false
     argument :dimensions_metric,
