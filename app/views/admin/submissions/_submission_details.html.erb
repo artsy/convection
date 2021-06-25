@@ -101,6 +101,24 @@
 
 <div class='overview-item'>
   <div class='overview-item-title'>
+    COA by authenticating body
+  </div>
+  <div class='overview-item-value'>
+    <%= @submission.coa_by_authenticating_body ? 'Yes' : 'No' %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    COA by gallery
+  </div>
+  <div class='overview-item-value'>
+    <%= @submission.coa_by_gallery ? 'Yes' : 'No' %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
     Location
   </div>
   <div class='overview-item-value'>

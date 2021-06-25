@@ -58,6 +58,8 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       expect(page).to have_content('Painting')
       expect(page).to have_content('77')
       expect(page).to have_content('23a')
+      expect(page).to have_content('COA by gallery')
+      expect(page).to have_content('No')
     end
 
     it 'displays no undo links' do
