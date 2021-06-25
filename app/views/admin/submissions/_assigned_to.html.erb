@@ -1,4 +1,4 @@
 <div class='col-md-9' id='assigned-to'>
   <%= @submission.assigned_to == '' ?  'Unassigned' : ADMINS[:"#{@submission.assigned_to}"] %>
 </div>
-<button class="col-md-3" id="edit" onclick="switchVisible()"> Edit </button>
+<button class="col-md-3" id="edit" onclick="switchVisible('update', 'edit')"> Edit </button>

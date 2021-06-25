@@ -1,0 +1,4 @@
+<div class='col-md-9' id='rejected-reason'>
+  <%= @submission.rejection_reason == '' ?  'None' : @submission.rejection_reason %>
+</div>
+<button class="col-md-3" id="edit_rejection_reason" onclick="switchVisible('update_rejection_reason', 'edit_rejection_reason')"> Edit </button>
