@@ -30,7 +30,7 @@ class Submission < ApplicationRecord
     unknown_edition: 3
   }
 
-  REJECTION_REASON = [
+  REJECTION_REASONS = [
     'BSV',
     'Fake',
     'Artist Submission',
