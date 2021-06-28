@@ -1728,16 +1728,6 @@ enum SubmissionSort {
   REJECTED_BY_DESC
 
   """
-  sort by rejection_reasons in ascending order
-  """
-  REJECTION_REASONS_ASC
-
-  """
-  sort by rejection_reasons in descending order
-  """
-  REJECTION_REASONS_DESC
-
-  """
   sort by rejection_reason in ascending order
   """
   REJECTION_REASON_ASC
