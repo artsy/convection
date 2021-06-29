@@ -50,6 +50,13 @@ class Submission < ApplicationRecord
     'Other'
   ].freeze
 
+  CATALOGUERS = [
+    'Phoebe Mitchell',
+    'Sarah Shelburne',
+    'Caroline Taggart',
+    'Dario Zorza'
+  ].freeze
+
   REQUIRED_FIELDS_FOR_SUBMISSION = %w[
     artist_id
     category

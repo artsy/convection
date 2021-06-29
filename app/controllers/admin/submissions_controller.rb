@@ -163,6 +163,7 @@ module Admin
         condition_report
         deleted_at
         depth
+        cataloguer
         dimensions_metric
         edition_number
         edition_size
