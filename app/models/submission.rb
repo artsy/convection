@@ -30,6 +30,14 @@ class Submission < ApplicationRecord
     unknown_edition: 3
   }
 
+  REJECTION_REASONS = [
+    'BSV',
+    'Fake',
+    'Artist Submission',
+    'NSV',
+    'Other'
+  ].freeze
+
   DIMENSION_METRICS = %w[in cm].freeze
 
   CATEGORIES = [
