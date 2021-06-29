@@ -58,6 +58,27 @@
             <div class='single-padding-top'>
               <%= @submission.state %>
             </div>
+            <div>
+              <% if @submission.rejected? %>
+                <div class='bold-label single-padding-top'>Rejection reason:</div>
+                <div class='single-padding-top'>
+                  <div id="update_rejection_reason" style="display: <%= @submission.rejection_reason.nil? ? 'block' : 'none' %>">
+                    <%= form_with model: [:admin, @submission] do |f| %>
+                      <% options = ['Please select one'] + Submission::REJECTION_REASONS %>
+                      <div class="col-md-9">
+                        <%= f.select :rejection_reason, options, {}, class: 'form-control'%>
+                      </div>
+                      <div class="col-md-3">
+                        <%= f.submit 'Update', id: 'update_rejection_reason', style: "height: 36px", onclick:"switchVisible('update_rejection_reason', 'edit_rejection_reason')"%>
+                      </div>
+                    <% end %>
+                  </div>
+                  <div id="edit_rejection_reason" style="display: <%= @submission.rejection_reason.nil? ? 'none' : 'block' %>">
+                    <%= render 'admin/submissions/rejection_reason'%>
+                  </div>
+                </div>
+              <% end %>
+            </div>
             <div class='bold-label single-padding-top'>Assigned To:</div>
             <div class='single-padding-top'>
               <div id="update" style="display: <%= @submission.assigned_to.nil? ? 'block' : 'none' %>">

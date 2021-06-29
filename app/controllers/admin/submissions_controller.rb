@@ -164,6 +164,7 @@ module Admin
         deleted_at
         depth
         cataloguer
+        rejection_reason
         dimensions_metric
         edition_number
         edition_size

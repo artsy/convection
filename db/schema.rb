@@ -191,6 +191,7 @@ ActiveRecord::Schema.define(version: 2021_06_28_123858) do
     t.boolean "coa_by_authenticating_body"
     t.boolean "coa_by_gallery"
     t.string "cataloguer"
+    t.string "rejection_reason"
     t.index ["consigned_partner_submission_id"], name: "index_submissions_on_consigned_partner_submission_id"
     t.index ["ext_user_id"], name: "index_submissions_on_ext_user_id"
     t.index ["primary_image_id"], name: "index_submissions_on_primary_image_id"
