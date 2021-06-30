@@ -1728,6 +1728,16 @@ enum SubmissionSort {
   REJECTED_BY_DESC
 
   """
+  sort by rejection_reason in ascending order
+  """
+  REJECTION_REASON_ASC
+
+  """
+  sort by rejection_reason in descending order
+  """
+  REJECTION_REASON_DESC
+
+  """
   sort by reminders_sent_count in ascending order
   """
   REMINDERS_SENT_COUNT_ASC
