@@ -100,7 +100,7 @@
             <div class='single-padding-top'>
               <div id="update_cataloguer" style="display: <%= @submission.cataloguer.nil? ? 'block' : 'none' %>">
                 <%= form_with model: [:admin, @submission] do |f| %>
-                  <% options = ['Please select one'] + Submission::CATALOGUERS %>
+                  <% options = [['Please select one']] + CATALOGUERS.collect { |grav_id, name| [name, grav_id] } %>
                   <div class="col-md-9">
                     <%= f.select :cataloguer, options, {}, class: 'form-control'%>
                   </div>

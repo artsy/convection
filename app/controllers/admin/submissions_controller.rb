@@ -34,6 +34,7 @@ module Admin
       {
         assigned_to: params[:assigned_to],
         state: params[:state],
+        cataloguer: params[:cataloguer],
         user: params[:user],
         artist: params[:artist],
         sort: params[:sort],
