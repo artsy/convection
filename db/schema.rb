@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_24_120342) do
+ActiveRecord::Schema.define(version: 2021_06_28_123858) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -190,6 +190,7 @@ ActiveRecord::Schema.define(version: 2021_06_24_120342) do
     t.string "utm_term"
     t.boolean "coa_by_authenticating_body"
     t.boolean "coa_by_gallery"
+    t.string "cataloguer"
     t.string "rejection_reason"
     t.index ["consigned_partner_submission_id"], name: "index_submissions_on_consigned_partner_submission_id"
     t.index ["ext_user_id"], name: "index_submissions_on_ext_user_id"
