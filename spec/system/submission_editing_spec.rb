@@ -84,7 +84,7 @@ describe 'Editing a submission', type: :feature do
                             )
 
         select 'Agnieszka', from: 'submission[assigned_to]'
-        click_button 'Update'
+        click_button 'Update', match: :first
 
         expect(page).to have_current_path(admin_submission_path(submission))
         expect(page).to have_select(

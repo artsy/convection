@@ -10,4 +10,11 @@ ADMINS = { '5ba2872826cbf26b896b1d71': 'Agnieszka',
            '593963389c18db5ce2ecdc70': 'Wendy',
            '602692836c6a2c0011e96827': 'Robin',
            '60b62f317a4fa058b2a5044d': 'Daniela',
-           '60ba938a6e6d1d000f35e5f4': 'George' }.freeze
+           '60ba938a6e6d1d000f35e5f4': 'George',
+           '60d0bc325a651500132f91b1': 'Louis' }.freeze
+
+CATALOGUERS = {
+    '5abbfc38c9dc2458cd28ca6b': 'Phoebe Mitchell',
+    '5b7573159363e41ef074fac4': 'Sarah Shelburne',
+    '5e56947fc47e41000ec22ef5': 'Caroline Taggart',
+    '60cb61cba775030011678a2a': 'Dario Zorza' }.freeze

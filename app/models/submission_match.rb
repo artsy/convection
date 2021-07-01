@@ -64,14 +64,21 @@ SQL
       state: params[:state].presence,
       user_id: params[:user].presence,
       artist_id: params[:artist].presence,
+      category: params[:category].presence
     }.compact
     attributes.merge!(assigned_to: assigned_to) if filtering_by_assigned_to?
+    attributes.merge!(cataloguer: cataloguer) if filtering_by_cataloguer?
     attributes
   end
 
   def filtering_by_assigned_to?
     params.keys.map(&:to_sym).include?(:assigned_to) &&
       params[:assigned_to] != 'all'
+  end
+
+  def filtering_by_cataloguer?
+    params.keys.map(&:to_sym).include?(:cataloguer) &&
+      params[:cataloguer] != 'all'
   end
 
   def filtering_by_assigned_without_accepted_offer?
@@ -100,5 +107,9 @@ SQL
 
   def assigned_to
     params[:assigned_to].presence
+  end
+
+  def cataloguer
+    params[:cataloguer].presence
   end
 end

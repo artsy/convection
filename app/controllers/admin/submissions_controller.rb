@@ -34,6 +34,8 @@ module Admin
       {
         assigned_to: params[:assigned_to],
         state: params[:state],
+        cataloguer: params[:cataloguer],
+        category: params[:category],
         user: params[:user],
         artist: params[:artist],
         sort: params[:sort],
@@ -163,6 +165,7 @@ module Admin
         condition_report
         deleted_at
         depth
+        cataloguer
         rejection_reason
         dimensions_metric
         edition_number
