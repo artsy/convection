@@ -1398,6 +1398,16 @@ enum SubmissionSort {
   AUTHENTICITY_CERTIFICATE_DESC
 
   """
+  sort by cataloguer in ascending order
+  """
+  CATALOGUER_ASC
+
+  """
+  sort by cataloguer in descending order
+  """
+  CATALOGUER_DESC
+
+  """
   sort by category in ascending order
   """
   CATEGORY_ASC

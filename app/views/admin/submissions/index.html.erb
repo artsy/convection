@@ -14,7 +14,7 @@
       <%= form_tag admin_submissions_url, method: 'get', id: 'submission-filter-form' do %>
         <%= hidden_field_tag :user, filters[:user] %>
         <%= hidden_field_tag :artist, filters[:artist] %>
-        <div class='col-md-6'>
+        <div class='col-md-4'>
           <label>State</label>
           <%= select_tag 'state',
                         options_for_select(
@@ -24,12 +24,22 @@
                         class: 'form-control',
                         onchange: ("$('#submission-filter-form').submit()") %>
         </div>
-        <div class='col-md-6' style="padding: 0;">
+        <div class='col-md-4' style="padding: 0 15px 0 0;">
           <label>Assigned to</label>
           <%= select_tag 'assigned_to',
                         options_for_select(
                           filter_by_assigned_to_options,
                           filters[:assigned_to]
+                        ),
+                        class: 'form-control',
+                        onchange: ("$('#submission-filter-form').submit()") %>
+        </div>
+        <div class='col-md-4' style="padding: 0;">
+          <label>Cataloguer</label>
+          <%= select_tag 'cataloguer',
+                        options_for_select(
+                          filter_by_cataloguers_options,
+                          filters[:cataloguer]
                         ),
                         class: 'form-control',
                         onchange: ("$('#submission-filter-form').submit()") %>
