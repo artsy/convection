@@ -64,6 +64,7 @@ SQL
       state: params[:state].presence,
       user_id: params[:user].presence,
       artist_id: params[:artist].presence,
+      category: params[:category].presence
     }.compact
     attributes.merge!(assigned_to: assigned_to) if filtering_by_assigned_to?
     attributes.merge!(cataloguer: cataloguer) if filtering_by_cataloguer?
