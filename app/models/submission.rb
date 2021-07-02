@@ -11,7 +11,13 @@ class Submission < ApplicationRecord
 
   pg_search_scope :search,
                   against: %i[id title],
-                  using: { tsearch: { prefix: true }, trigram: {} }
+                  using: {
+                    tsearch: { prefix: true },
+                    trigram: {
+                      only: %i[id],
+                      threshold: 0.9
+                    }
+                  }
 
   STATES = [
     DRAFT = 'draft',

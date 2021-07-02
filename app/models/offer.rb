@@ -10,7 +10,13 @@ class Offer < ApplicationRecord
   pg_search_scope :search,
                   against: %i[id reference_id],
                   associated_against: { partner: %i[name] },
-                  using: { tsearch: { prefix: true } }
+                  using: {
+                    tsearch: { prefix: true },
+                    trigram: {
+                      only: %i[id reference_id],
+                      threshold: 0.9
+                    }
+                  }
 
   OFFER_TYPES = [
     AUCTION_CONSIGNMENT = 'auction consignment',
