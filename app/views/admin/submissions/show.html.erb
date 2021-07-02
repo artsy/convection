@@ -79,6 +79,18 @@
                 </div>
               <% end %>
             </div>
+            <div class='bold-label single-padding-top'>Source</div>
+            <div class='single-padding-top'>
+              <div>
+                <%= @submission.utm_source %>
+              </div>
+              <div>
+                <%= @submission.utm_medium %>
+              </div>
+              <div>
+                <%= @submission.utm_term %>
+              </div>
+            </div>
             <div class='bold-label single-padding-top'>Assigned To:</div>
             <div class='single-padding-top'>
               <div id="update" style="display: <%= @submission.assigned_to.nil? ? 'block' : 'none' %>">
