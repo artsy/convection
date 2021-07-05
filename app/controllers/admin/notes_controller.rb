@@ -21,7 +21,7 @@ module Admin
     private
 
     def note_params
-      params.require(:note).permit(:body).merge(gravity_user_id: @current_user)
+      params.require(:note).permit(:body, :assign_with_partner).merge(gravity_user_id: @current_user)
     end
   end
 end
