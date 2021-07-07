@@ -224,10 +224,9 @@ describe 'admin/submissions/show.html.erb', type: :feature do
           )
         end
 
-        submission2.notes.create!(
+        submission2.user.notes.create!(
           gravity_user_id: gravity_user_id,
-          body: "Note 4",
-          assign_with_partner:true
+          body: "Note 4"
         )
         page.visit "/admin/submissions/#{submission.id}"
 

@@ -4,7 +4,12 @@ module Admin
   class NotesController < ApplicationController
     def create
       submission = Submission.find(params.dig(:note, :submission_id))
-      note = submission.notes.new(note_params)
+      if params.dig(:note, :add_note_to_user)
+        user = User.find(submission.user_id)
+        note = user.notes.new(note_params)
+      else
+        note = submission.notes.new(note_params)
+      end
       path = admin_submission_path(submission)
 
       if note.save
@@ -21,7 +26,7 @@ module Admin
     private
 
     def note_params
-      params.require(:note).permit(:body, :assign_with_partner).merge(gravity_user_id: @current_user)
+      params.require(:note).permit(:body).merge(gravity_user_id: @current_user)
     end
   end
 end

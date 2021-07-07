@@ -1,9 +1,9 @@
 <%= form_with model: [:admin, note], local: true do |f| %>
   <%= f.hidden_field :submission_id %>
   <%= f.text_area :body, required: "required" %>
-  <%= f.label :assign_with_partner do %>
-    <%= f.check_box :assign_with_partner %>
-   Assign note with partner
+  <%= f.label :add_note_to_user do %>
+    <%= f.check_box :add_note_to_user %>
+    Add a note to the user
 <% end %>
   <%= f.submit 'Create', style: "float:right;" %>
 <% end %>
