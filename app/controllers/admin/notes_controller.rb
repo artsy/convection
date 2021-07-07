@@ -5,8 +5,7 @@ module Admin
     def create
       submission = Submission.find(params.dig(:note, :submission_id))
       if params.dig(:note, :add_note_to_user)
-        user = User.find(submission.user_id)
-        note = user.notes.new(note_params)
+        note = submission.user.notes.new(note_params)
       else
         note = submission.notes.new(note_params)
       end

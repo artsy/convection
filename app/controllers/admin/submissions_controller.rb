@@ -79,7 +79,7 @@ module Admin
       @partner_submissions_count =
         notified_partner_submissions.group_by_day.count
       @offers = @submission.offers
-      @notes = @submission.notes + User.find(@submission.user_id).notes
+      @notes = @submission.notes + @submission.user.notes
       @actions = SubmissionStateActions.for(@submission)
       @partner_name = @submission.consigned_partner_submission&.partner&.name
     end
