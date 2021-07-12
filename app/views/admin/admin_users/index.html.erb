@@ -39,10 +39,10 @@
       <%= admin_user.cataloguer %>
     </div>
     <div class='col-md-2'>
-      <%= button_to 'Edit', edit_admin_admin_user_path(admin_user), method: 'get', class: 'btn btn-small btn-primary pull-right' %>
+      <%= button_to 'Edit', edit_admin_admin_user_path(admin_user), method: :get, class: 'btn btn-small btn-primary pull-right' %>
     </div>
     <div class='col-md-2'>
-      <%= button_to 'Destroy', admin_admin_user_path(admin_user), medivod: :delete, data: { confirm: 'Are you sure?'}, class: 'btn btn-small btn-primary pull-right' %>
+      <%= button_to 'Destroy', admin_admin_user_path(admin_user), method: :delete, data: { confirm: 'Are you sure?'}, class: 'btn btn-small btn-primary pull-right' %>
     </div>
   </div>
   <% end %>

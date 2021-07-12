@@ -6,7 +6,7 @@ module Admin
 
     # GET /admin_users
     def index
-      @admin_users = AdminUser.all
+      @admin_users = AdminUser.order('LOWER(name)').all
     end
 
     # GET /admin_users/1
@@ -57,7 +57,7 @@ module Admin
 
       # Only allow a list of trusted parameters through.
       def admin_user_params
-        params.require(:admin_user).permit(:name, :gravity_user_id, :admin_user, :boolean, :cataloguer)
+        params.require(:admin_user).permit(:name, :gravity_user_id, :admin_user, :admin, :cataloguer)
       end
   end
 end
