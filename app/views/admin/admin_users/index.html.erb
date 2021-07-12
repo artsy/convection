@@ -1,41 +1,49 @@
-<h1>Listing admin_user</h1>
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Gravity user</th>
-      <th>Admin</th>
-      <th>Boolean</th>
-      <th>Cataloguer</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @admin_users.each do |admin_user| %>
-      <tr>
-        <td>
-          <%= admin_user.name %>
-        </td>
-        <td>
-          <%= admin_user.gravity_user_id %>
-        </td>
-        <td>
-          <%= admin_user.admin %>
-        </td>
-        <td>
-          <%= admin_user.cataloguer %>
-        </td>
-        <td>
-          <%= link_to 'Edit', edit_admin_admin_user_path(admin_user) %>
-        </td>
-        <td>
-          <%= link_to 'Destroy', admin_admin_user_path(admin_user), method: :delete, data: { confirm: 'Are you sure?' } %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-<br/>
-<%= link_to 'New Admin', new_admin_admin_user_path %>
+<div class='page-title'>
+  <%= link_to 'Create New', new_admin_admin_user_path, class: 'btn btn-small btn-primary pull-right' %>
+  <h2>
+    Admins
+  </h2>
+</div>
+
+<div class='container double-padding-top'>
+
+  <div class='row'>
+    <div class='col-md-2'>
+      <div class='list-group-item-info bold-label'>Name</div>
+    </div>
+    <div class='col-md-4'>
+      <div class='list-group-item-info bold-label'>Gravity user</div>
+    </div>
+    <div class='col-md-1'>
+      <div class='list-group-item-info bold-label'>Admin</div>
+    </div>
+    <div class='col-md-1'>
+      <div class='list-group-item-info bold-label'>Cataloguer</div>
+    </div>
+    <div class='col-md-2'></div>
+    <div class='col-md-2'></div>
+    <div class='col-md-2'></div>
+  </div>
+  <% @admin_users.each do |admin_user| %>
+  <div class='row double-padding-top'>
+    <div class='col-md-2'>
+      <%= admin_user.name %>
+    </div>
+    <div class='col-md-4'>
+      <%= admin_user.gravity_user_id %>
+    </div>
+    <div class='col-md-1'>
+      <%= admin_user.admin %>
+    </div>
+    <div class='col-md-1'>
+      <%= admin_user.cataloguer %>
+    </div>
+    <div class='col-md-2'>
+      <%= button_to 'Edit', edit_admin_admin_user_path(admin_user), method: 'get', class: 'btn btn-small btn-primary pull-right' %>
+    </div>
+    <div class='col-md-2'>
+      <%= button_to 'Destroy', admin_admin_user_path(admin_user), medivod: :delete, data: { confirm: 'Are you sure?'}, class: 'btn btn-small btn-primary pull-right' %>
+    </div>
+  </div>
+  <% end %>
+</div>
