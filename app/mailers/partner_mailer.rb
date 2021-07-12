@@ -54,6 +54,6 @@ class PartnerMailer < ApplicationMailer
       )
 
     smtpapi category: %w[offer], unique_args: { offer_id: offer.id }
-    mail(to: email, subject: 'A response to your consignment offer')
+    mail(to: email, from: submission.assigned_to, subject: 'A response to your consignment offer')
   end
 end
