@@ -173,7 +173,7 @@ class Submission < ApplicationRecord
   end
 
   def exchange_assigned_to_real_user!
-    admin_gravity_id = Admin.find_by(name: assigned_to)&.gravity_user_id
+    admin_gravity_id = AdminUser.find_by(name: assigned_to)&.gravity_user_id
 
     return if assigned_to == admin_gravity_id
 

@@ -1,0 +1,41 @@
+<h1>Listing admin_user</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Gravity user</th>
+      <th>Admin</th>
+      <th>Boolean</th>
+      <th>Cataloguer</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @admin_users.each do |admin_user| %>
+      <tr>
+        <td>
+          <%= admin_user.name %>
+        </td>
+        <td>
+          <%= admin_user.gravity_user_id %>
+        </td>
+        <td>
+          <%= admin_user.admin %>
+        </td>
+        <td>
+          <%= admin_user.cataloguer %>
+        </td>
+        <td>
+          <%= link_to 'Edit', edit_admin_admin_user_path(admin_user) %>
+        </td>
+        <td>
+          <%= link_to 'Destroy', admin_admin_user_path(admin_user), method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br/>
+<%= link_to 'New Admin', new_admin_admin_user_path %>

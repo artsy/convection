@@ -264,7 +264,7 @@ describe SubmissionsHelper, type: :helper do
     subject { helper.assignable_admin?(user) }
 
     before do
-      Admin.create(gravity_user_id: 'admin', name: 'AdminName', admin: true)
+      AdminUser.create(gravity_user_id: 'admin', name: 'AdminName', admin: true)
     end
 
     context 'for non-admin user' do

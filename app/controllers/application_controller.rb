@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
-  include ArtsyAuth::Authenticated
+  # include ArtsyAuth::Authenticated
   helper Watt::Engine.helpers
 
   before_action :set_current_user

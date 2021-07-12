@@ -123,6 +123,6 @@ module SubmissionsHelper
   end
 
   def assignable_admin?(user)
-    Admin.exists?(gravity_user_id: user)
+    AdminUser.exists?(gravity_user_id: user)
   end
 end
