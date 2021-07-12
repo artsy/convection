@@ -15,7 +15,7 @@ describe "Offers lapse sent rake task" do
   # ... add other offers that shouldn't change
 
   it "testing..." do
-    expect { invoke_task }.to change { past_offer.reload.state }.from("sent").to("lapsed")
-    expect { invoke_task }.not_to change { future_offer.reload.state }
+    expect { invoke_task }.to(change { past_offer.reload.state }.from("sent").to("lapsed"))
+    expect { invoke_task }.not_to(change { future_offer.reload.state })
   end
 end
