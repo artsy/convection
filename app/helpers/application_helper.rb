@@ -27,4 +27,8 @@ module ApplicationHelper
   def filter_by_cataloguers_options
     AdminUser.cataloguers.map { |admin| [admin.name, admin.gravity_user_id] }.unshift(%w[all all], ['none', nil])
   end
+
+  def super_admin_user?(user_id)
+    AdminUser.exists?(gravity_user_id: user_id, admin: true)
+  end
 end

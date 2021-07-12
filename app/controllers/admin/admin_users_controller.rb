@@ -2,6 +2,9 @@
 
 module Admin
   class AdminUsersController < ApplicationController
+    include ApplicationHelper
+
+    before_action :authorize_user!
     before_action :set_admin_user, only: [:show, :edit, :update, :destroy]
 
     # GET /admin_users
@@ -56,7 +59,11 @@ module Admin
 
       # Only allow a list of trusted parameters through.
       def admin_user_params
-        params.require(:admin_user).permit(:name, :gravity_user_id, :admin_user, :admin, :cataloguer)
+        params.require(:admin_user).permit(:name, :gravity_user_id, :super_admin, :admin, :cataloguer)
+      end
+
+      def authorize_user!
+        raise ApplicationController::NotAuthorized unless super_admin_user? @current_user
       end
   end
 end

@@ -19,10 +19,13 @@ ActiveRecord::Schema.define(version: 2021_07_12_125843) do
   create_table "admin_users", force: :cascade do |t|
     t.string "name", default: "f"
     t.string "gravity_user_id", default: "f"
+    t.boolean "super_admin"
     t.boolean "admin"
     t.boolean "cataloguer"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["admin"], name: "index_admin_users_on_admin"
+    t.index ["cataloguer"], name: "index_admin_users_on_cataloguer"
     t.index ["gravity_user_id"], name: "index_admin_users_on_gravity_user_id", unique: true
     t.index ["name"], name: "index_admin_users_on_name", unique: true
   end
