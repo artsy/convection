@@ -21,10 +21,10 @@ module ApplicationHelper
   end
 
   def filter_by_assigned_to_options
-    ADMINS.collect.map { |id, name| [name, id] }.unshift(%w[all all], ['none', nil])
+    Admin.admins.map { |admin| [admin.name, admin.gravity_user_id] }.unshift(%w[all all], ['none', nil])
   end
 
   def filter_by_cataloguers_options
-    CATALOGUERS.collect.map { |id, name| [name, id] }.unshift(%w[all all], ['none', nil])
+    Admin.cataloguers.map { |admin| [admin.name, admin.gravity_user_id] }.unshift(%w[all all], ['none', nil])
   end
 end
