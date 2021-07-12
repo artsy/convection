@@ -17,14 +17,14 @@ ActiveRecord::Schema.define(version: 2021_07_12_125843) do
   enable_extension "plpgsql"
 
   create_table "admin_users", force: :cascade do |t|
-    t.string "name"
-    t.string "gravity_user_id"
-    t.boolean "admin", default: false
-    t.boolean "cataloguer", default: false
+    t.string "name", default: "f"
+    t.string "gravity_user_id", default: "f"
+    t.boolean "admin"
+    t.boolean "cataloguer"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["admin"], name: "index_admin_users_on_admin", unique: true
-    t.index ["cataloguer"], name: "index_admin_users_on_cataloguer", unique: true
+    t.index ["gravity_user_id"], name: "index_admin_users_on_gravity_user_id", unique: true
+    t.index ["name"], name: "index_admin_users_on_name", unique: true
   end
 
   create_table "artist_standing_scores", force: :cascade do |t|

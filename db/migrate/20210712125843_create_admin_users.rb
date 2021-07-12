@@ -3,10 +3,10 @@
 class CreateAdminUsers < ActiveRecord::Migration[6.1]
   def change
     create_table :admin_users do |t|
-      t.string :name
-      t.string :gravity_user_id
-      t.boolean :admin, index: { unique: true }, default: false
-      t.boolean :cataloguer, index: { unique: true }, default: false
+      t.string :name, index: { unique: true }, default: false
+      t.string :gravity_user_id, index: { unique: true }, default: false
+      t.boolean :admin
+      t.boolean :cataloguer
 
       t.timestamps
     end

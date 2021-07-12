@@ -20,9 +20,6 @@
     <div class='col-md-1'>
       <div class='list-group-item-info bold-label'>Cataloguer</div>
     </div>
-    <div class='col-md-2'></div>
-    <div class='col-md-2'></div>
-    <div class='col-md-2'></div>
   </div>
   <% @admin_users.each do |admin_user| %>
   <div class='row double-padding-top'>
@@ -33,10 +30,10 @@
       <%= admin_user.gravity_user_id %>
     </div>
     <div class='col-md-1'>
-      <%= admin_user.admin %>
+      <%= admin_user.admin ? "Yes" : "No" %>
     </div>
     <div class='col-md-1'>
-      <%= admin_user.cataloguer %>
+      <%= admin_user.cataloguer ? "Yes" : "No" %>
     </div>
     <div class='col-md-2'>
       <%= button_to 'Edit', edit_admin_admin_user_path(admin_user), method: :get, class: 'btn btn-small btn-primary pull-right' %>
