@@ -20,8 +20,7 @@ module Admin
     end
 
     # GET /admin_users/1/edit
-    def edit
-    end
+    def edit; end
 
     # POST /admin_users
     def create

@@ -23,8 +23,8 @@ ActiveRecord::Schema.define(version: 2021_07_12_125843) do
     t.boolean "cataloguer", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["admin"], name: "index_admin_users_on_admin"
-    t.index ["cataloguer"], name: "index_admin_users_on_cataloguer"
+    t.index ["admin"], name: "index_admin_users_on_admin", unique: true
+    t.index ["cataloguer"], name: "index_admin_users_on_cataloguer", unique: true
   end
 
   create_table "artist_standing_scores", force: :cascade do |t|
