@@ -1,4 +1,4 @@
 <div class='col-md-9' id='assigned-to'>
-  <%= @submission.assigned_to == '' ?  'Unassigned' : ADMINS[:"#{@submission.assigned_to}"] %>
+  <%= @submission.assigned_to == '' ?  'Unassigned' : AdminUser.find_by(gravity_user_id: @submission.assigned_to)&.name %>
 </div>
 <button class="col-md-3" id="edit" onclick="switchVisible('update', 'edit')"> Edit </button>
