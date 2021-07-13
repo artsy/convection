@@ -23,7 +23,7 @@ gem 'ddtrace'
 gem 'decent_exposure' # for safely referencing variables in views
 gem 'gemini_upload-rails' # for admins to upload images
 gem 'graphiql-rails' # A lovely interface to the API
-gem 'graphql', '~>1.11.6'
+gem 'graphql', '~>1.12.9'
 gem 'graphql-page_cursors'
 gem 'graphql-rails_logger' # Adds pretty-print logging support to queries
 gem 'haml-rails' # required for watt layouts
