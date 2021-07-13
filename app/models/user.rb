@@ -6,6 +6,7 @@ class User < ApplicationRecord
   validates :gravity_user_id, presence: true, uniqueness: true
 
   has_many :submissions, dependent: :nullify
+  has_many :notes, dependent: :nullify
 
   pg_search_scope :search, against: :email, using: { tsearch: { prefix: true } }
 
