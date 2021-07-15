@@ -3,6 +3,7 @@
 class Note < ApplicationRecord
   validates :body, presence: true
   belongs_to :submission
+  belongs_to :user
 
   def author
     if defined?(@author)

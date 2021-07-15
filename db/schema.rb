@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_12_125843) do
+ActiveRecord::Schema.define(version: 2021_07_07_130204) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -54,7 +54,9 @@ ActiveRecord::Schema.define(version: 2021_07_12_125843) do
     t.bigint "submission_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id"
     t.index ["submission_id"], name: "index_notes_on_submission_id"
+    t.index ["user_id"], name: "index_notes_on_user_id"
   end
 
   create_table "offer_responses", force: :cascade do |t|
@@ -222,6 +224,7 @@ ActiveRecord::Schema.define(version: 2021_07_12_125843) do
 
   add_foreign_key "assets", "submissions"
   add_foreign_key "notes", "submissions"
+  add_foreign_key "notes", "users"
   add_foreign_key "offer_responses", "offers"
   add_foreign_key "offers", "partner_submissions", on_delete: :cascade
   add_foreign_key "offers", "submissions", on_delete: :cascade
