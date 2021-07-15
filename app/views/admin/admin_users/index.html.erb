@@ -11,17 +11,17 @@
     <div class='col-md-2'>
       <div class='list-group-item-info bold-label'>Name</div>
     </div>
-    <div class='col-md-4'>
-      <div class='list-group-item-info bold-label'>Gravity User ID</div>
+    <div class='col-md-3'>
+      <div class='list-group-item-info bold-label align-center'>Gravity User ID</div>
     </div>
     <div class='col-md-1'>
-      <div class='list-group-item-info bold-label'>Assignee</div>
+      <div class='list-group-item-info bold-label align-center'>Assignee</div>
     </div>
     <div class='col-md-1'>
-      <div class='list-group-item-info bold-label'>Cataloguer</div>
+      <div class='list-group-item-info bold-label align-center'>Cataloguer</div>
     </div>
     <div class='col-md-1'>
-      <div class='list-group-item-info bold-label'>Admin</div>
+      <div class='list-group-item-info bold-label align-center'>Admin</div>
     </div>
   </div>
   <% @admin_users.each do |admin_user| %>
@@ -29,23 +29,23 @@
     <div class='col-md-2'>
       <%= admin_user.name %>
     </div>
-    <div class='col-md-4'>
+    <div class='col-md-3 align-center'>
       <%= admin_user.gravity_user_id %>
     </div>
-    <div class='col-md-1'>
+    <div class='col-md-1 align-center'>
       <%= admin_user.assignee ? "Yes" : "No" %>
     </div>
-    <div class='col-md-1'>
+    <div class='col-md-1 align-center'>
       <%= admin_user.cataloguer ? "Yes" : "No" %>
     </div>
-    <div class='col-md-1'>
+    <div class='col-md-1 align-center'>
       <%= admin_user.super_admin ? "Yes" : "No" %>
     </div>
-    <div class='col-md-1'>
-      <%= button_to 'Edit', edit_admin_admin_user_path(admin_user), method: :get, class: 'btn btn-small btn-primary pull-right' %>
+    <div class='col-md-2'%>
+      <%= button_to '&emsp;Edit&emsp;'.html_safe, edit_admin_admin_user_path(admin_user), method: :get, class: 'btn btn-small btn-primary pull-right', style: 'float: center;'%>
     </div>
     <div class='col-md-2'>
-      <%= button_to 'Remove', admin_admin_user_path(admin_user), method: :delete, data: { confirm: 'Are you sure?'}, class: 'btn btn-small btn-primary pull-right' %>
+      <%= button_to 'Remove', admin_admin_user_path(admin_user), method: :delete, data: { confirm: 'Are you sure?'}, class: 'btn btn-small btn-primary pull-right'%>
     </div>
   </div>
   <% end %>
