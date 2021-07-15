@@ -112,7 +112,7 @@
             <div class='single-padding-top'>
               <div id="update_cataloguer" style="display: <%= @submission.cataloguer.nil? ? 'block' : 'none' %>">
                 <%= form_with model: [:admin, @submission] do |f| %>
-                  <% options = [['Please select one']] + CATALOGUERS.collect { |grav_id, name| [name, grav_id] } %>
+                  <% options = [['Please select one']] + AdminUser.cataloguers.map { |cataloguer| [cataloguer.name, cataloguer.gravity_user_id] } %>
                   <div class="col-md-9">
                     <%= f.select :cataloguer, options, {}, class: 'form-control'%>
                   </div>
