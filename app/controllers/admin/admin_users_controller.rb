@@ -58,7 +58,7 @@ module Admin
     end
 
     def admin_user_params
-      params.require(:admin_user).permit(:name, :gravity_user_id, :super_admin, :admin, :cataloguer)
+      params.require(:admin_user).permit(:name, :gravity_user_id, :super_admin, :assignee, :cataloguer)
     end
 
     def authorize_user!

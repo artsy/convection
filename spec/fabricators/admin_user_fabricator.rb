@@ -5,6 +5,6 @@ Fabricator(:admin_user) do
     Fabricate.sequence(:gravity_user_id) { |i| "user-id-#{i}" }
   end
   name { "jon-jonson" }
-  admin { false }
+  assignee { false }
   cataloguer { false }
 end

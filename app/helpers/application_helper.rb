@@ -21,7 +21,7 @@ module ApplicationHelper
   end
 
   def filter_by_assigned_to_options
-    AdminUser.admins.map {
+    AdminUser.assignees.map {
       |admin| [admin.name, admin.gravity_user_id]
     }.unshift(%w[all all], ['none', nil])
   end
@@ -33,6 +33,6 @@ module ApplicationHelper
   end
 
   def super_admin_user?(user_id)
-    AdminUser.exists?(gravity_user_id: user_id, admin: true)
+    AdminUser.exists?(gravity_user_id: user_id, super_admin: true)
   end
 end

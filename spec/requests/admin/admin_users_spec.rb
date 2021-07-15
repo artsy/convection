@@ -42,7 +42,7 @@ RSpec.describe "/admin/admin_users", type: :request do
     context "with valid parameters" do
       it "creates a new AdminUser" do
         expect {
-          post admin_admin_users_url, params: { admin_user: { name: "paula" } }
+          post admin_admin_users_url, params: { admin_user: { name: "paula", gravity_user_id: "123" } }
         }.to change(AdminUser, :count).by(1)
 
         expect(response).to redirect_to(admin_admin_users_url)
