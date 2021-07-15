@@ -1,4 +1,4 @@
 <div class='col-md-9' id='cataloguer'>
-  <%= @submission.cataloguer == '' ?  'Unassigned' : CATALOGUERS[:"#{@submission.cataloguer}"] %>
+  <%= @submission.cataloguer == '' ?  'Unassigned' : AdminUser.find_by(id: @submission.cataloguer)&.name %>
 </div>
 <button class="col-md-3" id="edit_cataloguer" onclick="switchVisible('update_cataloguer', 'edit_cataloguer')"> Edit </button>

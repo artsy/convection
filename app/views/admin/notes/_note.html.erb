@@ -1,6 +1,9 @@
 <hr />
 <div class='list-group-item--note'>
   <div class='list-group-item--byline'>
+    <% if note.user %>
+      <span class='user-note-badge'>User note</span>
+    <% end %>
     <%= note.author.try(:name) %> added a note at <%= note.updated_at.in_time_zone('Eastern Time (US & Canada)').to_formatted_s(:long)%>
   </div>
   <div class='list-group-item--body'>

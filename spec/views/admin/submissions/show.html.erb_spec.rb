@@ -195,6 +195,19 @@ describe 'admin/submissions/show.html.erb', type: :feature do
     context 'notes' do
       let(:submission) { @submission }
       let(:gravity_user_id) { 'abc123' }
+      let(:submission2) do
+        Fabricate(
+          :submission,
+          title: 'THE SECOND ARTWORK',
+          artist_id: 'artistid',
+          edition: true,
+          edition_size: 100,
+          edition_number: '23a',
+          category: 'Painting',
+          user: submission.user,
+          state: 'submitted'
+        )
+      end
 
       before do
         mocked_user_data = {
@@ -208,6 +221,30 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         3.times do |i|
           submission.notes.create!(
             gravity_user_id: gravity_user_id, body: "Note #{i + 1}"
+          )
+        end
+
+        submission2.user.notes.create!(
+          gravity_user_id: gravity_user_id,
+          body: "Note 4"
+        )
+        page.visit "/admin/submissions/#{submission.id}"
+
+        expect(page).to have_content('Notes')
+
+        within(:css, '.notes-section') do
+          expect(page).to have_content('Buster Bluth added a note at', count: 4)
+          expect(page).to have_content('Note 1')
+          expect(page).to have_content('Note 2')
+          expect(page).to have_content('Note 3')
+          expect(page).to have_content('Note 4')
+        end
+      end
+
+      it 'shows a list of notes' do
+        3.times do |i|
+          submission.notes.create!(
+            gravity_user_id: gravity_user_id, body: "Note #{i + 1}",
           )
         end
 
