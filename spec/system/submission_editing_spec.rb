@@ -77,7 +77,7 @@ describe 'Editing a submission', type: :feature do
 
     context 'from the detail screen' do
       before do
-        Fabricate(:admin_user, name: 'Agnieszka', admin: true)
+        Fabricate(:admin_user, name: 'Agnieszka', assignee: true)
       end
 
       it 'displays that admin on the submission detail page' do

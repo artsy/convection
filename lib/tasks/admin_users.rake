@@ -7,7 +7,7 @@ namespace :admin_users do
       admin = AdminUser.find_by(gravity_user_id: id)
 
       if admin && !admin.admin
-        admin.update(admin: true)
+        admin.update(assignee: true)
       end
 
       unless admin
