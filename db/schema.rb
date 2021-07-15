@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 2021_07_12_125843) do
     t.index ["cataloguer"], name: "index_admin_users_on_cataloguer"
     t.index ["gravity_user_id"], name: "index_admin_users_on_gravity_user_id", unique: true
     t.index ["name"], name: "index_admin_users_on_name", unique: true
+    t.index ["super_admin"], name: "index_admin_users_on_super_admin"
   end
 
   create_table "artist_standing_scores", force: :cascade do |t|
