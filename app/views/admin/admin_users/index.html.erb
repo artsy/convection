@@ -1,0 +1,52 @@
+<div class='page-title'>
+  <%= link_to 'Create New', new_admin_admin_user_path, class: 'btn btn-small btn-primary pull-right' %>
+  <h2>
+    Admins
+  </h2>
+</div>
+
+<div class='container double-padding-top'>
+
+  <div class='row'>
+    <div class='col-md-2'>
+      <div class='list-group-item-info bold-label'>Name</div>
+    </div>
+    <div class='col-md-3'>
+      <div class='list-group-item-info bold-label align-center'>Gravity User ID</div>
+    </div>
+    <div class='col-md-1'>
+      <div class='list-group-item-info bold-label align-center'>Assignee</div>
+    </div>
+    <div class='col-md-1'>
+      <div class='list-group-item-info bold-label align-center'>Cataloguer</div>
+    </div>
+    <div class='col-md-1'>
+      <div class='list-group-item-info bold-label align-center'>Admin</div>
+    </div>
+  </div>
+  <% @admin_users.each do |admin_user| %>
+  <div class='row double-padding-top'>
+    <div class='col-md-2'>
+      <%= admin_user.name %>
+    </div>
+    <div class='col-md-3 align-center'>
+      <%= admin_user.gravity_user_id %>
+    </div>
+    <div class='col-md-1 align-center'>
+      <%= admin_user.assignee ? "Yes" : "No" %>
+    </div>
+    <div class='col-md-1 align-center'>
+      <%= admin_user.cataloguer ? "Yes" : "No" %>
+    </div>
+    <div class='col-md-1 align-center'>
+      <%= admin_user.super_admin ? "Yes" : "No" %>
+    </div>
+    <div class='col-md-2'%>
+      <%= button_to '&emsp;Edit&emsp;'.html_safe, edit_admin_admin_user_path(admin_user), method: :get, class: 'btn btn-small btn-primary pull-right', style: 'float: center;'%>
+    </div>
+    <div class='col-md-2'>
+      <%= button_to 'Remove', admin_admin_user_path(admin_user), method: :delete, data: { confirm: 'Are you sure?'}, class: 'btn btn-small btn-primary pull-right'%>
+    </div>
+  </div>
+  <% end %>
+</div>

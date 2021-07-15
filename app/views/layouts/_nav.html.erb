@@ -13,6 +13,7 @@
   <%= link_to 'Offers', admin_offers_url %>
   <%= link_to 'Consignments', admin_consignments_url %>
   <%= link_to 'Partners', admin_partners_url %>
+  <%= link_to 'Admins', admin_admin_users_url if super_admin_user?(@current_user) %>
   <%= link_to 'log out', '/sign_out' %>
 </div>
 
