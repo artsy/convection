@@ -56,7 +56,6 @@ RSpec.describe "/admin/admin_users", type: :request do
         patch admin_admin_user_url(admin_user), params: { admin_user: { name: "paula" } }
         expect(admin_user.reload.name).to eq("paula")
         expect(response).to redirect_to(admin_admin_users_url)
-
       end
     end
   end

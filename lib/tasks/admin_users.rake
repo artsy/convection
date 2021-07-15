@@ -11,7 +11,7 @@ namespace :admin_users do
       end
 
       unless admin
-        AdminUser.create!(gravity_user_id: id, name: name, admin: true)
+        AdminUser.create!(gravity_user_id: id, name: name, assignee: true)
       end
     end
 
