@@ -95,7 +95,7 @@
             <div class='single-padding-top'>
               <div id="update" style="display: <%= @submission.assigned_to.nil? ? 'block' : 'none' %>">
                 <%= form_with model: [:admin, @submission] do |f| %>
-                  <% options = [['Please select one', '']] + ADMINS.collect { |grav_id, name| [name, grav_id] } %>
+                  <% options = [['Please select one', '']] + AdminUser.admins.map { |admin| [admin.name, admin.gravity_user_id] } %>
                   <div class="col-md-9">
                     <%= f.select :assigned_to, options, {}, class: 'form-control'%>
                   </div>

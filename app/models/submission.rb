@@ -167,13 +167,13 @@ class Submission < ApplicationRecord
   def validate_primary_image
     return if primary_image.blank?
 
-    unless primary_image.asset_type == 'image'
-      errors.add(:primary_image, 'Primary image must have asset_type=image')
-    end
+    return if primary_image.asset_type == 'image'
+
+    errors.add(:primary_image, 'Primary image must have asset_type=image')
   end
 
   def exchange_assigned_to_real_user!
-    admin_gravity_id = ADMINS.key assigned_to
+    admin_gravity_id = AdminUser.find_by(name: assigned_to)&.gravity_user_id
 
     return if assigned_to == admin_gravity_id
 

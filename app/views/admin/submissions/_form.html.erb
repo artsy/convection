@@ -311,7 +311,7 @@
                   Assigned To:
                 </label>
                 <div class='col-sm-10'>
-                  <% options = [['Please select one', '']] + ADMINS.collect { |id, name| [name, id] } %>
+                  <% options = [['Please select one', '']] + AdminUser.admins.map { |admin| [admin.name, admin.gravity_user_id] } %>
                   <%= f.select :assigned_to, options, {}, class: 'form-control' %>
                 </div>
               </div>

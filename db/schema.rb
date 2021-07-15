@@ -10,12 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_28_123858) do
+ActiveRecord::Schema.define(version: 2021_07_12_125843) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
-  enable_extension "unaccent"
+
+  create_table "admin_users", force: :cascade do |t|
+    t.string "name", default: "f"
+    t.string "gravity_user_id", default: "f"
+    t.boolean "super_admin"
+    t.boolean "admin"
+    t.boolean "cataloguer"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["admin"], name: "index_admin_users_on_admin"
+    t.index ["cataloguer"], name: "index_admin_users_on_cataloguer"
+    t.index ["gravity_user_id"], name: "index_admin_users_on_gravity_user_id", unique: true
+    t.index ["name"], name: "index_admin_users_on_name", unique: true
+  end
 
   create_table "artist_standing_scores", force: :cascade do |t|
     t.string "artist_id"
@@ -178,6 +191,9 @@ ActiveRecord::Schema.define(version: 2021_06_28_123858) do
     t.string "assigned_to"
     t.datetime "published_at"
     t.string "source_artwork_id"
+    t.string "utm_source"
+    t.string "utm_medium"
+    t.string "utm_term"
     t.integer "attribution_class"
     t.string "publisher"
     t.string "artist_proofs"
@@ -185,13 +201,10 @@ ActiveRecord::Schema.define(version: 2021_06_28_123858) do
     t.string "exhibition"
     t.string "condition_report"
     t.string "signature_detail"
-    t.string "utm_source"
-    t.string "utm_medium"
-    t.string "utm_term"
     t.boolean "coa_by_authenticating_body"
     t.boolean "coa_by_gallery"
-    t.string "cataloguer"
     t.string "rejection_reason"
+    t.string "cataloguer"
     t.index ["consigned_partner_submission_id"], name: "index_submissions_on_consigned_partner_submission_id"
     t.index ["ext_user_id"], name: "index_submissions_on_ext_user_id"
     t.index ["primary_image_id"], name: "index_submissions_on_primary_image_id"

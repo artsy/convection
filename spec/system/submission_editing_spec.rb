@@ -76,6 +76,10 @@ describe 'Editing a submission', type: :feature do
     end
 
     context 'from the detail screen' do
+      before do
+        Fabricate(:admin_user, name: 'Agnieszka', admin: true)
+      end
+
       it 'displays that admin on the submission detail page' do
         visit admin_submission_path(submission)
         expect(page).to_not have_select(

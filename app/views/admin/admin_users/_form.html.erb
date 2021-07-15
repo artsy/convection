@@ -1,0 +1,45 @@
+<div class='container'>
+  <%= form_for @admin_user, url: @admin_user.persisted? ? admin_admin_user_path(@admin_user) : admin_admin_users_path do |f| %>
+  <% if @admin_user.errors.any? %>
+  <div id="error_explanation">
+    <h2>
+      <%= "#{pluralize(@admin_user.errors.count, "error")} prohibited this admin from being saved:" %>
+    </h2>
+    <ul>
+      <% @admin_user.errors.full_messages.each do |message| %>
+      <li>
+        <%= message %>
+      </li>
+      <% end %>
+    </ul>
+  </div>
+  <% end %>
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :gravity_user_id %>
+    <%= f.text_field :gravity_user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :assignee %>
+    <%= f.check_box :admin %>
+  </div>
+  <div class="field">
+    <%= f.label :cataloguer %>
+    <%= f.check_box :cataloguer %>
+  </div>
+  <div class="field">
+    <%= f.label :super_admin %>
+    <%= f.check_box :super_admin %>
+  </div>
+  <div class="actions">
+    <div class='row triple-padding-top'>
+      <div class='col-md-12'>
+        <%= f.submit 'Save', class: 'btn btn-primary btn-full-width' %>
+      </div>
+    </div>
+  </div>
+  <% end %>
+</div>
