@@ -40,7 +40,9 @@ class PartnerMailer < ApplicationMailer
 
     smtpapi category: %w[offer], unique_args: { offer_id: offer.id }
     mail(
-      to: email, subject: 'The consignor has expressed interest in your offer'
+      to: email,
+      reply_to: reply_email(@submission.assigned_to),
+      subject: 'The consignor has expressed interest in your offer'
     )
   end
 
@@ -54,6 +56,14 @@ class PartnerMailer < ApplicationMailer
       )
 
     smtpapi category: %w[offer], unique_args: { offer_id: offer.id }
-    mail(to: email, subject: 'A response to your consignment offer')
+    mail(
+      to: email,
+      reply_to: reply_email(@submission.assigned_to),
+      subject: 'A response to your consignment offer'
+    )
+  end
+
+  def reply_email(assigned_user_id)
+    Gravity.client.user(id: assigned_user_id)._get.user_detail._get.email || Convection.config.admin_email_address
   end
 end

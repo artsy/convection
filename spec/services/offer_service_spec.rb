@@ -8,6 +8,8 @@ describe OfferService do
   let(:partner) { Fabricate(:partner, name: 'Gagosian Gallery') }
   let(:submission) { Fabricate(:submission, state: submission_state) }
 
+  before { allow_any_instance_of(PartnerMailer).to receive(:reply_email).and_return('reply_email@artsy.net') }
+
   describe 'create_offer' do
     context 'with an id for created by but no current user' do
       let(:submission_state) { Submission::APPROVED }
@@ -268,6 +270,7 @@ describe OfferService do
           expect(emails.map(&:to).flatten).to eq(
             %w[contact1@partner.com contact2@partner.com]
           )
+          expect(emails.first.reply_to).to eq(%w[reply_email@artsy.net])
           expect(emails.first.from).to eq(%w[consign@artsy.net])
           expect(emails.first.subject).to eq(
             'The consignor has expressed interest in your offer'
@@ -329,6 +332,7 @@ describe OfferService do
             %w[contact1@partner.com contact2@partner.com]
           )
           expect(emails.first.from).to eq(%w[consign@artsy.net])
+          expect(emails.first.reply_to).to eq(%w[reply_email@artsy.net])
           expect(emails.first.subject).to eq(
             'A response to your consignment offer'
           )
