@@ -63,7 +63,7 @@ class PartnerMailer < ApplicationMailer
     )
   end
 
-  def reply_email(gravity_user_id)
-    Gravity.client.user(id: gravity_user_id)._get.user_detail._get.email || Convection.config.admin_email_address
+  def reply_email(assigned_user_id)
+    Gravity.client.user(id: assigned_user_id)._get.user_detail._get.email || Convection.config.admin_email_address
   end
 end
