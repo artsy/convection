@@ -259,6 +259,20 @@ describe OfferService do
         end
       end
 
+      context 'does not sending an offer' do
+        it 'does not sends an email to a user if the state is saved' do
+          OfferService.update_offer(offer, 'userid', state: Offer::SAVED)
+          emails = ActionMailer::Base.deliveries
+          expect(emails.length).to eq 0
+
+          offer.reload
+
+          expect(offer.state).to eq Offer::SAVED
+          expect(offer.sent_by).to be_nil
+          expect(offer.sent_at).to be_nil
+        end
+      end
+
       context 'introducing an offer' do
         it 'sends an email saying the user is interested in the offer' do
           OfferService.update_offer(offer, 'userid', state: Offer::REVIEW)
