@@ -40,6 +40,7 @@ describe 'admin/offers/index.html.erb', type: :feature do
       within(:css, '#offer-filter-form') do
         expect(page).to have_content('all')
         expect(page).to have_content('draft')
+        expect(page).to have_content('saved')
         expect(page).to have_content('sent')
         expect(page).to have_content('accepted')
         expect(page).to have_content('rejected')
@@ -72,6 +73,14 @@ describe 'admin/offers/index.html.erb', type: :feature do
         Fabricate(:offer_response, offer: offer, intended_state: Offer::REVIEW)
         page.visit admin_offers_path
         expect(page).to have_content('Response: Interested')
+      end
+
+      it 'displays the correct state when the offer is saved' do
+        offer.update!(state: Offer::SAVED)
+        page.visit admin_offers_path
+        within(:css, 'a.list-group-item') do
+          expect(page).to have_content('saved')
+        end
       end
 
       it 'displays the correct state when the offer is sent' do

@@ -28,6 +28,7 @@ class Offer < ApplicationRecord
   STATES = [
     DRAFT = 'draft',
     SENT = 'sent',
+    SAVED = 'saved',
     ACCEPTED = 'accepted',
     REJECTED = 'rejected',
     LAPSED = 'lapsed',
@@ -78,7 +79,7 @@ class Offer < ApplicationRecord
   end
 
   def reviewed?
-    !draft? && !sent? && !review?
+    !draft? && !sent? && !review? && !saved?
   end
 
   def locked?
