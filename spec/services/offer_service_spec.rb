@@ -259,8 +259,8 @@ describe OfferService do
         end
       end
 
-      context 'does not sending an offer' do
-        it 'does not sends an email to a user if the state is saved' do
+      context 'does not send an offer email' do
+        it 'does not send an email to a user if the state is saved' do
           OfferService.update_offer(offer, 'userid', state: Offer::SAVED)
           emails = ActionMailer::Base.deliveries
           expect(emails.length).to eq 0
