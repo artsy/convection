@@ -52,6 +52,20 @@ describe Admin::ConsignmentsController, type: :controller do
           submission: Fabricate(:submission, state: 'approved'),
           partner: partner2
         )
+      @consignment6 =
+        Fabricate(
+          :partner_submission,
+          state: 'withdrawn - Pre-Launch',
+          submission: Fabricate(:submission, state: 'approved'),
+          partner: partner2
+        )
+      @consignment7 =
+        Fabricate(
+          :partner_submission,
+          state: 'withdrawn - Post-Launch',
+          submission: Fabricate(:submission, state: 'approved'),
+          partner: partner2
+        )
 
       @consignment1.update!(
         accepted_offer:
@@ -98,6 +112,24 @@ describe Admin::ConsignmentsController, type: :controller do
             offer_type: 'retail'
           )
       )
+      @consignment6.update!(
+        accepted_offer:
+          Fabricate(
+            :offer,
+            state: 'sent',
+            partner_submission: @consignment1,
+            offer_type: 'purchase'
+          )
+      )
+      @consignment7.update!(
+        accepted_offer:
+          Fabricate(
+            :offer,
+            state: 'sent',
+            partner_submission: @consignment1,
+            offer_type: 'purchase'
+          )
+      )
     end
 
     it 'returns the first two consignments on the first page' do
@@ -106,7 +138,7 @@ describe Admin::ConsignmentsController, type: :controller do
     end
 
     it 'paginates correctly' do
-      get :index, params: { page: 3, size: 2 }
+      get :index, params: { page: 4, size: 2 }
       expect(controller.consignments.count).to eq 1
     end
 
@@ -126,12 +158,24 @@ describe Admin::ConsignmentsController, type: :controller do
         expect(controller.consignments.pluck(:id)).to eq [@consignment3.id]
       end
 
+      it 'allows you to filter by state = withdrawn - Pre-Launch' do
+        get :index, params: { state: 'withdrawn - Pre-Launch' }
+        expect(controller.consignments.pluck(:id)).to eq [@consignment6.id]
+      end
+
+      it 'allows you to filter by state = withdrawn - Post-Launch' do
+        get :index, params: { state: 'withdrawn - Post-Launch' }
+        expect(controller.consignments.pluck(:id)).to eq [@consignment7.id]
+      end
+
       it 'allows you to sort by offer type' do
         get :index, params: { sort: 'offers.offer_type', direction: 'asc' }
         expect(controller.consignments.pluck(:id)).to eq(
           [
             @consignment4.id,
             @consignment3.id,
+            @consignment7.id,
+            @consignment6.id,
             @consignment2.id,
             @consignment1.id,
             @consignment5.id
@@ -143,6 +187,8 @@ describe Admin::ConsignmentsController, type: :controller do
         get :index, params: { sort: 'partners.name', direction: 'desc' }
         expect(controller.consignments.pluck(:id)).to eq(
           [
+            @consignment7.id,
+            @consignment6.id,
             @consignment5.id,
             @consignment4.id,
             @consignment3.id,
@@ -158,6 +204,8 @@ describe Admin::ConsignmentsController, type: :controller do
           [
             @consignment4.id,
             @consignment5.id,
+            @consignment6.id,
+            @consignment7.id,
             @consignment3.id,
             @consignment2.id,
             @consignment1.id
