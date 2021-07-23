@@ -8,6 +8,8 @@ describe OfferService do
   let(:partner) { Fabricate(:partner, name: 'Gagosian Gallery') }
   let(:submission) { Fabricate(:submission, state: submission_state) }
 
+  before { allow_any_instance_of(PartnerMailer).to receive(:reply_email).and_return('reply_email@artsy.net') }
+
   describe 'create_offer' do
     context 'with an id for created by but no current user' do
       let(:submission_state) { Submission::APPROVED }
@@ -259,6 +261,20 @@ describe OfferService do
         end
       end
 
+      context 'does not send an offer email' do
+        it 'does not send an email to a user if the state is saved' do
+          OfferService.update_offer(offer, 'userid', state: Offer::SAVED)
+          emails = ActionMailer::Base.deliveries
+          expect(emails.length).to eq 0
+
+          offer.reload
+
+          expect(offer.state).to eq Offer::SAVED
+          expect(offer.sent_by).to be_nil
+          expect(offer.sent_at).to be_nil
+        end
+      end
+
       context 'introducing an offer' do
         it 'sends an email saying the user is interested in the offer' do
           OfferService.update_offer(offer, 'userid', state: Offer::REVIEW)
@@ -268,6 +284,7 @@ describe OfferService do
           expect(emails.map(&:to).flatten).to eq(
             %w[contact1@partner.com contact2@partner.com]
           )
+          expect(emails.first.reply_to).to eq(%w[reply_email@artsy.net])
           expect(emails.first.from).to eq(%w[consign@artsy.net])
           expect(emails.first.subject).to eq(
             'The consignor has expressed interest in your offer'
@@ -329,6 +346,7 @@ describe OfferService do
             %w[contact1@partner.com contact2@partner.com]
           )
           expect(emails.first.from).to eq(%w[consign@artsy.net])
+          expect(emails.first.reply_to).to eq(%w[reply_email@artsy.net])
           expect(emails.first.subject).to eq(
             'A response to your consignment offer'
           )

@@ -3,6 +3,9 @@
     <div class='overview-section offer-draft-actions'>
       <div class='single-padding-top'>
         <div>
+          <%= link_to 'Save', admin_offer_path(@offer, offer: { state: 'saved' }), method: :put, class: 'btn btn-secondary btn-small btn-full-width', data: { confirm: 'Mark an offer as saved. This action cannot be undone.' } %>
+        </div>
+        <div class='single-padding-top'>
           <%= link_to 'Save & Send', admin_offer_path(@offer, offer: { state: 'sent' }), method: :put, class: 'btn btn-secondary btn-small btn-full-width', data: { confirm: 'This action will send the offer to the collector. This action cannot be undone.' } %>
         </div>
         <div class='single-padding-top'>
@@ -25,6 +28,11 @@
   <% else %>
     <div class='overview-section offer-actions'>
       <div class='single-padding-top'>
+        <% if @offer.saved? %>
+          <div class='single-padding-top'>
+            <%= link_to 'Send', admin_offer_path(@offer, offer: { state: 'sent' }), method: :put, class: 'btn btn-secondary btn-small btn-full-width', data: { confirm: 'This action will send the offer to the collector. This action cannot be undone.' } %>
+          </div>
+        <% end %>
         <% unless @offer.review? %>
           <div class='single-padding-top'>
             <%= link_to 'Consignor Interested', '#', { 'data-remodal-target' => 'interested-modal', class: 'btn btn-secondary btn-small btn-full-width offer-review-button' } %>

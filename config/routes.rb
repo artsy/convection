@@ -29,6 +29,7 @@ Rails.application.routes.draw do
     end
     resources :consignments, only: %i[show edit update index]
     resources :users, only: :index
+    resources :admin_users
     root to: 'dashboard#index'
   end
   get '/match_artist', to: 'admin/submissions#match_artist'
