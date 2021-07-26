@@ -55,14 +55,14 @@ describe Admin::ConsignmentsController, type: :controller do
       @consignment6 =
         Fabricate(
           :partner_submission,
-          state: 'withdrawn - Pre-Launch',
+          state: 'withdrawn - pre-launch',
           submission: Fabricate(:submission, state: 'approved'),
           partner: partner2
         )
       @consignment7 =
         Fabricate(
           :partner_submission,
-          state: 'withdrawn - Post-Launch',
+          state: 'withdrawn - post-launch',
           submission: Fabricate(:submission, state: 'approved'),
           partner: partner2
         )
@@ -158,13 +158,13 @@ describe Admin::ConsignmentsController, type: :controller do
         expect(controller.consignments.pluck(:id)).to eq [@consignment3.id]
       end
 
-      it 'allows you to filter by state = withdrawn - Pre-Launch' do
-        get :index, params: { state: 'withdrawn - Pre-Launch' }
+      it 'allows you to filter by state = withdrawn - pre-launch' do
+        get :index, params: { state: 'withdrawn - pre-launch' }
         expect(controller.consignments.pluck(:id)).to eq [@consignment6.id]
       end
 
-      it 'allows you to filter by state = withdrawn - Post-Launch' do
-        get :index, params: { state: 'withdrawn - Post-Launch' }
+      it 'allows you to filter by state = withdrawn - post-launch' do
+        get :index, params: { state: 'withdrawn - post-launch' }
         expect(controller.consignments.pluck(:id)).to eq [@consignment7.id]
       end
 

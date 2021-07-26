@@ -23,7 +23,7 @@ class PartnerSubmission < ApplicationRecord
   has_many :offers, dependent: :destroy
   belongs_to :accepted_offer, class_name: 'Offer'
 
-  STATES = ['open', 'sold', 'bought in', 'canceled', 'withdrawn - Pre-Launch', 'withdrawn - Post-Launch'].freeze
+  STATES = ['open', 'sold', 'bought in', 'canceled', 'withdrawn - pre-launch', 'withdrawn - post-launch'].freeze
 
   scope :group_by_day, -> { group("date_trunc('day', notified_at) ") }
   scope :consigned, -> { where.not(accepted_offer_id: nil) }
