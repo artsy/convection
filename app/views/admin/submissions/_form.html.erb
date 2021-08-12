@@ -18,6 +18,18 @@
           <div class='row single-padding-top'>
             <div class='col-sm-12'>
               <label class='col-sm-2 control-label bold-label'>
+                Artwork
+              </label>
+              <div class='col-sm-10' id='artwork_selections_form'>
+                <%= f.text_field :artwork_title, value: @artwork&.[](:title), class: 'form-control', id: 'artwork_search' %>
+                <%= f.hidden_field :source_artwork_id %>
+              </div>
+            </div>
+          </div>
+
+          <div class='row single-padding-top'>
+            <div class='col-sm-12'>
+              <label class='col-sm-2 control-label bold-label'>
                 User
               </label>
               <div class='col-sm-10' id='user_selections_form'>

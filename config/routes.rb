@@ -33,6 +33,7 @@ Rails.application.routes.draw do
     root to: 'dashboard#index'
   end
   get '/match_artist', to: 'admin/submissions#match_artist'
+  get '/match_artwork', to: 'admin/submissions#match_artwork'
   get '/match_user', to: 'admin/submissions#match_user'
   get '/match_partner', to: 'admin/partners#match_partner'
   get 'system/up'

@@ -16,6 +16,24 @@ $ ->
         false
     )
 
+$ ->
+  # Artwork autocomplete
+  updateArtworkSelectionsForm = (selection) ->
+    $( "#artwork_selections_form #submission_artwork_id" ).val( selection.id )
+    $( "#artwork_selections_form #artwork_search" ).val( selection.title )
+
+  if $('#artwork_selections_form').length != 0
+    $('#artwork_selections_form #artwork_search').autocomplete(
+      source: (request, response) ->
+        $.getJSON('/match_artwork', term: request.term, response)
+      focus: (event, ui) ->
+        updateArtworkSelectionsForm(ui.item)
+        false
+      select: (event, ui) ->
+        updateArtworkSelectionsForm(ui.item)
+        false
+    )
+
   # User autocomplete
   updateUserSelectionsForm = (selection) ->
     $( "#user_selections_form #submission_user_id" ).val( selection.id )
