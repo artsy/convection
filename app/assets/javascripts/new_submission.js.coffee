@@ -32,7 +32,11 @@ $ ->
       select: (event, ui) ->
         updateArtworkSelectionsForm(ui.item)
         false
-    )
+    ).data("ui-autocomplete")._renderItem = (ul, item) ->
+      $( "<li class='ui-menu-item'>" )
+        .attr( "data-value", item.value )
+        .append( "<a class='ui-corner-all'>#{item.title} (#{item.id})</a>" )
+        .appendTo( ul )
 
   # User autocomplete
   updateUserSelectionsForm = (selection) ->
