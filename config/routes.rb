@@ -42,6 +42,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :submissions, only: %i[create update show index]
+    resources :consignments, only: %i[update]
     resources :assets, only: %i[create show index destroy]
     post '/callbacks/gemini', to: 'callbacks#gemini'
     post '/graphql', to: 'graphql#execute'
