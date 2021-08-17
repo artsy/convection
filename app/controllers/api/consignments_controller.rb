@@ -13,14 +13,14 @@ module Api
         [artwork_id: artwork_id, price: price]
       end
 
-      consignments = update_price(artworks_price)
+      update_price(artworks_price)
       render json: { result: 'ok' }, status: :created
     end
 
     def update_price(artworks_price)
       artworks_price.each do |artwork_price|
         submission = Submission.find_by(source_atrwork_id: artwork_price[:artwork_id])
-        return unless submission
+        next unless submission
 
         consignment = submission.consigned_partner_submission
         consignment.assign_attributes(sale_price_cents: artwork_price[:price])
