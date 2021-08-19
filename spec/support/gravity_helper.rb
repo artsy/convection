@@ -73,6 +73,31 @@ def stub_gravity_artists(opts = {})
       to_return(body: body.to_json, headers: HEADERS)
 end
 
+def stub_gravity_artwork(opts = {})
+  title = opts[:title] || 'Artwork'
+  body =
+    { id: 'artworkid', title: title, slug: title.parameterize }.deep_merge(opts)
+  stub_gravity_request("/artists/#{body[:id]}", body)
+end
+
+def stub_gravity_artworks(opts = {})
+  title = opts[:term] || 'Artwork'
+  id = opts[:id] || 'artwork1'
+
+  artwork = { id: id, title: title }.deep_merge(opts)
+  artwork_items = opts.key?(:override_body) ? opts[:override_body] : [artwork]
+
+  body = {
+      total_count: nil,
+      next: "#{Convection.config.gravity_api_url}/artworks?cursor=next-cursor",
+      _embedded: { artists: artwork_items }
+  }
+
+  stub_request(:any, %r{#{Convection.config.gravity_api_url}/artworks\?term=.*}).
+      to_return(body: body.to_json, headers: HEADERS)
+end
+
+
 def stub_gravity_user(opts = {})
   id = opts[:id] || 'userid'
   body =
