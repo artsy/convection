@@ -97,7 +97,6 @@ def stub_gravity_artworks(opts = {})
       to_return(body: body.to_json, headers: HEADERS)
 end
 
-
 def stub_gravity_user(opts = {})
   id = opts[:id] || 'userid'
   body =
