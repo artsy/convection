@@ -8,6 +8,12 @@ GRAVITY_ROOT = {
     artists: {
       href: "#{Convection.config.gravity_api_url}/artists{?term}", templated: true
     },
+    artwork: {
+      href: "#{Convection.config.gravity_api_url}/artwork/{id}", templated: true
+    },
+    artworks: {
+      href: "#{Convection.config.gravity_api_url}/artworks{?term}", templated: true
+    },
     partner: {
       href: "#{Convection.config.gravity_api_url}/partners/{id}",
       templated: true
