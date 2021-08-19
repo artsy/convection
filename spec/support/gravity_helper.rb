@@ -83,7 +83,7 @@ def stub_gravity_artwork(opts = {})
   title = opts[:title] || 'Artwork'
   body =
     { id: 'artworkid', title: title, slug: title.parameterize }.deep_merge(opts)
-  stub_gravity_request("/artists/#{body[:id]}", body)
+  stub_gravity_request("/artworks/#{body[:id]}", body)
 end
 
 def stub_gravity_artworks(opts = {})
