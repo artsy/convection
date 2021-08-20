@@ -96,7 +96,7 @@ def stub_gravity_artworks(opts = {})
   body = {
       total_count: nil,
       next: "#{Convection.config.gravity_api_url}/artworks?cursor=next-cursor",
-      _embedded: { artists: artwork_items }
+      _embedded: { artworks: artwork_items }
   }
 
   stub_request(:any, %r{#{Convection.config.gravity_api_url}/artworks\?term=.*}).
