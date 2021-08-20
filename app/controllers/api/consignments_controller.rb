@@ -12,6 +12,8 @@ module Api
       render json: { result: 'ok' }, status: :created
     end
 
+    private
+
     def update_price(artworks_price)
       artworks_price.each do |artwork_price|
         submission = Submission.find_by(source_artwork_id: artwork_price[:artwork_id])
@@ -31,15 +33,6 @@ module Api
         price = sale_artwork.highest_bid.try(:amount_cents)
         [artwork_id: artwork_id, price: price]
       end
-    end
-
-    def consignment_params
-      params.permit(
-        :sale_lot_number,
-        :sale_date,
-        :sale_price_cents,
-        :currency
-      ).merge(user_agent: request.user_agent)
     end
   end
 end
