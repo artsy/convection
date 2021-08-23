@@ -9,7 +9,7 @@ class SubmissionService
     def create_submission(submission_params, gravity_user_id)
       user = User.find_or_create_by!(gravity_user_id: gravity_user_id)
       create_params = submission_params.merge(user_id: user.id)
-      submission = Submission.create!(create_params)
+      submission = Submission.create!(create_params.except(:anon_user))
       UserService.delay.update_email(user.id)
       submission
     rescue ActiveRecord::RecordInvalid => e

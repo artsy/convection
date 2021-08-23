@@ -25,6 +25,10 @@
                 <%= f.hidden_field :user_id, :value => @submission&.user&.gravity_user_id %>
               </div>
             </div>
+            <label>
+              <input type="checkbox" name="submission[anon_user]" />
+              Allow Anon User
+            </label>
           </div>
 
           <div class='row single-padding-top'>

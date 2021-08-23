@@ -61,10 +61,15 @@ module Admin
     end
 
     def create
+      gravity_user_id = if submission_params[:anon_user]
+                          User.anon.gravity_user_id
+                        else
+                          submission_params[:user_id]
+                        end
       @submission =
         SubmissionService.create_submission(
           submission_params.merge(state: 'submitted'),
-          submission_params[:user_id]
+          gravity_user_id
         )
       redirect_to admin_submission_path(@submission)
     rescue SubmissionService::SubmissionError => e
@@ -164,6 +169,7 @@ module Admin
     def submission_params
       safelist = %i[
         artist_id
+        anon_user
         attribution_class
         authenticity_certificate
         artist_proofs
