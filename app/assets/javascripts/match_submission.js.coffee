@@ -32,6 +32,14 @@ $ ->
             item.href = "#{baseURL}&artist=#{item.id}"
           compiledData = compiledData.concat data
           respond()
+        $.getJSON '/match_artwork', { term: request.term, size: 5, format: 'json' }, (data) ->
+          for item in data
+            item.display = item.title
+            item.label = 'Artwork'
+            item.value = item.id
+            item.href = "#{baseURL}&artwork=#{item.id}"
+          compiledData = compiledData.concat data
+          respond()
       select: (e) ->
         false
     ).data("ui-autocomplete")._renderMenu = (ul, items) ->

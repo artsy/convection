@@ -11,6 +11,9 @@ describe 'admin/submissions/index.html.erb', type: :feature do
       stub_gravity_artist(id: 'artistid2')
       stub_gravity_artists
 
+      stub_gravity_artwork(id: 'artworkid2')
+      stub_gravity_artworks
+
       stub_gravity_user(id: 'userid2')
       stub_gravity_user_detail(id: 'userid2')
 

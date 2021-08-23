@@ -8,6 +8,12 @@ GRAVITY_ROOT = {
     artists: {
       href: "#{Convection.config.gravity_api_url}/artists{?term}", templated: true
     },
+    artwork: {
+      href: "#{Convection.config.gravity_api_url}/artwork/{id}", templated: true
+    },
+    artworks: {
+      href: "#{Convection.config.gravity_api_url}/artworks{?term}", templated: true
+    },
     partner: {
       href: "#{Convection.config.gravity_api_url}/partners/{id}",
       templated: true
@@ -70,6 +76,30 @@ def stub_gravity_artists(opts = {})
   }
 
   stub_request(:any, %r{#{Convection.config.gravity_api_url}/artists\?term=.*}).
+      to_return(body: body.to_json, headers: HEADERS)
+end
+
+def stub_gravity_artwork(opts = {})
+  title = opts[:title] || 'Artwork'
+  body =
+    { id: 'artworkid', title: title, slug: title.parameterize }.deep_merge(opts)
+  stub_gravity_request("/artworks/#{body[:id]}", body)
+end
+
+def stub_gravity_artworks(opts = {})
+  title = opts[:term] || 'Artwork'
+  id = opts[:id] || 'artwork1'
+
+  artwork = { id: id, title: title }.deep_merge(opts)
+  artwork_items = opts.key?(:override_body) ? opts[:override_body] : [artwork]
+
+  body = {
+      total_count: nil,
+      next: "#{Convection.config.gravity_api_url}/artworks?cursor=next-cursor",
+      _embedded: { artworks: artwork_items }
+  }
+
+  stub_request(:any, %r{#{Convection.config.gravity_api_url}/artworks\?term=.*}).
       to_return(body: body.to_json, headers: HEADERS)
 end
 
