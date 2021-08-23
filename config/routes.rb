@@ -42,8 +42,10 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :submissions, only: %i[create update show index]
-    resources :consignments, only: %i[update]
     resources :assets, only: %i[create show index destroy]
+    namespace :consignments do
+      put 'update_price'
+    end
     post '/callbacks/gemini', to: 'callbacks#gemini'
     post '/graphql', to: 'graphql#execute'
     put '/anonymize_user_email', to: 'users#anonymize_user_email'

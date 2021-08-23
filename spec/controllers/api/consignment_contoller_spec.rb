@@ -7,7 +7,7 @@ describe Api::ConsignmentsController, type: :controller do
     allow_any_instance_of(Api::ConsignmentsController).to receive(
       :require_authentication
     )
-    allow_any_instance_of(Api::ConsignmentsController).to receive(:fetch_artworks_price).and_return(
+    allow_any_instance_of(Api::ConsignmentsController).to receive(:fetch_sale_artworks_with_price).and_return(
       [artwork_id: 1, price: 2]
     )
   end
@@ -46,7 +46,7 @@ describe Api::ConsignmentsController, type: :controller do
       end
 
       it 'returns ok, and update consignment price' do
-        put :update, params: { id: '1' }
+        put :update_price, params: { sale_id: '1' }
         expect(response.body).to eq("{\"result\":\"ok\"}")
         expect(submission.consigned_partner_submission.sale_price_cents).to eq 2
       end
@@ -59,7 +59,7 @@ describe Api::ConsignmentsController, type: :controller do
       end
 
       it 'returns ok, and do not update consignment price' do
-        put :update, params: { id: '1' }
+        put :update_price, params: { sale_id: '1' }
         expect(response.body).to eq("{\"result\":\"ok\"}")
         expect(consignment.sale_price_cents).to eq 50
       end
