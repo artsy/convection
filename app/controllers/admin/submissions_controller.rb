@@ -135,6 +135,14 @@ module Admin
       respond_to { |format| format.json { render json: artists || [] } }
     end
 
+    def match_artwork
+      if params[:term]
+        term = params[:term]
+        artworks = Gravity.client.artworks(term: term).artworks
+      end
+      respond_to { |format| format.json { render json: artworks || [] } }
+    end
+
     def match_user
       if params[:term]
         term = params[:term]

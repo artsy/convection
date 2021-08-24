@@ -96,5 +96,16 @@ class PartnerSubmissionService
         )
       end
     end
+
+    def update_price(artworks_price)
+      artworks_price.each do |artwork_price|
+        submission = Submission.find_by(source_artwork_id: artwork_price[:artwork_id])
+        next unless submission
+
+        consignment = submission.consigned_partner_submission
+        consignment.assign_attributes(sale_price_cents: artwork_price[:price])
+        consignment.save!
+      end
+    end
   end
 end
