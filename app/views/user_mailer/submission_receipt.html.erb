@@ -13,18 +13,25 @@
                 </td>
               </tr>
               <tr>
-                <td class='email-title'>
-                  Thank you! We have received your submission.
-                </td>
-              </tr>
-              <tr>
                 <td class='email-sub-title'>
-                  Our team of specialists are currently reviewing your work. You will receive an email update once the status of your submission changes.
+                  Dear <%= @user.name %>,
+
+                  This is a confirmation that Artsy has received your artwork submission.
+
+                  Our team of specialists will review the work and reach out to you within 24 hours with an update or if they require additional information.
                 </td>
               </tr>
               <tr>
                 <td>
                   <%= render 'shared/email/submission_block', submission: @submission %>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  If you have any questions, please do not hesitate to reach out to us at consign@artsymail.com //TODO: link
+
+                  Thank you,
+                  Artsy
                 </td>
               </tr>
             </table>

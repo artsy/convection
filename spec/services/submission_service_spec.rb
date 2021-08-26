@@ -214,7 +214,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[consign@artsy.net])
       expect(emails.first.html_part.body).to include(
-        "Our team of Specialists carefully review each submission"
+        "Thank you for submission and interest in our"
       )
       expect(submission.state).to eq 'rejected'
       expect(submission.rejected_by).to eq 'userid'
@@ -223,6 +223,73 @@ describe SubmissionService do
       expect(submission.approved_at).to be_nil
       expect(submission.published_at).to be_nil
     end
+
+    it 'sends a fake rejection notification if the submission state is changed to rejected' do
+      SubmissionService.update_submission(
+        submission,
+        { state: 'rejected', rejection_reason: 'Fake' },
+        current_user: 'userid'
+      )
+      emails = ActionMailer::Base.deliveries
+      expect(emails.length).to eq 1
+      expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
+      expect(emails.first.to).to eq(%w[michael@bluth.com])
+      expect(emails.first.from).to eq(%w[consign@artsy.net])
+      expect(emails.first.html_part.body).to include(
+        "After extensive research"
+      )
+      expect(submission.state).to eq 'rejected'
+      expect(submission.rejected_by).to eq 'userid'
+      expect(submission.rejected_at).to_not be_nil
+      expect(submission.approved_by).to be_nil
+      expect(submission.approved_at).to be_nil
+      expect(submission.published_at).to be_nil
+    end
+
+     it 'sends a artist rejection notification if the submission state is changed to rejected' do
+      SubmissionService.update_submission(
+        submission,
+        { state: 'rejected', rejection_reason: 'Artist Submission' },
+        current_user: 'userid'
+      )
+      emails = ActionMailer::Base.deliveries
+      expect(emails.length).to eq 1
+      expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
+      expect(emails.first.to).to eq(%w[michael@bluth.com])
+      expect(emails.first.from).to eq(%w[consign@artsy.net])
+      expect(emails.first.html_part.body).to include(
+        "Currently we do not work with artists directly."
+      )
+      expect(submission.state).to eq 'rejected'
+      expect(submission.rejected_by).to eq 'userid'
+      expect(submission.rejected_at).to_not be_nil
+      expect(submission.approved_by).to be_nil
+      expect(submission.approved_at).to be_nil
+      expect(submission.published_at).to be_nil
+    end
+
+    it 'sends a artist rejection notification if the submission state is changed to rejected' do
+      SubmissionService.update_submission(
+        submission,
+        { state: 'rejected', rejection_reason: 'NSV' },
+        current_user: 'userid'
+      )
+      emails = ActionMailer::Base.deliveries
+      expect(emails.length).to eq 1
+      expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
+      expect(emails.first.to).to eq(%w[michael@bluth.com])
+      expect(emails.first.from).to eq(%w[consign@artsy.net])
+      expect(emails.first.html_part.body).to include(
+        "Unfortunately, this artwork would fall below our auction threshold"
+      )
+      expect(submission.state).to eq 'rejected'
+      expect(submission.rejected_by).to eq 'userid'
+      expect(submission.rejected_at).to_not be_nil
+      expect(submission.approved_by).to be_nil
+      expect(submission.approved_at).to be_nil
+      expect(submission.published_at).to be_nil
+    end
+
 
     it 'updates the user associated with the submission if a user ID is passed' do
       new_user =
@@ -374,7 +441,7 @@ describe SubmissionService do
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.html_part.body).to include(
-          'Thank you! We have received your submission.'
+          'This is a confirmation that Artsy has received your artwork submission.'
         )
         expect(emails.first.to).to eq(%w[michael@bluth.com])
         expect(submission.reload.receipt_sent_at).to_not be nil
@@ -508,7 +575,7 @@ describe SubmissionService do
         'consignments-archive@artsymail.com',
       )
       expect(emails.first.html_part.body).to include(
-        'Thank you! We have received your submission.'
+        'This is a confirmation that Artsy has received your artwork submission.'
       )
     end
   end
