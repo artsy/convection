@@ -84,7 +84,8 @@ class Offer < ApplicationRecord
 
   def locked?
     submission.consigned_partner_submission_id.present? &&
-      submission.consigned_partner_submission.accepted_offer_id != id
+      submission.consigned_partner_submission.accepted_offer_id != id &&
+        !submission.consigned_partner_submission.state.in?(['canceled', 'bought in'])
   end
 
   def rejected_by_user
