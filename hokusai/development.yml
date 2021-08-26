@@ -2,7 +2,9 @@
 version: "2"
 services:
   convection:
-    env_file: ../.env
+    env_file:
+      - ../.env.shared
+      - ../.env
 {% include 'templates/docker-compose-service.yml.j2' %}
     ports:
       - 3000:3000
