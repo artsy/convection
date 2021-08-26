@@ -64,6 +64,18 @@ describe Offer do
       expect(consigned_offer.locked?).to eq false
     end
 
+    it 'returns false if the partner_submission state is canceled' do
+      ps = Fabricate(:partner_submission, submission: approved_submission, state: 'canceled')
+      unaccepted_offer = Fabricate(:offer, submission: approved_submission)
+      expect(offer.locked?).to eq false
+    end
+
+    it 'returns false if the partner_submission state is bought in' do
+      ps = Fabricate(:partner_submission, submission: approved_submission, state: 'bought in')
+      unaccepted_offer = Fabricate(:offer, submission: approved_submission)
+      expect(offer.locked?).to eq false
+    end
+
     it 'returns false if the submission has not been consigned at all' do
       expect(offer.locked?).to eq false
     end
