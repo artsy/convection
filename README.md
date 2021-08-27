@@ -44,7 +44,7 @@ $ git clone git@github.com:your-github-username/convection.git
 
 - Populate environment variables
 
-`.env.oss.example` contains the environment variables you'll need to add to your local `.env` file.
+See [config/initializers/_config.rb][initializer] for environment variables that you'll need to add to your local `.env` file.
 
 
 ## Tests
