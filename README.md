@@ -28,7 +28,7 @@ Convection accepts PRs from branches on the main artsy/convection repo. PRs from
   ```
 - Shared Configuration for Local Development
 
-Convection uses [shared configuration](https://github.com/artsy/README/blob/main/playbooks/development-environments.md#shared-configuration) to distribute common and sensitive configuration values. The [setup script](bin/setup) will download `.env.shared` and also initialize `.env` (from `.env.example`). The `.env` file is for custom configuration and any overrides.
+Convection uses [shared configuration](https://github.com/artsy/README/blob/main/playbooks/development-environments.md#shared-configuration) to distribute common and sensitive configuration values. The setup script will download `.env.shared` and also initialize `.env` (from `.env.example`). The `.env` file is for custom configuration and any overrides.
 
 If a new sensitive (or common) environment variable needs to be added for development, remember to also update the shared configuraton in S3. Find [update instructions here](https://github.com/artsy/README/blob/main/playbooks/development-environments.md#shared-configuration). _This is only required when expanding shared development environment configuration_.
 
