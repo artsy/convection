@@ -3,7 +3,6 @@
 .byebug_history
 .env*
 !.env.example
-!.env.oss.example
 .ruby-gemset
 /.bundle
 /log/*
