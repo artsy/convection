@@ -1,1 +1,1 @@
-dotenv bundle exec rails server
+foreman run bundle exec rails server
