@@ -17,7 +17,7 @@ class UserMailer < ApplicationMailer
             unique_args: { submission_id: submission.id }
     mail(
       to: user_detail.email,
-      subject: "Consignment Submission Confirmation ##{@submission.id}",
+      subject: "Thank you for submitting your artwork to Artsy",
       bcc: Convection.config.bcc_email_address
     )
   end
@@ -67,7 +67,7 @@ class UserMailer < ApplicationMailer
             unique_args: { submission_id: submission.id }
     mail(
       to: user_detail.email,
-      subject: "Your consignment is approved. Find out what's next."
+      subject: "Artsy Approved Submission | Next Steps"
     )
   end
 
@@ -80,8 +80,16 @@ class UserMailer < ApplicationMailer
       utm_params(
         source: 'consignment-rejected', campaign: 'consignment-complete'
       )
-
-    smtpapi category: %w[submission_rejected],
+    rejection_reason = case submission.rejection_reason
+                       when 'Fake'
+                         'fake_reject'
+                       when 'Artist Submission'
+                         'artist_reject'
+                       when 'NSV', 'BSV'
+                         'nsv_bsv_reject'
+                       else
+                         'submission_rejected'
+    smtpapi category: rejection_reason,
             unique_args: { submission_id: submission.id }
     mail(to: user_detail.email, subject: 'An update about your submission')
   end
@@ -96,6 +104,6 @@ class UserMailer < ApplicationMailer
       utm_params(source: 'consignment-offer', campaign: 'consignment-offer')
 
     smtpapi category: %w[offer], unique_args: { offer_id: offer.id }
-    mail(to: user_detail.email, subject: 'Great news! You have a new offer.')
+    mail(to: user_detail.email, subject: 'An Offer for your Artwork')
   end
 end

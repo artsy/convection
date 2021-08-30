@@ -1,0 +1,26 @@
+<%= stylesheet_link_tag 'emails', media: 'all' %>
+
+<table class='padded-email'>
+  <tr>
+    <td>
+      <table class='email-content' align='left'>
+        <tr>
+          <td>
+            <%= render 'shared/email/email_header' %>
+          </td>
+        </tr>
+        <tr>
+          <td class='email-sub-title'>
+            <p>Dear <%= @user.name %>,</p>
+            <p>Thank you for submitting your work to Artsy.</p>
+            <p>Unfortunately, this artwork would fall below our auction threshold and therefore would not be suitable for a sale at Artsy. 
+              Should you have any other works of art you wish to sell with Artsy we would be happy to assist. </p>
+            <p>If you have any questions, please do not hesitate to reach out to us at consign@artsymail.com</p> //TODO: add link
+            <p>Thank you,</p>
+            <p>Artsy</p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
