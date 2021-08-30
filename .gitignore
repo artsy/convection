@@ -1,7 +1,8 @@
 !/log/.keep
 .DS_Store
 .byebug_history
-.env
+.env*
+!.env.example
 .ruby-gemset
 /.bundle
 /log/*

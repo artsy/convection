@@ -1,1 +1,1 @@
-dotenv bundle exec rails console
+foreman run bundle exec rails console

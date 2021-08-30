@@ -12,8 +12,7 @@ README.md
 #
 # Rails
 #
-.env
-.env.sample
+.env*
 *.rbc
 capybara-*.html
 log

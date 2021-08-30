@@ -18,13 +18,7 @@ Convection accepts PRs from branches on the main artsy/convection repo. PRs from
 
 ## Setup
 
-- Fork the project to your GitHub account
-
-- Clone your fork:
-
-  ```
-  $ git clone git@github.com:your-github-username/convection.git
-  ```
+### Artsy Developers
 
 - Read and run setup script:
 
@@ -32,14 +26,26 @@ Convection accepts PRs from branches on the main artsy/convection repo. PRs from
   $ cat bin/setup
   $ bin/setup
   ```
+- Shared Configuration for Local Development
+
+Convection uses [shared configuration](https://github.com/artsy/README/blob/main/playbooks/development-environments.md#shared-configuration) to distribute common and sensitive configuration values. The setup script will download `.env.shared` and also initialize `.env` (from `.env.example`). The `.env` file is for custom configuration and any overrides.
+
+If a new sensitive (or common) environment variable needs to be added for development, remember to also update the shared configuraton in S3. Find [update instructions here](https://github.com/artsy/README/blob/main/playbooks/development-environments.md#shared-configuration). _This is only required when expanding shared development environment configuration_.
+
+### Non-Artsy Developers
+
+- Fork the project to your GitHub account
+
+- Clone your fork:
+
+```
+$ git clone git@github.com:your-github-username/convection.git
+```
 
 - Populate environment variables
 
-  `.env.example` contains the keys you'll need to add to your local `.env` file. Consider using [the `copy_env` utility](https://github.com/jonallured/copy_env) to populate the values directly from hokusai:
+See [initializer](config/initializers/_config.rb) for environment variables that you'll need to add to your local `.env` file.
 
-  ```
-  $ copy_env hokusai
-  ```
 
 ## Tests
 
