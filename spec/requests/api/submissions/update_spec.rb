@@ -87,7 +87,7 @@ describe 'Update Submission' do
           expect(admin_email.text_part.body.to_s).to include(admin_copy)
 
           user_email = emails.detect { |e| e.to.include?('michael@bluth.com') }
-          user_copy = 'This is a confirmation that Artsy has received your artwork submission.'
+          user_copy = 'This is a confirmation'
           expect(user_email.html_part.body.to_s).to include(user_copy)
           expect(user_email.text_part.body.to_s).to include(user_copy)
         end

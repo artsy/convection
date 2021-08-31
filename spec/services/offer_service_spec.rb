@@ -233,7 +233,7 @@ describe OfferService do
 
           email_body = emails.first.html_part.body
           expect(email_body).to include(
-            'Artsy Approved Submission | Next Steps'
+            'An Offer for your Artwork'
           )
           expect(email_body).to include(
             'The work will be purchased directly from you by the partner'
