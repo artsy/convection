@@ -228,7 +228,7 @@ describe OfferService do
           expect(emails.first.to).to eq(%w[michael@bluth.com])
           expect(emails.first.from).to eq(%w[consign@artsy.net])
           expect(emails.first.subject).to eq(
-            'Great news! You have a new offer.'
+            'An Offer for your Artwork'
           )
 
           email_body = emails.first.html_part.body
