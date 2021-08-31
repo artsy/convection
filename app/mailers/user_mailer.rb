@@ -89,6 +89,7 @@ class UserMailer < ApplicationMailer
                          'nsv_bsv_reject'
                        else
                          'submission_rejected'
+                       end
     smtpapi category: rejection_reason,
             unique_args: { submission_id: submission.id }
     mail(to: user_detail.email, subject: 'An update about your submission')
