@@ -2,7 +2,8 @@
 
 module Api
   class SubmissionsController < RestController
-    before_action :require_authentication
+    before_action :require_authentication, except: %i[create update]
+    before_action :require_app_or_auth, only: %i[create update]
     before_action :set_submission, only: %i[show update]
     before_action :require_authorized_submission, only: %i[show update]
 
@@ -37,6 +38,15 @@ module Api
     end
 
     private
+
+    def require_app_or_auth
+      if params[:gravity_user_id]
+        require_trusted_app
+        @current_user = User.anonymous.gravity_user_id
+      else
+        require_authentication
+      end
+    end
 
     def submission_params
       params.permit(
