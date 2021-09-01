@@ -105,4 +105,23 @@ describe 'POST /api/submissions' do
       expect(response_json['user_agent']).to eq 'Eigen'
     end
   end
+
+  context 'with a trusted app token' do
+    let(:jwt_token) do
+      payload = { aud: 'force', roles: 'trusted' }
+      JWT.encode(payload, Convection.config.jwt_secret)
+    end
+
+    it 'uses the anonymous user' do
+      params = {
+        artist_id: 'artistid',
+        gravity_user_id: 'anonymous',
+        title: 'my artwork',
+      }
+
+      expect do
+        post '/api/submissions', params: params, headers: headers
+      end.to change { User.anonymous.submissions.count }.by(1)
+    end
+  end
 end
