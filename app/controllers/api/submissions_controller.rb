@@ -2,8 +2,8 @@
 
 module Api
   class SubmissionsController < RestController
-    before_action :require_authentication, except: :create
-    before_action :require_app_or_auth, only: :create
+    before_action :require_authentication, except: %i[create update]
+    before_action :require_app_or_auth, only: %i[create update]
     before_action :set_submission, only: %i[show update]
     before_action :require_authorized_submission, only: %i[show update]
 

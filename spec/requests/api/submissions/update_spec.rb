@@ -52,6 +52,37 @@ describe 'PUT /api/submissions' do
     end
   end
 
+  context 'with a trusted app token' do
+    let(:jwt_token) do
+      payload = { aud: 'force', roles: 'trusted' }
+      JWT.encode(payload, Convection.config.jwt_secret)
+    end
+
+    let(:submission) { Fabricate(:submission, user: user, artist_id: 'andy-warhol') }
+    let(:params) { { artist_id: 'kara-walker', gravity_user_id: 'anonymous' } }
+
+    context 'with a submission for the anonymous user' do
+      let(:user) { User.anonymous }
+
+      it 'returns a 201 and updates that submission' do
+        put "/api/submissions/#{submission.id}", params: params, headers: headers
+        expect(response.status).to eq 201
+        body = JSON.parse(response.body)
+        expect(body['id']).to eq submission.id
+        expect(body['artist_id']).to eq 'kara-walker'
+      end
+    end
+
+    context 'with a submission for another user' do
+      let(:user) { Fabricate(:user) }
+
+      it 'returns a 401' do
+        put "/api/submissions/#{submission.id}", params: params, headers: headers
+        expect(response.status).to eq 401
+      end
+    end
+  end
+
   describe 'updating to submitted status' do
     context 'with all the valid fields' do
       before do
