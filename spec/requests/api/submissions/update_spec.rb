@@ -92,39 +92,6 @@ describe 'PUT /api/submissions' do
             user: Fabricate(:user, gravity_user_id: 'userid'),
             artist_id: 'artistid'
           )
-          stub_gravity_root
-          stub_gravity_user
-          stub_gravity_user_detail(email: 'michael@bluth.com')
-          stub_gravity_artist
-
-          Fabricate(:image, submission: @submission)
-
-          put "/api/submissions/#{@submission.id}",
-              params: { state: 'submitted' }, headers: headers
-
-          expect(response.status).to eq 201
-          expect(@submission.reload.receipt_sent_at).to_not be_nil
-          emails = ActionMailer::Base.deliveries
-          expect(emails.length).to eq 2
-          admin_email = emails.detect { |e| e.to.include?('lucille@bluth.com') }
-          admin_copy = 'We have received the following submission from: Jon'
-          expect(admin_email.html_part.body.to_s).to include(admin_copy)
-          expect(admin_email.text_part.body.to_s).to include(admin_copy)
-
-          user_email = emails.detect { |e| e.to.include?('michael@bluth.com') }
-          user_copy = 'This is a confirmation'
-          expect(user_email.html_part.body.to_s).to include(user_copy)
-          expect(user_email.text_part.body.to_s).to include(user_copy)
-        end
-
-        it 'does not resend notifications' do
-          @submission.update!(receipt_sent_at: Time.now.utc)
-          @submission.update!(admin_receipt_sent_at: Time.now.utc)
-
-          put "/api/submissions/#{@submission.id}",
-              params: { state: 'submitted' }, headers: headers
-          expect(ActionMailer::Base.deliveries.length).to eq 0
-        end
       end
 
       it 'returns a 201 and sends receipt emails' do
@@ -152,7 +119,7 @@ describe 'PUT /api/submissions' do
         expect(admin_email.text_part.body.to_s).to include(admin_copy)
 
         user_email = emails.detect { |e| e.to.include?('michael@bluth.com') }
-        user_copy = 'Thank you! We have received your submission.'
+        user_copy = 'This is a confirmation'
         expect(user_email.html_part.body.to_s).to include(user_copy)
         expect(user_email.text_part.body.to_s).to include(user_copy)
       end
