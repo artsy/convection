@@ -333,7 +333,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.html_part.body).to include(
-          "We are delighted to work with you to sell your work through Artsy."
+          "We are delighted to work with you to sell your work through"
         )
         expect(page).to have_content 'Approved by Jon Jonson'
         expect(page).to_not have_content 'Reject'

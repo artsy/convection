@@ -258,7 +258,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[consign@artsy.net])
       expect(emails.first.html_part.body).to include(
-        "Currently we do not work with artists directly."
+        "If you are represented by a gallery that would be interested in partnering with Artsy"
       )
       expect(submission.state).to eq 'rejected'
       expect(submission.rejected_by).to eq 'userid'
@@ -441,7 +441,7 @@ describe SubmissionService do
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.html_part.body).to include(
-          'This is a confirmation that Artsy has received your artwork submission.'
+          'This is a confirmation'
         )
         expect(emails.first.to).to eq(%w[michael@bluth.com])
         expect(submission.reload.receipt_sent_at).to_not be nil
@@ -575,7 +575,7 @@ describe SubmissionService do
         'consignments-archive@artsymail.com',
       )
       expect(emails.first.html_part.body).to include(
-        'This is a confirmation that Artsy has received your artwork submission.'
+        'This is a confirmation'
       )
     end
   end
