@@ -16,7 +16,7 @@
                 <td class='email-sub-title'>
                   Dear <%= @user.name %>,
 
-                  This is a confirmation that Artsy has received your artwork submission.
+                  This is a confirmation that <%= link_to 'Artsy', 'https://www.artsy.net', target: :_blank %> has received your artwork submission.
 
                   Our team of specialists will review the work and reach out to you within 24 hours with an update or if they require additional information.
                 </td>
@@ -28,7 +28,7 @@
               </tr>
               <tr>
                 <td>
-                  If you have any questions, please do not hesitate to reach out to us at consign@artsymail.com //TODO: link
+                  If you have any questions, please do not hesitate to reach out to us at <%= link_to 'consign@artsymail.com', 'mailto:consign@artsymail.com', target: :_blank %></a>
 
                   Thank you,
                   Artsy

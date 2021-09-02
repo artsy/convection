@@ -13,9 +13,12 @@
           <td class='email-sub-title'>
             <p>Dear <%= @user.name %>,</p>
             <p>Thank you for submitting your work to Artsy.</p>
-            <p>Currently we do not work with artists directly. If you are represented by a gallery that would be interested in partnering with Artsy, please encourage the gallery to visit this page.</p>
-            <p>If you do not currently have gallery representation, we would like to bring to your attention our Gallery Representation Guide and The Working Artist’s Guide, two resources put together by our Editorial team. </p>
-            <p>We hope this information is helpful and that you continue to explore Artsy!</p>
+            <p>Currently <%= link_to 'we do not work with artists directly', 'https://support.artsy.net/hc/en-us/articles/360046647174-I-am-not-an-artist-on-Artsy-Can-I-sell-my-artwork-through-the-site-', target: :_blank %>.
+            If you are represented by a gallery that would be interested in partnering with Artsy, please encourage the gallery to visit this page.</p>
+            <p>If you do not currently have gallery representation, we would like to bring to your attention our
+              <%= link_to 'Gallery Representation Guide', 'https://www.artsy.net/article/artsy-editorial-artists-gallery-representation', target: :_blank %> and
+              <%= link_to 'The Working Artist’s Guide', 'https://www.artsy.net/series/working-artists-guide', target: :_blank %>, two resources put together by our Editorial team. </p>
+            <p>We hope this information is helpful and that you continue to explore <%= link_to 'Artsy', 'https://www.artsy.net', target: :_blank %>!</p>
             <p>Thank you,</p>
             <p>Artsy</p>
           </td>
