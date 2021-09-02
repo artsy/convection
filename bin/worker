@@ -1,1 +1,1 @@
-dotenv bundle exec sidekiq
+foreman run bundle exec sidekiq
