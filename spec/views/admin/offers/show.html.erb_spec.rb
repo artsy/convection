@@ -112,7 +112,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
         expect(emails.length).to eq 1
         expect(emails.first.to).to eq(%w[user@example.com])
         expect(emails.first.from).to eq(%w[consign@artsy.net])
-        expect(emails.first.subject).to eq('Great news! You have a new offer.')
+        expect(emails.first.subject).to eq('An Offer for your Artwork')
       end
     end
 
