@@ -26,9 +26,29 @@ only_release: &only_release
     branches:
       only: release
 
+only_dev: &only_dev
+  filters:
+    branches:
+      ignore:
+        - master
+        - staging
+        - release
+
+jobs:
+  detect-secrets:
+    docker:
+      - image: lirantal/detect-secrets
+    working_directory: /usr/src/app
+    steps:
+      - checkout
+      - run: detect-secrets-hook --baseline .secrets.baseline $(git ls-files)
+
 workflows:
   build-deploy:
     jobs:
+      - detect-secrets:
+          <<: *only_dev
+
       - horizon/block:
           <<: *only_release
           context: horizon
