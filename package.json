@@ -4,18 +4,14 @@
   "scripts": {
     "prettier": "prettier --write '**/*.rb'",
     "prettier-check": "prettier --check '**/*.rb'",
-    "sync-schema": "rake graphql:schema:idl && cp _schema.graphql ../metaphysics/src/data/convection.graphql"
+    "sync-schema": "rake graphql:schema:idl && cp _schema.graphql ../metaphysics/src/data/convection.graphql",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@prettier/plugin-ruby": "1.5.3",
-    "husky": "^5.1.3",
+    "husky": "^7.0.0",
     "lint-staged": "10.5.4",
     "prettier": "2.2.1"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "lint-staged": {
     "{app,spec}/**/*.rb": "bundle exec rubocop -a",
