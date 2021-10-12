@@ -7,6 +7,7 @@ module Types
     field :additional_info, String, null: true
     field :artist_id, String, null: false
     field :assets, [Types::AssetType, { null: true }], null: true
+    field :attribution_class, Types::AttributionClassType, null: true
     field :authenticity_certificate, Boolean, null: true
     field :category, String, null: true
     field :created_at, GraphQL::Types::ISO8601DateTime, null: true
@@ -42,7 +43,6 @@ module Types
     field :utm_source, String, null: true
     field :utm_medium, String, null: true
     field :utm_term, String, null: true
-
 
     field :offers, [Types::OfferType], null: false do
       argument :gravity_partner_id, ID, required: true
