@@ -1252,10 +1252,10 @@ type Submission {
   state: State
   title: String
   userAgent: String
-  userEmail: String!
+  userEmail: String
   userId: String!
-  userName: String!
-  userPhone: String!
+  userName: String
+  userPhone: String
   utmMedium: String
   utmSource: String
   utmTerm: String
