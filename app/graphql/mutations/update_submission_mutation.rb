@@ -30,6 +30,9 @@ module Mutations
     argument :title, String, required: false
     argument :width, String, required: false
     argument :year, String, required: false
+    argument :user_name, String, required: false
+    argument :user_email, String, required: false
+    argument :user_phone, String, required: false
     argument :utm_source, String, required: false
     argument :utm_medium, String, required: false
     argument :utm_term, String, required: false

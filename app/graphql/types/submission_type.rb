@@ -38,6 +38,9 @@ module Types
     field :title, String, null: true
     field :user_agent, String, null: true
     field :user_id, String, null: false
+    field :user_name, String, null: true
+    field :user_email, String, null: true
+    field :user_phone, String, null: true
     field :width, String, null: true
     field :year, String, null: true
     field :utm_source, String, null: true
