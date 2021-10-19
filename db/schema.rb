@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_19_105312) do
+ActiveRecord::Schema.define(version: 2021_10_14_123304) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_trgm'
   enable_extension 'plpgsql'
@@ -180,7 +180,7 @@ ActiveRecord::Schema.define(version: 2021_10_19_105312) do
     t.string 'state'
     t.datetime 'receipt_sent_at'
     t.string 'edition_number'
-    t.integer 'edition_size'
+    t.string 'edition_size'
     t.integer 'reminders_sent_count', default: 0
     t.datetime 'admin_receipt_sent_at'
     t.string 'approved_by'
