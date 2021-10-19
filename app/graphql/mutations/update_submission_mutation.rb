@@ -17,7 +17,7 @@ module Mutations
              prepare: ->(value, _context) { value.downcase }
     argument :edition, Boolean, required: false
     argument :edition_number, String, required: false
-    argument :edition_size, Int, required: false
+    argument :edition_size, String, required: false
     argument :height, String, required: false
     argument :location_city, String, required: false
     argument :location_country, String, required: false
