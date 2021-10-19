@@ -6,6 +6,7 @@ class ChangeEditionSizeTypeToString < ActiveRecord::Migration[6.1]
       t.change :edition_size, :string
     end
   end
+
   def self.down
     change_table :submissions do |t|
       t.change :edition_size, :integer
