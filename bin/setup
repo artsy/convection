@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Exit if any subcommand fails
 set -e
@@ -21,6 +21,13 @@ if command -v rbenv >/dev/null; then # skip rbenv steps if not available (RVM us
   rbenv shell "$ruby_version"
 fi
 
+if [ ! -z $NVM_DIR ]; then # skip nvm steps if not available
+  echo "Configuring Node 12"
+  source ~/.nvm/nvm.sh
+  nvm install
+  npm install -g yarn
+fi
+
 echo "install the bundler version locked in Gemfile.lock, if any..."
 LOCKED_BUNDLER_VERSION=$(grep -A2 'BUNDLED WITH' Gemfile.lock | tail -1 | awk '{print $1}')
 if [[ "$LOCKED_BUNDLER_VERSION" != '' ]]; then
@@ -39,6 +46,9 @@ fi
 
 echo "install project's gem dependencies..."
 bundle install > /dev/null
+
+echo "Installing javascript dependencies"
+yarn install
 
 echo "download .env.shared (common local dev config) from S3..."
 aws s3 cp s3://artsy-citadel/dev/.env.convection .env.shared
@@ -62,4 +72,3 @@ Your local dev environment is setup based on:
 
 Please launch staging VPN because the configs point to artsy apps in staging environment.
 "
-

@@ -25,7 +25,9 @@ Convection accepts PRs from branches on the main artsy/convection repo. PRs from
   ```
   $ cat bin/setup
   $ bin/setup
+  $ nvm use
   ```
+
 - Shared Configuration for Local Development
 
 Convection uses [shared configuration](https://github.com/artsy/README/blob/main/playbooks/development-environments.md#shared-configuration) to distribute common and sensitive configuration values. The setup script will download `.env.shared` and also initialize `.env` (from `.env.example`). The `.env` file is for custom configuration and any overrides.
@@ -45,7 +47,6 @@ $ git clone git@github.com:your-github-username/convection.git
 - Populate environment variables
 
 See [initializer](config/initializers/_config.rb) for environment variables that you'll need to add to your local `.env` file.
-
 
 ## Tests
 
@@ -76,9 +77,11 @@ This file is used for stitching. See [docs/schema-stitching.md][schema-doc] for 
 ## Starting Server
 
 ```
-$ foreman start
+$ foreman start # to run web and worker processes
 # or
-$ hokusai dev start
+$ foreman start web # to run web process only
+# or
+$ hokusai dev start # to run via local docker
 ```
 
 See the Procfile and Hokusai configuration to understand other services launched.

@@ -5,6 +5,7 @@ module Mutations
     argument :artistID, String, required: true
 
     argument :additional_info, String, required: false
+    argument :attribution_class, Types::AttributionClassType, required: false
     argument :authenticity_certificate, Boolean, required: false
     argument :category, Types::CategoryType, required: false
     argument :coaByAuthenticatingBody, Boolean, required: false
@@ -13,7 +14,8 @@ module Mutations
     argument :depth, String, required: false
     argument :dimensions_metric,
              String,
-             required: false, prepare: ->(value, _context) { value.downcase }
+             required: false,
+             prepare: ->(value, _context) { value.downcase }
     argument :edition, Boolean, required: false
     argument :edition_number, String, required: false
     argument :edition_size, Integer, required: false
@@ -32,6 +34,9 @@ module Mutations
     argument :state, Types::StateType, required: false
     argument :title, String, required: false
     argument :user_agent, String, required: false
+    argument :user_name, String, required: false
+    argument :user_email, String, required: false
+    argument :user_phone, String, required: false
     argument :width, String, required: false
     argument :year, String, required: false
     argument :utm_source, String, required: false
@@ -42,7 +47,9 @@ module Mutations
 
     def resolve(arguments)
       resolve_options = {
-        arguments: arguments, context: context, object: object
+        arguments: arguments,
+        context: context,
+        object: object
       }
       resolver = CreateSubmissionResolver.new(resolve_options)
       raise resolver.error unless resolver.valid?
