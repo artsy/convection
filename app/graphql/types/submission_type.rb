@@ -17,7 +17,7 @@ module Types
     field :edition, String, null: true
     field :edition_number, String, null: true
     field :edition_size, Integer, null: true
-    field :edition_size_temp, String, null: true
+    field :edition_size_formatted, String, null: true
     field :height, String, null: true
     field :id, ID, 'Uniq ID for this submission', null: false
     field :internalID, ID, null: true, method: :id
