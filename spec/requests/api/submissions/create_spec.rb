@@ -106,8 +106,8 @@ describe 'POST /api/submissions' do
     end
   end
 
-  context 'with a submission that includes a edition_size_temp' do
-    it 'returns a 201 and creates a submission with that edition_size_temp' do
+  context 'with a submission that includes a edition_size_formatted' do
+    it 'returns a 201 and creates a submission with that edition_size_formatted' do
       stub_gravity_root
       stub_gravity_user
       stub_gravity_user_detail(email: 'michael@bluth.com')
@@ -119,7 +119,7 @@ describe 'POST /api/submissions' do
         edition: true,
         edition_number: '23a',
         edition_size: 100,
-        edition_size_temp: '120',
+        edition_size_formatted: '120',
         minimum_price_dollars: 50_000,
         title: 'my sartwork'
       }

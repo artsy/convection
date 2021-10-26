@@ -10,8 +10,8 @@ class SubmissionService
   class << self
     def create_submission(submission_params, gravity_user_id)
       submission_params[:edition_size] =
-        submission_params.delete(:edition_size_temp) if submission_params[
-        :edition_size_temp
+        submission_params.delete(:edition_size_formatted) if submission_params[
+        :edition_size_formatted
       ].present?
       user = User.find_or_create_by!(gravity_user_id: gravity_user_id)
       create_params = submission_params.merge(user_id: user.id)
@@ -23,8 +23,8 @@ class SubmissionService
     end
 
     def update_submission(submission, params, current_user: nil)
-      params[:edition_size] = params.delete(:edition_size_temp) if params[
-        :edition_size_temp
+      params[:edition_size] = params.delete(:edition_size_formatted) if params[
+        :edition_size_formatted
       ].present?
       if params[:user_id]
         user = User.find_or_create_by!(gravity_user_id: params[:user_id])

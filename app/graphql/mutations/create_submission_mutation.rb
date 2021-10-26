@@ -19,7 +19,7 @@ module Mutations
     argument :edition, Boolean, required: false
     argument :edition_number, String, required: false
     argument :edition_size, Integer, required: false
-    argument :edition_size_temp, String, required: false
+    argument :edition_size_formatted, String, required: false
     argument :height, String, required: false
     argument :location_city, String, required: false
     argument :location_country, String, required: false

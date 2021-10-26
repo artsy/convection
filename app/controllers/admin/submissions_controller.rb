@@ -180,7 +180,7 @@ module Admin
         dimensions_metric
         edition_number
         edition_size
-        edition_size_temp
+        edition_size_formatted
         exhibition
         height
         location_city
