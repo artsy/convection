@@ -63,10 +63,7 @@ module Admin
     end
 
     def create
-      submission_params[:edition_size] =
-        submission_params[:edition_size_temp] if submission_params[
-        :edition_size_temp
-      ]
+      set_edition_size if params[:edition_size_temp].presence
       @submission =
         SubmissionService.create_submission(
           submission_params.merge(state: 'submitted'),
@@ -93,10 +90,7 @@ module Admin
     def edit; end
 
     def update
-      submission_params[:edition_size] =
-        submission_params[:edition_size_temp] if submission_params[
-        :edition_size_temp
-      ]
+      set_edition_size if params[:edition_size_temp].presence
       result =
         SubmissionService.update_submission(
           @submission,
@@ -162,6 +156,11 @@ module Admin
     end
 
     private
+
+    def set_edition_size
+      params[:edition_size] = params[:edition_size_temp]
+      params.except!(:edition_size_temp)
+    end
 
     def set_submission
       @submission = Submission.find(params[:id])
