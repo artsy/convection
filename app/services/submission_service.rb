@@ -1,12 +1,18 @@
 # frozen_string_literal: true
 
 class SubmissionService
-  class ParamError < StandardError; end
+  class ParamError < StandardError
+  end
 
-  class SubmissionError < StandardError; end
+  class SubmissionError < StandardError
+  end
 
   class << self
     def create_submission(submission_params, gravity_user_id)
+      submission_params[:edition_size] =
+        submission_params.delete(:edition_size_temp) if submission_params[
+        :edition_size_temp
+      ].present?
       user = User.find_or_create_by!(gravity_user_id: gravity_user_id)
       create_params = submission_params.merge(user_id: user.id)
       submission = Submission.create!(create_params)
@@ -17,6 +23,9 @@ class SubmissionService
     end
 
     def update_submission(submission, params, current_user: nil)
+      params[:edition_size] = params.delete(:edition_size_temp) if params[
+        :edition_size_temp
+      ].present?
       if params[:user_id]
         user = User.find_or_create_by!(gravity_user_id: params[:user_id])
         UserService.delay.update_email(user.id)
@@ -167,7 +176,9 @@ class SubmissionService
       raise 'User lacks email.' if user_detail.email.blank?
 
       email_args = {
-        submission: submission, user: user, user_detail: user_detail
+        submission: submission,
+        user: user,
+        user_detail: user_detail
       }
 
       if submission.reminders_sent_count == 1
@@ -232,18 +243,20 @@ class SubmissionService
       user_detail = user.user_detail._get
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
-      rejection_reason_template = case submission.rejection_reason
-                                  when 'Fake'
-                                    'fake_submission_rejected'
-                                  when 'Artist Submission'
-                                    'artist_submission_rejected'
-                                  when 'NSV', 'BSV'
-                                    'nsv_bsv_submission_rejected'
-                                  else
-                                    'other_submission_rejected'
-                                  end
+      rejection_reason_template =
+        case submission.rejection_reason
+        when 'Fake'
+          'fake_submission_rejected'
+        when 'Artist Submission'
+          'artist_submission_rejected'
+        when 'NSV', 'BSV'
+          'nsv_bsv_submission_rejected'
+        else
+          'other_submission_rejected'
+        end
 
-      UserMailer.send(rejection_reason_template,
+      UserMailer.send(
+        rejection_reason_template,
         submission: submission,
         user: user,
         user_detail: user_detail,

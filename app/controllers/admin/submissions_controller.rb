@@ -63,9 +63,6 @@ module Admin
     end
 
     def create
-      params[:edition_size] = params.delete(:edition_size_temp) if params[
-        :edition_size_temp
-      ].presence
       @submission =
         SubmissionService.create_submission(
           submission_params.merge(state: 'submitted'),
@@ -92,9 +89,6 @@ module Admin
     def edit; end
 
     def update
-      params[:edition_size] = params.delete(:edition_size_temp) if params[
-        :edition_size_temp
-      ].presence
       result =
         SubmissionService.update_submission(
           @submission,
