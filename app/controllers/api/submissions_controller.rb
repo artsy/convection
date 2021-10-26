@@ -13,20 +13,14 @@ module Api
 
     def create
       param! :artist_id, String, required: true
-      submission_params[:edition_size] =
-        submission_params[:edition_size_temp] if submission_params[
-        :edition_size_temp
-      ]
+      set_edition_size if params[:edition_size_temp].presence
       submission =
         SubmissionService.create_submission(submission_params, current_user)
       render json: submission.to_json, status: :created
     end
 
     def update
-      submission_params[:edition_size] =
-        submission_params[:edition_size_temp] if submission_params[
-        :edition_size_temp
-      ]
+      set_edition_size if params[:edition_size_temp].presence
       SubmissionService.update_submission(@submission, submission_params)
       render json: @submission.to_json, status: :created
     end
@@ -54,6 +48,11 @@ module Api
       else
         require_authentication
       end
+    end
+
+    def set_edition_size
+      params[:edition_size] = params[:edition_size_temp]
+      params.except!(:edition_size_temp)
     end
 
     def submission_params
