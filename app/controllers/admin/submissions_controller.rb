@@ -159,7 +159,7 @@ module Admin
 
     def set_edition_size
       params[:edition_size] = params[:edition_size_temp]
-      params.except!(:edition_size_temp)
+      params.except(:edition_size_temp)
     end
 
     def set_submission
