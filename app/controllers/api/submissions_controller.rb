@@ -13,12 +13,20 @@ module Api
 
     def create
       param! :artist_id, String, required: true
+      submission_params[:edition_size] =
+        submission_params[:edition_size_temp] if submission_params[
+        :edition_size_temp
+      ]
       submission =
         SubmissionService.create_submission(submission_params, current_user)
       render json: submission.to_json, status: :created
     end
 
     def update
+      submission_params[:edition_size] =
+        submission_params[:edition_size_temp] if submission_params[
+        :edition_size_temp
+      ]
       SubmissionService.update_submission(@submission, submission_params)
       render json: @submission.to_json, status: :created
     end
@@ -49,31 +57,34 @@ module Api
     end
 
     def submission_params
-      params.permit(
-        :additional_info,
-        :artist_id,
-        :authenticity_certificate,
-        :category,
-        :currency,
-        :deadline_to_sell,
-        :depth,
-        :dimensions_metric,
-        :edition,
-        :edition_number,
-        :edition_size,
-        :height,
-        :location_city,
-        :location_country,
-        :location_state,
-        :medium,
-        :minimum_price_dollars,
-        :provenance,
-        :signature,
-        :state,
-        :title,
-        :width,
-        :year
-      ).merge(user_agent: request.user_agent)
+      params
+        .permit(
+          :additional_info,
+          :artist_id,
+          :authenticity_certificate,
+          :category,
+          :currency,
+          :deadline_to_sell,
+          :depth,
+          :dimensions_metric,
+          :edition,
+          :edition_number,
+          :edition_size,
+          :edition_size_temp,
+          :height,
+          :location_city,
+          :location_country,
+          :location_state,
+          :medium,
+          :minimum_price_dollars,
+          :provenance,
+          :signature,
+          :state,
+          :title,
+          :width,
+          :year
+        )
+        .merge(user_agent: request.user_agent)
     end
   end
 end
