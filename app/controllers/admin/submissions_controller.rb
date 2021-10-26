@@ -21,7 +21,9 @@ module Admin
       matching_submissions.page(page).per(size)
     end
 
-    expose(:artist_details) { artists_names_query(submissions.map(&:artist_id)) }
+    expose(:artist_details) do
+      artists_names_query(submissions.map(&:artist_id))
+    end
 
     expose(:display_term) do
       if filters[:user].present?
@@ -61,6 +63,10 @@ module Admin
     end
 
     def create
+      submission_params[:edition_size] =
+        submission_params[:edition_size_temp] if submission_params[
+        :edition_size_temp
+      ]
       @submission =
         SubmissionService.create_submission(
           submission_params.merge(state: 'submitted'),
@@ -87,6 +93,10 @@ module Admin
     def edit; end
 
     def update
+      submission_params[:edition_size] =
+        submission_params[:edition_size_temp] if submission_params[
+        :edition_size_temp
+      ]
       result =
         SubmissionService.update_submission(
           @submission,
@@ -178,6 +188,7 @@ module Admin
         dimensions_metric
         edition_number
         edition_size
+        edition_size_temp
         exhibition
         height
         location_city
@@ -200,7 +211,9 @@ module Admin
 
       permitted_params = params.require(:submission).permit(safelist)
       permitted_params[:assigned_to] =
-        params.dig(:submission, :assigned_to) if params[:submission][:assigned_to].present?
+        params.dig(:submission, :assigned_to) if params[:submission][
+        :assigned_to
+      ].present?
       permitted_params
     end
   end
