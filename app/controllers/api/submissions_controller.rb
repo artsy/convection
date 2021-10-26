@@ -62,7 +62,7 @@ module Api
           :edition,
           :edition_number,
           :edition_size,
-          :edition_size_temp,
+          :edition_size_formatted,
           :height,
           :location_city,
           :location_country,
