@@ -13,18 +13,12 @@ module Api
 
     def create
       param! :artist_id, String, required: true
-      params[:edition_size] = params.delete(:edition_size_temp) if params[
-        :edition_size_temp
-      ].presence
       submission =
         SubmissionService.create_submission(submission_params, current_user)
       render json: submission.to_json, status: :created
     end
 
     def update
-      params[:edition_size] = params.delete(:edition_size_temp) if params[
-        :edition_size_temp
-      ].presence
       SubmissionService.update_submission(@submission, submission_params)
       render json: @submission.to_json, status: :created
     end
