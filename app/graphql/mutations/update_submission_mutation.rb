@@ -17,7 +17,7 @@ module Mutations
              prepare: ->(value, _context) { value.downcase }
     argument :edition, Boolean, required: false
     argument :edition_number, String, required: false
-    argument :edition_size, Integer, required: false
+    argument :edition_size, Integer, required: false, deprecation_reason: 'Use edition_size_formatted field instead'
     argument :edition_size_formatted, String, required: false
     argument :height, String, required: false
     argument :location_city, String, required: false
