@@ -451,7 +451,11 @@ input CreateSubmissionMutationInput {
   dimensionsMetric: String
   edition: Boolean
   editionNumber: String
-  editionSize: Int @deprecated(reason: "Use edition_size_formatted field instead")
+
+  """
+  Deprecated: Use edition_size_formatted field instead
+  """
+  editionSize: Int
   editionSizeFormatted: String
   height: String
   locationCity: String
@@ -1227,8 +1231,7 @@ type Submission {
   dimensionsMetric: String
   edition: String
   editionNumber: String
-  editionSize: Int
-  editionSizeFormatted: String
+  editionSize: String
   height: String
 
   """
@@ -1954,7 +1957,11 @@ input UpdateSubmissionMutationInput {
   dimensionsMetric: String
   edition: Boolean
   editionNumber: String
-  editionSize: Int @deprecated(reason: "Use edition_size_formatted field instead")
+
+  """
+  Deprecated: Use edition_size_formatted field instead
+  """
+  editionSize: Int
   editionSizeFormatted: String
   height: String
   id: ID!
