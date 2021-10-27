@@ -7,7 +7,7 @@ module Mutations
 
     argument :asset_type, String, required: false
 
-    field :asset, Types::AssetType, null: true
+    field :assets, [Types::AssetType], null: true
 
     def resolve(arguments)
       resolve_options = {
