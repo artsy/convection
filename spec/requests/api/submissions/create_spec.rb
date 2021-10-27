@@ -69,7 +69,7 @@ describe 'POST /api/submissions' do
       expect(response.status).to eq 201
 
       response_json = JSON.parse(response.body)
-      expect(response_json['edition_size']).to eq 100
+      expect(response_json['edition_size']).to eq '100'
     end
   end
 
@@ -99,7 +99,41 @@ describe 'POST /api/submissions' do
       expect(response.status).to eq 201
 
       response_json = JSON.parse(response.body)
-      expect(response_json['edition_size']).to eq 100
+      expect(response_json['edition_size']).to eq '100'
+      expect(response_json['minimum_price_dollars']).to eq 50_000
+      expect(response_json['currency']).to eq 'GBP'
+      expect(response_json['user_agent']).to eq 'Eigen'
+    end
+  end
+
+  context 'with a submission that includes a edition_size_formatted' do
+    it 'returns a 201 and creates a submission with that edition_size_formatted' do
+      stub_gravity_root
+      stub_gravity_user
+      stub_gravity_user_detail(email: 'michael@bluth.com')
+
+      params = {
+        artist_id: 'artistid',
+        category: 'Painting',
+        currency: 'GBP',
+        edition: true,
+        edition_number: '23a',
+        edition_size: 100,
+        edition_size_formatted: '120',
+        minimum_price_dollars: 50_000,
+        title: 'my sartwork'
+      }
+
+      eigen_headers = headers.merge('User-Agent' => 'Eigen')
+
+      expect do
+        post '/api/submissions', params: params, headers: eigen_headers
+      end.to change { Submission.count }.by(1)
+
+      expect(response.status).to eq 201
+
+      response_json = JSON.parse(response.body)
+      expect(response_json['edition_size']).to eq '120'
       expect(response_json['minimum_price_dollars']).to eq 50_000
       expect(response_json['currency']).to eq 'GBP'
       expect(response_json['user_agent']).to eq 'Eigen'
@@ -116,7 +150,7 @@ describe 'POST /api/submissions' do
       params = {
         artist_id: 'artistid',
         gravity_user_id: 'anonymous',
-        title: 'my artwork',
+        title: 'my artwork'
       }
 
       expect do
