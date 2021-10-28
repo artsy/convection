@@ -1880,26 +1880,6 @@ enum SubmissionSort {
   USER_ID_DESC
 
   """
-  sort by user_name in ascending order
-  """
-  USER_NAME_ASC
-
-  """
-  sort by user_name in descending order
-  """
-  USER_NAME_DESC
-
-  """
-  sort by user_phone in ascending order
-  """
-  USER_PHONE_ASC
-
-  """
-  sort by user_phone in descending order
-  """
-  USER_PHONE_DESC
-
-  """
   sort by utm_medium in ascending order
   """
   UTM_MEDIUM_ASC
