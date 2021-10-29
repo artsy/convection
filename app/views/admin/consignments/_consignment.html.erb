@@ -12,7 +12,7 @@
     <%= artist %>, <%= consignment.submission&.title&.truncate(30) %>
   </div>
   <div class='list-group-item-info'>
-    <%= consignment.submission.user&.email %>
+    <%= consignment.submission.user_email || consignment.submission.user&.email %>
   </div>
   <div class='list-group-item-info'>
     <%= formatted_location(consignment.submission)  %>
