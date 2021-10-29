@@ -25,7 +25,7 @@ class SubmissionService
     def update_submission(submission, params, current_user: nil)
       params[:edition_size] = params.delete(:edition_size_formatted) if params[
         :edition_size_formatted
-      ].present?
+      ]
       if params[:user_id]
         user = User.find_or_create_by!(gravity_user_id: params[:user_id])
         UserService.delay.update_email(user.id)
