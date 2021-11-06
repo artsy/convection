@@ -34,17 +34,29 @@ describe 'admin/submissions/show.html.erb', type: :feature do
           edition_size: 77,
           edition_number: '23a',
           category: 'Painting',
-          user: Fabricate(:user, gravity_user_id: 'userid'),
+          user:
+            Fabricate(
+              :user,
+              gravity_user_id: 'userid',
+              email: 'user@example.com'
+            ),
           state: 'submitted'
         )
 
-      stub_gravql_artists(body: {
-        data: {
-          artists: [
-            { id: @submission.artist_id, name: 'Gob Bluth', is_p1: false, target_supply: true },
-          ]
+      stub_gravql_artists(
+        body: {
+          data: {
+            artists: [
+              {
+                id: @submission.artist_id,
+                name: 'Gob Bluth',
+                is_p1: false,
+                target_supply: true
+              }
+            ]
+          }
         }
-      })
+      )
 
       stub_jwt_header('userid')
       page.visit "/admin/submissions/#{@submission.id}"
@@ -84,7 +96,9 @@ describe 'admin/submissions/show.html.erb', type: :feature do
 
     it 'displays the reviewer byline if the submission has been approved' do
       @submission.update!(
-        state: 'approved', approved_by: 'userid', approved_at: Time.now.utc
+        state: 'approved',
+        approved_by: 'userid',
+        approved_at: Time.now.utc
       )
       page.visit "/admin/submissions/#{@submission.id}"
       expect(page).to have_content 'Approved by Jon Jonson'
@@ -92,7 +106,9 @@ describe 'admin/submissions/show.html.erb', type: :feature do
 
     it 'displays the undo approval link if the submission has been approved' do
       @submission.update!(
-        state: 'approved', approved_by: 'userid', approved_at: Time.now.utc
+        state: 'approved',
+        approved_by: 'userid',
+        approved_at: Time.now.utc
       )
       page.visit "/admin/submissions/#{@submission.id}"
       expect(page).to have_content 'Undo approval'
@@ -108,7 +124,9 @@ describe 'admin/submissions/show.html.erb', type: :feature do
 
     it 'displays the reviewer byline if the submission has been rejected' do
       @submission.update!(
-        state: 'rejected', rejected_by: 'userid', rejected_at: Time.now.utc
+        state: 'rejected',
+        rejected_by: 'userid',
+        rejected_at: Time.now.utc
       )
       page.visit "/admin/submissions/#{@submission.id}"
       expect(page).to have_content 'Rejected by Jon Jonson'
@@ -116,7 +134,9 @@ describe 'admin/submissions/show.html.erb', type: :feature do
 
     it 'displays the undo rejection link if the submission has been approved' do
       @submission.update!(
-        state: 'rejected', rejected_by: 'userid', rejected_at: Time.now.utc
+        state: 'rejected',
+        rejected_by: 'userid',
+        rejected_at: Time.now.utc
       )
       page.visit "/admin/submissions/#{@submission.id}"
       expect(page).to have_content 'Undo rejection'
@@ -124,10 +144,9 @@ describe 'admin/submissions/show.html.erb', type: :feature do
     end
 
     it 'does not display partners who have not been notified' do
-      expect(NotificationService).to receive(:post_submission_event).once.with(
-        @submission.id,
-        'published'
-      )
+      expect(NotificationService).to receive(:post_submission_event)
+        .once
+        .with(@submission.id, 'published')
       partner1 = Fabricate(:partner, gravity_partner_id: 'partnerid')
       partner2 = Fabricate(:partner, gravity_partner_id: 'phillips')
       SubmissionService.update_submission(@submission, state: 'published')
@@ -140,23 +159,24 @@ describe 'admin/submissions/show.html.erb', type: :feature do
     end
 
     it 'displays the partners that a submission has been shown to' do
-      expect(NotificationService).to receive(:post_submission_event).once.with(
-        @submission.id,
-        'published'
-      )
+      expect(NotificationService).to receive(:post_submission_event)
+        .once
+        .with(@submission.id, 'published')
       stub_gravity_partner_communications
       stub_gravity_partner_contacts
       partner1 = Fabricate(:partner, gravity_partner_id: 'partnerid')
       partner2 = Fabricate(:partner, gravity_partner_id: 'phillips')
 
-      stub_gravql_match_partners(body: {
-        data: {
-          partners: [
-            { id: partner1.gravity_partner_id, given_name: 'Partner 1' },
-            { id: partner2.gravity_partner_id, given_name: 'Phillips' }
-          ]
+      stub_gravql_match_partners(
+        body: {
+          data: {
+            partners: [
+              { id: partner1.gravity_partner_id, given_name: 'Partner 1' },
+              { id: partner2.gravity_partner_id, given_name: 'Phillips' }
+            ]
+          }
         }
-      })
+      )
 
       SubmissionService.update_submission(@submission, state: 'published')
       stub_gravity_partner(id: 'partnerid')
@@ -187,9 +207,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
     end
 
     it 'displays supply priority' do
-      within('.supply-priority') do
-        expect(page).to have_content('P2')
-      end
+      within('.supply-priority') { expect(page).to have_content('P2') }
     end
 
     context 'notes' do
@@ -211,7 +229,9 @@ describe 'admin/submissions/show.html.erb', type: :feature do
 
       before do
         mocked_user_data = {
-          email: 'buster@example.com', id: gravity_user_id, name: 'Buster Bluth'
+          email: 'buster@example.com',
+          id: gravity_user_id,
+          name: 'Buster Bluth'
         }
 
         stub_gravity_user(mocked_user_data)
@@ -220,13 +240,14 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       it 'shows a list of notes' do
         3.times do |i|
           submission.notes.create!(
-            gravity_user_id: gravity_user_id, body: "Note #{i + 1}"
+            gravity_user_id: gravity_user_id,
+            body: "Note #{i + 1}"
           )
         end
 
         submission2.user.notes.create!(
           gravity_user_id: gravity_user_id,
-          body: "Note 4"
+          body: 'Note 4'
         )
         page.visit "/admin/submissions/#{submission.id}"
 
@@ -244,7 +265,8 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       it 'shows a list of notes' do
         3.times do |i|
           submission.notes.create!(
-            gravity_user_id: gravity_user_id, body: "Note #{i + 1}",
+            gravity_user_id: gravity_user_id,
+            body: "Note #{i + 1}"
           )
         end
 
@@ -300,7 +322,8 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       end
 
       it 'approves a submission when the Approve button is clicked' do
-        expect(NotificationService).to receive(:post_submission_event).once
+        expect(NotificationService).to receive(:post_submission_event)
+          .once
           .with(@submission.id, 'approved')
         expect(page).to_not have_content('Create Offer')
         expect(page).to have_content('submitted')
@@ -323,7 +346,8 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       end
 
       it 'publishes a submission when the Publish button is clicked' do
-        expect(NotificationService).to receive(:post_submission_event).once
+        expect(NotificationService).to receive(:post_submission_event)
+          .once
           .with(@submission.id, 'published')
         expect(page).to_not have_content('Create Offer')
         expect(page).to have_content('submitted')
@@ -333,7 +357,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.html_part.body).to include(
-          "We are delighted to work with you to sell your work through"
+          'We are delighted to work with you to sell your work through'
         )
         expect(page).to have_content 'Approved by Jon Jonson'
         expect(page).to_not have_content 'Reject'
@@ -347,7 +371,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.html_part.body).to include(
-          "Our team of Specialists carefully review each submission"
+          'Our team of Specialists carefully review each submission'
         )
         expect(page).to have_content 'Rejected by Jon Jonson'
         expect(page).to_not have_content 'Approve'
@@ -388,19 +412,23 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         end
 
         it 'removes the work from the digest when Undo approval is clicked' do
-          expect(NotificationService).to receive(:post_submission_event).once
+          expect(NotificationService).to receive(:post_submission_event)
+            .once
             .with(@submission.id, 'approved')
-          expect(NotificationService).to receive(:post_submission_event).once
+          expect(NotificationService).to receive(:post_submission_event)
+            .once
             .with(submission2.id, 'approved')
           SubmissionService.update_submission(@submission, state: 'approved')
           SubmissionService.update_submission(submission2, state: 'approved')
           Fabricate(
             :partner_submission,
-            partner: partner, submission: @submission
+            partner: partner,
+            submission: @submission
           )
           Fabricate(
             :partner_submission,
-            partner: partner, submission: submission2
+            partner: partner,
+            submission: submission2
           )
           expect(@submission.partner_submissions.count).to eq Partner.count
           expect(submission2.partner_submissions.count).to eq Partner.count
@@ -414,9 +442,11 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         end
 
         it 'removes the work from the digest when Undo publish is clicked' do
-          expect(NotificationService).to receive(:post_submission_event).once
+          expect(NotificationService).to receive(:post_submission_event)
+            .once
             .with(@submission.id, 'published')
-          expect(NotificationService).to receive(:post_submission_event).once
+          expect(NotificationService).to receive(:post_submission_event)
+            .once
             .with(submission2.id, 'published')
           SubmissionService.update_submission(@submission, state: 'published')
           SubmissionService.update_submission(submission2, state: 'published')
@@ -508,7 +538,12 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       before do
         partner = Fabricate(:partner, name: 'Artsy')
         consignment =
-          Fabricate(:partner_submission, submission: @submission, state: 'open', partner: partner)
+          Fabricate(
+            :partner_submission,
+            submission: @submission,
+            state: 'open',
+            partner: partner
+          )
         @submission.update!(consigned_partner_submission: consignment)
         page.visit admin_submission_path(@submission)
       end
@@ -516,7 +551,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       it 'shows the consignment' do
         expect(page).to have_selector('.list-item--consignment')
         expect(page).to have_content('Consignment')
-        expect(page).to have_content("Collector info")
+        expect(page).to have_content('Collector info')
 
         within('.consigned-partner-name') do
           expect(page).to have_content('Artsy')

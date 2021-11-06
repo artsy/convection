@@ -6,7 +6,7 @@ class UserService
       return if user_id == User.anonymous.id
 
       user = User.find(user_id)
-      email = Gravity.client.user_detail(id: user.gravity_user_id).email
+      email = user.user_email
       raise 'User lacks email.' if email.blank?
 
       user.update!(email: email) if email != user.email
