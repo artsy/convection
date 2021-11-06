@@ -7,16 +7,16 @@
       </div>
     <% end %>
     <div>
-      <%= submission.user&.name %>
+      <%= submission.user.user_name %>
     </div>
     <div>
       <%= submission.user&.submissions&.count || 0 %> submissions made
     </div>
     <div>
-      <%= submission.user&.user_detail&.email %>
+      <%= submission.user&.user_email %>
     </div>
     <div>
-      <%= submission.user&.user_detail&.phone %>
+      <%= submission.user&.user_phone %>
     </div>
   </div>
 </div>

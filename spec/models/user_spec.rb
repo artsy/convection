@@ -31,13 +31,13 @@ describe User do
         "#{Convection.config.gravity_api_url}/users/#{user.gravity_user_id}"
       ).to_raise(Faraday::ResourceNotFound)
       expect(user.gravity_user).to be_nil
-      expect(user.name).to be_nil
+      expect(user.user_name).to be_nil
     end
 
     it 'returns the object if it can find it' do
       stub_gravity_root
       stub_gravity_user(id: user.gravity_user_id, name: 'Buster Bluth')
-      expect(user.name).to eq 'Buster Bluth'
+      expect(user.user_name).to eq 'Buster Bluth'
     end
   end
 
@@ -51,7 +51,7 @@ describe User do
           user.gravity_user_id
         }"
       ).to_raise(Faraday::ResourceNotFound)
-      expect(user.name).to eq 'Buster Bluth'
+      expect(user.user_name).to eq 'Buster Bluth'
       expect(user.user_detail).to be_nil
       expect(user.user_detail&.email).to be_nil
     end
@@ -60,9 +60,10 @@ describe User do
       stub_gravity_root
       stub_gravity_user(id: user.gravity_user_id, name: 'Buster Bluth')
       stub_gravity_user_detail(
-        id: user.gravity_user_id, email: 'buster@bluth.com'
+        id: user.gravity_user_id,
+        email: 'buster@bluth.com'
       )
-      expect(user.name).to eq 'Buster Bluth'
+      expect(user.user_name).to eq 'Buster Bluth'
       expect(user.user_detail.email).to eq 'buster@bluth.com'
     end
 
@@ -73,6 +74,55 @@ describe User do
         "#{Convection.config.gravity_api_url}/users/#{user.gravity_user_id}"
       ).to_raise(Faraday::ResourceNotFound)
       expect(user.user_detail).to be_nil
+    end
+  end
+
+  context 'user info already in convection db' do
+    let(:user) do
+      Fabricate(
+        :user,
+        gravity_user_id: 'userid',
+        email: 'convection_email',
+        name: 'convection_name',
+        phone: 'convection_phone'
+      )
+    end
+
+    before do
+      stub_gravity_root
+      stub_gravity_user(id: user.gravity_user_id, name: 'Buster Bluth')
+      stub_gravity_user_detail(
+        id: user.gravity_user_id,
+        email: 'buster@bluth.com'
+      )
+      user
+    end
+
+    it 'return info from convection' do
+      expect(user.user_email).to eq 'convection_email'
+      expect(user.user_name).to eq 'convection_name'
+      expect(user.user_phone).to eq 'convection_phone'
+    end
+  end
+
+  context 'user info does not exist in convection db' do
+    let(:user) { Fabricate(:user, gravity_user_id: 'userid', email: nil) }
+
+    before do
+      stub_gravity_root
+      stub_gravity_user(id: user.gravity_user_id, name: 'Buster Bluth')
+      stub_gravity_user_detail(
+        id: user.gravity_user_id,
+        email: 'buster@bluth.com',
+        phone: 'phone'
+      )
+      user
+    end
+
+    it 'return info from gravity' do
+      expect(user.user_email).to eq 'buster@bluth.com'
+      expect(user.user_name).to eq 'Buster Bluth'
+      expect(user.user_phone).to eq 'phone'
     end
   end
 end
