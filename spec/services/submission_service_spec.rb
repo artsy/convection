@@ -10,7 +10,9 @@ describe SubmissionService do
   let(:submission) do
     Fabricate(
       :submission,
-      artist_id: 'artistid', user: user, title: 'My Artwork'
+      artist_id: 'artistid',
+      user: user,
+      title: 'My Artwork'
     )
   end
 
@@ -24,6 +26,16 @@ describe SubmissionService do
   context 'create_submission' do
     let(:params) do
       { artist_id: 'artistid', state: 'draft', title: 'My Artwork' }
+    end
+
+    it 'creates a submission with state Rejected when artist is not in target supply' do
+      stub_gravity_root
+      stub_gravity_user
+      stub_gravity_user_detail(email: 'michael@bluth.com')
+      stub_gravity_artist({ name: 'some nonTarget artist' })
+
+      new_submission = SubmissionService.create_submission(params, 'userid')
+      expect(new_submission.reload.state).to eq 'rejected'
     end
 
     it 'creates a submission and sets the user_id and email' do
@@ -69,20 +81,18 @@ describe SubmissionService do
     end
 
     it 'sends a reminder if the submission has no images' do
-      expect(NotificationService).to receive(:post_submission_event).once.with(
-        submission.id,
-        'submitted'
-      )
+      expect(NotificationService).to receive(:post_submission_event)
+        .once
+        .with(submission.id, 'submitted')
       SubmissionService.update_submission(submission, state: 'submitted')
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 3
     end
 
     it 'sends no reminders if the submission has images' do
-      expect(NotificationService).to receive(:post_submission_event).once.with(
-        submission.id,
-        'submitted'
-      )
+      expect(NotificationService).to receive(:post_submission_event)
+        .once
+        .with(submission.id, 'submitted')
       Fabricate(:image, submission: submission)
       SubmissionService.update_submission(submission, state: 'submitted')
       emails = ActionMailer::Base.deliveries
@@ -121,10 +131,9 @@ describe SubmissionService do
     end
 
     it 'sends an approval notification if the submission state is changed to approved' do
-      expect(NotificationService).to receive(:post_submission_event).once.with(
-        submission.id,
-        'approved'
-      )
+      expect(NotificationService).to receive(:post_submission_event)
+        .once
+        .with(submission.id, 'approved')
       SubmissionService.update_submission(
         submission,
         { state: 'approved' },
@@ -155,10 +164,9 @@ describe SubmissionService do
     end
 
     it 'generates partner submissions on publish' do
-      expect(NotificationService).to receive(:post_submission_event).once.with(
-        submission.id,
-        'published'
-      )
+      expect(NotificationService).to receive(:post_submission_event)
+        .once
+        .with(submission.id, 'published')
       partner1 = Fabricate(:partner, gravity_partner_id: 'partner1')
       partner2 = Fabricate(:partner, gravity_partner_id: 'partner2')
 
@@ -190,7 +198,9 @@ describe SubmissionService do
       allow(NotificationService).to receive(:post_submission_event)
       approved_at = 1.day.ago.beginning_of_day
       submission.update!(
-        state: 'approved', approved_at: approved_at, published_at: approved_at
+        state: 'approved',
+        approved_at: approved_at,
+        published_at: approved_at
       )
       SubmissionService.update_submission(
         submission,
@@ -214,7 +224,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[consign@artsy.net])
       expect(emails.first.html_part.body).to include(
-        "Thank you for submission and interest in our"
+        'Thank you for submission and interest in our'
       )
       expect(submission.state).to eq 'rejected'
       expect(submission.rejected_by).to eq 'userid'
@@ -235,9 +245,7 @@ describe SubmissionService do
       expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[consign@artsy.net])
-      expect(emails.first.html_part.body).to include(
-        "After extensive research"
-      )
+      expect(emails.first.html_part.body).to include('After extensive research')
       expect(submission.state).to eq 'rejected'
       expect(submission.rejected_by).to eq 'userid'
       expect(submission.rejected_at).to_not be_nil
@@ -246,7 +254,7 @@ describe SubmissionService do
       expect(submission.published_at).to be_nil
     end
 
-     it 'sends a artist rejection notification if the submission state is changed to rejected' do
+    it 'sends a artist rejection notification if the submission state is changed to rejected' do
       SubmissionService.update_submission(
         submission,
         { state: 'rejected', rejection_reason: 'Artist Submission' },
@@ -258,7 +266,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[consign@artsy.net])
       expect(emails.first.html_part.body).to include(
-        "If you are represented by a gallery that would be interested in partnering with Artsy"
+        'If you are represented by a gallery that would be interested in partnering with Artsy'
       )
       expect(submission.state).to eq 'rejected'
       expect(submission.rejected_by).to eq 'userid'
@@ -280,7 +288,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[consign@artsy.net])
       expect(emails.first.html_part.body).to include(
-        "Unfortunately, this artwork would fall below our auction threshold"
+        'Unfortunately, this artwork would fall below our auction threshold'
       )
       expect(submission.state).to eq 'rejected'
       expect(submission.rejected_by).to eq 'userid'
@@ -290,12 +298,12 @@ describe SubmissionService do
       expect(submission.published_at).to be_nil
     end
 
-
     it 'updates the user associated with the submission if a user ID is passed' do
       new_user =
         Fabricate(:user, gravity_user_id: 'new_gravity_user_id', email: nil)
       stub_gravity_user_detail(
-        id: new_user.gravity_user_id, email: 'cool.cat@fatcat.com'
+        id: new_user.gravity_user_id,
+        email: 'cool.cat@fatcat.com'
       )
 
       SubmissionService.update_submission(
@@ -321,7 +329,8 @@ describe SubmissionService do
       let!(:partner) { Fabricate(:partner, gravity_partner_id: 'partner1') }
 
       before do
-        expect(NotificationService).to receive(:post_submission_event).once
+        expect(NotificationService).to receive(:post_submission_event)
+          .once
           .with(submission.id, 'approved')
         Fabricate(:image, submission: submission)
         SubmissionService.update_submission(
@@ -363,7 +372,8 @@ describe SubmissionService do
 
     describe 'with published submission' do
       before do
-        expect(NotificationService).to receive(:post_submission_event).once
+        expect(NotificationService).to receive(:post_submission_event)
+          .once
           .with(submission.id, 'published')
         Fabricate(:partner, gravity_partner_id: 'partner1')
         Fabricate(:image, submission: submission)
@@ -440,9 +450,7 @@ describe SubmissionService do
         SubmissionService.notify_user(submission.id)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
-        expect(emails.first.html_part.body).to include(
-          'This is a confirmation'
-        )
+        expect(emails.first.html_part.body).to include('This is a confirmation')
         expect(emails.first.to).to eq(%w[michael@bluth.com])
         expect(submission.reload.receipt_sent_at).to_not be nil
       end
@@ -500,7 +508,8 @@ describe SubmissionService do
 
       it 'does not send a reminder if a receipt has already been sent' do
         submission.update!(
-          reminders_sent_count: 1, receipt_sent_at: Time.now.utc
+          reminders_sent_count: 1,
+          receipt_sent_at: Time.now.utc
         )
         SubmissionService.notify_user(submission.id)
         emails = ActionMailer::Base.deliveries
@@ -518,10 +527,9 @@ describe SubmissionService do
 
   context 'notify_admin' do
     it 'sends an email if one has not been sent' do
-      expect(NotificationService).to receive(:post_submission_event).once.with(
-        submission.id,
-        'submitted'
-      )
+      expect(NotificationService).to receive(:post_submission_event)
+        .once
+        .with(submission.id, 'submitted')
       SubmissionService.notify_admin(submission.id)
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
@@ -571,12 +579,8 @@ describe SubmissionService do
       SubmissionService.deliver_submission_receipt(submission.id)
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
-      expect(emails.first.bcc).to include(
-        'consignments-archive@artsymail.com',
-      )
-      expect(emails.first.html_part.body).to include(
-        'This is a confirmation'
-      )
+      expect(emails.first.bcc).to include('consignments-archive@artsymail.com')
+      expect(emails.first.html_part.body).to include('This is a confirmation')
     end
   end
 
