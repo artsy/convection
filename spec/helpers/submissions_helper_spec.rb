@@ -24,7 +24,9 @@ describe SubmissionsHelper, type: :helper do
       submission =
         Fabricate(
           :submission,
-          location_city: '', location_state: '', location_country: ''
+          location_city: '',
+          location_state: '',
+          location_country: ''
         )
       expect(helper.formatted_location(submission)).to be_blank
     end
@@ -33,7 +35,9 @@ describe SubmissionsHelper, type: :helper do
       submission =
         Fabricate(
           :submission,
-          location_city: '', location_state: 'Tokyo', location_country: 'Japan'
+          location_city: '',
+          location_state: 'Tokyo',
+          location_country: 'Japan'
         )
       expect(helper.formatted_location(submission)).to eq('Tokyo, Japan')
     end
@@ -44,7 +48,10 @@ describe SubmissionsHelper, type: :helper do
       submission =
         Fabricate(
           :submission,
-          width: '10', height: '12', depth: '1.75', dimensions_metric: 'in'
+          width: '10',
+          height: '12',
+          depth: '1.75',
+          dimensions_metric: 'in'
         )
       expect(helper.formatted_dimensions(submission)).to eq '12x10x1.75in'
     end
@@ -59,13 +66,19 @@ describe SubmissionsHelper, type: :helper do
     let(:submission_with_inch) do
       Fabricate(
         :submission,
-        width: '10', height: '12', depth: '1.75', dimensions_metric: 'in'
+        width: '10',
+        height: '12',
+        depth: '1.75',
+        dimensions_metric: 'in'
       )
-      end
+    end
     let(:submission_with_cm) do
       Fabricate(
         :submission,
-        width: '30', height: '40', depth: '2.54', dimensions_metric: 'cm'
+        width: '30',
+        height: '40',
+        depth: '2.54',
+        dimensions_metric: 'cm'
       )
     end
 
@@ -73,21 +86,26 @@ describe SubmissionsHelper, type: :helper do
       submission = Fabricate(:submission, width: nil, height: nil, depth: nil)
       expect(helper.formatted_dimensions_inch_cm(submission)).to eq([])
     end
-    
+
     it 'returns empty array when dimension metric is nil' do
-      submission = Fabricate(:submission, width: 10, height: 10, depth: 1, dimensions_metric: nil)
+      submission =
+        Fabricate(
+          :submission,
+          width: 10,
+          height: 10,
+          depth: 1,
+          dimensions_metric: nil
+        )
       expect(helper.formatted_dimensions_inch_cm(submission)).to eq([])
     end
 
     it 'returns array of formatted dimensions for both metrics' do
-      expect(helper.formatted_dimensions_inch_cm(submission_with_inch)).to match_array [
-        '12 x 10 x 1.75 in',
-        '30.48 x 25.4 x 4.45 cm'
-      ]
-      expect(helper.formatted_dimensions_inch_cm(submission_with_cm)).to match_array [
-        '15.75 x 11.81 x 1.0 in',
-        '40 x 30 x 2.54 cm'
-      ]
+      expect(
+        helper.formatted_dimensions_inch_cm(submission_with_inch)
+      ).to match_array ['12 x 10 x 1.75 in', '30.48 x 25.4 x 4.45 cm']
+      expect(
+        helper.formatted_dimensions_inch_cm(submission_with_cm)
+      ).to match_array ['15.75 x 11.81 x 1.0 in', '40 x 30 x 2.54 cm']
     end
   end
 
@@ -233,29 +251,41 @@ describe SubmissionsHelper, type: :helper do
         Fabricate(:submission, state: 'rejected', rejected_by: 'userid')
       expect(helper.reviewer_byline(submission)).to eq 'Rejected by Jon Jonson'
     end
+    it 'shows the correct label for automatically rejected submissions' do
+      stub_gravity_root
+      stub_gravity_user
+      submission = Fabricate(:submission, state: 'rejected', rejected_by: nil)
+      expect(helper.reviewer_byline(submission)).to eq 'Rejected automatically'
+    end
     it 'shows the correct label for an approved submission with no user' do
       submission = Fabricate(:submission, state: 'approved')
       expect(helper.reviewer_byline(submission)).to eq 'Approved by '
     end
     it 'shows the correct label for a rejected submission with no user' do
       submission = Fabricate(:submission, state: 'rejected')
-      expect(helper.reviewer_byline(submission)).to eq 'Rejected by '
+      expect(helper.reviewer_byline(submission)).to eq 'Rejected automatically'
     end
   end
 
   context 'artist_supply_priority' do
     context 'when is_p1' do
-      subject { helper.artist_supply_priority(is_p1: true, target_supply: true) }
+      subject do
+        helper.artist_supply_priority(is_p1: true, target_supply: true)
+      end
       it { is_expected.to eq 'P1' }
     end
 
     context 'when target_supply/p2' do
-      subject { helper.artist_supply_priority(is_p1: false, target_supply: true) }
+      subject do
+        helper.artist_supply_priority(is_p1: false, target_supply: true)
+      end
       it { is_expected.to eq 'P2' }
     end
 
     context 'none' do
-      subject { helper.artist_supply_priority(is_p1: false, target_supply: false) }
+      subject do
+        helper.artist_supply_priority(is_p1: false, target_supply: false)
+      end
       it { is_expected.to eq nil }
     end
   end
@@ -264,7 +294,11 @@ describe SubmissionsHelper, type: :helper do
     subject { helper.assignable_admin?(user) }
 
     before do
-      AdminUser.create(gravity_user_id: 'admin', name: 'AdminName', assignee: true)
+      AdminUser.create(
+        gravity_user_id: 'admin',
+        name: 'AdminName',
+        assignee: true
+      )
     end
 
     context 'for non-admin user' do

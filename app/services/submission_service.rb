@@ -17,6 +17,37 @@ class SubmissionService
       create_params = submission_params.merge(user_id: user.id)
       submission = Submission.create!(create_params)
       UserService.delay.update_email(user.id)
+
+      artist = Gravity.client.artist(id: submission.artist_id)._get
+
+      # puts artist.to_json
+
+      # below is the Artist
+      # {
+      #   "id": '51e6fda78b3b816d7800010a',
+      #   "slug": 'gina-beavers',
+      #   "created_at": '2013-07-17T20:25:11+00:00',
+      #   "updated_at": '2021-11-06T04:36:13+00:00',
+      #   "name": 'Gina Beavers',
+      #   "sortable_name": 'Beavers Gina',
+      #   "gender": 'female',
+      #   "biography": '',
+      #   "birthday": '1974',
+      #   "deathday": '',
+      #   "hometown": 'Athens, Greece',
+      #   "location": 'Brooklyn, NY, USA',
+      #   "nationality": 'American',
+      #   "image_versions": %w[four_thirds large square tall],
+      # }
+
+      if artist[:target_supply_priority] != 1
+        submission.update!(
+          state: 'rejected',
+          rejection_reason: 'Not Target Supply',
+          rejected_at: Time.now.utc
+        )
+      end
+
       submission
     rescue ActiveRecord::RecordInvalid => e
       raise SubmissionError, e.message
