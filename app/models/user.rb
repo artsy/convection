@@ -24,16 +24,16 @@ class User < ApplicationRecord
     end
   end
 
-  def user_name
-    name || gravity_user.try(:name)
+  def name
+    self[:name] || gravity_user.try(:name)
   end
 
-  def user_email
-    email || user_detail&.email
+  def email
+    self[:email] || user_detail&.email
   end
 
-  def user_phone
-    phone || user_detail&.phone
+  def phone
+    self[:phone] || user_detail&.phone
   end
 
   def user_detail

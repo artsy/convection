@@ -150,7 +150,7 @@ class OfferService
       return if offer.sent_at
 
       user = offer.submission.user
-      raise 'User lacks email.' if user.user_email.blank?
+      raise 'User lacks email.' if user.email.blank?
 
       artist = Gravity.client.artist(id: offer.submission.artist_id)._get
 

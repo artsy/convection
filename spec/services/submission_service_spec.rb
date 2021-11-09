@@ -39,16 +39,6 @@ describe SubmissionService do
       expect(new_submission.user_id).to eq user.id
       expect(new_submission.user.email).to eq 'michael@bluth.com'
     end
-
-    it 'raises an error if the email is blank' do
-      stub_gravity_root
-      stub_gravity_user(id: 'foo')
-      stub_gravity_user_detail(id: 'foo', email: '')
-
-      expect {
-        SubmissionService.create_submission(params, 'foo')
-      }.to raise_error('User lacks email.')
-    end
   end
 
   context 'update_submission' do

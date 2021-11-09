@@ -15,9 +15,8 @@ class SubmissionService
       ]
       user = User.find_or_create_by!(gravity_user_id: gravity_user_id)
       create_params = submission_params.merge(user_id: user.id)
-      submission = Submission.create!(create_params)
-      UserService.delay.update_email(user.id)
-      submission
+      Submission.create!(create_params)
+      
     rescue ActiveRecord::RecordInvalid => e
       raise SubmissionError, e.message
     end
@@ -28,7 +27,6 @@ class SubmissionService
       ]
       if params[:user_id]
         user = User.find_or_create_by!(gravity_user_id: params[:user_id])
-        UserService.delay.update_email(user.id)
         create_params = params.merge(user_id: user.id)
         submission.assign_attributes(create_params)
       else
@@ -172,7 +170,7 @@ class SubmissionService
       return if submission.receipt_sent_at || submission.images.count.positive?
 
       user = submission.user
-      raise 'User lacks email.' if user.user_email.blank?
+      raise 'User lacks email.' if user.email.blank?
 
       email_args = { submission: submission, user: user }
 
@@ -189,7 +187,7 @@ class SubmissionService
       raise 'Still processing images.' unless submission.ready?
 
       user = submission.user
-      raise 'User lacks email.' if user.user_email.blank?
+      raise 'User lacks email.' if user.email.blank?
 
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
