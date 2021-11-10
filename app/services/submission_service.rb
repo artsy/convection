@@ -15,18 +15,21 @@ class SubmissionService
       ]
       user = User.find_or_create_by!(gravity_user_id: gravity_user_id)
       create_params = submission_params.merge(user_id: user.id)
-      submission = Submission.create!(create_params)
-      UserService.delay.update_email(user.id)
 
-      artist = Gravity.client.artist(id: submission.artist_id)._get
-      if artist.target_supply.nil? || artist.target_supply == false
-        submission.update!(
-          state: 'rejected',
-          rejection_reason: 'Not Target Supply',
-          rejected_at: Time.now.utc
-        )
+      artist = Gravity.client.artist(id: submission_params[:artist_id])._get
+      unless artist[:target_supply]
+        create_params =
+          create_params.merge(
+            {
+              state: 'rejected',
+              rejection_reason: 'Not Target Supply',
+              rejected_at: Time.now.utc
+            }
+          )
       end
 
+      submission = Submission.create!(create_params)
+      UserService.delay.update_email(user.id)
       submission
     rescue ActiveRecord::RecordInvalid => e
       raise SubmissionError, e.message
