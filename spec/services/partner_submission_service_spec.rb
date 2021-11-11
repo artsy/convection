@@ -18,11 +18,13 @@ describe PartnerSubmissionService do
     allow(Convection.config).to receive(:gravity_xapp_token).and_return(
       'xapp_token'
     )
-    stub_gravql_artists(body:{
-      data: {
-        artists: [{ id: 'artistid', name: 'Andy Warhol' }]
+    stub_gravql_artists(
+      body: {
+        data: {
+          artists: [{ id: 'artistid', name: 'Andy Warhol' }]
+        }
       }
-    })
+    )
     stub_gravity_partner_communications
     stub_gravity_partner_contacts
     allow(Time).to receive(:now).and_return(
@@ -50,12 +52,13 @@ describe PartnerSubmissionService do
       submission =
         Fabricate(
           :submission,
-          state: 'submitted', user: @user, artist_id: 'artistid'
+          state: 'submitted',
+          user: @user,
+          artist_id: 'artistid'
         )
-      expect(NotificationService).to receive(:post_submission_event).once.with(
-        submission.id,
-        'published'
-      )
+      expect(NotificationService).to receive(:post_submission_event)
+        .once
+        .with(submission.id, 'published')
       SubmissionService.update_submission(submission, state: 'published')
       expect(partner.partner_submissions.count).to eq 1
       expect(partner.partner_submissions.first.submission).to eq submission
@@ -116,7 +119,8 @@ describe PartnerSubmissionService do
             minimum_price_cents: 50_000_00,
             currency: 'USD'
           )
-        expect(NotificationService).to receive(:post_submission_event).once
+        expect(NotificationService).to receive(:post_submission_event)
+          .once
           .with(@approved1.id, 'published')
         SubmissionService.update_submission(@approved1, state: 'published')
         PartnerSubmissionService.daily_digest
@@ -141,7 +145,8 @@ describe PartnerSubmissionService do
             title: 'Approved artwork with minimum price',
             year: '1992'
           )
-        expect(NotificationService).to receive(:post_submission_event).once
+        expect(NotificationService).to receive(:post_submission_event)
+          .once
           .with(@approved1.id, 'published')
         SubmissionService.update_submission(@approved1, state: 'published')
       end
@@ -185,11 +190,14 @@ describe PartnerSubmissionService do
             year: '1997'
           )
         Fabricate(:submission, state: 'rejected')
-        expect(NotificationService).to receive(:post_submission_event).once
+        expect(NotificationService).to receive(:post_submission_event)
+          .once
           .with(@approved1.id, 'published')
-        expect(NotificationService).to receive(:post_submission_event).once
+        expect(NotificationService).to receive(:post_submission_event)
+          .once
           .with(@approved2.id, 'published')
-        expect(NotificationService).to receive(:post_submission_event).once
+        expect(NotificationService).to receive(:post_submission_event)
+          .once
           .with(@approved3.id, 'published')
         SubmissionService.update_submission(@approved1, state: 'published')
         SubmissionService.update_submission(@approved2, state: 'published')
@@ -217,7 +225,7 @@ describe PartnerSubmissionService do
           expect(emails.length).to eq 1
           email = emails.first
           expect(email.subject).to include(
-            'New Artsy Consignments September 27: 3 works'
+            'New Artsy Consignments September 26: 3 works'
           )
           expect(email.bcc).to eq(%w[consignments-archive@artsymail.com])
           expect(email.from).to eq(%w[consign@artsy.net])
@@ -283,21 +291,24 @@ describe PartnerSubmissionService do
             :image,
             submission: @approved1,
             image_urls: {
-              'square' => 'http://square1.jpg', 'large' => 'http://foo1.jpg'
+              'square' => 'http://square1.jpg',
+              'large' => 'http://foo1.jpg'
             }
           )
           Fabricate(
             :image,
             submission: @approved1,
             image_urls: {
-              'square' => 'http://square2.jpg', 'large' => 'http://foo2.jpg'
+              'square' => 'http://square2.jpg',
+              'large' => 'http://foo2.jpg'
             }
           )
           Fabricate(
             :image,
             submission: @approved1,
             image_urls: {
-              'square' => 'http://square3.jpg', 'large' => 'http://foo3.jpg'
+              'square' => 'http://square3.jpg',
+              'large' => 'http://foo3.jpg'
             }
           )
           PartnerSubmissionService.daily_digest
@@ -358,7 +369,8 @@ describe PartnerSubmissionService do
             Fabricate(:partner, gravity_partner_id: 'phillips')
           stub_gravity_partner(name: 'Phillips Auctions', id: 'phillips')
           stub_gravity_partner_contacts(
-            partner_id: 'phillips', override_body: []
+            partner_id: 'phillips',
+            override_body: []
           )
           PartnerSubmissionService.daily_digest
 
@@ -372,7 +384,7 @@ describe PartnerSubmissionService do
           expect(emails.length).to eq 1
           email = emails.first
           expect(email.subject).to include(
-            'New Artsy Consignments September 27: 3 works'
+            'New Artsy Consignments September 26: 3 works'
           )
           expect(email.html_part.body).to include(
             '<i>First approved artwork</i><span>, 1992</span>'
@@ -388,10 +400,13 @@ describe PartnerSubmissionService do
         it 'sends to a gallery partner' do
           gallery_partner = Fabricate(:partner, gravity_partner_id: 'gagosian')
           stub_gravity_partner(
-            name: 'Gagosian Gallery', id: 'gagosian', type: 'Gallery'
+            name: 'Gagosian Gallery',
+            id: 'gagosian',
+            type: 'Gallery'
           )
           stub_gravity_partner_contacts(
-            partner_id: 'gagosian', override_body: []
+            partner_id: 'gagosian',
+            override_body: []
           )
           PartnerSubmissionService.generate_for_new_partner(gallery_partner)
           PartnerSubmissionService.deliver_digest(gallery_partner.id)
@@ -402,7 +417,7 @@ describe PartnerSubmissionService do
           expect(emails.length).to eq 1
           email = emails.first
           expect(email.subject).to include(
-            'New Artsy Consignments September 27: 3 works'
+            'New Artsy Consignments September 26: 3 works'
           )
           expect(email.html_part.body).to_not include('Submit Proposal')
           expect(email.html_part.body).to include(
