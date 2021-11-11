@@ -45,7 +45,7 @@ describe SubmissionService do
       stub_gravity_artist
 
       new_submission = SubmissionService.create_submission(params, 'userid')
-      expect(new_submission.reload.state).to eq 'draft'
+      expect(new_submission.reload.state).to eq 'rejected'
       expect(new_submission.user_id).to eq user.id
       expect(new_submission.user.email).to eq 'michael@bluth.com'
     end
