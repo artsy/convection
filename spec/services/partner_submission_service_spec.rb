@@ -225,7 +225,7 @@ describe PartnerSubmissionService do
           expect(emails.length).to eq 1
           email = emails.first
           expect(email.subject).to include(
-            'New Artsy Consignments September 26: 3 works'
+            'New Artsy Consignments September 27: 3 works'
           )
           expect(email.bcc).to eq(%w[consignments-archive@artsymail.com])
           expect(email.from).to eq(%w[consign@artsy.net])
@@ -384,7 +384,7 @@ describe PartnerSubmissionService do
           expect(emails.length).to eq 1
           email = emails.first
           expect(email.subject).to include(
-            'New Artsy Consignments September 26: 3 works'
+            'New Artsy Consignments September 27: 3 works'
           )
           expect(email.html_part.body).to include(
             '<i>First approved artwork</i><span>, 1992</span>'
@@ -417,7 +417,7 @@ describe PartnerSubmissionService do
           expect(emails.length).to eq 1
           email = emails.first
           expect(email.subject).to include(
-            'New Artsy Consignments September 26: 3 works'
+            'New Artsy Consignments September 27: 3 works'
           )
           expect(email.html_part.body).to_not include('Submit Proposal')
           expect(email.html_part.body).to include(
