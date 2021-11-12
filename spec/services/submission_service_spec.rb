@@ -25,7 +25,7 @@ describe SubmissionService do
 
   context 'create_submission' do
     let(:params) do
-      { artist_id: 'artistid', state: 'draft', title: 'My Artwork' }
+      { artist_id: 'artistid', state: 'rejected', title: 'My Artwork' }
     end
 
     it 'creates a submission with state Rejected when artist is not in target supply' do
@@ -36,6 +36,23 @@ describe SubmissionService do
 
       new_submission = SubmissionService.create_submission(params, 'userid')
       expect(new_submission.reload.state).to eq 'rejected'
+    end
+
+    it 'delvers rejection email to user for non-target supply artist submissions' do
+      stub_gravity_root
+      stub_gravity_user
+      stub_gravity_user_detail(email: 'michael@bluth.com')
+      stub_gravity_artist({ name: 'some nonTarget artist' })
+
+      new_submission = SubmissionService.create_submission(params, 'userid')
+      expect(new_submission.reload.state).to eq 'rejected'
+
+      emails = ActionMailer::Base.deliveries
+      expect(emails.length).to eq 1
+      expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
+      expect(emails.first.to).to eq(%w[michael@bluth.com])
+      expect(emails.first.from).to eq(%w[consign@artsy.net])
+      expect(emails.first.html_part.body).to include('we cannot accept it')
     end
 
     it 'creates a submission and sets the user_id and email' do
