@@ -24,7 +24,8 @@ module SubmissionsHelper
   end
 
   def formatted_dimensions_inch_cm(submission)
-    values = [submission.height, submission.width, submission.depth].select(&:present?)
+    values =
+      [submission.height, submission.width, submission.depth].select(&:present?)
 
     return [] if values.empty?
 
@@ -32,12 +33,12 @@ module SubmissionsHelper
     when 'cm'
       %W[
         #{values.join(' x ')}\ cm
-        #{values.map{ |dimension| convert_cm_to_inch(dimension) }.join(' x ')}\ in
+        #{values.map { |dimension| convert_cm_to_inch(dimension) }.join(' x ')}\ in
       ]
     when 'in'
       %W[
         #{values.join(' x ')}\ in
-        #{values.map{ |dimension| convert_inch_to_cm(dimension) }.join(' x ')}\ cm
+        #{values.map { |dimension| convert_inch_to_cm(dimension) }.join(' x ')}\ cm
       ]
     else
       []
@@ -78,7 +79,11 @@ module SubmissionsHelper
     if submission.approved? || submission.published?
       "Approved by #{submission.reviewed_by_user.try(:name)}"
     elsif submission.rejected?
-      "Rejected by #{submission.reviewed_by_user.try(:name)}"
+      if submission.reviewed_by_user
+        "Rejected by #{submission.reviewed_by_user.try(:name)}"
+      else
+        'Rejected automatically'
+      end
     end
   end
 
@@ -96,9 +101,10 @@ module SubmissionsHelper
   end
 
   def formatted_current_time
-    Time.now.in_time_zone('Eastern Time (US & Canada)').strftime(
-      '%l:%M %Z %B %-d, %Y'
-    )
+    Time
+      .now
+      .in_time_zone('Eastern Time (US & Canada)')
+      .strftime('%l:%M %Z %B %-d, %Y')
   end
 
   def formatted_minimum_price(submission)
