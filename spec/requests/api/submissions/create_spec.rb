@@ -36,6 +36,7 @@ describe 'POST /api/submissions' do
       stub_gravity_root
       stub_gravity_user
       stub_gravity_user_detail(email: 'michael@bluth.com')
+      stub_gravity_artist({ id: 'artistid' })
 
       params = { title: 'my sartwork', artist_id: 'artistid' }
 
@@ -52,6 +53,7 @@ describe 'POST /api/submissions' do
       stub_gravity_root
       stub_gravity_user
       stub_gravity_user_detail(email: 'michael@bluth.com')
+      stub_gravity_artist({ id: 'artistid' })
 
       params = {
         artist_id: 'artistid',
@@ -78,6 +80,7 @@ describe 'POST /api/submissions' do
       stub_gravity_root
       stub_gravity_user
       stub_gravity_user_detail(email: 'michael@bluth.com')
+      stub_gravity_artist({ id: 'artistid' })
 
       params = {
         artist_id: 'artistid',
@@ -111,6 +114,7 @@ describe 'POST /api/submissions' do
       stub_gravity_root
       stub_gravity_user
       stub_gravity_user_detail(email: 'michael@bluth.com')
+      stub_gravity_artist({ id: 'artistid' })
 
       params = {
         artist_id: 'artistid',
@@ -147,6 +151,8 @@ describe 'POST /api/submissions' do
     end
 
     it 'uses the anonymous user' do
+      stub_gravity_artist({ id: 'artistid' })
+
       params = {
         artist_id: 'artistid',
         gravity_user_id: 'anonymous',

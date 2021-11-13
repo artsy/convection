@@ -15,8 +15,7 @@ describe 'createConsignmentSubmission mutation' do
     '{ state: REJECTED, clientMutationId: "2", artistID: "andy", title: "soup", category: JEWELRY, minimumPriceDollars: 50000, currency: "GBP", sourceArtworkID: "gravity_artwork_id" }'
   end
 
-  let(:mutation) do
-    <<-GRAPHQL
+  let(:mutation) { <<-GRAPHQL }
     mutation {
       createConsignmentSubmission(input: #{mutation_inputs}){
         clientMutationId
@@ -31,8 +30,7 @@ describe 'createConsignmentSubmission mutation' do
         }
       }
     }
-    GRAPHQL
-  end
+  GRAPHQL
 
   describe 'invalid requests' do
     context 'with an unauthorized request' do
@@ -92,6 +90,7 @@ describe 'createConsignmentSubmission mutation' do
       stub_gravity_root
       stub_gravity_user
       stub_gravity_user_detail(email: 'michael@bluth.com')
+      stub_gravity_artist({ id: 'andy' })
 
       expect {
         post '/api/graphql', params: { query: mutation }, headers: headers
@@ -140,6 +139,7 @@ describe 'createConsignmentSubmission mutation' do
         stub_gravity_root
         stub_gravity_user
         stub_gravity_user_detail(email: 'michael@bluth.com')
+        stub_gravity_artist({ id: 'andy' })
 
         post '/api/graphql', params: { query: mutation }, headers: headers
 
