@@ -54,10 +54,10 @@ describe 'Submission Flow' do
     expect(submission.reload.state).to eq 'submitted'
 
     emails = ActionMailer::Base.deliveries
-    expect(emails.length).to eq 3
-    expect(emails.first.to).to eq(%w[consign@artsy.net])
-    expect(emails[1].subject).to include("You're Almost Done")
-    expect(emails[1].to).to eq(%w[michael@bluth.com]) # sidekiq flushes everything at once
+    expect(emails.length).to eq 4
+    expect(emails[1].to).to eq(%w[consign@artsy.net])
+    expect(emails[2].subject).to include("You're Almost Done")
+    expect(emails[2].to).to eq(%w[michael@bluth.com]) # sidekiq flushes everything at once
     expect(emails.last.subject).to include(
       'Artsy Consignments - complete your submission'
     )
@@ -105,10 +105,10 @@ describe 'Submission Flow' do
       expect(@submission.reload.state).to eq 'submitted'
       puts @submission.user.email
       emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 3
-      expect(emails.first.to).to eq(%w[consign@artsy.net])
-      expect(emails[1].subject).to include("You're Almost Done")
-      expect(emails[1].to).to eq(%w[michael@bluth.com]) # sidekiq flushes everything at once
+      expect(emails.length).to eq 4
+      expect(emails[1].to).to eq(%w[consign@artsy.net])
+      expect(emails[2].subject).to include("You're Almost Done")
+      expect(emails[2].to).to eq(%w[michael@bluth.com]) # sidekiq flushes everything at once
       expect(emails.last.subject).to include(
         'Artsy Consignments - complete your submission'
       )
@@ -203,8 +203,8 @@ describe 'Submission Flow' do
       expect(response.status).to eq 201
       expect(submission.reload.state).to eq 'submitted'
       emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 2
-      expect(emails.first.html_part.body).to include('https://new-image.jpg')
+      expect(emails.length).to eq 3
+      expect(emails[1].html_part.body).to include('https://new-image.jpg')
 
       # GET to retrieve the image url for the submission
       get '/api/assets',

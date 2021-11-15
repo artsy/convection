@@ -15,10 +15,34 @@ class SubmissionService
       ]
       user = User.find_or_create_by!(gravity_user_id: gravity_user_id)
       create_params = submission_params.merge(user_id: user.id)
-      Submission.create!(create_params)
-      
+      final_params =
+        create_params.merge(
+          reject_if_non_target_supply_artist(submission_params[:artist_id])
+        )
+      submission = Submission.create!(final_params)
+
+      if final_params[:state] == 'rejected'
+        delay_until(
+          Convection.config.rejection_email_minutes_after.minutes.from_now
+        ).deliver_rejection_notification(submission.id)
+      end
+
+      submission
     rescue ActiveRecord::RecordInvalid => e
       raise SubmissionError, e.message
+    end
+
+    def reject_if_non_target_supply_artist(artist_id)
+      artist = Gravity.client.artist(id: artist_id)._get
+      params = {}
+      unless artist[:target_supply]
+        params = {
+          state: 'rejected',
+          rejection_reason: 'Not Target Supply',
+          rejected_at: Time.now.utc
+        }
+      end
+      params
     end
 
     def update_submission(submission, params, current_user: nil)
