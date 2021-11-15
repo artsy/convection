@@ -45,6 +45,8 @@ Convection.config =
     smtp_port: ENV['SMTP_PORT'],
     smtp_user: ENV['SMTP_USER'],
     second_reminder_days_after: (ENV['SECOND_REMINDER_DAYS_AFTER'] || 7).to_i,
+    rejection_email_minutes_after:
+      (ENV['REJECTION_EMAIL_MINUTES_AFTER'] || 60).to_i,
     vibrations_url:
       ENV['VIBRATIONS_URL'] || 'https://admin-partners-staging.artsy.net'
   )

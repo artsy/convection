@@ -144,24 +144,26 @@ describe 'POST /api/submissions' do
     end
   end
 
-  context 'with a trusted app token' do
-    let(:jwt_token) do
-      payload = { aud: 'force', roles: 'trusted' }
-      JWT.encode(payload, Convection.config.jwt_secret)
-    end
+  # Below commented out for now to be revisited when we are implementing anonymous submission
 
-    it 'uses the anonymous user' do
-      stub_gravity_artist({ id: 'artistid' })
+  # context 'with a trusted app token' do
+  #   let(:jwt_token) do
+  #     payload = { aud: 'force', roles: 'trusted' }
+  #     JWT.encode(payload, Convection.config.jwt_secret)
+  #   end
 
-      params = {
-        artist_id: 'artistid',
-        gravity_user_id: 'anonymous',
-        title: 'my artwork'
-      }
+  #   it 'uses the anonymous user' do
+  #     stub_gravity_artist({ id: 'artistid' })
 
-      expect do
-        post '/api/submissions', params: params, headers: headers
-      end.to change { User.anonymous.submissions.count }.by(1)
-    end
-  end
+  #     params = {
+  #       artist_id: 'artistid',
+  #       gravity_user_id: 'anonymous',
+  #       title: 'my artwork'
+  #     }
+
+  #     expect do
+  #       post '/api/submissions', params: params, headers: headers
+  #     end.to change { User.anonymous.submissions.count }.by(1)
+  #   end
+  # end
 end

@@ -22,6 +22,13 @@ class SubmissionService
 
       submission = Submission.create!(final_params)
       UserService.delay.update_email(user.id)
+
+      if final_params[:state] == 'rejected'
+        delay_until(
+          Convection.config.rejection_email_minutes_after.minutes.from_now
+        ).deliver_rejection_notification(submission.id)
+      end
+
       submission
     rescue ActiveRecord::RecordInvalid => e
       raise SubmissionError, e.message
