@@ -46,6 +46,7 @@ module Types
     field :utm_source, String, null: true
     field :utm_medium, String, null: true
     field :utm_term, String, null: true
+    field :session_id, String, null: true
 
     field :offers, [Types::OfferType], null: false do
       argument :gravity_partner_id, ID, required: true

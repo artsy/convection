@@ -13,7 +13,10 @@ class SubmissionService
         submission_params.delete(:edition_size_formatted) if submission_params[
         :edition_size_formatted
       ]
-      user = User.find_or_create_by!(gravity_user_id: gravity_user_id)
+      user =
+        User.find_or_create_by!(
+          gravity_user_id: (gravity_user_id || 'anonymous')
+        )
       create_params = submission_params.merge(user_id: user.id)
       submission = Submission.create!(create_params)
       UserService.delay.update_email(user.id)
