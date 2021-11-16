@@ -1,15 +1,6 @@
 # frozen_string_literal: true
 
 class UpdateSubmissionResolver < BaseResolver
-  def valid?
-    return true if admin? || trusted_application?
-
-    bad_argument_error =
-      GraphQL::ExecutionError.new("Can't access updateConsignmentSubmission")
-    @error = bad_argument_error
-    false
-  end
-
   def run
     submission = Submission.find_by(id: @arguments[:id])
 

@@ -56,7 +56,6 @@ module Mutations
         object: object
       }
       resolver = CreateSubmissionResolver.new(resolve_options)
-      raise resolver.error unless resolver.valid?
 
       resolver.run
     end
