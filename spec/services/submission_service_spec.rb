@@ -476,9 +476,7 @@ describe SubmissionService do
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
-        expect(emails.first.html_part.body).to include(
-          'Complete your consignment submission'
-        )
+        expect(emails.first.html_part.body).to include('your submission')
         expect(emails.first.html_part.body).to include(
           'utm_campaign=consignment-complete'
         )
