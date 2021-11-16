@@ -230,6 +230,8 @@ ActiveRecord::Schema.define(version: 2021_11_16_122631) do
     t.string 'session_id'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
+    t.string 'name'
+    t.string 'phone'
     t.index ['gravity_user_id'],
             name: 'index_users_on_gravity_user_id',
             unique: true
