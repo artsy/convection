@@ -3,8 +3,6 @@
 class User < ApplicationRecord
   include PgSearch::Model
 
-  validates :gravity_user_id, presence: true, uniqueness: true
-
   has_many :submissions, dependent: :nullify
   has_many :notes, dependent: :nullify
 
