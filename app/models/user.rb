@@ -3,8 +3,6 @@
 class User < ApplicationRecord
   include PgSearch::Model
 
-  validates :gravity_user_id, presence: true, uniqueness: true
-
   has_many :submissions, dependent: :nullify
   has_many :notes, dependent: :nullify
 
@@ -13,7 +11,7 @@ class User < ApplicationRecord
   def gravity_user
     if defined?(@gravity_user)
       @gravity_user
-    else
+    elsif gravity_user_id
       @gravity_user =
         gravity_user_id &&
           (
@@ -27,7 +25,15 @@ class User < ApplicationRecord
   end
 
   def name
-    gravity_user.try(:name)
+    self[:name] || gravity_user.try(:name)
+  end
+
+  def email
+    self[:email] || user_detail&.email
+  end
+
+  def phone
+    self[:phone] || user_detail&.phone
   end
 
   def user_detail

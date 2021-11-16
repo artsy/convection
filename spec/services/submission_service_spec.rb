@@ -66,28 +66,6 @@ describe SubmissionService do
       expect(new_submission.user_id).to eq user.id
       expect(new_submission.user.email).to eq 'michael@bluth.com'
     end
-
-    it 'raises an exception if the user_detail cannot be found' do
-      stub_gravity_root
-      stub_request(
-        :get,
-        "#{Convection.config.gravity_api_url}/user_details/foo"
-      ).to_raise(Faraday::ResourceNotFound)
-
-      expect {
-        SubmissionService.create_submission(params, 'foo')
-      }.to raise_error(Faraday::ResourceNotFound)
-    end
-
-    it 'raises an error if the email is blank' do
-      stub_gravity_root
-      stub_gravity_user(id: 'foo')
-      stub_gravity_user_detail(id: 'foo', email: '')
-
-      expect {
-        SubmissionService.create_submission(params, 'foo')
-      }.to raise_error('User lacks email.')
-    end
   end
 
   context 'update_submission' do
@@ -318,6 +296,17 @@ describe SubmissionService do
     it 'updates the user associated with the submission if a user ID is passed' do
       new_user =
         Fabricate(:user, gravity_user_id: 'new_gravity_user_id', email: nil)
+      body = {
+        id: new_user.gravity_user_id,
+        name: 'Jon Jonson',
+        _links: {
+          user_detail: {
+            href:
+              "#{Convection.config.gravity_api_url}/user_details/#{new_user.gravity_user_id}"
+          }
+        }
+      }
+      stub_gravity_request('/users/new_gravity_user_id', body)
       stub_gravity_user_detail(
         id: new_user.gravity_user_id,
         email: 'cool.cat@fatcat.com'

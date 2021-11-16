@@ -17,14 +17,18 @@ describe 'Submission Flow' do
   it 'Completes a submission from Tokyo' do
     stub_gravity_root
     stub_gravity_user
-    stub_gravity_user_detail(email: 'michael@bluth.com')
     stub_gravity_artist
 
     # first create the submission, without a location_city
     post '/api/submissions',
          params: {
            artist_id: 'artistid',
-           user: Fabricate(:user, gravity_user_id: 'userid'),
+           user:
+             Fabricate(
+               :user,
+               gravity_user_id: 'userid',
+               email: 'michael@bluth.com'
+             ),
            title: 'My Artwork',
            medium: 'painting',
            year: '1992',
@@ -63,15 +67,19 @@ describe 'Submission Flow' do
   describe 'Creating a submission without a photo initially' do
     it 'sends an initial reminder and a delayed reminder' do
       stub_gravity_root
-      stub_gravity_user
-      stub_gravity_user_detail(email: 'michael@bluth.com')
+      stub_gravity_user(email: 'michael@bluth.com')
       stub_gravity_artist
 
       # first create the submission
       post '/api/submissions',
            params: {
              artist_id: 'artistid',
-             user: Fabricate(:user, gravity_user_id: 'userid'),
+             user:
+               Fabricate(
+                 :user,
+                 gravity_user_id: 'userid',
+                 email: 'michael@bluth.com'
+               ),
              title: 'My Artwork',
              medium: 'painting',
              year: '1992',
@@ -95,7 +103,7 @@ describe 'Submission Flow' do
           headers: headers
       expect(response.status).to eq 201
       expect(@submission.reload.state).to eq 'submitted'
-
+      puts @submission.user.email
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 4
       expect(emails[1].to).to eq(%w[consign@artsy.net])

@@ -19,9 +19,7 @@ class SubmissionService
         create_params.merge(
           reject_if_non_target_supply_artist(submission_params[:artist_id])
         )
-
       submission = Submission.create!(final_params)
-      UserService.delay.update_email(user.id)
 
       if final_params[:state] == 'rejected'
         delay_until(
@@ -53,7 +51,6 @@ class SubmissionService
       ]
       if params[:user_id]
         user = User.find_or_create_by!(gravity_user_id: params[:user_id])
-        UserService.delay.update_email(user.id)
         create_params = params.merge(user_id: user.id)
         submission.assign_attributes(create_params)
       else
@@ -196,15 +193,10 @@ class SubmissionService
       submission = Submission.find(submission_id)
       return if submission.receipt_sent_at || submission.images.count.positive?
 
-      user = Gravity.client.user(id: submission.user.gravity_user_id)._get
-      user_detail = user.user_detail._get
-      raise 'User lacks email.' if user_detail.email.blank?
+      user = submission.user
+      raise 'User lacks email.' if user.email.blank?
 
-      email_args = {
-        submission: submission,
-        user: user,
-        user_detail: user_detail
-      }
+      email_args = { submission: submission, user: user }
 
       if submission.reminders_sent_count == 1
         UserMailer.second_upload_reminder(email_args).deliver_now
@@ -218,16 +210,14 @@ class SubmissionService
       submission = Submission.find(submission_id)
       raise 'Still processing images.' unless submission.ready?
 
-      user = Gravity.client.user(id: submission.user.gravity_user_id)._get
-      user_detail = user.user_detail._get
-      raise 'User lacks email.' if user_detail.email.blank?
+      user = submission.user
+      raise 'User lacks email.' if user.email.blank?
 
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
       UserMailer.submission_receipt(
         submission: submission,
         user: user,
-        user_detail: user_detail,
         artist: artist
       ).deliver_now
     end
@@ -236,36 +226,28 @@ class SubmissionService
       submission = Submission.find(submission_id)
       raise 'Still processing images.' unless submission.ready?
 
-      user = Gravity.client.user(id: submission.user.gravity_user_id)._get
-      user_detail = user.user_detail._get
+      user = submission.user
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
-      AdminMailer.submission(
-        submission: submission,
-        user: user,
-        user_detail: user_detail,
-        artist: artist
-      ).deliver_now
+      AdminMailer.submission(submission: submission, user: user, artist: artist)
+        .deliver_now
     end
 
     def deliver_approval_notification(submission_id)
       submission = Submission.find(submission_id)
-      user = Gravity.client.user(id: submission.user.gravity_user_id)._get
-      user_detail = user.user_detail._get
+      user = submission.user
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
       UserMailer.submission_approved(
         submission: submission,
         user: user,
-        user_detail: user_detail,
         artist: artist
       ).deliver_now
     end
 
     def deliver_rejection_notification(submission_id)
       submission = Submission.find(submission_id)
-      user = Gravity.client.user(id: submission.user.gravity_user_id)._get
-      user_detail = user.user_detail._get
+      user = submission.user
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
       rejection_reason_template =
@@ -284,7 +266,6 @@ class SubmissionService
         rejection_reason_template,
         submission: submission,
         user: user,
-        user_detail: user_detail,
         artist: artist
       ).deliver_now
     end
