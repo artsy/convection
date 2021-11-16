@@ -21,9 +21,9 @@ describe NotificationService do
 
   describe '#post_submission_event' do
     it 'calls Artsy::EventService.post_event with an instance of BaseEvent' do
-      expect(Artsy::EventService).to receive(:post_event).once.with(
-        topic: 'consignments', event: instance_of(SubmissionEvent)
-      )
+      expect(Artsy::EventService).to receive(:post_event)
+        .once
+        .with(topic: 'consignments', event: instance_of(SubmissionEvent))
       NotificationService.post_submission_event(submission.id, 'submitted')
     end
   end

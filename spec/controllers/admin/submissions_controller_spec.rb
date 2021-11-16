@@ -20,32 +20,43 @@ describe Admin::SubmissionsController, type: :controller do
         }
       }
       stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
-        .to_return(body: gravql_artists_response.to_json).with(
-        headers: {
-          'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
-        }
-      )
+        .to_return(body: gravql_artists_response.to_json)
+        .with(
+          headers: {
+            'X-XAPP-TOKEN' => 'xapp_token',
+            'Content-Type' => 'application/json'
+          }
+        )
     end
 
     context 'with many submissions' do
       before do
-        @artist = {id: 'artistId', name: 'Banksy'}
+        @artist = { id: 'artistId', name: 'Banksy' }
         @user1 = Fabricate(:user, email: 'sarah@artsymail.com')
         @user2 = Fabricate(:user, email: 'lucille@bluth.com')
         @submission1 =
           Fabricate(
             :submission,
-            state: 'submitted', title: 'hi hi', user: @user1, artist_id: 'someArtistId'
+            state: 'submitted',
+            title: 'hi hi',
+            user: @user1,
+            artist_id: 'someArtistId'
           )
         @submission2 =
           Fabricate(
             :submission,
-            state: 'submitted', title: 'my artwork', user: @user1, artist_id: @artist[:id]
+            state: 'submitted',
+            title: 'my artwork',
+            user: @user1,
+            artist_id: @artist[:id]
           )
         @submission3 =
           Fabricate(
             :submission,
-            state: 'submitted', title: 'another artwork', user: @user2, artist_id: @artist[:id]
+            state: 'submitted',
+            title: 'another artwork',
+            user: @user2,
+            artist_id: @artist[:id]
           )
         @submission4 =
           Fabricate(:submission, state: 'approved', title: 'zzz', user: @user2)
@@ -79,7 +90,8 @@ describe Admin::SubmissionsController, type: :controller do
         it 'sets the artist details correctly' do
           get :index
           expect(controller.artist_details).to eq(
-            'artist1' => 'Andy Warhol', 'artist2' => 'Kara Walker'
+            'artist1' => 'Andy Warhol',
+            'artist2' => 'Kara Walker'
           )
         end
       end
@@ -146,7 +158,9 @@ describe Admin::SubmissionsController, type: :controller do
         it 'allows you to filter by state and sort by user email' do
           get :index,
               params: {
-                sort: 'users.email', direction: 'desc', state: 'submitted'
+                sort: 'users.email',
+                direction: 'desc',
+                state: 'submitted'
               }
           expect(controller.submissions.pluck(:id)).to eq [
                @submission2.id,
@@ -211,7 +225,9 @@ describe Admin::SubmissionsController, type: :controller do
           submissions = JSON.parse(response.body)
           expect(submissions.length).to eq 1
           expect(submissions.first['id']).to eq @submission1.id
-          expect(submissions.first['thumbnail']).to eq image.image_urls['thumbnail']
+          expect(submissions.first['thumbnail']).to eq image.image_urls[
+               'thumbnail'
+             ]
         end
       end
     end

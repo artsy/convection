@@ -60,7 +60,8 @@ describe User do
       stub_gravity_root
       stub_gravity_user(id: user.gravity_user_id, name: 'Buster Bluth')
       stub_gravity_user_detail(
-        id: user.gravity_user_id, email: 'buster@bluth.com'
+        id: user.gravity_user_id,
+        email: 'buster@bluth.com'
       )
       expect(user.name).to eq 'Buster Bluth'
       expect(user.user_detail.email).to eq 'buster@bluth.com'

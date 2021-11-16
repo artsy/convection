@@ -12,7 +12,9 @@ describe PartnerSubmission do
       expect(PartnerSubmission.new(state: 'open')).to be_valid
       expect(PartnerSubmission.new(state: 'canceled')).to be_valid
       expect(PartnerSubmission.new(state: 'withdrawn - pre-launch')).to be_valid
-      expect(PartnerSubmission.new(state: 'withdrawn - post-launch')).to be_valid
+      expect(
+        PartnerSubmission.new(state: 'withdrawn - post-launch')
+      ).to be_valid
     end
 
     it 'sets the default to open' do

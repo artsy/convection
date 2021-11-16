@@ -29,8 +29,7 @@ describe 'updateConsignmentSubmission mutation' do
     }, artistID: \"andy-warhol\", title: \"soup\" }"
   end
 
-  let(:mutation) do
-    <<-GRAPHQL
+  let(:mutation) { <<-GRAPHQL }
     mutation {
       updateConsignmentSubmission(input: #{mutation_inputs}){
         clientMutationId
@@ -43,8 +42,7 @@ describe 'updateConsignmentSubmission mutation' do
         }
       }
     }
-    GRAPHQL
-  end
+  GRAPHQL
 
   describe 'invalid requests' do
     context 'with an unauthorized request' do

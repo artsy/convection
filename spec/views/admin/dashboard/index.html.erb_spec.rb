@@ -8,11 +8,10 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
       allow_any_instance_of(ApplicationController).to receive(
         :require_artsy_authentication
       )
-      allow(ArtsyAdminAuth).to receive(
-        :decode_user
-      ).and_return('me')
+      allow(ArtsyAdminAuth).to receive(:decode_user).and_return('me')
 
-      allow_any_instance_of(SubmissionsHelper).to receive(:assignable_admin?).and_return(false)
+      allow_any_instance_of(SubmissionsHelper).to receive(:assignable_admin?)
+        .and_return(false)
 
       page.visit '/'
     end
@@ -34,30 +33,58 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
     end
 
     it 'lets you click and go to filtered submissions page' do
-      expect(page).to have_selector(".unreviewed-submissions a.unassigned-submissions[href='#{admin_submissions_path(state: :submitted, assigned_to: '')}']")
-      expect(page).not_to have_selector(".unreviewed-submissions a.my-submissions[href='#{admin_submissions_path(state: :submitted, assigned_to: 'me')}']")
+      expect(page).to have_selector(
+        ".unreviewed-submissions a.unassigned-submissions[href='#{admin_submissions_path(state: :submitted, assigned_to: '')}']"
+      )
+      expect(page).not_to have_selector(
+        ".unreviewed-submissions a.my-submissions[href='#{admin_submissions_path(state: :submitted, assigned_to: 'me')}']"
+      )
 
-      expect(page).to have_selector(".approved-submissions a.approved-without-cms[href='#{admin_submissions_path(state: :approved)}']")
-      expect(page).to have_selector(".approved-submissions a.published-to-cms[href='#{admin_submissions_path(state: :published)}']")
+      expect(page).to have_selector(
+        ".approved-submissions a.approved-without-cms[href='#{admin_submissions_path(state: :approved)}']"
+      )
+      expect(page).to have_selector(
+        ".approved-submissions a.published-to-cms[href='#{admin_submissions_path(state: :published)}']"
+      )
     end
 
     it 'lets you click and go to filtered offers page' do
-      expect(page).to have_selector(".offers a.sent[href='#{admin_offers_path(state: :sent)}']")
-      expect(page).to have_selector(".offers a.introduced[href='#{admin_offers_path(state: :review)}']")
+      expect(page).to have_selector(
+        ".offers a.sent[href='#{admin_offers_path(state: :sent)}']"
+      )
+      expect(page).to have_selector(
+        ".offers a.introduced[href='#{admin_offers_path(state: :review)}']"
+      )
 
-      expect(page).to have_selector(".upcoming-consignments a.auction-house[href='#{admin_consignments_path(state: :open, term: '!Artsy')}']")
-      expect(page).to have_selector(".upcoming-consignments a.artsy-curated-auctions[href='#{admin_consignments_path(state: :open, term: 'Artsy')}']")
+      expect(page).to have_selector(
+        ".upcoming-consignments a.auction-house[href='#{admin_consignments_path(state: :open, term: '!Artsy')}']"
+      )
+      expect(page).to have_selector(
+        ".upcoming-consignments a.artsy-curated-auctions[href='#{admin_consignments_path(state: :open, term: 'Artsy')}']"
+      )
 
-      expect(page).to have_selector(".sold-consignments a.auction-house[href='#{admin_consignments_path(state: :sold, term: '!Artsy')}']")
-      expect(page).to have_selector(".sold-consignments a.artsy-curated-auctions[href='#{admin_consignments_path(state: :sold, term: 'Artsy')}']")
+      expect(page).to have_selector(
+        ".sold-consignments a.auction-house[href='#{admin_consignments_path(state: :sold, term: '!Artsy')}']"
+      )
+      expect(page).to have_selector(
+        ".sold-consignments a.artsy-curated-auctions[href='#{admin_consignments_path(state: :sold, term: 'Artsy')}']"
+      )
     end
 
     it 'lets you click and go to filtered consignments page' do
-      expect(page).to have_selector(".upcoming-consignments a.auction-house[href='#{admin_consignments_path(state: :open, term: '!Artsy')}']")
-      expect(page).to have_selector(".upcoming-consignments a.artsy-curated-auctions[href='#{admin_consignments_path(state: :open, term: 'Artsy')}']")
+      expect(page).to have_selector(
+        ".upcoming-consignments a.auction-house[href='#{admin_consignments_path(state: :open, term: '!Artsy')}']"
+      )
+      expect(page).to have_selector(
+        ".upcoming-consignments a.artsy-curated-auctions[href='#{admin_consignments_path(state: :open, term: 'Artsy')}']"
+      )
 
-      expect(page).to have_selector(".sold-consignments a.auction-house[href='#{admin_consignments_path(state: :sold, term: '!Artsy')}']")
-      expect(page).to have_selector(".sold-consignments a.artsy-curated-auctions[href='#{admin_consignments_path(state: :sold, term: 'Artsy')}']")
+      expect(page).to have_selector(
+        ".sold-consignments a.auction-house[href='#{admin_consignments_path(state: :sold, term: '!Artsy')}']"
+      )
+      expect(page).to have_selector(
+        ".sold-consignments a.artsy-curated-auctions[href='#{admin_consignments_path(state: :sold, term: 'Artsy')}']"
+      )
     end
 
     context 'with some offers and submissions and consignments' do
@@ -66,7 +93,9 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
         Fabricate(:offer, state: 'review')
         Fabricate(:offer, state: 'draft')
 
-        2.times { Fabricate(:submission, state: 'submitted', assigned_to: 'me') }
+        2.times do
+          Fabricate(:submission, state: 'submitted', assigned_to: 'me')
+        end
         Fabricate(:submission, state: 'submitted', assigned_to: nil)
         Fabricate(:submission, state: 'submitted', assigned_to: 'some_user')
         Fabricate(:submission, state: 'approved', assigned_to: 'me')
@@ -80,7 +109,9 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
         Fabricate(:consignment, state: 'open', partner: artsy)
         Fabricate(:consignment, state: 'open', partner: non_artsy)
 
-        2.times { Fabricate(:consignment, state: 'sold', partner: artsy_curated) }
+        2.times do
+          Fabricate(:consignment, state: 'sold', partner: artsy_curated)
+        end
         Fabricate(:consignment, state: 'sold', partner: non_artsy)
         page.visit '/'
       end
@@ -109,28 +140,36 @@ describe 'admin/dashboard/index.html.erb', type: :feature do
     end
 
     context 'for assignable admins' do
-      before {
-        allow_any_instance_of(SubmissionsHelper).to receive(:assignable_admin?).and_return(true)
-      }
+      before do
+        allow_any_instance_of(SubmissionsHelper).to receive(:assignable_admin?)
+          .and_return(true)
+      end
 
       subject { page.tap { |p| p.visit '/' } }
 
       it { is_expected.to have_content('My Submissions : 0') }
-      it { is_expected.to have_selector(".unreviewed-submissions a.my-submissions[href='#{admin_submissions_path(state: :submitted, assigned_to: 'me')}']") }
+      it do
+        is_expected.to have_selector(
+          ".unreviewed-submissions a.my-submissions[href='#{admin_submissions_path(state: :submitted, assigned_to: 'me')}']"
+        )
+      end
 
       context 'with submissions' do
         before do
-          2.times { Fabricate(:submission, state: 'submitted', assigned_to: 'me') }
+          2.times do
+            Fabricate(:submission, state: 'submitted', assigned_to: 'me')
+          end
           Fabricate(:submission, state: 'submitted', assigned_to: nil)
           Fabricate(:submission, state: 'submitted', assigned_to: 'some_user')
           Fabricate(:submission, state: 'approved', assigned_to: 'me')
-          2.times { Fabricate(:submission, state: 'published', assigned_to: nil) }
+          2.times do
+            Fabricate(:submission, state: 'published', assigned_to: nil)
+          end
           Fabricate(:submission, state: 'draft', assigned_to: 'me')
         end
 
         it { is_expected.to have_content('My Submissions : 2') }
       end
-
     end
   end
 end

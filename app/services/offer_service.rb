@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class OfferService
-  class OfferError < StandardError; end
+  class OfferError < StandardError
+  end
 
   class << self
     def update_offer(offer, current_user = nil, params = {})
@@ -13,7 +14,10 @@ class OfferService
     end
 
     def create_offer(
-      submission_id, partner_id, offer_params = {}, current_user = nil
+      submission_id,
+      partner_id,
+      offer_params = {},
+      current_user = nil
     )
       submission = Submission.find(submission_id)
       if [Submission::REJECTED].include? submission.state
@@ -30,7 +34,8 @@ class OfferService
       partner = Partner.find(partner_id)
       partner_submission =
         PartnerSubmission.find_or_create_by!(
-          submission_id: submission.id, partner_id: partner.id
+          submission_id: submission.id,
+          partner_id: partner.id
         )
       if partner_submission.notified_at.blank?
         partner_submission.update!(notified_at: Time.now.utc)
@@ -97,7 +102,7 @@ class OfferService
         rejected_by: nil,
         rejected_at: nil,
         rejection_reason: nil,
-        rejection_note: nil,
+        rejection_note: nil
       )
     end
 
@@ -119,7 +124,9 @@ class OfferService
       artist = Gravity.client.artist(id: offer.submission.artist_id)._get
 
       PartnerMailer.offer_introduction(
-        offer: offer, artist: artist, email: email
+        offer: offer,
+        artist: artist,
+        email: email
       ).deliver_now
     end
 
@@ -149,7 +156,10 @@ class OfferService
       artist = Gravity.client.artist(id: offer.submission.artist_id)._get
 
       UserMailer.offer(
-        offer: offer, artist: artist, user: user, user_detail: user_detail
+        offer: offer,
+        artist: artist,
+        user: user,
+        user_detail: user_detail
       ).deliver_now
 
       offer.update!(sent_at: Time.now.utc, sent_by: current_user)

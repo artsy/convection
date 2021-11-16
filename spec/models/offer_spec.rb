@@ -65,13 +65,23 @@ describe Offer do
     end
 
     it 'returns false if the partner_submission state is canceled' do
-      ps = Fabricate(:partner_submission, submission: approved_submission, state: 'canceled')
+      ps =
+        Fabricate(
+          :partner_submission,
+          submission: approved_submission,
+          state: 'canceled'
+        )
       consigned_offer = Fabricate(:offer, partner_submission: ps)
       expect(consigned_offer.locked?).to eq false
     end
 
     it 'returns false if the partner_submission state is bought in' do
-      ps = Fabricate(:partner_submission, submission: approved_submission, state: 'bought in')
+      ps =
+        Fabricate(
+          :partner_submission,
+          submission: approved_submission,
+          state: 'bought in'
+        )
       consigned_offer = Fabricate(:offer, partner_submission: ps)
       expect(consigned_offer.locked?).to eq false
     end
@@ -137,7 +147,7 @@ describe Offer do
         'high_estimate_dollars',
         'high_estimate_cents',
         'starting_bid_dollars',
-        'starting_bid_cents',
+        'starting_bid_cents'
       )
     end
 

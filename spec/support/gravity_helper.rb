@@ -3,16 +3,20 @@
 GRAVITY_ROOT = {
   _links: {
     artist: {
-      href: "#{Convection.config.gravity_api_url}/artists/{id}", templated: true
+      href: "#{Convection.config.gravity_api_url}/artists/{id}",
+      templated: true
     },
     artists: {
-      href: "#{Convection.config.gravity_api_url}/artists{?term}", templated: true
+      href: "#{Convection.config.gravity_api_url}/artists{?term}",
+      templated: true
     },
     artwork: {
-      href: "#{Convection.config.gravity_api_url}/artwork/{id}", templated: true
+      href: "#{Convection.config.gravity_api_url}/artwork/{id}",
+      templated: true
     },
     artworks: {
-      href: "#{Convection.config.gravity_api_url}/artworks{?term}", templated: true
+      href: "#{Convection.config.gravity_api_url}/artworks{?term}",
+      templated: true
     },
     partner: {
       href: "#{Convection.config.gravity_api_url}/partners/{id}",
@@ -31,7 +35,8 @@ GRAVITY_ROOT = {
       templated: true
     },
     user: {
-      href: "#{Convection.config.gravity_api_url}/users/{id}", templated: true
+      href: "#{Convection.config.gravity_api_url}/users/{id}",
+      templated: true
     },
     user_detail: {
       href: "#{Convection.config.gravity_api_url}/user_details/{id}",
@@ -70,13 +75,15 @@ def stub_gravity_artists(opts = {})
   artist_items = opts.key?(:override_body) ? opts[:override_body] : [artist]
 
   body = {
-      total_count: nil,
-      next: "#{Convection.config.gravity_api_url}/artists?cursor=next-cursor",
-      _embedded: { artists: artist_items }
+    total_count: nil,
+    next: "#{Convection.config.gravity_api_url}/artists?cursor=next-cursor",
+    _embedded: {
+      artists: artist_items
+    }
   }
 
-  stub_request(:any, %r{#{Convection.config.gravity_api_url}/artists\?term=.*}).
-      to_return(body: body.to_json, headers: HEADERS)
+  stub_request(:any, %r{#{Convection.config.gravity_api_url}/artists\?term=.*})
+    .to_return(body: body.to_json, headers: HEADERS)
 end
 
 def stub_gravity_artwork(opts = {})
@@ -94,13 +101,15 @@ def stub_gravity_artworks(opts = {})
   artwork_items = opts.key?(:override_body) ? opts[:override_body] : [artwork]
 
   body = {
-      total_count: nil,
-      next: "#{Convection.config.gravity_api_url}/artworks?cursor=next-cursor",
-      _embedded: { artworks: artwork_items }
+    total_count: nil,
+    next: "#{Convection.config.gravity_api_url}/artworks?cursor=next-cursor",
+    _embedded: {
+      artworks: artwork_items
+    }
   }
 
-  stub_request(:any, %r{#{Convection.config.gravity_api_url}/artworks\?term=.*}).
-      to_return(body: body.to_json, headers: HEADERS)
+  stub_request(:any, %r{#{Convection.config.gravity_api_url}/artworks\?term=.*})
+    .to_return(body: body.to_json, headers: HEADERS)
 end
 
 def stub_gravity_user(opts = {})
@@ -162,7 +171,9 @@ def stub_gravity_partner_communications(opts = {})
       "#{
         Convection.config.gravity_api_url
       }/partner_communications?cursor=next-cursor",
-    _embedded: { partner_communications: communication_items }
+    _embedded: {
+      partner_communications: communication_items
+    }
   }
   stub_gravity_request("/partner_communications?name=#{CGI.escape(name)}", body)
 end
@@ -183,7 +194,9 @@ def stub_gravity_partner_contacts(opts = {})
       "#{
         Convection.config.gravity_api_url
       }/partner_contacts?cursor=next-cursor",
-    _embedded: { partner_contacts: contact_items }
+    _embedded: {
+      partner_contacts: contact_items
+    }
   }
   stub_gravity_request(
     "/partner_contacts?partner_id=#{partner_id}&communication_id=#{

@@ -10,14 +10,17 @@ class UserMailer < ApplicationMailer
     @artist = artist
     @utm_params =
       utm_params(
-        source: 'consignment-receipt', campaign: 'consignment-complete'
+        source: 'consignment-receipt',
+        campaign: 'consignment-complete'
       )
 
     smtpapi category: %w[submission_receipt],
-            unique_args: { submission_id: submission.id }
+            unique_args: {
+              submission_id: submission.id
+            }
     mail(
       to: user_detail.email,
-      subject: "Thank you for submitting your artwork to Artsy",
+      subject: 'Thank you for submitting your artwork to Artsy',
       bcc: Convection.config.bcc_email_address
     )
   end
@@ -33,7 +36,9 @@ class UserMailer < ApplicationMailer
       )
 
     smtpapi category: %w[first_upload_reminder],
-            unique_args: { submission_id: submission.id }
+            unique_args: {
+              submission_id: submission.id
+            }
     mail to: user_detail.email, subject: "You're Almost Done"
   end
 
@@ -48,7 +53,9 @@ class UserMailer < ApplicationMailer
       )
 
     smtpapi category: %w[second_upload_reminder],
-            unique_args: { submission_id: submission.id }
+            unique_args: {
+              submission_id: submission.id
+            }
     mail to: user_detail.email,
          subject: 'Artsy Consignments - complete your submission'
   end
@@ -60,14 +67,17 @@ class UserMailer < ApplicationMailer
     @artist = artist
     @utm_params =
       utm_params(
-        source: 'consignment-approved', campaign: 'consignment-complete'
+        source: 'consignment-approved',
+        campaign: 'consignment-complete'
       )
 
     smtpapi category: %w[submission_approved],
-            unique_args: { submission_id: submission.id }
+            unique_args: {
+              submission_id: submission.id
+            }
     mail(
       to: user_detail.email,
-      subject: "Artsy Approved Submission | Next Steps"
+      subject: 'Artsy Approved Submission | Next Steps'
     )
   end
 
@@ -78,11 +88,14 @@ class UserMailer < ApplicationMailer
     @artist = artist
     @utm_params =
       utm_params(
-        source: 'consignment-rejected', campaign: 'consignment-complete'
+        source: 'consignment-rejected',
+        campaign: 'consignment-complete'
       )
 
     smtpapi category: %w[artist_submission_rejected],
-            unique_args: { submission_id: submission.id }
+            unique_args: {
+              submission_id: submission.id
+            }
     mail(to: user_detail.email, subject: 'An update about your submission')
   end
 
@@ -93,11 +106,14 @@ class UserMailer < ApplicationMailer
     @artist = artist
     @utm_params =
       utm_params(
-        source: 'consignment-rejected', campaign: 'consignment-complete'
+        source: 'consignment-rejected',
+        campaign: 'consignment-complete'
       )
 
     smtpapi category: %w[fake_submission_rejected],
-            unique_args: { submission_id: submission.id }
+            unique_args: {
+              submission_id: submission.id
+            }
     mail(to: user_detail.email, subject: 'Artsy Submission')
   end
 
@@ -108,11 +124,14 @@ class UserMailer < ApplicationMailer
     @artist = artist
     @utm_params =
       utm_params(
-        source: 'consignment-rejected', campaign: 'consignment-complete'
+        source: 'consignment-rejected',
+        campaign: 'consignment-complete'
       )
 
     smtpapi category: %w[nsv_bsv_submission_rejected],
-            unique_args: { submission_id: submission.id }
+            unique_args: {
+              submission_id: submission.id
+            }
     mail(to: user_detail.email, subject: 'An update about your submission')
   end
 
@@ -123,11 +142,14 @@ class UserMailer < ApplicationMailer
     @artist = artist
     @utm_params =
       utm_params(
-        source: 'consignment-rejected', campaign: 'consignment-complete'
+        source: 'consignment-rejected',
+        campaign: 'consignment-complete'
       )
 
     smtpapi category: %w[other_submission_rejected],
-            unique_args: { submission_id: submission.id }
+            unique_args: {
+              submission_id: submission.id
+            }
     mail(to: user_detail.email, subject: 'An update about your submission')
   end
 

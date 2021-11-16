@@ -8,7 +8,11 @@ describe OfferService do
   let(:partner) { Fabricate(:partner, name: 'Gagosian Gallery') }
   let(:submission) { Fabricate(:submission, state: submission_state) }
 
-  before { allow_any_instance_of(PartnerMailer).to receive(:reply_email).and_return('reply_email@artsy.net') }
+  before do
+    allow_any_instance_of(PartnerMailer).to receive(:reply_email).and_return(
+      'reply_email@artsy.net'
+    )
+  end
 
   describe 'create_offer' do
     context 'with an id for created by but no current user' do
@@ -145,7 +149,8 @@ describe OfferService do
       OfferService.update_offer(
         offer,
         'userid',
-        high_estimate_cents: 30_000, notes: 'New offer notes!'
+        high_estimate_cents: 30_000,
+        notes: 'New offer notes!'
       )
       expect(offer.high_estimate_cents).to eq 30_000
       expect(offer.notes).to eq 'New offer notes!'
@@ -196,7 +201,8 @@ describe OfferService do
         stub_gravity_root
         stub_gravity_user(id: offer.submission.user.gravity_user_id)
         stub_gravity_user_detail(
-          email: 'michael@bluth.com', id: offer.submission.user.gravity_user_id
+          email: 'michael@bluth.com',
+          id: offer.submission.user.gravity_user_id
         )
         stub_gravity_artist(id: submission.artist_id)
         stub_gravity_partner(id: partner.gravity_partner_id)
@@ -227,9 +233,7 @@ describe OfferService do
           expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
           expect(emails.first.to).to eq(%w[michael@bluth.com])
           expect(emails.first.from).to eq(%w[consign@artsy.net])
-          expect(emails.first.subject).to eq(
-            'An Offer for your Artwork'
-          )
+          expect(emails.first.subject).to eq('An Offer for your Artwork')
 
           email_body = emails.first.html_part.body
           expect(email_body).to include(
@@ -392,19 +396,21 @@ describe OfferService do
             rejected_by: 'userid',
             rejected_at: Time.now.utc,
             rejection_reason: 'Low estimate',
-            rejection_note: 'Test Note',
+            rejection_note: 'Test Note'
           )
         end
 
         it { is_expected.to have_attributes({ state: Offer::SENT }) }
 
         it 'nullifies rejection related fields' do
-          is_expected.to have_attributes({
-            rejected_by: nil,
-            rejected_at: nil,
-            rejection_reason: nil,
-            rejection_note: nil,
-          })
+          is_expected.to have_attributes(
+            {
+              rejected_by: nil,
+              rejected_at: nil,
+              rejection_reason: nil,
+              rejection_note: nil
+            }
+          )
         end
       end
 
@@ -413,12 +419,7 @@ describe OfferService do
           OfferService.undo_lapse!(offer)
           offer.reload
         end
-        let(:offer) do
-          Fabricate(
-            :offer,
-            state: Offer::LAPSED
-          )
-        end
+        let(:offer) { Fabricate(:offer, state: Offer::LAPSED) }
         it { is_expected.to have_attributes({ state: Offer::SENT }) }
       end
     end

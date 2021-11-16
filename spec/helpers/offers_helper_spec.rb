@@ -183,7 +183,9 @@ describe OffersHelper, type: :helper do
       offer =
         double(
           'offer',
-          low_estimate_cents: 10_000, high_estimate_cents: nil, currency: 'EUR'
+          low_estimate_cents: 10_000,
+          high_estimate_cents: nil,
+          currency: 'EUR'
         )
       expect(helper.estimate_display(offer)).to eq 'EUR €100'
     end
@@ -192,7 +194,9 @@ describe OffersHelper, type: :helper do
       offer =
         double(
           'offer',
-          low_estimate_cents: nil, high_estimate_cents: 30_000, currency: 'EUR'
+          low_estimate_cents: nil,
+          high_estimate_cents: 30_000,
+          currency: 'EUR'
         )
       expect(helper.estimate_display(offer)).to eq 'EUR €300'
     end
@@ -201,7 +205,9 @@ describe OffersHelper, type: :helper do
       offer =
         double(
           'offer',
-          low_estimate_cents: nil, high_estimate_cents: nil, currency: 'EUR'
+          low_estimate_cents: nil,
+          high_estimate_cents: nil,
+          currency: 'EUR'
         )
       expect(helper.estimate_display(offer)).to eq nil
     end
@@ -245,7 +251,8 @@ describe OffersHelper, type: :helper do
       offer =
         double(
           'offer',
-          sale_period_start: Date.new(2_017, 1, 10), sale_period_end: nil
+          sale_period_start: Date.new(2_017, 1, 10),
+          sale_period_end: nil
         )
       expect(helper.sale_period_display(offer)).to eq 'Starts Jan 10, 2017'
     end
@@ -254,7 +261,8 @@ describe OffersHelper, type: :helper do
       offer =
         double(
           'offer',
-          sale_period_start: nil, sale_period_end: Date.new(2_017, 3, 10)
+          sale_period_start: nil,
+          sale_period_end: Date.new(2_017, 3, 10)
         )
       expect(helper.sale_period_display(offer)).to eq 'Ends Mar 10, 2017'
     end

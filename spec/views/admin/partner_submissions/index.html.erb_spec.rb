@@ -15,7 +15,9 @@ describe 'admin/partner_submissions/digest.html.erb', type: :feature do
         Fabricate(:partner, gravity_partner_id: 'partnerid', name: 'Wright')
 
       gravql_artists_response = {
-        data: { artists: [{ id: 'artist1', name: 'Andy Warhol' }] }
+        data: {
+          artists: [{ id: 'artist1', name: 'Andy Warhol' }]
+        }
       }
       stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
         .with do |request|
@@ -43,7 +45,8 @@ describe 'admin/partner_submissions/digest.html.erb', type: :feature do
 
         Fabricate(
           :partner_submission,
-          partner: @partner, submission: @submission
+          partner: @partner,
+          submission: @submission
         )
         Fabricate(
           :partner_submission,
@@ -53,7 +56,9 @@ describe 'admin/partner_submissions/digest.html.erb', type: :feature do
         )
 
         gravql_artists_response = {
-          data: { artists: [{ id: 'artist1', name: 'Andy Warhol' }] }
+          data: {
+            artists: [{ id: 'artist1', name: 'Andy Warhol' }]
+          }
         }
         stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
           .with do |request|

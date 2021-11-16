@@ -24,9 +24,13 @@ describe 'admin/submissions/index.html.erb', type: :feature do
         'xapp_token'
       )
 
-      stub_gravql_artists(body: {
-        data: { artists: [{ id: 'artist1', name: 'Andy Warhol' }] }
-      })
+      stub_gravql_artists(
+        body: {
+          data: {
+            artists: [{ id: 'artist1', name: 'Andy Warhol' }]
+          }
+        }
+      )
 
       page.visit admin_submissions_path
     end
@@ -52,7 +56,9 @@ describe 'admin/submissions/index.html.erb', type: :feature do
         3.times do
           Fabricate(
             :submission,
-            user: user, artist_id: 'artistid', state: 'submitted'
+            user: user,
+            artist_id: 'artistid',
+            state: 'submitted'
           )
         end
         page.visit admin_submissions_path
@@ -90,7 +96,8 @@ describe 'admin/submissions/index.html.erb', type: :feature do
         @user1 =
           Fabricate(
             :user,
-            gravity_user_id: 'userid', email: 'jon-jonson@test.com'
+            gravity_user_id: 'userid',
+            email: 'jon-jonson@test.com'
           )
         @user2 =
           Fabricate(:user, gravity_user_id: 'userid2', email: 'percy@test.com')
@@ -127,15 +134,13 @@ describe 'admin/submissions/index.html.erb', type: :feature do
         )
 
         @artists = [
-            { id: 'artistid', name: 'Andy Warhol' },
-            { id: 'artistid2', name: 'Kara Walker' },
-            { id: 'artistid3', name: 'Chuck Close' },
-            { id: 'artistid4', name: 'Lucille Bluth' }
+          { id: 'artistid', name: 'Andy Warhol' },
+          { id: 'artistid2', name: 'Kara Walker' },
+          { id: 'artistid3', name: 'Chuck Close' },
+          { id: 'artistid4', name: 'Lucille Bluth' }
         ]
 
-        stub_gravql_artists(body: {
-          data: { artists: @artists }
-        })
+        stub_gravql_artists(body: { data: { artists: @artists } })
 
         page.visit admin_submissions_path
       end
@@ -196,9 +201,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
 
         stub_gravity_artists(override_body: [artist])
 
-        stub_gravql_artists(body: {
-          data: { artists: [artist] }
-        })
+        stub_gravql_artists(body: { data: { artists: [artist] } })
 
         page.all(:fillable_field, 'term').last.set(artist[:name])
         expect(page).to have_selector('.ui-autocomplete')
@@ -216,9 +219,7 @@ describe 'admin/submissions/index.html.erb', type: :feature do
 
         stub_gravity_artists(override_body: [artist])
 
-        stub_gravql_artists(body: {
-          data: { artists: [artist] }
-        })
+        stub_gravql_artists(body: { data: { artists: [artist] } })
 
         page.all(:fillable_field, 'term').last.set(artist[:name])
         expect(page).to have_selector('.ui-autocomplete')
@@ -233,7 +234,8 @@ describe 'admin/submissions/index.html.erb', type: :feature do
         expect(page).to have_selector('.list-group-item-info--artist', count: 0)
       end
 
-      it 'allows you to search by user email, filter by state, and sort by ID', js: true do
+      it 'allows you to search by user email, filter by state, and sort by ID',
+         js: true do
         select('approved', from: 'state')
         page.all(:fillable_field, 'term').last.set('percy')
         expect(page).to have_selector('.ui-autocomplete')

@@ -10,7 +10,9 @@ class AdminMailer < ApplicationMailer
     @artist = artist
 
     smtpapi category: %w[submission],
-            unique_args: { submission_id: submission.id }
+            unique_args: {
+              submission_id: submission.id
+            }
     mail(
       to: Convection.config.admin_email_address,
       subject: "Submission ##{@submission.id}"

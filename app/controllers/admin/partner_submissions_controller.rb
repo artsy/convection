@@ -17,7 +17,8 @@ module Admin
       end
       @partner_submissions = partner_submissions.page(page).per(size)
 
-      artists_ids = @partner_submissions.filter_map { |p_s| p_s.submission&.artist_id }
+      artists_ids =
+        @partner_submissions.filter_map { |p_s| p_s.submission&.artist_id }
       @artist_details = artists_names_query(artists_ids)
     end
   end

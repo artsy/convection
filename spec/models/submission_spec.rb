@@ -62,14 +62,18 @@ describe Submission do
     let!(:artist_standing_score) do
       Fabricate(
         :artist_standing_score,
-        artist_id: artist_id, artist_score: 0.50, auction_score: 1.0
+        artist_id: artist_id,
+        artist_score: 0.50,
+        auction_score: 1.0
       )
     end
 
     let!(:other_standing_score) do
       Fabricate(
         :artist_standing_score,
-        artist_id: 'other', artist_score: 0.33, auction_score: 0.66
+        artist_id: 'other',
+        artist_score: 0.33,
+        auction_score: 0.66
       )
     end
 
@@ -78,7 +82,9 @@ describe Submission do
     let(:submission) do
       Fabricate(
         :submission,
-        artist_id: artist_id, medium: 'Painting', state: submission_state
+        artist_id: artist_id,
+        medium: 'Painting',
+        state: submission_state
       )
     end
 

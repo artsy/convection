@@ -19,8 +19,12 @@ describe 'Assets Index' do
   describe 'GET /assets' do
     it 'rejects unauthorized requests' do
       get '/api/assets',
-          params: { submission_id: submission.id },
-          headers: { 'Authorization' => 'Bearer foo.bar.baz' }
+          params: {
+            submission_id: submission.id
+          },
+          headers: {
+            'Authorization' => 'Bearer foo.bar.baz'
+          }
       expect(response.status).to eq 401
     end
 
@@ -50,7 +54,10 @@ describe 'Assets Index' do
       Fabricate(:image, submission: submission, gemini_token: 'foo')
       Fabricate(:image, submission: submission, gemini_token: 'boo')
       get '/api/assets',
-          params: { submission_id: submission.id }, headers: headers
+          params: {
+            submission_id: submission.id
+          },
+          headers: headers
       expect(response.status).to eq 200
       body = JSON.parse(response.body)
       expect(body.length).to eq 2
@@ -62,7 +69,10 @@ describe 'Assets Index' do
       expect(submission.assets.count).to eq 12
 
       get '/api/assets',
-          params: { submission_id: submission.id }, headers: headers
+          params: {
+            submission_id: submission.id
+          },
+          headers: headers
       expect(response.status).to eq 200
       body = JSON.parse(response.body)
       expect(body.length).to eq 10

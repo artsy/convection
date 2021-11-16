@@ -18,15 +18,15 @@ describe 'admin/offers/index.html.erb', type: :feature do
       )
       @artist = { id: 'artist1', name: 'Andy Warhol' }
 
-      gravql_artists_response = {
-        data: { artists: [@artist] }
-      }
+      gravql_artists_response = { data: { artists: [@artist] } }
       stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
-        .to_return(body: gravql_artists_response.to_json).with(
-        headers: {
-          'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
-        }
-      )
+        .to_return(body: gravql_artists_response.to_json)
+        .with(
+          headers: {
+            'X-XAPP-TOKEN' => 'xapp_token',
+            'Content-Type' => 'application/json'
+          }
+        )
 
       page.visit admin_offers_path
     end
@@ -54,7 +54,8 @@ describe 'admin/offers/index.html.erb', type: :feature do
       it 'displays the correct state when the offer has a "reject" response' do
         Fabricate(
           :offer_response,
-          offer: offer, intended_state: Offer::REJECTED
+          offer: offer,
+          intended_state: Offer::REJECTED
         )
         page.visit admin_offers_path
         expect(page).to have_content('Response: Reject')
@@ -63,7 +64,8 @@ describe 'admin/offers/index.html.erb', type: :feature do
       it 'displays the correct state when the offer has an "accept" response' do
         Fabricate(
           :offer_response,
-          offer: offer, intended_state: Offer::ACCEPTED
+          offer: offer,
+          intended_state: Offer::ACCEPTED
         )
         page.visit admin_offers_path
         expect(page).to have_content('Response: Accept')
@@ -205,7 +207,10 @@ describe 'admin/offers/index.html.erb', type: :feature do
         click_link("artist-#{@artist[:id]}")
         expect(current_url).to include "&artist=#{@artist[:id]}"
         expect(page).to have_selector("input[value='#{@artist[:name]}']")
-        expect(page).to have_selector('.list-group-item-info--artist-title', count: 1)
+        expect(page).to have_selector(
+          '.list-group-item-info--artist-title',
+          count: 1
+        )
       end
 
       it 'allows you to search by artist name and state', js: true do
@@ -220,9 +225,15 @@ describe 'admin/offers/index.html.erb', type: :feature do
         select('sent', from: 'state')
         expect(current_url).to include("artist=#{@artist[:id]}", 'state=sent')
         expect(page).to have_selector("input[value='#{@artist[:name]}']")
-        expect(page).to have_selector('.list-group-item-info--artist-title', count: 0)
+        expect(page).to have_selector(
+          '.list-group-item-info--artist-title',
+          count: 0
+        )
         select('accepted', from: 'state')
-        expect(page).to have_selector('.list-group-item-info--artist-title', count: 1)
+        expect(page).to have_selector(
+          '.list-group-item-info--artist-title',
+          count: 1
+        )
       end
 
       it 'lets you search by partner name', js: true do
@@ -257,7 +268,8 @@ describe 'admin/offers/index.html.erb', type: :feature do
         expect(page).to have_content('draft', count: 1)
       end
 
-      it 'allows you to search by partner name, filter by state, and sort by estimate', js: true do
+      it 'allows you to search by partner name, filter by state, and sort by estimate',
+         js: true do
         select('sent', from: 'state')
         page.all(:fillable_field, 'term').last.set('Gag')
         expect(page).to have_selector('.ui-autocomplete')

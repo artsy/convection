@@ -25,7 +25,8 @@ module Admin
       if params[:gravity_partner_id]
         partner =
           Partner.new(
-            gravity_partner_id: params[:gravity_partner_id], name: params[:name]
+            gravity_partner_id: params[:gravity_partner_id],
+            name: params[:name]
           )
       end
       if partner&.save

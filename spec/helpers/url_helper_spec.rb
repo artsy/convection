@@ -59,7 +59,8 @@ describe UrlHelper, type: :helper do
     it 'correctly replaces the submission number if one is supplied' do
       expect(
         helper.offer_response_form_url(
-          submission_id: 123, partner_name: 'gagosian gallery'
+          submission_id: 123,
+          partner_name: 'gagosian gallery'
         )
       ).to eq(
         'https://google.com/response?entry.blahblah=123&entry.blah2=gagosian gallery'

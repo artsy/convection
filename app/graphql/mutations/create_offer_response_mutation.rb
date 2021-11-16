@@ -13,7 +13,9 @@ module Mutations
 
     def resolve(arguments)
       resolve_options = {
-        arguments: arguments, context: context, object: object
+        arguments: arguments,
+        context: context,
+        object: object
       }
       resolver = CreateOfferResponseResolver.new(resolve_options)
       raise resolver.error unless resolver.valid?
