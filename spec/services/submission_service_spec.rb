@@ -34,8 +34,7 @@ describe SubmissionService do
       stub_gravity_user_detail(email: 'michael@bluth.com')
       stub_gravity_artist({ name: 'some nonTarget artist' })
 
-      new_submission =
-        SubmissionService.create_submission(params, 'userid', false)
+      new_submission = SubmissionService.create_submission(params, 'userid')
       expect(new_submission.reload.state).to eq 'rejected'
     end
 
@@ -45,8 +44,7 @@ describe SubmissionService do
       stub_gravity_user_detail(email: 'michael@bluth.com')
       stub_gravity_artist({ name: 'some nonTarget artist' })
 
-      new_submission =
-        SubmissionService.create_submission(params, 'userid', false)
+      new_submission = SubmissionService.create_submission(params, 'userid')
       expect(new_submission.reload.state).to eq 'rejected'
 
       emails = ActionMailer::Base.deliveries
@@ -76,8 +74,7 @@ describe SubmissionService do
       stub_gravity_user_detail(email: 'michael@bluth.com')
       stub_gravity_artist
 
-      new_submission =
-        SubmissionService.create_submission(params, 'userid', false)
+      new_submission = SubmissionService.create_submission(params, 'userid')
       expect(new_submission.reload.state).to eq 'rejected'
       expect(new_submission.user_id).to eq user.id
       expect(new_submission.user.email).to eq 'michael@bluth.com'

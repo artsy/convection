@@ -12,11 +12,7 @@ class CreateSubmissionResolver < BaseResolver
 
   def run
     submission =
-      SubmissionService.create_submission(
-        @arguments,
-        @context[:current_user],
-        false
-      )
+      SubmissionService.create_submission(@arguments, @context[:current_user])
     { consignment_submission: submission }
   end
 end
