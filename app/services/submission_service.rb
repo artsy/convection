@@ -8,20 +8,20 @@ class SubmissionService
   end
 
   class << self
-    def create_submission(submission_params, gravity_user_id)
+    def create_submission(submission_params, gravity_user_id, is_convection)
       submission_params[:edition_size] =
         submission_params.delete(:edition_size_formatted) if submission_params[
         :edition_size_formatted
       ]
       user = User.find_or_create_by!(gravity_user_id: gravity_user_id)
       create_params = submission_params.merge(user_id: user.id)
-      create_params =
-        create_params.merge(
-          reject_non_target_supply_artist_by_non_admin(
-            submission_params[:artist_id],
-            user,
-          ),
-        )
+
+      unless is_convection
+        create_params =
+          create_params.merge(
+            reject_non_target_supply_artist(submission_params[:artist_id]),
+          )
+      end
 
       submission = Submission.create!(create_params)
 
@@ -36,13 +36,9 @@ class SubmissionService
       raise SubmissionError, e.message
     end
 
-    def reject_non_target_supply_artist_by_non_admin(artist_id, user)
+    def reject_non_target_supply_artist(artist_id)
       artist = Gravity.client.artist(id: artist_id)._get
-      user_detail = user.user_detail._get
-
       params = {}
-      return params if user_detail.type == 'Admin'
-
       unless artist[:target_supply]
         params = {
           state: 'rejected',

@@ -14,7 +14,11 @@ module Api
     def create
       param! :artist_id, String, required: true
       submission =
-        SubmissionService.create_submission(submission_params, current_user)
+        SubmissionService.create_submission(
+          submission_params,
+          current_user,
+          false
+        )
       render json: submission.to_json, status: :created
     end
 
