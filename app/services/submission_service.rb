@@ -8,20 +8,27 @@ class SubmissionService
   end
 
   class << self
-    def create_submission(submission_params, gravity_user_id)
+    def create_submission(
+      submission_params,
+      gravity_user_id,
+      is_convection: true
+    )
       submission_params[:edition_size] =
         submission_params.delete(:edition_size_formatted) if submission_params[
         :edition_size_formatted
       ]
       user = User.find_or_create_by!(gravity_user_id: gravity_user_id)
       create_params = submission_params.merge(user_id: user.id)
-      final_params =
-        create_params.merge(
-          reject_if_non_target_supply_artist(submission_params[:artist_id])
-        )
-      submission = Submission.create!(final_params)
 
-      if final_params[:state] == 'rejected'
+      unless is_convection
+        create_params.merge!(
+          reject_non_target_supply_artist(submission_params[:artist_id])
+        )
+      end
+
+      submission = Submission.create!(create_params)
+
+      if create_params[:state] == 'rejected'
         delay_until(
           Convection.config.rejection_email_minutes_after.minutes.from_now
         ).deliver_rejection_notification(submission.id)
@@ -32,7 +39,7 @@ class SubmissionService
       raise SubmissionError, e.message
     end
 
-    def reject_if_non_target_supply_artist(artist_id)
+    def reject_non_target_supply_artist(artist_id)
       artist = Gravity.client.artist(id: artist_id)._get
       params = {}
       unless artist[:target_supply]
