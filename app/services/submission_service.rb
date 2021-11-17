@@ -17,10 +17,7 @@ class SubmissionService
       create_params = submission_params.merge(user_id: user.id)
 
       unless is_convection
-        create_params =
-          create_params.merge(
-            reject_non_target_supply_artist(submission_params[:artist_id]),
-          )
+       create_params.merge!(reject_non_target_supply_artist(submission_params[:artist_id]))
       end
 
       submission = Submission.create!(create_params)
