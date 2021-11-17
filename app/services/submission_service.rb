@@ -8,7 +8,7 @@ class SubmissionService
   end
 
   class << self
-    def create_submission(submission_params, gravity_user_id, is_convection)
+    def create_submission(submission_params, gravity_user_id, is_convection = false)
       submission_params[:edition_size] =
         submission_params.delete(:edition_size_formatted) if submission_params[
         :edition_size_formatted
