@@ -66,8 +66,7 @@ module Admin
       @submission =
         SubmissionService.create_submission(
           submission_params.merge(state: 'submitted'),
-          submission_params[:user_id],
-          authorized_artsy_token?(session[:access_token])
+          submission_params[:user_id]
         )
       redirect_to admin_submission_path(@submission)
     rescue SubmissionService::SubmissionError => e

@@ -8,7 +8,11 @@ class SubmissionService
   end
 
   class << self
-    def create_submission(submission_params, gravity_user_id, is_convection = false)
+    def create_submission(
+      submission_params,
+      gravity_user_id,
+      is_convection: true
+    )
       submission_params[:edition_size] =
         submission_params.delete(:edition_size_formatted) if submission_params[
         :edition_size_formatted
@@ -17,14 +21,16 @@ class SubmissionService
       create_params = submission_params.merge(user_id: user.id)
 
       unless is_convection
-       create_params.merge!(reject_non_target_supply_artist(submission_params[:artist_id]))
+        create_params.merge!(
+          reject_non_target_supply_artist(submission_params[:artist_id])
+        )
       end
 
       submission = Submission.create!(create_params)
 
       if create_params[:state] == 'rejected'
         delay_until(
-          Convection.config.rejection_email_minutes_after.minutes.from_now,
+          Convection.config.rejection_email_minutes_after.minutes.from_now
         ).deliver_rejection_notification(submission.id)
       end
 
@@ -40,7 +46,7 @@ class SubmissionService
         params = {
           state: 'rejected',
           rejection_reason: 'Not Target Supply',
-          rejected_at: Time.now.utc,
+          rejected_at: Time.now.utc
         }
       end
       params
@@ -114,7 +120,7 @@ class SubmissionService
         approved_by: nil,
         rejected_at: nil,
         rejected_by: nil,
-        published_at: nil,
+        published_at: nil
       )
     end
 
@@ -135,7 +141,7 @@ class SubmissionService
       submission.update!(approved_by: current_user, approved_at: Time.now.utc)
       NotificationService.delay.post_submission_event(
         submission.id,
-        SubmissionEvent::APPROVED,
+        SubmissionEvent::APPROVED
       )
     end
 
@@ -143,12 +149,12 @@ class SubmissionService
       submission.update!(
         approved_by: submission.approved_by || current_user,
         approved_at: submission.approved_at || Time.now.utc,
-        published_at: Time.now.utc,
+        published_at: Time.now.utc
       )
 
       NotificationService.delay.post_submission_event(
         submission.id,
-        SubmissionEvent::PUBLISHED,
+        SubmissionEvent::PUBLISHED
       )
 
       delay.deliver_approval_notification(submission.id)
@@ -171,7 +177,7 @@ class SubmissionService
       delay.deliver_submission_notification(submission.id)
       NotificationService.delay.post_submission_event(
         submission_id,
-        SubmissionEvent::SUBMITTED,
+        SubmissionEvent::SUBMITTED
       )
       submission.update!(admin_receipt_sent_at: Time.now.utc)
     end
@@ -219,7 +225,7 @@ class SubmissionService
       UserMailer.submission_receipt(
         submission: submission,
         user: user,
-        artist: artist,
+        artist: artist
       ).deliver_now
     end
 
@@ -242,7 +248,7 @@ class SubmissionService
       UserMailer.submission_approved(
         submission: submission,
         user: user,
-        artist: artist,
+        artist: artist
       ).deliver_now
     end
 
@@ -267,7 +273,7 @@ class SubmissionService
         rejection_reason_template,
         submission: submission,
         user: user,
-        artist: artist,
+        artist: artist
       ).deliver_now
     end
   end
