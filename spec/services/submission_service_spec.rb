@@ -57,6 +57,19 @@ describe SubmissionService do
       expect(emails.first.html_part.body).to include('we cannot accept it')
     end
 
+    it 'does not reject a submission automatically, when created by Convection' do
+      stub_gravity_root
+      stub_gravity_user
+      stub_gravity_user_detail(email: 'michael@bluth.com')
+      stub_gravity_artist({ name: 'some nonTarget artist' })
+
+      is_convection = true
+      new_submission =
+        SubmissionService.create_submission(params, 'userid', is_convection)
+
+      expect(new_submission.reload.state).to eq 'submitted'
+    end
+
     it 'creates a submission and sets the user_id and email' do
       stub_gravity_root
       stub_gravity_user
