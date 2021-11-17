@@ -14,7 +14,7 @@ describe 'Submission Flow' do
     expect(NotificationService).to receive(:post_submission_event).once
   end
 
-  it 'Completes a submission from Tokyo' do
+  it 'Completes 3' do
     stub_gravity_root
     stub_gravity_user
     stub_gravity_artist
@@ -54,9 +54,9 @@ describe 'Submission Flow' do
     expect(submission.reload.state).to eq 'submitted'
 
     emails = ActionMailer::Base.deliveries
-    expect(emails.length).to eq 4
-    expect(emails[1].to).to eq(%w[consign@artsy.net])
-    expect(emails[2].subject).to include("You're Almost Done")
+    expect(emails.length).to eq 3
+    expect(emails[1].to).to eq(%w[michael@bluth.com])
+    expect(emails[1].subject).to include("You're Almost Done")
     expect(emails[2].to).to eq(%w[michael@bluth.com]) # sidekiq flushes everything at once
     expect(emails.last.subject).to include(
       'Artsy Consignments - complete your submission'
@@ -105,9 +105,9 @@ describe 'Submission Flow' do
       expect(@submission.reload.state).to eq 'submitted'
       puts @submission.user.email
       emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 4
-      expect(emails[1].to).to eq(%w[consign@artsy.net])
-      expect(emails[2].subject).to include("You're Almost Done")
+      expect(emails.length).to eq 3
+      expect(emails[1].to).to eq(%w[michael@bluth.com])
+      expect(emails[1].subject).to include("You're Almost Done")
       expect(emails[2].to).to eq(%w[michael@bluth.com]) # sidekiq flushes everything at once
       expect(emails.last.subject).to include(
         'Artsy Consignments - complete your submission'
@@ -203,7 +203,7 @@ describe 'Submission Flow' do
       expect(response.status).to eq 201
       expect(submission.reload.state).to eq 'submitted'
       emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 3
+      expect(emails.length).to eq 2
       expect(emails[1].html_part.body).to include('https://new-image.jpg')
 
       # GET to retrieve the image url for the submission
