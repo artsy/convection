@@ -14,9 +14,17 @@ class SubmissionService
         :edition_size_formatted
       ]
       user =
-        User.find_or_create_by!(
-          gravity_user_id: (gravity_user_id || 'anonymous')
-        )
+        if gravity_user_id
+          User.find_or_create_by!(
+            gravity_user_id: (gravity_user_id || 'anonymous')
+          )
+        else
+          User.create!(
+            name: submission_params[:user_name],
+            email: submission_params[:user_email],
+            phone: submission_params[:user_email]
+          )
+        end
       create_params = submission_params.merge(user_id: user.id)
       final_params =
         create_params.merge(
