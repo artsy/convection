@@ -7,7 +7,13 @@ require 'support/jwt_helper'
 
 describe 'admin/offers/show.html.erb', type: :feature do
   context 'always' do
-    let(:submission) { Fabricate(:submission, state: Submission::APPROVED) }
+    let(:submission) do
+      Fabricate(
+        :submission,
+        state: Submission::APPROVED,
+        user: Fabricate(:user, name: 'Lucille Bluth', email: 'user@example.com')
+      )
+    end
     let(:partner) { Fabricate(:partner) }
     let(:partner_submission) do
       Fabricate(:partner_submission, submission: submission, partner: partner)
@@ -38,16 +44,30 @@ describe 'admin/offers/show.html.erb', type: :feature do
       allow(Convection.config).to receive(:gravity_xapp_token).and_return(
         'xapp_token'
       )
-      allow_any_instance_of(PartnerMailer).to receive(:reply_email).and_return('reply_email@artsy.net')
+      allow_any_instance_of(PartnerMailer).to receive(:reply_email).and_return(
+        'reply_email@artsy.net'
+      )
 
-      stub_gravql_artists(body: {
-        data: {
-          artists: [
-            { id: 'artist1', name: 'Andy Warhol', is_p1: true, target_supply: true },
-            { id: 'artist2', name: 'Kara Walker', is_p1: true, target_supply: true }
-          ]
+      stub_gravql_artists(
+        body: {
+          data: {
+            artists: [
+              {
+                id: 'artist1',
+                name: 'Andy Warhol',
+                is_p1: true,
+                target_supply: true
+              },
+              {
+                id: 'artist2',
+                name: 'Kara Walker',
+                is_p1: true,
+                target_supply: true
+              }
+            ]
+          }
         }
-      })
+      )
       page.visit "/admin/offers/#{offer.id}"
     end
 
@@ -163,7 +183,8 @@ describe 'admin/offers/show.html.erb', type: :feature do
         stub_gravity_root
         stub_gravity_user(id: offer.submission.user.gravity_user_id)
         stub_gravity_user_detail(
-          email: 'michael@bluth.com', id: offer.submission.user.gravity_user_id
+          email: 'michael@bluth.com',
+          id: offer.submission.user.gravity_user_id
         )
         stub_gravity_artist(id: submission.artist_id)
         stub_gravity_partner(id: partner.gravity_partner_id)
@@ -277,7 +298,8 @@ describe 'admin/offers/show.html.erb', type: :feature do
         stub_gravity_root
         stub_gravity_user(id: offer.submission.user.gravity_user_id)
         stub_gravity_user_detail(
-          email: 'michael@bluth.com', id: offer.submission.user.gravity_user_id
+          email: 'michael@bluth.com',
+          id: offer.submission.user.gravity_user_id
         )
         stub_gravity_artist(id: submission.artist_id)
         stub_gravity_partner(id: partner.gravity_partner_id)
@@ -390,7 +412,8 @@ describe 'admin/offers/show.html.erb', type: :feature do
       it 'shows an accepted response' do
         Fabricate(
           :offer_response,
-          offer: offer, intended_state: Offer::ACCEPTED
+          offer: offer,
+          intended_state: Offer::ACCEPTED
         )
         page.visit "/admin/offers/#{offer.id}"
         expect(page).to have_content('Offer responses')
@@ -436,7 +459,8 @@ describe 'admin/offers/show.html.erb', type: :feature do
         )
         Fabricate(
           :offer_response,
-          offer: offer, intended_state: Offer::ACCEPTED
+          offer: offer,
+          intended_state: Offer::ACCEPTED
         )
         page.visit "/admin/offers/#{offer.id}"
         expect(page).to have_content('Offer responses')
