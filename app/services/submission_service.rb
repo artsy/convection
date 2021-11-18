@@ -15,9 +15,7 @@ class SubmissionService
       ]
       user =
         if gravity_user_id
-          User.find_or_create_by!(
-            gravity_user_id: (gravity_user_id || 'anonymous')
-          )
+          User.find_or_create_by!(gravity_user_id: gravity_user_id)
         else
           User.create!(
             name: submission_params[:user_name],
