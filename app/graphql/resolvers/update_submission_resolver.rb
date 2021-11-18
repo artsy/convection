@@ -1,15 +1,6 @@
 # frozen_string_literal: true
 
 class UpdateSubmissionResolver < BaseResolver
-  def valid?
-    return true if admin? || trusted_application?
-
-    bad_argument_error =
-      GraphQL::ExecutionError.new("Can't access updateConsignmentSubmission")
-    @error = bad_argument_error
-    false
-  end
-
   def run
     submission = Submission.find_by(id: @arguments[:id])
 
@@ -17,8 +8,7 @@ class UpdateSubmissionResolver < BaseResolver
       raise(GraphQL::ExecutionError, 'Submission from ID Not Found')
     end
 
-    matching_users = submission.user&.gravity_user_id == @context[:current_user]
-    unless matching_users || admin?
+    unless matching_user(submission) || admin?
       raise(GraphQL::ExecutionError, 'Submission Not Found')
     end
 
@@ -27,8 +17,16 @@ class UpdateSubmissionResolver < BaseResolver
     #
     # params.delete('dimensions_metric')
 
-    SubmissionService.update_submission(submission, @arguments.except(:id))
+    SubmissionService.update_submission(
+      submission,
+      @arguments.except(:id, :session_id)
+    )
 
     { consignment_submission: submission }
+  end
+
+  def matching_user(submission)
+    submission.user&.gravity_user_id == @context&.[](:current_user) ||
+      submission.user&.session_id == @arguments&.[](:session_id)
   end
 end

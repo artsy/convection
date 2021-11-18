@@ -17,7 +17,16 @@ class SubmissionService
         submission_params.delete(:edition_size_formatted) if submission_params[
         :edition_size_formatted
       ]
-      user = User.find_or_create_by!(gravity_user_id: gravity_user_id)
+      user =
+        if gravity_user_id
+          User.find_or_create_by!(gravity_user_id: gravity_user_id)
+        else
+          User.create!(
+            name: submission_params[:user_name],
+            email: submission_params[:user_email],
+            phone: submission_params[:user_email]
+          )
+        end
       create_params = submission_params.merge(user_id: user.id)
 
       unless is_convection

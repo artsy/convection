@@ -29,8 +29,7 @@ describe 'updateConsignmentSubmission mutation' do
     }, artistID: \"andy-warhol\", title: \"soup\" }"
   end
 
-  let(:mutation) do
-    <<-GRAPHQL
+  let(:mutation) { <<-GRAPHQL }
     mutation {
       updateConsignmentSubmission(input: #{mutation_inputs}){
         clientMutationId
@@ -43,10 +42,9 @@ describe 'updateConsignmentSubmission mutation' do
         }
       }
     }
-    GRAPHQL
-  end
+  GRAPHQL
 
-  describe 'invalid requests' do
+  describe 'requests' do
     context 'with an unauthorized request' do
       let(:token) { 'foo.bar.baz' }
 
@@ -57,10 +55,7 @@ describe 'updateConsignmentSubmission mutation' do
         body = JSON.parse(response.body)
 
         update_response = body['data']['updateConsignmentSubmission']
-        expect(update_response).to eq nil
-
-        error_message = body['errors'][0]['message']
-        expect(error_message).to eq "Can't access updateConsignmentSubmission"
+        expect(update_response).to_not eq nil
       end
     end
 
@@ -77,17 +72,28 @@ describe 'updateConsignmentSubmission mutation' do
         body = JSON.parse(response.body)
 
         update_response = body['data']['updateConsignmentSubmission']
-        expect(update_response).to eq nil
-
-        error_message = body['errors'][0]['message']
-        expect(error_message).to eq "Can't access updateConsignmentSubmission"
+        expect(update_response).to_not eq nil
       end
     end
 
-    context 'with a request updating a submission that you do not own' do
-      let(:token) do
-        payload = { aud: 'gravity', sub: 'userid2', roles: 'user' }
-        JWT.encode(payload, Convection.config.jwt_secret)
+    context 'with a request updating your own submission' do
+      let(:user1) do
+        Fabricate(:user, gravity_user_id: 'userid3', session_id: 'token')
+      end
+      let(:submission1) do
+        attrs = {
+          artist_id: 'abbas-kiarostami',
+          category: 'Painting',
+          state: 'submitted',
+          title: 'rain',
+          user: user1
+        }
+        Fabricate(:submission, attrs)
+      end
+      let(:mutation_inputs) do
+        "{ state: DRAFT, category: JEWELRY, clientMutationId: \"test\", id: #{
+          submission1.id
+        }, artistID: \"andy-warhol\", title: \"soup\", sessionId: \"diff token\" }"
       end
 
       it 'returns an error for that request' do
@@ -101,6 +107,27 @@ describe 'updateConsignmentSubmission mutation' do
 
         error_message = body['errors'][0]['message']
         expect(error_message).to eq 'Submission Not Found'
+      end
+    end
+
+    context 'with a request updating your own submission' do
+      let(:user) do
+        Fabricate(:user, gravity_user_id: 'userid4', session_id: 'token')
+      end
+      let(:mutation_inputs) do
+        "{ state: DRAFT, category: JEWELRY, clientMutationId: \"test\", id: #{
+          submission.id
+        }, artistID: \"andy-warhol\", title: \"soup\", sessionId: \"token\" }"
+      end
+
+      it 'returns updated submission' do
+        post '/api/graphql', params: { query: mutation }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        update_response = body['data']['updateConsignmentSubmission']
+        expect(update_response).to_not eq nil
       end
     end
 
