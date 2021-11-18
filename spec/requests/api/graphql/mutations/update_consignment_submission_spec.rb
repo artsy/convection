@@ -76,21 +76,6 @@ describe 'updateConsignmentSubmission mutation' do
       end
     end
 
-    context 'with a request updating a submission that you do not own' do
-      it 'returns an error for that request' do
-        post '/api/graphql', params: { query: mutation }, headers: headers
-
-        expect(response.status).to eq 200
-        body = JSON.parse(response.body)
-
-        update_response = body['data']['updateConsignmentSubmission']
-        expect(update_response).to_not eq nil
-
-        error_message = body['errors'][0]['message']
-        expect(error_message).to eq 'Submission Not Found'
-      end
-    end
-
     context 'with an invalid submission id' do
       let(:mutation_inputs) do
         '{ clientMutationId: "test", id: 999999, artistID: "andy-warhol", title: "soup" }'
