@@ -9,7 +9,7 @@ class UpdateSubmissionResolver < BaseResolver
     end
 
     matching_user =
-      submission.user&.gravity_user_id == @context[:current_user] ||
+      submission.user&.gravity_user_id == @context.try(:current_user) ||
         submission.user.session_id == @arguments.try(:session_id)
     unless matching_user || admin?
       raise(GraphQL::ExecutionError, 'Submission Not Found')
