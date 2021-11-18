@@ -76,6 +76,61 @@ describe 'updateConsignmentSubmission mutation' do
       end
     end
 
+    context 'with a request updating your own submission' do
+      let(:user1) do
+        Fabricate(:user, gravity_user_id: 'userid3', session_id: 'token')
+      end
+      let(:submission1) do
+        attrs = {
+          artist_id: 'abbas-kiarostami',
+          category: 'Painting',
+          state: 'submitted',
+          title: 'rain',
+          user: user1
+        }
+        Fabricate(:submission, attrs)
+      end
+      let(:mutation_inputs) do
+        "{ state: DRAFT, category: JEWELRY, clientMutationId: \"test\", id: #{
+          submission1.id
+        }, artistID: \"andy-warhol\", title: \"soup\", sessionId: \"diff token\" }"
+      end
+
+      it 'returns an error for that request' do
+        post '/api/graphql', params: { query: mutation }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        update_response = body['data']['updateConsignmentSubmission']
+        expect(update_response).to eq nil
+
+        error_message = body['errors'][0]['message']
+        expect(error_message).to eq 'Submission Not Found'
+      end
+    end
+
+    context 'with a request updating your own submission' do
+      let(:user) do
+        Fabricate(:user, gravity_user_id: 'userid4', session_id: 'token')
+      end
+      let(:mutation_inputs) do
+        "{ state: DRAFT, category: JEWELRY, clientMutationId: \"test\", id: #{
+          submission.id
+        }, artistID: \"andy-warhol\", title: \"soup\", sessionId: \"token\" }"
+      end
+
+      it 'returns updated submission' do
+        post '/api/graphql', params: { query: mutation }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        update_response = body['data']['updateConsignmentSubmission']
+        expect(update_response).to_not eq nil
+      end
+    end
+
     context 'with an invalid submission id' do
       let(:mutation_inputs) do
         '{ clientMutationId: "test", id: 999999, artistID: "andy-warhol", title: "soup" }'

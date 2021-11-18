@@ -37,7 +37,11 @@ describe 'createConsignmentSubmission mutation' do
       let(:token) { 'foo.bar.baz' }
 
       it 'returns an error for that request' do
+        stub_gravity_root
+        stub_gravity_user
+        stub_gravity_user_detail(email: 'michael@bluth.com')
         stub_gravity_artist({ id: 'andy' })
+        stub_gravity_artists({ id: 'andy' })
         post '/api/graphql', params: { query: mutation }, headers: headers
 
         expect(response.status).to eq 200
