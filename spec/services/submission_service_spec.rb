@@ -62,7 +62,9 @@ describe SubmissionService do
       expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[consign@artsy.net])
-      expect(emails.first.html_part.body).to include('we cannot accept it')
+      expect(emails.first.html_part.body).to include(
+        'Specialists have determined we cannot accept'
+      )
     end
 
     it 'does not reject a submission automatically, when created by Convection' do

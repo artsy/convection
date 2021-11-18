@@ -265,6 +265,8 @@ class SubmissionService
           'artist_submission_rejected'
         when 'NSV', 'BSV'
           'nsv_bsv_submission_rejected'
+        when 'Not Target Supply'
+          'non_target_supply_artist_rejected'
         else
           'other_submission_rejected'
         end
