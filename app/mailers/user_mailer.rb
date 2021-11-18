@@ -125,6 +125,23 @@ class UserMailer < ApplicationMailer
     mail(to: user.email, subject: 'An update about your submission')
   end
 
+  def non_target_supply_artist_rejected(submission:, user:, artist:)
+    @submission = submission
+    @user = user
+    @artist = artist
+    @utm_params =
+      utm_params(
+        source: 'consignment-rejected',
+        campaign: 'consignment-complete'
+      )
+
+    smtpapi category: %w[non_target_supply_artist_rejected],
+            unique_args: {
+              submission_id: submission.id
+            }
+    mail(to: user.email, subject: 'An update about your submission')
+  end
+
   def other_submission_rejected(submission:, user:, artist:)
     @submission = submission
     @user = user
