@@ -46,6 +46,7 @@ module Mutations
     argument :utm_source, String, required: false
     argument :utm_medium, String, required: false
     argument :utm_term, String, required: false
+    argument :sessionID, String, required: false
 
     field :consignment_submission, Types::SubmissionType, null: true
 
@@ -56,7 +57,6 @@ module Mutations
         object: object
       }
       resolver = CreateSubmissionResolver.new(resolve_options)
-      raise resolver.error unless resolver.valid?
 
       resolver.run
     end

@@ -32,41 +32,23 @@ describe 'createConsignmentSubmission mutation' do
     }
   GRAPHQL
 
-  describe 'invalid requests' do
+  describe 'requests' do
     context 'with an unauthorized request' do
       let(:token) { 'foo.bar.baz' }
 
       it 'returns an error for that request' do
+        stub_gravity_root
+        stub_gravity_user
+        stub_gravity_user_detail(email: 'michael@bluth.com')
+        stub_gravity_artist({ id: 'andy' })
+        stub_gravity_artists({ id: 'andy' })
         post '/api/graphql', params: { query: mutation }, headers: headers
 
         expect(response.status).to eq 200
         body = JSON.parse(response.body)
 
         create_response = body['data']['createConsignmentSubmission']
-        expect(create_response).to eq nil
-
-        error_message = body['errors'][0]['message']
-        expect(error_message).to eq "Can't access createConsignmentSubmission"
-      end
-    end
-
-    context 'with a request missing an app token' do
-      let(:token) do
-        payload = { sub: 'userid', roles: 'user' }
-        JWT.encode(payload, Convection.config.jwt_secret)
-      end
-
-      it 'returns an error for that request' do
-        post '/api/graphql', params: { query: mutation }, headers: headers
-
-        expect(response.status).to eq 200
-        body = JSON.parse(response.body)
-
-        create_response = body['data']['createConsignmentSubmission']
-        expect(create_response).to eq nil
-
-        error_message = body['errors'][0]['message']
-        expect(error_message).to eq "Can't access createConsignmentSubmission"
+        expect(create_response).to_not eq nil
       end
     end
 
