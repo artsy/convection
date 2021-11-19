@@ -27,6 +27,7 @@ class SubmissionService
             phone: submission_params[:user_email]
           )
         end
+      user.session_id = submission_params.delete(:session_id)
       create_params = submission_params.merge(user_id: user.id)
 
       unless is_convection
