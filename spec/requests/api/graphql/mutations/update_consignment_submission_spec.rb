@@ -93,7 +93,7 @@ describe 'updateConsignmentSubmission mutation' do
       let(:mutation_inputs) do
         "{ state: DRAFT, category: JEWELRY, clientMutationId: \"test\", id: #{
           submission1.id
-        }, artistID: \"andy-warhol\", title: \"soup\", sessionId: \"diff token\" }"
+        }, artistID: \"andy-warhol\", title: \"soup\", sessionID: \"diff token\" }"
       end
 
       it 'returns an error for that request' do
@@ -117,7 +117,7 @@ describe 'updateConsignmentSubmission mutation' do
       let(:mutation_inputs) do
         "{ state: DRAFT, category: JEWELRY, clientMutationId: \"test\", id: #{
           submission.id
-        }, artistID: \"andy-warhol\", title: \"soup\", sessionId: \"token\" }"
+        }, artistID: \"andy-warhol\", title: \"soup\", sessionID: \"token\" }"
       end
 
       it 'returns updated submission' do
