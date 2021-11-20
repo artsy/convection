@@ -25,7 +25,14 @@ describe SubmissionService do
 
   context 'create_submission' do
     let(:params) do
-      { artist_id: 'artistid', state: 'submitted', title: 'My Artwork' }
+      {
+        artist_id: 'artistid',
+        state: 'submitted',
+        title: 'My Artwork',
+        user_name: 'michael',
+        user_email: 'michael@bluth.com',
+        user_phone: '555-5555'
+      }
     end
 
     it 'creates a submission with state Rejected when artist is not in target supply' do
@@ -93,6 +100,15 @@ describe SubmissionService do
       expect(new_submission.reload.state).to eq 'submitted'
       expect(new_submission.user_id).to eq user.id
       expect(new_submission.user.email).to eq 'michael@bluth.com'
+    end
+
+    context 'anonymous submission' do
+      it 'adds contact information to the user record' do
+        new_submission = SubmissionService.create_submission(params, nil)
+        expect(new_submission.user.name).to eq 'michael'
+        expect(new_submission.user.email).to eq 'michael@bluth.com'
+        expect(new_submission.user.phone).to eq '555-5555'
+      end
     end
   end
 
