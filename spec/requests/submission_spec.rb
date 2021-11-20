@@ -17,6 +17,7 @@ describe 'Submission Flow' do
   it 'Completes 3' do
     stub_gravity_root
     stub_gravity_user
+    stub_gravity_user_detail(email: 'michael@bluth.com')
     stub_gravity_artist
 
     # first create the submission, without a location_city
@@ -67,7 +68,8 @@ describe 'Submission Flow' do
   describe 'Creating a submission without a photo initially' do
     it 'sends an initial reminder and a delayed reminder' do
       stub_gravity_root
-      stub_gravity_user(email: 'michael@bluth.com')
+      stub_gravity_user
+      stub_gravity_user_detail(email: 'michael@bluth.com')
       stub_gravity_artist
 
       # first create the submission
