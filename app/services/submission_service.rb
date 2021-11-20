@@ -19,7 +19,14 @@ class SubmissionService
       ]
       user =
         if gravity_user_id
-          User.find_or_create_by!(gravity_user_id: gravity_user_id)
+          convection_user =
+            User.find_or_create_by!(gravity_user_id: gravity_user_id)
+          convection_user.update(
+            name: submission_params[:user_name],
+            email: submission_params[:user_email],
+            phone: submission_params[:user_phone]
+          )
+          convection_user
         else
           User.create!(
             name: submission_params[:user_name],

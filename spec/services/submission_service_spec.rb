@@ -110,6 +110,15 @@ describe SubmissionService do
         expect(new_submission.user.phone).to eq '555-5555'
       end
     end
+
+    context 'authenticated submission' do
+      it 'adds contact information to the user record' do
+        new_submission = SubmissionService.create_submission(params, 'userid')
+        expect(new_submission.user.name).to eq 'michael'
+        expect(new_submission.user.email).to eq 'michael@bluth.com'
+        expect(new_submission.user.phone).to eq '555-5555'
+      end
+    end
   end
 
   context 'update_submission' do
