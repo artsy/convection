@@ -24,7 +24,7 @@ class SubmissionService
           User.create!(
             name: submission_params[:user_name],
             email: submission_params[:user_email],
-            phone: submission_params[:user_email]
+            phone: submission_params[:user_phone]
           )
         end
       user.session_id = submission_params.delete(:session_id)
