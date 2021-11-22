@@ -22,9 +22,9 @@ module Admin
 
       if filtering_by_assigned_to?
         matching_consignments =
-          matching_consignments.joins(:submission).where(
-            'submissions.assigned_to' => params[:assigned_to]
-          )
+          matching_consignments
+            .joins(:submission)
+            .where('submissions.assigned_to' => params[:assigned_to])
       end
 
       if term.present?
@@ -39,13 +39,14 @@ module Admin
       if params[:user].present?
         user = User.find(params[:user])
         matching_consignments =
-          matching_consignments.where(submission: user.submissions)
+          matching_consignments.where(submission: user.submission)
       end
 
       if params[:artist].present?
-        matching_consignments = matching_consignments.
-          joins(:submission).
-          where(submissions: { artist_id: params[:artist]})
+        matching_consignments =
+          matching_consignments
+            .joins(:submission)
+            .where(submissions: { artist_id: params[:artist] })
       end
 
       if params[:state].present?
@@ -57,13 +58,13 @@ module Admin
       direction = params[:direction].presence || 'desc'
       matching_consignments =
         if sort.include?('partners')
-          matching_consignments.includes(:partner).reorder(
-            "#{sort} #{direction}, partner_submissions.id desc"
-          )
+          matching_consignments
+            .includes(:partner)
+            .reorder("#{sort} #{direction}, partner_submissions.id desc")
         elsif sort.include?('offers')
-          matching_consignments.joins(:accepted_offer).reorder(
-            "#{sort} #{direction}, partner_submissions.id desc"
-          )
+          matching_consignments
+            .joins(:accepted_offer)
+            .reorder("#{sort} #{direction}, partner_submissions.id desc")
         else
           matching_consignments.reorder("#{sort} #{direction}")
         end
@@ -72,7 +73,10 @@ module Admin
     end
 
     expose(:artist_details) do
-      artists_ids = consignments.filter_map { |consignment| consignment.submission&.artist_id }
+      artists_ids =
+        consignments.filter_map do |consignment|
+          consignment.submission&.artist_id
+        end
       artists_names_query(artists_ids)
     end
 
@@ -132,22 +136,24 @@ module Admin
     end
 
     def consignment_params
-      params.require(:partner_submission).permit(
-        :canceled_reason,
-        :currency,
-        :sale_price_dollars,
-        :sale_name,
-        :sale_date,
-        :sale_location,
-        :sale_lot_number,
-        :state,
-        :partner_commission_percent_whole,
-        :artsy_commission_percent_whole,
-        :invoice_number,
-        :partner_invoiced_at,
-        :partner_paid_at,
-        :notes
-      )
+      params
+        .require(:partner_submission)
+        .permit(
+          :canceled_reason,
+          :currency,
+          :sale_price_dollars,
+          :sale_name,
+          :sale_date,
+          :sale_location,
+          :sale_lot_number,
+          :state,
+          :partner_commission_percent_whole,
+          :artsy_commission_percent_whole,
+          :invoice_number,
+          :partner_invoiced_at,
+          :partner_paid_at,
+          :notes
+        )
     end
   end
 end

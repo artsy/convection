@@ -3,7 +3,7 @@
 class User < ApplicationRecord
   include PgSearch::Model
 
-  has_many :submissions, dependent: :nullify
+  has_one :submission, dependent: :nullify
   has_many :notes, dependent: :nullify
 
   pg_search_scope :search, against: :email, using: { tsearch: { prefix: true } }
@@ -42,8 +42,19 @@ class User < ApplicationRecord
     nil
   end
 
+  def user_submissions
+    users =
+      if gravity_user_id
+        User.where(gravity_user_id: gravity_user_id)
+      else
+        User.where(name: name, email: email, phone: phone)
+      end
+
+    users.map(&:submission).compact
+  end
+
   def unique_code_for_digest
-    created_at.to_i % 100_000 + id + (submissions.first&.id || 0)
+    created_at.to_i % 100_000 + id + (submission&.id || 0)
   end
 
   def self.anonymous
