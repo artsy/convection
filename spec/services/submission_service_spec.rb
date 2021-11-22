@@ -98,7 +98,7 @@ describe SubmissionService do
 
       new_submission = SubmissionService.create_submission(params, 'userid')
       expect(new_submission.reload.state).to eq 'submitted'
-      expect(new_submission.user_id).to eq user.id
+      expect(new_submission.user_id).to eq new_submission.user.id
       expect(new_submission.user.email).to eq 'michael@bluth.com'
     end
 

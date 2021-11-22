@@ -18,16 +18,13 @@ class SubmissionService
         :edition_size_formatted
       ]
       user =
-        if gravity_user_id
-          User.find_or_create_by!(gravity_user_id: gravity_user_id)
-        else
-          User.create!(
-            name: submission_params[:user_name],
-            email: submission_params[:user_email],
-            phone: submission_params[:user_phone]
-          )
-        end
-      user.session_id = submission_params.delete(:session_id)
+        User.create!(
+          gravity_user_id: gravity_user_id,
+          name: submission_params[:user_name],
+          email: submission_params[:user_email],
+          phone: submission_params[:user_phone],
+          session_id: submission_params.delete(:session_id)
+        )
       create_params = submission_params.merge(user_id: user.id)
 
       unless is_convection
