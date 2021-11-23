@@ -110,6 +110,21 @@ describe SubmissionService do
         expect(new_submission.user.phone).to eq '555-5555'
       end
     end
+
+    context 'authenticated submission' do
+      it 'adds contact information to the user record' do
+        stub_gravity_root
+        stub_gravity_user(name: 'michael')
+        stub_gravity_user_detail(email: 'michael@bluth.com')
+        stub_gravity_artist
+
+        new_submission = SubmissionService.create_submission(params, 'userid')
+        expect(new_submission.reload.state).to eq 'submitted'
+        expect(new_submission.user.name).to eq 'michael'
+        expect(new_submission.user.email).to eq 'michael@bluth.com'
+        expect(new_submission.user_id).to_not eq user.id # new submission create a new user
+      end
+    end
   end
 
   context 'update_submission' do
