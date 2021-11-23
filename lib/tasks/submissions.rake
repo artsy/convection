@@ -8,9 +8,8 @@ end
 
 task :rebase_user_submission => :environment do
   User.all.find_each do |user|
-    if user.user_submissions.count > 1
-      # try to find submission with same creditals(gravity_id or email,phone,name) and id
-      user_submissions = user.user_submissions.select {|submission| submission.user.id == user.id}
+    user_submissions = Submission.where(user_id: user.id)
+    if user_submissions.count > 1
       # delete from result already assigned submission
       user_submissions.delete(user.submission)
       # dublicate user and assign submission

@@ -19,7 +19,7 @@ class SubmissionService
       ]
       user =
         User.create!(
-          gravity_user_id: gravity_user_id,
+          gravity_user_id: gravity_user_id.presence,
           name: submission_params[:user_name],
           email: submission_params[:user_email],
           phone: submission_params[:user_phone],
