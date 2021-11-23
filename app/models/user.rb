@@ -42,7 +42,7 @@ class User < ApplicationRecord
     nil
   end
 
-  def user_submissions
+  def submissions
     users =
       if gravity_user_id
         User.where(gravity_user_id: gravity_user_id)
