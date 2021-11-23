@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_16_122633) do
+ActiveRecord::Schema.define(version: 2021_11_21_122634) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_trgm'
   enable_extension 'plpgsql'
@@ -232,9 +232,7 @@ ActiveRecord::Schema.define(version: 2021_11_16_122633) do
     t.string 'name'
     t.string 'phone'
     t.string 'session_id'
-    t.index ['gravity_user_id'],
-            name: 'index_users_on_gravity_user_id',
-            unique: true
+    t.index ['gravity_user_id'], name: 'index_users_on_gravity_user_id'
   end
 
   add_foreign_key 'assets', 'submissions'
