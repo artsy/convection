@@ -5,6 +5,8 @@ module Mutations
     argument :gemini_tokens, [String], required: true
     argument :submissionID, ID, required: true
 
+    argument :sessionID, String, required: false
+
     argument :asset_type, String, required: false
 
     field :assets, [Types::AssetType], null: true
