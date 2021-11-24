@@ -18,8 +18,7 @@ describe 'offers query' do
 
   let(:query_inputs) { "gravityPartnerId: \"#{partner.gravity_partner_id}\"" }
 
-  let(:query) do
-    <<-GRAPHQL
+  let(:query) { <<-GRAPHQL }
     query {
       offers(#{query_inputs}) {
         edges {
@@ -31,7 +30,6 @@ describe 'offers query' do
       }
     }
     GRAPHQL
-  end
 
   describe 'invalid requests' do
     context 'with an unauthorized request' do
@@ -126,8 +124,7 @@ describe 'offers query' do
         Fabricate :offer, partner_submission: ps, id: 9, created_at: 2.days.ago
       end
 
-      let(:query) do
-        <<-GRAPHQL
+      let(:query) { <<-GRAPHQL }
         query {
           offers(#{query_inputs}) {
             edges {
@@ -139,7 +136,6 @@ describe 'offers query' do
           }
         }
         GRAPHQL
-      end
 
       context 'without a sort column' do
         let(:query_inputs) do

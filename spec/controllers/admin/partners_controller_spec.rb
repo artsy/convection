@@ -44,7 +44,10 @@ describe Admin::PartnersController, type: :controller do
       it 'redirects to the index view on success' do
         expect {
           post :create,
-               params: { gravity_partner_id: '123', name: 'New Gallery' }
+               params: {
+                 gravity_partner_id: '123',
+                 name: 'New Gallery'
+               }
           expect(Partner.reorder(id: :desc).first.name).to eq 'New Gallery'
           expect(response).to redirect_to(:admin_partners)
         }.to change(Partner, :count).by(1)
@@ -54,7 +57,10 @@ describe Admin::PartnersController, type: :controller do
         allow_any_instance_of(Partner).to receive(:save).and_return(false)
         expect {
           post :create,
-               params: { gravity_partner_id: '123', name: 'New Gallery' }
+               params: {
+                 gravity_partner_id: '123',
+                 name: 'New Gallery'
+               }
           expect(controller.flash[:error]).to include(
             'Error creating gravity partner.'
           )

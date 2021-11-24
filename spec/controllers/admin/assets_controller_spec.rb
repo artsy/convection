@@ -51,7 +51,10 @@ describe Admin::AssetsController, type: :controller do
 
         expect {
           delete :destroy,
-                 params: { submission_id: @submission.id, id: asset.id }
+                 params: {
+                   submission_id: @submission.id,
+                   id: asset.id
+                 }
         }.to change(@submission.assets, :count).by(-1)
       end
     end

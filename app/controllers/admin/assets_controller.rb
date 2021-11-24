@@ -22,7 +22,8 @@ module Admin
       gemini_tokens = params[:gemini_tokens].split
       gemini_tokens.each do |token|
         @submission.assets.create(
-          asset_type: params[:asset_type], gemini_token: token
+          asset_type: params[:asset_type],
+          gemini_token: token
         )
       end
       redirect_to admin_submission_path(@submission)

@@ -63,14 +63,16 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
           'xapp_token'
         )
 
-        stub_gravql_artists(body: {
-          data: {
-            artists: [
-              { id: 'artist1', name: 'Andy Warhol' },
-              { id: 'artist2', name: 'Kara Walker' }
-            ]
+        stub_gravql_artists(
+          body: {
+            data: {
+              artists: [
+                { id: 'artist1', name: 'Andy Warhol' },
+                { id: 'artist2', name: 'Kara Walker' }
+              ]
+            }
           }
-        })
+        )
 
         fill_in('offer_commission_percent_whole', with: '10')
         fill_in('offer_low_estimate_dollars', with: '100')
@@ -134,14 +136,16 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
           'xapp_token'
         )
 
-        stub_gravql_artists(body: {
-          data: {
-            artists: [
-              { id: 'artist1', name: 'Andy Warhol' },
-              { id: 'artist2', name: 'Kara Walker' }
-            ]
+        stub_gravql_artists(
+          body: {
+            data: {
+              artists: [
+                { id: 'artist1', name: 'Andy Warhol' },
+                { id: 'artist2', name: 'Kara Walker' }
+              ]
+            }
           }
-        })
+        )
         fill_in('offer_price_dollars', with: '700')
         fill_in('offer_photography_info', with: '$50')
         fill_in('offer_shipping_info', with: '$70')
@@ -202,14 +206,16 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
           'xapp_token'
         )
 
-        stub_gravql_artists(body: {
-          data: {
-            artists: [
-              { id: 'artist1', name: 'Andy Warhol' },
-              { id: 'artist2', name: 'Kara Walker' }
-            ]
+        stub_gravql_artists(
+          body: {
+            data: {
+              artists: [
+                { id: 'artist1', name: 'Andy Warhol' },
+                { id: 'artist2', name: 'Kara Walker' }
+              ]
+            }
           }
-        })
+        )
 
         fill_in('offer_price_dollars', with: '700')
         fill_in('offer_commission_percent_whole', with: '12.5')
@@ -273,14 +279,16 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
           'xapp_token'
         )
 
-        stub_gravql_artists(body: {
-          data: {
-            artists: [
-              { id: 'artist1', name: 'Andy Warhol' },
-              { id: 'artist2', name: 'Kara Walker' }
-            ]
+        stub_gravql_artists(
+          body: {
+            data: {
+              artists: [
+                { id: 'artist1', name: 'Andy Warhol' },
+                { id: 'artist2', name: 'Kara Walker' }
+              ]
+            }
           }
-        })
+        )
 
         fill_in('offer_price_dollars', with: '700')
         fill_in('offer_photography_info', with: '$50')

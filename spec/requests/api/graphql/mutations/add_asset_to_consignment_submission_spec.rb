@@ -20,8 +20,7 @@ describe 'addAssetToConsignmentSubmission mutation' do
     }, geminiToken: \"gemini-token-hash\" }"
   end
 
-  let(:mutation) do
-    <<-GRAPHQL
+  let(:mutation) { <<-GRAPHQL }
       mutation {
         addAssetToConsignmentSubmission(input: #{mutation_inputs}){
           clientMutationId
@@ -32,7 +31,6 @@ describe 'addAssetToConsignmentSubmission mutation' do
         }
       }
     GRAPHQL
-  end
 
   describe 'valid requests' do
     it 'creates an asset' do

@@ -16,8 +16,7 @@ describe 'submission query' do
 
   let(:query_inputs) { "id: #{submission.id}" }
 
-  let(:query) do
-    <<-GRAPHQL
+  let(:query) { <<-GRAPHQL }
     query {
       submission(#{query_inputs}) {
         id,
@@ -26,7 +25,6 @@ describe 'submission query' do
       }
     }
     GRAPHQL
-  end
 
   describe 'invalid requests' do
     context 'with an unauthorized request' do
@@ -130,8 +128,7 @@ describe 'submission query' do
       let(:partner) { Fabricate :partner }
       let(:gravity_partner_id) { partner.gravity_partner_id }
 
-      let(:query) do
-        <<-GRAPHQL
+      let(:query) { <<-GRAPHQL }
         query {
           submission(#{query_inputs}) {
             offers(gravityPartnerId: "#{gravity_partner_id}") {
@@ -143,7 +140,6 @@ describe 'submission query' do
           }
         }
         GRAPHQL
-      end
 
       context 'with an invalid gravity partner id and some offers' do
         let(:gravity_partner_id) { 'invalid' }
@@ -176,7 +172,8 @@ describe 'submission query' do
       context 'with a valid gravity partner id and some offers' do
         let(:partner_submission) do
           Fabricate :partner_submission,
-                    partner: partner, submission: submission
+                    partner: partner,
+                    submission: submission
         end
 
         let!(:offer) do

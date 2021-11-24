@@ -30,13 +30,20 @@ describe 'admin/submissions/edit.html.erb', type: :feature do
       allow(Convection.config).to receive(:gravity_xapp_token).and_return(
         'xapp_token'
       )
-      stub_gravql_artists(body: {
-        data: {
-          artists: [
-            { id: @submission.artist_id, name: 'Gob Bluth', is_p1: false, target_supply: true },
-          ]
+      stub_gravql_artists(
+        body: {
+          data: {
+            artists: [
+              {
+                id: @submission.artist_id,
+                name: 'Gob Bluth',
+                is_p1: false,
+                target_supply: true
+              }
+            ]
+          }
         }
-      })
+      )
 
       page.visit "/admin/submissions/#{@submission.id}/edit"
     end

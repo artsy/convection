@@ -24,12 +24,13 @@ module Mutations
     argument :sale_location, String, required: false
     argument :starting_bid_dollars, Integer, required: false
 
-
     field :consignment_offer, Types::OfferType, null: true
 
     def resolve(arguments)
       resolve_options = {
-        arguments: arguments, context: context, object: object
+        arguments: arguments,
+        context: context,
+        object: object
       }
       resolver = CreateOfferResolver.new(resolve_options)
       raise resolver.error unless resolver.valid?

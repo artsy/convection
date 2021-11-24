@@ -22,8 +22,13 @@ describe 'Gemini Callback' do
            params: {
              access_token: 'wrong-token',
              token: 'gemini',
-             image_url: { square: 'https://new-image.jpg' },
-             metadata: { id: submission.id, _type: 'Consignment' }
+             image_url: {
+               square: 'https://new-image.jpg'
+             },
+             metadata: {
+               id: submission.id,
+               _type: 'Consignment'
+             }
            }
       expect(response.status).to eq 401
     end
@@ -31,9 +36,12 @@ describe 'Gemini Callback' do
     it 'rejects callbacks without an image_url' do
       post '/api/callbacks/gemini',
            params: {
-             access_token: 'auth-token',
-             token: 'gemini',
-             'metadata' => { id: submission.id, _type: 'Consignment' }
+             :access_token => 'auth-token',
+             :token => 'gemini',
+             'metadata' => {
+               id: submission.id,
+               _type: 'Consignment'
+             }
            }
       expect(response.status).to eq 400
     end
@@ -43,8 +51,13 @@ describe 'Gemini Callback' do
            params: {
              access_token: 'auth-token',
              token: 'gemini',
-             image_url: { square: 'https://new-image.jpg' },
-             metadata: { id: submission.id, _type: 'Consignment' }
+             image_url: {
+               square: 'https://new-image.jpg'
+             },
+             metadata: {
+               id: submission.id,
+               _type: 'Consignment'
+             }
            }
 
       expect(response.status).to eq 404
@@ -54,14 +67,20 @@ describe 'Gemini Callback' do
     it 'updates the asset to have the right image url' do
       Fabricate(
         :unprocessed_image,
-        submission: submission, gemini_token: 'gemini'
+        submission: submission,
+        gemini_token: 'gemini'
       )
       post '/api/callbacks/gemini',
            params: {
              access_token: 'auth-token',
              token: 'gemini',
-             image_url: { square: 'https://new-image.jpg' },
-             metadata: { id: submission.id, _type: 'Consignment' }
+             image_url: {
+               square: 'https://new-image.jpg'
+             },
+             metadata: {
+               id: submission.id,
+               _type: 'Consignment'
+             }
            }
 
       expect(response.status).to eq 200

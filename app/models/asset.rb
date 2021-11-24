@@ -16,9 +16,15 @@ class Asset < ApplicationRecord
     url = params[:image_url].values.first
     return self unless version && url
 
-    Asset.where(id: id).update_all(
-      ['image_urls = jsonb_set(image_urls, ?, ?)', "{#{version}}", "\"#{url}\""]
-    )
+    Asset
+      .where(id: id)
+      .update_all(
+        [
+          'image_urls = jsonb_set(image_urls, ?, ?)',
+          "{#{version}}",
+          "\"#{url}\""
+        ]
+      )
   end
 
   def original_image

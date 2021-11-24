@@ -15,22 +15,20 @@ describe 'admin/consignments/index.html.erb', type: :feature do
         'xapp_token'
       )
       @artists = [
-          { id: 'artist1', name: 'Andy Warhol' },
-          { id: 'artist2', name: 'Kara Walker' }
+        { id: 'artist1', name: 'Andy Warhol' },
+        { id: 'artist2', name: 'Kara Walker' }
       ]
 
-      gravql_artists_response = {
-        data: {
-          artists: @artists
-        }
-      }
+      gravql_artists_response = { data: { artists: @artists } }
       stub_gravity_artists
       stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
-        .to_return(body: gravql_artists_response.to_json).with(
-        headers: {
-          'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
-        }
-      )
+        .to_return(body: gravql_artists_response.to_json)
+        .with(
+          headers: {
+            'X-XAPP-TOKEN' => 'xapp_token',
+            'Content-Type' => 'application/json'
+          }
+        )
 
       allow(Convection.config).to receive(:gravity_xapp_token).and_return(
         'xapp_token'
@@ -175,14 +173,18 @@ describe 'admin/consignments/index.html.erb', type: :feature do
         expect(page).to have_selector('.ui-autocomplete')
         click_link("artist-#{artist[:id]}")
         select('bought in', from: 'state')
-        expect(current_url).to include("artist=#{artist[:id]}", 'state=bought+in')
+        expect(current_url).to include(
+          "artist=#{artist[:id]}",
+          'state=bought+in'
+        )
         expect(page).to have_content(artist[:name])
         expect(page).to have_selector('.list-group-item-info--artist', count: 1)
         select('sold', from: 'state')
         expect(page).to have_selector('.list-group-item-info--artist', count: 0)
       end
 
-      it 'allows you to search by partner name, filter by state, and sort by estimate', js: true do
+      it 'allows you to search by partner name, filter by state, and sort by estimate',
+         js: true do
         select('bought in', from: 'state')
         page.all(:fillable_field, 'term').last.set('herit')
         expect(page).to have_selector('.ui-autocomplete')

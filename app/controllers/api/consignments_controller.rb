@@ -14,7 +14,8 @@ module Api
     private
 
     def fetch_sale_artworks_with_price(sale_id)
-      sale_artworks = Gravity.client.sale_artworks(sale_id: sale_id).sale_artworks
+      sale_artworks =
+        Gravity.client.sale_artworks(sale_id: sale_id).sale_artworks
 
       sale_artworks.map do |sale_artwork|
         artwork_id = sale_artwork.artwork.id
