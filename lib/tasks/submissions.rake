@@ -13,6 +13,8 @@ task correction_seq_id: :environment do
 end
 
 task :rebase_user_submission => :environment do
+  Rake.application.invoke_task('correction_seq_id')
+
   User.all.find_each do |user|
     # find all submissions with user_id like the user.id
     user_submissions = Submission.where(user_id: user.id)

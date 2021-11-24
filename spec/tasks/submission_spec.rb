@@ -6,7 +6,6 @@ Rails.application.load_tasks
 
 describe 'Submission rake tasks' do
   subject(:invoke_task) do
-    Rake.application.invoke_task('correction_seq_id')
     Rake.application.invoke_task('rebase_user_submission')
   end
 
