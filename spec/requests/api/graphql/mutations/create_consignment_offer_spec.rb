@@ -20,7 +20,7 @@ describe 'createConsignmentOffer mutation' do
       submissionId: #{submission.id},
       commissionPercentWhole: 10
     }
-    INPUTS
+  INPUTS
 
   let(:mutation) { <<-GRAPHQL }
     mutation {
@@ -30,7 +30,7 @@ describe 'createConsignmentOffer mutation' do
         }
       }
     }
-    GRAPHQL
+  GRAPHQL
 
   describe 'invalid requests' do
     context 'with an unauthorized request' do
@@ -76,7 +76,7 @@ describe 'createConsignmentOffer mutation' do
           submissionId: #{submission.id},
           commissionPercentWhole: 10
         }
-        INPUTS
+      INPUTS
 
       it 'returns an error for that request' do
         post '/api/graphql', params: { query: mutation }, headers: headers
@@ -95,7 +95,7 @@ describe 'createConsignmentOffer mutation' do
           gravityPartnerId: "#{partner.gravity_partner_id}",
           commissionPercentWhole: 10
         }
-        INPUTS
+      INPUTS
 
       it 'returns an error for that request' do
         post '/api/graphql', params: { query: mutation }, headers: headers
@@ -114,7 +114,7 @@ describe 'createConsignmentOffer mutation' do
           gravityPartnerId: "#{partner.gravity_partner_id}",
           submissionId: #{submission.id}
         }
-        INPUTS
+      INPUTS
 
       it 'returns an error for that request' do
         post '/api/graphql', params: { query: mutation }, headers: headers
@@ -172,7 +172,7 @@ describe 'createConsignmentOffer mutation' do
           state: "draft",
           submissionId: #{submission.id}
         }
-        INPUTS
+      INPUTS
 
       it 'creates an offer' do
         stub_gravity_root

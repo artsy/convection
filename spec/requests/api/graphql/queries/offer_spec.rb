@@ -27,7 +27,7 @@ describe 'offer query' do
         commissionPercentWhole
       }
     }
-    GRAPHQL
+  GRAPHQL
 
   describe 'invalid requests' do
     context 'with an unauthorized request' do

@@ -19,7 +19,7 @@ describe 'createConsignmentOfferResponse mutation' do
       offerId: "#{offer.id}",
       intendedState: ACCEPTED
     }
-    INPUTS
+  INPUTS
 
   let(:mutation) { <<-GRAPHQL }
     mutation {
@@ -29,7 +29,7 @@ describe 'createConsignmentOfferResponse mutation' do
         }
       }
     }
-    GRAPHQL
+  GRAPHQL
 
   describe 'invalid requests' do
     context 'with an unauthorized request' do
@@ -76,7 +76,7 @@ describe 'createConsignmentOfferResponse mutation' do
         {
           intendedState: "accepted"
         }
-        INPUTS
+      INPUTS
 
       it 'returns an error for that request' do
         post '/api/graphql', params: { query: mutation }, headers: headers
@@ -94,7 +94,7 @@ describe 'createConsignmentOfferResponse mutation' do
         {
           offerId: #{offer.id}
         }
-        INPUTS
+      INPUTS
 
       it 'returns an error for that request' do
         post '/api/graphql', params: { query: mutation }, headers: headers
@@ -113,7 +113,7 @@ describe 'createConsignmentOfferResponse mutation' do
           intendedState: "blah",
           offerId: #{offer.id}
         }
-        INPUTS
+      INPUTS
 
       it 'returns an error for that request' do
         post '/api/graphql', params: { query: mutation }, headers: headers
@@ -133,7 +133,7 @@ describe 'createConsignmentOfferResponse mutation' do
           rejectionReason: "meow",
           offerId: #{offer.id}
         }
-        INPUTS
+      INPUTS
 
       it 'returns an error for that request' do
         post '/api/graphql', params: { query: mutation }, headers: headers
@@ -175,7 +175,7 @@ describe 'createConsignmentOfferResponse mutation' do
           phoneNumber: "123-456-7890",
           comments: "Cool offer but no thanks."
         }
-        INPUTS
+      INPUTS
 
       it 'creates an offer response' do
         expect {

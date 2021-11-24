@@ -67,9 +67,9 @@ module Admin
     end
 
     def authorize_user!
-      unless super_admin_user? @current_user
-        raise ApplicationController::NotAuthorized
-      end
+      return if super_admin_user? @current_user
+
+      raise ApplicationController::NotAuthorized
     end
   end
 end

@@ -30,7 +30,7 @@ describe 'addAssetToConsignmentSubmission mutation' do
           }
         }
       }
-    GRAPHQL
+  GRAPHQL
 
   describe 'valid requests' do
     it 'creates an asset' do

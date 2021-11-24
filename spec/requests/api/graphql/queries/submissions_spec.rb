@@ -28,7 +28,7 @@ describe 'submissions query' do
         }
       }
     }
-    GRAPHQL
+  GRAPHQL
 
   describe 'invalid requests' do
     context 'with an unauthorized request' do
@@ -134,7 +134,7 @@ describe 'submissions query' do
             }
           }
         }
-        GRAPHQL
+      GRAPHQL
 
       it 'returns all submissions' do
         post '/api/graphql', params: { query: query }, headers: headers
@@ -202,7 +202,7 @@ describe 'submissions query' do
             }
           }
         }
-        GRAPHQL
+      GRAPHQL
 
       it 'returns those image urls' do
         post '/api/graphql', params: { query: query }, headers: headers
@@ -247,7 +247,7 @@ describe 'submissions query' do
             }
           }
         }
-        GRAPHQL
+      GRAPHQL
 
       before { submission.update(primary_image_id: primary_asset.id) }
 
@@ -296,7 +296,7 @@ describe 'submissions query' do
             }
           }
         }
-        GRAPHQL
+      GRAPHQL
 
       it 'returns nil for the primary image' do
         post '/api/graphql', params: { query: query }, headers: headers
@@ -328,7 +328,7 @@ describe 'submissions query' do
             }
           }
         }
-        GRAPHQL
+      GRAPHQL
 
       it 'returns an empty object' do
         post '/api/graphql', params: { query: query }, headers: headers
@@ -360,7 +360,7 @@ describe 'submissions query' do
             }
           }
         }
-        GRAPHQL
+      GRAPHQL
 
       context 'without filterByCategory argument' do
         let(:query_inputs) { 'filterByCategory: null' }
@@ -417,7 +417,7 @@ describe 'submissions query' do
             }
           }
         }
-        GRAPHQL
+      GRAPHQL
 
       context 'without a sort column' do
         let(:query_inputs) { 'sort: null' }
@@ -487,7 +487,7 @@ describe 'submissions query' do
               }
             }
           }
-          GRAPHQL
+        GRAPHQL
 
         it 'returns 100 submissions' do
           post '/api/graphql', params: { query: query }, headers: headers

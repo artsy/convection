@@ -29,7 +29,7 @@ describe 'offers query' do
         }
       }
     }
-    GRAPHQL
+  GRAPHQL
 
   describe 'invalid requests' do
     context 'with an unauthorized request' do
@@ -135,7 +135,7 @@ describe 'offers query' do
             }
           }
         }
-        GRAPHQL
+      GRAPHQL
 
       context 'without a sort column' do
         let(:query_inputs) do

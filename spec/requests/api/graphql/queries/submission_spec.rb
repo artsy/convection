@@ -24,7 +24,7 @@ describe 'submission query' do
         title
       }
     }
-    GRAPHQL
+  GRAPHQL
 
   describe 'invalid requests' do
     context 'with an unauthorized request' do
@@ -139,7 +139,7 @@ describe 'submission query' do
             }
           }
         }
-        GRAPHQL
+      GRAPHQL
 
       context 'with an invalid gravity partner id and some offers' do
         let(:gravity_partner_id) { 'invalid' }

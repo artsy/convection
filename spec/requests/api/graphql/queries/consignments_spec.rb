@@ -46,7 +46,7 @@ describe 'consignments query' do
         }
       }
     }
-    GRAPHQL
+  GRAPHQL
 
   describe 'invalid requests' do
     context 'with an unauthorized request' do
@@ -151,7 +151,7 @@ describe 'consignments query' do
               }
             }
           }
-        GRAPHQL
+      GRAPHQL
 
       context 'without a sort parameter' do
         let(:query_inputs) do
