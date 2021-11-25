@@ -1,3 +1,7 @@
+inherit_from: .rubocop_todo.yml
+
+require: rubocop-rails
+
 AllCops:
   TargetRubyVersion: 2.5
   Exclude:
@@ -13,6 +17,12 @@ Bundler/OrderedGems:
 
 Documentation:
   Enabled: false
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
 
 # Layout handled by prettier (mostly)
 Layout:
@@ -32,8 +42,6 @@ Metrics/ClassLength:
   Enabled: false
 Metrics/CyclomaticComplexity:
   Enabled: false
-Metrics/LineLength:
-  Enabled: false
 Metrics/MethodLength:
   Enabled: false
 Metrics/ModuleLength:
@@ -43,7 +51,7 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Enabled: false
 
-Naming/UncommunicativeMethodParamName:
+Naming/MethodParameterName:
   Enabled: false
 
 Naming/AccessorMethodName:
@@ -83,6 +91,9 @@ Style/Send:
 Style/PreferredHashMethods:
   Enabled: false
 
+Style/HashEachMethods:
+  Enabled: false
+
 Style/BlockDelimiters:
   Enabled: false
 
@@ -90,6 +101,12 @@ Style/CommandLiteral:
   Enabled: false
 
 Style/HashSyntax:
+  Enabled: false
+
+Style/HashTransformKeys:
+  Enabled: false
+
+Style/HashTransformValues:
   Enabled: false
 
 Style/IfUnlessModifier:
