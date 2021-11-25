@@ -27,9 +27,6 @@ Lint/StructNewOverride:
 # Layout handled by prettier (mostly)
 Layout:
   Enabled: false
-Layout/LineLength:
-  Enabled: true
-  Max: 200
 
 Lint/AmbiguousBlockAssociation:
   Enabled: false
@@ -83,9 +80,6 @@ Style/NumericPredicate:
 
 Style/ParallelAssignment:
   Enabled: false
-
-Style/Send:
-  Enabled: true
 
 # We want to use Hash#has_key? since it looks a bit more readable than Hash#key?
 Style/PreferredHashMethods:
