@@ -11,10 +11,8 @@ class AddAssetToSubmissionResolver < BaseResolver
       raise(GraphQL::ExecutionError, 'Submission from ID Not Found')
     end
 
-    matching_user = submission.user&.gravity_user_id == @context[:current_user]
-
-    unless matching_user || admin?
-      raise(GraphQL::ExecutionError, 'Submission from ID Not Found')
+    unless matching_user(submission, @arguments&.[](:session_id)) || admin?
+      raise(GraphQL::ExecutionError, 'Submission Not Found')
     end
 
     @arguments[:asset_type] ||= 'image'
