@@ -14,7 +14,7 @@ describe 'Submission Flow' do
     expect(NotificationService).to receive(:post_submission_event).once
   end
 
-  it 'Completes 3' do
+  it 'Completes a submission from Tokyo' do
     stub_gravity_root
     stub_gravity_user
     stub_gravity_artist

@@ -36,19 +36,51 @@ describe 'createConsignmentSubmission mutation' do
     context 'with an unauthorized request' do
       let(:token) { 'foo.bar.baz' }
 
-      it 'returns an error for that request' do
+      it 'raises an exception if contact information is not provided' do
         stub_gravity_root
         stub_gravity_user
         stub_gravity_user_detail(email: 'michael@bluth.com')
         stub_gravity_artist({ id: 'andy' })
         stub_gravity_artists({ id: 'andy' })
-        post '/api/graphql', params: { query: mutation }, headers: headers
 
-        expect(response.status).to eq 200
-        body = JSON.parse(response.body)
+        expect {
+          post '/api/graphql', params: { query: mutation }, headers: headers
+        }.to raise_error(
+          SubmissionService::SubmissionError,
+          "Validation failed: Gravity user can't be blank"
+        )
+      end
 
-        create_response = body['data']['createConsignmentSubmission']
-        expect(create_response).to_not eq nil
+      context 'contact information is provided' do
+        let(:mutation) { <<-GRAPHQL }
+          mutation {
+            createConsignmentSubmission(input: {artistID: "andy", userName: "foo", userEmail: "bar", userPhone: "baz"}){
+              clientMutationId
+              consignmentSubmission {
+                userName
+                userEmail
+                userPhone
+              }
+            }
+          }
+        GRAPHQL
+
+        it 'creates a submission' do
+          stub_gravity_root
+          stub_gravity_user
+          stub_gravity_user_detail(email: 'michael@bluth.com')
+          stub_gravity_artist({ id: 'andy' })
+          stub_gravity_artists({ id: 'andy' })
+
+          post '/api/graphql', params: { query: mutation }, headers: headers
+
+          body = JSON.parse(response.body)
+          submission =
+            body['data']['createConsignmentSubmission']['consignmentSubmission']
+          expect(submission).to eq(
+            { 'userName' => 'foo', 'userEmail' => 'bar', 'userPhone' => 'baz' }
+          )
+        end
       end
     end
 

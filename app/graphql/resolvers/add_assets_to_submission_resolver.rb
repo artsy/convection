@@ -11,8 +11,8 @@ class AddAssetsToSubmissionResolver < BaseResolver
       raise(GraphQL::ExecutionError, 'Submission from ID Not Found')
     end
 
-    unless submission.user&.gravity_user_id == @context[:current_user] || admin?
-      raise(GraphQL::ExecutionError, 'Submission from ID Not Found')
+    unless matching_user(submission, @arguments&.[](:session_id)) || admin?
+      raise(GraphQL::ExecutionError, 'Submission Not Found')
     end
 
     assets = create_assets(@arguments[:gemini_tokens], @arguments[:asset_type])
