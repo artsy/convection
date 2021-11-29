@@ -4,7 +4,9 @@ class PartnerMailerPreview < BasePreview
   def submission_digest_auction
     params =
       submission_digest_mail_params.merge(
-        partner_name: 'Phillips', partner_type: 'Auction', email: 'foo@foo.com'
+        partner_name: 'Phillips',
+        partner_type: 'Auction',
+        email: 'foo@foo.com'
       )
     PartnerMailer.submission_digest(params)
   end
@@ -12,7 +14,9 @@ class PartnerMailerPreview < BasePreview
   def submission_digest_gallery
     params =
       submission_digest_mail_params.merge(
-        partner_name: 'Gagosian', partner_type: 'Gallery', email: 'foo@foo.com'
+        partner_name: 'Gagosian',
+        partner_type: 'Gallery',
+        email: 'foo@foo.com'
       )
     PartnerMailer.submission_digest(params)
   end
@@ -42,6 +46,10 @@ class PartnerMailerPreview < BasePreview
     users_to_submissions =
       [sub1, sub2, base_submission_with_minimum_price].group_by(&:user)
 
-    { users_to_submissions: users_to_submissions, submissions_artists: submissions_artists, submissions_count: 3 }
+    {
+      users_to_submissions: users_to_submissions,
+      submissions_artists: submissions_artists,
+      submissions_count: 3
+    }
   end
 end

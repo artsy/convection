@@ -61,7 +61,8 @@ describe 'admin/offers/edit.html.erb', type: :feature do
       let(:offer) do
         Fabricate(
           :offer,
-          offer_type: 'purchase', partner_submission: partner_submission
+          offer_type: 'purchase',
+          partner_submission: partner_submission
         )
       end
 
@@ -96,7 +97,8 @@ describe 'admin/offers/edit.html.erb', type: :feature do
       let(:offer) do
         Fabricate(
           :offer,
-          offer_type: 'retail', partner_submission: partner_submission
+          offer_type: 'retail',
+          partner_submission: partner_submission
         )
       end
       before { page.visit "/admin/offers/#{offer.id}/edit" }
@@ -132,7 +134,8 @@ describe 'admin/offers/edit.html.erb', type: :feature do
       let(:offer) do
         Fabricate(
           :offer,
-          offer_type: 'net price', partner_submission: partner_submission
+          offer_type: 'net price',
+          partner_submission: partner_submission
         )
       end
       before { page.visit "/admin/offers/#{offer.id}/edit" }

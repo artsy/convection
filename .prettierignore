@@ -1,2 +1,5 @@
 app/graphql/util/authorization_instrumentation.rb
 hokusai/*.yml
+node_modules
+**/*.text.erb
+*.md

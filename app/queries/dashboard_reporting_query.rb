@@ -16,6 +16,7 @@ module DashboardReportingQuery
         FROM submissions
         WHERE state = 'submitted' AND deleted_at IS NULL
       SQL
+
       ActiveRecord::Base.connection.execute(query).first.symbolize_keys
     end
   end
@@ -30,6 +31,7 @@ module DashboardReportingQuery
         COUNT(state = 'review' OR NULL) AS review
         FROM offers
       SQL
+
       ActiveRecord::Base.connection.execute(query).first.symbolize_keys
     end
   end

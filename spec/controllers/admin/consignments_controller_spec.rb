@@ -11,14 +11,15 @@ describe Admin::ConsignmentsController, type: :controller do
 
   describe '#index' do
     before do
-      @artist = {id: 'artistId', name: 'Banksy'}
+      @artist = { id: 'artistId', name: 'Banksy' }
       @partner1 = Fabricate(:partner, name: 'Gagosian Gallery')
       partner2 = Fabricate(:partner, name: 'Heritage Auctions')
       @consignment1 =
         Fabricate(
           :partner_submission,
           state: 'open',
-          submission: Fabricate(:submission, state: 'approved', artist_id: @artist[:id]),
+          submission:
+            Fabricate(:submission, state: 'approved', artist_id: @artist[:id]),
           partner: @partner1,
           sale_price_cents: 100_000
         )
@@ -26,7 +27,8 @@ describe Admin::ConsignmentsController, type: :controller do
         Fabricate(
           :partner_submission,
           state: 'open',
-          submission: Fabricate(:submission, state: 'approved', artist_id: @artist[:id]),
+          submission:
+            Fabricate(:submission, state: 'approved', artist_id: @artist[:id]),
           partner: @partner1,
           sale_price_cents: 200_000
         )
@@ -34,7 +36,12 @@ describe Admin::ConsignmentsController, type: :controller do
         Fabricate(
           :partner_submission,
           state: 'bought in',
-          submission: Fabricate(:submission, state: 'approved', artist_id: 'someArtistId'),
+          submission:
+            Fabricate(
+              :submission,
+              state: 'approved',
+              artist_id: 'someArtistId'
+            ),
           partner: @partner1,
           sale_price_cents: 300_000
         )
@@ -216,7 +223,9 @@ describe Admin::ConsignmentsController, type: :controller do
       it 'allows you to filter by state and sort by sale_price_cents' do
         get :index,
             params: {
-              sort: 'sale_price_cents', direction: 'desc', state: 'open'
+              sort: 'sale_price_cents',
+              direction: 'desc',
+              state: 'open'
             }
         expect(controller.consignments.pluck(:id)).to eq [
              @consignment4.id,
@@ -229,7 +238,9 @@ describe Admin::ConsignmentsController, type: :controller do
       it 'allows you to search for partner and sort by sale_price_cents' do
         get :index,
             params: {
-              sort: 'sale_price_cents', direction: 'desc', partner: @partner1.id
+              sort: 'sale_price_cents',
+              direction: 'desc',
+              partner: @partner1.id
             }
         expect(controller.consignments.pluck(:id)).to eq [
              @consignment3.id,
@@ -241,7 +252,9 @@ describe Admin::ConsignmentsController, type: :controller do
       it 'allows you to search for artist and sort by sale_price_cents' do
         get :index,
             params: {
-              sort: 'sale_price_cents', direction: 'desc', artist: @artist[:id]
+              sort: 'sale_price_cents',
+              direction: 'desc',
+              artist: @artist[:id]
             }
         expect(controller.consignments.pluck(:id)).to eq [
              @consignment2.id,

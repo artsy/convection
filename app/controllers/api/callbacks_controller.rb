@@ -28,7 +28,8 @@ module Api
       params.permit(
         :access_token,
         :token,
-        image_url: %i[square large medium thumbnail], metadata: %i[id _type]
+        image_url: %i[square large medium thumbnail],
+        metadata: %i[id _type]
       )
     end
 

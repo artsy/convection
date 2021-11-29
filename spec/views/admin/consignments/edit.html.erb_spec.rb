@@ -54,11 +54,13 @@ describe 'admin/consignments/edit.html.erb', type: :feature do
         }
       }
       stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
-        .to_return(body: gravql_artists_response.to_json).with(
-        headers: {
-          'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
-        }
-      )
+        .to_return(body: gravql_artists_response.to_json)
+        .with(
+          headers: {
+            'X-XAPP-TOKEN' => 'xapp_token',
+            'Content-Type' => 'application/json'
+          }
+        )
 
       page.visit edit_admin_consignment_path(partner_submission)
     end
@@ -105,8 +107,12 @@ describe 'admin/consignments/edit.html.erb', type: :feature do
            )
         expect(page).to have_content('Name August Sale')
         expect(page).to have_content('Price $700')
-        expect(page).to have_content('Partner Commission (commission charged to seller) % 10.0')
-        expect(page).to have_content('Artsy Commission (commission charged to partner) % 8.8')
+        expect(page).to have_content(
+          'Partner Commission (commission charged to seller) % 10.0'
+        )
+        expect(page).to have_content(
+          'Artsy Commission (commission charged to partner) % 8.8'
+        )
       end
 
       context 'when the consignment has a partner invoice date' do
@@ -116,15 +122,12 @@ describe 'admin/consignments/edit.html.erb', type: :feature do
         end
 
         it 'allows you to edit the invoice number' do
-          fill_in(
-            'partner_submission_invoice_number',
-            with: '424242'
-          )
+          fill_in('partner_submission_invoice_number', with: '424242')
 
           click_button('Save')
           expect(page.current_path).to eq admin_consignment_path(
-             partner_submission
-          )
+               partner_submission
+             )
           expect(page).to have_content('Invoice number 424242')
         end
       end

@@ -22,7 +22,9 @@ RSpec.describe Note, type: :model do
 
       before do
         mocked_user_data = {
-          email: 'buster@example.com', id: gravity_user_id, name: 'Buster Bluth'
+          email: 'buster@example.com',
+          id: gravity_user_id,
+          name: 'Buster Bluth'
         }
 
         @stub = stub_gravity_user(mocked_user_data)

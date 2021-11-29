@@ -3,25 +3,26 @@
 class User < ApplicationRecord
   include PgSearch::Model
 
+  validates :gravity_user_id, presence: true, unless: :contact_information?
+
   has_one :submission, dependent: :nullify
   has_many :notes, dependent: :nullify
 
   pg_search_scope :search, against: :email, using: { tsearch: { prefix: true } }
 
   def gravity_user
-    if defined?(@gravity_user)
-      @gravity_user
-    elsif gravity_user_id
-      @gravity_user =
-        gravity_user_id &&
-          (
-            begin
-              Gravity.client.user(id: gravity_user_id)._get
-            rescue Faraday::ResourceNotFound
-              nil
-            end
-          )
-    end
+    return @gravity_user if defined?(@gravity_user)
+    return nil unless gravity_user_id
+
+    @gravity_user =
+      gravity_user_id &&
+        (
+          begin
+            Gravity.client.user(id: gravity_user_id)._get
+          rescue Faraday::ResourceNotFound
+            nil
+          end
+        )
   end
 
   def name
@@ -59,5 +60,9 @@ class User < ApplicationRecord
 
   def self.anonymous
     User.find_or_create_by(gravity_user_id: 'anonymous')
+  end
+
+  def contact_information?
+    self[:name].present? && self[:email].present? && self[:phone].present?
   end
 end

@@ -37,7 +37,9 @@ describe 'Editing a submission', type: :feature do
 
     # Stub gravity representation of current user
     stub_gravity_user(
-      id: admin_id, email: 'admin@art.sy', name: 'Blake Adminmeier'
+      id: admin_id,
+      email: 'admin@art.sy',
+      name: 'Blake Adminmeier'
     )
 
     # Stub gravity
@@ -48,13 +50,20 @@ describe 'Editing a submission', type: :feature do
     allow(Convection.config).to receive(:gravity_xapp_token).and_return(
       'xapp_token'
     )
-    stub_gravql_artists(body: {
-      data: {
-        artists: [
-          { id: submission.artist_id, name: 'Gob Bluth', is_p1: false, target_supply: true },
-        ]
+    stub_gravql_artists(
+      body: {
+        data: {
+          artists: [
+            {
+              id: submission.artist_id,
+              name: 'Gob Bluth',
+              is_p1: false,
+              target_supply: true
+            }
+          ]
+        }
       }
-    })
+    )
   end
 
   context 'adding an admin to a submission' do
@@ -76,9 +85,7 @@ describe 'Editing a submission', type: :feature do
     end
 
     context 'from the detail screen' do
-      before do
-        Fabricate(:admin_user, name: 'Agnieszka', assignee: true)
-      end
+      before { Fabricate(:admin_user, name: 'Agnieszka', assignee: true) }
 
       it 'displays that admin on the submission detail page' do
         visit admin_submission_path(submission)

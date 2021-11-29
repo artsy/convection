@@ -33,7 +33,8 @@ module Types
 
       argument :sort,
                OfferSortType,
-               required: false, prepare: OfferSortType.prepare do
+               required: false,
+               prepare: OfferSortType.prepare do
         description 'Return offers sorted this way'
       end
     end
@@ -61,7 +62,9 @@ module Types
 
     field :submissions,
           SubmissionConnectionType,
-          null: true, connection: true, max_page_size: 100 do
+          null: true,
+          connection: true,
+          max_page_size: 100 do
       description 'Filter all submission'
 
       argument :ids, [ID], required: false do
@@ -78,7 +81,8 @@ module Types
 
       argument :sort,
                SubmissionSortType,
-               required: false, prepare: SubmissionSortType.prepare do
+               required: false,
+               prepare: SubmissionSortType.prepare do
         description 'Return submissions sorted this way'
       end
 
@@ -97,7 +101,9 @@ module Types
 
     field :consignments,
           ConsignmentConnectionType,
-          null: true, connection: true, max_page_size: 100 do
+          null: true,
+          connection: true,
+          max_page_size: 100 do
       description 'Sold or bought-in consignments'
 
       argument :gravity_partner_id, ID, required: true do
@@ -106,7 +112,8 @@ module Types
 
       argument :sort,
                ConsignmentSortType,
-               required: false, prepare: ConsignmentSortType.prepare do
+               required: false,
+               prepare: ConsignmentSortType.prepare do
         description 'Return consignments sorted by input (default sort by id)'
       end
     end

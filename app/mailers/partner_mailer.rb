@@ -15,10 +15,13 @@ class PartnerMailer < ApplicationMailer
     @partner_type = partner_type
     @utm_params =
       utm_params(
-        source: 'consignment-partner-digest', campaign: 'consignment-complete'
+        source: 'consignment-partner-digest',
+        campaign: 'consignment-complete'
       )
     smtpapi category: %w[submission_digest],
-            unique_args: { partner_name: partner_name }
+            unique_args: {
+              partner_name: partner_name
+            }
 
     current_date = Time.now.utc.strftime('%B %-d')
     mail(
@@ -35,7 +38,8 @@ class PartnerMailer < ApplicationMailer
     @artist = artist
     @utm_params =
       utm_params(
-        source: 'consignment-offer-introduction', campaign: 'consignment-offer'
+        source: 'consignment-offer-introduction',
+        campaign: 'consignment-offer'
       )
 
     smtpapi category: %w[offer], unique_args: { offer_id: offer.id }
@@ -52,7 +56,8 @@ class PartnerMailer < ApplicationMailer
     @artist = artist
     @utm_params =
       utm_params(
-        source: 'consignment-offer-rejected', campaign: 'consignment-offer'
+        source: 'consignment-offer-rejected',
+        campaign: 'consignment-offer'
       )
 
     smtpapi category: %w[offer], unique_args: { offer_id: offer.id }
@@ -64,6 +69,7 @@ class PartnerMailer < ApplicationMailer
   end
 
   def reply_email(assigned_user_id)
-    Gravity.client.user(id: assigned_user_id)._get.user_detail._get.email || Convection.config.admin_email_address
+    Gravity.client.user(id: assigned_user_id)._get.user_detail._get.email ||
+      Convection.config.admin_email_address
   end
 end

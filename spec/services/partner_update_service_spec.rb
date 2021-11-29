@@ -11,7 +11,8 @@ describe PartnerUpdateService do
     let!(:partner2) do
       Fabricate(
         :partner,
-        gravity_partner_id: 'gagosian', name: 'Gagosian Gallery'
+        gravity_partner_id: 'gagosian',
+        name: 'Gagosian Gallery'
       )
     end
     let!(:partner3) do

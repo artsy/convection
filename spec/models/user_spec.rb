@@ -23,6 +23,74 @@ describe User do
     end
   end
 
+  context 'active record validation' do
+    context 'contact information has not been provided' do
+      let(:user) { Fabricate(:user, name: nil, email: nil, phone: nil) }
+      it 'fails if gravity_user_id is nil' do
+        user.gravity_user_id = nil
+        user.validate
+        expect(user.errors[:gravity_user_id]).to include("can't be blank")
+      end
+      it 'fails if gravity_user_id is empty' do
+        user.gravity_user_id = ''
+        user.validate
+        expect(user.errors[:gravity_user_id]).to include("can't be blank")
+      end
+      it 'passes if gravity_user_id has a value' do
+        user.gravity_user_id = 'user-1'
+        user.validate
+        expect(user.errors[:gravity_user_id]).to_not include("can't be blank")
+      end
+    end
+    context 'contact information has been provided' do
+      let(:user) do
+        Fabricate(
+          :user,
+          name: 'user',
+          email: 'user@example.com',
+          phone: '+1 (212) 555-5555'
+        )
+      end
+      it 'passes if gravity_user_id is nil' do
+        user.gravity_user_id = nil
+        user.validate
+        expect(user.errors[:gravity_user_id]).to_not include("can't be blank")
+      end
+      it 'passes if gravity_user_id is empty' do
+        user.gravity_user_id = ''
+        user.validate
+        expect(user.errors[:gravity_user_id]).to_not include("can't be blank")
+      end
+    end
+  end
+
+  context 'contact_information?' do
+    let(:user) do
+      Fabricate(
+        :user,
+        name: 'user',
+        email: 'user@example.com',
+        phone: '+1 (212) 555-5555'
+      )
+    end
+
+    it 'returns true if name, email, and phone have values' do
+      expect(user.contact_information?).to be true
+    end
+    it 'returns false if name is nil' do
+      user.name = nil
+      expect(user.contact_information?).to be false
+    end
+    it 'returns false if email is nil' do
+      user.name = nil
+      expect(user.contact_information?).to be false
+    end
+    it 'returns false if phone is nil' do
+      user.name = nil
+      expect(user.contact_information?).to be false
+    end
+  end
+
   context 'gravity_user' do
     it 'returns nil if it cannot find the object' do
       stub_gravity_root

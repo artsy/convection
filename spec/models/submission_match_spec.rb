@@ -45,8 +45,12 @@ describe SubmissionMatch do
       let(:params) { { state: 'approved' } }
 
       context 'with offers in review or accepted' do
-        let!(:offer1) { Fabricate :offer, submission: submission1, state: 'review' }
-        let!(:offer2) { Fabricate :offer, submission: submission2, state: 'accepted' }
+        let!(:offer1) do
+          Fabricate :offer, submission: submission1, state: 'review'
+        end
+        let!(:offer2) do
+          Fabricate :offer, submission: submission2, state: 'accepted'
+        end
 
         it 'returns an empty result' do
           matching = SubmissionMatch.find_all(params).to_a
@@ -55,10 +59,18 @@ describe SubmissionMatch do
       end
 
       context 'with other offer states ' do
-        let!(:offer1) { Fabricate :offer, submission: submission1, state: 'draft' }
-        let!(:offer2) { Fabricate :offer, submission: submission2, state: 'sent' }
-        let!(:offer3) { Fabricate :offer, submission: submission2, state: 'lapsed' }
-        let!(:offer4) { Fabricate :offer, submission: submission1, state: 'rejected' }
+        let!(:offer1) do
+          Fabricate :offer, submission: submission1, state: 'draft'
+        end
+        let!(:offer2) do
+          Fabricate :offer, submission: submission2, state: 'sent'
+        end
+        let!(:offer3) do
+          Fabricate :offer, submission: submission2, state: 'lapsed'
+        end
+        let!(:offer4) do
+          Fabricate :offer, submission: submission1, state: 'rejected'
+        end
 
         it 'returns the matching submissions' do
           matching = SubmissionMatch.find_all(params).to_a
@@ -67,9 +79,15 @@ describe SubmissionMatch do
       end
 
       context 'with more than one offer where at least one is in review' do
-        let!(:offer1) { Fabricate :offer, submission: submission1, state: 'draft' }
-        let!(:offer2) { Fabricate :offer, submission: submission2, state: 'sent' }
-        let!(:offer3) { Fabricate :offer, submission: submission2, state: 'review' }
+        let!(:offer1) do
+          Fabricate :offer, submission: submission1, state: 'draft'
+        end
+        let!(:offer2) do
+          Fabricate :offer, submission: submission2, state: 'sent'
+        end
+        let!(:offer3) do
+          Fabricate :offer, submission: submission2, state: 'review'
+        end
 
         it 'returns the matching submissions' do
           matching = SubmissionMatch.find_all(params).to_a

@@ -17,14 +17,18 @@ describe 'partners create', type: :feature do
         'xapp_token'
       )
       gravql_match_partners_response = {
-        data: { match_partners: [{ id: 'partner1', given_name: 'Storefront' }] }
+        data: {
+          match_partners: [{ id: 'partner1', given_name: 'Storefront' }]
+        }
       }
       stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
-        .to_return(body: gravql_match_partners_response.to_json).with(
-        headers: {
-          'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
-        }
-      )
+        .to_return(body: gravql_match_partners_response.to_json)
+        .with(
+          headers: {
+            'X-XAPP-TOKEN' => 'xapp_token',
+            'Content-Type' => 'application/json'
+          }
+        )
 
       page.visit '/admin/partners'
     end

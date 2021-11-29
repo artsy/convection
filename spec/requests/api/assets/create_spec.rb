@@ -19,8 +19,13 @@ describe 'Create Asset' do
   describe 'POST /assets' do
     it 'rejects unauthorized requests' do
       post '/api/assets',
-           params: { gemini_token: 'gemini', submission_id: submission.id },
-           headers: { 'Authorization' => 'Bearer foo.bar.baz' }
+           params: {
+             gemini_token: 'gemini',
+             submission_id: submission.id
+           },
+           headers: {
+             'Authorization' => 'Bearer foo.bar.baz'
+           }
       expect(response.status).to eq 401
     end
 
@@ -31,7 +36,10 @@ describe 'Create Asset' do
 
     it 'rejects assets without a gemini_token' do
       post '/api/assets',
-           params: { submission_id: submission.id }, headers: headers
+           params: {
+             submission_id: submission.id
+           },
+           headers: headers
       expect(response.status).to eq 400
       expect(
         JSON.parse(response.body)['error']
@@ -41,7 +49,8 @@ describe 'Create Asset' do
     it 'creates an asset' do
       post '/api/assets',
            params: {
-             submission_id: submission.id, gemini_token: 'gemini-token'
+             submission_id: submission.id,
+             gemini_token: 'gemini-token'
            },
            headers: headers
       expect(response.status).to eq 201
@@ -61,7 +70,8 @@ describe 'Create Asset' do
       expect {
         post '/api/assets',
              params: {
-               submission_id: submission.id, gemini_token: 'gemini-token'
+               submission_id: submission.id,
+               gemini_token: 'gemini-token'
              },
              headers: headers
       }.to raise_error('Still processing images.')

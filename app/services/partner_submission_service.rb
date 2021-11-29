@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class PartnerSubmissionService
-  class PartnerSubmissionError < StandardError; end
+  class PartnerSubmissionError < StandardError
+  end
   extend GraphqlHelper
 
   class << self
@@ -50,21 +51,26 @@ class PartnerSubmissionService
       gravity_partner_id = partner.gravity_partner_id
       gravity_partner = Gravity.client.partner(id: gravity_partner_id)._get
       submission_ids = submissions.pluck(:id)
-      partner_contacts.map(&:email).each do |email|
-        delay.deliver_partner_contact_email(
-          submission_ids,
-          partner.name,
-          gravity_partner.type,
-          email
-        )
-      end
+      partner_contacts
+        .map(&:email)
+        .each do |email|
+          delay.deliver_partner_contact_email(
+            submission_ids,
+            partner.name,
+            gravity_partner.type,
+            email
+          )
+        end
 
       notified_at = Time.now.utc
       partner_submissions.each { |ps| ps.update!(notified_at: notified_at) }
     end
 
     def deliver_partner_contact_email(
-      submission_ids, partner_name, partner_type, email
+      submission_ids,
+      partner_name,
+      partner_type,
+      email
     )
       submissions = Submission.find(submission_ids)
       return if submissions.empty?
@@ -90,16 +96,19 @@ class PartnerSubmissionService
     end
 
     def generate_for_new_partner(partner)
-      Submission.where(state: 'published').each do |submission|
-        partner.partner_submissions.find_or_create_by!(
-          submission_id: submission.id
-        )
-      end
+      Submission
+        .where(state: 'published')
+        .each do |submission|
+          partner.partner_submissions.find_or_create_by!(
+            submission_id: submission.id
+          )
+        end
     end
 
     def update_price(artworks_price)
       artworks_price.each do |artwork_price|
-        submission = Submission.find_by(source_artwork_id: artwork_price[:artwork_id])
+        submission =
+          Submission.find_by(source_artwork_id: artwork_price[:artwork_id])
         next unless submission
 
         consignment = submission.consigned_partner_submission

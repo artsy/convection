@@ -5,9 +5,12 @@ module PartnerService
     def fetch_partner_contacts!(partner)
       gravity_partner_id = partner.gravity_partner_id
       partner_communication =
-        Gravity.client.partner_communications(
-          name: Convection.config.consignment_communication_name
-        ).first
+        Gravity
+          .client
+          .partner_communications(
+            name: Convection.config.consignment_communication_name
+          )
+          .first
 
       partner_contacts =
         Gravity.fetch_all(

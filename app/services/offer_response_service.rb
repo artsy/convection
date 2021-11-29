@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class OfferResponseService
-  class OfferResponseError < StandardError; end
+  class OfferResponseError < StandardError
+  end
 
   def self.create_offer_response(offer_id, offer_response_params = {})
     offer = Offer.find(offer_id)

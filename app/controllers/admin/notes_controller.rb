@@ -4,11 +4,12 @@ module Admin
   class NotesController < ApplicationController
     def create
       submission = Submission.find(params.dig(:note, :submission_id))
-      note = if params.dig(:note, :add_note_to_user) == '0'
-               submission.notes.new(note_params)
-             else
-               submission.user.notes.new(note_params)
-             end
+      note =
+        if params.dig(:note, :add_note_to_user) == '0'
+          submission.notes.new(note_params)
+        else
+          submission.user.notes.new(note_params)
+        end
       path = admin_submission_path(submission)
 
       if note.save
