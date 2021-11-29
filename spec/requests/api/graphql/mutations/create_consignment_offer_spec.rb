@@ -14,18 +14,15 @@ describe 'createConsignmentOffer mutation' do
 
   let(:headers) { { 'Authorization' => "Bearer #{token}" } }
 
-  let(:mutation_inputs) do
-    <<-INPUTS
+  let(:mutation_inputs) { <<-INPUTS }
     {
       gravityPartnerId: "#{partner.gravity_partner_id}",
       submissionId: #{submission.id},
       commissionPercentWhole: 10
     }
-    INPUTS
-  end
+  INPUTS
 
-  let(:mutation) do
-    <<-GRAPHQL
+  let(:mutation) { <<-GRAPHQL }
     mutation {
       createConsignmentOffer(input: #{mutation_inputs}){
         consignmentOffer {
@@ -33,8 +30,7 @@ describe 'createConsignmentOffer mutation' do
         }
       }
     }
-    GRAPHQL
-  end
+  GRAPHQL
 
   describe 'invalid requests' do
     context 'with an unauthorized request' do
@@ -75,14 +71,12 @@ describe 'createConsignmentOffer mutation' do
     end
 
     context 'with a request missing a gravity partner id' do
-      let(:mutation_inputs) do
-        <<-INPUTS
+      let(:mutation_inputs) { <<-INPUTS }
         {
           submissionId: #{submission.id},
           commissionPercentWhole: 10
         }
-        INPUTS
-      end
+      INPUTS
 
       it 'returns an error for that request' do
         post '/api/graphql', params: { query: mutation }, headers: headers
@@ -96,14 +90,12 @@ describe 'createConsignmentOffer mutation' do
     end
 
     context 'with a request missing a submission id' do
-      let(:mutation_inputs) do
-        <<-INPUTS
+      let(:mutation_inputs) { <<-INPUTS }
         {
           gravityPartnerId: "#{partner.gravity_partner_id}",
           commissionPercentWhole: 10
         }
-        INPUTS
-      end
+      INPUTS
 
       it 'returns an error for that request' do
         post '/api/graphql', params: { query: mutation }, headers: headers
@@ -117,14 +109,12 @@ describe 'createConsignmentOffer mutation' do
     end
 
     context 'with a request missing a commission percent' do
-      let(:mutation_inputs) do
-        <<-INPUTS
+      let(:mutation_inputs) { <<-INPUTS }
         {
           gravityPartnerId: "#{partner.gravity_partner_id}",
           submissionId: #{submission.id}
         }
-        INPUTS
-      end
+      INPUTS
 
       it 'returns an error for that request' do
         post '/api/graphql', params: { query: mutation }, headers: headers
@@ -161,8 +151,7 @@ describe 'createConsignmentOffer mutation' do
     end
 
     context 'with an auction offer' do
-      let(:mutation_inputs) do
-        <<-INPUTS
+      let(:mutation_inputs) { <<-INPUTS }
         {
           commissionPercentWhole: 10,
           createdById: "foo",
@@ -183,8 +172,7 @@ describe 'createConsignmentOffer mutation' do
           state: "draft",
           submissionId: #{submission.id}
         }
-        INPUTS
-      end
+      INPUTS
 
       it 'creates an offer' do
         stub_gravity_root

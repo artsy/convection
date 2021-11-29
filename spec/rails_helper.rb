@@ -13,7 +13,8 @@ require 'webmock/rspec'
 require 'rack_session_access/capybara'
 
 WebMock.disable_net_connect!(
-  allow_localhost: true, allow: 'chromedriver.storage.googleapis.com'
+  allow_localhost: true,
+  allow: 'chromedriver.storage.googleapis.com'
 )
 
 ActiveRecord::Migration.maintain_test_schema!
@@ -56,7 +57,9 @@ end
 Capybara.register_driver :headless_chrome do |app|
   caps =
     Selenium::WebDriver::Remote::Capabilities.chrome(
-      loggingPrefs: { browser: 'ALL' }
+      loggingPrefs: {
+        browser: 'ALL'
+      }
     )
   opts = Selenium::WebDriver::Chrome::Options.new(options: { 'w3c' => false })
 

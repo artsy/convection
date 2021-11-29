@@ -8,7 +8,9 @@ describe DemandCalculator do
   let!(:artist_standing_score) do
     Fabricate(
       :artist_standing_score,
-      artist_id: artist_id, artist_score: 0.50, auction_score: 1.0
+      artist_id: artist_id,
+      artist_score: 0.50,
+      auction_score: 1.0
     )
   end
 

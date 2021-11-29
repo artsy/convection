@@ -27,11 +27,13 @@ describe 'admin/submissions/new.html.erb', type: :feature do
       allow(Convection.config).to receive(:gravity_xapp_token).and_return(
         'xapp_token'
       )
-      stub_gravql_artists(body: {
-        data: {
-          artists: [{ id: 'artist1', name: 'Gob Bluth' }]
+      stub_gravql_artists(
+        body: {
+          data: {
+            artists: [{ id: 'artist1', name: 'Gob Bluth' }]
+          }
         }
-      })
+      )
 
       fill_in('submission_title', with: 'my new artwork title')
       find('#submission_artist_id').set('artistid')

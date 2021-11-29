@@ -6,7 +6,8 @@ module Admin
   class OffersController < ApplicationController
     include GraphqlHelper
 
-    before_action :set_offer, only: %i[show edit update destroy undo_rejection undo_lapse]
+    before_action :set_offer,
+                  only: %i[show edit update destroy undo_rejection undo_lapse]
 
     expose(:display_term) do
       if filters[:user].present?
@@ -20,13 +21,18 @@ module Admin
     expose :offer
 
     expose(:offers) do
-      matching_offers = Offer.all.includes(:partner_submission, :partner, submission: [:user, :consigned_partner_submission, :primary_image])
+      matching_offers =
+        Offer.all.includes(
+          :partner_submission,
+          :partner,
+          submission: %i[user consigned_partner_submission primary_image]
+        )
 
       if filtering_by_assigned_to?
         matching_offers =
-          matching_offers.joins(:submission).where(
-            'submissions.assigned_to' => params[:assigned_to]
-          )
+          matching_offers
+            .joins(:submission)
+            .where('submissions.assigned_to' => params[:assigned_to])
       end
 
       if params[:term].present?
@@ -44,18 +50,18 @@ module Admin
       end
 
       if params[:artist].present?
-        matching_offers = matching_offers.
-          joins(:submission).
-          where(submissions: { artist_id: params[:artist]})
+        matching_offers =
+          matching_offers
+            .joins(:submission)
+            .where(submissions: { artist_id: params[:artist] })
       end
 
       if params[:state].present?
         matching_offers =
           if params[:state] == 'sent with response'
-            matching_offers.where(state: Offer::SENT).where(
-              'offer_responses_count > ?',
-              0
-            )
+            matching_offers
+              .where(state: Offer::SENT)
+              .where('offer_responses_count > ?', 0)
           else
             matching_offers.where(state: params[:state])
           end
@@ -65,7 +71,9 @@ module Admin
       direction = params[:direction].presence || 'desc'
       matching_offers =
         if sort.include?('partners')
-          matching_offers.includes(:partner_submission).includes(:partner)
+          matching_offers
+            .includes(:partner_submission)
+            .includes(:partner)
             .reorder("#{sort} #{direction}")
         elsif sort.include?('submissions')
           matching_offers.includes(:submission).reorder("#{sort} #{direction}")
@@ -108,8 +116,7 @@ module Admin
     expose(:term) { params[:term] }
 
     expose(:artist) do
-      artists_names_query([offer&.submission&.artist_id])&.values
-        &.first
+      artists_names_query([offer&.submission&.artist_id])&.values&.first
     end
 
     def filtering_by_assigned_to?
@@ -127,7 +134,8 @@ module Admin
     def new_step_1
       @offer =
         Offer.new(
-          offer_type: params[:offer_type], partner_info: params[:partner_info]
+          offer_type: params[:offer_type],
+          partner_info: params[:partner_info]
         )
 
       if params[:submission_id].present? && params[:partner_id].present? &&
@@ -200,32 +208,34 @@ module Admin
     end
 
     def offer_params
-      params.require(:offer).permit(
-        :commission_percent_whole,
-        :created_by_id,
-        :currency,
-        :deadline_to_consign,
-        :high_estimate_dollars,
-        :insurance_info,
-        :low_estimate_dollars,
-        :notes,
-        :offer_type,
-        :other_fees_info,
-        :override_email,
-        :partner_info,
-        :photography_info,
-        :price_dollars,
-        :rejection_reason,
-        :rejection_note,
-        :sale_date,
-        :sale_location,
-        :sale_name,
-        :sale_period_end,
-        :sale_period_start,
-        :shipping_info,
-        :state,
-        :starting_bid_dollars
-      )
+      params
+        .require(:offer)
+        .permit(
+          :commission_percent_whole,
+          :created_by_id,
+          :currency,
+          :deadline_to_consign,
+          :high_estimate_dollars,
+          :insurance_info,
+          :low_estimate_dollars,
+          :notes,
+          :offer_type,
+          :other_fees_info,
+          :override_email,
+          :partner_info,
+          :photography_info,
+          :price_dollars,
+          :rejection_reason,
+          :rejection_note,
+          :sale_date,
+          :sale_location,
+          :sale_name,
+          :sale_period_end,
+          :sale_period_start,
+          :shipping_info,
+          :state,
+          :starting_bid_dollars
+        )
     end
   end
 end

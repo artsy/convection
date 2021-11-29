@@ -14,17 +14,14 @@ describe 'createConsignmentOfferResponse mutation' do
 
   let(:headers) { { 'Authorization' => "Bearer #{token}" } }
 
-  let(:mutation_inputs) do
-    <<-INPUTS
+  let(:mutation_inputs) { <<-INPUTS }
     {
       offerId: "#{offer.id}",
       intendedState: ACCEPTED
     }
-    INPUTS
-  end
+  INPUTS
 
-  let(:mutation) do
-    <<-GRAPHQL
+  let(:mutation) { <<-GRAPHQL }
     mutation {
       createConsignmentOfferResponse(input: #{mutation_inputs}){
         consignmentOfferResponse {
@@ -32,8 +29,7 @@ describe 'createConsignmentOfferResponse mutation' do
         }
       }
     }
-    GRAPHQL
-  end
+  GRAPHQL
 
   describe 'invalid requests' do
     context 'with an unauthorized request' do
@@ -76,13 +72,11 @@ describe 'createConsignmentOfferResponse mutation' do
     end
 
     context 'with a request missing an offer id' do
-      let(:mutation_inputs) do
-        <<-INPUTS
+      let(:mutation_inputs) { <<-INPUTS }
         {
           intendedState: "accepted"
         }
-        INPUTS
-      end
+      INPUTS
 
       it 'returns an error for that request' do
         post '/api/graphql', params: { query: mutation }, headers: headers
@@ -96,13 +90,11 @@ describe 'createConsignmentOfferResponse mutation' do
     end
 
     context 'with a request missing an intended state' do
-      let(:mutation_inputs) do
-        <<-INPUTS
+      let(:mutation_inputs) { <<-INPUTS }
         {
           offerId: #{offer.id}
         }
-        INPUTS
-      end
+      INPUTS
 
       it 'returns an error for that request' do
         post '/api/graphql', params: { query: mutation }, headers: headers
@@ -116,14 +108,12 @@ describe 'createConsignmentOfferResponse mutation' do
     end
 
     context 'with an invalid intended state' do
-      let(:mutation_inputs) do
-        <<-INPUTS
+      let(:mutation_inputs) { <<-INPUTS }
         {
           intendedState: "blah",
           offerId: #{offer.id}
         }
-        INPUTS
-      end
+      INPUTS
 
       it 'returns an error for that request' do
         post '/api/graphql', params: { query: mutation }, headers: headers
@@ -137,15 +127,13 @@ describe 'createConsignmentOfferResponse mutation' do
     end
 
     context 'with an invalid rejection reason' do
-      let(:mutation_inputs) do
-        <<-INPUTS
+      let(:mutation_inputs) { <<-INPUTS }
         {
           intendedState: REJECTED,
           rejectionReason: "meow",
           offerId: #{offer.id}
         }
-        INPUTS
-      end
+      INPUTS
 
       it 'returns an error for that request' do
         post '/api/graphql', params: { query: mutation }, headers: headers
@@ -179,8 +167,7 @@ describe 'createConsignmentOfferResponse mutation' do
     end
 
     context 'with more fields' do
-      let(:mutation_inputs) do
-        <<-INPUTS
+      let(:mutation_inputs) { <<-INPUTS }
         {
           offerId: "#{offer.id}",
           intendedState: REJECTED,
@@ -188,8 +175,7 @@ describe 'createConsignmentOfferResponse mutation' do
           phoneNumber: "123-456-7890",
           comments: "Cool offer but no thanks."
         }
-        INPUTS
-      end
+      INPUTS
 
       it 'creates an offer response' do
         expect {

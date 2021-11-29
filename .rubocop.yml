@@ -2,9 +2,21 @@ inherit_from: .rubocop_todo.yml
 
 require: rubocop-rails
 
-Rails/InverseOf:
+AllCops:
+  TargetRubyVersion: 2.5
   Exclude:
-    - app/models/note.rb
+    - tmp/**/*
+    - vendor/**/*
+    - db/**/*
+    - bin/**/*
+    - Gemfile
+    - node_modules/**/*
+
+Bundler/OrderedGems:
+  Enabled: false
+
+Documentation:
+  Enabled: false
 
 Lint/RaiseException:
   Enabled: true
@@ -12,250 +24,74 @@ Lint/RaiseException:
 Lint/StructNewOverride:
   Enabled: true
 
-Layout/AccessModifierIndentation:
+# Layout handled by prettier (mostly)
+Layout:
   Enabled: false
 
-Layout/ArgumentAlignment:
+Lint/AmbiguousBlockAssociation:
   Enabled: false
 
-Layout/ArrayAlignment:
+Metrics/AbcSize:
   Enabled: false
-
-Layout/AssignmentIndentation:
-  Enabled: false
-
-Layout/BlockAlignment:
-  Enabled: false
-
-Layout/BlockEndNewline:
-  Enabled: false
-
-Layout/CaseIndentation:
-  Enabled: false
-
-Layout/ClosingParenthesisIndentation:
-  Enabled: false
-
-Layout/CommentIndentation:
-  Enabled: false
-
-Layout/ConditionPosition:
-  Enabled: false
-
-Layout/DefEndAlignment:
-  Enabled: false
-
-Layout/DotPosition:
-  Enabled: false
-
-Layout/ElseAlignment:
-  Enabled: false
-
-Layout/EmptyLines:
-  Enabled: false
-
-Layout/EmptyLinesAroundAccessModifier:
-  Enabled: false
-
-Layout/EmptyLinesAroundArguments:
-  Enabled: false
-
-Layout/EmptyLinesAroundBeginBody:
-  Enabled: false
-
-Layout/EmptyLinesAroundBlockBody:
-  Enabled: false
-
-Layout/EmptyLinesAroundClassBody:
-  Enabled: false
-
-Layout/EmptyLinesAroundExceptionHandlingKeywords:
-  Enabled: false
-
-Layout/EmptyLinesAroundMethodBody:
-  Enabled: false
-
-Layout/EmptyLinesAroundModuleBody:
-  Enabled: false
-
-Layout/EndAlignment:
-  Enabled: false
-
-Layout/EndOfLine:
-  Enabled: false
-
-Layout/ExtraSpacing:
-  Enabled: false
-
-Layout/FirstArgumentIndentation:
-  Enabled: false
-
-Layout/FirstArrayElementIndentation:
-  Enabled: false
-
-Layout/FirstArrayElementLineBreak:
-  Enabled: false
-
-Layout/FirstHashElementIndentation:
-  Enabled: false
-
-Layout/FirstHashElementLineBreak:
-  Enabled: false
-
-Layout/FirstMethodArgumentLineBreak:
-  Enabled: false
-
-Layout/FirstMethodParameterLineBreak:
-  Enabled: false
-
-Layout/FirstParameterIndentation:
+Metrics/BlockLength:
   Enabled: false
-
-Layout/HashAlignment:
-  Enabled: false
-
-Layout/IndentationConsistency:
-  Enabled: false
-
-Layout/IndentationWidth:
-  Enabled: false
-
-Layout/InitialIndentation:
-  Enabled: false
-
-Layout/LeadingEmptyLines:
-  Enabled: false
-
-Layout/MultilineArrayBraceLayout:
-  Enabled: false
-
-Layout/MultilineArrayLineBreaks:
-  Enabled: false
-
-Layout/MultilineAssignmentLayout:
-  Enabled: false
-
-Layout/MultilineBlockLayout:
-  Enabled: false
-
-Layout/MultilineHashBraceLayout:
-  Enabled: false
-
-Layout/MultilineHashKeyLineBreaks:
-  Enabled: false
-
-Layout/MultilineMethodArgumentLineBreaks:
-  Enabled: false
-
-Layout/MultilineMethodCallBraceLayout:
-  Enabled: false
-
-Layout/MultilineMethodCallIndentation:
-  Enabled: false
-
-Layout/MultilineMethodDefinitionBraceLayout:
-  Enabled: false
-
-Layout/MultilineOperationIndentation:
-  Enabled: false
-
-Layout/ParameterAlignment:
-  Enabled: false
-
-Layout/RescueEnsureAlignment:
-  Enabled: false
-
-Layout/SpaceAfterColon:
-  Enabled: false
-
-Layout/SpaceAfterComma:
-  Enabled: false
-
-Layout/SpaceAfterMethodName:
-  Enabled: false
-
-Layout/SpaceAfterNot:
-  Enabled: false
-
-Layout/SpaceAfterSemicolon:
+Metrics/ClassLength:
   Enabled: false
-
-Layout/SpaceAroundBlockParameters:
-  Enabled: false
-
-Layout/SpaceAroundEqualsInParameterDefault:
-  Enabled: false
-
-Layout/SpaceAroundKeyword:
-  Enabled: false
-
-Layout/SpaceAroundOperators:
+Metrics/CyclomaticComplexity:
   Enabled: false
-
-Layout/SpaceBeforeBlockBraces:
-  Enabled: false
-
-Layout/SpaceBeforeComma:
-  Enabled: false
-
-Layout/SpaceBeforeComment:
+Metrics/MethodLength:
   Enabled: false
-
-Layout/SpaceBeforeFirstArg:
+Metrics/ModuleLength:
   Enabled: false
-
-Layout/SpaceBeforeSemicolon:
+Metrics/ParameterLists:
   Enabled: false
-
-Layout/SpaceInLambdaLiteral:
+Metrics/PerceivedComplexity:
   Enabled: false
 
-Layout/SpaceInsideArrayLiteralBrackets:
+Naming/MethodParameterName:
   Enabled: false
 
-Layout/SpaceInsideArrayPercentLiteral:
+Naming/AccessorMethodName:
   Enabled: false
 
-Layout/SpaceInsideBlockBraces:
+Rails/FilePath:
   Enabled: false
 
-Layout/SpaceInsideHashLiteralBraces:
+Rails/Date:
   Enabled: false
 
-Layout/SpaceInsideParens:
+Style/FrozenStringLiteralComment:
   Enabled: false
 
-Layout/SpaceInsidePercentLiteralDelimiters:
+Style/GuardClause:
   Enabled: false
 
-Layout/SpaceInsideRangeLiteral:
+Style/CommentedKeyword:
   Enabled: false
 
-Layout/SpaceInsideReferenceBrackets:
+Style/ClassAndModuleChildren:
   Enabled: false
 
-Layout/SpaceInsideStringInterpolation:
+Style/DateTime:
   Enabled: false
 
-Layout/IndentationStyle:
+Style/NumericPredicate:
   Enabled: false
 
-Layout/TrailingEmptyLines:
+Style/ParallelAssignment:
   Enabled: false
 
-Layout/LineLength:
+# We want to use Hash#has_key? since it looks a bit more readable than Hash#key?
+Style/PreferredHashMethods:
   Enabled: false
 
-Layout/TrailingWhitespace:
+Style/HashEachMethods:
   Enabled: false
 
 Style/BlockDelimiters:
   Enabled: false
 
 Style/CommandLiteral:
-  Enabled: false
-
-Style/HashEachMethods:
   Enabled: false
 
 Style/HashSyntax:
@@ -283,6 +119,9 @@ Style/MethodCallWithoutArgsParentheses:
   Enabled: false
 
 Style/MethodDefParentheses:
+  Enabled: false
+
+Style/MultilineBlockChain:
   Enabled: false
 
 Style/MultilineIfModifier:
@@ -362,21 +201,3 @@ Style/WhileUntilModifier:
 
 Style/WordArray:
   Enabled: false
-
-Layout/SpaceAroundMethodCallOperator:
-  Enabled: false
-
-Style/ExponentialNotation:
-  Enabled: false
-
-Layout/EmptyLinesAroundAttributeAccessor:
-  Enabled: false
-
-Style/SlicingWithRange:
-  Enabled: false
-
-Lint/DeprecatedOpenSSLConstant:
-  Enabled: true
-
-AllCops:
-  NewCops: enable

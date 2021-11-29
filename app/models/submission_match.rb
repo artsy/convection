@@ -24,15 +24,24 @@ class SubmissionMatch
 
   def custom_filtered_submissions
     submissions = Submission
-    submissions = submissions_assigned_without_accepted_offer(submissions) if filtering_by_assigned_without_accepted_offer?
-    submissions = submissions_approved_without_reviewed_or_accepted_offer(submissions) if params[:state] == Submission::APPROVED
+    submissions =
+      submissions_assigned_without_accepted_offer(
+        submissions
+      ) if filtering_by_assigned_without_accepted_offer?
+    submissions =
+      submissions_approved_without_reviewed_or_accepted_offer(
+        submissions
+      ) if params[:state] == Submission::APPROVED
     submissions
   end
 
   def submissions_approved_without_reviewed_or_accepted_offer(submissions)
-    submissions.joins(
-      "LEFT OUTER JOIN offers on offers.submission_id = submissions.id AND offers.state IN ('#{Offer::ACCEPTED}', '#{Offer::REVIEW}')"
-    ).distinct.where(offers: { submission_id: nil })
+    submissions
+      .joins(
+        "LEFT OUTER JOIN offers on offers.submission_id = submissions.id AND offers.state IN ('#{Offer::ACCEPTED}', '#{Offer::REVIEW}')"
+      )
+      .distinct
+      .where(offers: { submission_id: nil })
   end
 
   def submissions_assigned_without_accepted_offer(submissions)

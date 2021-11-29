@@ -16,8 +16,7 @@ describe 'submissions query' do
 
   let(:query_inputs) { "ids: [\"#{submission.id}\"]" }
 
-  let(:query) do
-    <<-GRAPHQL
+  let(:query) { <<-GRAPHQL }
     query {
       submissions(#{query_inputs}) {
         edges {
@@ -29,8 +28,7 @@ describe 'submissions query' do
         }
       }
     }
-    GRAPHQL
-  end
+  GRAPHQL
 
   describe 'invalid requests' do
     context 'with an unauthorized request' do
@@ -124,8 +122,7 @@ describe 'submissions query' do
         JWT.encode(payload, Convection.config.jwt_secret)
       end
 
-      let(:query) do
-        <<-GRAPHQL
+      let(:query) { <<-GRAPHQL }
         query {
           submissions {
             edges {
@@ -137,8 +134,7 @@ describe 'submissions query' do
             }
           }
         }
-        GRAPHQL
-      end
+      GRAPHQL
 
       it 'returns all submissions' do
         post '/api/graphql', params: { query: query }, headers: headers
@@ -194,8 +190,7 @@ describe 'submissions query' do
         Fabricate :image, submission: submission, image_urls: image_urls
       end
 
-      let(:query) do
-        <<-GRAPHQL
+      let(:query) { <<-GRAPHQL }
         query {
           submissions(#{query_inputs}) {
             edges {
@@ -207,8 +202,7 @@ describe 'submissions query' do
             }
           }
         }
-        GRAPHQL
-      end
+      GRAPHQL
 
       it 'returns those image urls' do
         post '/api/graphql', params: { query: query }, headers: headers
@@ -238,8 +232,7 @@ describe 'submissions query' do
       let!(:primary_asset) { Fabricate :image, submission: submission }
       let!(:another_asset) { Fabricate :image, submission: submission }
 
-      let(:query) do
-        <<-GRAPHQL
+      let(:query) { <<-GRAPHQL }
         query {
           submissions(#{query_inputs}) {
             edges {
@@ -254,8 +247,7 @@ describe 'submissions query' do
             }
           }
         }
-        GRAPHQL
-      end
+      GRAPHQL
 
       before { submission.update(primary_image_id: primary_asset.id) }
 
@@ -292,8 +284,7 @@ describe 'submissions query' do
 
       let!(:asset) { Fabricate :image, submission: submission }
 
-      let(:query) do
-        <<-GRAPHQL
+      let(:query) { <<-GRAPHQL }
         query {
           submissions(#{query_inputs}) {
             edges {
@@ -305,8 +296,7 @@ describe 'submissions query' do
             }
           }
         }
-        GRAPHQL
-      end
+      GRAPHQL
 
       it 'returns nil for the primary image' do
         post '/api/graphql', params: { query: query }, headers: headers
@@ -326,8 +316,7 @@ describe 'submissions query' do
     context 'with an asset that has not been processed' do
       let!(:asset) { Fabricate :unprocessed_image, submission: submission }
 
-      let(:query) do
-        <<-GRAPHQL
+      let(:query) { <<-GRAPHQL }
         query {
           submissions(#{query_inputs}) {
             edges {
@@ -339,8 +328,7 @@ describe 'submissions query' do
             }
           }
         }
-        GRAPHQL
-      end
+      GRAPHQL
 
       it 'returns an empty object' do
         post '/api/graphql', params: { query: query }, headers: headers
@@ -362,8 +350,7 @@ describe 'submissions query' do
       let!(:middle_submission) { Fabricate :submission, category: 'Sculpture' }
       let!(:last_submission) { Fabricate :submission, category: 'Photography' }
 
-      let(:query) do
-        <<-GRAPHQL
+      let(:query) { <<-GRAPHQL }
         query {
           submissions(#{query_inputs}) {
             edges {
@@ -373,8 +360,7 @@ describe 'submissions query' do
             }
           }
         }
-        GRAPHQL
-      end
+      GRAPHQL
 
       context 'without filterByCategory argument' do
         let(:query_inputs) { 'filterByCategory: null' }
@@ -420,8 +406,7 @@ describe 'submissions query' do
         Fabricate :submission, id: 9, created_at: 2.days.ago
       end
 
-      let(:query) do
-        <<-GRAPHQL
+      let(:query) { <<-GRAPHQL }
         query {
           submissions(#{query_inputs}) {
             edges {
@@ -432,8 +417,7 @@ describe 'submissions query' do
             }
           }
         }
-        GRAPHQL
-      end
+      GRAPHQL
 
       context 'without a sort column' do
         let(:query_inputs) { 'sort: null' }
@@ -491,8 +475,7 @@ describe 'submissions query' do
       end
 
       context 'with no page size specified' do
-        let(:query) do
-          <<-GRAPHQL
+        let(:query) { <<-GRAPHQL }
           query {
             submissions {
               edges {
@@ -504,8 +487,7 @@ describe 'submissions query' do
               }
             }
           }
-          GRAPHQL
-        end
+        GRAPHQL
 
         it 'returns 100 submissions' do
           post '/api/graphql', params: { query: query }, headers: headers

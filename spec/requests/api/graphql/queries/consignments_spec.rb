@@ -34,8 +34,7 @@ describe 'consignments query' do
   let(:headers) { { 'Authorization' => "Bearer #{token}" } }
 
   let(:query_inputs) { "gravityPartnerId: \"#{partner.gravity_partner_id}\"" }
-  let(:query) do
-    <<-GRAPHQL
+  let(:query) { <<-GRAPHQL }
     query {
       consignments(#{query_inputs}) {
         totalCount
@@ -47,8 +46,7 @@ describe 'consignments query' do
         }
       }
     }
-    GRAPHQL
-  end
+  GRAPHQL
 
   describe 'invalid requests' do
     context 'with an unauthorized request' do
@@ -130,8 +128,7 @@ describe 'consignments query' do
     end
 
     describe 'sorting' do
-      let(:query) do
-        <<-GRAPHQL
+      let(:query) { <<-GRAPHQL }
         query {
           consignments(#{query_inputs}) {
              totalCount
@@ -154,8 +151,7 @@ describe 'consignments query' do
               }
             }
           }
-        GRAPHQL
-      end
+      GRAPHQL
 
       context 'without a sort parameter' do
         let(:query_inputs) do

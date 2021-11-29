@@ -27,7 +27,9 @@ module GraphqlHelper
     artist_details_response =
       Gravql::Schema.execute(
         query: artist_query_builder(fields: [:name]),
-        variables: { ids: artist_ids.uniq.select(&:present?) }
+        variables: {
+          ids: artist_ids.uniq.select(&:present?)
+        }
       )
     if artist_details_response[:errors].present?
       flash.now[:error] = 'Error fetching artist details.'
@@ -40,12 +42,13 @@ module GraphqlHelper
   def artists_details_query(artist_ids)
     artist_details_response =
       Gravql::Schema.execute(
-        query: artist_query_builder(fields: [
-          'name',
-          'is_p1: isP1',
-          'target_supply: targetSupply'
-        ]),
-        variables: { ids: artist_ids.compact.uniq }
+        query:
+          artist_query_builder(
+            fields: ['name', 'is_p1: isP1', 'target_supply: targetSupply']
+          ),
+        variables: {
+          ids: artist_ids.compact.uniq
+        }
       )
     if artist_details_response[:errors].present?
       flash.now[:error] = 'Error fetching artist details.'
@@ -57,7 +60,10 @@ module GraphqlHelper
   def match_partners_query(term)
     match_partners_response =
       Gravql::Schema.execute(
-        query: MATCH_PARTNERS_QUERY, variables: { term: term }
+        query: MATCH_PARTNERS_QUERY,
+        variables: {
+          term: term
+        }
       )
     if match_partners_response[:errors].present?
       flash.now[:error] = 'Error fetching partner details.'

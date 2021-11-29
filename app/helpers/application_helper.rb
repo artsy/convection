@@ -14,22 +14,23 @@ module ApplicationHelper
     markdown.html_safe
   end
 
-  def humanized_options_for_select(values,  **args)
-    options_for_select(values.map do |value, _|
-      [value.to_s.humanize, value]
-    end, **args)
+  def humanized_options_for_select(values, **args)
+    options_for_select(
+      values.map { |value, _| [value.to_s.humanize, value] },
+      **args
+    )
   end
 
   def filter_by_assigned_to_options
-    AdminUser.assignees.map {
-      |admin| [admin.name, admin.gravity_user_id]
-    }.unshift(%w[all all], ['none', nil])
+    AdminUser.assignees.map do |admin|
+      [admin.name, admin.gravity_user_id]
+    end.unshift(%w[all all], ['none', nil])
   end
 
   def filter_by_cataloguers_options
-    AdminUser.cataloguers.map {
-      |cataloguer| [cataloguer.name, cataloguer.gravity_user_id]
-    }.unshift(%w[all all], ['none', nil])
+    AdminUser.cataloguers.map do |cataloguer|
+      [cataloguer.name, cataloguer.gravity_user_id]
+    end.unshift(%w[all all], ['none', nil])
   end
 
   def super_admin_user?(user_id)
