@@ -12,7 +12,6 @@ class SubmissionService
       submission_params,
       gravity_user_id,
       is_convection: true,
-      is_admin: false,
       current_user: nil
     )
       submission_params[:edition_size] =
@@ -32,7 +31,7 @@ class SubmissionService
       user.session_id = submission_params.delete(:session_id)
       create_params = submission_params.merge(user_id: user.id)
 
-      if is_admin
+      if AdminUser.exists?(gravity_user_id: current_user)
         create_params.merge!(
           created_by: User.find_by(gravity_user_id: current_user).email
         )
