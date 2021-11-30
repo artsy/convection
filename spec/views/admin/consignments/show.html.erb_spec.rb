@@ -59,11 +59,13 @@ describe 'admin/consignments/show.html.erb', type: :feature do
         }
       }
       stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
-        .to_return(body: gravql_artists_response.to_json).with(
-        headers: {
-          'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'
-        }
-      )
+        .to_return(body: gravql_artists_response.to_json)
+        .with(
+          headers: {
+            'X-XAPP-TOKEN' => 'xapp_token',
+            'Content-Type' => 'application/json'
+          }
+        )
       page.visit admin_consignment_path(partner_submission)
     end
 
@@ -79,7 +81,10 @@ describe 'admin/consignments/show.html.erb', type: :feature do
 
       context 'when the consignment has a partner invoice date' do
         before do
-          partner_submission.update!(partner_invoiced_at: Time.zone.now, invoice_number: 424242)
+          partner_submission.update!(
+            partner_invoiced_at: Time.zone.now,
+            invoice_number: 424_242
+          )
           page.visit admin_consignment_path(partner_submission)
         end
 
@@ -109,7 +114,8 @@ describe 'admin/consignments/show.html.erb', type: :feature do
 
       it 'shows a canceled reason if the consignment has been canceled' do
         partner_submission.update!(
-          state: 'canceled', canceled_reason: 'done with this piece.'
+          state: 'canceled',
+          canceled_reason: 'done with this piece.'
         )
         page.visit admin_consignment_path(partner_submission)
         expect(page).to have_content 'Canceled Reason'

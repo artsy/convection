@@ -20,12 +20,14 @@ describe OfferResponse do
     it 'allows only certain rejection_reasons' do
       expect(
         OfferResponse.new(
-          intended_state: Offer::REJECTED, rejection_reason: 'Low estimate'
+          intended_state: Offer::REJECTED,
+          rejection_reason: 'Low estimate'
         )
       ).to be_valid
       expect(
         OfferResponse.new(
-          intended_state: Offer::REJECTED, rejection_reason: 'meow'
+          intended_state: Offer::REJECTED,
+          rejection_reason: 'meow'
         )
       ).not_to be_valid
     end

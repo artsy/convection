@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-HEADERS = {'X-XAPP-TOKEN' => 'xapp_token', 'Content-Type' => 'application/json'}.freeze
+HEADERS = {
+  'X-XAPP-TOKEN' => 'xapp_token',
+  'Content-Type' => 'application/json'
+}.freeze
 
 def stub_graphql_request(query, body)
-  stub_request(:post, "#{Convection.config.gravity_api_url}/graphql").
-    to_return(body: body.to_json).
-    with(
-      body: hash_including('query' => /#{query}/),
-      headers: HEADERS
-    )
+  stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
+    .to_return(body: body.to_json)
+    .with(body: hash_including('query' => /#{query}/), headers: HEADERS)
 end
 
 def stub_gravql_artists(body:)

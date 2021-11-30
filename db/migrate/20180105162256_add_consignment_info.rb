@@ -4,14 +4,16 @@ class AddConsignmentInfo < ActiveRecord::Migration[5.0]
   def change
     add_reference :submissions,
                   :consigned_partner_submission,
-                  references: :partner_submissions, index: true
+                  references: :partner_submissions,
+                  index: true
     add_foreign_key :submissions,
                     :partner_submissions,
                     column: :consigned_partner_submission_id
 
     add_reference :partner_submissions,
                   :accepted_offer,
-                  references: :offers, index: true
+                  references: :offers,
+                  index: true
     add_foreign_key :partner_submissions, :offers, column: :accepted_offer_id
 
     add_column :partner_submissions, :partner_commission_percent, :float

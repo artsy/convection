@@ -12,7 +12,9 @@ end
 
 class DemandCalculator
   CATEGORY_MODIFIERS = {
-    'Default' => 0.5, 'Painting' => 1, 'Print' => 0.75
+    'Default' => 0.5,
+    'Painting' => 1,
+    'Print' => 0.75
   }.freeze
 
   def self.score(artist_id, category)
@@ -23,8 +25,11 @@ class DemandCalculator
     @artist_id = artist_id
     @category = category
     @artist_standing_score =
-      ArtistStandingScore.where(artist_id: artist_id).order(created_at: :asc)
-        .limit(1).first || NullArtistStandingScore.new
+      ArtistStandingScore
+        .where(artist_id: artist_id)
+        .order(created_at: :asc)
+        .limit(1)
+        .first || NullArtistStandingScore.new
   end
 
   def score

@@ -20,16 +20,14 @@ describe 'offer query' do
     "id: \"#{offer.id}\", gravityPartnerId: \"#{partner.gravity_partner_id}\""
   end
 
-  let(:query) do
-    <<-GRAPHQL
+  let(:query) { <<-GRAPHQL }
     query {
       offer(#{query_inputs}) {
         id
         commissionPercentWhole
       }
     }
-    GRAPHQL
-  end
+  GRAPHQL
 
   describe 'invalid requests' do
     context 'with an unauthorized request' do

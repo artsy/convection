@@ -22,7 +22,9 @@ describe Admin::OffersController, type: :controller do
                params: {
                  partner_id: partner.id,
                  submission_id: submission.id,
-                 offer: { offer_type: 'purchase' }
+                 offer: {
+                   offer_type: 'purchase'
+                 }
                }
           expect(response).to redirect_to(admin_offer_url(Offer.last))
         }.to change(Offer, :count).by(1)
@@ -32,7 +34,10 @@ describe Admin::OffersController, type: :controller do
         expect {
           post :create,
                params: {
-                 partner_id: partner.id, offer: { offer_type: 'purchase' }
+                 partner_id: partner.id,
+                 offer: {
+                   offer_type: 'purchase'
+                 }
                }
           expect(controller.flash[:error]).to include(
             "Couldn't find Submission without an ID"
@@ -44,7 +49,7 @@ describe Admin::OffersController, type: :controller do
 
     describe '#index' do
       before do
-        @artist = {id: 'artistId', name: 'Banksy'}
+        @artist = { id: 'artistId', name: 'Banksy' }
         @partner1 = Fabricate(:partner, name: 'Gagosian Gallery')
         partner2 = Fabricate(:partner, name: 'Heritage Auctions')
         @offer1 =
@@ -70,7 +75,11 @@ describe Admin::OffersController, type: :controller do
                 :partner_submission,
                 partner: @partner1,
                 submission:
-                  Fabricate(:submission, user_email: 'michael@bluth.com', artist_id: @artist[:id])
+                  Fabricate(
+                    :submission,
+                    user_email: 'michael@bluth.com',
+                    artist_id: @artist[:id]
+                  )
               ),
             offer_type: 'purchase',
             price_cents: 200_00
@@ -84,7 +93,11 @@ describe Admin::OffersController, type: :controller do
                 :partner_submission,
                 partner: @partner1,
                 submission:
-                  Fabricate(:submission, user_email: 'lucille@bluth.com', artist_id: 'someArtistId')
+                  Fabricate(
+                    :submission,
+                    user_email: 'lucille@bluth.com',
+                    artist_id: 'someArtistId'
+                  )
               ),
             offer_type: 'purchase',
             price_cents: 300_00
@@ -98,7 +111,11 @@ describe Admin::OffersController, type: :controller do
                 :partner_submission,
                 partner: partner2,
                 submission:
-                  Fabricate(:submission, user_email: 'lucille@bluth.com', artist_id: @artist[:id])
+                  Fabricate(
+                    :submission,
+                    user_email: 'lucille@bluth.com',
+                    artist_id: @artist[:id]
+                  )
               ),
             offer_type: 'auction consignment',
             high_estimate_cents: 400_00
@@ -147,7 +164,10 @@ describe Admin::OffersController, type: :controller do
 
         it 'allows you to sort by user email' do
           get :index,
-              params: { sort: 'submissions.user_email', direction: 'asc' }
+              params: {
+                sort: 'submissions.user_email',
+                direction: 'asc'
+              }
           expect(controller.offers.pluck(:id)).to eq [
                @offer3.id,
                @offer4.id,
@@ -170,7 +190,11 @@ describe Admin::OffersController, type: :controller do
 
         it 'allows you to filter by state and sort by price_cents' do
           get :index,
-              params: { sort: 'price_cents', direction: 'desc', state: 'sent' }
+              params: {
+                sort: 'price_cents',
+                direction: 'desc',
+                state: 'sent'
+              }
           expect(controller.offers.pluck(:id)).to eq [
                @offer4.id,
                @offer3.id,
@@ -202,10 +226,7 @@ describe Admin::OffersController, type: :controller do
                 state: 'sent',
                 artist: @artist[:id]
               }
-          expect(controller.offers.pluck(:id)).to eq [
-               @offer4.id,
-               @offer2.id,
-             ]
+          expect(controller.offers.pluck(:id)).to eq [@offer4.id, @offer2.id]
         end
 
         it 'allows you to filter by state, search for partner, and sort by date' do
@@ -336,16 +357,27 @@ describe Admin::OffersController, type: :controller do
         retail_offer =
           Fabricate(
             :offer,
-            offer_type: 'retail', insurance_info: '1000 or best offer'
+            offer_type: 'retail',
+            insurance_info: '1000 or best offer'
           )
         put :update,
-            params: { id: retail_offer.id, offer: { insurance_info: nil } }
+            params: {
+              id: retail_offer.id,
+              offer: {
+                insurance_info: nil
+              }
+            }
         expect(retail_offer.reload.insurance_info).to eq ''
       end
 
       it 'remains on the edit view and shows an error on failure' do
         put :update,
-            params: { id: offer.id, offer: { offer_type: 'bogus type' } }
+            params: {
+              id: offer.id,
+              offer: {
+                offer_type: 'bogus type'
+              }
+            }
         expect(response).to render_template(:edit)
         expect(controller.flash[:error]).to include(
           'Validation failed: Offer type is not included in the list'
@@ -372,7 +404,12 @@ describe Admin::OffersController, type: :controller do
 
       it 'remains on the edit view and shows an error on failure' do
         put :update,
-            params: { id: offer.id, offer: { offer_type: 'bogus type' } }
+            params: {
+              id: offer.id,
+              offer: {
+                offer_type: 'bogus type'
+              }
+            }
         expect(response).to render_template(:edit)
         expect(controller.flash[:error]).to include(
           'Validation failed: Offer type is not included in the list'
@@ -390,7 +427,7 @@ describe Admin::OffersController, type: :controller do
           rejected_by: 'userid',
           rejected_at: Time.now.utc,
           rejection_reason: 'Low estimate',
-          rejection_note: 'Test Note',
+          rejection_note: 'Test Note'
         )
       end
 
@@ -402,7 +439,8 @@ describe Admin::OffersController, type: :controller do
 
       it 'remains on the edit view and shows an error on failure' do
         allow(OfferService).to receive(:undo_rejection!).and_raise(
-          OfferService::OfferError, 'TestError'
+          OfferService::OfferError,
+          'TestError'
         )
 
         expect(subject).to render_template(:edit)
@@ -413,18 +451,13 @@ describe Admin::OffersController, type: :controller do
     describe '#undo_lapse' do
       subject { put :undo_lapse, params: { id: offer.id } }
 
-      let(:offer) do
-        Fabricate(
-          :offer,
-          state: Offer::LAPSED
-          )
+      let(:offer) { Fabricate(:offer, state: Offer::LAPSED) }
+
+      before { allow(OfferService).to receive(:undo_lapse!) }
+
+      it 'redirects to the show view on success' do
+        expect(subject).to redirect_to(admin_offer_url(offer))
       end
-
-    before { allow(OfferService).to receive(:undo_lapse!) }
-
-    it 'redirects to the show view on success' do
-      expect(subject).to redirect_to(admin_offer_url(offer))
-    end
     end
   end
 end

@@ -10,8 +10,12 @@ describe DashboardReportingQuery::Submission do
     end
 
     describe 'unreviewed_user_submissions' do
-      subject { DashboardReportingQuery::Submission.unreviewed_user_submissions('user_id') }
-      it { is_expected.to eq({self_assigned: 0, total: 0, unassigned: 0}) }
+      subject do
+        DashboardReportingQuery::Submission.unreviewed_user_submissions(
+          'user_id'
+        )
+      end
+      it { is_expected.to eq({ self_assigned: 0, total: 0, unassigned: 0 }) }
     end
   end
 
@@ -19,9 +23,18 @@ describe DashboardReportingQuery::Submission do
     before do
       Fabricate(:submission, state: Submission::APPROVED, assigned_to: nil)
       Fabricate(:submission, state: Submission::SUBMITTED, assigned_to: nil)
-      Fabricate(:submission, state: Submission::DRAFT,  assigned_to: 'user_id')
-      Fabricate(:submission, state: Submission::SUBMITTED, assigned_to: 'user_id')
-      Fabricate(:submission, state: Submission::SUBMITTED, assigned_to: 'user_id', deleted_at: Time.now.utc)
+      Fabricate(:submission, state: Submission::DRAFT, assigned_to: 'user_id')
+      Fabricate(
+        :submission,
+        state: Submission::SUBMITTED,
+        assigned_to: 'user_id'
+      )
+      Fabricate(
+        :submission,
+        state: Submission::SUBMITTED,
+        assigned_to: 'user_id',
+        deleted_at: Time.now.utc
+      )
     end
 
     describe 'grouped_by_state' do
@@ -30,8 +43,14 @@ describe DashboardReportingQuery::Submission do
     end
 
     describe 'unreviewed_user_submissions' do
-      subject { DashboardReportingQuery::Submission.unreviewed_user_submissions('user_id') }
-      it { is_expected.to include({total: 2, unassigned: 1, self_assigned: 1 }) }
+      subject do
+        DashboardReportingQuery::Submission.unreviewed_user_submissions(
+          'user_id'
+        )
+      end
+      it do
+        is_expected.to include({ total: 2, unassigned: 1, self_assigned: 1 })
+      end
     end
   end
 end
@@ -59,11 +78,12 @@ describe DashboardReportingQuery::Offer do
   end
 end
 
-
 describe DashboardReportingQuery::Consignment do
   context 'when no consignment' do
     describe 'grouped_by_state_and_partner' do
-      subject { DashboardReportingQuery::Consignment.grouped_by_state_and_partner }
+      subject do
+        DashboardReportingQuery::Consignment.grouped_by_state_and_partner
+      end
       it { is_expected.to eq({}) }
     end
   end
@@ -85,15 +105,36 @@ describe DashboardReportingQuery::Consignment do
     end
 
     describe 'grouped_by_state_and_partner' do
-      subject { DashboardReportingQuery::Consignment.grouped_by_state_and_partner }
+      subject do
+        DashboardReportingQuery::Consignment.grouped_by_state_and_partner
+      end
 
-      it { is_expected.to include({
-                                    open: { total: 3, artsy_curated: 2, auction_house: 1 },
-                                    canceled: {total: 1, artsy_curated: 1, auction_house: 0},
-                                    sold: {total: 3, artsy_curated: 2, auction_house: 1},
-                                    "bought in": {total: 1, artsy_curated: 0, auction_house: 1}
-        })
-      }
+      it do
+        is_expected.to include(
+          {
+            open: {
+              total: 3,
+              artsy_curated: 2,
+              auction_house: 1
+            },
+            canceled: {
+              total: 1,
+              artsy_curated: 1,
+              auction_house: 0
+            },
+            sold: {
+              total: 3,
+              artsy_curated: 2,
+              auction_house: 1
+            },
+            "bought in": {
+              total: 1,
+              artsy_curated: 0,
+              auction_house: 1
+            }
+          }
+        )
+      end
     end
   end
 end

@@ -7,14 +7,14 @@ describe Api::ConsignmentsController, type: :controller do
     allow_any_instance_of(Api::ConsignmentsController).to receive(
       :require_authentication
     )
-    allow_any_instance_of(Api::ConsignmentsController).to receive(:fetch_sale_artworks_with_price).and_return(
-      [artwork_id: 1, price: 2]
-    )
+    allow_any_instance_of(Api::ConsignmentsController).to receive(
+      :fetch_sale_artworks_with_price
+    ).and_return([artwork_id: 1, price: 2])
   end
 
   describe '#update' do
     let(:partner) { Fabricate(:partner, name: 'Gagosian Gallery') }
-    let(:submission) do 
+    let(:submission) do
       Fabricate(
         :submission,
         state: 'approved',
@@ -38,7 +38,7 @@ describe Api::ConsignmentsController, type: :controller do
         offer_type: 'purchase'
       )
     end
-    
+
     context 'when artwork submission exist' do
       before do
         submission.update!(source_artwork_id: '1')
