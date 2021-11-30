@@ -67,7 +67,8 @@ module Admin
         SubmissionService.create_submission(
           submission_params.merge(state: 'submitted'),
           submission_params[:user_id],
-          is_admin: AdminUser.exists?
+          is_admin: AdminUser.exists?,
+          current_user: @current_user
         )
       redirect_to admin_submission_path(@submission)
     rescue SubmissionService::SubmissionError => e
