@@ -32,7 +32,7 @@ class SubmissionService
       create_params = submission_params.merge(user_id: user.id)
 
       if is_admin
-        create_params.merge!(createdBy: Convection.config.admin_email_address)
+        create_params.merge!(created_by: Convection.config.admin_email_address)
       end
 
       unless is_convection
