@@ -11,7 +11,8 @@ class SubmissionService
     def create_submission(
       submission_params,
       gravity_user_id,
-      is_convection: true
+      is_convection: true,
+      is_admin: false
     )
       submission_params[:edition_size] =
         submission_params.delete(:edition_size_formatted) if submission_params[
@@ -29,6 +30,10 @@ class SubmissionService
         end
       user.session_id = submission_params.delete(:session_id)
       create_params = submission_params.merge(user_id: user.id)
+
+      if is_admin
+        create_params.merge!(createdBy: Convection.config.admin_email_address)
+      end
 
       unless is_convection
         create_params.merge!(
