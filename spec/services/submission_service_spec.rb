@@ -104,6 +104,12 @@ describe SubmissionService do
 
     context 'anonymous submission' do
       it 'adds contact information to the user record' do
+        stub_gravity_user(id: 'anonymous', name: 'michael')
+        stub_gravity_user_detail(
+          email: 'michael@bluth.com',
+          id: 'anonymous',
+          phone: '555-5555'
+        )
         new_submission = SubmissionService.create_submission(params, nil)
         expect(new_submission.user.name).to eq 'michael'
         expect(new_submission.user.email).to eq 'michael@bluth.com'

@@ -20,10 +20,11 @@ class SubmissionService
       user =
         if gravity_user_id
           User.find_or_create_by!(gravity_user_id: gravity_user_id)
+        elsif contact_information?(submission_params)
+          User.anonymous
         else
-          User.create!
+          raise "Validation failed: Gravity user can't be blank"
         end
-      user.session_id = submission_params.delete(:session_id)
       create_params = submission_params.merge(user_id: user.id)
 
       unless is_convection
@@ -283,6 +284,12 @@ class SubmissionService
         user: user,
         artist: artist
       ).deliver_now
+    end
+
+    def contact_information?(submission_params)
+      submission_params[:user_name].present? &&
+        submission_params[:user_email].present? &&
+        submission_params[:user_phone].present?
     end
   end
 end

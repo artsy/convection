@@ -3,7 +3,7 @@
 class User < ApplicationRecord
   include PgSearch::Model
 
-  #validates :gravity_user_id, presence: true, unless: :contact_information?
+  validates :gravity_user_id, presence: true
 
   has_many :submissions, dependent: :nullify
   has_many :notes, dependent: :nullify
@@ -30,7 +30,7 @@ class User < ApplicationRecord
   end
 
   def email
-    user_detail&.email
+    self[:email] || user_detail&.email
   end
 
   def phone

@@ -42,11 +42,10 @@ describe 'createConsignmentSubmission mutation' do
         stub_gravity_user_detail(email: 'michael@bluth.com')
         stub_gravity_artist({ id: 'andy' })
         stub_gravity_artists({ id: 'andy' })
-
         expect {
           post '/api/graphql', params: { query: mutation }, headers: headers
         }.to raise_error(
-          SubmissionService::SubmissionError,
+          RuntimeError,
           "Validation failed: Gravity user can't be blank"
         )
       end

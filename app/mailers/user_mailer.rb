@@ -171,6 +171,6 @@ class UserMailer < ApplicationMailer
       utm_params(source: 'consignment-offer', campaign: 'consignment-offer')
 
     smtpapi category: %w[offer], unique_args: { offer_id: offer.id }
-    mail(to: submission.email, subject: 'An Offer for your Artwork')
+    mail(to: @submission.email, subject: 'An Offer for your Artwork')
   end
 end

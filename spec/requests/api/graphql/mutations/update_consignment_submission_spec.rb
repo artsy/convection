@@ -77,16 +77,15 @@ describe 'updateConsignmentSubmission mutation' do
     end
 
     context 'with a request updating your own submission' do
-      let(:user1) do
-        Fabricate(:user, gravity_user_id: 'userid3', session_id: 'token')
-      end
+      let(:user1) { Fabricate(:user, gravity_user_id: 'userid3') }
       let(:submission1) do
         attrs = {
           artist_id: 'abbas-kiarostami',
           category: 'Painting',
           state: 'submitted',
           title: 'rain',
-          user: user1
+          user: user1,
+          session_id: 'token'
         }
         Fabricate(:submission, attrs)
       end
@@ -111,12 +110,21 @@ describe 'updateConsignmentSubmission mutation' do
     end
 
     context 'with a request updating your own submission' do
-      let(:user) do
-        Fabricate(:user, gravity_user_id: 'userid4', session_id: 'token')
+      let(:user1) { Fabricate(:user, gravity_user_id: 'userid4') }
+      let(:submission1) do
+        attrs = {
+          artist_id: 'abbas-kiarostami',
+          category: 'Painting',
+          state: 'submitted',
+          title: 'rain',
+          user: user1,
+          session_id: 'token'
+        }
+        Fabricate(:submission, attrs)
       end
       let(:mutation_inputs) do
         "{ state: DRAFT, category: JEWELRY, clientMutationId: \"test\", id: #{
-          submission.id
+          submission1.id
         }, artistID: \"andy-warhol\", title: \"soup\", sessionID: \"token\" }"
       end
 

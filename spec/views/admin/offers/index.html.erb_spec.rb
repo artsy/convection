@@ -52,6 +52,8 @@ describe 'admin/offers/index.html.erb', type: :feature do
       let(:offer) { Fabricate(:offer) }
 
       it 'displays the correct state when the offer has a "reject" response' do
+        stub_gravity_user(id: offer.submission.user.gravity_user_id)
+        stub_gravity_user_detail(id: offer.submission.user.gravity_user_id)
         Fabricate(
           :offer_response,
           offer: offer,
@@ -62,6 +64,8 @@ describe 'admin/offers/index.html.erb', type: :feature do
       end
 
       it 'displays the correct state when the offer has an "accept" response' do
+        stub_gravity_user(id: offer.submission.user.gravity_user_id)
+        stub_gravity_user_detail(id: offer.submission.user.gravity_user_id)
         Fabricate(
           :offer_response,
           offer: offer,
@@ -72,12 +76,16 @@ describe 'admin/offers/index.html.erb', type: :feature do
       end
 
       it 'displays the correct state when the offer has an "interested" response' do
+        stub_gravity_user(id: offer.submission.user.gravity_user_id)
+        stub_gravity_user_detail(id: offer.submission.user.gravity_user_id)
         Fabricate(:offer_response, offer: offer, intended_state: Offer::REVIEW)
         page.visit admin_offers_path
         expect(page).to have_content('Response: Interested')
       end
 
       it 'displays the correct state when the offer is saved' do
+        stub_gravity_user(id: offer.submission.user.gravity_user_id)
+        stub_gravity_user_detail(id: offer.submission.user.gravity_user_id)
         offer.update!(state: Offer::SAVED)
         page.visit admin_offers_path
         within(:css, 'a.list-group-item') do
@@ -86,6 +94,8 @@ describe 'admin/offers/index.html.erb', type: :feature do
       end
 
       it 'displays the correct state when the offer is sent' do
+        stub_gravity_user(id: offer.submission.user.gravity_user_id)
+        stub_gravity_user_detail(id: offer.submission.user.gravity_user_id)
         offer.update!(state: Offer::SENT)
         page.visit admin_offers_path
         within(:css, 'a.list-group-item') do
@@ -94,6 +104,8 @@ describe 'admin/offers/index.html.erb', type: :feature do
       end
 
       it 'displays the correct state when the offer is accepted' do
+        stub_gravity_user(id: offer.submission.user.gravity_user_id)
+        stub_gravity_user_detail(id: offer.submission.user.gravity_user_id)
         offer.update!(state: Offer::ACCEPTED)
         page.visit admin_offers_path
         within(:css, 'a.list-group-item') do
@@ -104,7 +116,11 @@ describe 'admin/offers/index.html.erb', type: :feature do
 
     context 'with some offers' do
       before do
-        3.times { Fabricate(:offer, state: 'sent') }
+        3.times do
+          offer = Fabricate(:offer, state: 'sent')
+          stub_gravity_user(id: offer.submission.user.gravity_user_id)
+          stub_gravity_user_detail(id: offer.submission.user.gravity_user_id)
+        end
         page.visit admin_offers_path
       end
 
@@ -140,7 +156,9 @@ describe 'admin/offers/index.html.erb', type: :feature do
             submission: Fabricate(:submission, state: Submission::APPROVED)
           )
         accepted_offer = Fabricate(:offer, partner_submission: ps)
-        Fabricate(:offer, partner_submission: ps)
+        offer = Fabricate(:offer, partner_submission: ps)
+        stub_gravity_user(id: offer.submission.user.gravity_user_id)
+        stub_gravity_user_detail(id: offer.submission.user.gravity_user_id)
         OfferService.consign!(accepted_offer)
         page.visit admin_offers_path
         expect(page).to have_selector('.locked', count: 1)
@@ -177,8 +195,10 @@ describe 'admin/offers/index.html.erb', type: :feature do
           partner_submission: Fabricate(:partner_submission, partner: @partner1)
         )
 
-        stub_gravity_user(id: @offer1.submission.user.gravity_user_id)
-        stub_gravity_user_detail(id: @offer1.submission.user.gravity_user_id)
+        Offer.all.each do |offer|
+          stub_gravity_user(id: offer.submission.user.gravity_user_id)
+          stub_gravity_user_detail(id: offer.submission.user.gravity_user_id)
+        end
 
         page.visit admin_offers_path
       end

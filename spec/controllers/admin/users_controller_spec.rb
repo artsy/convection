@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'support/gravity_helper'
 
 describe Admin::UsersController, type: :controller do
   describe 'with some users' do
@@ -12,16 +13,16 @@ describe Admin::UsersController, type: :controller do
 
     describe '#index' do
       before do
-        Fabricate(:user, email: 'sarah@sarah.com', name: 'sarah', phone: '322')
-        Fabricate(:user, email: 'percy@percy.com', name: 'percy', phone: '322')
-        Fabricate(
-          :user,
-          email: 'lucille@bluth.com',
-          name: 'lucill',
-          phone: '322'
-        )
-        Fabricate(:user, email: 'sarah@test.com', name: 'sarah', phone: '322')
-        Fabricate(:user, email: 'test@test.com', name: 'test', phone: '322')
+        Fabricate(:user, email: 'sarah@sarah.com')
+        Fabricate(:user, email: 'percy@percy.com')
+        Fabricate(:user, email: 'lucille@bluth.com')
+        Fabricate(:user, email: 'sarah@test.com')
+        Fabricate(:user, email: 'test@test.com')
+        stub_gravity_root
+        User.all.each do |user|
+          stub_gravity_user(id: user.gravity_user_id)
+          stub_gravity_user_detail(id: user.gravity_user_id)
+        end
       end
 
       it 'returns the first two users on the first page' do
