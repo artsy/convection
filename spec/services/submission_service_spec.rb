@@ -638,6 +638,40 @@ describe SubmissionService do
     end
   end
 
+  context 'contact_information?' do
+    let(:submission_params) do
+      {
+        user_name: 'user',
+        user_email: 'user@example.com',
+        user_phone: '+1 (212) 555-5555'
+      }
+    end
+
+    it 'returns true if name, email, and phone have values' do
+      expect(
+        SubmissionService.contact_information?(submission_params)
+      ).to be true
+    end
+    it 'returns false if name is nil' do
+      submission_params[:user_name] = nil
+      expect(
+        SubmissionService.contact_information?(submission_params)
+      ).to be false
+    end
+    it 'returns false if email is nil' do
+      submission_params[:user_email] = nil
+      expect(
+        SubmissionService.contact_information?(submission_params)
+      ).to be false
+    end
+    it 'returns false if phone is nil' do
+      submission_params[:user_phone] = nil
+      expect(
+        SubmissionService.contact_information?(submission_params)
+      ).to be false
+    end
+  end
+
   context 'deliver_submission_notification' do
     it 'raises an exception if the submission cannot be found' do
       expect {
