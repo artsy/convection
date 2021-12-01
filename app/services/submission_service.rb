@@ -21,11 +21,7 @@ class SubmissionService
         if gravity_user_id
           User.find_or_create_by!(gravity_user_id: gravity_user_id)
         else
-          User.create!(
-            name: submission_params[:user_name],
-            email: submission_params[:user_email],
-            phone: submission_params[:user_phone]
-          )
+          User.create!
         end
       user.session_id = submission_params.delete(:session_id)
       create_params = submission_params.merge(user_id: user.id)
@@ -211,7 +207,7 @@ class SubmissionService
       return if submission.receipt_sent_at || submission.images.count.positive?
 
       user = submission.user
-      raise 'User lacks email.' if user.email.blank?
+      raise 'User lacks email.' if submission.email.blank?
 
       email_args = { submission: submission, user: user }
 
@@ -228,7 +224,7 @@ class SubmissionService
       raise 'Still processing images.' unless submission.ready?
 
       user = submission.user
-      raise 'User lacks email.' if user.email.blank?
+      raise 'User lacks email.' if submission.email.blank?
 
       artist = Gravity.client.artist(id: submission.artist_id)._get
 

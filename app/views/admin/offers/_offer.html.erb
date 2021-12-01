@@ -47,7 +47,7 @@
       <%= offer_artist(offer) %>, <%= offer.submission&.title&.truncate(30) %>
     </div>
     <div class='list-group-item-info'>
-      <%= offer.submission.user&.email %>
+      <%= offer.submission.email %>
     </div>
     <div class='list-group-item-info'>
       <%= formatted_location(offer.submission)  %>

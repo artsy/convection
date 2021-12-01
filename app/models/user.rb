@@ -3,7 +3,7 @@
 class User < ApplicationRecord
   include PgSearch::Model
 
-  validates :gravity_user_id, presence: true, unless: :contact_information?
+  #validates :gravity_user_id, presence: true, unless: :contact_information?
 
   has_many :submissions, dependent: :nullify
   has_many :notes, dependent: :nullify
@@ -26,15 +26,15 @@ class User < ApplicationRecord
   end
 
   def name
-    self[:name] || gravity_user.try(:name)
+    gravity_user.try(:name)
   end
 
   def email
-    self[:email] || user_detail&.email
+    user_detail&.email
   end
 
   def phone
-    self[:phone] || user_detail&.phone
+    user_detail&.phone
   end
 
   def user_detail
@@ -49,9 +49,5 @@ class User < ApplicationRecord
 
   def self.anonymous
     User.find_or_create_by(gravity_user_id: 'anonymous')
-  end
-
-  def contact_information?
-    self[:name].present? && self[:email].present? && self[:phone].present?
   end
 end

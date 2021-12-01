@@ -18,7 +18,7 @@ class UserMailer < ApplicationMailer
               submission_id: submission.id
             }
     mail(
-      to: user.email,
+      to: submission.email,
       subject: 'Thank you for submitting your artwork to Artsy',
       bcc: Convection.config.bcc_email_address
     )
@@ -37,7 +37,7 @@ class UserMailer < ApplicationMailer
             unique_args: {
               submission_id: submission.id
             }
-    mail to: user.email, subject: "You're Almost Done"
+    mail to: submission.email, subject: "You're Almost Done"
   end
 
   def second_upload_reminder(submission:, user:)
@@ -53,7 +53,7 @@ class UserMailer < ApplicationMailer
             unique_args: {
               submission_id: submission.id
             }
-    mail to: user.email,
+    mail to: submission.email,
          subject: 'Artsy Consignments - complete your submission'
   end
 
@@ -71,7 +71,10 @@ class UserMailer < ApplicationMailer
             unique_args: {
               submission_id: submission.id
             }
-    mail(to: user.email, subject: 'Artsy Approved Submission | Next Steps')
+    mail(
+      to: submission.email,
+      subject: 'Artsy Approved Submission | Next Steps'
+    )
   end
 
   def artist_submission_rejected(submission:, user:, artist:)
@@ -88,7 +91,7 @@ class UserMailer < ApplicationMailer
             unique_args: {
               submission_id: submission.id
             }
-    mail(to: user.email, subject: 'An update about your submission')
+    mail(to: submission.email, subject: 'An update about your submission')
   end
 
   def fake_submission_rejected(submission:, user:, artist:)
@@ -105,7 +108,7 @@ class UserMailer < ApplicationMailer
             unique_args: {
               submission_id: submission.id
             }
-    mail(to: user.email, subject: 'Artsy Submission')
+    mail(to: submission.email, subject: 'Artsy Submission')
   end
 
   def nsv_bsv_submission_rejected(submission:, user:, artist:)
@@ -122,7 +125,7 @@ class UserMailer < ApplicationMailer
             unique_args: {
               submission_id: submission.id
             }
-    mail(to: user.email, subject: 'An update about your submission')
+    mail(to: submission.email, subject: 'An update about your submission')
   end
 
   def non_target_supply_artist_rejected(submission:, user:, artist:)
@@ -139,7 +142,7 @@ class UserMailer < ApplicationMailer
             unique_args: {
               submission_id: submission.id
             }
-    mail(to: user.email, subject: 'An update about your submission')
+    mail(to: submission.email, subject: 'An update about your submission')
   end
 
   def other_submission_rejected(submission:, user:, artist:)
@@ -156,7 +159,7 @@ class UserMailer < ApplicationMailer
             unique_args: {
               submission_id: submission.id
             }
-    mail(to: user.email, subject: 'An update about your submission')
+    mail(to: submission.email, subject: 'An update about your submission')
   end
 
   def offer(offer:, artist:, user:)
@@ -168,6 +171,6 @@ class UserMailer < ApplicationMailer
       utm_params(source: 'consignment-offer', campaign: 'consignment-offer')
 
     smtpapi category: %w[offer], unique_args: { offer_id: offer.id }
-    mail(to: user.email, subject: 'An Offer for your Artwork')
+    mail(to: submission.email, subject: 'An Offer for your Artwork')
   end
 end
