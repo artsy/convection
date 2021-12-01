@@ -553,7 +553,9 @@ describe 'admin/submissions/show.html.erb', type: :feature do
 
         expect(page).to have_content('Details')
         expect(page).to have_content('Collector info')
+        expect(page).to have_content('Artsy')
         expect(page).to have_content('Created By')
+        expect(page).to have_content('User')
 
         within(:css, '.list-item--consignment') do
           expect(page).to have_content('Gob Bluth')
