@@ -103,7 +103,6 @@ describe 'Submission Flow' do
           headers: headers
       expect(response.status).to eq 201
       expect(@submission.reload.state).to eq 'submitted'
-      puts @submission.user.email
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 3
       expect(emails[1].to).to eq(%w[michael@bluth.com])
