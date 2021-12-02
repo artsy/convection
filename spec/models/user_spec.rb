@@ -27,13 +27,13 @@ describe User do
     context 'contact information has not been provided' do
       it 'fails if gravity_user_id is empty' do
         user.gravity_user_id = ''
-        user.validate
-        expect(user.errors[:gravity_user_id]).to include("can't be blank")
+        user.save!
+        expect(user.gravity_user_id).to be_nil
       end
       it 'passes if gravity_user_id has a value' do
         user.gravity_user_id = 'user-1'
-        user.validate
-        expect(user.errors[:gravity_user_id]).to_not include("can't be blank")
+        user.save!
+        expect(user.gravity_user_id).to eq 'user-1'
       end
     end
   end

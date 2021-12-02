@@ -111,9 +111,10 @@ describe SubmissionService do
           phone: '555-5555'
         )
         new_submission = SubmissionService.create_submission(params, nil)
-        expect(new_submission.user.name).to eq 'michael'
-        expect(new_submission.user.email).to eq 'michael@bluth.com'
-        expect(new_submission.user.phone).to eq '555-5555'
+        expect(new_submission.user_name).to eq 'michael'
+        expect(new_submission.user_email).to eq 'michael@bluth.com'
+        expect(new_submission.user_phone).to eq '555-5555'
+        expect(new_submission.user.gravity_user_id).to eq nil
       end
     end
   end

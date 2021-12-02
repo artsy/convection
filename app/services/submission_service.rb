@@ -21,7 +21,7 @@ class SubmissionService
         if gravity_user_id
           User.find_or_create_by!(gravity_user_id: gravity_user_id)
         elsif contact_information?(submission_params)
-          User.anonymous
+          User.create!
         else
           raise "Validation failed: Gravity user can't be blank"
         end
