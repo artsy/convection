@@ -550,12 +550,12 @@ describe 'admin/submissions/show.html.erb', type: :feature do
 
       it 'shows the consignment' do
         expect(page).to have_selector('.list-item--consignment')
-        expect(page).to have_content('Consignment')
-        expect(page).to have_content('Collector info')
 
-        within('.consigned-partner-name') do
-          expect(page).to have_content('Artsy')
-        end
+        expect(page).to have_content('Details')
+        expect(page).to have_content('Collector info')
+        expect(page).to have_content('Artsy')
+        expect(page).to have_content('Created By')
+        expect(page).to have_content('User')
 
         within(:css, '.list-item--consignment') do
           expect(page).to have_content('Gob Bluth')
