@@ -102,6 +102,16 @@ describe SubmissionService do
       expect(new_submission.user.email).to eq 'michael@bluth.com'
     end
 
+    it 'does not populate created_by field, when submission is made by non-admin' do
+      stub_gravity_root
+      stub_gravity_user
+      stub_gravity_user_detail(email: 'michael@bluth.com')
+      stub_gravity_artist
+
+      new_submission = SubmissionService.create_submission(params, 'userid')
+      expect(new_submission.reload.created_by).to eq nil
+    end
+
     context 'anonymous submission' do
       it 'adds contact information to the user record' do
         stub_gravity_user(id: 'anonymous', name: 'michael')
