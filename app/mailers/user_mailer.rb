@@ -3,9 +3,8 @@
 class UserMailer < ApplicationMailer
   helper :url, :submissions, :offers
 
-  def submission_receipt(submission:, user:, artist:)
+  def submission_receipt(submission:, artist:)
     @submission = submission
-    @user = user
     @artist = artist
     @utm_params =
       utm_params(
@@ -24,9 +23,8 @@ class UserMailer < ApplicationMailer
     )
   end
 
-  def first_upload_reminder(submission:, user:)
+  def first_upload_reminder(submission:)
     @submission = submission
-    @user = user
     @utm_params =
       utm_params(
         source: 'drip-consignment-reminder-e01',
@@ -40,9 +38,8 @@ class UserMailer < ApplicationMailer
     mail to: submission.email, subject: "You're Almost Done"
   end
 
-  def second_upload_reminder(submission:, user:)
+  def second_upload_reminder(submission:)
     @submission = submission
-    @user = user
     @utm_params =
       utm_params(
         source: 'drip-consignment-reminder-e02-v2',
@@ -57,9 +54,8 @@ class UserMailer < ApplicationMailer
          subject: 'Artsy Consignments - complete your submission'
   end
 
-  def submission_approved(submission:, user:, artist:)
+  def submission_approved(submission:, artist:)
     @submission = submission
-    @user = user
     @artist = artist
     @utm_params =
       utm_params(
@@ -77,9 +73,8 @@ class UserMailer < ApplicationMailer
     )
   end
 
-  def artist_submission_rejected(submission:, user:, artist:)
+  def artist_submission_rejected(submission:, artist:)
     @submission = submission
-    @user = user
     @artist = artist
     @utm_params =
       utm_params(
@@ -94,9 +89,8 @@ class UserMailer < ApplicationMailer
     mail(to: submission.email, subject: 'An update about your submission')
   end
 
-  def fake_submission_rejected(submission:, user:, artist:)
+  def fake_submission_rejected(submission:, artist:)
     @submission = submission
-    @user = user
     @artist = artist
     @utm_params =
       utm_params(
@@ -111,9 +105,8 @@ class UserMailer < ApplicationMailer
     mail(to: submission.email, subject: 'Artsy Submission')
   end
 
-  def nsv_bsv_submission_rejected(submission:, user:, artist:)
+  def nsv_bsv_submission_rejected(submission:, artist:)
     @submission = submission
-    @user = user
     @artist = artist
     @utm_params =
       utm_params(
@@ -128,9 +121,8 @@ class UserMailer < ApplicationMailer
     mail(to: submission.email, subject: 'An update about your submission')
   end
 
-  def non_target_supply_artist_rejected(submission:, user:, artist:)
+  def non_target_supply_artist_rejected(submission:, artist:)
     @submission = submission
-    @user = user
     @artist = artist
     @utm_params =
       utm_params(
@@ -145,9 +137,8 @@ class UserMailer < ApplicationMailer
     mail(to: submission.email, subject: 'An update about your submission')
   end
 
-  def other_submission_rejected(submission:, user:, artist:)
+  def other_submission_rejected(submission:, artist:)
     @submission = submission
-    @user = user
     @artist = artist
     @utm_params =
       utm_params(
@@ -162,11 +153,10 @@ class UserMailer < ApplicationMailer
     mail(to: submission.email, subject: 'An update about your submission')
   end
 
-  def offer(offer:, artist:, user:)
+  def offer(offer:, artist:)
     @offer = offer
     @submission = offer.submission
     @artist = artist
-    @user = user
     @utm_params =
       utm_params(source: 'consignment-offer', campaign: 'consignment-offer')
 

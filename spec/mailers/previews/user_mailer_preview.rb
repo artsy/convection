@@ -26,8 +26,7 @@ class UserMailerPreview < BasePreview
       offer: auction_offer,
       artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol'),
       user_detail:
-        OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com'),
-      user: OpenStruct.new(id: 'x', name: 'William Black')
+        OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com')
     )
   end
 
@@ -55,8 +54,7 @@ class UserMailerPreview < BasePreview
         ),
       artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol'),
       user_detail:
-        OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com'),
-      user: OpenStruct.new(id: 'x', name: 'William Black')
+        OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com')
     )
   end
 
@@ -81,8 +79,7 @@ class UserMailerPreview < BasePreview
         ),
       artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol'),
       user_detail:
-        OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com'),
-      user: OpenStruct.new(id: 'x', name: 'William Black')
+        OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com')
     )
   end
 
@@ -109,8 +106,7 @@ class UserMailerPreview < BasePreview
         ),
       artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol'),
       user_detail:
-        OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com'),
-      user: OpenStruct.new(id: 'x', name: 'William Black')
+        OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com')
     )
   end
 
@@ -121,8 +117,7 @@ class UserMailerPreview < BasePreview
       submission: base_submission,
       artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol'),
       user_detail:
-        OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com'),
-      user: OpenStruct.new(id: 'x', name: 'William Black')
+        OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com')
     }
   end
 
@@ -130,8 +125,7 @@ class UserMailerPreview < BasePreview
     {
       submission: OpenStruct.new(id: '12'),
       user_detail:
-        OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com'),
-      user: OpenStruct.new(id: 'x', name: 'William Black')
+        OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com')
     }
   end
 end
