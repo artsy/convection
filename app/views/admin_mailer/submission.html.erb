@@ -1,4 +1,4 @@
-<p>We have received the following submission from: <%= @user.name %> (<%= mail_to(@user.email) %>)</p>
+<p>We have received the following submission from: <%= @submission.name %> (<%= mail_to(@submission.email) %>)</p>
 
 <%= link_to('View Submission In Admin', "#{Convection.config.convection_url}/admin/submissions/#{@submission.id}") %>
 

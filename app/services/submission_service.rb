@@ -18,18 +18,10 @@ class SubmissionService
         submission_params.delete(:edition_size_formatted) if submission_params[
         :edition_size_formatted
       ]
-      user =
-        if gravity_user_id
-          User.find_or_create_by!(gravity_user_id: gravity_user_id)
-        else
-          User.create!(
-            name: submission_params[:user_name],
-            email: submission_params[:user_email],
-            phone: submission_params[:user_phone]
-          )
-        end
-      user.session_id = submission_params.delete(:session_id)
-      create_params = submission_params.merge(user_id: user.id)
+      user = User.find_by(gravity_user_id: gravity_user_id) if gravity_user_id
+        .present?
+
+      create_params = submission_params.merge(user_id: user&.id)
 
       if AdminUser.exists?(gravity_user_id: current_user)
         create_params.merge!(
@@ -217,10 +209,9 @@ class SubmissionService
       submission = Submission.find(submission_id)
       return if submission.receipt_sent_at || submission.images.count.positive?
 
-      user = submission.user
-      raise 'User lacks email.' if user.email.blank?
+      raise 'User lacks email.' if submission.email.blank?
 
-      email_args = { submission: submission, user: user }
+      email_args = { submission: submission }
 
       if submission.reminders_sent_count == 1
         UserMailer.second_upload_reminder(email_args).deliver_now
@@ -234,16 +225,12 @@ class SubmissionService
       submission = Submission.find(submission_id)
       raise 'Still processing images.' unless submission.ready?
 
-      user = submission.user
-      raise 'User lacks email.' if user.email.blank?
+      raise 'User lacks email.' if submission.email.blank?
 
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
-      UserMailer.submission_receipt(
-        submission: submission,
-        user: user,
-        artist: artist
-      ).deliver_now
+      UserMailer.submission_receipt(submission: submission, artist: artist)
+        .deliver_now
     end
 
     def deliver_submission_notification(submission_id)
@@ -259,19 +246,14 @@ class SubmissionService
 
     def deliver_approval_notification(submission_id)
       submission = Submission.find(submission_id)
-      user = submission.user
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
-      UserMailer.submission_approved(
-        submission: submission,
-        user: user,
-        artist: artist
-      ).deliver_now
+      UserMailer.submission_approved(submission: submission, artist: artist)
+        .deliver_now
     end
 
     def deliver_rejection_notification(submission_id)
       submission = Submission.find(submission_id)
-      user = submission.user
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
       rejection_reason_template =
@@ -291,7 +273,6 @@ class SubmissionService
       UserMailer.send(
         rejection_reason_template,
         submission: submission,
-        user: user,
         artist: artist
       ).deliver_now
     end

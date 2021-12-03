@@ -11,7 +11,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
       Fabricate(
         :submission,
         state: Submission::APPROVED,
-        user: Fabricate(:user, name: 'Lucille Bluth', email: 'user@example.com')
+        user: Fabricate(:user, email: 'user@example.com')
       )
     end
     let(:partner) { Fabricate(:partner) }

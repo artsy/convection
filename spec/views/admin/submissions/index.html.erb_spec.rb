@@ -53,6 +53,8 @@ describe 'admin/submissions/index.html.erb', type: :feature do
     context 'with submissions' do
       before do
         user = Fabricate(:user, gravity_user_id: 'userid')
+        stub_gravity_user(id: 'userid')
+        stub_gravity_user_detail(id: 'userid')
         3.times do
           Fabricate(
             :submission,
@@ -70,8 +72,6 @@ describe 'admin/submissions/index.html.erb', type: :feature do
       end
 
       it 'lets you click a submission' do
-        stub_gravity_user
-        stub_gravity_user_detail
         stub_gravity_artist
 
         submission = Submission.order(id: :desc).first
@@ -101,6 +101,10 @@ describe 'admin/submissions/index.html.erb', type: :feature do
           )
         @user2 =
           Fabricate(:user, gravity_user_id: 'userid2', email: 'percy@test.com')
+        stub_gravity_user(id: 'userid', email: 'jon-jonson@test.com')
+        stub_gravity_user_detail(id: 'userid', email: 'jon-jonson@test.com')
+        stub_gravity_user(id: 'userid2', email: 'percy@test.com')
+        stub_gravity_user_detail(id: 'userid2', email: 'percy@test.com')
         3.times do
           Fabricate(
             :submission,

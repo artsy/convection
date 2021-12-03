@@ -36,19 +36,16 @@ describe 'createConsignmentSubmission mutation' do
     context 'with an unauthorized request' do
       let(:token) { 'foo.bar.baz' }
 
-      it 'raises an exception if contact information is not provided' do
+      it 'create user with gravity_auser_id eq nil if contact information is not provided' do
         stub_gravity_root
         stub_gravity_user
         stub_gravity_user_detail(email: 'michael@bluth.com')
         stub_gravity_artist({ id: 'andy' })
         stub_gravity_artists({ id: 'andy' })
 
-        expect {
-          post '/api/graphql', params: { query: mutation }, headers: headers
-        }.to raise_error(
-          SubmissionService::SubmissionError,
-          "Validation failed: Gravity user can't be blank"
-        )
+        post '/api/graphql', params: { query: mutation }, headers: headers
+
+        expect(User.last).to eq nil
       end
 
       context 'contact information is provided' do

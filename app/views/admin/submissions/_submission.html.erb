@@ -22,7 +22,7 @@
     <%= submission&.title&.truncate(30) %>
   </div>
   <div class='list-group-item-info list-group-item-info--email'>
-    <%= submission.user&.email %>
+    <%= submission.email %>
   </div>
   <div class='list-group-item-info'>
     <%= formatted_location(submission)  %>

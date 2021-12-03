@@ -4,15 +4,9 @@ require 'rails_helper'
 require 'support/gravity_helper'
 
 describe 'Anonymize user email' do
-  let!(:user1) do
-    Fabricate(:user, email: 'test1@test.com', name: 'test', phone: '322')
-  end
-  let!(:user2) do
-    Fabricate(:user, email: 'test2@test.com', name: 'test', phone: '322')
-  end
-  let!(:user3) do
-    Fabricate(:user, email: 'test2@test.com', name: 'test', phone: '322')
-  end
+  let!(:user1) { Fabricate(:user, email: 'test1@test.com') }
+  let!(:user2) { Fabricate(:user, email: 'test2@test.com') }
+  let!(:user3) { Fabricate(:user, email: 'test2@test.com') }
   let(:jwt_token) do
     JWT.encode(
       { aud: 'gravity', roles: 'trusted' },

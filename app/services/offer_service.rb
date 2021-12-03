@@ -149,12 +149,11 @@ class OfferService
       offer = Offer.find(offer_id)
       return if offer.sent_at
 
-      user = offer.submission.user
-      raise 'User lacks email.' if user.email.blank?
+      raise 'User lacks email.' if offer.submission.email.blank?
 
       artist = Gravity.client.artist(id: offer.submission.artist_id)._get
 
-      UserMailer.offer(offer: offer, artist: artist, user: user).deliver_now
+      UserMailer.offer(offer: offer, artist: artist).deliver_now
 
       offer.update!(sent_at: Time.now.utc, sent_by: current_user)
     end
