@@ -184,4 +184,16 @@ class Submission < ApplicationRecord
 
     update(assigned_to: admin_gravity_id)
   end
+
+  def email
+    user_email || user&.email
+  end
+
+  def name
+    user_name || user&.name
+  end
+
+  def phone
+    user_phone || user&.phone
+  end
 end

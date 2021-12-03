@@ -66,7 +66,8 @@ module Admin
       @submission =
         SubmissionService.create_submission(
           submission_params.merge(state: 'submitted'),
-          submission_params[:user_id]
+          submission_params[:user_id],
+          current_user: @current_user
         )
       redirect_to admin_submission_path(@submission)
     rescue SubmissionService::SubmissionError => e
@@ -81,7 +82,7 @@ module Admin
       @partner_submissions_count =
         notified_partner_submissions.group_by_day.count
       @offers = @submission.offers
-      @notes = @submission.notes + @submission.user.notes
+      @notes = @submission.notes + @submission.user&.notes.to_a
       @actions = SubmissionStateActions.for(@submission)
       @partner_name = @submission.consigned_partner_submission&.partner&.name
     end

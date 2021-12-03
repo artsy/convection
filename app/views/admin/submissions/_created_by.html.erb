@@ -1,0 +1,17 @@
+<div class='overview-section'>
+  <div class='bold-label'>Created By</div>
+  <div class='single-padding-top'>
+    <% if @submission.created_by %>
+      <div class="consigned-partner-name">
+        Admin
+      </div>
+      <div class="consigned-partner-name">
+        Email: <%= @submission.created_by%>
+      </div>
+     <% else %>
+     <div class="consigned-partner-name">
+        User
+      </div>
+    <% end %>
+  </div>
+</div>
