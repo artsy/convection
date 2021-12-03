@@ -42,7 +42,6 @@ describe 'admin/submissions/new.html.erb', type: :feature do
       expect(page).to have_content('Submission #')
       expect(page).to have_content('my new artwork title')
       expect(page).to have_content('Gob Bluth'.upcase)
-      expect(page).to have_content('Jon Jonson')
     end
   end
 end

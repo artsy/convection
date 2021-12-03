@@ -45,7 +45,7 @@ describe 'createConsignmentSubmission mutation' do
 
         post '/api/graphql', params: { query: mutation }, headers: headers
 
-        expect(User.last.gravity_user_id).to eq nil
+        expect(User.last).to eq nil
       end
 
       context 'contact information is provided' do
