@@ -17,7 +17,7 @@ class AddAssetToSubmissionResolver < BaseResolver
 
     @arguments[:asset_type] ||= 'image'
 
-    asset = submission.assets.create!(@arguments)
+    asset = submission.assets.create!(@arguments.except(:session_id))
     SubmissionService.notify_user(submission.id) if submission.submitted?
 
     { asset: asset }
