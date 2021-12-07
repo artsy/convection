@@ -219,4 +219,43 @@ describe Submission do
       ).and change { Offer.count }.by(-1)
     end
   end
+
+  context 'count_submissions_of_user' do
+    context 'if user exist' do
+      let(:user) { Fabricate(:user) }
+      let!(:submission) { Fabricate(:submission, user: user) }
+      let!(:submission1) { Fabricate(:submission, user: user) }
+      let!(:out_of_sample_submission) { Fabricate(:submission, user: nil) }
+
+      it 'returns the count of user submissions eq 1' do
+        submission1.delete
+        expect(submission.count_submissions_of_user).to eq 1
+      end
+
+      it 'returns the count of user submissions eq 2' do
+        expect(submission.count_submissions_of_user).to eq 2
+      end
+    end
+
+    context 'if anonymous submission' do
+      let!(:submission) do
+        Fabricate(:submission, user: nil, user_email: 'user@artsymail.com')
+      end
+      let!(:submission1) do
+        Fabricate(:submission, user: nil, user_email: 'user@artsymail.com')
+      end
+      let!(:out_of_sample_submission) do
+        Fabricate(:submission, user: nil, user_email: 'diff_user@artsymail.com')
+      end
+
+      it 'return the count of user submissions found by user_email eq 1' do
+        submission1.delete
+        expect(submission.count_submissions_of_user).to eq 1
+      end
+
+      it 'return the count of user submissions found by user_email eq 2' do
+        expect(submission.count_submissions_of_user).to eq 2
+      end
+    end
+  end
 end

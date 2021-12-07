@@ -196,4 +196,10 @@ class Submission < ApplicationRecord
   def phone
     user_phone || user&.phone
   end
+
+  def count_submissions_of_user
+    return Submission.where(user_email: user_email).count if user.nil?
+
+    user.submissions.count
+  end
 end
