@@ -10,7 +10,7 @@
       <%= submission.name %>
     </div>
     <div>
-      <%= submission.user&.submissions&.count || 0 %> submissions made
+      <%= submission.count_submissions_of_user %> submissions made
     </div>
     <div>
       <%= submission.email %>
