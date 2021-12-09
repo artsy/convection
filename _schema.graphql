@@ -9,7 +9,9 @@ input AddAssetToConsignmentSubmissionInput {
   """
   clientMutationId: String
   geminiToken: String!
+  name: String
   sessionID: String
+  size: String
   submissionID: ID!
 }
 
@@ -36,7 +38,9 @@ input AddAssetsToConsignmentSubmissionInput {
   """
   clientMutationId: String
   geminiTokens: [String!]!
+  name: String
   sessionID: String
+  size: String
   submissionID: ID!
 }
 
@@ -75,6 +79,13 @@ type Asset {
   known image urls
   """
   imageUrls: JSON
+
+  """
+  original image name
+  """
+  name: String
+  originalImage: String
+  size: String
   submissionID: ID
   submissionId: ID!
 }
