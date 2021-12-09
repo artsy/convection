@@ -84,7 +84,6 @@ type Asset {
   original image name
   """
   name: String
-  originalImage: String
   size: String
   submissionID: ID
   submissionId: ID!
