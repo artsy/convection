@@ -196,4 +196,10 @@ class Submission < ApplicationRecord
   def phone
     user_phone || user&.phone
   end
+
+  def count_submissions_of_user
+    return 1 if user.nil?
+
+    user.submissions.count
+  end
 end

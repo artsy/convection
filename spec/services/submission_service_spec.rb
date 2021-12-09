@@ -124,6 +124,7 @@ describe SubmissionService do
         expect(new_submission.user_name).to eq 'michael'
         expect(new_submission.user_email).to eq 'michael@bluth.com'
         expect(new_submission.user_phone).to eq '555-5555'
+        expect(new_submission.count_submissions_of_user).to eq 1
         expect(new_submission.user).to eq nil
       end
     end
