@@ -75,6 +75,7 @@ type Asset {
   known image urls
   """
   imageUrls: JSON
+  originalImageUrl: String
   submissionID: ID
   submissionId: ID!
 }

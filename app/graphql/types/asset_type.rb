@@ -10,5 +10,6 @@ module Types
     field :image_urls, GraphQL::Types::JSON, 'known image urls', null: true
     field :submission_id, ID, null: false
     field :submissionID, ID, null: true, method: :submission_id # Alias for MPv2 compatability
+    field :original_image_url, String, null: true, method: :original_image
   end
 end

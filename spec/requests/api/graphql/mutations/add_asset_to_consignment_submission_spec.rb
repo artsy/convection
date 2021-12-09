@@ -27,6 +27,7 @@ describe 'addAssetToConsignmentSubmission mutation' do
           asset {
             id
             submissionId
+            originalImageUrl
           }
         }
       }
@@ -34,6 +35,9 @@ describe 'addAssetToConsignmentSubmission mutation' do
 
   describe 'valid requests' do
     it 'creates an asset' do
+      allow_any_instance_of(Asset).to receive(:original_image).and_return(
+        'link'
+      )
       expect {
         post '/api/graphql', params: { query: mutation }, headers: headers
       }.to change(Asset, :count).by(1)
@@ -44,6 +48,7 @@ describe 'addAssetToConsignmentSubmission mutation' do
 
       asset_response = body['data']['addAssetToConsignmentSubmission']['asset']
       expect(asset_response['id']).not_to be_nil
+      expect(asset_response['originalImageUrl']).to eq 'link'
       expect(asset_response['submissionId'].to_i).to eq submission.id
     end
   end
