@@ -49,7 +49,8 @@ module Types
 
     field :submission, SubmissionType, null: true do
       description 'Get a Submission'
-      argument :id, ID, required: false
+      argument :id, ID, required: true
+      argument :sessionID, String, required: false
     end
 
     def submission(arguments)

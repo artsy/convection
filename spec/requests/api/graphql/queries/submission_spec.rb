@@ -40,17 +40,17 @@ describe 'submission query' do
         expect(submission_response).to eq nil
 
         error_message = body['errors'][0]['message']
-        expect(error_message).to eq "Can't access submission"
+        expect(error_message).to eq 'Submission Not Found'
       end
     end
 
-    context 'with a request from a regular user' do
+    context 'with a request from a usual user' do
       let(:token) do
-        payload = { aud: 'gravity', sub: 'userid', roles: 'user' }
+        payload = { aud: 'gravity', sub: 'userid_1', roles: 'user' }
         JWT.encode(payload, Convection.config.jwt_secret)
       end
 
-      it 'returns an error for that request' do
+      it 'returns error if user is not a submission owner' do
         post '/api/graphql', params: { query: query }, headers: headers
 
         expect(response.status).to eq 200
@@ -60,12 +60,104 @@ describe 'submission query' do
         expect(submission_response).to eq nil
 
         error_message = body['errors'][0]['message']
-        expect(error_message).to eq "Can't access submission"
+        expect(error_message).to eq 'Submission Not Found'
+      end
+    end
+
+    context 'with an unauthorized request' do
+      let(:token) { 'foo.bar.baz' }
+      let(:submission) { Fabricate :submission, session_id: 'session' }
+      let(:query_inputs) { "id: #{submission.id}, sessionID: \"session1\"" }
+
+      it 'returns submission' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submission_response = body['data']['submission']
+        expect(submission_response).to eq nil
+
+        error_message = body['errors'][0]['message']
+        expect(error_message).to eq 'Submission Not Found'
       end
     end
   end
 
   describe 'valid requests' do
+    context 'with an unauthorized request' do
+      let(:token) { 'foo.bar.baz' }
+      let(:submission) { Fabricate :submission, session_id: 'session' }
+      let(:query_inputs) { "id: #{submission.id}, sessionID: \"session\"" }
+
+      it 'returns submission' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submission_response = body['data']['submission']
+        expect(submission_response).to match(
+          {
+            'id' => submission.id.to_s,
+            'artistId' => submission.artist_id,
+            'title' => submission.title
+          }
+        )
+      end
+
+      context 'and anonymous submission' do
+        let(:token) { 'foo.bar.baz' }
+        let(:submission) do
+          Fabricate :submission, session_id: 'session', user: nil
+        end
+        let(:query_inputs) { "id: #{submission.id}, sessionID: \"session\"" }
+
+        it 'returns submission' do
+          post '/api/graphql', params: { query: query }, headers: headers
+
+          expect(response.status).to eq 200
+          body = JSON.parse(response.body)
+
+          submission_response = body['data']['submission']
+          expect(submission_response).to match(
+            {
+              'id' => submission.id.to_s,
+              'artistId' => submission.artist_id,
+              'title' => submission.title
+            }
+          )
+        end
+      end
+    end
+
+    context 'with a request from a submission owner' do
+      let(:token) do
+        payload = {
+          aud: 'gravity',
+          sub: submission.user&.gravity_user_id,
+          roles: 'user'
+        }
+        JWT.encode(payload, Convection.config.jwt_secret)
+      end
+
+      it 'returns submission' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submission_response = body['data']['submission']
+        expect(submission_response).to match(
+          {
+            'id' => submission.id.to_s,
+            'artistId' => submission.artist_id,
+            'title' => submission.title
+          }
+        )
+      end
+    end
+
     context 'with an invalid submission id' do
       let(:query_inputs) { 'id: 999999999' }
 
@@ -79,7 +171,7 @@ describe 'submission query' do
         expect(submission_response).to eq nil
 
         error_message = body['errors'][0]['message']
-        expect(error_message).to eq 'Submission not found'
+        expect(error_message).to eq 'Submission from ID Not Found'
       end
     end
 

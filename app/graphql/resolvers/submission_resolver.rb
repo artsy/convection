@@ -2,18 +2,21 @@
 
 class SubmissionResolver < BaseResolver
   def valid?
-    unless admin?
-      bad_argument_error =
-        GraphQL::ExecutionError.new("Can't access submission")
-      @error = bad_argument_error
-    end
-
-    admin? || partner?
+    true
   end
 
   def run
-    Submission.find(@arguments[:id])
-  rescue ActiveRecord::RecordNotFound
-    raise GraphQL::ExecutionError, 'Submission not found'
+    submission = Submission.find_by(id: @arguments[:id])
+
+    unless submission
+      raise GraphQL::ExecutionError, 'Submission from ID Not Found'
+    end
+
+    unless matching_user(submission, @arguments&.[](:session_id)) || admin? ||
+             partner?
+      raise GraphQL::ExecutionError, 'Submission Not Found'
+    end
+
+    submission
   end
 end
