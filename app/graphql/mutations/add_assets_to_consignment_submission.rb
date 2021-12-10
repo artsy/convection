@@ -6,7 +6,7 @@ module Mutations
     argument :submissionID, ID, required: true
     argument :sessionID, String, required: false
     argument :asset_type, String, required: false
-    argument :name, String, required: false
+    argument :filename, String, required: false
     argument :size, String, required: false
 
     field :assets, [Types::AssetType], null: true
