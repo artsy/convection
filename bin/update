@@ -25,8 +25,8 @@ END
 )
 
 current_branch=$(git branch --show-current)
-if [ "$current_branch" != "master" ]; then
-  echo "must be on master branch"
+if [ "$current_branch" != "main" ]; then
+  echo "must be on main branch"
   exit 1
 fi
 
