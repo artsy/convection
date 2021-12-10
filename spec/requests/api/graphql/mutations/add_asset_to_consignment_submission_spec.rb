@@ -17,7 +17,7 @@ describe 'addAssetToConsignmentSubmission mutation' do
   let(:mutation_inputs) do
     "{ clientMutationId: \"test\", submissionID: #{
       submission.id
-    }, geminiToken: \"gemini-token-hash\" }"
+    }, filename: \"testname\", geminiToken: \"gemini-token-hash\" }"
   end
 
   let(:mutation) { <<-GRAPHQL }
@@ -43,6 +43,7 @@ describe 'addAssetToConsignmentSubmission mutation' do
       body = JSON.parse(response.body)
 
       asset_response = body['data']['addAssetToConsignmentSubmission']['asset']
+      expect(Asset.first.filename).to eq 'testname'
       expect(asset_response['id']).not_to be_nil
       expect(asset_response['submissionId'].to_i).to eq submission.id
     end
