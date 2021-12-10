@@ -216,6 +216,61 @@ describe 'submission query' do
       end
     end
 
+    context 'with a submission not in draft state' do
+      let(:submission) { Fabricate :submission, state: 'submitted' }
+
+      context 'if admin' do
+        let(:token) do
+          payload = {
+            aud: 'gravity',
+            sub: submission.user&.gravity_user_id,
+            roles: 'admin'
+          }
+          JWT.encode(payload, Convection.config.jwt_secret)
+        end
+
+        it 'returns an error for that request' do
+          post '/api/graphql', params: { query: query }, headers: headers
+
+          expect(response.status).to eq 200
+          body = JSON.parse(response.body)
+
+          submission_response = body['data']['submission']
+          expect(submission_response).to match(
+            {
+              'id' => submission.id.to_s,
+              'artistId' => submission.artist_id,
+              'title' => submission.title
+            }
+          )
+        end
+      end
+
+      context 'if submission owner' do
+        let(:token) do
+          payload = {
+            aud: 'gravity',
+            sub: submission.user&.gravity_user_id,
+            roles: 'user'
+          }
+          JWT.encode(payload, Convection.config.jwt_secret)
+        end
+
+        it 'returns an error for that request' do
+          post '/api/graphql', params: { query: query }, headers: headers
+
+          expect(response.status).to eq 200
+          body = JSON.parse(response.body)
+
+          submission_response = body['data']['submission']
+          expect(submission_response).to eq nil
+
+          error_message = body['errors'][0]['message']
+          expect(error_message).to eq 'Submission Not Found'
+        end
+      end
+    end
+
     context 'including offers' do
       let(:partner) { Fabricate :partner }
       let(:gravity_partner_id) { partner.gravity_partner_id }
