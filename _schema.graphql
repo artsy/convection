@@ -8,8 +8,10 @@ input AddAssetToConsignmentSubmissionInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+  filename: String
   geminiToken: String!
   sessionID: String
+  size: String
   submissionID: ID!
 }
 
@@ -35,8 +37,10 @@ input AddAssetsToConsignmentSubmissionInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+  filename: String
   geminiTokens: [String!]!
   sessionID: String
+  size: String
   submissionID: ID!
 }
 
@@ -62,6 +66,11 @@ type Asset {
   assetType: String!
 
   """
+  original image name
+  """
+  filename: String
+
+  """
   gemini token for asset
   """
   geminiToken: String
@@ -75,6 +84,7 @@ type Asset {
   known image urls
   """
   imageUrls: JSON
+  size: String
   submissionID: ID
   submissionId: ID!
 }

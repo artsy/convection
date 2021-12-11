@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_01_142602) do
+ActiveRecord::Schema.define(version: 2021_12_09_141138) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_trgm'
   enable_extension 'plpgsql'
@@ -46,6 +46,8 @@ ActiveRecord::Schema.define(version: 2021_12_01_142602) do
     t.string 'gemini_token'
     t.jsonb 'image_urls', default: {}
     t.integer 'submission_id'
+    t.string 'filename'
+    t.string 'size'
     t.index %w[submission_id asset_type],
             name: 'index_assets_on_submission_id_and_asset_type'
     t.index ['submission_id'], name: 'index_assets_on_submission_id'
@@ -218,8 +220,8 @@ ActiveRecord::Schema.define(version: 2021_12_01_142602) do
     t.string 'cataloguer'
     t.string 'user_name'
     t.string 'user_phone'
-    t.string 'session_id'
     t.string 'created_by'
+    t.string 'session_id'
     t.index ['consigned_partner_submission_id'],
             name: 'index_submissions_on_consigned_partner_submission_id'
     t.index ['ext_user_id'], name: 'index_submissions_on_ext_user_id'
