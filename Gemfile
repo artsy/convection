@@ -9,7 +9,7 @@ gem 'rails', '6.1.4.1'
 gem 'pg'
 gem 'puma'
 
-watt_gem_spec = { git: 'https://github.com/artsy/watt.git', branch: 'master' }
+watt_gem_spec = { git: 'https://github.com/artsy/watt.git', branch: 'main' }
 gem 'watt', watt_gem_spec # artsy bootstrap
 
 gem 'artsy-auth'
