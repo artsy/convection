@@ -56,7 +56,6 @@ module Types
     def submission(arguments)
       query_options = { arguments: arguments, context: context, object: object }
       resolver = SubmissionResolver.new(query_options)
-      raise resolver.error unless resolver.valid?
 
       resolver.run
     end

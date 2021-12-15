@@ -38,7 +38,7 @@ class BaseResolver
 
   def matching_user(submission, session_id)
     (
-      submission.user.present? &&
+      submission.user&.gravity_user_id.present? &&
         submission.user&.gravity_user_id == @context&.[](:current_user)
     ) || (session_id.present? && submission.session_id == session_id)
   end

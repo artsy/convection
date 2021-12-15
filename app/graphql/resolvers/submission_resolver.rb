@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 class SubmissionResolver < BaseResolver
-  def valid?
-    true
-  end
-
   def run
     submission = Submission.find_by(id: @arguments[:id])
 
