@@ -15,12 +15,8 @@ class RemoveAssetFromSubmissionResolver < BaseResolver
         raise(GraphQL::ExecutionError, 'Submission Not Found')
       end
   
-      @arguments[:asset_type] ||= 'image'
-  
-      submission.assets.destroy!(@arguments.except(:session_id))
+      submission.assets.destroy(@arguments)
       SubmissionService.notify_user(submission.id) if submission.submitted?
-  
-      { asset: asset }
     end
   end
   

@@ -34,7 +34,7 @@ module Api
       param! :gemini_token, String, required: true
       param! :submission_id, String, required: true
 
-      asset = Asset.find(params[:id])
+      asset = Asset.find_by(gemini_token: gemini_token)
       asset.destroy!
 
       SubmissionService.notify_user(@submission.id) if @submission.submitted?
