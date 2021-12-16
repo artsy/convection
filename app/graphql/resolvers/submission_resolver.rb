@@ -8,13 +8,14 @@ class SubmissionResolver < BaseResolver
       raise GraphQL::ExecutionError, 'Submission from ID Not Found'
     end
 
-    unless (
-             submission.draft? &&
-               matching_user(submission, @arguments&.[](:session_id))
-           ) || admin? || partner?
+    unless draft_in_progress?(submission, @arguments) || admin? || partner?
       raise GraphQL::ExecutionError, 'Submission Not Found'
     end
 
     submission
+  end
+
+  def draft_in_progress?(submission, arguments)
+    submission.draft? && matching_user(submission, arguments&.[](:session_id))
   end
 end
