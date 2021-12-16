@@ -9,8 +9,8 @@ class SubmissionResolver < BaseResolver
     end
 
     unless (
-             matching_user(submission, @arguments&.[](:session_id)) &&
-               submission.draft?
+             submission.draft? &&
+               matching_user(submission, @arguments&.[](:session_id))
            ) || admin? || partner?
       raise GraphQL::ExecutionError, 'Submission Not Found'
     end
