@@ -7,7 +7,16 @@ $ ->
         currentStateFilter = $('#state :selected').val()
         baseURL = "/admin/submissions?state=#{currentStateFilter}"
         respond = _.after 2, ->
-          response compiledData
+          # Remove duplicate results.
+          res = compiledData.reduce (memo, item) ->
+            for i in memo
+              # Only compare IDs (values) for the same result type
+              if i.label == item.label && i.value == item.value
+                return memo
+            memo.push(item)
+            memo
+          , []
+          response res
         $.getJSON '/admin/submissions', { term: request.term, size: 5, format: 'json' }, (data) ->
           for item in data
             item.display = "##{item.id} (#{item.title})"
@@ -15,6 +24,16 @@ $ ->
             item.value = item.id
             item.href = "/admin/submissions/#{item.id}"
           compiledData = compiledData.concat data
+          respond()
+        $.getJSON '/match_user_by_contact_info', { term: request.term, size: 5, format: 'json' }, (data) ->
+          for item in data
+            item.display = item.email
+            item.label = 'User'
+            item.value = item.id
+            item.href = "#{baseURL}&user=#{item.id}"
+          compiledData = compiledData.concat data
+          # There may be duplicated users because an email can match a user and a submission.
+          # De-duplication is performed in the `respond` callback.
           respond()
         $.getJSON '/admin/users', { term: request.term, size: 5, format: 'json' }, (data) ->
           for item in data
