@@ -154,6 +154,26 @@ module Admin
       respond_to { |format| format.json { render json: users || [] } }
     end
 
+    def match_user_by_contact_info
+      if params[:term]
+        term = params[:term]
+
+        # Exclude anonymous submissions from the submissions with a matching email
+        submissions =
+          Submission.where(user_email: term).where.not(user_id: nil).limit(1)
+        if submissions.empty?
+          users = []
+        else
+          user = {
+            id: submissions.first.user_id,
+            email: submissions.first.user_email
+          }
+          users = [user]
+        end
+      end
+      respond_to { |format| format.json { render json: users || [] } }
+    end
+
     private
 
     def set_submission
