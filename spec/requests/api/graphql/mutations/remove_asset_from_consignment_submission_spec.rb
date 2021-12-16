@@ -38,18 +38,14 @@ describe 'removeAssetFromConsignmentSubmission mutation' do
       }
   GRAPHQL
 
-
-
   describe 'valid requests' do
     it 'creates an asset' do
       expect {
         post '/api/graphql', params: { query: createMutation }, headers: headers
       }.to change(Asset, :count).by(1)
-
       expect {
         post '/api/graphql', params: { query: removeMutation }, headers: headers
       }.to change(Asset, :count).by(1)
     end
   end
-
 end
