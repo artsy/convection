@@ -8,7 +8,10 @@ class UpdateSubmissionResolver < BaseResolver
       raise(GraphQL::ExecutionError, 'Submission from ID Not Found')
     end
 
-    unless matching_user(submission, @arguments&.[](:session_id)) || admin?
+    unless (
+             matching_user(submission, @arguments&.[](:session_id)) &&
+               submission.draft?
+           ) || admin?
       raise(GraphQL::ExecutionError, 'Submission Not Found')
     end
 
