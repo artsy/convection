@@ -198,7 +198,7 @@ class Submission < ApplicationRecord
   end
 
   def count_submissions_of_user
-    return 1 if user.nil?
+    return Submission.where(user_email: user_email).count if user.nil?
 
     user.submissions.count
   end
