@@ -113,19 +113,31 @@ describe SubmissionService do
     end
 
     context 'anonymous submission' do
-      it 'adds contact information to the user record' do
+      before do
         stub_gravity_user(id: 'anonymous', name: 'michael')
         stub_gravity_user_detail(
           email: 'michael@bluth.com',
           id: 'anonymous',
           phone: '555-5555'
         )
-        new_submission = SubmissionService.create_submission(params, nil)
-        expect(new_submission.user_name).to eq 'michael'
-        expect(new_submission.user_email).to eq 'michael@bluth.com'
-        expect(new_submission.user_phone).to eq '555-5555'
-        expect(new_submission.count_submissions_of_user).to eq 1
-        expect(new_submission.user).to eq nil
+      end
+      context 'create_submission' do
+        it 'adds contact information to the user record' do
+          new_submission = SubmissionService.create_submission(params, nil)
+          expect(new_submission.user_name).to eq 'michael'
+          expect(new_submission.user_email).to eq 'michael@bluth.com'
+          expect(new_submission.user_phone).to eq '555-5555'
+          expect(new_submission.count_submissions_of_user).to eq 1
+          expect(new_submission.user).to eq nil
+        end
+      end
+      context 'count_submissions_of_user' do
+        it 'return 3 if we had 3 submission with the same user_email' do
+          SubmissionService.create_submission(params, nil)
+          SubmissionService.create_submission(params, nil)
+          SubmissionService.create_submission(params, nil)
+          expect(Submission.last.count_submissions_of_user).to eq 3
+        end
       end
     end
   end

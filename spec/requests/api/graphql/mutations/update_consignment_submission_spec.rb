@@ -8,7 +8,7 @@ describe 'updateConsignmentSubmission mutation' do
     attrs = {
       artist_id: 'abbas-kiarostami',
       category: 'Painting',
-      state: 'submitted',
+      state: 'draft',
       title: 'rain',
       user: user
     }
@@ -54,8 +54,8 @@ describe 'updateConsignmentSubmission mutation' do
         expect(response.status).to eq 200
         body = JSON.parse(response.body)
 
-        update_response = body['data']['updateConsignmentSubmission']
-        expect(update_response).to_not eq nil
+        error_message = body['errors'][0]['message']
+        expect(error_message).to eq 'Submission Not Found'
       end
     end
 
@@ -82,7 +82,7 @@ describe 'updateConsignmentSubmission mutation' do
         attrs = {
           artist_id: 'abbas-kiarostami',
           category: 'Painting',
-          state: 'submitted',
+          state: 'draft',
           title: 'rain',
           user: user1,
           session_id: 'token'
@@ -111,11 +111,15 @@ describe 'updateConsignmentSubmission mutation' do
 
     context 'with a request updating your own submission' do
       let(:user1) { Fabricate(:user, gravity_user_id: 'userid4') }
+      let(:token) do
+        payload = { aud: 'gravity', sub: user1.gravity_user_id, roles: 'user' }
+        JWT.encode(payload, Convection.config.jwt_secret)
+      end
       let(:submission1) do
         attrs = {
           artist_id: 'abbas-kiarostami',
           category: 'Painting',
-          state: 'submitted',
+          state: 'draft',
           title: 'rain',
           user: user1,
           session_id: 'token'
@@ -123,7 +127,7 @@ describe 'updateConsignmentSubmission mutation' do
         Fabricate(:submission, attrs)
       end
       let(:mutation_inputs) do
-        "{ state: DRAFT, category: JEWELRY, clientMutationId: \"test\", id: #{
+        "{ category: JEWELRY, clientMutationId: \"test\", id: #{
           submission1.id
         }, artistID: \"andy-warhol\", title: \"soup\", sessionID: \"token\" }"
       end
@@ -155,6 +159,80 @@ describe 'updateConsignmentSubmission mutation' do
 
         error_message = body['errors'][0]['message']
         expect(error_message).to eq 'Submission from ID Not Found'
+      end
+    end
+
+    context 'with a submission not in draft state' do
+      let(:user1) { Fabricate(:user, gravity_user_id: 'userid4') }
+
+      let(:submission1) do
+        attrs = {
+          artist_id: 'abbas-kiarostami',
+          category: 'Painting',
+          state: 'submitted',
+          title: 'rain',
+          user: user1,
+          session_id: 'token'
+        }
+        Fabricate(:submission, attrs)
+      end
+      let(:mutation_inputs) do
+        "{ category: JEWELRY, clientMutationId: \"test\", id: #{
+          submission1.id
+        }, artistID: \"andy-warhol\", title: \"soup\", sessionID: \"token\" }"
+      end
+
+      context 'if admin' do
+        let(:token) do
+          payload = {
+            aud: 'gravity',
+            sub: user1.gravity_user_id,
+            roles: 'admin'
+          }
+          JWT.encode(payload, Convection.config.jwt_secret)
+        end
+
+        it 'returns an error for that request' do
+          post '/api/graphql', params: { query: mutation }, headers: headers
+
+          expect(response.status).to eq 200
+          body = JSON.parse(response.body)
+
+          submission_response =
+            body['data']['updateConsignmentSubmission']['consignmentSubmission']
+          expect(submission_response).to include(
+            {
+              'id' => submission1.id.to_s,
+              'title' => 'soup',
+              'artistId' => 'andy-warhol',
+              'category' => 'Jewelry',
+              'state' => 'SUBMITTED'
+            }
+          )
+        end
+      end
+
+      context 'if submission owner' do
+        let(:token) do
+          payload = {
+            aud: 'gravity',
+            sub: user1.gravity_user_id,
+            roles: 'user'
+          }
+          JWT.encode(payload, Convection.config.jwt_secret)
+        end
+        it 'returns an error for that request' do
+          post '/api/graphql', params: { query: mutation }, headers: headers
+
+          expect(response.status).to eq 200
+          body = JSON.parse(response.body)
+
+          update_response = body['data']['updateConsignmentSubmission']
+          expect(update_response).to eq nil
+
+          error_message = body['errors'][0]['message']
+          expect(error_message).to eq 'Submission Not Found'
+        end
       end
     end
 
