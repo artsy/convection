@@ -38,31 +38,5 @@ describe Api::ConsignmentsController, type: :controller do
         offer_type: 'purchase'
       )
     end
-
-    context 'when artwork submission exist' do
-      before do
-        submission.update!(source_artwork_id: '1')
-        consignment.update!(accepted_offer: offer)
-      end
-
-      it 'returns ok, and update consignment price' do
-        put :update_price, params: { sale_id: '1' }
-        expect(response.body).to eq("{\"result\":\"ok\"}")
-        expect(submission.consigned_partner_submission.sale_price_cents).to eq 2
-      end
-    end
-
-    context 'when artwork submission do not exist' do
-      before do
-        submission.update!(source_artwork_id: nil)
-        consignment.update!(accepted_offer: offer)
-      end
-
-      it 'returns ok, and do not update consignment price' do
-        put :update_price, params: { sale_id: '1' }
-        expect(response.body).to eq("{\"result\":\"ok\"}")
-        expect(consignment.sale_price_cents).to eq 50
-      end
-    end
   end
 end
