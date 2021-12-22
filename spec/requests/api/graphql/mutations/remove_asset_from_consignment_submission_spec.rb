@@ -34,18 +34,29 @@ describe 'removeAssetFromConsignmentSubmission mutation' do
 
   let(:removeMutation) { <<-GRAPHQL }
       mutation {
-        removeAssetFromConsignmentSubmission(input: #{mutation_inputs}){}
+        removeAssetFromConsignmentSubmission(input: #{mutation_inputs}){
+          clientMutationId
+          asset {
+            id
+            submissionId
+          }
+        }
       }
   GRAPHQL
 
   describe 'valid requests' do
-    it 'creates an asset' do
+    it 'removes an asset from submission successfully' do
       expect {
         post '/api/graphql', params: { query: createMutation }, headers: headers
       }.to change(Asset, :count).by(1)
+
+      expect(Asset.count).to eq 1
+
       expect {
         post '/api/graphql', params: { query: removeMutation }, headers: headers
-      }.to change(Asset, :count).by(1)
+      }.to change(Asset, :count).by(-1)
+
+      expect(Asset.count).to eq 0
     end
   end
 end
