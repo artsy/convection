@@ -15,7 +15,13 @@ class RemoveAssetFromSubmissionResolver < BaseResolver
       raise(GraphQL::ExecutionError, 'Submission Not Found')
     end
 
-    submission.assets.destroy!(@arguments.except(:session_id))
+    asset = Asset.find_by(gemini_token: @arguments[:gemini_token])
+    raise(GraphQL::ExecutionError, 'Asset Not Found') unless asset
+
+    asset.destroy!
+
     SubmissionService.notify_user(submission.id) if submission.submitted?
+
+    { asset: asset }
   end
 end

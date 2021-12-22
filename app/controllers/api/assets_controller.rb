@@ -30,18 +30,6 @@ module Api
       render json: asset.to_json, status: :created
     end
 
-    def destroy
-      param! :asset_type, String, default: 'image'
-      param! :gemini_token, String, required: true
-      param! :submission_id, String, required: true
-
-      asset = Asset.find_by(gemini_token: @arguments[:gemini_token])
-      asset.destroy!
-
-      SubmissionService.notify_user(@submission.id) if @submission.submitted?
-      render json: asset.to_json, status: :ok
-    end
-
     private
 
     def set_submission_and_asset
