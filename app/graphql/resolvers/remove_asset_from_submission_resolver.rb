@@ -1,22 +1,16 @@
 # frozen_string_literal: true
 
 class RemoveAssetFromSubmissionResolver < BaseResolver
-  def valid?
-    true
-  end
-
   def run
-    submission = Submission.find_by(id: @arguments[:submission_id])
-    unless submission
-      raise(GraphQL::ExecutionError, 'Submission from ID Not Found')
-    end
+    asset = Asset.find_by(id: @arguments[:asset_id])
+    raise(GraphQL::ExecutionError, 'Asset Not Found') unless asset
+
+    submission = asset.submission
+    raise(GraphQL::ExecutionError, 'Submission Not Found') unless submission
 
     unless matching_user(submission, @arguments&.[](:session_id)) || admin?
       raise(GraphQL::ExecutionError, 'Submission Not Found')
     end
-
-    asset = Asset.find_by(gemini_token: @arguments[:gemini_token])
-    raise(GraphQL::ExecutionError, 'Asset Not Found') unless asset
 
     asset.destroy!
 

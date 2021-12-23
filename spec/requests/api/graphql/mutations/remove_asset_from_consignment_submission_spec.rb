@@ -6,6 +6,9 @@ require 'support/gravity_helper'
 describe 'removeAssetFromConsignmentSubmission mutation' do
   let(:user) { Fabricate(:user, gravity_user_id: 'userid') }
   let(:submission) { Fabricate(:submission, user: user) }
+  let(:asset) do
+    Fabricate(:asset, id: 1, submission: submission, asset_type: 'image')
+  end
 
   let(:token) do
     payload = { aud: 'gravity', sub: user.gravity_user_id, roles: 'user' }
@@ -14,15 +17,19 @@ describe 'removeAssetFromConsignmentSubmission mutation' do
 
   let(:headers) { { 'Authorization' => "Bearer #{token}" } }
 
-  let(:mutation_inputs) do
+  let(:create_mutation_inputs) do
     "{ clientMutationId: \"test\", submissionID: #{
       submission.id
-    }, filename: \"testname\", geminiToken: \"gemini-token-hash\" }"
+    }, filename: \"testname\", geminiToken: \"gemini-token-hash\", sessionID: \"1\" }"
+  end
+
+  let(:remove_mutation_inputs) do
+    "{ clientMutationId: \"test\", assetID: \"1\", sessionID: \"1\"}"
   end
 
   let(:createMutation) { <<-GRAPHQL }
       mutation {
-        addAssetToConsignmentSubmission(input: #{mutation_inputs}){
+        addAssetToConsignmentSubmission(input: #{create_mutation_inputs}){
           clientMutationId
           asset {
             id
@@ -34,7 +41,7 @@ describe 'removeAssetFromConsignmentSubmission mutation' do
 
   let(:removeMutation) { <<-GRAPHQL }
       mutation {
-        removeAssetFromConsignmentSubmission(input: #{mutation_inputs}){
+        removeAssetFromConsignmentSubmission(input: #{remove_mutation_inputs}){
           clientMutationId
           asset {
             id
