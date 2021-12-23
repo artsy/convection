@@ -29,7 +29,7 @@
             <% @users_to_submissions.each do |user, submissions| %>
               <tr>
                 <td class='consignor-header'>
-                  <p class='consignor-id'>Consignor <%= user.unique_code_for_digest %></p>
+                  <p class='consignor-id'>Consignor <%= user&.unique_code_for_digest || submissions.first&.unique_code_for_digest %></p>
                   <span class='consignor-works-count'><%= pluralize(submissions.count, 'work') %></span>
                 </td>
               </tr>

@@ -202,4 +202,9 @@ class Submission < ApplicationRecord
 
     user.submissions.count
   end
+
+  def unique_code_for_digest
+    created_at.to_i % 100_000 + (user_id || id) +
+      (count_submissions_of_user || 0)
+  end
 end
