@@ -18,10 +18,14 @@ class SubmissionService
         submission_params.delete(:edition_size_formatted) if submission_params[
         :edition_size_formatted
       ]
-      user = User.find_by(gravity_user_id: gravity_user_id) if gravity_user_id
-        .present?
 
-      create_params = submission_params.merge(user_id: user&.id)
+      create_params = submission_params.clone
+
+      if gravity_user_id.present?
+        user = User.find_or_create_by(gravity_user_id: gravity_user_id)
+
+        create_params.merge!(user_id: user&.id)
+      end
 
       if AdminUser.exists?(gravity_user_id: current_user)
         create_params.merge!(
