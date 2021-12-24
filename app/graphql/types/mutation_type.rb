@@ -6,6 +6,8 @@ module Types
 
     field :add_asset_to_consignment_submission,
           mutation: Mutations::AddAssetToConsignmentSubmission
+    field :remove_asset_from_consignment_submission,
+          mutation: Mutations::RemoveAssetFromConsignmentSubmission
     field :add_assets_to_consignment_submission,
           mutation: Mutations::AddAssetsToConsignmentSubmission
     field :create_consignment_offer, mutation: Mutations::CreateOfferMutation

@@ -15,8 +15,9 @@ class SubmissionEvent < Events::BaseEvent
 
   def subject
     {
-      id: @object.user.gravity_user_id,
-      display: "#{@object.user.gravity_user_id} (#{@object.location_city})"
+      id: @object.user&.gravity_user_id || @object.user_id,
+      display:
+        "#{@object.user&.gravity_user_id || @object.user_id} (#{@object.location_city})"
     }
   end
 
