@@ -18,10 +18,14 @@ class SubmissionService
         submission_params.delete(:edition_size_formatted) if submission_params[
         :edition_size_formatted
       ]
-      user = User.find_by(gravity_user_id: gravity_user_id) if gravity_user_id
-        .present?
 
-      create_params = submission_params.merge(user_id: user&.id)
+      create_params = submission_params.clone
+
+      if gravity_user_id.present?
+        user = User.find_or_create_by(gravity_user_id: gravity_user_id)
+
+        create_params.merge!(user_id: user&.id)
+      end
 
       if AdminUser.exists?(gravity_user_id: current_user)
         create_params.merge!(
@@ -29,7 +33,7 @@ class SubmissionService
         )
       end
 
-      unless is_convection
+      unless is_convection || submission_params[:state]&.downcase == 'draft'
         create_params.merge!(
           reject_non_target_supply_artist(submission_params[:artist_id])
         )
@@ -61,7 +65,12 @@ class SubmissionService
       params
     end
 
-    def update_submission(submission, params, current_user: nil)
+    def update_submission(
+      submission,
+      params,
+      current_user: nil,
+      is_convection: true
+    )
       params[:edition_size] = params.delete(:edition_size_formatted) if params[
         :edition_size_formatted
       ]
@@ -74,6 +83,12 @@ class SubmissionService
       end
 
       if submission.state_changed?
+        unless is_convection
+          submission.assign_attributes(
+            reject_non_target_supply_artist(submission.artist_id)
+          )
+        end
+
         update_submission_state(submission, current_user)
       end
       submission.save!
