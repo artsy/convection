@@ -66,13 +66,7 @@ class Submission < ApplicationRecord
     'Other'
   ].freeze
 
-  REQUIRED_FIELDS_FOR_SUBMISSION = %w[
-    artist_id
-    category
-    title
-    user_id
-    year
-  ].freeze
+  REQUIRED_FIELDS_FOR_SUBMISSION = %w[artist_id title year].freeze
 
   delegate :images, to: :assets
 

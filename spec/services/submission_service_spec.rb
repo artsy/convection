@@ -112,6 +112,19 @@ describe SubmissionService do
       expect(new_submission.reload.created_by).to eq nil
     end
 
+    it 'creates a submission and sets the user_id if new convection user' do
+      stub_gravity_root
+      stub_gravity_user(id: 'user_id')
+      stub_gravity_user_detail(id: 'user_id', email: 'michael1@bluth.com')
+      stub_gravity_artist
+
+      new_submission = SubmissionService.create_submission(params, 'user_id')
+
+      expect(new_submission.reload.state).to eq 'submitted'
+      expect(new_submission.user_id).to_not eq user.id
+      expect(new_submission.user.email).to eq 'michael1@bluth.com'
+    end
+
     context 'anonymous submission' do
       before do
         stub_gravity_user(id: 'anonymous', name: 'michael')
@@ -138,6 +151,34 @@ describe SubmissionService do
           SubmissionService.create_submission(params, nil)
           expect(Submission.last.count_submissions_of_user).to eq 3
         end
+      end
+    end
+
+    context 'draft submission' do
+      let(:params) do
+        {
+          artist_id: 'artistid',
+          state: 'draft',
+          title: 'My Artwork',
+          user_name: 'michael',
+          user_email: 'michael@bluth.com',
+          user_phone: '555-5555'
+        }
+      end
+
+      it 'creates a submission with state Draft when artist is not in target supply' do
+        stub_gravity_root
+        stub_gravity_user
+        stub_gravity_user_detail(email: 'michael@bluth.com')
+        stub_gravity_artist({ name: 'some nonTarget artist' })
+
+        new_submission =
+          SubmissionService.create_submission(
+            params,
+            'userid',
+            is_convection: false
+          )
+        expect(new_submission.reload.state).to eq 'draft'
       end
     end
   end
@@ -346,6 +387,8 @@ describe SubmissionService do
     end
 
     it 'sends a artist rejection notification if the submission state is changed to rejected' do
+      stub_gravity_artist({ name: 'some nonTarget artist' })
+
       SubmissionService.update_submission(
         submission,
         { state: 'rejected', rejection_reason: 'NSV' },
@@ -360,6 +403,7 @@ describe SubmissionService do
         'Unfortunately, this artwork would fall below our auction threshold'
       )
       expect(submission.state).to eq 'rejected'
+      expect(submission.rejection_reason).to eq 'NSV'
       expect(submission.rejected_by).to eq 'userid'
       expect(submission.rejected_at).to_not be_nil
       expect(submission.approved_by).to be_nil
@@ -401,6 +445,112 @@ describe SubmissionService do
         { title: 'Excellent Artwork' }
       )
       expect(submission.user_id).to eq user.id
+    end
+
+    it 'updates submission to Rejected state when submission state changed and artist is not in target supply' do
+      stub_gravity_artist({ name: 'some nonTarget artist' })
+
+      SubmissionService.update_submission(
+        submission,
+        { state: 'submitted' },
+        current_user: 'userid',
+        is_convection: false
+      )
+
+      expect(submission.state).to eq 'rejected'
+      expect(submission.rejection_reason).to eq 'Not Target Supply'
+
+      emails = ActionMailer::Base.deliveries
+      expect(emails.length).to eq 1
+      expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
+      expect(emails.first.to).to eq(%w[michael@bluth.com])
+      expect(emails.first.from).to eq(%w[consign@artsy.net])
+      expect(emails.first.html_part.body).to include(
+        'Specialists have determined we cannot accept'
+      )
+    end
+
+    it 'updates submission to Submitted state when submission state changed and artist is in target supply' do
+      stub_gravity_artist(target_supply: true)
+      expect(NotificationService).to receive(:post_submission_event)
+        .once
+        .with(submission.id, 'submitted')
+
+      SubmissionService.update_submission(
+        submission,
+        { state: 'submitted' },
+        current_user: 'userid',
+        is_convection: false
+      )
+
+      expect(submission.state).to eq 'submitted'
+      expect(submission.rejection_reason).to eq nil
+    end
+
+    it 'updates submission to Submitted state when submission state changed in Convection and artist is not in target supply' do
+      stub_gravity_artist({ name: 'some nonTarget artist' })
+      expect(NotificationService).to receive(:post_submission_event)
+        .once
+        .with(submission.id, 'submitted')
+
+      SubmissionService.update_submission(
+        submission,
+        { state: 'submitted' },
+        current_user: 'userid',
+        is_convection: true
+      )
+
+      expect(submission.state).to eq 'submitted'
+      expect(submission.rejection_reason).to eq nil
+    end
+
+    context 'anonymous submission' do
+      let(:submission) do
+        Fabricate(
+          :submission,
+          artist_id: 'artistid',
+          user_id: nil,
+          user: nil,
+          title: 'My Artwork',
+          user_name: 'michael',
+          user_email: 'michael@bluth.com',
+          user_phone: '555-5555'
+        )
+      end
+
+      it 'updates submission to Submitted state' do
+        stub_gravity_artist(target_supply: true)
+        expect(NotificationService).to receive(:post_submission_event)
+          .once
+          .with(submission.id, 'submitted')
+
+        SubmissionService.update_submission(
+          submission,
+          { state: 'submitted' },
+          current_user: nil,
+          is_convection: false
+        )
+
+        expect(submission.state).to eq 'submitted'
+      end
+    end
+
+    Submission::REQUIRED_FIELDS_FOR_SUBMISSION.map do |field|
+      it "raises an exception if submission have missing #{field}" do
+        arguments = { state: 'submitted' }
+        arguments[field] = nil
+
+        expect {
+          SubmissionService.update_submission(
+            submission,
+            arguments,
+            current_user: 'userid'
+          )
+        }.to raise_error(
+          SubmissionService::ParamError,
+          'Missing fields for submission.'
+        )
+      end
     end
   end
 
