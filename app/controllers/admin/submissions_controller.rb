@@ -162,6 +162,7 @@ module Admin
         submissions =
           Submission
             .where('user_email like ?', "%#{term}%")
+            .where
             .not(user_id: nil)
             .limit(1)
         if submissions.empty?
