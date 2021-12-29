@@ -160,7 +160,10 @@ module Admin
 
         # Exclude anonymous submissions from the submissions with a matching email
         submissions =
-          Submission.where(user_email: term).where.not(user_id: nil).limit(1)
+          Submission
+            .where('user_email like ?', "%#{term}%")
+            .not(user_id: nil)
+            .limit(1)
         if submissions.empty?
           users = []
         else
