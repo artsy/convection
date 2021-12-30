@@ -192,6 +192,7 @@ class Submission < ApplicationRecord
   end
 
   def count_submissions_of_user
+    return 0 if user.nil? && user_email.blank?
     return Submission.where(user_email: user_email).count if user.nil?
 
     user.submissions.count
