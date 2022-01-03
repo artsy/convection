@@ -41,6 +41,7 @@ module Admin
         user: params[:user],
         artist: params[:artist],
         sort: params[:sort],
+        user_email: params[:user_email],
         direction: params[:direction]
       }
     end

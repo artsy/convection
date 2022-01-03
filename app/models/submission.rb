@@ -198,8 +198,17 @@ class Submission < ApplicationRecord
   end
 
   def count_submissions_of_user
-    return 1 if user.nil?
+    user_submission_by_email =
+      if user_email.present?
+        Submission.where(user_email: user_email)
+      else
+        Submission.none
+      end
+    if user.nil?
+      return user_submission_by_email.count > 0 ? submission_count : 0
+    end
 
-    user.submissions.count
+    user.submissions.count +
+      user_submission_by_email.where.not(user_id: user_id).count
   end
 end
