@@ -205,7 +205,9 @@ class Submission < ApplicationRecord
         Submission.none
       end
     if user.nil?
-      return user_submission_by_email.count > 0 ? submission_count : 0
+      return(
+        user_submission_by_email.count > 0 ? user_submission_by_email.count : 0
+      )
     end
 
     user.submissions.count +
