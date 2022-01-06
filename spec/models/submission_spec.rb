@@ -254,7 +254,7 @@ describe Submission do
       end
 
       it 'return the count of user submissions found by user_email eq 1' do
-        expect(submission.count_submissions_of_user).to eq 1
+        expect(submission.count_submissions_of_user).to eq 2
       end
     end
   end
