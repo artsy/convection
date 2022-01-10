@@ -22,7 +22,11 @@ describe 'Editing a submission', type: :feature do
   let(:admin_id) { 'adminid' }
 
   before do
-    stub_gravity_root
+    add_default_stubs(
+      id: submission.user.gravity_user_id,
+      artist_id: submission.artist_id
+    )
+
     allow(Convection.config).to receive(:auction_offer_form_url).and_return(
       'https://google.com/auction'
     )
@@ -41,11 +45,6 @@ describe 'Editing a submission', type: :feature do
       email: 'admin@art.sy',
       name: 'Blake Adminmeier'
     )
-
-    # Stub gravity
-    stub_gravity_user(id: submission.user.gravity_user_id)
-    stub_gravity_user_detail(id: submission.user.gravity_user_id)
-    stub_gravity_artist(id: submission.artist_id)
 
     allow(Convection.config).to receive(:gravity_xapp_token).and_return(
       'xapp_token'

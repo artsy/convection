@@ -21,11 +21,7 @@ describe 'admin/submissions/edit.html.erb', type: :feature do
           category: 'Painting',
           user: Fabricate(:user, gravity_user_id: 'userid')
         )
-
-      stub_gravity_root
-      stub_gravity_user
-      stub_gravity_user_detail
-      stub_gravity_artist
+      add_default_stubs
 
       allow(Convection.config).to receive(:gravity_xapp_token).and_return(
         'xapp_token'

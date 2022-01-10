@@ -237,23 +237,19 @@ describe SubmissionsHelper, type: :helper do
   end
 
   context 'reviewer_byline' do
+    before { add_default_stubs }
+
     it 'shows the correct label for an approved submission' do
-      stub_gravity_root
-      stub_gravity_user
       submission =
         Fabricate(:submission, state: 'approved', approved_by: 'userid')
       expect(helper.reviewer_byline(submission)).to eq 'Approved by Jon Jonson'
     end
     it 'shows the correct label for a rejected submissions' do
-      stub_gravity_root
-      stub_gravity_user
       submission =
         Fabricate(:submission, state: 'rejected', rejected_by: 'userid')
       expect(helper.reviewer_byline(submission)).to eq 'Rejected by Jon Jonson'
     end
     it 'shows the correct label for automatically rejected submissions' do
-      stub_gravity_root
-      stub_gravity_user
       submission = Fabricate(:submission, state: 'rejected', rejected_by: nil)
       expect(helper.reviewer_byline(submission)).to eq 'Rejected automatically'
     end

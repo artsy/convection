@@ -112,9 +112,7 @@ describe 'PUT /api/submissions' do
         allow(Convection.config).to receive(:admin_email_address).and_return(
           'lucille@bluth.com'
         )
-        stub_gravity_root
-        stub_gravity_user
-        stub_gravity_artist
+        add_default_stubs
 
         Fabricate(:image, submission: @submission)
 

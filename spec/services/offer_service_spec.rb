@@ -200,9 +200,10 @@ describe OfferService do
       end
 
       before do
-        stub_gravity_root
-        stub_gravity_user(id: offer.submission.user.gravity_user_id)
-        stub_gravity_artist(id: submission.artist_id)
+        add_default_stubs(
+          id: offer.submission.user.gravity_user_id,
+          artist_id: submission.artist_id
+        )
         stub_gravity_partner(id: partner.gravity_partner_id)
         stub_gravity_partner_communications(
           partner_id: partner.gravity_partner_id

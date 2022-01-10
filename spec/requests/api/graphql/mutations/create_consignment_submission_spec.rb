@@ -32,17 +32,13 @@ describe 'createConsignmentSubmission mutation' do
     }
   GRAPHQL
 
+  before { add_default_stubs(email: 'michael@bluth.com', artist_id: 'andy') }
+
   describe 'requests' do
     context 'with an unauthorized request' do
       let(:token) { 'foo.bar.baz' }
 
       it 'create user with gravity_auser_id eq nil if contact information is not provided' do
-        stub_gravity_root
-        stub_gravity_user
-        stub_gravity_user_detail(email: 'michael@bluth.com')
-        stub_gravity_artist({ id: 'andy' })
-        stub_gravity_artists({ id: 'andy' })
-
         post '/api/graphql', params: { query: mutation }, headers: headers
 
         expect(User.last).to eq nil
@@ -63,12 +59,6 @@ describe 'createConsignmentSubmission mutation' do
         GRAPHQL
 
         it 'creates a submission' do
-          stub_gravity_root
-          stub_gravity_user
-          stub_gravity_user_detail(email: 'michael@bluth.com')
-          stub_gravity_artist({ id: 'andy' })
-          stub_gravity_artists({ id: 'andy' })
-
           post '/api/graphql', params: { query: mutation }, headers: headers
 
           body = JSON.parse(response.body)
@@ -98,11 +88,6 @@ describe 'createConsignmentSubmission mutation' do
 
   describe 'valid requests' do
     it 'creates a submission' do
-      stub_gravity_root
-      stub_gravity_user
-      stub_gravity_user_detail(email: 'michael@bluth.com')
-      stub_gravity_artist({ id: 'andy' })
-
       expect {
         post '/api/graphql', params: { query: mutation }, headers: headers
       }.to change(Submission, :count).by(1)
@@ -147,11 +132,6 @@ describe 'createConsignmentSubmission mutation' do
       end
 
       it 'sets that UA on the submission' do
-        stub_gravity_root
-        stub_gravity_user
-        stub_gravity_user_detail(email: 'michael@bluth.com')
-        stub_gravity_artist({ id: 'andy' })
-
         post '/api/graphql', params: { query: mutation }, headers: headers
 
         expect(response.status).to eq 200

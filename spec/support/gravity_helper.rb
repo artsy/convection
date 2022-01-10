@@ -47,6 +47,23 @@ GRAVITY_ROOT = {
 
 HEADERS = { 'Content-Type' => 'application/json' }.freeze
 
+def add_default_stubs(
+  id: nil,
+  name: nil,
+  email: nil,
+  artist_id: nil,
+  artist_name: nil
+)
+  user_params = { id: id, name: name, email: email }.reject { |_k, v| v.nil? }
+  artist_params = { id: artist_id, name: artist_name }.reject { |_k, v| v.nil? }
+
+  stub_gravity_root
+  stub_gravity_user(user_params)
+  stub_gravity_user_detail(user_params)
+  stub_gravity_artist(artist_params)
+  stub_gravity_artists(artist_params)
+end
+
 def stub_gravity_root
   stub_gravity_request('', GRAVITY_ROOT)
 end

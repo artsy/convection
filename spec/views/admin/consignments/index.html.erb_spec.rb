@@ -63,12 +63,10 @@ describe 'admin/consignments/index.html.erb', type: :feature do
 
       it 'lets you click a consignment' do
         consignment = PartnerSubmission.consigned.first
-        stub_gravity_root
-        stub_gravity_user(id: consignment.submission.user.gravity_user_id)
-        stub_gravity_user_detail(
-          id: consignment.submission.user.gravity_user_id
+        add_default_stubs(
+          id: consignment.submission.user.gravity_user_id,
+          artist_id: consignment.submission.artist_id
         )
-        stub_gravity_artist(id: consignment.submission.artist_id)
         page.visit admin_consignments_path
 
         find(".list-item--consignment[data-id='#{consignment.id}']").click

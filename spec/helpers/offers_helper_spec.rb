@@ -5,10 +5,7 @@ require 'support/gravity_helper'
 
 describe OffersHelper, type: :helper do
   context 'reviewed_byline' do
-    before do
-      stub_gravity_root
-      stub_gravity_user
-    end
+    before { add_default_stubs }
 
     it 'shows the correct label for a rejected offer' do
       offer = Fabricate(:offer, state: 'rejected', rejected_by: 'userid')

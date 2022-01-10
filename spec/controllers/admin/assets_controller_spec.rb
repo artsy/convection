@@ -9,10 +9,7 @@ describe Admin::AssetsController, type: :controller do
       allow_any_instance_of(Admin::AssetsController).to receive(
         :require_artsy_authentication
       )
-      stub_gravity_root
-      stub_gravity_user
-      stub_gravity_user_detail
-      stub_gravity_artist
+      add_default_stubs
       @submission =
         Fabricate(
           :submission,

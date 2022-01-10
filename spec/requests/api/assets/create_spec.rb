@@ -61,10 +61,7 @@ describe 'Create Asset' do
     end
 
     it 'creates an asset and attempts to send a notification' do
-      stub_gravity_root
-      stub_gravity_user
-      stub_gravity_user_detail(email: 'michael@bluth.com')
-      stub_gravity_artist
+      add_default_stubs(email: 'michael@bluth.com')
 
       submission.update!(state: 'submitted')
       expect {

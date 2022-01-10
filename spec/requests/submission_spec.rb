@@ -11,14 +11,11 @@ describe 'Submission Flow' do
 
   before do
     allow(Convection.config).to receive(:access_token).and_return('auth-token')
+    add_default_stubs(email: 'michael@bluth.com')
     expect(NotificationService).to receive(:post_submission_event).once
   end
 
   it 'Completes a submission from Tokyo' do
-    stub_gravity_root
-    stub_gravity_user
-    stub_gravity_artist
-
     # first create the submission, without a location_city
     post '/api/submissions',
          params: {
@@ -66,10 +63,6 @@ describe 'Submission Flow' do
 
   describe 'Creating a submission without a photo initially' do
     it 'sends an initial reminder and a delayed reminder' do
-      stub_gravity_root
-      stub_gravity_user(email: 'michael@bluth.com')
-      stub_gravity_artist
-
       # first create the submission
       post '/api/submissions',
            params: {
@@ -117,11 +110,6 @@ describe 'Submission Flow' do
 
   describe 'Creating a submission (as a client might) with a photo' do
     it 'creates and updates a submission/assets' do
-      stub_gravity_root
-      stub_gravity_user
-      stub_gravity_user_detail(email: 'michael@bluth.com')
-      stub_gravity_artist
-
       # first create the submission
       post '/api/submissions',
            params: {
