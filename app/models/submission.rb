@@ -66,13 +66,7 @@ class Submission < ApplicationRecord
     'Other'
   ].freeze
 
-  REQUIRED_FIELDS_FOR_SUBMISSION = %w[
-    artist_id
-    category
-    title
-    user_id
-    year
-  ].freeze
+  REQUIRED_FIELDS_FOR_SUBMISSION = %w[artist_id title year].freeze
 
   delegate :images, to: :assets
 
@@ -201,5 +195,10 @@ class Submission < ApplicationRecord
     return Submission.where(user_email: user_email).count if user.nil?
 
     user.submissions.count
+  end
+
+  def unique_code_for_digest
+    created_at.to_i % 100_000 + (user_id || id) +
+      (count_submissions_of_user || 0)
   end
 end

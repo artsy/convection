@@ -8,7 +8,10 @@ class UpdateSubmissionResolver < BaseResolver
       raise(GraphQL::ExecutionError, 'Submission from ID Not Found')
     end
 
-    unless matching_user(submission, @arguments&.[](:session_id)) || admin?
+    unless (
+             matching_user(submission, @arguments&.[](:session_id)) &&
+               submission.draft?
+           ) || admin?
       raise(GraphQL::ExecutionError, 'Submission Not Found')
     end
 
@@ -19,7 +22,9 @@ class UpdateSubmissionResolver < BaseResolver
 
     SubmissionService.update_submission(
       submission,
-      @arguments.except(:id, :session_id)
+      @arguments.except(:id, :session_id),
+      current_user: nil,
+      is_convection: false
     )
 
     { consignment_submission: submission }
