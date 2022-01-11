@@ -51,10 +51,9 @@ $green: #0eda83;
   text-decoration: underline;
 }
 
-.sidebar-link-2 {
+.smaller-sidebar-link {
+  @extend .sidebar-link;
   font-size: 16px;
-  color: $gray-dark;
-  text-decoration: underline;
 }
 
 .watt-overview {
