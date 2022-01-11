@@ -10,7 +10,7 @@
       <%= submission.name %>
     </div>
     <div class="sidebar-link-2" >
-      <%= link_to "#{submission.count_submissions_of_user} submissions made", admin_submissions_path(user_id: submission.user_id, user_email: submission.user_email) %>
+      <%= link_to "#{submission.count_submissions_of_user} submissions made", admin_submissions_path(user: submission.user_id, user_email: submission.user_email) %>
     </div>
     <div>
       <%= submission.email %>
