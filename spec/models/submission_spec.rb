@@ -247,14 +247,23 @@ describe Submission do
       let!(:out_of_sample_submission) do
         Fabricate(:submission, user: nil, user_email: 'diff_user@artsymail.com')
       end
+      let!(:submission_without_email_and_user) do
+        Fabricate(:submission, user: nil, user_email: nil)
+      end
 
       it 'return the count of user submissions found by user_email eq 1' do
         submission1.delete
         expect(submission.count_submissions_of_user).to eq 1
       end
 
-      it 'return the count of user submissions found by user_email eq 1' do
+      it 'return the count of user submissions found by user_email eq 2' do
         expect(submission.count_submissions_of_user).to eq 2
+      end
+
+      it 'return 1 submission if submission without a user and does not have user_email' do
+        expect(
+          submission_without_email_and_user.count_submissions_of_user
+        ).to eq 1
       end
     end
   end
