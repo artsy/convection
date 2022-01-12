@@ -23,72 +23,70 @@ describe User do
     end
   end
 
-  context 'active record validation' do
-    context 'contact information has not been provided' do
-      it 'fails if gravity_user_id is empty' do
-        user.gravity_user_id = ''
-        user.save!
-        expect(user.gravity_user_id).to be_nil
-      end
-      it 'passes if gravity_user_id has a value' do
-        user.gravity_user_id = 'user-1'
-        user.save!
-        expect(user.gravity_user_id).to eq 'user-1'
-      end
-    end
-  end
-
-  context 'gravity_user' do
-    it 'returns nil if it cannot find the object' do
-      stub_gravity_root
-      stub_request(
-        :get,
-        "#{Convection.config.gravity_api_url}/users/#{user.gravity_user_id}"
-      ).to_raise(Faraday::ResourceNotFound)
-      expect(user.gravity_user).to be_nil
-      expect(user.name).to be_nil
-    end
-
-    it 'returns the object if it can find it' do
-      stub_gravity_root
-      stub_gravity_user(id: user.gravity_user_id, name: 'Buster Bluth')
-      expect(user.name).to eq 'Buster Bluth'
-    end
-  end
-
-  context 'user detail' do
-    it 'returns nil if it cannot find the object' do
-      stub_gravity_root
-      stub_gravity_user(id: user.gravity_user_id, name: 'Buster Bluth')
-      stub_request(
-        :get,
-        "#{Convection.config.gravity_api_url}/user_details/#{
-          user.gravity_user_id
-        }"
-      ).to_raise(Faraday::ResourceNotFound)
-      expect(user.name).to eq 'Buster Bluth'
-      expect(user.user_detail).to be_nil
-      expect(user.user_detail&.email).to be_nil
-    end
-
-    it 'returns the object if it can find it' do
-      stub_gravity_root
-      stub_gravity_user(id: user.gravity_user_id, name: 'Buster Bluth')
-      stub_gravity_user_detail(
+  context 'model' do
+    before do
+      add_default_stubs(
         id: user.gravity_user_id,
+        name: 'Buster Bluth',
         email: 'buster@bluth.com'
       )
-      expect(user.name).to eq 'Buster Bluth'
-      expect(user.user_detail.email).to eq 'buster@bluth.com'
     end
 
-    it 'returns nil if there is no gravity_user' do
-      stub_gravity_root
-      stub_request(
-        :get,
-        "#{Convection.config.gravity_api_url}/users/#{user.gravity_user_id}"
-      ).to_raise(Faraday::ResourceNotFound)
-      expect(user.user_detail).to be_nil
+    context 'active record validation' do
+      context 'contact information has not been provided' do
+        it 'do not save gravity_user_id if gravity_user_id is empty' do
+          user.gravity_user_id = ''
+          user.save!
+          expect(user.gravity_user_id).to be_nil
+        end
+        it 'passes if gravity_user_id has a value' do
+          user.gravity_user_id = 'user-1'
+          user.save!
+          expect(user.gravity_user_id).to eq 'user-1'
+        end
+      end
+    end
+
+    context 'gravity_user' do
+      it 'returns nil if it cannot find the object' do
+        stub_request(
+          :get,
+          "#{Convection.config.gravity_api_url}/users/#{user.gravity_user_id}"
+        ).to_raise(Faraday::ResourceNotFound)
+        expect(user.gravity_user).to be_nil
+        expect(user.name).to be_nil
+      end
+
+      it 'returns the object if it can find it' do
+        expect(user.name).to eq 'Buster Bluth'
+      end
+    end
+
+    context 'user detail' do
+      it 'returns nil if it cannot find the object' do
+        stub_request(
+          :get,
+          "#{Convection.config.gravity_api_url}/user_details/#{
+            user.gravity_user_id
+          }"
+        ).to_raise(Faraday::ResourceNotFound)
+        expect(user.name).to eq 'Buster Bluth'
+        expect(user.user_detail).to be_nil
+        expect(user.user_detail&.email).to be_nil
+      end
+
+      it 'returns the object if it can find it' do
+        expect(user.name).to eq 'Buster Bluth'
+        expect(user.user_detail.email).to eq 'buster@bluth.com'
+      end
+
+      it 'returns nil if there is no gravity_user' do
+        stub_request(
+          :get,
+          "#{Convection.config.gravity_api_url}/users/#{user.gravity_user_id}"
+        ).to_raise(Faraday::ResourceNotFound)
+        expect(user.user_detail).to be_nil
+      end
     end
   end
 end

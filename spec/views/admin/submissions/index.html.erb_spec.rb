@@ -7,15 +7,10 @@ require 'support/gravql_helper'
 describe 'admin/submissions/index.html.erb', type: :feature do
   context 'always' do
     before do
-      stub_gravity_root
-      stub_gravity_artist(id: 'artistid2')
-      stub_gravity_artists
+      add_default_stubs(id: 'userid2', artist_id: 'artistid2')
 
       stub_gravity_artwork(id: 'artworkid2')
       stub_gravity_artworks
-
-      stub_gravity_user(id: 'userid2')
-      stub_gravity_user_detail(id: 'userid2')
 
       allow_any_instance_of(ApplicationController).to receive(
         :require_artsy_authentication

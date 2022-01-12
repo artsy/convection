@@ -16,12 +16,7 @@ describe SubmissionService do
     )
   end
 
-  before do
-    stub_gravity_root
-    stub_gravity_user
-    stub_gravity_user_detail(email: 'michael@bluth.com')
-    stub_gravity_artist
-  end
+  before { add_default_stubs }
 
   context 'create_submission' do
     let(:params) do
@@ -36,11 +31,6 @@ describe SubmissionService do
     end
 
     it 'creates a submission with state Rejected when artist is not in target supply' do
-      stub_gravity_root
-      stub_gravity_user
-      stub_gravity_user_detail(email: 'michael@bluth.com')
-      stub_gravity_artist({ name: 'some nonTarget artist' })
-
       new_submission =
         SubmissionService.create_submission(
           params,
@@ -51,11 +41,6 @@ describe SubmissionService do
     end
 
     it 'delvers rejection email to user for non-target supply artist submissions' do
-      stub_gravity_root
-      stub_gravity_user
-      stub_gravity_user_detail(email: 'michael@bluth.com')
-      stub_gravity_artist({ name: 'some nonTarget artist' })
-
       new_submission =
         SubmissionService.create_submission(
           params,
@@ -75,11 +60,6 @@ describe SubmissionService do
     end
 
     it 'does not reject a submission automatically, when created by Convection' do
-      stub_gravity_root
-      stub_gravity_user
-      stub_gravity_user_detail(email: 'michael@bluth.com')
-      stub_gravity_artist({ name: 'some nonTarget artist' })
-
       new_submission =
         SubmissionService.create_submission(
           params,
@@ -91,11 +71,6 @@ describe SubmissionService do
     end
 
     it 'creates a submission and sets the user_id and email' do
-      stub_gravity_root
-      stub_gravity_user
-      stub_gravity_user_detail(email: 'michael@bluth.com')
-      stub_gravity_artist
-
       new_submission = SubmissionService.create_submission(params, 'userid')
       expect(new_submission.reload.state).to eq 'submitted'
       expect(new_submission.user_id).to eq user.id
@@ -103,11 +78,6 @@ describe SubmissionService do
     end
 
     it 'does not populate created_by field, when submission is made by non-admin' do
-      stub_gravity_root
-      stub_gravity_user
-      stub_gravity_user_detail(email: 'michael@bluth.com')
-      stub_gravity_artist
-
       new_submission = SubmissionService.create_submission(params, 'userid')
       expect(new_submission.reload.created_by).to eq nil
     end
@@ -412,28 +382,14 @@ describe SubmissionService do
     end
 
     it 'updates the user associated with the submission if a user ID is passed' do
-      new_user =
-        Fabricate(:user, gravity_user_id: 'new_gravity_user_id', email: nil)
-      body = {
-        id: new_user.gravity_user_id,
-        name: 'Jon Jonson',
-        _links: {
-          user_detail: {
-            href:
-              "#{Convection.config.gravity_api_url}/user_details/#{new_user.gravity_user_id}"
-          }
-        }
-      }
-      stub_gravity_request('/users/new_gravity_user_id', body)
+      new_user = Fabricate(:user, gravity_user_id: 'user_id3', email: nil)
+      add_default_stubs(id: new_user.gravity_user_id)
       stub_gravity_user_detail(
         id: new_user.gravity_user_id,
         email: 'cool.cat@fatcat.com'
       )
 
-      SubmissionService.update_submission(
-        submission,
-        { user_id: 'new_gravity_user_id' }
-      )
+      SubmissionService.update_submission(submission, { user_id: 'user_id3' })
 
       expect(submission.user_id).to eq new_user.id
       expect(submission.user.email).to eq 'cool.cat@fatcat.com'
@@ -797,9 +753,6 @@ describe SubmissionService do
       allow(Convection.config).to receive(:admin_email_address).and_return(
         'lucille@bluth.com'
       )
-      stub_gravity_root
-      stub_gravity_user
-      stub_gravity_user_detail(email: 'michael@bluth.com')
       stub_gravity_artist
 
       submission.update!(receipt_sent_at: Time.now.utc - 20.minutes)
@@ -834,10 +787,6 @@ describe SubmissionService do
       allow(Convection.config).to receive(:admin_email_address).and_return(
         'lucille@bluth.com'
       )
-      stub_gravity_root
-      stub_gravity_user
-      stub_gravity_user_detail(email: 'michael@bluth.com')
-      stub_gravity_artist
       submission.update!(receipt_sent_at: Time.now.utc - 20.minutes)
       Fabricate(:unprocessed_image, submission: submission)
       SubmissionService.deliver_submission_notification(submission.id)

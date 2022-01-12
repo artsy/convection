@@ -13,6 +13,7 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
     end
 
     before do
+      add_default_stubs(id: submission.user.gravity_user_id)
       allow_any_instance_of(Admin::OffersController).to receive(
         :require_artsy_authentication
       )
@@ -55,10 +56,6 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
       end
 
       it 'allows you to create an offer' do
-        stub_gravity_root
-        stub_gravity_user(id: submission.user.gravity_user_id)
-        stub_gravity_user_detail(id: submission.user.gravity_user_id)
-
         allow(Convection.config).to receive(:gravity_xapp_token).and_return(
           'xapp_token'
         )
@@ -128,10 +125,6 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
       end
 
       it 'allows you to create an offer' do
-        stub_gravity_root
-        stub_gravity_user(id: submission.user.gravity_user_id)
-        stub_gravity_user_detail(id: submission.user.gravity_user_id)
-
         allow(Convection.config).to receive(:gravity_xapp_token).and_return(
           'xapp_token'
         )
@@ -198,10 +191,6 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
       end
 
       it 'allows you to create an offer' do
-        stub_gravity_root
-        stub_gravity_user(id: submission.user.gravity_user_id)
-        stub_gravity_user_detail(id: submission.user.gravity_user_id)
-
         allow(Convection.config).to receive(:gravity_xapp_token).and_return(
           'xapp_token'
         )
@@ -271,10 +260,6 @@ describe 'admin/offers/new_step_1.html.erb', type: :feature do
       end
 
       it 'allows you to create an offer' do
-        stub_gravity_root
-        stub_gravity_user(id: submission.user.gravity_user_id)
-        stub_gravity_user_detail(id: submission.user.gravity_user_id)
-
         allow(Convection.config).to receive(:gravity_xapp_token).and_return(
           'xapp_token'
         )

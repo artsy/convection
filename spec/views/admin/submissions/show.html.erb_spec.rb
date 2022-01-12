@@ -20,10 +20,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       allow(Convection.config).to receive(:auction_offer_form_url).and_return(
         'https://google.com/auction'
       )
-      stub_gravity_root
-      stub_gravity_user
-      stub_gravity_user_detail
-      stub_gravity_artist
+      add_default_stubs
 
       @submission =
         Fabricate(
