@@ -41,6 +41,7 @@ module Admin
         user: params[:user],
         artist: params[:artist],
         sort: params[:sort],
+        user_email: params[:user_email],
         direction: params[:direction]
       }
     end
@@ -160,7 +161,11 @@ module Admin
 
         # Exclude anonymous submissions from the submissions with a matching email
         submissions =
-          Submission.where(user_email: term).where.not(user_id: nil).limit(1)
+          Submission
+            .where('user_email like ?', "%#{term}%")
+            .where
+            .not(user_id: nil)
+            .limit(1)
         if submissions.empty?
           users = []
         else

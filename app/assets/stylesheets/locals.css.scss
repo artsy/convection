@@ -51,6 +51,11 @@ $green: #0eda83;
   text-decoration: underline;
 }
 
+.smaller-sidebar-link {
+  @extend .sidebar-link;
+  font-size: 16px;
+}
+
 .watt-overview {
   .overview-section-title--inline {
     font-size: 25px;
