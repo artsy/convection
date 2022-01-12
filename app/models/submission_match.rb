@@ -75,6 +75,7 @@ SQL
       artist_id: params[:artist].presence,
       category: params[:category].presence
     }.compact
+    attributes.merge!(user_email: user_email) if filtering_by_user_email?
     attributes.merge!(assigned_to: assigned_to) if filtering_by_assigned_to?
     attributes.merge!(cataloguer: cataloguer) if filtering_by_cataloguer?
     attributes
@@ -92,6 +93,10 @@ SQL
 
   def filtering_by_assigned_without_accepted_offer?
     filtering_by_assigned_to? && %w[accepted published].include?(params[:state])
+  end
+
+  def filtering_by_user_email?
+    params[:user_email].presence && params[:user].blank?
   end
 
   def sorting_by_users?
@@ -120,5 +125,9 @@ SQL
 
   def cataloguer
     params[:cataloguer].presence
+  end
+
+  def user_email
+    params[:user_email].presence
   end
 end
