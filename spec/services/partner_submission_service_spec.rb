@@ -8,12 +8,8 @@ describe PartnerSubmissionService do
   before do
     @user = Fabricate(:user, gravity_user_id: 'userid')
     @user2 = Fabricate(:user, gravity_user_id: 'userid2')
-    stub_gravity_root
-    stub_gravity_user
-    stub_gravity_user(id: 'userid2')
-    stub_gravity_user_detail(id: 'userid2')
-    stub_gravity_user_detail
-    stub_gravity_artist
+    add_default_stubs
+    add_default_stubs(id: 'userid2')
 
     allow(Convection.config).to receive(:gravity_xapp_token).and_return(
       'xapp_token'

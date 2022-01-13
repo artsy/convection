@@ -41,11 +41,11 @@ describe 'admin/consignments/show.html.erb', type: :feature do
       )
 
       stub_jwt_header('userid')
-      stub_gravity_root
-      stub_gravity_user(name: 'Lucille Bluth')
-      stub_gravity_artist(id: submission.artist_id)
-      stub_gravity_user(id: submission.user.gravity_user_id)
-      stub_gravity_user_detail(id: submission.user.gravity_user_id)
+      add_default_stubs(
+        id: submission.user.gravity_user_id,
+        name: 'Lucille Bluth',
+        artist_id: submission.artist_id
+      )
 
       allow(Convection.config).to receive(:gravity_xapp_token).and_return(
         'xapp_token'

@@ -19,10 +19,7 @@ describe 'admin/submissions/new.html.erb', type: :feature do
     end
 
     it 'lets you update the submission title and redirects back to the show page' do
-      stub_gravity_root
-      stub_gravity_user
-      stub_gravity_user_detail
-      stub_gravity_artist
+      add_default_stubs
 
       allow(Convection.config).to receive(:gravity_xapp_token).and_return(
         'xapp_token'

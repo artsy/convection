@@ -131,9 +131,7 @@ describe 'createConsignmentOffer mutation' do
   describe 'valid requests' do
     context 'with just the minimum' do
       it 'creates an offer' do
-        stub_gravity_root
-        stub_gravity_user
-        stub_gravity_user_detail(email: 'michael@bluth.com')
+        add_default_stubs
 
         expect {
           post '/api/graphql', params: { query: mutation }, headers: headers
@@ -175,9 +173,7 @@ describe 'createConsignmentOffer mutation' do
       INPUTS
 
       it 'creates an offer' do
-        stub_gravity_root
-        stub_gravity_user
-        stub_gravity_user_detail(email: 'michael@bluth.com')
+        add_default_stubs
 
         expect {
           post '/api/graphql', params: { query: mutation }, headers: headers

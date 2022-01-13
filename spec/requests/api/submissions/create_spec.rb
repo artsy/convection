@@ -11,6 +11,10 @@ describe 'POST /api/submissions' do
 
   let(:headers) { { 'Authorization' => "Bearer #{jwt_token}" } }
 
+  before do
+    add_default_stubs(email: 'michael@bluth.com', artist_id: 'artistid')
+  end
+
   context 'with an unauthorized submission' do
     let(:headers) { { 'Authorization' => 'Bearer foo.bar.baz' } }
 
@@ -33,11 +37,6 @@ describe 'POST /api/submissions' do
 
   context 'with an authorized submission and artist id' do
     it 'returns a 201 and creates a submission' do
-      stub_gravity_root
-      stub_gravity_user
-      stub_gravity_user_detail(email: 'michael@bluth.com')
-      stub_gravity_artist({ id: 'artistid' })
-
       params = { title: 'my sartwork', artist_id: 'artistid' }
 
       expect do
@@ -50,11 +49,6 @@ describe 'POST /api/submissions' do
 
   context 'with an editioned submission' do
     it 'returns a 201 and creates a submission with edition fields' do
-      stub_gravity_root
-      stub_gravity_user
-      stub_gravity_user_detail(email: 'michael@bluth.com')
-      stub_gravity_artist({ id: 'artistid' })
-
       params = {
         artist_id: 'artistid',
         category: 'Painting',
@@ -77,11 +71,6 @@ describe 'POST /api/submissions' do
 
   context 'with a submission that includes a minimum price' do
     it 'returns a 201 and creates a submission with that minimum price' do
-      stub_gravity_root
-      stub_gravity_user
-      stub_gravity_user_detail(email: 'michael@bluth.com')
-      stub_gravity_artist({ id: 'artistid' })
-
       params = {
         artist_id: 'artistid',
         category: 'Painting',
@@ -111,11 +100,6 @@ describe 'POST /api/submissions' do
 
   context 'with a submission that includes a edition_size_formatted' do
     it 'returns a 201 and creates a submission with that edition_size_formatted' do
-      stub_gravity_root
-      stub_gravity_user
-      stub_gravity_user_detail(email: 'michael@bluth.com')
-      stub_gravity_artist({ id: 'artistid' })
-
       params = {
         artist_id: 'artistid',
         category: 'Painting',

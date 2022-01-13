@@ -6,8 +6,7 @@ require 'support/gravity_helper'
 describe 'admin/offers/index.html.erb', type: :feature do
   context 'always' do
     before do
-      stub_gravity_root
-      stub_gravity_artists
+      add_default_stubs
 
       allow_any_instance_of(ApplicationController).to receive(
         :require_artsy_authentication
@@ -131,10 +130,10 @@ describe 'admin/offers/index.html.erb', type: :feature do
 
       it 'lets you click an offer' do
         offer = Offer.first
-        stub_gravity_root
-        stub_gravity_user(id: offer.submission.user.gravity_user_id)
-        stub_gravity_user_detail(id: offer.submission.user.gravity_user_id)
-        stub_gravity_artist(id: offer.submission.artist_id)
+        add_default_stubs(
+          id: offer.submission.user.gravity_user_id,
+          artist_id: offer.submission.artist_id
+        )
 
         find(".list-item--offer[data-id='#{offer.id}']").click
         expect(page).to have_content("Offer ##{offer.reference_id}")
