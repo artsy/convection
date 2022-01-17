@@ -17,30 +17,20 @@ module Api
       sale_artworks =
         Gravity.client.sale_artworks(sale_id: sale_id).sale_artworks
 
-      sale_artworks.map do |sale_artwork|
+      sale_artworks.each do |sale_artwork|
         artwork = sale_artwork.artwork
-        submission = Submission.find_by(source_artwork_id: artwork.id)
+        submission =
+          Submission.with_source_artwork_id.find_by(
+            source_artwork_id: artwork.id
+          )
         next unless submission
 
-        submission.assign_attributes(
-          title: artwork.title,
-          medium: artwork.medium
+        SubmissionService.update_submission_info(artwork, submission)
+        PartnerSubmissionService.update_consignment_info(
+          sale,
+          sale_artwork,
+          submission
         )
-        submission.save!
-
-        consignment = submission.consigned_partner_submission
-        next unless consignment
-
-        price = sale_artwork.highest_bid.try(:amount_cents)
-        state = price ? 'sold' : 'bought in'
-        consignment.assign_attributes(
-          sale_price_cents: price || consignment.sale_price_cents,
-          sale_lot_number: sale_artwork.lot_number,
-          sale_date: sale.end_date,
-          state: state,
-          sale_name: sale.name
-        )
-        consignment.save!
       end
     end
   end

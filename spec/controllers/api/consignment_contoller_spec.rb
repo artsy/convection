@@ -7,9 +7,6 @@ describe Api::ConsignmentsController, type: :controller do
     allow_any_instance_of(Api::ConsignmentsController).to receive(
       :require_authentication
     )
-    allow_any_instance_of(Api::ConsignmentsController).to receive(
-      :fetch_sale_artworks_with_price
-    ).and_return([artwork_id: 1, price: 2])
   end
 
   describe '#update' do
