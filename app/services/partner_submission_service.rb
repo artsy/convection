@@ -107,7 +107,7 @@ class PartnerSubmissionService
 
     def update_consignment_info(sale, sale_artwork, submission)
       consignment = submission.consigned_partner_submission
-      next unless consignment
+      return unless consignment
 
       price = sale_artwork.highest_bid.try(:amount_cents)
       state = price ? 'sold' : 'bought in'
