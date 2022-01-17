@@ -13,37 +13,34 @@ module Api
     private
 
     def update_sale_info(sale_id)
-      sale = Gravity.client.sales(sale_id).sales # return array, but i need .sale(id).sale which exist but doesnt work, need investigate
+      sale = Gravity.client.sale(id: sale_id)._get
       sale_artworks =
         Gravity.client.sale_artworks(sale_id: sale_id).sale_artworks
 
       sale_artworks.map do |sale_artwork|
-        artwork = sale_artwork.artwork # sometimes doesnt work
+        artwork = sale_artwork.artwork
         submission = Submission.find_by(source_artwork_id: artwork.id)
         next unless submission
 
-        # submission update
         submission.assign_attributes(
           title: artwork.title,
-          medium: artwork.medium,
-          year: artwork.year
+          medium: artwork.medium
         )
+        submission.save!
 
-        # do we need to update artist name here? in some cases artwork can have multiple artists, why? and which one to indicate?
-
-        # consignment update
-        price = sale_artwork.highest_bid.try(:amount_cents)
-        lot_number = sale_artwork.lot_number
-        sale_date = sale.end_date
-        state = price ? 'sold' : 'bought in'
         consignment = submission.consigned_partner_submission
+        next unless consignment
+
+        price = sale_artwork.highest_bid.try(:amount_cents)
+        state = price ? 'sold' : 'bought in'
         consignment.assign_attributes(
-          sale_price_cents: price,
-          sale_lot_number: lot_number,
-          sale_date: sale_date,
+          sale_price_cents: price || consignment.sale_price_cents,
+          sale_lot_number: sale_artwork.lot_number,
+          sale_date: sale.end_date,
           state: state,
           sale_name: sale.name
         )
+        consignment.save!
       end
     end
   end
