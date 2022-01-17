@@ -8,7 +8,6 @@ class Submission < ApplicationRecord
   alias_attribute :deleted?, :deleted_at
 
   scope :not_deleted, -> { where(deleted_at: nil) }
-  scope :with_source_artwork_id, -> { where.not(source_artwork_id: nil) }
 
   pg_search_scope :search,
                   against: %i[id title],

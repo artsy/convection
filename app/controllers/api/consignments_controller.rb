@@ -16,13 +16,12 @@ module Api
       sale = Gravity.client.sale(id: sale_id)._get
       sale_artworks =
         Gravity.client.sale_artworks(sale_id: sale_id).sale_artworks
+      artworks = sale_artworks.map { |sa| [sa, sa.artwork, sa.artwork.id] }
+      artwork_ids = artworks.map(&:third)
+      submissions = Submission.where(source_artwork_id: artwork_ids)
 
-      sale_artworks.each do |sale_artwork|
-        artwork = sale_artwork.artwork
-        submission =
-          Submission.with_source_artwork_id.find_by(
-            source_artwork_id: artwork.id
-          )
+      artworks.each do |sale_artwork, artwork, artwork_id|
+        submission = submissions.find_by(source_artwork_id: artwork_id)
         next unless submission
 
         SubmissionService.update_submission_info(artwork, submission)
