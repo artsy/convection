@@ -8,14 +8,14 @@
       <div class="consigned-partner-name">
         Email: <%= @submission.created_by%>
       </div>
-     <% else %>
+    <% else %>
       <div class="consigned-partner-name">
         User
         <% if @submission.user_agent %>
           <% if @submission.user_agent.include? "Artsy-Web" %>
-            (Web)
+            (<a href="#" title="<%= @submission.user_agent %>">Web</a>)
           <% elsif @submission.user_agent.include? "Artsy-Mobile" %>
-            (Mobile)
+            (<a href="#" title="<%= @submission.user_agent %>">Mobile</a>)
           <% end %>
         <% end %>
       </div>
