@@ -9,8 +9,15 @@
         Email: <%= @submission.created_by%>
       </div>
      <% else %>
-     <div class="consigned-partner-name">
+      <div class="consigned-partner-name">
         User
+        <% if @submission.user_agent %>
+          <% if @submission.user_agent.include? "Artsy-Web" %>
+            (Web)
+          <% elsif @submission.user_agent.include? "Artsy-Mobile" %>
+            (Mobile)
+          <% end %>
+        <% end %>
       </div>
     <% end %>
   </div>
