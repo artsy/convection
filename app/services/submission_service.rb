@@ -281,6 +281,7 @@ class SubmissionService
       submission.assign_attributes(
         title: artwork.title,
         medium: artwork.medium,
+        year: artwork.date,
         artist_id: artwork.artists.first.id
       )
       submission.save!
