@@ -37,6 +37,10 @@ class User < ApplicationRecord
     user_detail&.phone
   end
 
+  def save_submission_to_my_collection?
+    user_detail&.enabled_lab_features&.include?('SWA My Collection')
+  end
+
   def user_detail
     gravity_user&.user_detail&._get
   rescue Faraday::ResourceNotFound
