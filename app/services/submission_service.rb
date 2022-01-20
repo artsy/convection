@@ -97,6 +97,9 @@ class SubmissionService
     def update_submission_state(submission, current_user)
       case submission.state
       when 'submitted'
+        if submission.user.save_submission_to_my_collection?
+          create_my_collection_artwork(submission)
+        end
         submit!(submission)
       when 'approved'
         approve!(submission, current_user)

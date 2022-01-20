@@ -13,6 +13,35 @@ module GraphqlHelper
     GQL
   end
 
+  def my_collection_create_artwork_mutation_builder
+    <<~GQL
+      mutation myCollectionAddArtworkMutation(
+        $input: MyCollectionCreateArtworkInput!
+      ) {
+        myCollectionCreateArtwork(input: $input) {
+          artworkOrError {
+            __typename
+          }
+        }
+      }
+    GQL
+  end
+
+  def create_my_collection_artwork(submission)
+    response =
+      Metaql::Schema.execute(
+        query: my_collection_create_artwork_mutation_builder,
+        variables: {
+          input: my_collection_create_artwork_mutation_params(submission)
+        }
+      )
+    if response[:errors].present?
+      # error
+    end
+
+    response # need to save my_collection_artwork_id
+  end
+
   MATCH_PARTNERS_QUERY =
     '
   query matchPartners($term: String!) {
@@ -73,5 +102,24 @@ module GraphqlHelper
     end
 
     match_partners_response[:data][:match_partners]
+  end
+
+  def my_collection_create_artwork_mutation_params(submission)
+    {
+      artistIds: [submission.artist_id],
+      artworkLocation: submission.location_city,
+      category: submission.category,
+      date: submission.year,
+      depth: submission.depth,
+      editionNumber: submission.edition_number,
+      editionSize: submission.edition_size,
+      externalImageUrls: submission.images.map(&:image_urls),
+      height: submission.height,
+      isEdition: submission.edition,
+      medium: submission.medium,
+      provenance: submission.provenance,
+      title: submission.title,
+      width: submission.width
+    }
   end
 end
