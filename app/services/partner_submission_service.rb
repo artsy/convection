@@ -105,16 +105,20 @@ class PartnerSubmissionService
         end
     end
 
-    def update_price(artworks_price)
-      artworks_price.each do |artwork_price|
-        submission =
-          Submission.find_by(source_artwork_id: artwork_price[:artwork_id])
-        next unless submission
+    def update_consignment_info(sale, sale_artwork, submission)
+      consignment = submission.consigned_partner_submission
+      return unless consignment
 
-        consignment = submission.consigned_partner_submission
-        consignment.assign_attributes(sale_price_cents: artwork_price[:price])
-        consignment.save!
-      end
+      price = sale_artwork.highest_bid.try(:amount_cents)
+      state = price ? 'sold' : 'bought in'
+      consignment.assign_attributes(
+        sale_price_cents: price || consignment.sale_price_cents,
+        sale_lot_number: sale_artwork.lot_number,
+        sale_date: sale.end_date,
+        state: state,
+        sale_name: sale.name
+      )
+      consignment.save!
     end
   end
 end

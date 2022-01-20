@@ -291,5 +291,15 @@ class SubmissionService
         artist: artist
       ).deliver_now
     end
+
+    def update_submission_info(artwork, submission)
+      submission.assign_attributes(
+        title: artwork.title,
+        medium: artwork.medium,
+        year: artwork.date,
+        artist_id: artwork.artists.first.id
+      )
+      submission.save!
+    end
   end
 end
