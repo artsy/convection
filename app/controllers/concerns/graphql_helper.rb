@@ -39,7 +39,7 @@ module GraphqlHelper
       # error
     end
 
-    response # need to save my_collection_artwork_id
+    response # need to save submission&.user&.my_collection_artwork_id ||= response[:data]
   end
 
   MATCH_PARTNERS_QUERY =
@@ -107,7 +107,12 @@ module GraphqlHelper
   def my_collection_create_artwork_mutation_params(submission)
     {
       artistIds: [submission.artist_id],
-      artworkLocation: submission.location_city,
+      artworkLocation:
+        [
+          submission.location_city,
+          submission.location_state,
+          submission.location_country
+        ].delete_if(&:empty?).join(', '),
       category: submission.category,
       date: submission.year,
       depth: submission.depth,

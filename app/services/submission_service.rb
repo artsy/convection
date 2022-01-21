@@ -87,6 +87,10 @@ class SubmissionService
           submission.assign_attributes(
             reject_non_target_supply_artist(submission.artist_id)
           )
+          if submission.submitted? &&
+               submission.user.save_submission_to_my_collection?
+            create_my_collection_artwork(submission)
+          end
         end
 
         update_submission_state(submission, current_user)
@@ -97,9 +101,6 @@ class SubmissionService
     def update_submission_state(submission, current_user)
       case submission.state
       when 'submitted'
-        if submission.user.save_submission_to_my_collection?
-          create_my_collection_artwork(submission)
-        end
         submit!(submission)
       when 'approved'
         approve!(submission, current_user)
