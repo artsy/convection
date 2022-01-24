@@ -55,7 +55,6 @@ module Mutations
         arguments: arguments,
         context: context,
         object: object
-        #token?
       }
       resolver = CreateSubmissionResolver.new(resolve_options)
 

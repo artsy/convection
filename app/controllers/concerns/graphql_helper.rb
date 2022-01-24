@@ -27,16 +27,14 @@ module GraphqlHelper
     GQL
   end
 
-  def create_my_collection_artwork(submission, session_id)
+  def create_my_collection_artwork(submission, x_app_token)
     Metaql::Schema.execute(
-        query: my_collection_create_artwork_mutation_builder,
-        token: session_id, #token?
-        variables: {
-          input: my_collection_create_artwork_mutation_params(submission)
-        }
-      )
-
-    
+      query: my_collection_create_artwork_mutation_builder,
+      token: x_app_token,
+      variables: {
+        input: my_collection_create_artwork_mutation_params(submission)
+      }
+    )
   end
 
   MATCH_PARTNERS_QUERY =
