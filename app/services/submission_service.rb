@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class SubmissionService
-  include GraphqlHelper
+  extend GraphqlHelper
+
   class ParamError < StandardError
   end
 

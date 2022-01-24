@@ -30,7 +30,7 @@ module GraphqlHelper
   def create_my_collection_artwork(submission, x_app_token)
     Metaql::Schema.execute(
       query: my_collection_create_artwork_mutation_builder,
-      token: x_app_token,
+      x_app_token: x_app_token,
       variables: {
         input: my_collection_create_artwork_mutation_params(submission)
       }
@@ -104,9 +104,9 @@ module GraphqlHelper
       artistIds: [submission.artist_id],
       artworkLocation:
         [
-          submission.location_city,
-          submission.location_state,
-          submission.location_country
+          submission.location_city.to_s,
+          submission.location_state.to_s,
+          submission.location_country.to_s
         ].delete_if(&:empty?).join(', '),
       category: submission.category,
       date: submission.year,
