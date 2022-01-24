@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class SubmissionService
+  include GraphqlHelper
   class ParamError < StandardError
   end
 
@@ -89,7 +90,7 @@ class SubmissionService
           )
           if submission.submitted? &&
                submission.user.save_submission_to_my_collection?
-            create_my_collection_artwork(submission)
+            create_my_collection_artwork(submission, '') #token? second param
           end
         end
 

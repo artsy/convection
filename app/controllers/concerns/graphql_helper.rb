@@ -27,19 +27,16 @@ module GraphqlHelper
     GQL
   end
 
-  def create_my_collection_artwork(submission)
-    response =
-      Metaql::Schema.execute(
+  def create_my_collection_artwork(submission, session_id)
+    Metaql::Schema.execute(
         query: my_collection_create_artwork_mutation_builder,
+        token: session_id, #token?
         variables: {
           input: my_collection_create_artwork_mutation_params(submission)
         }
       )
-    if response[:errors].present?
-      # error
-    end
 
-    response # need to save submission&.user&.my_collection_artwork_id ||= response[:data]
+    
   end
 
   MATCH_PARTNERS_QUERY =
@@ -118,9 +115,11 @@ module GraphqlHelper
       depth: submission.depth,
       editionNumber: submission.edition_number,
       editionSize: submission.edition_size,
-      externalImageUrls: submission.images.map(&:image_urls),
+      externalImageUrls:
+        submission.images.map(&:image_urls).delete_if(&:empty?),
       height: submission.height,
-      isEdition: submission.edition,
+      attributionClass:
+        submission.attribution_class&.upcase || 'UNKNOWN_EDITION',
       medium: submission.medium,
       provenance: submission.provenance,
       title: submission.title,
