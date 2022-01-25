@@ -17,8 +17,8 @@ module Api
       @jwt_payload ||= request.env['JWT_PAYLOAD']
     end
 
-    def x_app_token
-      @x_app_token ||= request.env['HTTP_AUTHORIZATION'].split.last
+    def current_user_token
+      @current_user_token ||= request.env['HTTP_AUTHORIZATION']
     end
 
     def current_app
