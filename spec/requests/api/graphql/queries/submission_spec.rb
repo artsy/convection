@@ -171,7 +171,7 @@ describe 'submission query' do
         expect(submission_response).to eq nil
 
         error_message = body['errors'][0]['message']
-        expect(error_message).to eq 'Submission from ID Not Found'
+        expect(error_message).to eq 'Submission Not Found'
       end
     end
 

@@ -49,13 +49,15 @@ module Types
 
     field :submission, SubmissionType, null: true do
       description 'Get a Submission'
-      argument :id, ID, required: true
+      argument :id, ID, required: false # we need either id or externalID
+      argument :external_id, ID, required: false
       argument :sessionID, String, required: false
     end
 
     def submission(arguments)
       query_options = { arguments: arguments, context: context, object: object }
       resolver = SubmissionResolver.new(query_options)
+      raise resolver.error unless resolver.valid?
 
       resolver.run
     end
