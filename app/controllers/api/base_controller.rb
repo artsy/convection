@@ -17,10 +17,6 @@ module Api
       @jwt_payload ||= request.env['JWT_PAYLOAD']
     end
 
-    def current_user_token
-      @current_user_token ||= request.env['HTTP_AUTHORIZATION']
-    end
-
     def current_app
       @current_app ||= jwt_payload&.fetch('aud', nil)
     end

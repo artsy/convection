@@ -21,18 +21,30 @@ module GraphqlHelper
         myCollectionCreateArtwork(input: $input) {
           artworkOrError {
             __typename
+            ... on MyCollectionArtworkMutationSuccess {
+              artworkEdge {
+                node {
+                  id
+                }
+              }
+            }
+            ... on MyCollectionArtworkMutationFailure {
+              mutationError {
+                message
+              }
+            }
           }
         }
       }
     GQL
   end
 
-  def create_my_collection_artwork(submission, x_app_token)
+  def create_my_collection_artwork(submission, _current_user_token)
     Metaql::Schema.execute(
       query: my_collection_create_artwork_mutation_builder,
-      x_app_token: x_app_token,
       variables: {
-        input: my_collection_create_artwork_mutation_params(submission)
+        input:
+          my_collection_create_artwork_mutation_params(submission, current_user)
       }
     )
   end
@@ -99,15 +111,16 @@ module GraphqlHelper
     match_partners_response[:data][:match_partners]
   end
 
-  def my_collection_create_artwork_mutation_params(submission)
+  def my_collection_create_artwork_mutation_params(submission, current_user)
     {
+      user_id: current_user,
       artistIds: [submission.artist_id],
       artworkLocation:
         [
-          submission.location_city.to_s,
-          submission.location_state.to_s,
-          submission.location_country.to_s
-        ].delete_if(&:empty?).join(', '),
+          submission.location_city,
+          submission.location_state,
+          submission.location_country
+        ].delete_if(&:blank?).join(', '),
       category: submission.category,
       date: submission.year,
       depth: submission.depth,

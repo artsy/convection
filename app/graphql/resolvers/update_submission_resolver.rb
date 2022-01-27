@@ -23,7 +23,6 @@ class UpdateSubmissionResolver < BaseResolver
     SubmissionService.update_submission(
       submission,
       @arguments.except(:id, :session_id),
-      @context[:x_app_token],
       current_user: nil,
       is_convection: false
     )

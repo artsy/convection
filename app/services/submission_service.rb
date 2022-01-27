@@ -70,7 +70,6 @@ class SubmissionService
     def update_submission(
       submission,
       params,
-      x_app_token,
       current_user: nil,
       is_convection: true
     )
@@ -92,7 +91,7 @@ class SubmissionService
           )
           if submission.submitted? &&
                submission.user.save_submission_to_my_collection?
-            create_my_collection_artwork(submission, x_app_token)
+            create_my_collection_artwork(submission, current_user)
           end
         end
 
