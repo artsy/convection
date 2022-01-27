@@ -20,7 +20,7 @@ class UpdateSubmissionResolver < BaseResolver
 
     SubmissionService.update_submission(
       submission,
-      @arguments.except(:id, :session_id),
+      @arguments.except(:id, :external_id, :session_id),
       current_user: nil,
       is_convection: false
     )

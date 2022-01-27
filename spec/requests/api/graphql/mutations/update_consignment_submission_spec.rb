@@ -262,7 +262,7 @@ describe 'updateConsignmentSubmission mutation' do
     describe 'successfull scenario' do
       let(:mutation_inputs) do
         "{ state: DRAFT, clientMutationId: \"test\", externalId: \"#{
-          submission.external_id
+          submission.uuid
         }\", title: \"soup\" }"
       end
 
@@ -289,7 +289,7 @@ describe 'updateConsignmentSubmission mutation' do
           ]
 
         expect(updated_data['title']).to eq('soup')
-        expect(updated_data['externalId']).to eq(submission.external_id)
+        expect(updated_data['externalId']).to eq(submission.uuid)
       end
     end
   end

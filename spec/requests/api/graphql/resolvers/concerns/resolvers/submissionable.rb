@@ -26,9 +26,9 @@ describe 'Resolvers::Submissionable' do
 
       it 'returns correct submission when passing correct arguments' do
         expect(dummy_class.new(id: submission.id).submission).to eq(submission)
-        expect(
-          dummy_class.new(external_id: submission.external_id).submission
-        ).to eq(submission)
+        expect(dummy_class.new(external_id: submission.uuid).submission).to eq(
+          submission
+        )
       end
     end
 
@@ -53,7 +53,7 @@ describe 'Resolvers::Submissionable' do
 
       it 'returns correct submission when passing correct arguments' do
         expect(dummy_class.new(sid: submission.id).submission).to eq(submission)
-        expect(dummy_class.new(esid: submission.external_id).submission).to eq(
+        expect(dummy_class.new(esid: submission.uuid).submission).to eq(
           submission
         )
       end
@@ -92,7 +92,7 @@ describe 'Resolvers::Submissionable' do
           class_instance = dummy_class.new(id: submission.id)
           expect(class_instance.valid?).to eq(true)
 
-          class_instance = dummy_class.new(external_id: submission.external_id)
+          class_instance = dummy_class.new(external_id: submission.uuid)
           expect(class_instance.valid?).to eq(true)
         end
       end

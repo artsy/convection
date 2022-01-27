@@ -223,15 +223,13 @@ ActiveRecord::Schema.define(version: 2022_01_25_100834) do
     t.string 'user_phone'
     t.string 'created_by'
     t.string 'session_id'
-    t.uuid 'external_id', default: -> { 'gen_random_uuid()' }, null: false
+    t.uuid 'uuid', default: -> { 'gen_random_uuid()' }, null: false
     t.index ['consigned_partner_submission_id'],
             name: 'index_submissions_on_consigned_partner_submission_id'
     t.index ['ext_user_id'], name: 'index_submissions_on_ext_user_id'
-    t.index ['external_id'],
-            name: 'index_submissions_on_external_id',
-            unique: true
     t.index ['primary_image_id'], name: 'index_submissions_on_primary_image_id'
     t.index ['user_id'], name: 'index_submissions_on_user_id'
+    t.index ['uuid'], name: 'index_submissions_on_uuid', unique: true
   end
 
   create_table 'users', force: :cascade do |t|

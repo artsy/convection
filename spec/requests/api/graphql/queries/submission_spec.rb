@@ -194,7 +194,7 @@ describe 'submission query' do
     end
 
     context 'when requesting by external id' do
-      let(:query_inputs) { "externalId: \"#{submission.external_id}\"" }
+      let(:query_inputs) { "externalId: \"#{submission.uuid}\"" }
       let(:query) { <<-GRAPHQL }
         query {
           submission(#{query_inputs}) {
@@ -212,7 +212,7 @@ describe 'submission query' do
 
         submission_response = body['data']['submission']
         expect(submission_response).to match(
-          { 'id' => submission.id.to_s, 'externalId' => submission.external_id }
+          { 'id' => submission.id.to_s, 'externalId' => submission.uuid }
         )
       end
     end

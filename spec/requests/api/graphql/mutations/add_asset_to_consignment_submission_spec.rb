@@ -60,7 +60,7 @@ describe 'addAssetToConsignmentSubmission mutation' do
       it_behaves_like 'successfull creation' do
         let(:mutation_inputs) do
           "{ clientMutationId: \"test\", externalSubmissionId: \"#{
-            submission.external_id
+            submission.uuid
           }\", filename: \"testname\", geminiToken: \"gemini-token-hash\" }"
         end
       end
