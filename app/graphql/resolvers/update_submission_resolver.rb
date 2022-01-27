@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class UpdateSubmissionResolver < BaseResolver
-  include SubmissionableResolver
+  include Resolvers::Submissionable
 
   def run
-    raise(GraphQL::ExecutionError, 'Submission Not Found') unless submission
+    check_submission_presence!
 
     unless (
              matching_user(submission, @arguments&.[](:session_id)) &&
@@ -32,5 +32,4 @@ class UpdateSubmissionResolver < BaseResolver
     @error = compute_error
     @error.nil?
   end
-
 end

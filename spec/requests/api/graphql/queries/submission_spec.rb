@@ -193,6 +193,52 @@ describe 'submission query' do
       end
     end
 
+    context 'when requesting by external id' do
+      let(:query_inputs) { "externalId: \"#{submission.external_id}\"" }
+      let(:query) { <<-GRAPHQL }
+        query {
+          submission(#{query_inputs}) {
+            id,
+            externalId
+          }
+        }
+      GRAPHQL
+
+      it 'returns that submission' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submission_response = body['data']['submission']
+        expect(submission_response).to match(
+          { 'id' => submission.id.to_s, 'externalId' => submission.external_id }
+        )
+      end
+    end
+
+    context 'when neigher id nor external_id not passed' do
+      let(:query_inputs) { 'sessionID: "session_id"' }
+      let(:query) { <<-GRAPHQL }
+        query {
+          submission(#{query_inputs}) {
+            id,
+            externalId
+          }
+        }
+      GRAPHQL
+
+      it 'returns an error' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+        expect(body['errors'][0]['message']).to eq(
+          'Neither id nor externalId have been passed.'
+        )
+      end
+    end
+
     context 'with a valid submission id from a partner' do
       let(:token) do
         payload = { aud: 'gravity', sub: 'userid', roles: 'partner' }

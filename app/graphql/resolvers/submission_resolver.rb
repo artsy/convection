@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class SubmissionResolver < BaseResolver
-  include SubmissionableResolver
+  include Resolvers::Submissionable
 
   def run
-    raise GraphQL::ExecutionError, 'Submission Not Found' unless submission
+    check_submission_presence!
 
     unless draft_in_progress?(submission, @arguments) || admin? || partner?
       raise GraphQL::ExecutionError, 'Submission Not Found'

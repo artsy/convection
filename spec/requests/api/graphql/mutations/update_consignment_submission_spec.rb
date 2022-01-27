@@ -257,4 +257,40 @@ describe 'updateConsignmentSubmission mutation' do
       end
     end
   end
+
+  context 'when working with external id' do
+    describe 'successfull scenario' do
+      let(:mutation_inputs) do
+        "{ state: DRAFT, clientMutationId: \"test\", externalId: \"#{
+          submission.external_id
+        }\", title: \"soup\" }"
+      end
+
+      let(:mutation) { <<-GRAPHQL }
+        mutation {
+          updateConsignmentSubmission(input: #{mutation_inputs}){
+            clientMutationId
+            consignmentSubmission {
+              title
+              externalId
+            }
+          }
+        }
+      GRAPHQL
+
+      it 'updates submission' do
+        post '/api/graphql', params: { query: mutation }, headers: headers
+        expect(response.status).to eq 200
+
+        response_body = JSON.parse(response.body)
+        updated_data =
+          response_body['data']['updateConsignmentSubmission'][
+            'consignmentSubmission'
+          ]
+
+        expect(updated_data['title']).to eq('soup')
+        expect(updated_data['externalId']).to eq(submission.external_id)
+      end
+    end
+  end
 end

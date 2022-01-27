@@ -1,6 +1,12 @@
-# TODO: docs
+# Include this module in any of Resolvers if you want to perform
+# a submission lookup and arguments validation based on
+# submission id/external_id.
 
-module SubmissionableResolver
+# Lookup is performed by @arguments[:id]/@arguments[:external_id] by
+# default, be can be overwritten be redefining `submission_id` and
+# `external_submission_id` in your resolvers.
+
+module Resolvers::Submissionable
   IdsNotPassed =
     GraphQL::ExecutionError.new('Neither id nor externalId have been passed.')
 
@@ -13,6 +19,10 @@ module SubmissionableResolver
   def valid?
     @error = compute_error
     @error.nil?
+  end
+
+  def check_submission_presence!
+    raise(GraphQL::ExecutionError, 'Submission Not Found') unless submission
   end
 
   private
