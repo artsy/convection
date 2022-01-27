@@ -49,7 +49,7 @@ module Types
 
     field :submission, SubmissionType, null: true do
       description 'Get a Submission'
-      argument :id, ID, required: false # we need either id or externalID
+      argument :id, ID, required: false
       argument :external_id, ID, required: false
       argument :sessionID, String, required: false
     end
