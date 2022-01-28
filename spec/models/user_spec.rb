@@ -93,7 +93,7 @@ describe User do
   describe '#save_submission_to_my_collection?' do
     it 'returns the result of the swa_my_collection feature toggle' do
       expect(Unleash::Context).to receive(:new)
-        .with(user_id: user.id.to_s)
+        .with(user_id: user.gravity_user_id.to_s)
         .and_return('unleash_context_mock')
         .twice
 

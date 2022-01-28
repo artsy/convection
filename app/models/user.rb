@@ -40,7 +40,7 @@ class User < ApplicationRecord
   def save_submission_to_my_collection?
     Convection.unleash.enabled?(
       'swa_my_collection',
-      Unleash::Context.new(user_id: id.to_s)
+      Unleash::Context.new(user_id: gravity_user_id.to_s)
     )
   end
 
