@@ -42,6 +42,7 @@ gem 'sentry-raven' # for error reporting
 gem 'sidekiq'
 gem 'tzinfo-data' # overrides system time zone data
 gem 'uglifier'
+gem 'unleash'
 
 group :development, :test do
   gem 'guard-rspec', require: false

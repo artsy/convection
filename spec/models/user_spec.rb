@@ -89,4 +89,25 @@ describe User do
       end
     end
   end
+
+  describe '#save_submission_to_my_collection?' do
+    it 'returns the result of the swa_my_collection feature toggle' do
+      expect(Unleash::Context).to receive(:new)
+        .with(user_id: user.id.to_s)
+        .and_return('unleash_context_mock')
+        .twice
+
+      expect(Convection.unleash).to receive(:enabled?)
+        .with('swa_my_collection', 'unleash_context_mock')
+        .and_return(true)
+        .once
+      expect(user.save_submission_to_my_collection?).to eq(true)
+
+      expect(Convection.unleash).to receive(:enabled?)
+        .with('swa_my_collection', 'unleash_context_mock')
+        .and_return(false)
+        .once
+      expect(user.save_submission_to_my_collection?).to eq(false)
+    end
+  end
 end

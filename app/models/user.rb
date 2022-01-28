@@ -38,7 +38,10 @@ class User < ApplicationRecord
   end
 
   def save_submission_to_my_collection?
-    user_detail&.enabled_lab_features&.include?('SWA My Collection')
+    Convection.unleash.enabled?(
+      'swa_my_collection',
+      Unleash::Context.new(user_id: id.to_s)
+    )
   end
 
   def user_detail
