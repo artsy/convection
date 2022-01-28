@@ -89,5 +89,33 @@ describe 'Gemini Callback' do
         'square' => 'https://new-image.jpg'
       )
     end
+
+    context 'when passing submission uuid' do
+      it 'updates the asset to have correct image url' do
+        Fabricate(
+          :unprocessed_image,
+          submission: submission,
+          gemini_token: 'gemini'
+        )
+        post '/api/callbacks/gemini',
+             params: {
+               access_token: 'auth-token',
+               token: 'gemini',
+               image_url: {
+                 square: 'https://new-image.jpg'
+               },
+               metadata: {
+                 id: submission.uuid,
+                 _type: 'Consignment'
+               }
+             }
+
+        expect(response.status).to eq 200
+        expect(JSON.parse(response.body)['submission_id']).to eq(submission.id)
+        expect(JSON.parse(response.body)['image_urls']).to eq(
+          'square' => 'https://new-image.jpg'
+        )
+      end
+    end
   end
 end
