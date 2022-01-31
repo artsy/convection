@@ -3,7 +3,7 @@ class AddForeignKeyFromSubmissionToAdminUser < ActiveRecord::Migration[6.1]
     add_column :submissions, :created_by_id, :bigint
     add_foreign_key :submissions, :admin_users, column: :created_by_id
 
-    populate_created_by_field_with_admin_id
+    populate_created_by_id_field_with_admin_id
 
     remove_column :submissions, :created_by, :string
   end
