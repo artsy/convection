@@ -5,9 +5,11 @@
       <div class="consigned-partner-name">
         Admin
       </div>
-      <div class="consigned-partner-name">
-        Email: <%= @submission.created_by%>
-      </div>
+      <% if @submission.created_by.email.present? %>   
+        <div class="consigned-partner-name">
+          Email: <%= @submission.created_by.email%>
+        </div>
+      <% end %>
      <% else %>
      <div class="consigned-partner-name">
         User
