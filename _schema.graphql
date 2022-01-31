@@ -1754,6 +1754,16 @@ enum SubmissionSort {
   MINIMUM_PRICE_CENTS_DESC
 
   """
+  sort by my_collection_artwork_id in ascending order
+  """
+  MY_COLLECTION_ARTWORK_ID_ASC
+
+  """
+  sort by my_collection_artwork_id in descending order
+  """
+  MY_COLLECTION_ARTWORK_ID_DESC
+
+  """
   sort by offers_count in ascending order
   """
   OFFERS_COUNT_ASC
