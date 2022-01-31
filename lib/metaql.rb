@@ -8,7 +8,7 @@ class Metaql
     def self.execute(query:, variables: {})
       response =
         Net::HTTP.post(
-          URI("#{Convection.config.metaphysics_api_url}"),
+          URI(Convection.config.metaphysics_api_url),
           { query: query, variables: variables }.to_json,
           'X-ACCESS-TOKEN' => Convection.config.gravity_xapp_token,
           'Content-Type' => 'application/json'
