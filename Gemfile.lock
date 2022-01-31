@@ -267,6 +267,7 @@ GEM
     multi_json (1.15.0)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
+    murmurhash3 (0.1.6)
     neat (1.7.2)
       bourbon (>= 4.0)
       sass (>= 3.3)
@@ -474,6 +475,8 @@ GEM
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
     unicode-display_width (2.0.0)
+    unleash (4.0.0)
+      murmurhash3 (~> 0.1.6)
     webdrivers (4.6.0)
       nokogiri (~> 1.6)
       rubyzip (>= 1.3.0)
@@ -544,6 +547,7 @@ DEPENDENCIES
   solargraph
   tzinfo-data
   uglifier
+  unleash
   watt!
   webdrivers
   webmock
