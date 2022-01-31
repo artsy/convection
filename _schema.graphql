@@ -1564,14 +1564,14 @@ enum SubmissionSort {
   CREATED_AT_DESC
 
   """
-  sort by created_by in ascending order
+  sort by created_by_id in ascending order
   """
-  CREATED_BY_ASC
+  CREATED_BY_ID_ASC
 
   """
-  sort by created_by in descending order
+  sort by created_by_id in descending order
   """
-  CREATED_BY_DESC
+  CREATED_BY_ID_DESC
 
   """
   sort by currency in ascending order
