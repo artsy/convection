@@ -48,5 +48,7 @@ Convection.config =
     rejection_email_minutes_after:
       (ENV['REJECTION_EMAIL_MINUTES_AFTER'] || 60).to_i,
     vibrations_url:
-      ENV['VIBRATIONS_URL'] || 'https://admin-partners-staging.artsy.net'
+      ENV['VIBRATIONS_URL'] || 'https://admin-partners-staging.artsy.net',
+    unleash_url: ENV['UNLEASH_URL'],
+    unleash_token: ENV['UNLEASH_TOKEN']
   )
