@@ -39,7 +39,7 @@ class SubmissionService
         )
       end
 
-      submission = Submission.create!(create_params).reload
+      submission = Submission.create!(create_params)
 
       if create_params[:state] == 'rejected'
         delay_until(

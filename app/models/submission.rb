@@ -4,6 +4,7 @@ class Submission < ApplicationRecord
   include Currency
   include Dollarize
   include PgSearch::Model
+  include ReloadUuid
 
   alias_attribute :deleted?, :deleted_at
 
