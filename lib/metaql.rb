@@ -13,7 +13,6 @@ class Metaql
           'X-ACCESS-TOKEN' => Convection.config.gravity_xapp_token,
           'Content-Type' => 'application/json'
         )
-      response
 
       JSON.parse(response.body, symbolize_names: true)
     end
