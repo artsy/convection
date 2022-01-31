@@ -90,8 +90,8 @@ class SubmissionService
             reject_non_target_supply_artist(submission.artist_id)
           )
           if submission.submitted? &&
-               submission.user.save_submission_to_my_collection?
-            create_my_collection_artwork(submission, current_user)
+               submission.user&.save_submission_to_my_collection?
+            create_my_collection_artwork(submission)
           end
         end
 

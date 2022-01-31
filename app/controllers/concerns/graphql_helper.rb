@@ -39,16 +39,12 @@ module GraphqlHelper
     GQL
   end
 
-  def create_my_collection_artwork(submission, current_user)
+  def create_my_collection_artwork(submission, _current_user)
     response =
       Metaql::Schema.execute(
         query: my_collection_create_artwork_mutation_builder,
         variables: {
-          input:
-            my_collection_create_artwork_mutation_params(
-              submission,
-              current_user
-            )
+          input: my_collection_create_artwork_mutation_params(submission)
         }
       )
     return if response[:errors].present?
@@ -128,9 +124,9 @@ module GraphqlHelper
     match_partners_response[:data][:match_partners]
   end
 
-  def my_collection_create_artwork_mutation_params(submission, current_user)
+  def my_collection_create_artwork_mutation_params(submission)
     {
-      user_id: current_user,
+      user_id: submission.user&.gravity_user_id,
       artistIds: [submission.artist_id],
       artworkLocation:
         [
