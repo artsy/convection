@@ -39,7 +39,7 @@ module GraphqlHelper
     GQL
   end
 
-  def create_my_collection_artwork(submission, _current_user_token)
+  def create_my_collection_artwork(submission, current_user)
     Metaql::Schema.execute(
       query: my_collection_create_artwork_mutation_builder,
       variables: {
