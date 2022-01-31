@@ -40,12 +40,29 @@ module GraphqlHelper
   end
 
   def create_my_collection_artwork(submission, current_user)
-    Metaql::Schema.execute(
-      query: my_collection_create_artwork_mutation_builder,
-      variables: {
-        input:
-          my_collection_create_artwork_mutation_params(submission, current_user)
-      }
+    response =
+      Metaql::Schema.execute(
+        query: my_collection_create_artwork_mutation_builder,
+        variables: {
+          input:
+            my_collection_create_artwork_mutation_params(
+              submission,
+              current_user
+            )
+        }
+      )
+    return if response[:errors].present?
+
+    submission.update(
+      :my_collection_artwork_id,
+      response.dig(
+        :date,
+        :myCollectionCreateArtwork,
+        :artworkOrError,
+        :artworkEdge,
+        :node,
+        :id
+      )
     )
   end
 
