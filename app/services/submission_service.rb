@@ -29,8 +29,7 @@ class SubmissionService
 
       if AdminUser.exists?(gravity_user_id: current_user)
         create_params.merge!(
-          created_by:
-            User.find_or_create_by(gravity_user_id: current_user).email
+          created_by: User.find_by(gravity_user_id: current_user).email
         )
       end
 
