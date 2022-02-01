@@ -49,7 +49,7 @@ Rails
       resources :submissions, only: %i[create update show index]
       resources :assets, only: %i[create show index destroy]
       namespace :consignments do
-        put 'update_price'
+        put 'update_sale_info'
       end
       post '/callbacks/gemini', to: 'callbacks#gemini'
       post '/graphql', to: 'graphql#execute'
