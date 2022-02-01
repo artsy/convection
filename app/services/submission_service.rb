@@ -89,7 +89,7 @@ class SubmissionService
           submission.assign_attributes(
             reject_non_target_supply_artist(submission.artist_id)
           )
-          if submission.submitted? &&
+          if submission.submitted? && submission.user &&
                submission.user&.save_submission_to_my_collection?
             create_my_collection_artwork(submission)
           end
