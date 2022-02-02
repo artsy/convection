@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_24_121120) do
+ActiveRecord::Schema.define(version: 2022_01_31_105557) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_trgm'
   enable_extension 'plpgsql'
@@ -223,6 +223,7 @@ ActiveRecord::Schema.define(version: 2022_01_24_121120) do
     t.string 'user_phone'
     t.string 'created_by'
     t.string 'session_id'
+    t.string 'my_collection_artwork_id'
     t.index ['consigned_partner_submission_id'],
             name: 'index_submissions_on_consigned_partner_submission_id'
     t.index ['ext_user_id'], name: 'index_submissions_on_ext_user_id'
