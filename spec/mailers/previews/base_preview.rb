@@ -31,6 +31,8 @@ class BasePreview < ActionMailer::Preview
       id: 12,
       user_id: 'userid',
       user: OpenStruct.new(unique_code_for_digest: 12),
+      email: 'michael@bluth.com',
+      name: 'Michael Bluth',
       processed_images: [],
       images: [],
       title: 'My Favorite Artwork',

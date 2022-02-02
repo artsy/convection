@@ -17,16 +17,30 @@ class UserMailerPreview < BasePreview
     UserMailer.submission_approved(receipt_mail_params)
   end
 
-  def submission_rejected
-    UserMailer.submission_rejected(receipt_mail_params)
+  def artist_submission_rejected
+    UserMailer.artist_submission_rejected(receipt_mail_params)
+  end
+
+  def fake_submission_rejected
+    UserMailer.fake_submission_rejected(receipt_mail_params)
+  end
+
+  def nsv_bsv_submission_rejected
+    UserMailer.nsv_bsv_submission_rejected(receipt_mail_params)
+  end
+
+  def non_target_supply_artist_rejected
+    UserMailer.non_target_supply_artist_rejected(receipt_mail_params)
+  end
+
+  def other_submission_rejected
+    UserMailer.other_submission_rejected(receipt_mail_params)
   end
 
   def auction_consignment_offer
     UserMailer.offer(
       offer: auction_offer,
-      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol'),
-      user_detail:
-        OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com')
+      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol')
     )
   end
 
@@ -52,9 +66,7 @@ class UserMailerPreview < BasePreview
           partner: OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery'),
           submission: base_submission
         ),
-      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol'),
-      user_detail:
-        OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com')
+      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol')
     )
   end
 
@@ -77,9 +89,7 @@ class UserMailerPreview < BasePreview
           partner: OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery'),
           submission: base_submission
         ),
-      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol'),
-      user_detail:
-        OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com')
+      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol')
     )
   end
 
@@ -104,9 +114,7 @@ class UserMailerPreview < BasePreview
           partner: OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery'),
           submission: base_submission
         ),
-      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol'),
-      user_detail:
-        OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com')
+      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol')
     )
   end
 
@@ -115,17 +123,11 @@ class UserMailerPreview < BasePreview
   def receipt_mail_params
     {
       submission: base_submission,
-      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol'),
-      user_detail:
-        OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com')
+      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol')
     }
   end
 
   def reminder_mail_params
-    {
-      submission: OpenStruct.new(id: '12'),
-      user_detail:
-        OpenStruct.new(id: 'high_bidder_id', email: 'themaninblack@yahoo.com')
-    }
+    { submission: OpenStruct.new(id: '12', email: 'michael@bluth.com') }
   end
 end
