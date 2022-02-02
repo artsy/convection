@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 2022_01_31_105557) do
     t.boolean 'cataloguer', default: false
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
+    t.string 'email'
     t.index ['assignee'], name: 'index_admin_users_on_assignee'
     t.index ['cataloguer'], name: 'index_admin_users_on_cataloguer'
     t.index ['gravity_user_id'],
