@@ -3,8 +3,8 @@
 class AdminUser < ApplicationRecord
   has_many :submissions,
            dependent: :nullify,
-           inverse_of: :created_by,
-           foreign_key: 'created_by_id'
+           inverse_of: :admin,
+           foreign_key: 'admin_id'
 
   validates :gravity_user_id, presence: true, uniqueness: true
   validates :name, presence: true, uniqueness: true

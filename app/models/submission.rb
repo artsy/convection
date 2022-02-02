@@ -75,7 +75,7 @@ class Submission < ApplicationRecord
   has_many :offers, dependent: :destroy
   has_many :notes, dependent: :nullify
   belongs_to :user
-  belongs_to :created_by, class_name: 'AdminUser'
+  belongs_to :admin, class_name: 'AdminUser'
   belongs_to :primary_image, class_name: 'Asset'
   belongs_to :consigned_partner_submission, class_name: 'PartnerSubmission'
 
