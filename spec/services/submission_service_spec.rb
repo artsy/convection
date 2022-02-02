@@ -428,6 +428,9 @@ describe SubmissionService do
 
     it 'updates submission to Submitted state when submission state changed and artist is in target supply' do
       stub_gravity_artist(target_supply: true)
+      allow(submission.user).to receive(:save_submission_to_my_collection?)
+        .and_return(nil)
+
       expect(NotificationService).to receive(:post_submission_event)
         .once
         .with(submission.id, 'submitted')

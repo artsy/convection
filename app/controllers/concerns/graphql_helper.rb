@@ -13,6 +13,55 @@ module GraphqlHelper
     GQL
   end
 
+  def my_collection_create_artwork_mutation_builder
+    <<~GQL
+      mutation myCollectionAddArtworkMutation(
+        $input: MyCollectionCreateArtworkInput!
+      ) {
+        myCollectionCreateArtwork(input: $input) {
+          artworkOrError {
+            __typename
+            ... on MyCollectionArtworkMutationSuccess {
+              artworkEdge {
+                node {
+                  id
+                }
+              }
+            }
+            ... on MyCollectionArtworkMutationFailure {
+              mutationError {
+                message
+              }
+            }
+          }
+        }
+      }
+    GQL
+  end
+
+  def create_my_collection_artwork(submission, _current_user)
+    response =
+      Metaql::Schema.execute(
+        query: my_collection_create_artwork_mutation_builder,
+        variables: {
+          input: my_collection_create_artwork_mutation_params(submission)
+        }
+      )
+    return if response[:errors].present?
+
+    submission.update(
+      :my_collection_artwork_id,
+      response.dig(
+        :date,
+        :myCollectionCreateArtwork,
+        :artworkOrError,
+        :artworkEdge,
+        :node,
+        :id
+      )
+    )
+  end
+
   MATCH_PARTNERS_QUERY =
     '
   query matchPartners($term: String!) {
@@ -73,5 +122,32 @@ module GraphqlHelper
     end
 
     match_partners_response[:data][:match_partners]
+  end
+
+  def my_collection_create_artwork_mutation_params(submission)
+    {
+      user_id: submission.user&.gravity_user_id,
+      artistIds: [submission.artist_id],
+      artworkLocation:
+        [
+          submission.location_city,
+          submission.location_state,
+          submission.location_country
+        ].delete_if(&:blank?).join(', '),
+      category: submission.category,
+      date: submission.year,
+      depth: submission.depth,
+      editionNumber: submission.edition_number,
+      editionSize: submission.edition_size,
+      externalImageUrls:
+        submission.images.map(&:image_urls).delete_if(&:empty?),
+      height: submission.height,
+      attributionClass:
+        submission.attribution_class&.upcase || 'UNKNOWN_EDITION',
+      medium: submission.medium,
+      provenance: submission.provenance,
+      title: submission.title,
+      width: submission.width
+    }
   end
 end
