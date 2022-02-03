@@ -28,6 +28,8 @@ Convection.config =
     debug_email_address: ENV['DEBUG_EMAIL_ADDRESS'] || 'sarah@artsymail.com',
     gemini_account_key: ENV['GEMINI_ACCOUNT_KEY'] || 'convection-staging',
     gemini_app: ENV['GEMINI_APP'] || 'https://media.artsy.net',
+    metaphysics_api_url:
+      "#{ENV['METAPHYSICS_URL'] || 'https://metaphysics-staging.artsy.net'}/v2",
     gravity_api_url:
       "#{ENV['GRAVITY_URL'] || 'https://stagingapi.artsy.net'}/api",
     gravity_app_id: ENV['GRAVITY_APP_ID'] || 'replace-me',
@@ -48,5 +50,7 @@ Convection.config =
     rejection_email_minutes_after:
       (ENV['REJECTION_EMAIL_MINUTES_AFTER'] || 60).to_i,
     vibrations_url:
-      ENV['VIBRATIONS_URL'] || 'https://admin-partners-staging.artsy.net'
+      ENV['VIBRATIONS_URL'] || 'https://admin-partners-staging.artsy.net',
+    unleash_url: ENV['UNLEASH_URL'],
+    unleash_token: ENV['UNLEASH_TOKEN']
   )

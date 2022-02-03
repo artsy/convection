@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_25_100834) do
+ActiveRecord::Schema.define(version: 2022_01_31_105557) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_trgm'
   enable_extension 'pgcrypto'
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 2022_01_25_100834) do
     t.boolean 'cataloguer', default: false
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
+    t.string 'email'
     t.index ['assignee'], name: 'index_admin_users_on_assignee'
     t.index ['cataloguer'], name: 'index_admin_users_on_cataloguer'
     t.index ['gravity_user_id'],
@@ -221,13 +222,16 @@ ActiveRecord::Schema.define(version: 2022_01_25_100834) do
     t.string 'cataloguer'
     t.string 'user_name'
     t.string 'user_phone'
-    t.string 'created_by'
     t.string 'session_id'
     t.uuid 'uuid', default: -> { 'gen_random_uuid()' }, null: false
+    t.bigint 'admin_id'
+    t.string 'my_collection_artwork_id'
     t.index ['consigned_partner_submission_id'],
             name: 'index_submissions_on_consigned_partner_submission_id'
     t.index ['ext_user_id'], name: 'index_submissions_on_ext_user_id'
     t.index ['primary_image_id'], name: 'index_submissions_on_primary_image_id'
+    t.index ['source_artwork_id'],
+            name: 'index_submissions_on_source_artwork_id'
     t.index ['user_id'], name: 'index_submissions_on_user_id'
     t.index ['uuid'], name: 'index_submissions_on_uuid', unique: true
   end
@@ -252,6 +256,7 @@ ActiveRecord::Schema.define(version: 2022_01_25_100834) do
                   on_delete: :nullify
   add_foreign_key 'partner_submissions', 'partners'
   add_foreign_key 'partner_submissions', 'submissions'
+  add_foreign_key 'submissions', 'admin_users', column: 'admin_id'
   add_foreign_key 'submissions',
                   'assets',
                   column: 'primary_image_id',

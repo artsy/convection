@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'support/gravity_helper'
 
 RSpec.describe '/admin/admin_users', type: :request do
   before do
@@ -11,6 +12,10 @@ RSpec.describe '/admin/admin_users', type: :request do
     allow_any_instance_of(Admin::AdminUsersController).to receive(
       :authorize_user!
     ).and_return(true)
+
+    stub_gravity_root
+    stub_gravity_user(id: 'userid')
+    stub_gravity_user_detail(id: 'userid')
   end
 
   let!(:admin_user) { Fabricate(:admin_user, name: 'paul') }
@@ -46,7 +51,7 @@ RSpec.describe '/admin/admin_users', type: :request do
                params: {
                  admin_user: {
                    name: 'paula',
-                   gravity_user_id: '123'
+                   gravity_user_id: 'userid'
                  }
                }
         }.to change(AdminUser, :count).by(1)

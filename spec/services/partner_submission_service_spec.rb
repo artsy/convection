@@ -24,7 +24,7 @@ describe PartnerSubmissionService do
     stub_gravity_partner_communications
     stub_gravity_partner_contacts
     allow(Time).to receive(:now).and_return(
-      Time.new(2_017, 9, 27).in_time_zone('UTC')
+      Time.new(2_017, 9, 27, 12).in_time_zone('UTC')
     ) # stub time for email subject lines
     allow(Convection.config).to receive(:auction_offer_form_url).and_return(
       'https://google.com/auction'
