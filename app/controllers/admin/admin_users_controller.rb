@@ -77,7 +77,8 @@ module Admin
       begin
         user =
           Gravity.client.user(id: @admin_user.gravity_user_id).user_detail._get
-        @admin_user.email = user.email unless user.nil?
+
+        @admin_user.email = user.email if user
       rescue Faraday::ResourceNotFound
         nil
       end
