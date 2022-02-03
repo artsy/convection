@@ -24,6 +24,7 @@ module Convection
         #{Rails.root.join('app', 'services')}
         #{Rails.root.join('app', 'graphql')}
         #{Rails.root.join('app', 'graphql', 'resolvers')}
+        #{Rails.root.join('app', 'graphql', 'resolvers', 'concerns')}
         #{Rails.root.join('app', 'controllers', 'concerns')}
         #{Rails.root.join('app', 'models', 'concerns')}
         #{Rails.root.join('app', 'queries')}

@@ -2,7 +2,8 @@
 
 module Mutations
   class UpdateSubmissionMutation < Mutations::BaseMutation
-    argument :id, ID, required: true
+    argument :id, ID, required: false
+    argument :external_id, ID, required: false
 
     argument :additional_info, String, required: false
     argument :artistID, String, required: false
@@ -51,6 +52,7 @@ module Mutations
         object: object
       }
       resolver = UpdateSubmissionResolver.new(resolve_options)
+      raise resolver.error unless resolver.valid?
 
       resolver.run
     end

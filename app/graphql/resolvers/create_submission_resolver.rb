@@ -8,6 +8,7 @@ class CreateSubmissionResolver < BaseResolver
         @context[:current_user],
         is_convection: false
       )
+
     { consignment_submission: submission }
   end
 end
