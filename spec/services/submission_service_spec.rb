@@ -7,6 +7,9 @@ describe SubmissionService do
   let!(:user) do
     Fabricate(:user, gravity_user_id: 'userid', email: 'michael@bluth.com')
   end
+  let!(:admin) do
+    Fabricate(:admin_user, gravity_user_id: 'userid1', email: 'admin@bluth.com')
+  end
   let(:submission) do
     Fabricate(
       :submission,
@@ -77,9 +80,22 @@ describe SubmissionService do
       expect(new_submission.user.email).to eq 'michael@bluth.com'
     end
 
-    it 'does not populate created_by field, when submission is made by non-admin' do
+    it 'does not populate admin field, when submission is made by non-admin' do
       new_submission = SubmissionService.create_submission(params, 'userid')
-      expect(new_submission.reload.created_by).to eq nil
+      expect(new_submission.reload.admin).to eq nil
+    end
+
+    it 'populates admin field, when submission is made by admin' do
+      new_submission =
+        SubmissionService.create_submission(
+          params,
+          'userid',
+          is_convection: true,
+          current_user: admin.gravity_user_id
+        )
+
+      expect(new_submission.reload.admin.id).to eq admin.id
+      expect(new_submission.reload.admin.email).to eq admin.email
     end
 
     it 'creates a submission and sets the user_id if new convection user' do

@@ -28,6 +28,7 @@ module Admin
     # POST /admin/admin_users
     def create
       @admin_user = AdminUser.new(admin_user_params)
+      load_admin_email
 
       if @admin_user.save
         redirect_to admin_admin_users_path,
@@ -70,6 +71,17 @@ module Admin
       return if super_admin_user? @current_user
 
       raise ApplicationController::NotAuthorized
+    end
+
+    def load_admin_email
+      begin
+        user =
+          Gravity.client.user(id: @admin_user.gravity_user_id).user_detail._get
+
+        @admin_user.email = user.email if user
+      rescue Faraday::ResourceNotFound
+        nil
+      end
     end
   end
 end

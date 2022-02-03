@@ -1,13 +1,15 @@
 <div class='overview-section'>
   <div class='bold-label'>Created By</div>
   <div class='single-padding-top'>
-    <% if @submission.created_by %>
+    <% if @submission.admin %>
       <div class="consigned-partner-name">
         Admin
       </div>
-      <div class="consigned-partner-name">
-        Email: <%= @submission.created_by%>
-      </div>
+      <% if @submission.admin.email.present? %>   
+        <div class="consigned-partner-name">
+          Email: <%= @submission.admin.email%>
+        </div>
+      <% end %>
      <% else %>
      <div class="consigned-partner-name">
         User
