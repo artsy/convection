@@ -13,6 +13,7 @@
 ActiveRecord::Schema.define(version: 2022_01_31_105557) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_trgm'
+  enable_extension 'pgcrypto'
   enable_extension 'plpgsql'
   enable_extension 'unaccent'
 
@@ -222,6 +223,7 @@ ActiveRecord::Schema.define(version: 2022_01_31_105557) do
     t.string 'user_name'
     t.string 'user_phone'
     t.string 'session_id'
+    t.uuid 'uuid', default: -> { 'gen_random_uuid()' }, null: false
     t.bigint 'admin_id'
     t.string 'my_collection_artwork_id'
     t.index ['consigned_partner_submission_id'],
@@ -231,6 +233,7 @@ ActiveRecord::Schema.define(version: 2022_01_31_105557) do
     t.index ['source_artwork_id'],
             name: 'index_submissions_on_source_artwork_id'
     t.index ['user_id'], name: 'index_submissions_on_user_id'
+    t.index ['uuid'], name: 'index_submissions_on_uuid', unique: true
   end
 
   create_table 'users', force: :cascade do |t|

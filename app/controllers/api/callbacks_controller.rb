@@ -10,7 +10,10 @@ module Api
       param! :metadata, Hash, required: true
       param! :token, String, required: true
 
-      submission = Submission.find(gemini_params[:metadata][:id])
+      submission =
+        Submission.find_by(uuid: gemini_params[:metadata][:id]) ||
+          Submission.find(gemini_params[:metadata][:id])
+
       asset =
         submission.assets.detect { |a| a.gemini_token == gemini_params[:token] }
 

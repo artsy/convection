@@ -17,6 +17,11 @@ module Types
     field :edition, String, null: true
     field :edition_number, String, null: true
     field :edition_size, String, null: true
+    field :external_id,
+          ID,
+          null: false,
+          method: :uuid,
+          description: 'UUID visible to users'
     field :height, String, null: true
     field :id, ID, 'Uniq ID for this submission', null: false
     field :internalID, ID, null: true, method: :id

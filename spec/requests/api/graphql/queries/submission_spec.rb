@@ -171,7 +171,7 @@ describe 'submission query' do
         expect(submission_response).to eq nil
 
         error_message = body['errors'][0]['message']
-        expect(error_message).to eq 'Submission from ID Not Found'
+        expect(error_message).to eq 'Submission Not Found'
       end
     end
 
@@ -189,6 +189,52 @@ describe 'submission query' do
             'artistId' => submission.artist_id,
             'title' => submission.title
           }
+        )
+      end
+    end
+
+    context 'when requesting by external id' do
+      let(:query_inputs) { "externalId: \"#{submission.uuid}\"" }
+      let(:query) { <<-GRAPHQL }
+        query {
+          submission(#{query_inputs}) {
+            id,
+            externalId
+          }
+        }
+      GRAPHQL
+
+      it 'returns that submission' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submission_response = body['data']['submission']
+        expect(submission_response).to match(
+          { 'id' => submission.id.to_s, 'externalId' => submission.uuid }
+        )
+      end
+    end
+
+    context 'when neigher id nor external_id not passed' do
+      let(:query_inputs) { 'sessionID: "session_id"' }
+      let(:query) { <<-GRAPHQL }
+        query {
+          submission(#{query_inputs}) {
+            id,
+            externalId
+          }
+        }
+      GRAPHQL
+
+      it 'returns an error' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+        expect(body['errors'][0]['message']).to eq(
+          'Neither id nor externalId have been passed.'
         )
       end
     end
