@@ -10,7 +10,7 @@ class Metaql
         Net::HTTP.post(
           URI(Convection.config.metaphysics_api_url),
           { query: query, variables: variables }.to_json,
-          'X-ACCESS-TOKEN' => Convection.config.gravity_xapp_token,
+          'X-XAPP-TOKEN' => Convection.config.gravity_xapp_token,
           'Content-Type' => 'application/json'
         )
 
