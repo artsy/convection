@@ -126,7 +126,8 @@ module GraphqlHelper
 
   def my_collection_create_artwork_mutation_params(submission)
     {
-      user_id: submission.user&.gravity_user_id,
+      userId: submission.user&.gravity_user_id,
+      submissionId: submission.id.to_s,
       artistIds: [submission.artist_id],
       artworkLocation:
         [
