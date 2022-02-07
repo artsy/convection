@@ -141,7 +141,9 @@ module GraphqlHelper
       editionNumber: submission.edition_number,
       editionSize: submission.edition_size,
       externalImageUrls:
-        submission.images.map(&:image_urls).delete_if(&:empty?),
+        submission.images.map do |image|
+          image.original_image&.split('?')&.first
+        end,
       height: submission.height,
       attributionClass:
         submission.attribution_class&.upcase || 'UNKNOWN_EDITION',
