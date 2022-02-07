@@ -50,15 +50,15 @@ module GraphqlHelper
     return if response[:errors].present?
 
     submission.update(
-      :my_collection_artwork_id,
-      response.dig(
-        :date,
-        :myCollectionCreateArtwork,
-        :artworkOrError,
-        :artworkEdge,
-        :node,
-        :id
-      )
+      my_collection_artwork_id:
+        response.dig(
+          :date,
+          :myCollectionCreateArtwork,
+          :artworkOrError,
+          :artworkEdge,
+          :node,
+          :id
+        )
     )
   end
 
