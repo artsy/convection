@@ -239,13 +239,19 @@ a.make-primary-link {
   pointer-events: none;
 }
 
-.offer-type-radio {
+.offer-type-radio,
+.submission-reason-radio{
   display: flex;
   justify-content: flex-start;
   align-items: center;
 
   input {
     width: 30px;
+  }
+
+  label {
+    margin-top: 10px;
+    margin-left: 5px;
   }
 }
 
