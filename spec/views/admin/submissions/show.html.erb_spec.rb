@@ -365,10 +365,14 @@ describe 'admin/submissions/show.html.erb', type: :feature do
       it 'rejects a submission when the Reject button is clicked' do
         expect(page).to have_content('submitted')
         click_link 'Reject'
+        within('[data-remodal-id="reject-reasons-modal"]') do
+          choose('Fake')
+          click_button('Save and Send')
+        end
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.html_part.body).to include(
-          'Our team of Specialists carefully review each submission'
+          'After extensive research, we are unable to find a record'
         )
         expect(page).to have_content 'Rejected by Jon Jonson'
         expect(page).to_not have_content 'Approve'

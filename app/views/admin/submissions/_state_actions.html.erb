@@ -5,7 +5,11 @@
     <% end %>
     <% @actions.each do |action| %>
       <div class='single-padding-top'>
-        <%= link_to(action[:text], admin_submission_path(@submission, submission: { state: action[:state] }), method: :put, class: action[:class], data: { confirm: action[:confirm] }) %>
+        <% if action[:state] == 'rejected' %>
+          <%= link_to(action[:text], '#', { 'data-remodal-target' => 'reject-reasons-modal', class: action[:class] }) %>
+        <% else %>
+          <%= link_to(action[:text], admin_submission_path(@submission, submission: { state: action[:state] }), method: :put, class: action[:class], data: { confirm: action[:confirm] }) %>
+        <% end %>
       </div>
     <% end %>
     <% if @submission.reviewed? %>
