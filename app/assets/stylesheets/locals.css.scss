@@ -334,3 +334,9 @@ a.make-primary-link {
 .align-center {
   text-align: center;
 }
+
+@media (min-width: $screen-sm-min) {
+  .smaller-modal {
+    height: 500px !important;
+  }
+}
