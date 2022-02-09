@@ -1,0 +1,35 @@
+<div class='modal remodal' data-remodal-id='reject-reasons-modal'>
+  <div class='modal-header'>
+    <h3>
+      Please select a rejection reason
+    </h3>
+  </div>
+  <div class='modal-close'>
+    <%= link_to '', '#', id: 'reject-reason-close'%>
+  </div>
+  <div class='modal-content'>
+    <div class='single-padding-top'>
+      <p>An email will be sent to the consignor, letting them know that we are not accepting their submission. This action cannot be undone.</p>
+      <div class='col-sm-12'>
+        <%= form_for(@submission, url: admin_submission_path, method: :put) do |f| %>
+          <%= f.hidden_field :state, value: 'rejected' %>
+          <div class='row'>
+            <div class='col-md-12'>
+              <% Submission::REJECTION_REASONS.each do |rejection_reason| %>
+                <div class='offer-type-radio'>
+                  <%= f.radio_button :rejection_reason, rejection_reason, checked: (rejection_reason == @submission.rejection_reason), class: 'form-control' %>
+                  <%= f.label :rejection_reason, rejection_reason, value: rejection_reason, class: 'control-label' %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+          <div class='row triple-padding-top'>
+            <div class='col-md-12'>
+              <%= f.submit 'Save and Send', class: 'btn btn-primary btn-full-width' %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
