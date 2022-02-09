@@ -64,6 +64,7 @@
                 <div class='bold-label single-padding-top'>Rejection reason:</div>
                 <div class='single-padding-top'>
                   <div id="update_rejection_reason" style="display: <%= @submission.rejection_reason.nil? ? 'block' : 'none' %>">
+                    <p>Sellers will not be notified of changes to rejection reasons.</p>
                     <%= form_with model: [:admin, @submission] do |f| %>
                       <% options = ['Please select one'] + Submission::REJECTION_REASONS %>
                       <div class="col-md-9">
