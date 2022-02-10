@@ -101,6 +101,14 @@ class Submission < ApplicationRecord
 
   dollarize :minimum_price_cents
 
+  def consignment_state
+    consigned_partner_submission&.state
+  end
+
+  def as_json(_options = {})
+    super(methods: :consignment_state)
+  end
+
   def can_submit?
     REQUIRED_FIELDS_FOR_SUBMISSION.all? { |attr| self[attr].present? }
   end
