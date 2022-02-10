@@ -225,6 +225,7 @@ module Admin
         user_id
         width
         year
+        source_artwork_id
       ]
 
       permitted_params = params.require(:submission).permit(safelist)
