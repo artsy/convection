@@ -53,6 +53,7 @@
             </div>
           </div>
           <%= render 'state_actions' %>
+          <%= render 'rejection_reasons_modal'%>
           <div class='overview-section'>
             <div class='bold-label'>State</div>
             <div class='single-padding-top'>
@@ -63,10 +64,10 @@
                 <div class='bold-label single-padding-top'>Rejection reason:</div>
                 <div class='single-padding-top'>
                   <div id="update_rejection_reason" style="display: <%= @submission.rejection_reason.nil? ? 'block' : 'none' %>">
+                    <p>Sellers will not be notified of changes to rejection reasons.</p>
                     <%= form_with model: [:admin, @submission] do |f| %>
-                      <% options = ['Please select one'] + Submission::REJECTION_REASONS %>
                       <div class="col-md-9">
-                        <%= f.select :rejection_reason, options, {}, class: 'form-control'%>
+                        <%= f.select :rejection_reason, Submission::REJECTION_REASONS, {}, class: 'form-control'%>
                       </div>
                       <div class="col-md-3">
                         <%= f.submit 'Update', id: 'update_rejection_reason', style: "height: 36px", onclick:"switchVisible('update_rejection_reason', 'edit_rejection_reason')"%>
