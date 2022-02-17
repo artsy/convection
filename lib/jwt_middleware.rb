@@ -8,6 +8,7 @@ class JwtMiddleware
   def call(env)
     if env['HTTP_AUTHORIZATION']
       token = parse_header env['HTTP_AUTHORIZATION']
+      env['JWT_TOKEN'] = token
 
       begin
         env['JWT_PAYLOAD'], _headers =

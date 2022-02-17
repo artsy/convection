@@ -29,5 +29,9 @@ module Api
       @current_user_roles ||=
         jwt_payload&.fetch('roles', nil)&.split(',')&.map(&:to_sym) || []
     end
+
+    def jwt_token
+      @jwt_token ||= request.env['JWT_TOKEN']
+    end
   end
 end

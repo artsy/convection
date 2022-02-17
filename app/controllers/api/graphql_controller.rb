@@ -22,7 +22,8 @@ module Api
       {
         current_application: current_app,
         current_user: current_user,
-        current_user_roles: current_user_roles
+        current_user_roles: current_user_roles,
+        jwt_token: jwt_token
       }
     end
   end

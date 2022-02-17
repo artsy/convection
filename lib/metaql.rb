@@ -5,12 +5,12 @@ require 'uri'
 
 class Metaql
   module Schema
-    def self.execute(query:, variables: {})
+    def self.execute(query:, variables: {}, access_token:)
       response =
         Net::HTTP.post(
           URI(Convection.config.metaphysics_api_url),
           { query: query, variables: variables }.to_json,
-          'X-XAPP-TOKEN' => Convection.config.gravity_xapp_token,
+          'X-ACCESS-TOKEN' => access_token,
           'Content-Type' => 'application/json'
         )
 

@@ -22,7 +22,8 @@ class UpdateSubmissionResolver < BaseResolver
       submission,
       @arguments.except(:id, :external_id, :session_id),
       current_user: nil,
-      is_convection: false
+      is_convection: false,
+      access_token: @context[:jwt_token]
     )
 
     { consignment_submission: submission }
