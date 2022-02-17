@@ -48,7 +48,16 @@ module GraphqlHelper
           input: my_collection_create_artwork_mutation_params(submission)
         }
       )
-    return if response[:errors].present?
+
+    # return if response[:errors].present?
+    if response[:errors].present?
+      raise "API error adding submission to My Collection: #{response[:errors]}"
+    end
+    if response[:data][:myCollectionCreateArtwork][:artworkOrError][
+         :mutationError
+       ]
+      raise "GraphQL error adding submission to My Collection: #{response[:data][:myCollectionCreateArtwork][:artworkOrError][:mutationError][:message]}"
+    end
 
     submission.update(
       my_collection_artwork_id:
