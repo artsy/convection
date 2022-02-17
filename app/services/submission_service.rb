@@ -71,7 +71,8 @@ class SubmissionService
       submission,
       params,
       current_user: nil,
-      is_convection: true
+      is_convection: true,
+      access_token: nil
     )
       params[:edition_size] = params.delete(:edition_size_formatted) if params[
         :edition_size_formatted
@@ -89,9 +90,9 @@ class SubmissionService
           submission.assign_attributes(
             reject_non_target_supply_artist(submission.artist_id)
           )
-          if submission.submitted? && submission.user &&
+          if submission.submitted? && submission.user && !access_token.nil? &&
                submission.user&.save_submission_to_my_collection?
-            create_my_collection_artwork(submission)
+            create_my_collection_artwork(submission, access_token)
           end
         end
 
