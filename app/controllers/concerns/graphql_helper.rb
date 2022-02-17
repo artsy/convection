@@ -43,10 +43,10 @@ module GraphqlHelper
     response =
       Metaql::Schema.execute(
         query: my_collection_create_artwork_mutation_builder,
+        access_token: access_token,
         variables: {
           input: my_collection_create_artwork_mutation_params(submission)
-        },
-        access_token: access_token
+        }
       )
     return if response[:errors].present?
 
