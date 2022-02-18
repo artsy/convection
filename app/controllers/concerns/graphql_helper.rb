@@ -62,7 +62,7 @@ module GraphqlHelper
     submission.update(
       my_collection_artwork_id:
         response.dig(
-          :date,
+          :data,
           :myCollectionCreateArtwork,
           :artworkOrError,
           :artworkEdge,
