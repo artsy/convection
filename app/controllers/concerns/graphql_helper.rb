@@ -39,26 +39,36 @@ module GraphqlHelper
     GQL
   end
 
-  def create_my_collection_artwork(submission)
+  def create_my_collection_artwork(submission, access_token)
     response =
       Metaql::Schema.execute(
         query: my_collection_create_artwork_mutation_builder,
+        access_token: access_token,
         variables: {
           input: my_collection_create_artwork_mutation_params(submission)
         }
       )
-    return if response[:errors].present?
+
+    # return if response[:errors].present?
+    if response[:errors].present?
+      raise "API error adding submission to My Collection: #{response[:errors]}"
+    end
+    if response[:data][:myCollectionCreateArtwork][:artworkOrError][
+         :mutationError
+       ]
+      raise "GraphQL error adding submission to My Collection: #{response[:data][:myCollectionCreateArtwork][:artworkOrError][:mutationError][:message]}"
+    end
 
     submission.update(
-      :my_collection_artwork_id,
-      response.dig(
-        :date,
-        :myCollectionCreateArtwork,
-        :artworkOrError,
-        :artworkEdge,
-        :node,
-        :id
-      )
+      my_collection_artwork_id:
+        response.dig(
+          :date,
+          :myCollectionCreateArtwork,
+          :artworkOrError,
+          :artworkEdge,
+          :node,
+          :id
+        )
     )
   end
 
@@ -126,7 +136,7 @@ module GraphqlHelper
 
   def my_collection_create_artwork_mutation_params(submission)
     {
-      user_id: submission.user&.gravity_user_id,
+      submissionId: submission.id.to_s,
       artistIds: [submission.artist_id],
       artworkLocation:
         [
@@ -140,7 +150,9 @@ module GraphqlHelper
       editionNumber: submission.edition_number,
       editionSize: submission.edition_size,
       externalImageUrls:
-        submission.images.map(&:image_urls).delete_if(&:empty?),
+        submission.images.map do |image|
+          image.original_image&.split('?')&.first
+        end,
       height: submission.height,
       attributionClass:
         submission.attribution_class&.upcase || 'UNKNOWN_EDITION',
