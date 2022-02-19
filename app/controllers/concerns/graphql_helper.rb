@@ -56,13 +56,14 @@ module GraphqlHelper
     if response[:data][:myCollectionCreateArtwork][:artworkOrError][
          :mutationError
        ]
+      Rails.logger.info "Failed access token: #{token}"
       raise "GraphQL error adding submission to My Collection: #{response[:data][:myCollectionCreateArtwork][:artworkOrError][:mutationError][:message]}"
     end
 
     submission.update(
       my_collection_artwork_id:
         response.dig(
-          :date,
+          :data,
           :myCollectionCreateArtwork,
           :artworkOrError,
           :artworkEdge,
