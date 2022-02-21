@@ -24,7 +24,7 @@ module GraphqlHelper
             ... on MyCollectionArtworkMutationSuccess {
               artworkEdge {
                 node {
-                  id
+                  internalID
                 }
               }
             }
@@ -72,7 +72,7 @@ module GraphqlHelper
           :artworkOrError,
           :artworkEdge,
           :node,
-          :id
+          :internalID
         )
     )
   end
