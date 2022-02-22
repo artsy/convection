@@ -24,7 +24,7 @@ module GraphqlHelper
             ... on MyCollectionArtworkMutationSuccess {
               artworkEdge {
                 node {
-                  id
+                  internalID
                 }
               }
             }
@@ -49,15 +49,19 @@ module GraphqlHelper
         }
       )
 
-    # return if response[:errors].present?
     if response[:errors].present?
-      raise "API error adding submission to My Collection: #{response[:errors]}"
+      Rails
+        .logger.error "API error adding submission to My Collection: #{response[:errors]}"
+
+      return nil
     end
     if response[:data][:myCollectionCreateArtwork][:artworkOrError][
          :mutationError
        ]
-      Rails.logger.info "Failed access token: #{token}"
-      raise "GraphQL error adding submission to My Collection: #{response[:data][:myCollectionCreateArtwork][:artworkOrError][:mutationError][:message]}"
+      Rails
+        .logger.error "GraphQL error adding submission to My Collection: #{response[:data][:myCollectionCreateArtwork][:artworkOrError][:mutationError][:message]}"
+
+      return nil
     end
 
     submission.update(
@@ -68,7 +72,7 @@ module GraphqlHelper
           :artworkOrError,
           :artworkEdge,
           :node,
-          :id
+          :internalID
         )
     )
   end
