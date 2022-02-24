@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 require 'support/gravity_helper'
+require 'sidekiq/testing'
 
 describe SubmissionService do
   let!(:user) do
@@ -477,6 +478,50 @@ describe SubmissionService do
 
       expect(submission.state).to eq 'submitted'
       expect(submission.rejection_reason).to eq nil
+    end
+
+    context 'Braze integration' do
+      let(:submission) do
+        Fabricate(
+          :submission,
+          artist_id: 'artistid',
+          user: user,
+          title: 'My Artwork',
+          state: 'draft'
+        )
+      end
+      let(:response) do
+        {
+          data: {
+            myCollectionCreateArtwork: {
+              artworkOrError: {
+                internalID: nil
+              }
+            }
+          }
+        }
+      end
+
+      before do
+        stub_gravity_artist(target_supply: true)
+        allow(submission.user).to receive(:save_submission_to_my_collection?)
+          .and_return(true)
+        allow(Metaql::Schema).to receive(:execute).and_return(response)
+      end
+
+      it 'schedules a SwaMyCollectionEmailWorker' do
+        Sidekiq::Testing.fake! do
+          expect {
+            SubmissionService.update_submission(
+              submission,
+              { state: 'submitted' },
+              current_user: 'userid',
+              is_convection: false,
+              access_token: 'token'
+            )
+          }.to change(SwaMyCollectionEmailWorker.jobs, :size).by(1)
+        end
+      end
     end
 
     context 'anonymous submission' do

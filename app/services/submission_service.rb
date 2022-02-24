@@ -67,6 +67,7 @@ class SubmissionService
       params
     end
 
+    # This method deserves a refactor, there are a lot of things happening here
     def update_submission(
       submission,
       params,
@@ -92,13 +93,20 @@ class SubmissionService
           )
           if submission.submitted? && submission.user && !access_token.nil? &&
                submission.user&.save_submission_to_my_collection?
-            create_my_collection_artwork(submission, access_token)
+            response = create_my_collection_artwork(submission, access_token)
+            notify_user_with_braze(submission.id, response)
           end
         end
 
         update_submission_state(submission, current_user)
       end
       submission.save!
+    end
+
+    def notify_user_with_braze(submission_id, response)
+      if response
+        SwaMyCollectionEmailWorker.perform_in(1.day.from_now, submission_id)
+      end
     end
 
     def update_submission_state(submission, current_user)
