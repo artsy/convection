@@ -9,5 +9,10 @@ Convection.unleash =
     custom_http_headers: {
       'Authorization': Convection.config[:unleash_token]
     },
-    disable_client: Convection.config[:unleash_url].blank?
+    disable_client: Convection.config[:unleash_url].blank?,
+    instance_id: Socket.gethostname,
+    logger: Rails.logger,
+    environment: Rails.env,
+    metrics_interval: 60,
+    refresh_interval: 60
   )
