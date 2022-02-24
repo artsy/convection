@@ -442,6 +442,136 @@ describe SubmissionService do
       )
     end
 
+    context 'my collection artwork' do
+      let(:response) do
+        {
+          data: {
+            myCollectionCreateArtwork: {
+              artworkOrError: {
+                artworkEdge: {
+                  node: {
+                    id: '1'
+                  }
+                }
+              }
+            }
+          }
+        }
+      end
+      let(:access_token) { 'access_token' }
+
+      before do
+        stub_gravity_artist(target_supply: true)
+        allow(Metaql::Schema).to receive(:execute).and_return(response)
+        allow_any_instance_of(User).to receive(
+          :save_submission_to_my_collection?
+        ).and_return(true)
+      end
+
+      it 'create my collection artwork if artwork rejected(target supply)' do
+        stub_gravity_artist(target_supply: false)
+        SubmissionService.update_submission(
+          submission,
+          { state: 'submitted' },
+          current_user: 'userid',
+          is_convection: false,
+          access_token: access_token
+        )
+
+        expect(submission.state).to eq 'rejected'
+        expect(submission.my_collection_artwork_id).to eq '1'
+        expect(submission.rejection_reason).to eq 'Not Target Supply'
+      end
+
+      it 'create my collection artwork if artwork submitted' do
+        SubmissionService.update_submission(
+          submission,
+          { state: 'submitted' },
+          current_user: 'userid',
+          is_convection: false,
+          access_token: access_token
+        )
+
+        expect(submission.state).to eq 'submitted'
+        expect(submission.my_collection_artwork_id).to eq '1'
+      end
+
+      it 'does not create my collection artwork if artwork draft' do
+        SubmissionService.update_submission(
+          submission,
+          { state: 'draft' },
+          current_user: 'userid',
+          is_convection: false,
+          access_token: access_token
+        )
+
+        expect(submission.state).to eq 'draft'
+        expect(submission.my_collection_artwork_id).to eq nil
+      end
+
+      it 'does not create my collection artwork if no access_token' do
+        access_token = nil
+
+        SubmissionService.update_submission(
+          submission,
+          { state: 'submitted' },
+          current_user: 'userid',
+          is_convection: false,
+          access_token: access_token
+        )
+
+        expect(submission.state).to eq 'submitted'
+        expect(submission.my_collection_artwork_id).to eq nil
+      end
+
+      it 'does not create my collection artwork if no user' do
+        submission.user = nil
+
+        SubmissionService.update_submission(
+          submission,
+          { state: 'submitted' },
+          current_user: 'userid',
+          is_convection: false,
+          access_token: access_token
+        )
+
+        expect(submission.state).to eq 'submitted'
+        expect(submission.my_collection_artwork_id).to eq nil
+      end
+
+      it 'does not create my collection artwork if user cannot save submission to my collection' do
+        allow_any_instance_of(User).to receive(
+          :save_submission_to_my_collection?
+        ).and_return(false)
+
+        SubmissionService.update_submission(
+          submission,
+          { state: 'submitted' },
+          current_user: 'userid',
+          is_convection: false,
+          access_token: access_token
+        )
+
+        expect(submission.state).to eq 'submitted'
+        expect(submission.my_collection_artwork_id).to eq nil
+      end
+
+      it 'does not create my collection artwork if my collection artwork already exists' do
+        submission.my_collection_artwork_id = '2'
+
+        SubmissionService.update_submission(
+          submission,
+          { state: 'submitted' },
+          current_user: 'userid',
+          is_convection: false,
+          access_token: access_token
+        )
+
+        expect(submission.state).to eq 'submitted'
+        expect(submission.my_collection_artwork_id).to eq '2'
+      end
+    end
+
     it 'updates submission to Submitted state when submission state changed and artist is in target supply' do
       stub_gravity_artist(target_supply: true)
       allow(submission.user).to receive(:save_submission_to_my_collection?)
