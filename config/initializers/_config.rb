@@ -16,6 +16,9 @@ Convection.config =
       ENV['OFFER_RESPONSE_FORM_URL'] || 'https://foo.com',
     bcc_email_address:
       ENV['BCC_EMAIL_ADDRESS'] || 'consignments-archive@artsymail.com',
+    braze_api_key: ENV['BRAZE_API_KEY'],
+    braze_api_url: ENV['BRAZE_API_URL'],
+    braze_campaign_id: ENV['BRAZE_CAMPAIGN_ID'],
     cloudfront_url: ENV['CLOUDFRONT_URL'],
     consignment_communication_name:
       ENV['CONSIGNMENT_COMMUNICATION_NAME'] || 'Consignment Submissions',
