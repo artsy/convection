@@ -90,6 +90,8 @@ GEM
     bourbon (4.2.3)
       sass (~> 3.4)
       thor
+    braze_ruby (0.8.0)
+      faraday
     builder (3.2.4)
     bunny (2.17.0)
       amq-protocol (~> 2.3, >= 2.3.1)
@@ -505,6 +507,7 @@ DEPENDENCIES
   bootsnap
   bootstrap-sass
   bourbon (= 4.2.3)
+  braze_ruby
   capybara
   coffee-rails
   console_color

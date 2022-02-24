@@ -17,6 +17,7 @@ gem 'artsy-eventservice' # for posting events to artsy event stream
 gem 'bootsnap', require: false # Speed up boot time by caching expensive operations.
 gem 'bootstrap-sass' # required for watt
 gem 'bourbon', '4.2.3' # required for watt
+gem 'braze_ruby'
 gem 'coffee-rails' # required for watt
 gem 'console_color'
 gem 'ddtrace'
