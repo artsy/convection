@@ -8,7 +8,7 @@ describe 'createConsignmentOffer mutation' do
   let!(:submission) { Fabricate :submission, state: 'approved' }
 
   let(:token) do
-    payload = { aud: 'gravity', sub: 'userid', roles: 'user' }
+    payload = { aud: 'gravity', sub: 'userid', roles: 'admin' }
     JWT.encode(payload, Convection.config.jwt_secret)
   end
 
