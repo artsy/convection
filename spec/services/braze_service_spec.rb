@@ -31,7 +31,7 @@ describe BrazeService do
     context 'when submission is valid' do
       let(:gravity_user_id) { 'userid' }
       let(:email_subject) { '[TESTING] SWA Braze integration' }
-      let(:braze_campaign_id) { '244d6288-4f71-4c49-a6fb-9df00826550a' }
+      let(:braze_campaign_id) { Convection.config.braze_campaign_id }
       let(:submission) do
         Fabricate(
           :submission,
