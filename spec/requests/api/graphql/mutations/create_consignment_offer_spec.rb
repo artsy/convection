@@ -8,7 +8,7 @@ describe 'createConsignmentOffer mutation' do
   let!(:submission) { Fabricate :submission, state: 'approved' }
 
   let(:token) do
-    payload = { aud: 'gravity', sub: 'userid', roles: 'user' }
+    payload = { aud: 'gravity', sub: 'userid', roles: 'admin' }
     JWT.encode(payload, Convection.config.jwt_secret)
   end
 
@@ -67,6 +67,46 @@ describe 'createConsignmentOffer mutation' do
 
         error_message = body['errors'][0]['message']
         expect(error_message).to eq "Can't access createConsignmentOffer"
+      end
+    end
+
+    context 'with a request from an untrusted client app' do
+      let(:token) do
+        payload = { aud: 'bad-actor', sub: 'userid', roles: 'untrusted' }
+        JWT.encode(payload, Convection.config.jwt_secret)
+      end
+
+      it 'returns an error for that request' do
+        post '/api/graphql', params: { query: mutation }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        create_response = body['data']['createConsignmentOffer']
+        expect(create_response).to eq nil
+
+        error_message = body['errors'][0]['message']
+        expect(error_message).to eq "Can't access createConsignmentOffer"
+      end
+    end
+
+    context 'with a request from a trusted client app' do
+      let(:token) do
+        payload = { aud: 'good-actor', sub: nil, roles: 'trusted' }
+        JWT.encode(payload, Convection.config.jwt_secret)
+      end
+
+      it 'creates an offer' do
+        post '/api/graphql', params: { query: mutation }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+        create_response = body['data']['createConsignmentOffer']
+
+        offer = Offer.last
+
+        offer_response = create_response['consignmentOffer']
+        expect(offer_response).to include({ 'id' => offer.id.to_s })
       end
     end
 
