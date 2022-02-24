@@ -461,7 +461,7 @@ describe SubmissionService do
       let(:access_token) { 'access_token' }
 
       before do
-        allow(SubmissionService).to receive(:deliver_rejection_notification)
+        allow(NotificationService).to receive(:post_submission_event)
           .and_return(true)
         stub_gravity_artist(target_supply: true)
         allow(Metaql::Schema).to receive(:execute).and_return(response)
