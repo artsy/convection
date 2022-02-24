@@ -19,7 +19,7 @@ $ ->
 $ ->
   # Artwork autocomplete
   updateArtworkSelectionsForm = (selection) ->
-    $( "#artwork_selections_form #submission_artwork_id" ).val( selection.id )
+    $( "#artwork_selections_form #submission_source_artwork_id" ).val( selection.id )
     $( "#artwork_selections_form #artwork_search" ).val( selection.title )
 
   if $('#artwork_selections_form').length != 0
