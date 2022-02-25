@@ -450,7 +450,7 @@ describe SubmissionService do
               artworkOrError: {
                 artworkEdge: {
                   node: {
-                    id: '1'
+                    internalID: '1'
                   }
                 }
               }
@@ -472,6 +472,7 @@ describe SubmissionService do
 
       it 'create my collection artwork if artwork rejected(target supply)' do
         stub_gravity_artist(target_supply: false)
+
         SubmissionService.update_submission(
           submission,
           { state: 'submitted' },
@@ -571,6 +572,66 @@ describe SubmissionService do
 
         expect(submission.state).to eq 'submitted'
         expect(submission.my_collection_artwork_id).to eq '2'
+      end
+
+      context 'with errors from gravity' do
+        it 'do not logs an error if gravity return ok' do
+          SubmissionService.update_submission(
+            submission,
+            { state: 'submitted' },
+            current_user: 'userid',
+            is_convection: false,
+            access_token: access_token
+          )
+
+          expect(Rails.logger).to_not receive(:error).with(anything)
+        end
+
+        it 'logs an error if gravity return error' do
+          error_message = 'error message'
+          response = { error: error_message }
+          allow(Metaql::Schema).to receive(:execute).and_return(response)
+
+          SubmissionService.update_submission(
+            submission,
+            { state: 'submitted' },
+            current_user: 'userid',
+            is_convection: false,
+            access_token: access_token
+          )
+
+          expect(submission.state).to eq 'submitted'
+          expect(submission.my_collection_artwork_id).to eq nil
+          allow(Rails.logger).to receive(:error).at_least(:once)
+        end
+
+        it 'logs an error if gravity return GraphQL error' do
+          error_message = 'error message'
+          response = {
+            data: {
+              myCollectionCreateArtwork: {
+                artworkOrError: {
+                  mutationError: {
+                    message: error_message
+                  }
+                }
+              }
+            }
+          }
+          allow(Metaql::Schema).to receive(:execute).and_return(response)
+
+          SubmissionService.update_submission(
+            submission,
+            { state: 'submitted' },
+            current_user: 'userid',
+            is_convection: false,
+            access_token: access_token
+          )
+
+          expect(submission.state).to eq 'submitted'
+          expect(submission.my_collection_artwork_id).to eq nil
+          allow(Rails.logger).to receive(:error).at_least(:once)
+        end
       end
     end
 
