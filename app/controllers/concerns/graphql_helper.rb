@@ -55,22 +55,12 @@ module GraphqlHelper
 
       return nil
     end
-    if response.dig(
-         :data,
-         :myCollectionCreateArtwork,
-         :artworkOrError,
-         :mutationError
-       )
-      error_message =
-        response.dig(
-          :data,
-          :myCollectionCreateArtwork,
-          :artworkOrError,
-          :mutationError,
-          :message
-        )
-      Rails
-        .logger.error "GraphQL error adding submission to My Collection: #{error_message}"
+
+    # prettier-ignore
+    if response.dig(:data, :myCollectionCreateArtwork, :artworkOrError, :mutationError)
+      # prettier-ignore
+      error_message = response.dig(:data, :myCollectionCreateArtwork, :artworkOrError, :mutationError, :message)
+      Rails.logger.error "GraphQL error adding submission to My Collection: #{error_message}"
 
       return nil
     end
