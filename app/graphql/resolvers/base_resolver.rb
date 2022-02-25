@@ -21,7 +21,7 @@ class BaseResolver
   private
 
   def trusted_application?
-    @context[:current_application].present?
+    @context[:current_application].present? && @context[:current_user_roles].include?(:trusted)
   end
 
   def user?
