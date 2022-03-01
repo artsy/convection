@@ -105,7 +105,19 @@ class Submission < ApplicationRecord
     consigned_partner_submission&.state
   end
 
-  def as_json(_options = {})
+  def as_json(options = {})
+    if options[:properties] == :short
+      return(
+        {
+          id: id,
+          uuid: uuid,
+          state: state,
+          rejection_reason: rejection_reason,
+          consignment_state: consignment_state
+        }
+      )
+    end
+
     super(methods: :consignment_state)
   end
 

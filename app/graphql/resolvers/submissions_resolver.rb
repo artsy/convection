@@ -11,7 +11,8 @@ class SubmissionsResolver < BaseResolver
       'Only Admins can use the user_id for another user.'
     )
 
-  BadArgumentError = GraphQL::ExecutionError.new("Can't access arguments: ids")
+  NotAllowedSubmissionsError =
+    GraphQL::ExecutionError.new("Can't load other people's submissions.")
 
   InvalidSortError = GraphQL::ExecutionError.new('Invalid sort column.')
 
@@ -21,14 +22,22 @@ class SubmissionsResolver < BaseResolver
   end
 
   def run
-    base_submissions.where(conditions).order(sort_order)
+    submissions = base_submissions.where(conditions).order(sort_order)
+
+    submissions.map do |submission|
+      if admin? || partner? || submission.draft?
+        submission
+      else
+        submission.as_json(properties: :short)
+      end
+    end
   end
 
   private
 
   def compute_error
     if not_allowed_ids?
-      BadArgumentError
+      NotAllowedSubmissionsError
     elsif not_allowed_all_submissions?
       AllSubmissionsError
     elsif user_mismatch?
@@ -39,19 +48,31 @@ class SubmissionsResolver < BaseResolver
   end
 
   def base_submissions
-    @arguments[:available] ? Submission.available : Submission.all
+    submissions = @arguments[:available] ? Submission.available : Submission.all
+
+    if !submission_ids.empty? || !submission_uuids.empty?
+      submissions =
+        submissions
+          .where(id: submission_ids)
+          .or(submissions.where(uuid: submission_uuids))
+    end
+
+    submissions
   end
 
   def conditions
     {
-      id: submission_ids.presence,
       user_id: user_ids.presence,
       category: filter_by_category.presence
     }.compact
   end
 
   def submission_ids
-    @arguments.fetch(:ids, [])
+    @arguments.fetch(:ids, []).select { |id| number?(id) }
+  end
+
+  def submission_uuids
+    @arguments.fetch(:ids, []).reject { |id| number?(id) }
   end
 
   def user_ids
@@ -63,9 +84,14 @@ class SubmissionsResolver < BaseResolver
   end
 
   def not_allowed_ids?
-    return false if admin?
+    return false if admin? || !@arguments.key?(:ids)
+    return true if partner?
 
-    @arguments.key?(:ids)
+    current_user = User.find_by(gravity_user_id: @context[:current_user])
+
+    base_submissions.select(:user_id).distinct.map { |s| s.user_id } != [
+      current_user&.id
+    ]
   end
 
   def not_allowed_all_submissions?
@@ -75,7 +101,7 @@ class SubmissionsResolver < BaseResolver
   end
 
   def return_all_submissions?
-    submission_ids.empty? && user_ids.empty?
+    submission_ids.empty? && submission_uuids.empty? && user_ids.empty?
   end
 
   def user_mismatch?
@@ -97,5 +123,11 @@ class SubmissionsResolver < BaseResolver
     return default_sort unless @arguments[:sort]
 
     @arguments[:sort]
+  end
+
+  def number?(obj)
+    obj = obj.to_s unless obj.is_a? String
+
+    /\A[+-]?\d+(\.\d+)?\z/.match(obj)
   end
 end
