@@ -121,3 +121,8 @@ Style/GuardClause:
 Style/MultilineBlockChain:
   Exclude:
     - 'spec/services/offer_service_spec.rb'
+
+Style/ClassVars:
+  Exclude:
+    - 'spec/requests/api/graphql/extensions/default_value_extension_spec.rb'
+    - 'spec/requests/api/graphql/extensions/nilable_field_extension_spec.rb'
