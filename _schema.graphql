@@ -1303,7 +1303,6 @@ type Submission {
   attributionClass: AttributionClass
   authenticityCertificate: Boolean
   category: String
-  consignmentState: String
   createdAt: ISO8601DateTime
   currency: String
   depth: String
@@ -1333,6 +1332,7 @@ type Submission {
   provenance: String
   publishedAt: ISO8601DateTime
   rejectionReason: String
+  saleState: String
   signature: Boolean
 
   """

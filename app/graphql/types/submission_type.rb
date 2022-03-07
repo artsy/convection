@@ -13,7 +13,7 @@ module Types
     field :internalID, ID, null: true, method: :id
     field :state, Types::StateType, null: true
     field :rejection_reason, String, null: true
-    field :consignment_state, String, null: true
+    field :sale_state, String, null: true
 
     nilable_field :additional_info, String, null: true
     nilable_field :artist_id, String, null: false, default_value: ''
@@ -69,10 +69,18 @@ module Types
       partner_submission.offers
     end
 
-    def consignment_state
-      partner_submission = PartnerSubmission.find_by(submission_id: object[:id])
+    def sale_state
+      return object['sale_state'] if object['sale_state']
+      return nil unless object['consigned_partner_submission_id']
 
-      partner_submission&.state
+      begin
+        partner_submission =
+          PartnerSubmission.find(object['consigned_partner_submission_id'])
+
+        partner_submission&.state
+      rescue Faraday::ResourceNotFound
+        nil
+      end
     end
   end
 end

@@ -101,7 +101,7 @@ class Submission < ApplicationRecord
 
   dollarize :minimum_price_cents
 
-  def consignment_state
+  def sale_state
     consigned_partner_submission&.state
   end
 
@@ -113,12 +113,13 @@ class Submission < ApplicationRecord
           uuid: uuid,
           state: state,
           rejection_reason: rejection_reason,
-          consignment_state: consignment_state
-        }
+          sale_state: sale_state,
+          consigned_partner_submission_id: consigned_partner_submission_id
+        }.as_json
       )
     end
 
-    super(methods: :consignment_state)
+    super(methods: :sale_state)
   end
 
   def can_submit?
