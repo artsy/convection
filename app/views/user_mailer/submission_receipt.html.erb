@@ -14,22 +14,10 @@
               </tr>
               <tr>
                 <td class='email-sub-title'>
-                  Dear <%= @submission.name %>,
-                </td>
-              </tr>
-              <tr>
-                <td class='email-sub-title'>
-                  Thank you for submitting an artwork to sell with <%= link_to 'Artsy', 'https://www.artsy.net', target: :_blank %>. We’ll reach out to you shortly with an update or if we require additional information.
-                </td>
-              </tr>
-              <tr>
-                <td class='email-sub-title-bold'>
-                  What happens next?
-                </td>
-              </tr>
-              <tr>
-                <td class='email-sub-title'>
-                  Our team of specialists will review your work to evaluate whether we currently have a suitable market for it. If your work is accepted, we’ll send you a sales offer and guide you in choosing the best option for selling it.
+                  <p>Dear <%= @submission.name %>,</p>
+                  <p>Thank you for submitting an artwork to sell with <%= link_to 'Artsy', 'https://www.artsy.net', target: :_blank %>. We’ll reach out to you shortly with an update or if we require additional information.</p>
+                  <p class='email-sub-title-bold'>What happens next?</p>
+                  <p>Our team of specialists will review your work to evaluate whether we currently have a suitable market for it. If your work is accepted, we’ll send you a sales offer and guide you in choosing the best option for selling it.</p>
                 </td>
               </tr>
               <tr>
@@ -39,12 +27,8 @@
               </tr>
               <tr>
                 <td>
-                  Sincerely,
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  The Sell with Artsy Team
+                  <p>Sincerely,</p>
+                  <p>The Sell with Artsy Team</p>
                 </td>
               </tr>
             </table>
