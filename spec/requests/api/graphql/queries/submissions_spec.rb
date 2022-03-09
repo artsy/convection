@@ -172,6 +172,7 @@ describe 'submissions query' do
         expect(result_submission['title']).to eq submission.title
         expect(result_submission['artistId']).to eq submission.artist_id.to_s
         expect(result_submission['id']).to eq submission.id.to_s
+        expect(result_submission['saleState']).to eq nil
       end
     end
 
