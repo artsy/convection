@@ -973,7 +973,12 @@ describe SubmissionService do
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
       expect(emails.first.bcc).to include('consignments-archive@artsymail.com')
-      expect(emails.first.html_part.body).to include('This is a confirmation')
+      expect(emails.first.html_part.body).to include(
+        'Thank you for submitting an artwork'
+      )
+      expect(emails.first.html_part.body).to include(
+        'Our team of specialists will review your work to evaluate whether we currently have a suitable market for it'
+      )
     end
   end
 
