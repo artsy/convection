@@ -70,7 +70,9 @@ module Types
     end
 
     def sale_state
-      return object['sale_state'] if object['sale_state']
+      sale_state = object.is_a?(Hash) ? object['sale_state'] : object.sale_state
+
+      return sale_state if sale_state
       return nil unless object['consigned_partner_submission_id']
 
       begin

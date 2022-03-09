@@ -114,12 +114,19 @@ class Submission < ApplicationRecord
           state: state,
           rejection_reason: rejection_reason,
           sale_state: sale_state,
+          # Added to save REST API behavior. Should be removed after migration MP to GraphQL query
+          consignment_state: sale_state,
           consigned_partner_submission_id: consigned_partner_submission_id
         }.as_json
       )
     end
 
-    super(methods: :sale_state)
+    super(methods: :sale_state).merge(
+      {
+        # Added to save REST API behavior. Should be removed after migration MP to GraphQL query
+        'consignment_state' => sale_state
+      }
+    )
   end
 
   def can_submit?

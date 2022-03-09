@@ -22,7 +22,11 @@ class SubmissionsResolver < BaseResolver
   end
 
   def run
-    submissions = base_submissions.where(conditions).order(sort_order)
+    submissions =
+      base_submissions
+        .where(conditions)
+        .order(sort_order)
+        .left_joins(:consigned_partner_submission)
 
     submissions.map do |submission|
       if admin? || partner? || submission.draft?
