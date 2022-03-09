@@ -12,12 +12,13 @@
         <tr>
           <td class='email-sub-title'>
             <p>Dear <%= @submission.name %>,</p>
-            <p>Thank you for submitting your work to <%= link_to 'Artsy', 'https://www.artsy.net', target: :_blank %>.</p>
-            <p>Unfortunately, this artwork would fall below our auction threshold and therefore would not be suitable for a sale at Artsy. 
-              Should you have any other works of art you wish to sell with Artsy we would be happy to assist. </p>
-            <p>If you have any questions, please do not hesitate to reach out to us at <%= link_to 'consign@artsymail.com', 'mailto:consign@artsymail.com', target: :_blank %></p>
-            <p>Thank you,</p>
-            <p>Artsy</p>
+            <p>Thank you for your interest in selling with <%= link_to 'Artsy', 'https://www.artsy.net', target: :_blank %> and for giving us a chance to consider your artwork.</p>
+            <p>Our specialists have reviewed your submission and while it’s a wonderful piece, we unfortunately don’t have demand for this artwork on Artsy at the moment.</p>
+            <p>You can submit another artwork anytime. If you would like to sell multiple artworks, we’d be happy to assist you at <%= link_to 'Artsy', 'https://www.artsy.net', target: :_blank %></p>
+
+            <p>If you have any questions, please do not hesitate to reach out to us at <%= link_to 'consign@artsymail.com', 'mailto:consign@artsymail.com', target: :_blank %>. We look forward to hearing from you.</p>
+            <p>Sincerely,</p>
+            <p>The Sell with Artsy Team</p>
           </td>
         </tr>
       </table>

@@ -386,7 +386,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[consign@artsy.net])
       expect(emails.first.html_part.body).to include(
-        'Unfortunately, this artwork would fall below our auction threshold'
+        'we unfortunately don’t have demand for this artwork on Artsy at the moment.'
       )
       expect(submission.state).to eq 'rejected'
       expect(submission.rejection_reason).to eq 'NSV'
