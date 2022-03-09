@@ -43,7 +43,7 @@ describe SubmissionService do
       expect(new_submission.reload.state).to eq 'rejected'
     end
 
-    it 'delvers rejection email to user for non-target supply artist submissions' do
+    it 'delivers rejection email to user for non-target supply artist submissions' do
       new_submission =
         SubmissionService.create_submission(
           params,
@@ -58,7 +58,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[consign@artsy.net])
       expect(emails.first.html_part.body).to include(
-        'Specialists have determined we cannot accept'
+        'we unfortunately don’t have demand for this artwork on Artsy at the moment'
       )
     end
 
@@ -320,7 +320,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[consign@artsy.net])
       expect(emails.first.html_part.body).to include(
-        'Thank you for submission and interest in our'
+        'we unfortunately don’t have demand for this artwork on Artsy at the moment.'
       )
       expect(submission.state).to eq 'rejected'
       expect(submission.rejected_by).to eq 'userid'
@@ -362,7 +362,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[consign@artsy.net])
       expect(emails.first.html_part.body).to include(
-        'If you are represented by a gallery that would be interested in partnering with Artsy'
+        'If you’re looking for gallery representation'
       )
       expect(submission.state).to eq 'rejected'
       expect(submission.rejected_by).to eq 'userid'
@@ -372,7 +372,7 @@ describe SubmissionService do
       expect(submission.published_at).to be_nil
     end
 
-    it 'sends a artist rejection notification if the submission state is changed to rejected' do
+    it 'sends a NSV notification if the submission state is changed to rejected' do
       stub_gravity_artist({ name: 'some nonTarget artist' })
 
       SubmissionService.update_submission(
@@ -438,7 +438,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[consign@artsy.net])
       expect(emails.first.html_part.body).to include(
-        'Specialists have determined we cannot accept'
+        'we unfortunately don’t have demand for this artwork on Artsy at the moment.'
       )
     end
 
@@ -848,7 +848,9 @@ describe SubmissionService do
         SubmissionService.notify_user(submission.id)
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
-        expect(emails.first.html_part.body).to include('This is a confirmation')
+        expect(emails.first.html_part.body).to include(
+          'Our team of specialists will review your work to evaluate whether we currently have a suitable market for it. If your work is accepted, we’ll send you a sales offer and guide you in choosing the best option for selling it.'
+        )
         expect(emails.first.to).to eq(%w[michael@bluth.com])
         expect(submission.reload.receipt_sent_at).to_not be nil
       end
