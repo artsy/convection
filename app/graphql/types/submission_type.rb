@@ -4,55 +4,58 @@ module Types
   class SubmissionType < Types::BaseObject
     description 'Consignment Submission'
 
-    field :additional_info, String, null: true
-    field :artist_id, String, null: false
-    field :assets, [Types::AssetType, { null: true }], null: true
-    field :attribution_class, Types::AttributionClassType, null: true
-    field :authenticity_certificate, Boolean, null: true
-    field :category, String, null: true
-    field :created_at, GraphQL::Types::ISO8601DateTime, null: true
-    field :currency, String, null: true
-    field :depth, String, null: true
-    field :dimensions_metric, String, null: true
-    field :edition, String, null: true
-    field :edition_number, String, null: true
-    field :edition_size, String, null: true
     field :external_id,
           ID,
           null: false,
           method: :uuid,
           description: 'UUID visible to users'
-    field :height, String, null: true
     field :id, ID, 'Uniq ID for this submission', null: false
     field :internalID, ID, null: true, method: :id
-    field :location_city, String, null: true
-    field :location_country, String, null: true
-    field :location_state, String, null: true
-    field :medium, String, null: true
-    field :minimum_price_dollars, Integer, null: true
-    field :primary_image, Types::AssetType, null: true
-    field :provenance, String, null: true
-    field :published_at, GraphQL::Types::ISO8601DateTime, null: true
-    field :signature, Boolean, null: true
-    field :sourceArtworkID,
-          String,
-          null: true,
-          method: :source_artwork_id,
-          description: 'If this artwork exists in Gravity, its ID'
     field :state, Types::StateType, null: true
-    field :title, String, null: true
-    field :user_agent, String, null: true
-    field :user_id, String, null: false
-    field :user_name, String, null: true
-    field :user_email, String, null: true
-    field :user_phone, String, null: true
-    field :width, String, null: true
-    field :year, String, null: true
-    field :utm_source, String, null: true
-    field :utm_medium, String, null: true
-    field :utm_term, String, null: true
+    field :rejection_reason, String, null: true
+    field :sale_state, String, null: true
 
-    field :offers, [Types::OfferType], null: false do
+    nilable_field :additional_info, String, null: true
+    nilable_field :artist_id, String, null: false, default_value: ''
+    nilable_field :assets, [Types::AssetType, { null: true }], null: true
+    nilable_field :attribution_class, Types::AttributionClassType, null: true
+    nilable_field :authenticity_certificate, Boolean, null: true
+    nilable_field :category, String, null: true
+    nilable_field :created_at, GraphQL::Types::ISO8601DateTime, null: true
+    nilable_field :currency, String, null: true
+    nilable_field :depth, String, null: true
+    nilable_field :dimensions_metric, String, null: true
+    nilable_field :edition, String, null: true
+    nilable_field :edition_number, String, null: true
+    nilable_field :edition_size, String, null: true
+    nilable_field :height, String, null: true
+    nilable_field :location_city, String, null: true
+    nilable_field :location_country, String, null: true
+    nilable_field :location_state, String, null: true
+    nilable_field :medium, String, null: true
+    nilable_field :minimum_price_dollars, Integer, null: true
+    nilable_field :primary_image, Types::AssetType, null: true
+    nilable_field :provenance, String, null: true
+    nilable_field :published_at, GraphQL::Types::ISO8601DateTime, null: true
+    nilable_field :signature, Boolean, null: true
+    nilable_field :sourceArtworkID,
+                  String,
+                  null: true,
+                  method: :source_artwork_id,
+                  description: 'If this artwork exists in Gravity, its ID'
+    nilable_field :title, String, null: true
+    nilable_field :user_agent, String, null: true
+    nilable_field :user_id, String, null: false, default_value: -1
+    nilable_field :user_name, String, null: true
+    nilable_field :user_email, String, null: true
+    nilable_field :user_phone, String, null: true
+    nilable_field :width, String, null: true
+    nilable_field :year, String, null: true
+    nilable_field :utm_source, String, null: true
+    nilable_field :utm_medium, String, null: true
+    nilable_field :utm_term, String, null: true
+
+    nilable_field :offers, [Types::OfferType], null: false, default_value: [] do
       argument :gravity_partner_id, ID, required: true
     end
 
@@ -64,6 +67,22 @@ module Types
       return [] unless partner_submission
 
       partner_submission.offers
+    end
+
+    def sale_state
+      sale_state = object.is_a?(Hash) ? object['sale_state'] : object.sale_state
+
+      return sale_state if sale_state
+      return nil unless object['consigned_partner_submission_id']
+
+      begin
+        partner_submission =
+          PartnerSubmission.find(object['consigned_partner_submission_id'])
+
+        partner_submission&.state
+      rescue Faraday::ResourceNotFound
+        nil
+      end
     end
   end
 end

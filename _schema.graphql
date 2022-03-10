@@ -1331,6 +1331,8 @@ type Submission {
   primaryImage: Asset
   provenance: String
   publishedAt: ISO8601DateTime
+  rejectionReason: String
+  saleState: String
   signature: Boolean
 
   """

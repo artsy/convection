@@ -3,14 +3,31 @@
 require 'rails_helper'
 
 describe 'submissions query' do
-  let!(:submission) { Fabricate :submission }
+  let(:user) { Fabricate(:user) }
+  let!(:submission) { Fabricate :submission, user: user }
 
-  let(:token) do
+  let(:admin_token) do
     JWT.encode(
-      { aud: 'gravity', sub: 'userid', roles: 'admin' },
+      { aud: 'gravity', sub: user.gravity_user_id, roles: 'admin' },
       Convection.config.jwt_secret
     )
   end
+
+  let(:partner_token) do
+    JWT.encode(
+      { aud: 'gravity', sub: user.gravity_user_id, roles: 'partner' },
+      Convection.config.jwt_secret
+    )
+  end
+
+  let(:user_token) do
+    JWT.encode(
+      { aud: 'gravity', sub: user.gravity_user_id, roles: 'user' },
+      Convection.config.jwt_secret
+    )
+  end
+
+  let(:token) { admin_token }
 
   let(:headers) { { 'Authorization' => "Bearer #{token}" } }
 
@@ -23,7 +40,8 @@ describe 'submissions query' do
           node {
             id,
             artistId,
-            title
+            title,
+            saleState
           }
         }
       }
@@ -44,14 +62,16 @@ describe 'submissions query' do
         expect(submissions_response).to eq nil
 
         error_message = body['errors'][0]['message']
-        expect(error_message).to eq "Can't access arguments: ids"
+        expect(error_message).to eq "Can't load other people's submissions."
       end
     end
 
-    context 'with a request from a regular user' do
+    context 'with a request from a regular user and wrong submission id' do
       let(:token) do
-        payload = { aud: 'gravity', sub: 'userid', roles: 'user' }
-        JWT.encode(payload, Convection.config.jwt_secret)
+        JWT.encode(
+          { aud: 'gravity', sub: 'user_id', roles: 'user' },
+          Convection.config.jwt_secret
+        )
       end
 
       it 'returns an error for that request' do
@@ -64,12 +84,79 @@ describe 'submissions query' do
         expect(submissions_response).to eq nil
 
         error_message = body['errors'][0]['message']
-        expect(error_message).to eq "Can't access arguments: ids"
+        expect(error_message).to eq "Can't load other people's submissions."
       end
     end
   end
 
   describe 'valid requests' do
+    context 'with a request from a regular user' do
+      let(:token) { user_token }
+
+      it 'returns all field for draft submission' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submissions_response = body['data']['submissions']
+        expect(submissions_response['edges'].count).to eq 1
+
+        result_submission = submissions_response['edges'][0]['node']
+
+        expect(result_submission['title']).to eq submission.title
+        expect(result_submission['artistId']).to eq submission.artist_id.to_s
+        expect(result_submission['id']).to eq submission.id.to_s
+      end
+
+      context 'with submission in submitted state' do
+        let!(:submission) do
+          Fabricate :submission, user: user, state: 'submitted'
+        end
+
+        it 'returns limited set of fields allowed for loading' do
+          post '/api/graphql', params: { query: query }, headers: headers
+
+          expect(response.status).to eq 200
+          body = JSON.parse(response.body)
+
+          submissions_response = body['data']['submissions']
+          expect(submissions_response['edges'].count).to eq 1
+
+          result_submission = submissions_response['edges'][0]['node']
+
+          expect(result_submission['title']).to eq nil
+          expect(result_submission['artistId']).to eq ''
+          expect(result_submission['id']).to eq submission.id.to_s
+          expect(result_submission['saleState']).to eq nil
+        end
+      end
+
+      context 'with consigned partner submission' do
+        let(:partner_submission) { Fabricate(:partner_submission) }
+        let!(:submission) do
+          Fabricate :submission,
+                    user: user,
+                    state: 'submitted',
+                    consigned_partner_submission: partner_submission
+        end
+
+        it 'returns limited set of fields allowed for loading' do
+          post '/api/graphql', params: { query: query }, headers: headers
+
+          expect(response.status).to eq 200
+          body = JSON.parse(response.body)
+
+          submissions_response = body['data']['submissions']
+          expect(submissions_response['edges'].count).to eq 1
+
+          result_submission = submissions_response['edges'][0]['node']
+
+          expect(result_submission['saleState']).to eq partner_submission.state
+        end
+      end
+    end
+
     context 'with valid submission ids' do
       it 'returns those submissions' do
         post '/api/graphql', params: { query: query }, headers: headers
@@ -79,6 +166,93 @@ describe 'submissions query' do
 
         submissions_response = body['data']['submissions']
         expect(submissions_response['edges'].count).to eq 1
+
+        result_submission = submissions_response['edges'][0]['node']
+
+        expect(result_submission['title']).to eq submission.title
+        expect(result_submission['artistId']).to eq submission.artist_id.to_s
+        expect(result_submission['id']).to eq submission.id.to_s
+        expect(result_submission['saleState']).to eq nil
+      end
+    end
+
+    context 'with submission in submitted state' do
+      it 'returns those submissions' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submissions_response = body['data']['submissions']
+        expect(submissions_response['edges'].count).to eq 1
+
+        result_submission = submissions_response['edges'][0]['node']
+
+        expect(result_submission['title']).to eq submission.title
+        expect(result_submission['artistId']).to eq submission.artist_id.to_s
+        expect(result_submission['id']).to eq submission.id.to_s
+      end
+    end
+
+    context 'with consigned partner submission' do
+      let(:partner_submission) { Fabricate(:partner_submission) }
+      let!(:submission) do
+        Fabricate :submission,
+                  user: user,
+                  state: 'submitted',
+                  consigned_partner_submission: partner_submission
+      end
+
+      it 'returns limited set of fields allowed for loading' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submissions_response = body['data']['submissions']
+        expect(submissions_response['edges'].count).to eq 1
+
+        result_submission = submissions_response['edges'][0]['node']
+
+        expect(result_submission['saleState']).to eq partner_submission.state
+      end
+    end
+
+    context 'with valid submission uuid' do
+      let(:query_inputs) { "ids: [\"#{submission.uuid}\"]" }
+
+      it 'returns those submissions' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submissions_response = body['data']['submissions']
+        expect(submissions_response['edges'].count).to eq 1
+
+        result_submission = submissions_response['edges'][0]['node']
+
+        expect(result_submission['title']).to eq submission.title
+        expect(result_submission['artistId']).to eq submission.artist_id.to_s
+        expect(result_submission['id']).to eq submission.id.to_s
+      end
+    end
+
+    context 'with valid submission uuid and id' do
+      let(:submission2) { Fabricate :submission }
+
+      let(:query_inputs) do
+        "ids: [\"#{submission.id}\", \"#{submission2.uuid}\"]"
+      end
+
+      it 'ignores that invalid submission ids and returns the known ones' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submissions_response = body['data']['submissions']
+        expect(submissions_response['edges'].count).to eq 2
       end
     end
 
@@ -117,10 +291,7 @@ describe 'submissions query' do
     end
 
     context 'with a request from a partner' do
-      let(:token) do
-        payload = { aud: 'gravity', sub: 'userid', roles: 'partner' }
-        JWT.encode(payload, Convection.config.jwt_secret)
-      end
+      let(:token) { partner_token }
 
       let(:query) { <<-GRAPHQL }
         query {
