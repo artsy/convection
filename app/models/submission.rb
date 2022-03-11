@@ -101,12 +101,32 @@ class Submission < ApplicationRecord
 
   dollarize :minimum_price_cents
 
-  def consignment_state
+  def sale_state
     consigned_partner_submission&.state
   end
 
-  def as_json(_options = {})
-    super(methods: :consignment_state)
+  def as_json(options = {})
+    if options[:properties] == :short
+      return(
+        {
+          id: id,
+          uuid: uuid,
+          state: state,
+          rejection_reason: rejection_reason,
+          sale_state: sale_state,
+          # Added to save REST API behavior. Should be removed after migration MP to GraphQL query
+          consignment_state: sale_state,
+          consigned_partner_submission_id: consigned_partner_submission_id
+        }.as_json
+      )
+    end
+
+    super(methods: :sale_state).merge(
+      {
+        # Added to save REST API behavior. Should be removed after migration MP to GraphQL query
+        'consignment_state' => sale_state
+      }
+    )
   end
 
   def can_submit?
