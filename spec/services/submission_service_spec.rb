@@ -29,8 +29,19 @@ describe SubmissionService do
         title: 'My Artwork',
         user_name: 'michael',
         user_email: 'michael@bluth.com',
-        user_phone: '555-5555'
+        user_phone: '555-5555',
+        source: 'web_inbound'
       }
+    end
+
+    it 'creates a submission with correct source' do
+      new_submission =
+        SubmissionService.create_submission(
+          params,
+          'userid',
+          is_convection: false
+        )
+      expect(new_submission.reload.source).to eq 'web_inbound'
     end
 
     it 'creates a submission with state Rejected when artist is not in target supply' do
