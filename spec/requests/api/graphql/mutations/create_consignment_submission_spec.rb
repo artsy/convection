@@ -139,5 +139,18 @@ describe 'createConsignmentSubmission mutation' do
         expect(submission.user_agent).to eq 'something, something'
       end
     end
+
+    context 'with provided source' do
+      let(:mutation_inputs) { '{ artistID: "andy", source: WEB_INBOUND }' }
+
+      it 'creates a submission with correct source' do
+        post '/api/graphql', params: { query: mutation }, headers: headers
+
+        expect(response.status).to eq 200
+        submission = Submission.first
+
+        expect(submission.source).to eq 'web_inbound'
+      end
+    end
   end
 end

@@ -47,6 +47,7 @@ module Mutations
     argument :utm_medium, String, required: false
     argument :utm_term, String, required: false
     argument :sessionID, String, required: false
+    argument :source, Types::SubmissionSourceType, required: false
 
     field :consignment_submission, Types::SubmissionType, null: true
 

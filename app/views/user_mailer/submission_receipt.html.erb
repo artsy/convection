@@ -14,11 +14,10 @@
               </tr>
               <tr>
                 <td class='email-sub-title'>
-                  Dear <%= @submission.name %>,
-
-                  This is a confirmation that <%= link_to 'Artsy', 'https://www.artsy.net', target: :_blank %> has received your artwork submission.
-
-                  Our team of specialists will review the work and reach out to you within 24 hours with an update or if they require additional information.
+                  <p>Dear <%= @submission.name %>,</p>
+                  <p>Thank you for submitting an artwork to sell with <%= link_to 'Artsy', 'https://www.artsy.net', target: :_blank %>. We’ll reach out to you shortly with an update or if we require additional information.</p>
+                  <p class='email-sub-title-bold'>What happens next?</p>
+                  <p>Our team of specialists will review your work to evaluate whether we currently have a suitable market for it. If your work is accepted, we’ll send you a sales offer and guide you in choosing the best option for selling it.</p>
                 </td>
               </tr>
               <tr>
@@ -28,10 +27,11 @@
               </tr>
               <tr>
                 <td>
-                  If you have any questions, please do not hesitate to reach out to us at <%= link_to 'consign@artsymail.com', 'mailto:consign@artsymail.com', target: :_blank %></a>
-
-                  Thank you,
-                  Artsy
+                  <p>
+                    Sincerely,
+                    <br />
+                    The Sell with Artsy Team
+                  </p>
                 </td>
               </tr>
             </table>

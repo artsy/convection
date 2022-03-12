@@ -1,5 +1,5 @@
-$sans-serif: HelveticaNeue, Helvetica, 'Helvetica', sans-serif;
-$serif: TimesNewRoman, 'Times New Roman', Times, serif;
+$sans-serif: HelveticaNeue, Helvetica, "Helvetica", sans-serif;
+$serif: TimesNewRoman, "Times New Roman", Times, serif;
 $purple: #6e1fff;
 $red: #f7625a;
 $green: #0eda83;
@@ -177,6 +177,12 @@ table.bordered-email {
   .email-sub-title {
     font-size: 20px;
     padding-bottom: 40px;
+    text-align: left;
+  }
+
+  .email-sub-title-bold {
+    font-size: 20px;
+    font-weight: bold;
     text-align: left;
   }
 

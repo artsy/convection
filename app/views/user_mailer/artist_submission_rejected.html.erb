@@ -12,15 +12,16 @@
         <tr>
           <td class='email-sub-title'>
             <p>Dear <%= @submission.name %>,</p>
-            <p>Thank you for submitting your work to Artsy.</p>
-            <p>Currently <%= link_to 'we do not work with artists directly', 'https://support.artsy.net/hc/en-us/articles/360046647174-I-am-not-an-artist-on-Artsy-Can-I-sell-my-artwork-through-the-site-', target: :_blank %>.
-            If you are represented by a gallery that would be interested in partnering with Artsy, please encourage the gallery to visit this page.</p>
-            <p>If you do not currently have gallery representation, we would like to bring to your attention our
-              <%= link_to 'Gallery Representation Guide', 'https://www.artsy.net/article/artsy-editorial-artists-gallery-representation', target: :_blank %> and
-              <%= link_to 'The Working Artist’s Guide', 'https://www.artsy.net/series/working-artists-guide', target: :_blank %>, two resources put together by our Editorial team. </p>
-            <p>We hope this information is helpful and that you continue to explore <%= link_to 'Artsy', 'https://www.artsy.net', target: :_blank %>!</p>
-            <p>Thank you,</p>
-            <p>Artsy</p>
+            <p>Thank you for submitting your artwork for Artsy to consider. We always enjoy seeing fresh talent.</p>
+            <p>Currently, we don’t work with artists directly. If you are represented by a gallery, you can encourage them to consider partnering with us.</p>
+            <p>If you’re looking for gallery representation, you might be interested in reading our <%= link_to 'Gallery Representation Guide', 'https://www.artsy.net/article/artsy-editorial-artists-gallery-representation', target: :_blank %> 
+               and <%= link_to 'The Working Artist’s Guide', 'https://www.artsy.net/series/working-artists-guide', target: :_blank %>, two resources from our Editorial Team.</p>
+            <p>We wish you all the best in your continued work.</p>
+            <p>
+              Sincerely,
+              <br />
+              The Sell with Artsy Team
+            </p>
           </td>
         </tr>
       </table>

@@ -32,6 +32,14 @@ class Submission < ApplicationRecord
     CLOSED = 'closed'
   ].freeze
 
+  SOURCES = [
+    WEB_INBOUND = 'web_inbound',
+    APP_INBOUND = 'app_inbound',
+    ADMIN = 'admin',
+    PARTNER = 'partner',
+    MY_COLLECTION = 'my_collection'
+  ].freeze
+
   enum attribution_class: {
          unique: 0,
          limited_edition: 1,
@@ -81,6 +89,7 @@ class Submission < ApplicationRecord
   belongs_to :consigned_partner_submission, class_name: 'PartnerSubmission'
 
   validates :state, inclusion: { in: STATES }
+  validates :source, inclusion: { in: SOURCES }, allow_nil: true
   validates :category, inclusion: { in: CATEGORIES }, allow_nil: true
   validates :dimensions_metric,
             inclusion: {
