@@ -2118,6 +2118,11 @@ input UpdateSubmissionMutationInput {
   provenance: String
   sessionID: String
   signature: Boolean
+
+  """
+  If this artwork exists in Gravity, its ID
+  """
+  sourceArtworkID: String
   state: State
   title: String
   userEmail: String
