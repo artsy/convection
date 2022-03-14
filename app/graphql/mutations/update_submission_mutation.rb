@@ -32,6 +32,10 @@ module Mutations
     argument :provenance, String, required: false
     argument :signature, Boolean, required: false
     argument :state, Types::StateType, required: false
+    argument :sourceArtworkID,
+             String,
+             required: false,
+             description: 'If this artwork exists in Gravity, its ID'
     argument :title, String, required: false
     argument :width, String, required: false
     argument :year, String, required: false

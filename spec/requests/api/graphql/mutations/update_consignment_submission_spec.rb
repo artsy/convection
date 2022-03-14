@@ -26,7 +26,7 @@ describe 'updateConsignmentSubmission mutation' do
   let(:mutation_inputs) do
     "{ state: DRAFT, category: JEWELRY, clientMutationId: \"test\", id: #{
       submission.id
-    }, artistID: \"andy-warhol\", title: \"soup\" }"
+    }, artistID: \"andy-warhol\", title: \"soup\", sourceArtworkID: \"gravity_artwork_id\" }"
   end
 
   let(:mutation) { <<-GRAPHQL }
@@ -39,6 +39,7 @@ describe 'updateConsignmentSubmission mutation' do
           id
           artistId
           title
+          sourceArtworkID
         }
       }
     }
