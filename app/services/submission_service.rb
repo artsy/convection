@@ -35,6 +35,8 @@ class SubmissionService
         )
       end
 
+      create_params.merge!(source: 'admin') if is_convection
+
       unless is_convection || submission_params[:state]&.downcase == 'draft'
         create_params.merge!(
           reject_non_target_supply_artist(submission_params[:artist_id])
