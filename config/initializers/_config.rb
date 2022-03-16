@@ -53,5 +53,5 @@ Convection.config =
       ENV['VIBRATIONS_URL'] || 'https://admin-partners-staging.artsy.net',
     unleash_url: ENV['UNLEASH_URL'],
     unleash_token: ENV['UNLEASH_TOKEN'],
-    send_new_receipt_email: ENV['SEND_NEW_RECEIPT_EMAIL'] || 'false'
+    send_new_receipt_email: ENV['SEND_NEW_RECEIPT_EMAIL'] == 'true'
   )
