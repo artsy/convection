@@ -29,6 +29,7 @@ module Mutations
     argument :location_state, String, required: false
     argument :medium, String, required: false
     argument :minimum_price_dollars, Integer, required: false
+    argument :myCollectionArtworkID, String, required: false
     argument :provenance, String, required: false
     argument :signature, Boolean, required: false
     argument :sourceArtworkID,
