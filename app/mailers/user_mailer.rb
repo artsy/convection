@@ -6,6 +6,8 @@ class UserMailer < ApplicationMailer
   def submission_receipt(submission:, artist:)
     @submission = submission
     @artist = artist
+    @inject_create_account_section = Convection.config.send_new_receipt_email
+
     @utm_params =
       utm_params(
         source: 'consignment-receipt',
