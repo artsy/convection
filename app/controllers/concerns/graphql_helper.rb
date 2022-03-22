@@ -194,7 +194,7 @@ module GraphqlHelper
   def my_collection_create_artwork_mutation_params(submission)
     {
       submissionId: submission.id.to_s,
-      importSource: 'convection',
+      importSource: 'CONVECTION',
       artistIds: [submission.artist_id],
       artworkLocation:
         [
