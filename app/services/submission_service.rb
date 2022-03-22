@@ -99,7 +99,6 @@ class SubmissionService
           elsif submission.source == "my_collection"
             update_my_collection_artwork(submission, access_token)
           end
-
         end
 
         update_submission_state(submission, current_user)
