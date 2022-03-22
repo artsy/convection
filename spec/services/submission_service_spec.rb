@@ -593,19 +593,47 @@ describe SubmissionService do
         expect(submission.my_collection_artwork_id).to eq nil
       end
 
-      it 'does not create my collection artwork if my collection artwork already exists' do
-        submission.my_collection_artwork_id = '2'
+      context 'when my collection artwork already exists' do
+        subject(:update_submission) do
+          SubmissionService.update_submission(
+            submission,
+            { state: 'submitted' },
+            current_user: 'userid',
+            is_convection: false,
+            access_token: access_token
+          )
+        end
 
-        SubmissionService.update_submission(
-          submission,
-          { state: 'submitted' },
-          current_user: 'userid',
-          is_convection: false,
-          access_token: access_token
-        )
+        before do
+          submission.update(my_collection_artwork_id: '2')
+        end
 
-        expect(submission.state).to eq 'submitted'
-        expect(submission.my_collection_artwork_id).to eq '2'
+        it 'does not create my collection artwork' do
+          update_submission
+
+          expect(submission.state).to eq 'submitted'
+          expect(submission.my_collection_artwork_id).to eq '2'
+        end
+
+        context 'when source is my collection' do
+          before do
+            submission.update(source: 'my_collection')
+          end
+
+          it 'sets submission_id for my collection artwork' do
+            expect(SubmissionService).to receive(:update_my_collection_artwork)
+
+            update_submission
+          end
+        end
+
+        context 'when source is not my collection' do
+          it 'does not set submission_id for my collection artwork' do
+            expect(SubmissionService).to_not receive(:update_my_collection_artwork)
+
+            update_submission
+          end
+        end
       end
 
       context 'with errors from gravity' do
