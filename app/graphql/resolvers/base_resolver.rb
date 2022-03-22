@@ -42,6 +42,10 @@ class BaseResolver
       submitted_by_current_session?(submission, session_id)
   end
 
+  def matching_email(submission, user_email)
+    submission.user_email == user_email
+  end
+
   def submitted_by_current_user?(submission)
     submission.user&.gravity_user_id.present? &&
       submission.user&.gravity_user_id == @context&.[](:current_user)

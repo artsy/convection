@@ -9,7 +9,7 @@ class UpdateSubmissionResolver < BaseResolver
     unless (
              matching_user(submission, @arguments&.[](:session_id)) &&
                submission.draft?
-           ) || admin?
+           ) || matching_email(submission, arguments&.[](:user_email)) || admin?
       raise(GraphQL::ExecutionError, 'Submission Not Found')
     end
 
