@@ -84,20 +84,6 @@ describe 'createConsignmentSubmission mutation' do
         expect(error_message).to match 'is required'
       end
     end
-
-    context 'with published state' do
-      let(:mutation_inputs) { '{ artistID: "andy", state: PUBLISHED  }' }
-
-      it 'returns an error' do
-        post '/api/graphql', params: { query: mutation }, headers: headers
-
-        expect(response.status).to eq 200
-        body = JSON.parse(response.body)
-
-        error_message = body['errors'][0]['message']
-        expect(error_message).to match 'has an invalid value'
-      end
-    end
   end
 
   describe 'valid requests' do
