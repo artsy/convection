@@ -1289,11 +1289,14 @@ type RemoveAssetFromConsignmentSubmissionPayload {
 }
 
 """
-Enum with all submission states for Create or Update Submission
+Enum with all available submission states
 """
 enum State {
   APPROVED
+  CLOSED
   DRAFT
+  HOLD
+  PUBLISHED
   REJECTED
   SUBMITTED
 }
@@ -1344,7 +1347,7 @@ type Submission {
   If this artwork exists in Gravity, its ID
   """
   sourceArtworkID: String
-  state: SubmissionState
+  state: State
   title: String
   userAgent: String
   userEmail: String
@@ -2084,19 +2087,6 @@ enum SubmissionSource {
   MY_COLLECTION
   PARTNER
   WEB_INBOUND
-}
-
-"""
-Enum with all available submission states
-"""
-enum SubmissionState {
-  APPROVED
-  CLOSED
-  DRAFT
-  HOLD
-  PUBLISHED
-  REJECTED
-  SUBMITTED
 }
 
 """

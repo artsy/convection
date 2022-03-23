@@ -2,11 +2,8 @@
 
 module Types
   class StateType < Types::BaseEnum
-    description 'Enum with all submission states for Create or Update Submission'
+    description 'Enum with all available submission states'
 
-    value('DRAFT', nil, value: 'draft')
-    value('SUBMITTED', nil, value: 'submitted')
-    value('APPROVED', nil, value: 'approved')
-    value('REJECTED', nil, value: 'rejected')
+    Submission::STATES.map { |source| value(source.upcase, nil, value: source) }
   end
 end

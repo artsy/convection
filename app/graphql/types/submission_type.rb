@@ -11,7 +11,7 @@ module Types
           description: 'UUID visible to users'
     field :id, ID, 'Uniq ID for this submission', null: false
     field :internalID, ID, null: true, method: :id
-    field :state, Types::SubmissionStateType, null: true
+    field :state, Types::StateType, null: true
     field :rejection_reason, String, null: true
     field :sale_state, String, null: true
 
