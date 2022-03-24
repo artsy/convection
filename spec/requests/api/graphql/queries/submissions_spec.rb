@@ -132,6 +132,22 @@ describe 'submissions query' do
         end
       end
 
+      context 'with submission in published state' do
+        let!(:submission) do
+          Fabricate :submission, user: user, state: 'published'
+        end
+
+        it 'returns submission' do
+          post '/api/graphql', params: { query: query }, headers: headers
+
+          expect(response.status).to eq 200
+          body = JSON.parse(response.body)
+
+          submissions_response = body['data']['submissions']
+          expect(submissions_response['edges'].count).to eq 1
+        end
+      end
+
       context 'with consigned partner submission' do
         let(:partner_submission) { Fabricate(:partner_submission) }
         let!(:submission) do

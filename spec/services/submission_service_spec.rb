@@ -889,6 +889,16 @@ describe SubmissionService do
         expect(submission.reload.receipt_sent_at).to_not be nil
       end
 
+      it 'sends a receipt without a prompt to create an Artsy account for user submissions' do
+        SubmissionService.notify_user(submission.id)
+        emails = ActionMailer::Base.deliveries
+        expect(emails.length).to eq 1
+        expect(emails.first.html_part.body).to_not include(
+                                                     'find your artwork in My Collection'
+                                                   )
+        expect(submission.reload.receipt_sent_at).to_not be nil
+      end
+
       it 'does not send a receipt if one has already been sent' do
         submission.update!(receipt_sent_at: Time.now.utc)
         expect { SubmissionService.notify_user(submission.id) }.to_not change(
@@ -954,6 +964,51 @@ describe SubmissionService do
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 0
       end
+    end
+  end
+
+  context 'notify_anonymous_user' do
+    let(:submission) do
+      Fabricate(
+        :submission,
+        state: 'submitted',
+        artist_id: 'artistid',
+        user_id: nil,
+        user: nil,
+        title: 'My Artwork',
+        user_name: 'michael',
+        user_email: 'michael@bluth.com',
+        user_phone: '555-5555'
+      )
+    end
+    before { Fabricate(:image, submission: submission) }
+
+    it 'sends a receipt with a prompt to create an Artsy account when config allows' do
+      allow(Convection.config).to receive(:send_new_receipt_email).and_return(
+        true
+      )
+      SubmissionService.notify_user(submission.id)
+      emails = ActionMailer::Base.deliveries
+      expect(emails.length).to eq 1
+
+      expect(emails.first.html_part.body).to include(
+        'find your artwork in My Collection'
+      )
+      expect(submission.reload.receipt_sent_at).to_not be nil
+    end
+
+    it 'does not send a receipt with a prompt to create an Artsy account when config does not allow' do
+      allow(Convection.config).to receive(:send_new_receipt_email).and_return(
+        false
+      )
+      SubmissionService.notify_user(submission.id)
+      emails = ActionMailer::Base.deliveries
+      expect(emails.length).to eq 1
+
+      expect(emails.first.html_part.body).to_not include(
+                                                   'find your artwork in My Collection'
+                                                 )
+      expect(submission.reload.receipt_sent_at).to_not be nil
     end
   end
 
