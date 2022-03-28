@@ -8,7 +8,7 @@ class AddUserToSubmissionResolver < BaseResolver
 
     # check if user_email in incoming args matches to the one on the submission
     unless matching_email(submission, @arguments&.[](:user_email))
-      raise(GraphQL::ExecutionError, 'Submission Not Found')
+      raise(GraphQL::ExecutionError, 'Submission not found for this user')
     end
 
     #  make sure submission has no user
@@ -16,13 +16,13 @@ class AddUserToSubmissionResolver < BaseResolver
       raise(GraphQL::ExecutionError, 'Submission already has a user')
     end
 
-    # create user and assign them to the submission
-    user = User.find_or_create_by(gravity_user_id: @context[:current_user])
-    user.email = @arguments&.[](:user_email)
-    submission.user = user
+    SubmissionService.add_user_to_submission(
+      submission,
+      @context[:current_user],
+      @context[:jwt_token]
+    )
 
-    # save and return submission
-    submission.save!
+    # return submission
     { consignment_submission: submission }
   end
 end
