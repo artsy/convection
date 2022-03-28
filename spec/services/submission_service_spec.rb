@@ -593,7 +593,7 @@ describe SubmissionService do
         expect(submission.my_collection_artwork_id).to eq nil
       end
 
-      context 'when my collection artwork already exists' do
+      context 'when a My Collection artwork already exists' do
         subject(:update_submission) do
           SubmissionService.update_submission(
             submission,
@@ -608,27 +608,27 @@ describe SubmissionService do
           submission.update(my_collection_artwork_id: '2')
         end
 
-        it 'does not create my collection artwork' do
+        it 'does not create a My Collection artwork' do
           update_submission
 
           expect(submission.state).to eq 'submitted'
           expect(submission.my_collection_artwork_id).to eq '2'
         end
 
-        context 'when source is my collection' do
+        context 'when the submission source is my_collection' do
           before do
             submission.update(source: 'my_collection')
           end
 
-          it 'sets submission_id for my collection artwork' do
+          it 'updates the My Collection artwork to set the submission ID' do
             expect(SubmissionService).to receive(:update_my_collection_artwork)
 
             update_submission
           end
         end
 
-        context 'when source is not my collection' do
-          it 'does not set submission_id for my collection artwork' do
+        context 'when source is not my_collection' do
+          it 'does not updates the My Collection artwork ' do
             expect(SubmissionService).to_not receive(:update_my_collection_artwork)
 
             update_submission
