@@ -576,7 +576,7 @@ describe SubmissionService do
         expect(submission.my_collection_artwork_id).to eq nil
       end
 
-      it 'does not create my collection artwork if user cannot save submission to my collection' do
+      it 'creates my collection artwork regardless of feature flag' do
         allow_any_instance_of(User).to receive(
           :save_submission_to_my_collection?
         ).and_return(false)
@@ -590,7 +590,7 @@ describe SubmissionService do
         )
 
         expect(submission.state).to eq 'submitted'
-        expect(submission.my_collection_artwork_id).to eq nil
+        expect(submission.my_collection_artwork_id).to_not eq nil
       end
 
       it 'does not create my collection artwork if my collection artwork already exists' do
