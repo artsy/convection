@@ -43,7 +43,7 @@ class BaseResolver
   end
 
   def matching_email(submission, user_email)
-    submission.user_email == user_email
+    submission.user_email.downcase == user_email.downcase
   end
 
   def submitted_by_current_user?(submission)
