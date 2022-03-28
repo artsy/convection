@@ -94,17 +94,21 @@ class SubmissionService
           )
           if !submission.draft? && submission.user && !access_token.nil? &&
                submission.user&.save_submission_to_my_collection?
-            if !submission.my_collection_artwork_id
-              create_my_collection_artwork(submission, access_token)
-            elsif submission.source == "my_collection"
-              update_my_collection_artwork(submission, access_token)
-            end
+            create_or_update_my_collection_artwork(submission, access_token)
           end
         end
 
         update_submission_state(submission, current_user)
       end
       submission.save!
+    end
+
+    def create_or_update_my_collection_artwork(submission, access_token)
+      if !submission.my_collection_artwork_id
+        create_my_collection_artwork(submission, access_token)
+      elsif submission.source == "my_collection"
+        update_my_collection_artwork(submission, access_token)
+      end
     end
 
     def update_submission_state(submission, current_user)
