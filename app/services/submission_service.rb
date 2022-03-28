@@ -93,11 +93,12 @@ class SubmissionService
             reject_non_target_supply_artist(submission.artist_id)
           )
           if !submission.draft? && submission.user && !access_token.nil? &&
-               !submission.my_collection_artwork_id &&
                submission.user&.save_submission_to_my_collection?
-            create_my_collection_artwork(submission, access_token)
-          elsif submission.source == "my_collection"
-            update_my_collection_artwork(submission, access_token)
+            if !submission.my_collection_artwork_id
+              create_my_collection_artwork(submission, access_token)
+            elsif submission.source == "my_collection"
+              update_my_collection_artwork(submission, access_token)
+            end
           end
         end
 
