@@ -212,7 +212,6 @@ module GraphqlHelper
           image.original_image&.split('?')&.first
         end,
       height: submission.height,
-      importSource: 'CONVECTION',
       attributionClass:
         submission.attribution_class&.upcase || 'UNKNOWN_EDITION',
       medium: submission.medium,
