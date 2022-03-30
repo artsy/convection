@@ -17,5 +17,7 @@ module Types
           mutation: Mutations::CreateSubmissionMutation
     field :update_consignment_submission,
           mutation: Mutations::UpdateSubmissionMutation
+    field :add_user_to_submission,
+          mutation: Mutations::AddUserToSubmissionMutation
   end
 end

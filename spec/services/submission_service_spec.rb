@@ -203,6 +203,67 @@ describe SubmissionService do
     end
   end
 
+  context 'add_user_to_submission' do
+    let(:submission) do
+      Fabricate(
+        :submission,
+        state: 'submitted',
+        artist_id: 'artistid',
+        user_id: nil,
+        user: nil,
+        title: 'My Artwork',
+        user_name: 'michael',
+        user_email: 'michael@bluth.com',
+        user_phone: '555-5555'
+      )
+    end
+    let(:access_token) { 'access_token' }
+    let(:gravity_user_id) { 'gravity_user_id' }
+    let(:create_artwork_response) do
+      {
+        data: {
+          myCollectionCreateArtwork: {
+            artworkOrError: {
+              artworkEdge: {
+                node: {
+                  internalID: '1'
+                }
+              }
+            }
+          }
+        }
+      }
+    end
+
+    before do
+      allow(Convection.config).to receive(:send_new_receipt_email).and_return(
+        true
+      )
+      allow(Metaql::Schema).to receive(:execute).and_return(
+        create_artwork_response
+      )
+    end
+
+    it 'adds user to submission' do
+      SubmissionService.add_user_to_submission(
+        submission,
+        gravity_user_id,
+        access_token
+      )
+      expect(submission.user_id).to_not be_nil
+      expect(submission.user).to_not be_nil
+    end
+
+    it 'creates artwork from submission in user my_collection' do
+      SubmissionService.add_user_to_submission(
+        submission,
+        gravity_user_id,
+        access_token
+      )
+      expect(submission.my_collection_artwork_id).to eq '1'
+    end
+  end
+
   context 'update_submission' do
     it 'sends no emails of the submission is not being submitted' do
       SubmissionService.update_submission(submission, state: 'draft')
