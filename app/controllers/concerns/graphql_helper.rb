@@ -39,6 +39,32 @@ module GraphqlHelper
     GQL
   end
 
+  def my_collection_update_artwork_mutation_builder
+    <<~GQL
+      mutation myCollectionUpdateArtworkMutation(
+        $input: MyCollectionUpdateArtworkInput!
+      ) {
+        myCollectionUpdateArtwork(input: $input) {
+          artworkOrError {
+            __typename
+            ... on MyCollectionArtworkMutationSuccess {
+              artworkEdge {
+                node {
+                  internalID
+                }
+              }
+            }
+            ... on MyCollectionArtworkMutationFailure {
+              mutationError {
+                message
+              }
+            }
+          }
+        }
+      }
+    GQL
+  end
+
   def create_my_collection_artwork(submission, access_token)
     response =
       Metaql::Schema.execute(
@@ -75,6 +101,32 @@ module GraphqlHelper
           :internalID
         )
     )
+  end
+
+  def update_my_collection_artwork(submission, access_token)
+    response =
+      Metaql::Schema.execute(
+        query: my_collection_update_artwork_mutation_builder,
+        access_token: access_token,
+        variables: {
+          input: my_collection_update_artwork_mutation_params(submission)
+        }
+      )
+
+    if response[:errors].present?
+      Rails
+        .logger.error "API error updating submission artwork in My Collection: #{response[:errors]}"
+
+      return nil
+    end
+
+    # prettier-ignore
+    if response.dig(:data, :myCollectionUpdateArtwork, :artworkOrError, :mutationError)
+      error_message = response.dig(:data, :myCollectionUpdateArtwork, :artworkOrError, :mutationError, :message)
+      Rails.logger.error "GraphQL error updating submission artwork in My Collection: #{error_message}"
+
+      nil
+    end
   end
 
   MATCH_PARTNERS_QUERY =
@@ -142,6 +194,7 @@ module GraphqlHelper
   def my_collection_create_artwork_mutation_params(submission)
     {
       submissionId: submission.id.to_s,
+      importSource: 'CONVECTION',
       artistIds: [submission.artist_id],
       artworkLocation:
         [
@@ -165,6 +218,13 @@ module GraphqlHelper
       provenance: submission.provenance,
       title: submission.title,
       width: submission.width
+    }
+  end
+
+  def my_collection_update_artwork_mutation_params(submission)
+    {
+      artworkId: submission.my_collection_artwork_id,
+      submissionId: submission.id.to_s,
     }
   end
 end
