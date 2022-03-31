@@ -86,7 +86,6 @@ module GraphqlHelper
     if response.dig(:data, :myCollectionCreateArtwork, :artworkOrError, :mutationError)
       error_message = response.dig(:data, :myCollectionCreateArtwork, :artworkOrError, :mutationError, :message)
       Rails.logger.error "GraphQL error adding submission to My Collection: #{error_message}"
-      Rails.logger.error "\t#{access_token}"
 
       return nil
     end
@@ -225,7 +224,7 @@ module GraphqlHelper
   def my_collection_update_artwork_mutation_params(submission)
     {
       artworkId: submission.my_collection_artwork_id,
-      submissionId: submission.id.to_s
+      submissionId: submission.id.to_s,
     }
   end
 end
