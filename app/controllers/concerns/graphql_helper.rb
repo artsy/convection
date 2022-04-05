@@ -224,7 +224,7 @@ module GraphqlHelper
   def my_collection_update_artwork_mutation_params(submission)
     {
       artworkId: submission.my_collection_artwork_id,
-      submissionId: submission.id.to_s,
+      submissionId: submission.id.to_s
     }
   end
 end
