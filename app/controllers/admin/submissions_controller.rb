@@ -212,6 +212,7 @@ module Admin
         location_city
         location_country
         location_state
+        location_postal_code
         literature
         medium
         minimum_price_dollars

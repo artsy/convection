@@ -231,5 +231,32 @@ describe Admin::SubmissionsController, type: :controller do
         end
       end
     end
+
+    context 'create submission' do
+      it 'with correct address' do
+        post :create,
+             params: {
+               submission: {
+                 artist_id: 'artistid',
+                 user:
+                   Fabricate(
+                     :user,
+                     gravity_user_id: 'userid',
+                     email: 'michael@bluth.com'
+                   ),
+                 title: 'My Artwork',
+                 location_state: 'Tokyo',
+                 location_country: 'Japan',
+                 location_postal_code: '12345'
+               }
+             }
+
+        expect(response.status).to eq 302
+        submission = Submission.last
+        expect(submission.location_country).to eq 'Japan'
+        expect(submission.location_state).to eq 'Tokyo'
+        expect(submission.location_postal_code).to eq '12345'
+      end
+    end
   end
 end
