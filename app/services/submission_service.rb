@@ -106,7 +106,7 @@ class SubmissionService
     def create_or_update_my_collection_artwork(submission, access_token)
       if !submission.my_collection_artwork_id
         create_my_collection_artwork(submission, access_token)
-      elsif submission.source == "my_collection"
+      elsif submission.source == 'my_collection'
         update_my_collection_artwork(submission, access_token)
       end
     end

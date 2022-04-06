@@ -32,6 +32,8 @@ module Types
     nilable_field :location_city, String, null: true
     nilable_field :location_country, String, null: true
     nilable_field :location_state, String, null: true
+    nilable_field :location_postal_code, String, null: true
+    nilable_field :location_country_code, String, null: true
     nilable_field :medium, String, null: true
     nilable_field :minimum_price_dollars, Integer, null: true
     nilable_field :primary_image, Types::AssetType, null: true
