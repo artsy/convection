@@ -28,6 +28,7 @@ module Mutations
     argument :location_country, String, required: false
     argument :location_state, String, required: false
     argument :location_postal_code, String, required: false
+    argument :location_country_code, String, required: false
     argument :medium, String, required: false
     argument :minimum_price_dollars, Int, required: false
     argument :provenance, String, required: false

@@ -155,16 +155,17 @@ describe 'createConsignmentSubmission mutation' do
 
     context 'with postal code' do
       let(:mutation_inputs) do
-        '{ artistID: "andy", locationPostalCode: "12345" }'
+        '{ artistID: "andy", locationPostalCode: "12345", locationCountryCode: "us" }'
       end
 
-      it 'creates a submission with correct postal code' do
+      it 'creates a submission with correct address' do
         post '/api/graphql', params: { query: mutation }, headers: headers
 
         expect(response.status).to eq 200
         submission = Submission.first
 
         expect(submission.location_postal_code).to eq '12345'
+        expect(submission.location_country_code).to eq 'us'
       end
     end
   end

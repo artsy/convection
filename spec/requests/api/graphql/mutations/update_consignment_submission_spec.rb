@@ -40,6 +40,7 @@ describe 'updateConsignmentSubmission mutation' do
           artistId
           title
           locationPostalCode
+          locationCountryCode
         }
       }
     }
@@ -280,6 +281,34 @@ describe 'updateConsignmentSubmission mutation' do
               'category' => 'Painting',
               'state' => 'DRAFT',
               'locationPostalCode' => '12345'
+            }
+          )
+        end
+      end
+
+      context 'country code' do
+        let(:mutation_inputs) do
+          "{  clientMutationId: \"test\", id: \"#{
+            submission.id
+          }\", locationCountryCode: \"us\" }"
+        end
+
+        it 'updates successfull' do
+          post '/api/graphql', params: { query: mutation }, headers: headers
+
+          expect(response.status).to eq 200
+          body = JSON.parse(response.body)
+
+          submission_response =
+            body['data']['updateConsignmentSubmission']['consignmentSubmission']
+          expect(submission_response).to include(
+            {
+              'id' => submission.id.to_s,
+              'title' => 'rain',
+              'artistId' => 'abbas-kiarostami',
+              'category' => 'Painting',
+              'state' => 'DRAFT',
+              'locationCountryCode' => 'us'
             }
           )
         end

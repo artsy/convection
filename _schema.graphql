@@ -523,6 +523,7 @@ input CreateSubmissionMutationInput {
   height: String
   locationCity: String
   locationCountry: String
+  locationCountryCode: String
   locationPostalCode: String
   locationState: String
   medium: String
@@ -1362,6 +1363,7 @@ type Submission {
   internalID: ID
   locationCity: String
   locationCountry: String
+  locationCountryCode: String
   locationPostalCode: String
   locationState: String
   medium: String
@@ -1767,6 +1769,16 @@ enum SubmissionSort {
   LOCATION_COUNTRY_ASC
 
   """
+  sort by location_country_code in ascending order
+  """
+  LOCATION_COUNTRY_CODE_ASC
+
+  """
+  sort by location_country_code in descending order
+  """
+  LOCATION_COUNTRY_CODE_DESC
+
+  """
   sort by location_country in descending order
   """
   LOCATION_COUNTRY_DESC
@@ -2160,6 +2172,7 @@ input UpdateSubmissionMutationInput {
   id: ID
   locationCity: String
   locationCountry: String
+  locationCountryCode: String
   locationPostalCode: String
   locationState: String
   medium: String
