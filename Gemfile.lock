@@ -112,7 +112,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.1.9)
-    connection_pool (2.2.3)
+    connection_pool (2.2.5)
     console_color (0.0.6)
     crack (0.4.5)
       rexml
@@ -371,7 +371,7 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     redcarpet (3.5.1)
-    redis (4.2.5)
+    redis (4.6.0)
     regexp_parser (2.1.1)
     reverse_markdown (2.0.0)
       nokogiri
@@ -440,7 +440,7 @@ GEM
       faraday (>= 1.0)
     sexp_processor (4.15.2)
     shellany (0.0.1)
-    sidekiq (6.2.1)
+    sidekiq (6.4.0)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
