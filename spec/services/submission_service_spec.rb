@@ -665,9 +665,7 @@ describe SubmissionService do
           )
         end
 
-        before do
-          submission.update(my_collection_artwork_id: '2')
-        end
+        before { submission.update(my_collection_artwork_id: '2') }
 
         it 'does not create a My Collection artwork' do
           update_submission
@@ -677,9 +675,7 @@ describe SubmissionService do
         end
 
         context 'when the submission source is my_collection' do
-          before do
-            submission.update(source: 'my_collection')
-          end
+          before { submission.update(source: 'my_collection') }
 
           it 'updates the My Collection artwork to set the submission ID' do
             expect(SubmissionService).to receive(:update_my_collection_artwork)
@@ -690,7 +686,9 @@ describe SubmissionService do
 
         context 'when source is not my_collection' do
           it 'does not updates the My Collection artwork ' do
-            expect(SubmissionService).to_not receive(:update_my_collection_artwork)
+            expect(SubmissionService).to_not receive(
+                                               :update_my_collection_artwork
+                                             )
 
             update_submission
           end

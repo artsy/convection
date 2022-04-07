@@ -13,11 +13,12 @@ describe SubmissionsHelper, type: :helper do
           :submission,
           location_city: 'Brooklyn',
           location_state: 'New York',
-          location_country: 'USA'
+          location_country: 'USA',
+          location_postal_code: '12345'
         )
       expect(
         helper.formatted_location(submission)
-      ).to eq 'Brooklyn, New York, USA'
+      ).to eq 'Brooklyn, New York, USA, 12345'
     end
 
     it 'returns empty string when location values are nil' do
@@ -26,7 +27,8 @@ describe SubmissionsHelper, type: :helper do
           :submission,
           location_city: '',
           location_state: '',
-          location_country: ''
+          location_country: '',
+          location_postal_code: ''
         )
       expect(helper.formatted_location(submission)).to be_blank
     end

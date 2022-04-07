@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_10_110820) do
+ActiveRecord::Schema.define(version: 2022_04_06_080052) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_trgm'
   enable_extension 'pgcrypto'
@@ -227,6 +227,8 @@ ActiveRecord::Schema.define(version: 2022_03_10_110820) do
     t.string 'my_collection_artwork_id'
     t.uuid 'uuid', default: -> { 'gen_random_uuid()' }, null: false
     t.string 'source'
+    t.string 'location_postal_code'
+    t.string 'location_country_code'
     t.index ['consigned_partner_submission_id'],
             name: 'index_submissions_on_consigned_partner_submission_id'
     t.index ['ext_user_id'], name: 'index_submissions_on_ext_user_id'
