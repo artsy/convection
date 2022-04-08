@@ -21,8 +21,8 @@
                 </td>
               </tr>
 
-              <%# inject section with a link to Artsy web with submission ID for anonymous visitors %>
-              <% if @submission.user_id.nil? && @inject_create_account_section %>
+              <%# inject section with a link to Artsy web with submission ID %>
+              <% if @inject_create_account_section %>
                 <tr>
                   <td class='email-sub-title'>
                     <p>You’ll need an Artsy account in order to find your artwork in My Collection, along with related art market insights.</p>
