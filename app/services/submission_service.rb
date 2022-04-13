@@ -43,7 +43,7 @@ class SubmissionService
         )
       end
 
-      delay.deliver_submission_receipt(submission.id)
+      submission = Submission.create!(create_params)
 
       if create_params[:state] == 'rejected'
         delay_until(
