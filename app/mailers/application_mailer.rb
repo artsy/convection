@@ -5,6 +5,9 @@ class ApplicationMailer < ActionMailer::Base
   default bcc: Convection.config.bcc_email_address
   layout 'mailer'
 
+  @inject_create_account_section = Convection.config.send_new_receipt_email
+  @is_production = Rails.env.production?
+
   protected
 
   def smtpapi(opts = {})

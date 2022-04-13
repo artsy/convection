@@ -19,7 +19,7 @@
                 <tr>
                   <td class='email-sub-title'>
                     <p>To keep an eye on demand for this piece, you’ll need an Artsy account, so you can access <p style="text-decoration: underline;">My Collection.</p></p>
-                    <p>Simply <%= link_to 'sign up', "https://www.artsy.net/signup?submissionId=#{@submission.id}", target: :_blank %> or <%= link_to 'log in', "https://www.artsy.net/login?submissionId=#{@submission.id}", target: :_blank %> to Artsy with the same email you used for this submission and visit our app. </p>
+                    <%= render 'shared/email/myCollection_block', is_production: @is_production %>
                     <p>You’ll find the artwork in My Collection, along with related art market insights.</p>
                   </td>
                 </tr>

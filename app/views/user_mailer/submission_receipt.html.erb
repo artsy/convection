@@ -22,7 +22,12 @@
               </tr>
               
                <% if @inject_create_account_section %>
-                 <%= render 'shared/email/myCollection_block', is_production: @is_production %>
+                  <tr>
+                    <td class='email-sub-title'>
+                        <p>You’ll need an Artsy account in order to find your artwork in My Collection, along with related art market insights.</p>
+                        <%= render 'shared/email/myCollection_block', is_production: @is_production %>
+                    </td>
+                  </tr>
                <% end %>
 
               <tr>
