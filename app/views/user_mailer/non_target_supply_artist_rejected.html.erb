@@ -16,8 +16,8 @@
             <p>Our specialists have reviewed your submission and while it’s a wonderful piece, we unfortunately don’t have demand for this artwork on Artsy at the moment.</p>
 
             <% if Convection.config.send_new_receipt_email %>
-              <p>To keep an eye on demand for this piece, you’ll need an Artsy account, so you can access <p style="text-decoration: underline;">My Collection.</p></p>
-              <%= render 'shared/email/myCollection_block' %>
+              <p>To keep an eye on demand for this piece, you’ll need an Artsy account, so you can access <span style="text-decoration:underline">My Collection.</span></p>
+              <p>Simply <%= link_to 'sign up', @sign_up_url, target: :_blank %> or <%= link_to 'log in', @log_in_url, target: :_blank %> to Artsy with the same email you used for this submission and visit our app.</p>
               <p>You’ll find the artwork in My Collection, along with related art market insights.</p>
             <% end %>
 
