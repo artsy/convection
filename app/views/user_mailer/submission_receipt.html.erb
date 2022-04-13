@@ -19,10 +19,10 @@
                   <p class='email-sub-title-bold'>What happens next?</p>
                   <p>Our team of specialists will review your work to evaluate whether we currently have a suitable market for it. If your work is accepted, we’ll send you a sales offer and guide you in choosing the best option for selling it.</p>
                 
-                   <% if Convection.config.send_new_receipt_email %>
+                  <% if Convection.config.send_new_receipt_email %>
                     <p>You’ll need an Artsy account in order to find your artwork in <span style="text-decoration:underline">My Collection</span>, along with related art market insights.</p>
-                    <p>Simply <%= link_to 'sign up', @sign_up_url, target: :_blank %> or <%= link_to 'log in', @log_in_url, target: :_blank %> to Artsy with the same email you used for this submission and visit our app.</p>
-                <% end %>
+                    <p>Simply <%= link_to 'sign up', artsy_formatted_url('signup', { submissionId: @submission.id }), target: :_blank %> or <%= link_to 'log in', artsy_formatted_url('login', { submissionId: @submission.id }), target: :_blank %> to Artsy with the same email you used for this submission and visit our app.</p>
+                  <% end %>
                 </td>
               </tr>
 

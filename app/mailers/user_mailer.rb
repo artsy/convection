@@ -3,14 +3,9 @@
 class UserMailer < ApplicationMailer
   helper :url, :submissions, :offers
 
-  include UrlHelper
-
   def submission_receipt(submission:, artist:)
     @submission = submission
     @artist = artist
-    @sign_up_url =
-      artsy_formatted_url('signup', { submissionId: @submission.id })
-    @log_in_url = artsy_formatted_url('login', { submissionId: @submission.id })
 
     @utm_params =
       utm_params(
@@ -114,9 +109,6 @@ class UserMailer < ApplicationMailer
   def nsv_bsv_submission_rejected(submission:, artist:)
     @submission = submission
     @artist = artist
-    @sign_up_url =
-      artsy_formatted_url('signup', { submissionId: @submission.id })
-    @log_in_url = artsy_formatted_url('login', { submissionId: @submission.id })
 
     @utm_params =
       utm_params(
@@ -134,9 +126,6 @@ class UserMailer < ApplicationMailer
   def non_target_supply_artist_rejected(submission:, artist:)
     @submission = submission
     @artist = artist
-    @sign_up_url =
-      artsy_formatted_url('signup', { submissionId: @submission.id })
-    @log_in_url = artsy_formatted_url('login', { submissionId: @submission.id })
 
     @utm_params =
       utm_params(
