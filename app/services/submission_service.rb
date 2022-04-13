@@ -45,6 +45,8 @@ class SubmissionService
 
       submission = Submission.create!(create_params)
 
+      delay.deliver_submission_receipt(submission.id)
+
       if create_params[:state] == 'rejected'
         delay_until(
           Convection.config.rejection_email_minutes_after.minutes.from_now

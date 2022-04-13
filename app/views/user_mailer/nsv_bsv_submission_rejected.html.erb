@@ -10,16 +10,16 @@
           </td>
         </tr>
         <tr>
-          <td class='email-sub-title'>
+          <td>
             <p>Dear <%= @submission.name %>,</p>
             <p>Thank you for your interest in selling with <%= link_to 'Artsy', 'https://www.artsy.net', target: :_blank %> and for giving us a chance to consider your artwork.</p>
             <p>Our specialists have reviewed your submission and while it’s a wonderful piece, we unfortunately don’t have demand for this artwork on Artsy at the moment.</p>
 
-            <% if @inject_create_account_section %>
+            <% if Convection.config.send_new_receipt_email %>
                 <tr>
                   <td class='email-sub-title'>
                     <p>To keep an eye on demand for this piece, you’ll need an Artsy account, so you can access <p style="text-decoration: underline;">My Collection.</p></p>
-                    <%= render 'shared/email/myCollection_block', is_production: @is_production %>
+                    <%= render 'shared/email/myCollection_block' %>
                     <p>You’ll find the artwork in My Collection, along with related art market insights.</p>
                   </td>
                 </tr>

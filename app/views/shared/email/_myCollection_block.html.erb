@@ -1,4 +1,4 @@
-<% if @is_production %>
+<% if Rails.env.production? %>
     <p>Simply <%= link_to 'sign up', "https://www.artsy.net/signup?submissionId=#{@submission.id}", target: :_blank %> or <%= link_to 'log in', "https://www.artsy.net/login?submissionId=#{@submission.id}", target: :_blank %> to Artsy with the same email you used for this submission and visit our app.</p>
 <% else %>
     <p>Simply <%= link_to 'sign up', "https://staging.artsy.net/signup?submissionId=#{@submission.id}", target: :_blank %> or <%= link_to 'log in', "https://staging.artsy.net/login?submissionId=#{@submission.id}", target: :_blank %> to Artsy with the same email you used for this submission and visit our app.</p>

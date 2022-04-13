@@ -21,11 +21,11 @@
                 </td>
               </tr>
               
-               <% if @inject_create_account_section %>
+               <% if Convection.config.send_new_receipt_email %>
                   <tr>
                     <td class='email-sub-title'>
                         <p>You’ll need an Artsy account in order to find your artwork in My Collection, along with related art market insights.</p>
-                        <%= render 'shared/email/myCollection_block', is_production: @is_production %>
+                        <%= render 'shared/email/myCollection_block' %>
                     </td>
                   </tr>
                <% end %>
