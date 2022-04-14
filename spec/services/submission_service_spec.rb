@@ -981,7 +981,7 @@ describe SubmissionService do
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.html_part.body).to_not include(
-                                                     'find your artwork in My Collection'
+                                                     'find your artwork in'
                                                    )
         expect(submission.reload.receipt_sent_at).to_not be nil
       end
@@ -1078,9 +1078,7 @@ describe SubmissionService do
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
 
-      expect(emails.first.html_part.body).to include(
-        'find your artwork in My Collection'
-      )
+      expect(emails.first.html_part.body).to include('find your artwork in')
       expect(submission.reload.receipt_sent_at).to_not be nil
     end
 
@@ -1092,9 +1090,7 @@ describe SubmissionService do
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
 
-      expect(emails.first.html_part.body).to_not include(
-                                                   'find your artwork in My Collection'
-                                                 )
+      expect(emails.first.html_part.body).to_not include('find your artwork in')
       expect(submission.reload.receipt_sent_at).to_not be nil
     end
   end
