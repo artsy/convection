@@ -18,18 +18,13 @@
                   <p>Thank you for submitting an artwork to sell with <%= link_to 'Artsy', 'https://www.artsy.net', target: :_blank %>. We’ll reach out to you shortly with an update or if we require additional information.</p>
                   <p class='email-sub-title-bold'>What happens next?</p>
                   <p>Our team of specialists will review your work to evaluate whether we currently have a suitable market for it. If your work is accepted, we’ll send you a sales offer and guide you in choosing the best option for selling it.</p>
+                
+                  <% if Convection.config.send_new_receipt_email %>
+                    <p>You’ll need an Artsy account in order to find your artwork in <span style="text-decoration:underline">My Collection</span>, along with related art market insights.</p>
+                    <p>Simply <%= link_to 'sign up', artsy_formatted_url('signup', { submissionId: @submission.id }), target: :_blank %> or <%= link_to 'log in', artsy_formatted_url('login', { submissionId: @submission.id }), target: :_blank %> to Artsy with the same email you used for this submission and visit our app.</p>
+                  <% end %>
                 </td>
               </tr>
-
-              <%# inject section with a link to Artsy web with submission ID %>
-              <% if @inject_create_account_section %>
-                <tr>
-                  <td class='email-sub-title'>
-                    <p>You’ll need an Artsy account in order to find your artwork in My Collection, along with related art market insights.</p>
-                    <p>Simply <%= link_to 'sign up', "https://www.artsy.net/signup?submissionId=#{@submission.id}", target: :_blank %> or <%= link_to 'log in', "https://www.artsy.net/login?submissionId=#{@submission.id}", target: :_blank %> to Artsy with the same email you used for this submission and visit our app.</p>
-                  </td>
-                </tr>
-              <% end %>
 
               <tr>
                 <td>
