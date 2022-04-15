@@ -4,7 +4,7 @@ orbs:
   hokusai: artsy/hokusai@0.10.0
   horizon: artsy/release@0.0.1
   node: artsy/node@2.0.0
-  slack: circleci/slack@3.4.2
+  slack: circleci/slack@4.9.3
   yarn: artsy/yarn@6.1.0
 
 not_staging_or_release: &not_staging_or_release
@@ -82,15 +82,18 @@ workflows:
           requires:
             - push-staging-image
           post-steps:
-            - slack/status:
-                fail_only: true
-                failure_message: Convection staging deploy has failed!
+            - slack/notify:
+                event: fail
+                template: basic_fail_1
 
       - hokusai/deploy-production:
           <<: *only_release
           requires:
             - horizon/block
           post-steps:
-            - slack/status:
-                success_message: Convection production has been deployed!
-                failure_message: Convection production deploy has failed!
+            - slack/notify:
+                event: fail
+                template: basic_fail_1
+            - slack/notify:
+                event: pass
+                template: success_tagged_deploy_1
