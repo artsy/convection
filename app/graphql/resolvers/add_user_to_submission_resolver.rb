@@ -6,8 +6,8 @@ class AddUserToSubmissionResolver < BaseResolver
   def run
     check_submission_presence!
 
-    # check if user_email in incoming args matches to the one on the submission
-    unless matching_email(submission, @arguments&.[](:user_email))
+    # check if user's email in Gravity matches the one on the submission
+    unless matching_email(submission)
       raise(GraphQL::ExecutionError, 'Submission not found for this user')
     end
 
