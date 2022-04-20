@@ -2,7 +2,6 @@
 
 module Mutations
   class AddUserToSubmissionMutation < Mutations::BaseMutation
-    argument :user_email, String, required: true
     argument :id, ID, required: true
 
     field :consignment_submission, Types::SubmissionType, null: true
