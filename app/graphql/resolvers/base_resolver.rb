@@ -47,7 +47,7 @@ class BaseResolver
       user = Gravity.client.user(id: @context[:current_user]).user_detail._get
       submission.user_email.downcase == user.email
     rescue StandardError
-      Rails.logger.info 'Unable match user email with submission email'
+      Rails.logger.info 'Unable to match user email with submission email'
       nil
     end
   end
