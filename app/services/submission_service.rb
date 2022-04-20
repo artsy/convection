@@ -320,13 +320,13 @@ class SubmissionService
     end
 
     def add_user_to_submission(submission, gravity_user_id, access_token)
-      if gravity_user_id.present?
+      # add user to submission when user is present and ENV for the feature allows
+      if gravity_user_id.present? && Convection.config.send_new_receipt_email
         user = User.find_or_create_by(gravity_user_id: gravity_user_id)
         submission.update!(user_id: user&.id)
 
-        # "send_new_receipt_email" is here for us to test the feature on staging
-        if !access_token.nil? && !submission.my_collection_artwork_id &&
-             Convection.config.send_new_receipt_email
+        # create artwork in user's collection
+        if !access_token.nil? && !submission.my_collection_artwork_id
           create_my_collection_artwork(submission, access_token)
         end
       end
