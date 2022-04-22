@@ -560,9 +560,6 @@ describe SubmissionService do
           .and_return(true)
         stub_gravity_artist(target_supply: true)
         allow(Metaql::Schema).to receive(:execute).and_return(response)
-        allow_any_instance_of(User).to receive(
-          :save_submission_to_my_collection?
-        ).and_return(true)
       end
 
       it 'create my collection artwork if artwork rejected(target supply)' do
@@ -624,23 +621,6 @@ describe SubmissionService do
 
       it 'does not create my collection artwork if no user' do
         submission.user = nil
-
-        SubmissionService.update_submission(
-          submission,
-          { state: 'submitted' },
-          current_user: 'userid',
-          is_convection: false,
-          access_token: access_token
-        )
-
-        expect(submission.state).to eq 'submitted'
-        expect(submission.my_collection_artwork_id).to eq nil
-      end
-
-      it 'does not create my collection artwork if user cannot save submission to my collection' do
-        allow_any_instance_of(User).to receive(
-          :save_submission_to_my_collection?
-        ).and_return(false)
 
         SubmissionService.update_submission(
           submission,
@@ -758,8 +738,6 @@ describe SubmissionService do
 
     it 'updates submission to Submitted state when submission state changed and artist is in target supply' do
       stub_gravity_artist(target_supply: true)
-      allow(submission.user).to receive(:save_submission_to_my_collection?)
-        .and_return(nil)
 
       expect(NotificationService).to receive(:post_submission_event)
         .once

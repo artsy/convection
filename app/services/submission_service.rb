@@ -92,8 +92,7 @@ class SubmissionService
           submission.assign_attributes(
             reject_non_target_supply_artist(submission.artist_id)
           )
-          if !submission.draft? && submission.user && !access_token.nil? &&
-               submission.user&.save_submission_to_my_collection?
+          if !submission.draft? && submission.user && !access_token.nil?
             create_or_update_my_collection_artwork(submission, access_token)
           end
         end

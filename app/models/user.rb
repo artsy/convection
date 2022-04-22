@@ -37,13 +37,6 @@ class User < ApplicationRecord
     user_detail&.phone
   end
 
-  def save_submission_to_my_collection?
-    Convection.unleash.enabled?(
-      'swa_my_collection',
-      Unleash::Context.new(user_id: gravity_user_id.to_s)
-    )
-  end
-
   def user_detail
     gravity_user&.user_detail&._get
   rescue Faraday::ResourceNotFound
