@@ -203,7 +203,7 @@ spec:
         env:
         - name: MALLOC_ARENA_MAX
           value: '2'
-        - name: DD_TRACE_AGENT_HOSTNAME
+        - name: DATADOG_TRACE_AGENT_HOSTNAME
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
