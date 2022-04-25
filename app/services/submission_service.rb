@@ -31,7 +31,7 @@ class SubmissionService
 
       if AdminUser.exists?(gravity_user_id: current_user)
         create_params.merge!(
-          admin: AdminUser.find_by(gravity_user_id: current_user)
+          admin: AdminUser.find_by(gravity_user_id: current_user),
         )
       end
 
@@ -39,15 +39,21 @@ class SubmissionService
 
       unless is_convection || submission_params[:state]&.downcase == 'draft'
         create_params.merge!(
-          reject_non_target_supply_artist(submission_params[:artist_id])
+          reject_non_target_supply_artist(submission_params[:artist_id]),
         )
       end
+
+      trusted_key_value =
+        Convection.config.access_token + create_params[:artist_id] +
+          Time.current.to_s
+      hasher = Digest::SHA512.digest trusted_key_value
+      trusted_hash = Digest::SHA512.hexdigest(hasher)
 
       submission = Submission.create!(create_params)
 
       if create_params[:state] == 'rejected'
         delay_until(
-          Convection.config.rejection_email_minutes_after.minutes.from_now
+          Convection.config.rejection_email_minutes_after.minutes.from_now,
         ).deliver_rejection_notification(submission.id)
       end
 
@@ -63,7 +69,7 @@ class SubmissionService
         params = {
           state: 'rejected',
           rejection_reason: 'Not Target Supply',
-          rejected_at: Time.now.utc
+          rejected_at: Time.now.utc,
         }
       end
       params
@@ -90,7 +96,7 @@ class SubmissionService
       if submission.state_changed?
         unless is_convection
           submission.assign_attributes(
-            reject_non_target_supply_artist(submission.artist_id)
+            reject_non_target_supply_artist(submission.artist_id),
           )
           if !submission.draft? && submission.user && !access_token.nil?
             create_or_update_my_collection_artwork(submission, access_token)
@@ -160,7 +166,7 @@ class SubmissionService
         approved_by: nil,
         rejected_at: nil,
         rejected_by: nil,
-        published_at: nil
+        published_at: nil,
       )
     end
 
@@ -181,7 +187,7 @@ class SubmissionService
       submission.update!(approved_by: current_user, approved_at: Time.now.utc)
       NotificationService.delay.post_submission_event(
         submission.id,
-        SubmissionEvent::APPROVED
+        SubmissionEvent::APPROVED,
       )
     end
 
@@ -189,12 +195,12 @@ class SubmissionService
       submission.update!(
         approved_by: submission.approved_by || current_user,
         approved_at: submission.approved_at || Time.now.utc,
-        published_at: Time.now.utc
+        published_at: Time.now.utc,
       )
 
       NotificationService.delay.post_submission_event(
         submission.id,
-        SubmissionEvent::PUBLISHED
+        SubmissionEvent::PUBLISHED,
       )
 
       delay.deliver_approval_notification(submission.id)
@@ -217,7 +223,7 @@ class SubmissionService
       delay.deliver_submission_notification(submission.id)
       NotificationService.delay.post_submission_event(
         submission_id,
-        SubmissionEvent::SUBMITTED
+        SubmissionEvent::SUBMITTED,
       )
       submission.update!(admin_receipt_sent_at: Time.now.utc)
     end
@@ -304,7 +310,7 @@ class SubmissionService
       UserMailer.send(
         rejection_reason_template,
         submission: submission,
-        artist: artist
+        artist: artist,
       ).deliver_now
     end
 
@@ -313,7 +319,7 @@ class SubmissionService
         title: artwork.title,
         medium: artwork.medium,
         year: artwork.date,
-        artist_id: artwork.artists.first.id
+        artist_id: artwork.artists.first.id,
       )
       submission.save!
     end
