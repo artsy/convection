@@ -3,7 +3,6 @@ version: 2.1
 orbs:
   hokusai: artsy/hokusai@volatile
   horizon: artsy/release@volatile
-  node: artsy/node@2.1.0
   slack: circleci/slack@4.9.3
   yarn: artsy/yarn@6.1.0
 
