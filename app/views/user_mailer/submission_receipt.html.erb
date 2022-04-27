@@ -21,7 +21,7 @@
                 
                   <% if Convection.config.send_new_receipt_email %>
                     <p>You’ll need an Artsy account in order to find your artwork in <span style="text-decoration:underline">My Collection</span>, along with related art market insights.</p>
-                    <p>Simply <%= link_to 'sign up', artsy_formatted_url('signup', { submissionId: @submission.id }), target: :_blank %> or <%= link_to 'log in', artsy_formatted_url('login', { submissionId: @submission.id }), target: :_blank %> to Artsy with the same email you used for this submission and visit our app.</p>
+                    <p>Simply <%= link_to 'sign up', artsy_formatted_url('signup', { submissionId: @submission.uuid }), target: :_blank %> or <%= link_to 'log in', artsy_formatted_url('login', { submissionId: @submission.uuid }), target: :_blank %> to Artsy with the same email you used for this submission and visit our app.</p>
                   <% end %>
                 </td>
               </tr>
