@@ -256,7 +256,7 @@ class SubmissionService
       submission = Submission.find(submission_id)
       raise 'Still processing images.' unless submission.ready?
 
-      raise 'User lacks email.' if submission.email.blank?
+      Rails.logger.warn 'User lacks email.' if submission.email.blank?
 
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
