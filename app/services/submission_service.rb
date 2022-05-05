@@ -214,7 +214,7 @@ class SubmissionService
       submission = Submission.find(submission_id)
       return if submission.admin_receipt_sent_at
 
-      delay.deliver_submission_notification(submission.id)
+      delay_until(5.minutes.from_now).deliver_submission_notification(submission.id)
       NotificationService.delay.post_submission_event(
         submission_id,
         SubmissionEvent::SUBMITTED
@@ -227,12 +227,12 @@ class SubmissionService
       return if submission.receipt_sent_at
 
       if submission.images.count.positive?
-        delay.deliver_submission_receipt(submission.id)
+        delay_until(5.minutes.from_now).deliver_submission_receipt(submission.id)
         submission.update!(receipt_sent_at: Time.now.utc)
       else
         return if submission.reminders_sent_count >= 2
 
-        delay.deliver_upload_reminder(submission.id)
+        delay_until(5.minutes.from_now).deliver_upload_reminder(submission.id)
       end
     end
 
