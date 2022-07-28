@@ -354,6 +354,16 @@ describe SubmissionService do
       expect(partner2.partner_submissions.length).to eq 0
     end
 
+    it 'calls the salesforce service to add the artwork on approval' do
+      expect(SalesforceService).to receive(:add_artwork).with(submission.id)
+
+      SubmissionService.update_submission(
+        submission,
+        { state: 'approved' },
+        current_user: 'userid'
+      )
+    end
+
     it 'generates partner submissions on publish' do
       expect(NotificationService).to receive(:post_submission_event)
         .once
@@ -401,6 +411,26 @@ describe SubmissionService do
 
       expect(submission.reload.approved_at).to eq approved_at
       expect(submission.reload.published_at).to_not be_nil
+    end
+
+    it 'calls the salesforce service to add the artwork on publish' do
+      expect(SalesforceService).to receive(:add_artwork).with(submission.id)
+      SubmissionService.update_submission(
+        submission,
+        { state: 'published' },
+        current_user: 'userid'
+      )
+    end
+
+    it 'does not call the salesforce service if submission had been approved on publish' do
+      submission.approved_at = Time.now.utc
+
+      expect(SalesforceService).not_to receive(:add_artwork).with(submission.id)
+      SubmissionService.update_submission(
+        submission,
+        { state: 'published' },
+        current_user: 'userid'
+      )
     end
 
     it 'sends a rejection notification if the submission state is changed to rejected' do
