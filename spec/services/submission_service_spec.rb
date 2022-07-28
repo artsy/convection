@@ -355,6 +355,7 @@ describe SubmissionService do
     end
 
     it 'calls the salesforce service to add the artwork on approval' do
+      allow(NotificationService).to receive(:post_submission_event)
       expect(SalesforceService).to receive(:add_artwork).with(submission.id)
 
       SubmissionService.update_submission(
@@ -414,6 +415,7 @@ describe SubmissionService do
     end
 
     it 'calls the salesforce service to add the artwork on publish' do
+      allow(NotificationService).to receive(:post_submission_event)
       expect(SalesforceService).to receive(:add_artwork).with(submission.id)
       SubmissionService.update_submission(
         submission,
@@ -423,6 +425,7 @@ describe SubmissionService do
     end
 
     it 'does not call the salesforce service if submission had been approved on publish' do
+      allow(NotificationService).to receive(:post_submission_event)
       submission.approved_at = Time.now.utc
 
       expect(SalesforceService).not_to receive(:add_artwork).with(submission.id)
