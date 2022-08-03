@@ -62,12 +62,12 @@ class SalesforceService
     end
 
     def api_enabled?
-      Convection.config.salesforce_client_id &&
-        Convection.config.salesforce_client_secret &&
-        Convection.config.salesforce_host &&
-        Convection.config.salesforce_username && 
-        Convection.config.salesforce_password &&
-        Convection.config.salesforce_security_token
+      Convection.config.salesforce_client_id.present? &&
+        Convection.config.salesforce_client_secret.present? &&
+        Convection.config.salesforce_host.present? &&
+        Convection.config.salesforce_username.present? && 
+        Convection.config.salesforce_password.present? &&
+        Convection.config.salesforce_security_token.present?
     end
 
     def api
