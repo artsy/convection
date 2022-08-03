@@ -47,6 +47,11 @@ describe OfferService do
         expect(submission.approved_by).to eq user.id.to_s
         expect(submission.approved_at).to_not be_nil
       end
+
+      it 'calls the salesforce service to add the artwork' do
+        expect(SalesforceService).to receive(:add_artwork).with(submission.id)
+        OfferService.create_offer(submission.id, partner.id, {}, user.id)
+      end
     end
 
     context 'with a submission in a draft state' do
@@ -60,6 +65,11 @@ describe OfferService do
         expect(submission.state).to eq Submission::APPROVED
         expect(submission.approved_by).to eq user.id.to_s
         expect(submission.approved_at).to_not be_nil
+      end
+
+      it 'calls the salesforce service to add the artwork' do
+        expect(SalesforceService).to receive(:add_artwork).with(submission.id)
+        OfferService.create_offer(submission.id, partner.id, {}, user.id)
       end
     end
 
@@ -134,6 +144,11 @@ describe OfferService do
         expect { OfferService.create_offer(nil, partner.id) }.to raise_error(
           OfferService::OfferError
         )
+      end
+
+      it 'does not call the salesforce service to add the artwork' do
+        expect(SalesforceService).not_to receive(:add_artwork).with(submission.id)
+        OfferService.create_offer(submission.id, partner.id, {}, user.id)
       end
     end
   end
