@@ -52,14 +52,14 @@ describe SalesforceService do
         {
           LastName: submission.user_name,
           Email: submission.user_email,
-          Partner_Contact_Ext_Id__c: submission.user_id,
+          Partner_Contact_Ext_Id__c: submission.user&.gravity_user_id,
           Phone: submission.user_phone
         }
       end
 
       it 'calls the Salesforce api with the correct params' do
         expect(restforce_double).to receive(:select).with(
-          'Contact', submission.user_id, ['Id'], 'Partner_Contact_Ext_Id__c'
+          'Contact', submission.user.gravity_user_id, ['Id'], 'Partner_Contact_Ext_Id__c'
         ).and_return(OpenStruct.new({ Id: 'SF_Contact_ID'}))
 
         expect(restforce_double).to receive(:select).with(
@@ -76,9 +76,29 @@ describe SalesforceService do
       context 'when the salesforce contact is not found' do
         it 'creates a contact in Salesforce, then assigns it to the artwork when creating it' do
           expect(restforce_double).to receive(:select).with(
-            'Contact', submission.user_id, ['Id'], 'Partner_Contact_Ext_Id__c'
+            'Contact', submission.user.gravity_user_id, ['Id'], 'Partner_Contact_Ext_Id__c'
           ).and_raise(Restforce::NotFoundError, 'TestError')
 
+          expect(restforce_double).to receive(:create!).with(
+            'Contact', contact_as_salesforce_representation,
+          ).and_return('SF_Contact_ID')
+
+          expect(restforce_double).to receive(:select).with(
+            'Artist__c', submission.artist_id, ['Id'], 'Gravity_Artist_ID__c'
+          ).and_return(OpenStruct.new({ Id: 'SF_Artist_ID'}))
+
+          expect(restforce_double).to receive(:create!).with(
+            'Artwork__c', artwork_as_salesforce_representation,
+          ).and_return('SF_Artwork_ID')
+
+          described_class.add_artwork(submission.id)
+        end
+      end
+
+      context 'when the submission does not have a user' do
+        let(:submission) { Fabricate(:submission, user: nil) }
+
+        it 'creates a contact in Salesforce, then assigns it to the artwork when creating it' do
           expect(restforce_double).to receive(:create!).with(
             'Contact', contact_as_salesforce_representation,
           ).and_return('SF_Contact_ID')

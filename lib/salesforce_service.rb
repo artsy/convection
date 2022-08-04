@@ -7,7 +7,7 @@ class SalesforceService
 
       submission = Submission.find(submission_id)
       
-      sf_contact_id = find_contact_id(submission.user_id) || api.create!('Contact', map_submission_to_salesforce_contact(submission))
+      sf_contact_id = find_contact_id(submission) || api.create!('Contact', map_submission_to_salesforce_contact(submission))
       sf_artist_id = api.select('Artist__c', submission.artist_id, ['Id'], 'Gravity_Artist_ID__c').Id
 
       api.create!('Artwork__c', map_submission_to_salesforce_artwork(submission, sf_contact_id, sf_artist_id))
@@ -15,8 +15,9 @@ class SalesforceService
 
     private
     
-    def find_contact_id(user_id)
-      api.select('Contact', user_id, ['Id'], 'Partner_Contact_Ext_Id__c').Id
+    def find_contact_id(submission)
+      return if submission.user.blank?
+      api.select('Contact', submission.user.gravity_user_id, ['Id'], 'Partner_Contact_Ext_Id__c').Id
     rescue Restforce::NotFoundError
       nil
     end
@@ -25,7 +26,7 @@ class SalesforceService
       {
         LastName: submission.user_name,
         Email: submission.user_email,
-        Partner_Contact_Ext_Id__c: submission.user_id,
+        Partner_Contact_Ext_Id__c: submission.user&.gravity_user_id,
         Phone: submission.user_phone
       }
     end
