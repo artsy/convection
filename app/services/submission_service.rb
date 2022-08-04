@@ -178,6 +178,8 @@ class SubmissionService
     end
 
     def approve!(submission, current_user)
+      SalesforceService.delay.add_artwork(submission.id)
+      
       submission.update!(approved_by: current_user, approved_at: Time.now.utc)
       NotificationService.delay.post_submission_event(
         submission.id,
@@ -186,6 +188,8 @@ class SubmissionService
     end
 
     def publish!(submission, current_user)
+      SalesforceService.delay.add_artwork(submission.id) unless submission.approved_at
+
       submission.update!(
         approved_by: submission.approved_by || current_user,
         approved_at: submission.approved_at || Time.now.utc,
