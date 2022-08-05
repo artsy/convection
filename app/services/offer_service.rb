@@ -30,6 +30,7 @@ class OfferService
           approved_by: current_user,
           approved_at: Time.now.utc
         )
+        SalesforceService.delay.add_artwork(submission.id)
       end
       partner = Partner.find(partner_id)
       partner_submission =
