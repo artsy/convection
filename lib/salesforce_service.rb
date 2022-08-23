@@ -14,12 +14,12 @@ class SalesforceService
     end
 
     private
-    
+
     def find_contact_id(submission)
       return if submission.user.blank?
       api.select('Contact', submission.user.gravity_user_id, ['Id'], 'Partner_Contact_Ext_Id__c').Id
     rescue Restforce::NotFoundError
-      nil
+      api.query("select Id from Contact where Email = '#{submission.user_email}'").first&.Id
     end
 
     def map_submission_to_salesforce_contact(submission)
@@ -52,7 +52,9 @@ class SalesforceService
         Not_Signed__c: !submission.signature,
         COA_by_Gallery__c: submission.coa_by_gallery || false,
         COA_by_Authenticating_Body__c: submission.coa_by_authenticating_body || false,
-        Cataloguer__c: submission.cataloguer
+        Cataloguer__c: submission.cataloguer,
+        Primary_Image_URL__c: submission.primary_image&.image_urls&.dig('thumbnail'),
+        Convection_ID__c: submission.id
         # Other fields we could sync in the future:
         # Artwork_Status__c: submission.state,
         # Materials: ???
