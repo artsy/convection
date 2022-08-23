@@ -128,20 +128,44 @@ describe SalesforceService do
       context 'when the submission does not have a user' do
         let(:submission) { Fabricate(:submission, user: nil) }
 
-        it 'creates a contact in Salesforce, then assigns it to the artwork when creating it' do
-          expect(restforce_double).to receive(:create!).with(
-            'Contact', contact_as_salesforce_representation,
-          ).and_return('SF_Contact_ID')
+        context 'when the salesforce contact is found by email' do
+          it 'assigns it to the artwork when creating it' do
+            expect(restforce_double).to receive(:query).with(
+              "select Id from Contact where Email = '#{submission.user_email}'"
+            ).and_return([OpenStruct.new({ Id: 'SF_Contact_ID'})])
+  
+            expect(restforce_double).to receive(:select).with(
+              'Artist__c', submission.artist_id, ['Id'], 'Gravity_Artist_ID__c'
+            ).and_return(OpenStruct.new({ Id: 'SF_Artist_ID'}))
+  
+            expect(restforce_double).to receive(:create!).with(
+              'Artwork__c', artwork_as_salesforce_representation,
+            ).and_return('SF_Artwork_ID')
+  
+            described_class.add_artwork(submission.id)
+          end
+        end
 
-          expect(restforce_double).to receive(:select).with(
-            'Artist__c', submission.artist_id, ['Id'], 'Gravity_Artist_ID__c'
-          ).and_return(OpenStruct.new({ Id: 'SF_Artist_ID'}))
+        context 'when the salesforce contact is not found by email' do
+          it 'creates a contact in Salesforce, then assigns it to the artwork when creating it' do
+            expect(restforce_double).to receive(:query).with(
+              "select Id from Contact where Email = '#{submission.user_email}'"
+            ).and_return([])
 
-          expect(restforce_double).to receive(:create!).with(
-            'Artwork__c', artwork_as_salesforce_representation,
-          ).and_return('SF_Artwork_ID')
-
-          described_class.add_artwork(submission.id)
+            expect(restforce_double).to receive(:create!).with(
+              'Contact', contact_as_salesforce_representation,
+            ).and_return('SF_Contact_ID')
+  
+            expect(restforce_double).to receive(:select).with(
+              'Artist__c', submission.artist_id, ['Id'], 'Gravity_Artist_ID__c'
+            ).and_return(OpenStruct.new({ Id: 'SF_Artist_ID'}))
+  
+            expect(restforce_double).to receive(:create!).with(
+              'Artwork__c', artwork_as_salesforce_representation,
+            ).and_return('SF_Artwork_ID')
+  
+            described_class.add_artwork(submission.id)
+          end
         end
       end
     end

@@ -16,10 +16,17 @@ class SalesforceService
     private
 
     def find_contact_id(submission)
-      return if submission.user.blank?
-      api.select('Contact', submission.user.gravity_user_id, ['Id'], 'Partner_Contact_Ext_Id__c').Id
+      if submission.user.present?
+        api.select('Contact', submission.user.gravity_user_id, ['Id'], 'Partner_Contact_Ext_Id__c').Id
+      else
+        find_contact_id_by_email(submission.user_email)
+      end
     rescue Restforce::NotFoundError
-      api.query("select Id from Contact where Email = '#{submission.user_email}'").first&.Id
+      find_contact_id_by_email(submission.user_email)
+    end
+
+    def find_contact_id_by_email(user_email)
+      api.query("select Id from Contact where Email = '#{user_email}'").first&.Id
     end
 
     def map_submission_to_salesforce_contact(submission)
