@@ -45,7 +45,9 @@ describe SalesforceService do
           Not_Signed__c: !submission.signature,
           COA_by_Gallery__c: submission.coa_by_gallery || false,
           COA_by_Authenticating_Body__c: submission.coa_by_authenticating_body || false,
-          Cataloguer__c: submission.cataloguer
+          Cataloguer__c: submission.cataloguer,
+          Primary_Image_URL__c: submission.primary_image&.image_urls&.dig('thumbnail'),
+          Convection_ID__c: submission.id
         }
       end
       let(:contact_as_salesforce_representation) do
@@ -73,25 +75,53 @@ describe SalesforceService do
         described_class.add_artwork(submission.id)
       end
 
-      context 'when the salesforce contact is not found' do
-        it 'creates a contact in Salesforce, then assigns it to the artwork when creating it' do
-          expect(restforce_double).to receive(:select).with(
-            'Contact', submission.user.gravity_user_id, ['Id'], 'Partner_Contact_Ext_Id__c'
-          ).and_raise(Restforce::NotFoundError, 'TestError')
+      context 'when the salesforce contact is not found by id' do
+        context 'when the salesforce contact is not found by email' do
+          it 'creates a contact in Salesforce, then assigns it to the artwork when creating it' do
+            expect(restforce_double).to receive(:select).with(
+              'Contact', submission.user.gravity_user_id, ['Id'], 'Partner_Contact_Ext_Id__c'
+            ).and_raise(Restforce::NotFoundError, 'TestError')
 
-          expect(restforce_double).to receive(:create!).with(
-            'Contact', contact_as_salesforce_representation,
-          ).and_return('SF_Contact_ID')
+            expect(restforce_double).to receive(:query).with(
+              "select Id from Contact where Email = '#{submission.user_email}'"
+            ).and_return([])
+  
+            expect(restforce_double).to receive(:create!).with(
+              'Contact', contact_as_salesforce_representation,
+            ).and_return('SF_Contact_ID')
+  
+            expect(restforce_double).to receive(:select).with(
+              'Artist__c', submission.artist_id, ['Id'], 'Gravity_Artist_ID__c'
+            ).and_return(OpenStruct.new({ Id: 'SF_Artist_ID'}))
+  
+            expect(restforce_double).to receive(:create!).with(
+              'Artwork__c', artwork_as_salesforce_representation,
+            ).and_return('SF_Artwork_ID')
+  
+            described_class.add_artwork(submission.id)
+          end
+        end
 
-          expect(restforce_double).to receive(:select).with(
-            'Artist__c', submission.artist_id, ['Id'], 'Gravity_Artist_ID__c'
-          ).and_return(OpenStruct.new({ Id: 'SF_Artist_ID'}))
+        context 'when the salesforce contact is found by email' do
+          it 'assigns it to the artwork when creating it' do
+            expect(restforce_double).to receive(:select).with(
+              'Contact', submission.user.gravity_user_id, ['Id'], 'Partner_Contact_Ext_Id__c'
+            ).and_raise(Restforce::NotFoundError, 'TestError')
 
-          expect(restforce_double).to receive(:create!).with(
-            'Artwork__c', artwork_as_salesforce_representation,
-          ).and_return('SF_Artwork_ID')
-
-          described_class.add_artwork(submission.id)
+            expect(restforce_double).to receive(:query).with(
+              "select Id from Contact where Email = '#{submission.user_email}'"
+            ).and_return([OpenStruct.new({ Id: 'SF_Contact_ID'})])
+  
+            expect(restforce_double).to receive(:select).with(
+              'Artist__c', submission.artist_id, ['Id'], 'Gravity_Artist_ID__c'
+            ).and_return(OpenStruct.new({ Id: 'SF_Artist_ID'}))
+  
+            expect(restforce_double).to receive(:create!).with(
+              'Artwork__c', artwork_as_salesforce_representation,
+            ).and_return('SF_Artwork_ID')
+  
+            described_class.add_artwork(submission.id)
+          end
         end
       end
 
