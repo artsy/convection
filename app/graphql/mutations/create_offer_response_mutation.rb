@@ -17,7 +17,7 @@ module Mutations
         context: context,
         object: object
       }
-      resolver = CreateOfferResponseResolver.new(resolve_options)
+      resolver = CreateOfferResponseResolver.new(**resolve_options)
       raise resolver.error unless resolver.valid?
 
       resolver.run

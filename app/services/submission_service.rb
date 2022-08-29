@@ -249,9 +249,9 @@ class SubmissionService
       email_args = { submission: submission }
 
       if submission.reminders_sent_count == 1
-        UserMailer.second_upload_reminder(email_args).deliver_now
+        UserMailer.second_upload_reminder(**email_args).deliver_now
       else
-        UserMailer.first_upload_reminder(email_args).deliver_now
+        UserMailer.first_upload_reminder(**email_args).deliver_now
       end
       submission.increment!(:reminders_sent_count)
     end

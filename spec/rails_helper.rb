@@ -71,5 +71,5 @@ Capybara.register_driver :headless_chrome do |app|
 
   prepare_chromedriver(args)
 
-  Capybara::Selenium::Driver.new(app, args)
+  Capybara::Selenium::Driver.new(app, **args)
 end
