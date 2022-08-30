@@ -2,39 +2,39 @@
 
 class UserMailerPreview < BasePreview
   def submission_receipt
-    UserMailer.submission_receipt(receipt_mail_params)
+    UserMailer.submission_receipt(**receipt_mail_params)
   end
 
   def first_upload_reminder
-    UserMailer.first_upload_reminder(reminder_mail_params)
+    UserMailer.first_upload_reminder(**reminder_mail_params)
   end
 
   def second_upload_reminder
-    UserMailer.second_upload_reminder(reminder_mail_params)
+    UserMailer.second_upload_reminder(**reminder_mail_params)
   end
 
   def submission_approved
-    UserMailer.submission_approved(receipt_mail_params)
+    UserMailer.submission_approved(**receipt_mail_params)
   end
 
   def artist_submission_rejected
-    UserMailer.artist_submission_rejected(receipt_mail_params)
+    UserMailer.artist_submission_rejected(**receipt_mail_params)
   end
 
   def fake_submission_rejected
-    UserMailer.fake_submission_rejected(receipt_mail_params)
+    UserMailer.fake_submission_rejected(**receipt_mail_params)
   end
 
   def nsv_bsv_submission_rejected
-    UserMailer.nsv_bsv_submission_rejected(receipt_mail_params)
+    UserMailer.nsv_bsv_submission_rejected(**receipt_mail_params)
   end
 
   def non_target_supply_artist_rejected
-    UserMailer.non_target_supply_artist_rejected(receipt_mail_params)
+    UserMailer.non_target_supply_artist_rejected(**receipt_mail_params)
   end
 
   def other_submission_rejected
-    UserMailer.other_submission_rejected(receipt_mail_params)
+    UserMailer.other_submission_rejected(**receipt_mail_params)
   end
 
   def auction_consignment_offer

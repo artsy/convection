@@ -60,7 +60,7 @@ module Mutations
         context: context,
         object: object
       }
-      resolver = CreateSubmissionResolver.new(resolve_options)
+      resolver = CreateSubmissionResolver.new(**resolve_options)
 
       resolver.run
     end
