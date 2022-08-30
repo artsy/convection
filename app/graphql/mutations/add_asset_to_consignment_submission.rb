@@ -18,7 +18,7 @@ module Mutations
         context: context,
         object: object
       }
-      resolver = AddAssetToSubmissionResolver.new(resolve_options)
+      resolver = AddAssetToSubmissionResolver.new(**resolve_options)
       raise resolver.error unless resolver.valid?
 
       resolver.run

@@ -266,7 +266,7 @@ describe SubmissionService do
 
   context 'update_submission' do
     it 'sends no emails of the submission is not being submitted' do
-      SubmissionService.update_submission(submission, state: 'draft')
+      SubmissionService.update_submission(submission, { state: 'draft' })
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 0
     end
@@ -275,7 +275,7 @@ describe SubmissionService do
       expect(NotificationService).to receive(:post_submission_event)
         .once
         .with(submission.id, 'submitted')
-      SubmissionService.update_submission(submission, state: 'submitted')
+      SubmissionService.update_submission(submission, { state: 'submitted' })
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 3
     end
@@ -285,7 +285,7 @@ describe SubmissionService do
         .once
         .with(submission.id, 'submitted')
       Fabricate(:image, submission: submission)
-      SubmissionService.update_submission(submission, state: 'submitted')
+      SubmissionService.update_submission(submission, { state: 'submitted' })
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 2
     end

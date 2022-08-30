@@ -13,7 +13,7 @@ module Mutations
         object: object
       }
 
-      resolver = AddUserToSubmissionResolver.new(resolve_options)
+      resolver = AddUserToSubmissionResolver.new(**resolve_options)
 
       raise resolver.error unless resolver.valid?
 

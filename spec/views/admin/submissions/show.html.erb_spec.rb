@@ -146,7 +146,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         .with(@submission.id, 'published')
       partner1 = Fabricate(:partner, gravity_partner_id: 'partnerid')
       partner2 = Fabricate(:partner, gravity_partner_id: 'phillips')
-      SubmissionService.update_submission(@submission, state: 'published')
+      SubmissionService.update_submission(@submission, { state: 'published' })
       expect(@submission.partner_submissions.count).to eq 2
       page.visit "/admin/submissions/#{@submission.id}"
 
@@ -175,7 +175,7 @@ describe 'admin/submissions/show.html.erb', type: :feature do
         }
       )
 
-      SubmissionService.update_submission(@submission, state: 'published')
+      SubmissionService.update_submission(@submission, { state: 'published' })
       stub_gravity_partner(id: 'partnerid')
       stub_gravity_partner(id: 'phillips')
       stub_gravity_partner_contacts(partner_id: 'partnerid')
@@ -419,8 +419,8 @@ describe 'admin/submissions/show.html.erb', type: :feature do
           expect(NotificationService).to receive(:post_submission_event)
             .once
             .with(submission2.id, 'approved')
-          SubmissionService.update_submission(@submission, state: 'approved')
-          SubmissionService.update_submission(submission2, state: 'approved')
+          SubmissionService.update_submission(@submission, { state: 'approved' })
+          SubmissionService.update_submission(submission2, { state: 'approved' })
           Fabricate(
             :partner_submission,
             partner: partner,
@@ -449,8 +449,8 @@ describe 'admin/submissions/show.html.erb', type: :feature do
           expect(NotificationService).to receive(:post_submission_event)
             .once
             .with(submission2.id, 'published')
-          SubmissionService.update_submission(@submission, state: 'published')
-          SubmissionService.update_submission(submission2, state: 'published')
+          SubmissionService.update_submission(@submission, { state: 'published' })
+          SubmissionService.update_submission(submission2, { state: 'published' })
           expect(@submission.partner_submissions.count).to eq Partner.count
           expect(submission2.partner_submissions.count).to eq Partner.count
           page.visit "/admin/submissions/#{@submission.id}"

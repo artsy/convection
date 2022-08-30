@@ -1,4 +1,4 @@
-FROM ruby:2.7.2-alpine
+FROM ruby:3.0.2-alpine3.13
 
 ENV LANG C.UTF-8
 ARG BUNDLE_GITHUB__COM

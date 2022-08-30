@@ -13,7 +13,7 @@ module Mutations
         context: context,
         object: object
       }
-      resolver = RemoveAssetFromSubmissionResolver.new(resolve_options)
+      resolver = RemoveAssetFromSubmissionResolver.new(**resolve_options)
 
       resolver.run
     end
