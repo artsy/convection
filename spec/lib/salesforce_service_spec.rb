@@ -47,7 +47,8 @@ describe SalesforceService do
           COA_by_Authenticating_Body__c: submission.coa_by_authenticating_body || false,
           Cataloguer__c: submission.cataloguer,
           Primary_Image_URL__c: submission.primary_image&.image_urls&.dig('thumbnail'),
-          Convection_ID__c: submission.id
+          Convection_ID__c: submission.id,
+          OwnerId: 'SF_User_ID'
         }
       end
       let(:contact_as_salesforce_representation) do
@@ -67,6 +68,10 @@ describe SalesforceService do
         expect(restforce_double).to receive(:select).with(
           'Artist__c', submission.artist_id, ['Id'], 'Gravity_Artist_ID__c'
         ).and_return(OpenStruct.new({ Id: 'SF_Artist_ID'}))
+
+        expect(restforce_double).to receive(:select).with(
+          'User', submission.approved_by, ['Id'], 'Admin_User_ID__c'
+        ).and_return(OpenStruct.new({ Id: 'SF_User_ID'}))
 
         expect(restforce_double).to receive(:create!).with(
           'Artwork__c', artwork_as_salesforce_representation,
@@ -93,6 +98,10 @@ describe SalesforceService do
             expect(restforce_double).to receive(:select).with(
               'Artist__c', submission.artist_id, ['Id'], 'Gravity_Artist_ID__c'
             ).and_return(OpenStruct.new({ Id: 'SF_Artist_ID'}))
+
+            expect(restforce_double).to receive(:select).with(
+              'User', submission.approved_by, ['Id'], 'Admin_User_ID__c'
+            ).and_return(OpenStruct.new({ Id: 'SF_User_ID'}))
   
             expect(restforce_double).to receive(:create!).with(
               'Artwork__c', artwork_as_salesforce_representation,
@@ -115,6 +124,10 @@ describe SalesforceService do
             expect(restforce_double).to receive(:select).with(
               'Artist__c', submission.artist_id, ['Id'], 'Gravity_Artist_ID__c'
             ).and_return(OpenStruct.new({ Id: 'SF_Artist_ID'}))
+
+            expect(restforce_double).to receive(:select).with(
+              'User', submission.approved_by, ['Id'], 'Admin_User_ID__c'
+            ).and_return(OpenStruct.new({ Id: 'SF_User_ID'}))
   
             expect(restforce_double).to receive(:create!).with(
               'Artwork__c', artwork_as_salesforce_representation,
@@ -137,6 +150,10 @@ describe SalesforceService do
             expect(restforce_double).to receive(:select).with(
               'Artist__c', submission.artist_id, ['Id'], 'Gravity_Artist_ID__c'
             ).and_return(OpenStruct.new({ Id: 'SF_Artist_ID'}))
+
+            expect(restforce_double).to receive(:select).with(
+              'User', submission.approved_by, ['Id'], 'Admin_User_ID__c'
+            ).and_return(OpenStruct.new({ Id: 'SF_User_ID'}))
   
             expect(restforce_double).to receive(:create!).with(
               'Artwork__c', artwork_as_salesforce_representation,
@@ -159,9 +176,35 @@ describe SalesforceService do
             expect(restforce_double).to receive(:select).with(
               'Artist__c', submission.artist_id, ['Id'], 'Gravity_Artist_ID__c'
             ).and_return(OpenStruct.new({ Id: 'SF_Artist_ID'}))
+
+            expect(restforce_double).to receive(:select).with(
+              'User', submission.approved_by, ['Id'], 'Admin_User_ID__c'
+            ).and_return(OpenStruct.new({ Id: 'SF_User_ID'}))
   
             expect(restforce_double).to receive(:create!).with(
               'Artwork__c', artwork_as_salesforce_representation,
+            ).and_return('SF_Artwork_ID')
+  
+            described_class.add_artwork(submission.id)
+          end
+        end
+
+        context 'when there is no owner found in SF' do
+          it 'does not send the owner key in the artwork representation' do
+            expect(restforce_double).to receive(:query).with(
+              "select Id from Contact where Email = '#{submission.user_email}'"
+            ).and_return([OpenStruct.new({ Id: 'SF_Contact_ID'})])
+  
+            expect(restforce_double).to receive(:select).with(
+              'Artist__c', submission.artist_id, ['Id'], 'Gravity_Artist_ID__c'
+            ).and_return(OpenStruct.new({ Id: 'SF_Artist_ID'}))
+
+            expect(restforce_double).to receive(:select).with(
+              'User', submission.approved_by, ['Id'], 'Admin_User_ID__c'
+            ).and_raise(Restforce::NotFoundError, 'TestError')
+  
+            expect(restforce_double).to receive(:create!).with(
+              'Artwork__c', artwork_as_salesforce_representation.except(:OwnerId),
             ).and_return('SF_Artwork_ID')
   
             described_class.add_artwork(submission.id)
