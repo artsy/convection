@@ -178,9 +178,9 @@ class SubmissionService
     end
 
     def approve!(submission, current_user)
-      SalesforceService.delay.add_artwork(submission.id)
-      
       submission.update!(approved_by: current_user, approved_at: Time.now.utc)
+
+      SalesforceService.delay.add_artwork(submission.id)
       NotificationService.delay.post_submission_event(
         submission.id,
         SubmissionEvent::APPROVED

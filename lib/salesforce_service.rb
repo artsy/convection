@@ -29,6 +29,12 @@ class SalesforceService
       api.query("select Id from Contact where Email = '#{user_email}'").first&.Id
     end
 
+    def find_owner_id(submission)
+      api.select('User', submission.approved_by, ['Id'], 'Admin_User_ID__c').Id
+    rescue Restforce::NotFoundError
+      nil
+    end
+
     def map_submission_to_salesforce_contact(submission)
       {
         LastName: submission.user_name,
@@ -39,7 +45,7 @@ class SalesforceService
     end
 
     def map_submission_to_salesforce_artwork(submission, contact_id, artist_id)
-      {
+      artwork_rep = {
         Name: submission.title[0..79],
         Artwork_Title__c: submission.title,
         Seller_Contact__c: contact_id,
@@ -70,6 +76,10 @@ class SalesforceService
         # Framed: ???
         # FramedDimensions: ???
       }
+      # Owner can't be nil, if we can't find it the API will succeed using the default user
+      owner_id = find_owner_id(submission)
+      artwork_rep = artwork_rep.merge(OwnerId: owner_id) if owner_id
+      artwork_rep
     end
 
     def api_enabled?
