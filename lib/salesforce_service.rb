@@ -40,7 +40,8 @@ class SalesforceService
 
     def map_submission_to_salesforce_artwork(submission, contact_id, artist_id)
       {
-        Name: submission.title,
+        Name: submission.title[0..79],
+        Artwork_Title__c: submission.title,
         Seller_Contact__c: contact_id,
         Primary_Artist__c: artist_id,
         Artwork_Year__c: submission.year,
