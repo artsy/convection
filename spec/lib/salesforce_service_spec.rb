@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe SalesforceService do
   describe '.add_artwork' do
-    let(:submission) { Fabricate(:submission) }
+    let(:submission) { Fabricate(:submission, title: 'reallylongtitlemorethan80charsreallylongtitlemorethan80charsreallylongtitlemorethan80chars') }
 
     context 'when the integration is not enabled' do
       it 'does not call the Salesforce api' do
@@ -26,7 +26,8 @@ describe SalesforceService do
 
       let(:artwork_as_salesforce_representation) do
         {
-          Name: submission.title,
+          Name: submission.title[0..79],
+          Artwork_Title__c: submission.title,
           Seller_Contact__c: 'SF_Contact_ID',
           Primary_Artist__c: 'SF_Artist_ID',
           Artwork_Year__c: submission.year,
