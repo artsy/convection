@@ -49,7 +49,8 @@ describe SalesforceService do
           Cataloguer__c: submission.cataloguer,
           Primary_Image_URL__c: submission.primary_image&.image_urls&.dig('thumbnail'),
           Convection_ID__c: submission.id,
-          OwnerId: 'SF_User_ID'
+          OwnerId: 'SF_User_ID',
+          Assigned_To__c: 'SF_User_ID'
         }
       end
       let(:contact_as_salesforce_representation) do
@@ -72,6 +73,10 @@ describe SalesforceService do
 
         expect(restforce_double).to receive(:select).with(
           'User', submission.approved_by, ['Id'], 'Admin_User_ID__c'
+        ).and_return(OpenStruct.new({ Id: 'SF_User_ID'}))
+
+        expect(restforce_double).to receive(:select).with(
+          'User', submission.assigned_to, ['Id'], 'Admin_User_ID__c'
         ).and_return(OpenStruct.new({ Id: 'SF_User_ID'}))
 
         expect(restforce_double).to receive(:create!).with(
@@ -103,6 +108,10 @@ describe SalesforceService do
             expect(restforce_double).to receive(:select).with(
               'User', submission.approved_by, ['Id'], 'Admin_User_ID__c'
             ).and_return(OpenStruct.new({ Id: 'SF_User_ID'}))
+
+            expect(restforce_double).to receive(:select).with(
+              'User', submission.assigned_to, ['Id'], 'Admin_User_ID__c'
+            ).and_return(OpenStruct.new({ Id: 'SF_User_ID'}))
   
             expect(restforce_double).to receive(:create!).with(
               'Artwork__c', artwork_as_salesforce_representation,
@@ -129,6 +138,10 @@ describe SalesforceService do
             expect(restforce_double).to receive(:select).with(
               'User', submission.approved_by, ['Id'], 'Admin_User_ID__c'
             ).and_return(OpenStruct.new({ Id: 'SF_User_ID'}))
+
+            expect(restforce_double).to receive(:select).with(
+              'User', submission.assigned_to, ['Id'], 'Admin_User_ID__c'
+            ).and_return(OpenStruct.new({ Id: 'SF_User_ID'}))
   
             expect(restforce_double).to receive(:create!).with(
               'Artwork__c', artwork_as_salesforce_representation,
@@ -140,7 +153,7 @@ describe SalesforceService do
       end
 
       context 'when the submission does not have a user' do
-        let(:submission) { Fabricate(:submission, user: nil) }
+        let(:submission) { Fabricate(:submission, user: nil, assigned_to: SecureRandom.uuid) }
 
         context 'when the salesforce contact is found by email' do
           it 'assigns it to the artwork when creating it' do
@@ -154,6 +167,10 @@ describe SalesforceService do
 
             expect(restforce_double).to receive(:select).with(
               'User', submission.approved_by, ['Id'], 'Admin_User_ID__c'
+            ).and_return(OpenStruct.new({ Id: 'SF_User_ID'}))
+
+            expect(restforce_double).to receive(:select).with(
+              'User', submission.assigned_to, ['Id'], 'Admin_User_ID__c'
             ).and_return(OpenStruct.new({ Id: 'SF_User_ID'}))
   
             expect(restforce_double).to receive(:create!).with(
@@ -181,6 +198,10 @@ describe SalesforceService do
             expect(restforce_double).to receive(:select).with(
               'User', submission.approved_by, ['Id'], 'Admin_User_ID__c'
             ).and_return(OpenStruct.new({ Id: 'SF_User_ID'}))
+
+            expect(restforce_double).to receive(:select).with(
+              'User', submission.assigned_to, ['Id'], 'Admin_User_ID__c'
+            ).and_return(OpenStruct.new({ Id: 'SF_User_ID'}))
   
             expect(restforce_double).to receive(:create!).with(
               'Artwork__c', artwork_as_salesforce_representation,
@@ -203,6 +224,10 @@ describe SalesforceService do
             expect(restforce_double).to receive(:select).with(
               'User', submission.approved_by, ['Id'], 'Admin_User_ID__c'
             ).and_raise(Restforce::NotFoundError, 'TestError')
+
+            expect(restforce_double).to receive(:select).with(
+              'User', submission.assigned_to, ['Id'], 'Admin_User_ID__c'
+            ).and_return(OpenStruct.new({ Id: 'SF_User_ID'}))
   
             expect(restforce_double).to receive(:create!).with(
               'Artwork__c', artwork_as_salesforce_representation.except(:OwnerId),
