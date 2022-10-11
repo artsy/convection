@@ -29,8 +29,8 @@ class SalesforceService
       api.query("select Id from Contact where Email = '#{user_email}'").first&.Id
     end
 
-    def find_owner_id(submission)
-      api.select('User', submission.approved_by, ['Id'], 'Admin_User_ID__c').Id
+    def find_sf_user_id(gravity_id)
+      api.select('User', gravity_id, ['Id'], 'Admin_User_ID__c').Id
     rescue Restforce::NotFoundError
       nil
     end
@@ -68,7 +68,8 @@ class SalesforceService
         COA_by_Authenticating_Body__c: submission.coa_by_authenticating_body || false,
         Cataloguer__c: submission.cataloguer,
         Primary_Image_URL__c: submission.primary_image&.image_urls&.dig('thumbnail'),
-        Convection_ID__c: submission.id
+        Convection_ID__c: submission.id,
+        Assigned_To__c: find_sf_user_id(submission.assigned_to)
         # Other fields we could sync in the future:
         # Artwork_Status__c: submission.state,
         # Materials: ???
@@ -77,7 +78,7 @@ class SalesforceService
         # FramedDimensions: ???
       }
       # Owner can't be nil, if we can't find it the API will succeed using the default user
-      owner_id = find_owner_id(submission)
+      owner_id = find_sf_user_id(submission.approved_by)
       artwork_rep = artwork_rep.merge(OwnerId: owner_id) if owner_id
       artwork_rep
     end
