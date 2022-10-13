@@ -91,11 +91,13 @@ class SubmissionsResolver < BaseResolver
     return false if admin? || !@arguments.key?(:ids)
     return true if partner?
 
-    current_user = User.find_by(gravity_user_id: @context[:current_user])
+    # Because there can by more than one user for the currenty user in the DB
+    # TODO: Remove duplicates
+    current_users = User.where(gravity_user_id: @context[:current_user])
 
-    base_submissions.select(:user_id).distinct.map { |s| s.user_id } != [
-      current_user&.id
-    ]
+    !current_users.pluck(:id).include?(
+      base_submissions.select(:user_id).distinct.map { |s| s.user_id }
+    )
   end
 
   def not_allowed_all_submissions?
