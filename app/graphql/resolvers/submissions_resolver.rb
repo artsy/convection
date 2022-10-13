@@ -95,9 +95,9 @@ class SubmissionsResolver < BaseResolver
     # TODO: Remove duplicates
     current_users = User.where(gravity_user_id: @context[:current_user])
 
-    !current_users.pluck(:id).include?(
-      base_submissions.select(:user_id).distinct.map { |s| s.user_id }
-    )
+    base_submissions.select(:user_id).distinct.select do |submission|
+      !current_users.pluck(:id).include?(submission.user_id)
+    end.any?
   end
 
   def not_allowed_all_submissions?
