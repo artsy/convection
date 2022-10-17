@@ -209,7 +209,7 @@ module GraphqlHelper
       editionSize: submission.edition_size,
       externalImageUrls:
         submission.images.map do |image|
-          image.original_image&.split('?')&.first
+          CGI.unescape(image.original_image&.split('?')&.first)
         end,
       height: submission.height,
       attributionClass:
