@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ApplicationMailer < ActionMailer::Base
-  default from: 'Artsy <consign@artsy.net>'
+  default from: 'Artsy <sell@artsy.net>'
   default bcc: Convection.config.bcc_email_address
   layout 'mailer'
 

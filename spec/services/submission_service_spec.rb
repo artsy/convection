@@ -90,7 +90,7 @@ describe SubmissionService do
       expect(emails.length).to eq 1
       expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
       expect(emails.first.to).to eq(%w[michael@bluth.com])
-      expect(emails.first.from).to eq(%w[consign@artsy.net])
+      expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
         'we unfortunately don’t have demand for this artwork on Artsy at the moment'
       )
@@ -446,7 +446,7 @@ describe SubmissionService do
       expect(emails.length).to eq 1
       expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
       expect(emails.first.to).to eq(%w[michael@bluth.com])
-      expect(emails.first.from).to eq(%w[consign@artsy.net])
+      expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
         'we unfortunately don’t have demand for this artwork on Artsy at the moment.'
       )
@@ -468,7 +468,7 @@ describe SubmissionService do
       expect(emails.length).to eq 1
       expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
       expect(emails.first.to).to eq(%w[michael@bluth.com])
-      expect(emails.first.from).to eq(%w[consign@artsy.net])
+      expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include('After extensive research')
       expect(submission.state).to eq 'rejected'
       expect(submission.rejected_by).to eq 'userid'
@@ -488,7 +488,7 @@ describe SubmissionService do
       expect(emails.length).to eq 1
       expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
       expect(emails.first.to).to eq(%w[michael@bluth.com])
-      expect(emails.first.from).to eq(%w[consign@artsy.net])
+      expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
         'If you’re looking for gallery representation'
       )
@@ -512,7 +512,7 @@ describe SubmissionService do
       expect(emails.length).to eq 1
       expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
       expect(emails.first.to).to eq(%w[michael@bluth.com])
-      expect(emails.first.from).to eq(%w[consign@artsy.net])
+      expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
         'we unfortunately don’t have demand for this artwork on Artsy at the moment.'
       )
@@ -564,7 +564,7 @@ describe SubmissionService do
       expect(emails.length).to eq 1
       expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
       expect(emails.first.to).to eq(%w[michael@bluth.com])
-      expect(emails.first.from).to eq(%w[consign@artsy.net])
+      expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
         'we unfortunately don’t have demand for this artwork on Artsy at the moment.'
       )
@@ -1020,7 +1020,7 @@ describe SubmissionService do
           'utm_source=drip-consignment-reminder-e01'
         )
         expect(emails.first.to).to eq(%w[michael@bluth.com])
-        expect(emails.first.from).to eq(%w[consign@artsy.net])
+        expect(emails.first.from).to eq(%w[sell@artsy.net])
         expect(submission.reload.receipt_sent_at).to be nil
         expect(submission.reload.reminders_sent_count).to eq 1
       end
@@ -1041,7 +1041,7 @@ describe SubmissionService do
           'utm_source=drip-consignment-reminder-e02-v2'
         )
         expect(emails.first.to).to eq(%w[michael@bluth.com])
-        expect(emails.first.from).to eq(%w[consign@artsy.net])
+        expect(emails.first.from).to eq(%w[sell@artsy.net])
         expect(submission.reload.receipt_sent_at).to be nil
         expect(submission.reload.reminders_sent_count).to eq 2
       end
@@ -1115,7 +1115,7 @@ describe SubmissionService do
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
       expect(emails.first.html_part.body).to include('My Artwork')
-      expect(emails.first.to).to eq(%w[consign@artsy.net])
+      expect(emails.first.to).to eq(%w[sell@artsy.net])
       expect(submission.reload.admin_receipt_sent_at).to_not be nil
     end
 
