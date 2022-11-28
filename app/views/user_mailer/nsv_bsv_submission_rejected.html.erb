@@ -12,15 +12,18 @@
         <tr>
           <td class='email-sub-title'>
             <p>Dear <%= @submission.name %>,</p>
-            <p>Thank you for your interest in selling with <%= link_to 'Artsy', 'https://www.artsy.net', target: :_blank %> and for giving us a chance to consider your artwork.</p>
-            <p>Our specialists have reviewed your submission and while it’s a wonderful piece, we unfortunately don’t have demand for this artwork on Artsy at the moment.</p>
-            <p>You can submit another artwork anytime. If you would like to sell multiple artworks, we’d be happy to assist you at <%= link_to 'Artsy', 'https://www.artsy.net', target: :_blank %></p>
-            <p>If you have any questions, please do not hesitate to reach out to us at <%= link_to 'consign@artsymail.com', 'mailto:consign@artsymail.com', target: :_blank %>. We look forward to hearing from you.</p>
+            <p>Thank you for submitting <%= @submission.title %> by <%= @artist.name %> to us for evaluation. </p>
+            <p>Unfortunately, we don’t have a selling opportunity for this work right now. However, we have uploaded it to <%= link_to 'My Collection', 'https://www.artsy.net/settings/my-collection', target: :_blank %> in Artsy to help you track demand.</p>
+            <p>My Collection is your personal space to manage your collection, track demand for your artwork and see updates about the artist. To find this artwork in My Collection, use this email address when you sign up or log in to Artsy.</p>
+            <p>We will be in touch if there is an opportunity to sell this work with us in the future. If you have other works you are looking to buy or sell, or have questions about managing your collection, please don’t hesitate to reach out to our team directly at <%= link_to 'sell@artsy.net', 'mailto:sell@artsy.net', target: :_blank %>.</p>
             <p>
-              Sincerely,
+              All the best, 
               <br />
-              The Sell with Artsy Team
+              Caroline
+              <br />
+              Sell with Artsy
             </p>
+            
           </td>
         </tr>
       </table>
