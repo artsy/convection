@@ -224,7 +224,7 @@ describe PartnerSubmissionService do
             'New Artsy Consignments September 27: 3 works'
           )
           expect(email.bcc).to eq(%w[consignments-archive@artsymail.com])
-          expect(email.from).to eq(%w[consign@artsy.net])
+          expect(email.from).to eq(%w[sell@artsy.net])
           expect(email.html_part.body).to include(
             '<i>First approved artwork</i><span>, 1992</span>'
           )

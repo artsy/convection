@@ -131,7 +131,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.to).to eq(%w[user@example.com])
-        expect(emails.first.from).to eq(%w[consign@artsy.net])
+        expect(emails.first.from).to eq(%w[sell@artsy.net])
         expect(emails.first.subject).to eq('An Offer for your Artwork')
       end
     end
@@ -223,7 +223,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
         expect(emails.map(&:to).flatten).to eq(
           %w[contact1@partner.com contact2@partner.com]
         )
-        expect(emails.first.from).to eq(%w[consign@artsy.net])
+        expect(emails.first.from).to eq(%w[sell@artsy.net])
         expect(emails.first.subject).to eq(
           'The consignor has expressed interest in your offer'
         )
@@ -340,7 +340,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
           %w[contact1@partner.com contact2@partner.com]
         )
         expect(emails.first.reply_to).to eq(%w[reply_email@artsy.net])
-        expect(emails.first.from).to eq(%w[consign@artsy.net])
+        expect(emails.first.from).to eq(%w[sell@artsy.net])
         expect(emails.first.subject).to eq(
           'A response to your consignment offer'
         )
@@ -366,7 +366,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
           %w[contact1@partner.com contact2@partner.com]
         )
         expect(emails.first.reply_to).to eq(%w[reply_email@artsy.net])
-        expect(emails.first.from).to eq(%w[consign@artsy.net])
+        expect(emails.first.from).to eq(%w[sell@artsy.net])
         expect(emails.first.subject).to eq(
           'A response to your consignment offer'
         )
@@ -383,7 +383,7 @@ describe 'admin/offers/show.html.erb', type: :feature do
         expect(emails.length).to eq 1
         expect(emails.map(&:to).flatten).to eq(%w[override@partner.com])
         expect(emails.first.reply_to).to eq(%w[reply_email@artsy.net])
-        expect(emails.first.from).to eq(%w[consign@artsy.net])
+        expect(emails.first.from).to eq(%w[sell@artsy.net])
         expect(emails.first.subject).to eq(
           'A response to your consignment offer'
         )

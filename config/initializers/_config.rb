@@ -8,7 +8,7 @@ Convection.config =
   OpenStruct.new(
     access_token: ENV['ACCESS_TOKEN'] || 'replace-me',
     admin_names: (ENV['ADMIN_NAMES'] || 'Alice Betty Cindy').split,
-    admin_email_address: ENV['ADMIN_EMAIL_ADDRESS'] || 'consign@artsy.net',
+    admin_email_address: ENV['ADMIN_EMAIL_ADDRESS'] || 'sell@artsy.net',
     artsy_url: ENV['ARTSY_URL'] || 'https://staging.artsy.net',
     artsy_cms_url: 'https://cms.artsy.net',
     auction_offer_form_url: ENV['AUCTION_OFFER_FORM_URL'] || 'https://foo.com',
