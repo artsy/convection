@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -8,6 +7,7 @@ metadata:
     app: convection
     component: web
     layer: application
+    app.kubernetes.io/version: staging
 spec:
   strategy:
     rollingUpdate:
@@ -25,74 +25,81 @@ spec:
         app: convection
         component: web
         layer: application
+        app.kubernetes.io/version: staging
       name: convection-web
     spec:
       containers:
-        - name: convection-web
-          env:
-            - name: PORT
-              value: "8080"
-            - name: PUMA_WORKERS
-              value: "1"
-            - name: PUMA_THREAD_MIN
-              value: "5"
-            - name: PUMA_THREAD_MAX
-              value: "5"
-            - name: RAILS_SERVE_STATIC_FILES
-              value: 'true'
-            - name: RAILS_LOG_TO_STDOUT
-              value: 'true'
-            - name: PUMA_BIND
-              value: 'tcp://0.0.0.0:8080'
-            - name: MALLOC_ARENA_MAX
-              value: "2"
-            - name: DATADOG_TRACE_AGENT_HOSTNAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: spec.nodeName
-          envFrom:
-            - configMapRef:
-                name: convection-environment
-          image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/convection:staging
-          imagePullPolicy: Always
-          ports:
-            - name: convection-http
-              containerPort: 8080
-          resources:
-            requests:
-              cpu: 50m
-              memory: 256Mi
-            limits:
-              memory: 512Mi
-          readinessProbe:
-            httpGet:
-              port: convection-http
-              path: /system/up
-              httpHeaders:
-                - name: X-Forwarded-Proto
-                  value: https
-            initialDelaySeconds: 10
-            periodSeconds: 10
-            timeoutSeconds: 5
-          lifecycle:
-            preStop:
-              exec:
-                command: ["sh", "-c", "sleep 5"]
+      - name: convection-web
+        env:
+        - name: PORT
+          value: '8080'
+        - name: PUMA_WORKERS
+          value: '1'
+        - name: PUMA_THREAD_MIN
+          value: '5'
+        - name: PUMA_THREAD_MAX
+          value: '5'
+        - name: RAILS_SERVE_STATIC_FILES
+          value: 'true'
+        - name: RAILS_LOG_TO_STDOUT
+          value: 'true'
+        - name: PUMA_BIND
+          value: tcp://0.0.0.0:8080
+        - name: MALLOC_ARENA_MAX
+          value: '2'
+        - name: DATADOG_TRACE_AGENT_HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: DD_VERSION
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['app.kubernetes.io/version']
+        envFrom:
+        - configMapRef:
+            name: convection-environment
+        image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/convection:staging
+        imagePullPolicy: Always
+        ports:
+        - name: convection-http
+          containerPort: 8080
+        resources:
+          requests:
+            cpu: 50m
+            memory: 256Mi
+          limits:
+            memory: 512Mi
+        readinessProbe:
+          httpGet:
+            port: convection-http
+            path: /system/up
+            httpHeaders:
+            - name: X-Forwarded-Proto
+              value: https
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - sh
+              - -c
+              - sleep 5
       dnsPolicy: ClusterFirst
       dnsConfig:
         options:
-          - name: ndots
-            value: "1"
+        - name: ndots
+          value: '1'
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
-              - matchExpressions:
-                  - key: tier
-                    operator: In
-                    values:
-                      - foreground
-
+            - matchExpressions:
+              - key: tier
+                operator: In
+                values:
+                - foreground
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
@@ -107,7 +114,6 @@ spec:
   minReplicas: 1
   maxReplicas: 3
   targetCPUUtilizationPercentage: 70
-
 ---
 apiVersion: v1
 kind: Service
@@ -120,35 +126,33 @@ metadata:
   namespace: default
 spec:
   ports:
-    - port: 8080
-      protocol: TCP
-      name: http
-      targetPort: convection-http
+  - port: 8080
+    protocol: TCP
+    name: http
+    targetPort: convection-http
   selector:
     app: convection
     layer: application
     component: web
   type: ClusterIP
-
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: convection
   annotations:
-    nginx.ingress.kubernetes.io/whitelist-source-range: "{{ cloudflareIpSourceRanges|join(',') }}"
+    nginx.ingress.kubernetes.io/whitelist-source-range: {{ cloudflareIpSourceRanges|join(',') }}
 spec:
   ingressClassName: nginx
   rules:
-    - host: convection-staging.artsy.net
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              serviceName: convection-web-internal
-              servicePort: http
-
+  - host: convection-staging.artsy.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          serviceName: convection-web-internal
+          servicePort: http
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
@@ -163,7 +167,6 @@ spec:
   minReplicas: 1
   maxReplicas: 2
   targetCPUUtilizationPercentage: 80
-
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -173,6 +176,7 @@ metadata:
     app: convection
     layer: application
     component: sidekiq
+    app.kubernetes.io/version: staging
 spec:
   strategy:
     rollingUpdate:
@@ -190,59 +194,67 @@ spec:
         app: convection
         layer: application
         component: sidekiq
+        app.kubernetes.io/version: staging
       name: convection-sidekiq
       namespace: default
     spec:
       containers:
-        - name: convection-sidekiq
-          env:
-            - name: MALLOC_ARENA_MAX
-              value: "2"
-            - name: DD_TRACE_AGENT_HOSTNAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: spec.nodeName
-          envFrom:
-            - configMapRef:
-                name: convection-environment
-          image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/convection:staging
-          imagePullPolicy: Always
-          args: ["bundle", "exec", "sidekiq"]
-          livenessProbe:
-            exec:
-              command:
-                - pgrep
-                - -f
-                - sidekiq
-            initialDelaySeconds: 30
-            periodSeconds: 30
-          resources:
-            requests:
-              cpu: 50m
-              memory: 256Mi
-            limits:
-              memory: 512Mi
+      - name: convection-sidekiq
+        env:
+        - name: MALLOC_ARENA_MAX
+          value: '2'
+        - name: DATADOG_TRACE_AGENT_HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: DD_VERSION
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['app.kubernetes.io/version']
+        envFrom:
+        - configMapRef:
+            name: convection-environment
+        image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/convection:staging
+        imagePullPolicy: Always
+        args:
+        - bundle
+        - exec
+        - sidekiq
+        livenessProbe:
+          exec:
+            command:
+            - pgrep
+            - -f
+            - sidekiq
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        resources:
+          requests:
+            cpu: 50m
+            memory: 256Mi
+          limits:
+            memory: 512Mi
       dnsPolicy: ClusterFirst
       dnsConfig:
         options:
-          - name: ndots
-            value: "1"
+        - name: ndots
+          value: '1'
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
-              - matchExpressions:
-                  - key: tier
-                    operator: In
-                    values:
-                      - background
+            - matchExpressions:
+              - key: tier
+                operator: In
+                values:
+                - background
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: convection-data-import
 spec:
-  schedule: "0 6 * * 0"
+  schedule: 0 6 * * 0
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
@@ -250,26 +262,29 @@ spec:
       template:
         metadata:
           annotations:
-            "cluster-autoscaler.kubernetes.io/safe-to-evict": "false"
+            cluster-autoscaler.kubernetes.io/safe-to-evict: 'false'
         spec:
           containers:
-            - name: convection-data-import
-              image: artsy/pg-data-sync:12
-              imagePullPolicy: Always
-              env:
-                - name: APP_NAME
-                  value: "convection"
-              envFrom:
-                - configMapRef:
-                    name: convection-environment
-              args: ["sh", "./import-db.sh", "production"]
+          - name: convection-data-import
+            image: artsy/pg-data-sync:12
+            imagePullPolicy: Always
+            env:
+            - name: APP_NAME
+              value: convection
+            envFrom:
+            - configMapRef:
+                name: convection-environment
+            args:
+            - sh
+            - ./import-db.sh
+            - production
           restartPolicy: Never
           affinity:
             nodeAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
                 nodeSelectorTerms:
-                  - matchExpressions:
-                      - key: tier
-                        operator: In
-                        values:
-                          - background
+                - matchExpressions:
+                  - key: tier
+                    operator: In
+                    values:
+                    - background

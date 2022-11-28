@@ -92,8 +92,7 @@ class SubmissionService
           submission.assign_attributes(
             reject_non_target_supply_artist(submission.artist_id)
           )
-          if !submission.draft? && submission.user && !access_token.nil? &&
-               submission.user&.save_submission_to_my_collection?
+          if !submission.draft? && submission.user && !access_token.nil?
             create_or_update_my_collection_artwork(submission, access_token)
           end
         end
@@ -180,6 +179,8 @@ class SubmissionService
 
     def approve!(submission, current_user)
       submission.update!(approved_by: current_user, approved_at: Time.now.utc)
+
+      SalesforceService.delay.add_artwork(submission.id)
       NotificationService.delay.post_submission_event(
         submission.id,
         SubmissionEvent::APPROVED
@@ -187,6 +188,8 @@ class SubmissionService
     end
 
     def publish!(submission, current_user)
+      SalesforceService.delay.add_artwork(submission.id) unless submission.approved_at
+
       submission.update!(
         approved_by: submission.approved_by || current_user,
         approved_at: submission.approved_at || Time.now.utc,
@@ -215,7 +218,7 @@ class SubmissionService
       submission = Submission.find(submission_id)
       return if submission.admin_receipt_sent_at
 
-      delay.deliver_submission_notification(submission.id)
+      delay_until(5.minutes.from_now).deliver_submission_notification(submission.id)
       NotificationService.delay.post_submission_event(
         submission_id,
         SubmissionEvent::SUBMITTED
@@ -228,12 +231,12 @@ class SubmissionService
       return if submission.receipt_sent_at
 
       if submission.images.count.positive?
-        delay.deliver_submission_receipt(submission.id)
+        delay_until(5.minutes.from_now).deliver_submission_receipt(submission.id)
         submission.update!(receipt_sent_at: Time.now.utc)
       else
         return if submission.reminders_sent_count >= 2
 
-        delay.deliver_upload_reminder(submission.id)
+        delay_until(5.minutes.from_now).deliver_upload_reminder(submission.id)
       end
     end
 
@@ -246,9 +249,9 @@ class SubmissionService
       email_args = { submission: submission }
 
       if submission.reminders_sent_count == 1
-        UserMailer.second_upload_reminder(email_args).deliver_now
+        UserMailer.second_upload_reminder(**email_args).deliver_now
       else
-        UserMailer.first_upload_reminder(email_args).deliver_now
+        UserMailer.first_upload_reminder(**email_args).deliver_now
       end
       submission.increment!(:reminders_sent_count)
     end
@@ -257,7 +260,7 @@ class SubmissionService
       submission = Submission.find(submission_id)
       raise 'Still processing images.' unless submission.ready?
 
-      raise 'User lacks email.' if submission.email.blank?
+      Rails.logger.warn 'User lacks email.' if submission.email.blank?
 
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
@@ -320,13 +323,13 @@ class SubmissionService
     end
 
     def add_user_to_submission(submission, gravity_user_id, access_token)
-      if gravity_user_id.present?
+      # add user to submission when user is present and ENV for the feature allows
+      if gravity_user_id.present? && Convection.config.send_new_receipt_email
         user = User.find_or_create_by(gravity_user_id: gravity_user_id)
         submission.update!(user_id: user&.id)
 
-        # "send_new_receipt_email" is here for us to test the feature on staging
-        if !access_token.nil? && !submission.my_collection_artwork_id &&
-             Convection.config.send_new_receipt_email
+        # create artwork in user's collection
+        if !access_token.nil? && !submission.my_collection_artwork_id
           create_my_collection_artwork(submission, access_token)
         end
       end

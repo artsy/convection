@@ -53,7 +53,7 @@ module Mutations
         context: context,
         object: object
       }
-      resolver = UpdateSubmissionResolver.new(resolve_options)
+      resolver = UpdateSubmissionResolver.new(**resolve_options)
       raise resolver.error unless resolver.valid?
 
       resolver.run

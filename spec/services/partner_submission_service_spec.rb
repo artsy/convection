@@ -55,7 +55,7 @@ describe PartnerSubmissionService do
       expect(NotificationService).to receive(:post_submission_event)
         .once
         .with(submission.id, 'published')
-      SubmissionService.update_submission(submission, state: 'published')
+      SubmissionService.update_submission(submission, { state: 'published' })
       expect(partner.partner_submissions.count).to eq 1
       expect(partner.partner_submissions.first.submission).to eq submission
       Fabricate(:submission, state: 'published')
@@ -118,7 +118,7 @@ describe PartnerSubmissionService do
         expect(NotificationService).to receive(:post_submission_event)
           .once
           .with(@approved1.id, 'published')
-        SubmissionService.update_submission(@approved1, state: 'published')
+        SubmissionService.update_submission(@approved1, { state: 'published' })
         PartnerSubmissionService.daily_digest
         @email = ActionMailer::Base.deliveries.last
       end
@@ -144,7 +144,7 @@ describe PartnerSubmissionService do
         expect(NotificationService).to receive(:post_submission_event)
           .once
           .with(@approved1.id, 'published')
-        SubmissionService.update_submission(@approved1, state: 'published')
+        SubmissionService.update_submission(@approved1, { state: 'published' })
       end
 
       it 'does not display any min price-related text' do
@@ -195,9 +195,9 @@ describe PartnerSubmissionService do
         expect(NotificationService).to receive(:post_submission_event)
           .once
           .with(@approved3.id, 'published')
-        SubmissionService.update_submission(@approved1, state: 'published')
-        SubmissionService.update_submission(@approved2, state: 'published')
-        SubmissionService.update_submission(@approved3, state: 'published')
+        SubmissionService.update_submission(@approved1, { state: 'published' })
+        SubmissionService.update_submission(@approved2, { state: 'published' })
+        SubmissionService.update_submission(@approved3, { state: 'published' })
         ActionMailer::Base.deliveries = []
         expect(@partner.partner_submissions.count).to eq 3
       end
@@ -224,7 +224,7 @@ describe PartnerSubmissionService do
             'New Artsy Consignments September 27: 3 works'
           )
           expect(email.bcc).to eq(%w[consignments-archive@artsymail.com])
-          expect(email.from).to eq(%w[consign@artsy.net])
+          expect(email.from).to eq(%w[sell@artsy.net])
           expect(email.html_part.body).to include(
             '<i>First approved artwork</i><span>, 1992</span>'
           )

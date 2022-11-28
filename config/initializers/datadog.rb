@@ -15,4 +15,5 @@ Datadog.configure do |c|
         cache_service: 'convection.cache'
   c.use :redis, service_name: 'convection.redis'
   c.use :http, service_name: 'convection.http', distributed_tracing: true
+  c.use :sidekiq, service_name: 'convection.sidekiq'
 end

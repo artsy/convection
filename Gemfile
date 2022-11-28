@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 
 ruby File.read('.ruby-version')
 
-gem 'rails', '6.1.4.1'
+gem 'rails', '6.1.4.7'
 
 gem 'pg'
 gem 'puma'
@@ -37,6 +37,7 @@ gem 'premailer-rails' # generate text parts from HTML automatically
 gem 'rack-cors' # to allow cross-origin requests
 gem 'rails_param' # validate and coerce API parameters
 gem 'redcarpet'
+gem 'restforce'
 gem 'sass-rails'
 gem 'sentry-raven' # for error reporting
 gem 'sidekiq'

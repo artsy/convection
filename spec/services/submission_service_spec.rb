@@ -90,7 +90,7 @@ describe SubmissionService do
       expect(emails.length).to eq 1
       expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
       expect(emails.first.to).to eq(%w[michael@bluth.com])
-      expect(emails.first.from).to eq(%w[consign@artsy.net])
+      expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
         'we unfortunately don’t have demand for this artwork on Artsy at the moment'
       )
@@ -266,7 +266,7 @@ describe SubmissionService do
 
   context 'update_submission' do
     it 'sends no emails of the submission is not being submitted' do
-      SubmissionService.update_submission(submission, state: 'draft')
+      SubmissionService.update_submission(submission, { state: 'draft' })
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 0
     end
@@ -275,7 +275,7 @@ describe SubmissionService do
       expect(NotificationService).to receive(:post_submission_event)
         .once
         .with(submission.id, 'submitted')
-      SubmissionService.update_submission(submission, state: 'submitted')
+      SubmissionService.update_submission(submission, { state: 'submitted' })
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 3
     end
@@ -285,7 +285,7 @@ describe SubmissionService do
         .once
         .with(submission.id, 'submitted')
       Fabricate(:image, submission: submission)
-      SubmissionService.update_submission(submission, state: 'submitted')
+      SubmissionService.update_submission(submission, { state: 'submitted' })
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 2
     end
@@ -354,6 +354,17 @@ describe SubmissionService do
       expect(partner2.partner_submissions.length).to eq 0
     end
 
+    it 'calls the salesforce service to add the artwork on approval' do
+      allow(NotificationService).to receive(:post_submission_event)
+      expect(SalesforceService).to receive(:add_artwork).with(submission.id)
+
+      SubmissionService.update_submission(
+        submission,
+        { state: 'approved' },
+        current_user: 'userid'
+      )
+    end
+
     it 'generates partner submissions on publish' do
       expect(NotificationService).to receive(:post_submission_event)
         .once
@@ -403,6 +414,28 @@ describe SubmissionService do
       expect(submission.reload.published_at).to_not be_nil
     end
 
+    it 'calls the salesforce service to add the artwork on publish' do
+      allow(NotificationService).to receive(:post_submission_event)
+      expect(SalesforceService).to receive(:add_artwork).with(submission.id)
+      SubmissionService.update_submission(
+        submission,
+        { state: 'published' },
+        current_user: 'userid'
+      )
+    end
+
+    it 'does not call the salesforce service if submission had been approved on publish' do
+      allow(NotificationService).to receive(:post_submission_event)
+      submission.approved_at = Time.now.utc
+
+      expect(SalesforceService).not_to receive(:add_artwork).with(submission.id)
+      SubmissionService.update_submission(
+        submission,
+        { state: 'published' },
+        current_user: 'userid'
+      )
+    end
+
     it 'sends a rejection notification if the submission state is changed to rejected' do
       SubmissionService.update_submission(
         submission,
@@ -413,7 +446,7 @@ describe SubmissionService do
       expect(emails.length).to eq 1
       expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
       expect(emails.first.to).to eq(%w[michael@bluth.com])
-      expect(emails.first.from).to eq(%w[consign@artsy.net])
+      expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
         'we unfortunately don’t have demand for this artwork on Artsy at the moment.'
       )
@@ -435,7 +468,7 @@ describe SubmissionService do
       expect(emails.length).to eq 1
       expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
       expect(emails.first.to).to eq(%w[michael@bluth.com])
-      expect(emails.first.from).to eq(%w[consign@artsy.net])
+      expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include('After extensive research')
       expect(submission.state).to eq 'rejected'
       expect(submission.rejected_by).to eq 'userid'
@@ -455,7 +488,7 @@ describe SubmissionService do
       expect(emails.length).to eq 1
       expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
       expect(emails.first.to).to eq(%w[michael@bluth.com])
-      expect(emails.first.from).to eq(%w[consign@artsy.net])
+      expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
         'If you’re looking for gallery representation'
       )
@@ -479,7 +512,7 @@ describe SubmissionService do
       expect(emails.length).to eq 1
       expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
       expect(emails.first.to).to eq(%w[michael@bluth.com])
-      expect(emails.first.from).to eq(%w[consign@artsy.net])
+      expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
         "Unfortunately, we don’t have a selling opportunity for this work right now."
       )
@@ -531,7 +564,7 @@ describe SubmissionService do
       expect(emails.length).to eq 1
       expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
       expect(emails.first.to).to eq(%w[michael@bluth.com])
-      expect(emails.first.from).to eq(%w[consign@artsy.net])
+      expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
         'we unfortunately don’t have demand for this artwork on Artsy at the moment.'
       )
@@ -560,9 +593,6 @@ describe SubmissionService do
           .and_return(true)
         stub_gravity_artist(target_supply: true)
         allow(Metaql::Schema).to receive(:execute).and_return(response)
-        allow_any_instance_of(User).to receive(
-          :save_submission_to_my_collection?
-        ).and_return(true)
       end
 
       it 'create my collection artwork if artwork rejected(target supply)' do
@@ -624,23 +654,6 @@ describe SubmissionService do
 
       it 'does not create my collection artwork if no user' do
         submission.user = nil
-
-        SubmissionService.update_submission(
-          submission,
-          { state: 'submitted' },
-          current_user: 'userid',
-          is_convection: false,
-          access_token: access_token
-        )
-
-        expect(submission.state).to eq 'submitted'
-        expect(submission.my_collection_artwork_id).to eq nil
-      end
-
-      it 'does not create my collection artwork if user cannot save submission to my collection' do
-        allow_any_instance_of(User).to receive(
-          :save_submission_to_my_collection?
-        ).and_return(false)
 
         SubmissionService.update_submission(
           submission,
@@ -758,8 +771,6 @@ describe SubmissionService do
 
     it 'updates submission to Submitted state when submission state changed and artist is in target supply' do
       stub_gravity_artist(target_supply: true)
-      allow(submission.user).to receive(:save_submission_to_my_collection?)
-        .and_return(nil)
 
       expect(NotificationService).to receive(:post_submission_event)
         .once
@@ -981,7 +992,7 @@ describe SubmissionService do
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.html_part.body).to_not include(
-                                                     'find your artwork in My Collection'
+                                                     'find your artwork in'
                                                    )
         expect(submission.reload.receipt_sent_at).to_not be nil
       end
@@ -1009,7 +1020,7 @@ describe SubmissionService do
           'utm_source=drip-consignment-reminder-e01'
         )
         expect(emails.first.to).to eq(%w[michael@bluth.com])
-        expect(emails.first.from).to eq(%w[consign@artsy.net])
+        expect(emails.first.from).to eq(%w[sell@artsy.net])
         expect(submission.reload.receipt_sent_at).to be nil
         expect(submission.reload.reminders_sent_count).to eq 1
       end
@@ -1030,7 +1041,7 @@ describe SubmissionService do
           'utm_source=drip-consignment-reminder-e02-v2'
         )
         expect(emails.first.to).to eq(%w[michael@bluth.com])
-        expect(emails.first.from).to eq(%w[consign@artsy.net])
+        expect(emails.first.from).to eq(%w[sell@artsy.net])
         expect(submission.reload.receipt_sent_at).to be nil
         expect(submission.reload.reminders_sent_count).to eq 2
       end
@@ -1078,9 +1089,7 @@ describe SubmissionService do
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
 
-      expect(emails.first.html_part.body).to include(
-        'find your artwork in My Collection'
-      )
+      expect(emails.first.html_part.body).to include('find your artwork in')
       expect(submission.reload.receipt_sent_at).to_not be nil
     end
 
@@ -1092,9 +1101,7 @@ describe SubmissionService do
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
 
-      expect(emails.first.html_part.body).to_not include(
-                                                   'find your artwork in My Collection'
-                                                 )
+      expect(emails.first.html_part.body).to_not include('find your artwork in')
       expect(submission.reload.receipt_sent_at).to_not be nil
     end
   end
@@ -1108,7 +1115,7 @@ describe SubmissionService do
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
       expect(emails.first.html_part.body).to include('My Artwork')
-      expect(emails.first.to).to eq(%w[consign@artsy.net])
+      expect(emails.first.to).to eq(%w[sell@artsy.net])
       expect(submission.reload.admin_receipt_sent_at).to_not be nil
     end
 

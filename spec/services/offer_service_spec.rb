@@ -47,6 +47,11 @@ describe OfferService do
         expect(submission.approved_by).to eq user.id.to_s
         expect(submission.approved_at).to_not be_nil
       end
+
+      it 'calls the salesforce service to add the artwork' do
+        expect(SalesforceService).to receive(:add_artwork).with(submission.id)
+        OfferService.create_offer(submission.id, partner.id, {}, user.id)
+      end
     end
 
     context 'with a submission in a draft state' do
@@ -60,6 +65,11 @@ describe OfferService do
         expect(submission.state).to eq Submission::APPROVED
         expect(submission.approved_by).to eq user.id.to_s
         expect(submission.approved_at).to_not be_nil
+      end
+
+      it 'calls the salesforce service to add the artwork' do
+        expect(SalesforceService).to receive(:add_artwork).with(submission.id)
+        OfferService.create_offer(submission.id, partner.id, {}, user.id)
       end
     end
 
@@ -134,6 +144,13 @@ describe OfferService do
         expect { OfferService.create_offer(nil, partner.id) }.to raise_error(
           OfferService::OfferError
         )
+      end
+
+      it 'does not call the salesforce service to add the artwork' do
+        expect(SalesforceService).not_to receive(:add_artwork).with(
+          submission.id
+        )
+        OfferService.create_offer(submission.id, partner.id, {}, user.id)
       end
     end
   end
@@ -231,7 +248,7 @@ describe OfferService do
           expect(emails.length).to eq 1
           expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
           expect(emails.first.to).to eq(%w[michael@bluth.com])
-          expect(emails.first.from).to eq(%w[consign@artsy.net])
+          expect(emails.first.from).to eq(%w[sell@artsy.net])
           expect(emails.first.subject).to eq('An Offer for your Artwork')
 
           email_body = emails.first.html_part.body
@@ -288,7 +305,7 @@ describe OfferService do
             %w[contact1@partner.com contact2@partner.com]
           )
           expect(emails.first.reply_to).to eq(%w[reply_email@artsy.net])
-          expect(emails.first.from).to eq(%w[consign@artsy.net])
+          expect(emails.first.from).to eq(%w[sell@artsy.net])
           expect(emails.first.subject).to eq(
             'The consignor has expressed interest in your offer'
           )
@@ -348,7 +365,7 @@ describe OfferService do
           expect(emails.map(&:to).flatten).to eq(
             %w[contact1@partner.com contact2@partner.com]
           )
-          expect(emails.first.from).to eq(%w[consign@artsy.net])
+          expect(emails.first.from).to eq(%w[sell@artsy.net])
           expect(emails.first.reply_to).to eq(%w[reply_email@artsy.net])
           expect(emails.first.subject).to eq(
             'A response to your consignment offer'

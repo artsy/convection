@@ -12,7 +12,8 @@ module Resolvers::Submissionable
 
   def submission
     @submission ||=
-      Submission.find_by(id: submission_id) ||
+      Submission.find_by(uuid: submission_id) ||
+        Submission.find_by(id: submission_id) ||
         Submission.find_by(uuid: external_submission_id)
   end
 

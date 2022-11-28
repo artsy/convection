@@ -6,7 +6,6 @@ class UserMailer < ApplicationMailer
   def submission_receipt(submission:, artist:)
     @submission = submission
     @artist = artist
-    @inject_create_account_section = Convection.config.send_new_receipt_email
 
     @utm_params =
       utm_params(
@@ -110,6 +109,7 @@ class UserMailer < ApplicationMailer
   def nsv_bsv_submission_rejected(submission:, artist:)
     @submission = submission
     @artist = artist
+
     @utm_params =
       utm_params(
         source: 'consignment-rejected',
@@ -126,6 +126,7 @@ class UserMailer < ApplicationMailer
   def non_target_supply_artist_rejected(submission:, artist:)
     @submission = submission
     @artist = artist
+
     @utm_params =
       utm_params(
         source: 'consignment-rejected',

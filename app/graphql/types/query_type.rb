@@ -14,7 +14,7 @@ module Types
 
     def offer(arguments = {})
       query_options = { arguments: arguments, context: context, object: object }
-      resolver = OfferResolver.new(query_options)
+      resolver = OfferResolver.new(**query_options)
       raise resolver.error unless resolver.valid?
 
       resolver.run
@@ -41,7 +41,7 @@ module Types
 
     def offers(arguments = {})
       query_options = { arguments: arguments, context: context, object: object }
-      resolver = OffersResolver.new(query_options)
+      resolver = OffersResolver.new(**query_options)
       raise resolver.error unless resolver.valid?
 
       resolver.run
@@ -56,7 +56,7 @@ module Types
 
     def submission(arguments)
       query_options = { arguments: arguments, context: context, object: object }
-      resolver = SubmissionResolver.new(query_options)
+      resolver = SubmissionResolver.new(**query_options)
       raise resolver.error unless resolver.valid?
 
       resolver.run
@@ -95,7 +95,7 @@ module Types
 
     def submissions(arguments = {})
       query_options = { arguments: arguments, context: context, object: object }
-      resolver = SubmissionsResolver.new(query_options)
+      resolver = SubmissionsResolver.new(**query_options)
       raise resolver.error unless resolver.valid?
 
       resolver.run
@@ -122,7 +122,7 @@ module Types
 
     def consignments(arguments = {})
       query_options = { arguments: arguments, context: context, object: object }
-      resolver = ConsignmentsResolver.new(query_options)
+      resolver = ConsignmentsResolver.new(**query_options)
       raise resolver.error unless resolver.valid?
 
       resolver.run
