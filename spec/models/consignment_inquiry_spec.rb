@@ -3,11 +3,6 @@
 require 'rails_helper'
 
 describe ConsignmentInquiry do
-  let(:offer) { Fabricate(:offer) }
-  let(:approved_submission) do
-    Fabricate(:submission, state: Submission::APPROVED)
-  end
-
   context 'Validations' do
     it 'validates email format' do
       expect do
