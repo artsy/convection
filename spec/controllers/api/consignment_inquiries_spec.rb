@@ -11,6 +11,7 @@ describe Api::ConsignmentInquiriesController, type: :controller do
 
   describe '#create' do
     it "creates a ConsignmentInquiry" do
+      allow(Artsy::EventService).to receive(:post_event)
       expect {
         post :create, 
           params: { 
