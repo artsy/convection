@@ -15,15 +15,6 @@ module Api
 
     private
 
-    def require_trusted_app_without_current_user
-      has_trusted_app =
-        current_app.present? &&
-          current_user_roles.include?(:trusted)
-      return if has_trusted_app
-
-      raise ApplicationController::NotAuthorized
-    end
-
     def consignment_inquiry_params
       params
         .permit(
