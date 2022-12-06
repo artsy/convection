@@ -1,6 +1,6 @@
 module Api
   class ConsignmentInquiriesController < RestController
-    before_action :require_trusted_app_without_current_user, only: %i[create]
+    before_action :ensure_trusted_app, only: %i[create]
 
     def create
       param! :email, String, required: true

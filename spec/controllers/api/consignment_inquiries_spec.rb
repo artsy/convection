@@ -5,7 +5,7 @@ require 'rails_helper'
 describe Api::ConsignmentInquiriesController, type: :controller do
   before do
     allow_any_instance_of(Api::ConsignmentInquiriesController).to receive(
-      :require_trusted_app_without_current_user
+      :ensure_trusted_app
     )
   end
 
