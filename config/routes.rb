@@ -48,6 +48,7 @@ Rails
     namespace :api do
       resources :submissions, only: %i[create update show index]
       resources :assets, only: %i[create show index destroy]
+      resources :consignment_inquiries, only: %i[create]
       namespace :consignments do
         put 'update_sale_info'
       end
