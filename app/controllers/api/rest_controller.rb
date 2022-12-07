@@ -35,10 +35,10 @@ module Api
       raise ApplicationController::NotAuthorized
     end
 
-    def ensure_trusted_app
+    def ensure_trusted_app_or_user
       has_trusted_app =
         current_app.present? &&
-          current_user_roles.include?(:trusted)
+          (current_user_roles.include?(:trusted) || current_user)
       return if has_trusted_app
 
       raise ApplicationController::NotAuthorized

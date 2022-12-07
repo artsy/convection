@@ -1,6 +1,6 @@
 module Api
   class ConsignmentInquiriesController < RestController
-    before_action :ensure_trusted_app, only: %i[create]
+    before_action :ensure_trusted_app_or_user, only: %i[create]
 
     def create
       param! :email, String, required: true
