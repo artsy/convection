@@ -122,7 +122,7 @@ class UserMailer < ApplicationMailer
             }
     title = submission.title ||= 'Unknown'
     artist_name = artist.name 
-    subject = "Update on #{"#{title}"} #{artist_name ? "by #{artist_name}" : '' }" #rubocop:disable Style/RedundantInterpolation
+    subject = "Update on \"#{title}\" #{artist_name ? "by #{artist_name}" : '' }"
     mail(to: submission.email, subject: subject)
   end
 
