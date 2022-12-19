@@ -11,7 +11,11 @@
         </tr>
         <tr>
           <td class='email-sub-title'>
-            <p>Dear <%= @submission.name %>,</p>
+            <% if @submission.user_name %>
+              <p>Hi <%= @submission.user_name %>,</p>
+            <% else %>
+              <p>Hi there,</p>
+            <% end %>
             <p>Thank you for submitting <%= @submission.title %> by <%= @artist.name %> to us for evaluation. </p>
             <p>Unfortunately, we don’t have a selling opportunity for this work right now. However, we have uploaded it to <%= link_to 'My Collection', 'https://www.artsy.net/settings/my-collection', target: :_blank %> in Artsy to help you track demand.</p>
             <p>My Collection is your personal space to manage your collection, track demand for your artwork and see updates about the artist. To find this artwork in My Collection, use this email address when you sign up or log in to Artsy.</p>
