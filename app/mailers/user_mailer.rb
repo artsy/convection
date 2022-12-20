@@ -120,8 +120,8 @@ class UserMailer < ApplicationMailer
             unique_args: {
               submission_id: submission.id
             }
-    title = submission.title ||= 'Unknown'
-    artist_name = artist.name 
+    title = submission.title || 'Unknown'
+    artist_name = artist&.name 
     subject = "Update on \"#{title}\" #{artist_name ? "by #{artist_name}" : '' }"
     mail(to: submission.email, subject: subject)
   end
