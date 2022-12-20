@@ -291,20 +291,8 @@ class SubmissionService
       submission = Submission.find(submission_id)
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
-      rejection_reason_template =
-        case submission.rejection_reason
-        when 'Fake'
-          'fake_submission_rejected'
-        when 'Artist Submission'
-          'artist_submission_rejected'
-        when 'NSV', 'BSV'
-          'nsv_bsv_submission_rejected'
-        when 'Not Target Supply'
-          'non_target_supply_artist_rejected'
-        else
-          'other_submission_rejected'
-        end
-
+      rejection_reason_template = 'nsv_bsv_submission_rejected'
+        
       UserMailer.send(
         rejection_reason_template,
         submission: submission,
