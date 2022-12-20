@@ -120,7 +120,10 @@ class UserMailer < ApplicationMailer
             unique_args: {
               submission_id: submission.id
             }
-    mail(to: submission.email, subject: 'An update about your submission')
+    title = submission.title ||= 'Unknown'
+    artist_name = artist.name 
+    subject = "Update on \"#{title}\" #{artist_name ? "by #{artist_name}" : '' }"
+    mail(to: submission.email, subject: subject)
   end
 
   def non_target_supply_artist_rejected(submission:, artist:)
