@@ -92,8 +92,10 @@ class SubmissionsResolver < BaseResolver
     return true if partner?
 
     current_user = User.find_by(gravity_user_id: @context[:current_user])
+    user_submissions = base_submissions.select(:user_id).distinct
+    return false if user_submissions.empty?
 
-    base_submissions.select(:user_id).distinct.map { |s| s.user_id } != [
+    user_submissions.map { |s| s.user_id } != [
       current_user&.id
     ]
   end
