@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   hokusai: artsy/hokusai@volatile
   horizon: artsy/release@volatile
-  slack: circleci/slack@4.10.1
+  slack: circleci/slack@4.12.0
 
 not_staging_or_release: &not_staging_or_release
   filters:
