@@ -3,7 +3,6 @@ version: 2.1
 orbs:
   hokusai: artsy/hokusai@volatile
   horizon: artsy/release@volatile
-  slack: circleci/slack@4.12.0
 
 not_staging_or_release: &not_staging_or_release
   filters:
@@ -79,19 +78,8 @@ workflows:
           project-name: convection
           requires:
             - push-staging-image
-          post-steps:
-            - slack/notify:
-                event: fail
-                template: basic_fail_1
 
       - hokusai/deploy-production:
           <<: *only_release
           requires:
             - horizon/block
-          post-steps:
-            - slack/notify:
-                event: fail
-                template: basic_fail_1
-            - slack/notify:
-                event: pass
-                template: success_tagged_deploy_1
