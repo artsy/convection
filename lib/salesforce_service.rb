@@ -75,6 +75,8 @@ class SalesforceService
         # Diameter: ???
         # Framed: ???
         # FramedDimensions: ???
+        # Previoulsly synced fields:
+        # Not_Signed__c: !submission.signature, removed due to cataloguing issues
       }
       # Owner can't be nil, if we can't find it the API will succeed using the default user
       owner_id = find_sf_user_id(submission.approved_by)
