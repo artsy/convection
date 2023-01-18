@@ -63,7 +63,6 @@ class SalesforceService
         Literature__c: submission.literature,
         Signature_Inscription__c: submission.signature_detail,
         Certificate_Of_Authenticity__c: submission.coa_by_authenticating_body || submission.coa_by_gallery || false,
-        Not_Signed__c: !submission.signature,
         COA_by_Gallery__c: submission.coa_by_gallery || false,
         COA_by_Authenticating_Body__c: submission.coa_by_authenticating_body || false,
         Cataloguer__c: submission.cataloguer,
@@ -76,6 +75,8 @@ class SalesforceService
         # Diameter: ???
         # Framed: ???
         # FramedDimensions: ???
+        # Previoulsly synced fields:
+        # Not_Signed__c: !submission.signature, removed due to cataloguing issues
       }
       # Owner can't be nil, if we can't find it the API will succeed using the default user
       owner_id = find_sf_user_id(submission.approved_by)
