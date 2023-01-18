@@ -63,7 +63,6 @@ class SalesforceService
         Literature__c: submission.literature,
         Signature_Inscription__c: submission.signature_detail,
         Certificate_Of_Authenticity__c: submission.coa_by_authenticating_body || submission.coa_by_gallery || false,
-        Not_Signed__c: !submission.signature,
         COA_by_Gallery__c: submission.coa_by_gallery || false,
         COA_by_Authenticating_Body__c: submission.coa_by_authenticating_body || false,
         Cataloguer__c: submission.cataloguer,
