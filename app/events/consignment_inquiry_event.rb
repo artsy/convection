@@ -13,6 +13,7 @@ class ConsignmentInquiryEvent < Events::BaseEvent
   def properties
     {
       email: @object.email,
+      recipient_email: @object.recipient_email,
       gravity_user_id: @object.gravity_user_id,
       message: @object.message,
       name: @object.name,
