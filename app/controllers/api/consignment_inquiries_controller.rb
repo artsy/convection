@@ -8,6 +8,7 @@ module Api
       param! :message, String, required: true
       param! :phone_number, String, required: false
       param! :gravity_user_id, String, required: false
+      param! :recipient_email, String, required: false
       consignment_inquiry = ConsignmentInquiry.create!(consignment_inquiry_params)
       ConsignmentInquiryService.post_consignment_created_event(consignment_inquiry)
       render json: consignment_inquiry.to_json, status: :created
@@ -22,7 +23,8 @@ module Api
           :gravity_user_id,
           :message,
           :name,
-          :phone_number
+          :phone_number,
+          :recipient_email
         )
     end
   end
