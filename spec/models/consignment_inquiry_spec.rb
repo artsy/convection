@@ -13,6 +13,16 @@ describe ConsignmentInquiry do
         )
       end.to raise_error "Validation failed: Email is invalid"
     end
+    it 'validates recipient email format' do
+      expect do
+        ConsignmentInquiry.create!(
+          email: "validemail@email.com",
+          message: "Is a valid message",
+          name: "Valid Name",
+          recipient_email: "notavalidemail"
+        )
+      end.to raise_error "Validation failed: Recipient email is invalid"
+    end
     it 'requires name' do
       expect do
         ConsignmentInquiry.create!(
