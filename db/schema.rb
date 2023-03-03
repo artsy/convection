@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_05_131817) do
+ActiveRecord::Schema.define(version: 2023_03_02_151711) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -61,8 +61,10 @@ ActiveRecord::Schema.define(version: 2022_12_05_131817) do
     t.string "phone_number"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "recipient_email"
     t.index ["email"], name: "index_consignment_inquiries_on_email"
     t.index ["gravity_user_id"], name: "index_consignment_inquiries_on_gravity_user_id"
+    t.index ["recipient_email"], name: "index_consignment_inquiries_on_recipient_email"
   end
 
   create_table "notes", force: :cascade do |t|
