@@ -163,8 +163,7 @@ class UserMailer < ApplicationMailer
     @offer = offer
     @submission = offer.submission
     @artist = artist
-    @utm_params =
-      utm_params(source: 'consignment-offer', campaign: 'consignment-offer')
+    @utm_params = offer_utm_params(offer)
 
     smtpapi category: %w[offer], unique_args: { offer_id: offer.id }
     mail(to: @submission.email, subject: 'An Offer for your Artwork')
