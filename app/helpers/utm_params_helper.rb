@@ -8,6 +8,8 @@ module UtmParamsHelper
 
   def offer_utm_params(offer)
     case offer.offer_type
+    when Offer::AUCTION_CONSIGNMENT
+      utm_params(source: 'sendgrid', campaign: 'sell', term: 'cx', content:'auction-offer')
     when Offer::NET_PRICE
       utm_params(source: 'sendgrid', campaign: 'sell', term: 'cx', content:'net-price-offer')
     when Offer::RETAIL
