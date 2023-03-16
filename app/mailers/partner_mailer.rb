@@ -15,8 +15,10 @@ class PartnerMailer < ApplicationMailer
     @partner_type = partner_type
     @utm_params =
       utm_params(
-        source: 'consignment-partner-digest',
-        campaign: 'consignment-complete'
+        source: 'sendgrid',
+        campaign: 'sell',
+        term: 'cx',
+        content: 'sub-digest-auction'
       )
     smtpapi category: %w[submission_digest],
             unique_args: {
