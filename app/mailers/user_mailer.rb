@@ -140,8 +140,10 @@ class UserMailer < ApplicationMailer
 
     @utm_params =
       utm_params(
-        source: 'consignment-rejected',
-        campaign: 'consignment-complete'
+        source: 'sendgrid',
+        campaign: 'sell',
+        term: 'cx',
+        content: 'non-ts-rejected'
       )
 
     smtpapi category: %w[non_target_supply_artist_rejected],

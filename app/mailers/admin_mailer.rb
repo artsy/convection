@@ -7,6 +7,13 @@ class AdminMailer < ApplicationMailer
     @submission = submission
     @user = user
     @artist = artist
+    @utm_params =
+      utm_params(
+        source: 'sendgrid',
+        campaign: 'sell',
+        term: 'cx',
+        content: 'received'
+      )
 
     smtpapi category: %w[submission],
             unique_args: {
