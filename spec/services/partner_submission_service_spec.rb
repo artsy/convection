@@ -235,6 +235,13 @@ describe PartnerSubmissionService do
             '<i>Third approved artwork</i><span>, 1997</span>'
           )
           expect(email.html_part.body).to include('https://cms.artsy.net')
+
+          expect(emails.first.html_part.body).to include('utm_source=sendgrid')
+          expect(emails.first.html_part.body).to include('utm_medium=email')
+          expect(emails.first.html_part.body).to include('utm_campaign=sell')
+          expect(emails.first.html_part.body).to include(
+            'utm_content=sub-digest-auction'
+          )
           expect(
             @partner.partner_submissions.map(&:notified_at).compact.length
           ).to eq 3

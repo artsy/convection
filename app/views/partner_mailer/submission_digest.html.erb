@@ -60,7 +60,7 @@
                       <table class='full-width-button'>
                         <tr>
                             <td class='submit-proposal-button'>
-                              <%= link_to('Send Proposal', Convection.config.artsy_cms_url) %>
+                              <%= link_to('Send Proposal', utm_url(Convection.config.artsy_cms_url, @utm_params)) %>
                             </td>
                         </tr>
                       </table>
