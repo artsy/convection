@@ -92,7 +92,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
-        "Unfortunately, we don’t have a selling opportunity for this work right now"
+        'Unfortunately, we don’t have a selling opportunity for this work right now'
       )
     end
 
@@ -448,7 +448,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
-        "Unfortunately, we don’t have a selling opportunity for this work right now"
+        'Unfortunately, we don’t have a selling opportunity for this work right now'
       )
       expect(submission.state).to eq 'rejected'
       expect(submission.rejected_by).to eq 'userid'
@@ -469,7 +469,9 @@ describe SubmissionService do
       expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[sell@artsy.net])
-      expect(emails.first.html_part.body).to include("Unfortunately, we don’t have a selling opportunity for this work right now")
+      expect(emails.first.html_part.body).to include(
+        'Unfortunately, we don’t have a selling opportunity for this work right now'
+      )
       expect(submission.state).to eq 'rejected'
       expect(submission.rejected_by).to eq 'userid'
       expect(submission.rejected_at).to_not be_nil
@@ -490,7 +492,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
-        "Unfortunately, we don’t have a selling opportunity for this work right now"
+        'Unfortunately, we don’t have a selling opportunity for this work right now'
       )
       expect(submission.state).to eq 'rejected'
       expect(submission.rejected_by).to eq 'userid'
@@ -514,7 +516,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
-        "Unfortunately, we don’t have a selling opportunity for this work right now."
+        'Unfortunately, we don’t have a selling opportunity for this work right now.'
       )
       expect(submission.state).to eq 'rejected'
       expect(submission.rejection_reason).to eq 'NSV'
@@ -566,7 +568,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
-        "Unfortunately, we don’t have a selling opportunity for this work right now"
+        'Unfortunately, we don’t have a selling opportunity for this work right now'
       )
     end
 
@@ -1156,6 +1158,7 @@ describe SubmissionService do
       Fabricate(:unprocessed_image, submission: submission)
       SubmissionService.deliver_submission_receipt(submission.id)
       emails = ActionMailer::Base.deliveries
+
       expect(emails.length).to eq 1
       expect(emails.first.bcc).to include('consignments-archive@artsymail.com')
       expect(emails.first.html_part.body).to include(
@@ -1164,6 +1167,11 @@ describe SubmissionService do
       expect(emails.first.html_part.body).to include(
         'Our team of specialists will review your work to evaluate whether we currently have a suitable market for it'
       )
+
+      expect(emails.first.html_part.body).to include('utm_source=sendgrid')
+      expect(emails.first.html_part.body).to include('utm_medium=email')
+      expect(emails.first.html_part.body).to include('utm_campaign=sell')
+      expect(emails.first.html_part.body).to include('utm_content=received')
     end
   end
 

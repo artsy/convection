@@ -9,8 +9,10 @@ class UserMailer < ApplicationMailer
 
     @utm_params =
       utm_params(
-        source: 'consignment-receipt',
-        campaign: 'consignment-complete'
+        source: 'sendgrid',
+        campaign: 'sell',
+        term: 'cx',
+        content: 'received'
       )
 
     smtpapi category: %w[submission_receipt],
@@ -129,8 +131,8 @@ class UserMailer < ApplicationMailer
               submission_id: submission.id
             }
     title = submission.title || 'Unknown'
-    artist_name = artist&.name 
-    subject = "Update on \"#{title}\" #{artist_name ? "by #{artist_name}" : '' }"
+    artist_name = artist&.name
+    subject = "Update on \"#{title}\" #{artist_name ? "by #{artist_name}" : ''}"
     mail(to: submission.email, subject: subject)
   end
 

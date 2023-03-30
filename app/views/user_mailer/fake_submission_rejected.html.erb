@@ -12,7 +12,7 @@
         <tr>
           <td class='email-sub-title'>
             <p>Dear <%= @submission.name %>,</p>
-            <p>Thank you for your submission to <%= link_to 'Artsy', 'https://www.artsy.net', target: :_blank %>.</p>
+            <p>Thank you for your submission to <%= link_to 'Artsy', artsy_formatted_url('', @utm_params), target: :_blank %>.</p>
             <p>After extensive research, we were unable to verify this artwork and attribute it to the artist. Therefore, we cannot offer this work for sale through Artsy.</p>
             <p>Should you have other works of art you wish to sell with Artsy, we would be happy to assist. You can submit another artwork anytime.</p>
             <p>
