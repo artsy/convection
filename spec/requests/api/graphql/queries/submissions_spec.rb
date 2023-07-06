@@ -87,6 +87,23 @@ describe 'submissions query' do
         expect(error_message).to eq "Can't load other people's submissions."
       end
     end
+
+    context 'with a request from a partner user and wrong submission id' do
+      let(:token) { partner_token }
+
+      it 'returns an error for that request' do
+        post '/api/graphql', params: { query: query }, headers: headers
+
+        expect(response.status).to eq 200
+        body = JSON.parse(response.body)
+
+        submissions_response = body['data']['submissions']
+        expect(submissions_response).to eq nil
+
+        error_message = body['errors'][0]['message']
+        expect(error_message).to eq "Can't load other people's submissions."
+      end
+    end
   end
 
   describe 'valid requests' do
