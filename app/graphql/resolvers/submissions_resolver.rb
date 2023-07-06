@@ -89,7 +89,6 @@ class SubmissionsResolver < BaseResolver
 
   def not_allowed_ids?
     return false if admin? || !@arguments.key?(:ids)
-    return true if partner?
 
     current_user = User.find_by(gravity_user_id: @context[:current_user])
     user_submissions = base_submissions.select(:user_id).distinct
