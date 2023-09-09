@@ -4,5 +4,5 @@
     "automerge": false
   },
   "extends": ["@artsy:app"],
-  "assignees": ["jonallured", "bhoggard"]
+  "assignees": ["jonallured"]
 }
