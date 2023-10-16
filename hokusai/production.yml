@@ -300,6 +300,7 @@ spec:
             - pgrep
             - -f
             - sidekiq
+            timeoutSeconds: 3
           initialDelaySeconds: 30
           periodSeconds: 30
         resources:
