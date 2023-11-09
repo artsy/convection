@@ -51,7 +51,7 @@ echo "Installing javascript dependencies"
 yarn install
 
 echo "download .env.shared (common local dev config) from S3..."
-aws s3 cp s3://artsy-citadel/dev/.env.convection .env.shared
+aws s3 cp s3://artsy-citadel/convection/.env.shared ./
 
 echo "initialize .env (custom local dev config) from .env.example, if required..."
 if [ ! -e ".env" ]; then
