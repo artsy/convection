@@ -28,16 +28,15 @@ class SubmissionService
       if gravity_user_id.present?
         user = User.find_or_create_by(gravity_user_id: gravity_user_id)
 
-        create_params.merge!(user_id: user&.id)
+        create_params[:user_id] = user&.id
       end
 
       if AdminUser.exists?(gravity_user_id: current_user)
-        create_params.merge!(
-          admin: AdminUser.find_by(gravity_user_id: current_user)
-        )
+        admin = AdminUser.find_by(gravity_user_id: current_user)
+        create_params[:admin] = admin
       end
 
-      create_params.merge!(source: "admin") if is_convection
+      create_params[:source] = "admin" if is_convection
 
       unless is_convection || submission_params[:state]&.downcase == "draft"
         create_params.merge!(

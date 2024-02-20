@@ -79,9 +79,9 @@ SQL
       artist_id: params[:artist].presence,
       category: params[:category].presence
     }.compact
-    attributes.merge!(user_email: user_email) if filtering_by_user_email?
-    attributes.merge!(assigned_to: assigned_to) if filtering_by_assigned_to?
-    attributes.merge!(cataloguer: cataloguer) if filtering_by_cataloguer?
+    attributes[:user_email] = user_email if filtering_by_user_email?
+    attributes[:assigned_to] = assigned_to if filtering_by_assigned_to?
+    attributes[:cataloguer] = cataloguer if filtering_by_cataloguer?
     attributes
   end
 
