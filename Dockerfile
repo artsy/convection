@@ -23,7 +23,7 @@ ENV CHROMEDRIVER_PATH=/usr/bin/chromedriver
 RUN gem install bundler && \
   bundle config --global frozen 1
 
-COPY Gemfile Gemfile.lock .ruby-version  ./
+COPY Gemfile Gemfile.lock ./
 RUN bundle install -j4 && \
   mkdir -p /shared/pids && \
   mkdir /shared/sockets && \

@@ -25,7 +25,6 @@ Convection accepts PRs from branches on the main artsy/convection repo. PRs from
   ```
   $ cat bin/setup
   $ bin/setup
-  $ nvm use
   ```
 
 - Shared Configuration for Local Development
