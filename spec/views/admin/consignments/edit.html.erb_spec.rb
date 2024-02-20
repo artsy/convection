@@ -103,8 +103,8 @@ describe "admin/consignments/edit.html.erb", type: :feature do
 
         click_button("Save")
         expect(page.current_path).to eq admin_consignment_path(
-             partner_submission
-           )
+          partner_submission
+        )
         expect(page).to have_content("Name August Sale")
         expect(page).to have_content("Price $700")
         expect(page).to have_content(
@@ -126,8 +126,8 @@ describe "admin/consignments/edit.html.erb", type: :feature do
 
           click_button("Save")
           expect(page.current_path).to eq admin_consignment_path(
-               partner_submission
-             )
+            partner_submission
+          )
           expect(page).to have_content("Invoice number 424242")
         end
       end
@@ -141,8 +141,8 @@ describe "admin/consignments/edit.html.erb", type: :feature do
         )
         click_button("Save")
         expect(page.current_path).to eq admin_consignment_path(
-             partner_submission
-           )
+          partner_submission
+        )
         expect(page).to have_content("State canceled")
         expect(page).to have_content("Canceled Reason do not want this piece.")
       end

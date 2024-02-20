@@ -182,7 +182,7 @@ describe "admin/consignments/index.html.erb", type: :feature do
       end
 
       it "allows you to search by partner name, filter by state, and sort by estimate",
-         js: true do
+        js: true do
         select("bought in", from: "state")
         page.all(:fillable_field, "term").last.set("herit")
         expect(page).to have_selector(".ui-autocomplete")

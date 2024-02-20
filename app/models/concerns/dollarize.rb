@@ -24,7 +24,7 @@ module Dollarize
             if dollars.blank?
               nil
             elsif dollars.is_a?(String)
-              dollars.gsub(",", "").to_f * 100
+              dollars.delete(",").to_f * 100
             else
               dollars.to_f * 100
             end

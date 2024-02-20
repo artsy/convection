@@ -16,13 +16,13 @@ class User < ApplicationRecord
 
     @gravity_user =
       gravity_user_id &&
-        (
-          begin
-            Gravity.client.user(id: gravity_user_id)._get
-          rescue Faraday::ResourceNotFound
-            nil
-          end
-        )
+      (
+        begin
+          Gravity.client.user(id: gravity_user_id)._get
+        rescue Faraday::ResourceNotFound
+          nil
+        end
+      )
   end
 
   def name

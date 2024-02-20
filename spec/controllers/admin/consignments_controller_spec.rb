@@ -153,11 +153,11 @@ describe Admin::ConsignmentsController, type: :controller do
       it "allows you to filter by state = open" do
         get :index, params: {state: "open"}
         expect(controller.consignments.pluck(:id)).to eq [
-             @consignment5.id,
-             @consignment4.id,
-             @consignment2.id,
-             @consignment1.id
-           ]
+          @consignment5.id,
+          @consignment4.id,
+          @consignment2.id,
+          @consignment1.id
+        ]
       end
 
       it "allows you to filter by state = bought in" do
@@ -222,44 +222,44 @@ describe Admin::ConsignmentsController, type: :controller do
 
       it "allows you to filter by state and sort by sale_price_cents" do
         get :index,
-            params: {
-              sort: "sale_price_cents",
-              direction: "desc",
-              state: "open"
-            }
+          params: {
+            sort: "sale_price_cents",
+            direction: "desc",
+            state: "open"
+          }
         expect(controller.consignments.pluck(:id)).to eq [
-             @consignment4.id,
-             @consignment5.id,
-             @consignment2.id,
-             @consignment1.id
-           ]
+          @consignment4.id,
+          @consignment5.id,
+          @consignment2.id,
+          @consignment1.id
+        ]
       end
 
       it "allows you to search for partner and sort by sale_price_cents" do
         get :index,
-            params: {
-              sort: "sale_price_cents",
-              direction: "desc",
-              partner: @partner1.id
-            }
+          params: {
+            sort: "sale_price_cents",
+            direction: "desc",
+            partner: @partner1.id
+          }
         expect(controller.consignments.pluck(:id)).to eq [
-             @consignment3.id,
-             @consignment2.id,
-             @consignment1.id
-           ]
+          @consignment3.id,
+          @consignment2.id,
+          @consignment1.id
+        ]
       end
 
       it "allows you to search for artist and sort by sale_price_cents" do
         get :index,
-            params: {
-              sort: "sale_price_cents",
-              direction: "desc",
-              artist: @artist[:id]
-            }
+          params: {
+            sort: "sale_price_cents",
+            direction: "desc",
+            artist: @artist[:id]
+          }
         expect(controller.consignments.pluck(:id)).to eq [
-             @consignment2.id,
-             @consignment1.id
-           ]
+          @consignment2.id,
+          @consignment1.id
+        ]
       end
     end
   end

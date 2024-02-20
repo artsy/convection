@@ -5,10 +5,10 @@ module Types
     description "Consignment Submission"
 
     field :external_id,
-          ID,
-          null: false,
-          method: :uuid,
-          description: "UUID visible to users"
+      ID,
+      null: false,
+      method: :uuid,
+      description: "UUID visible to users"
     field :id, ID, "Uniq ID for this submission", null: false
     field :internalID, ID, null: true, method: :id
     field :state, Types::StateType, null: true
@@ -41,10 +41,10 @@ module Types
     nilable_field :published_at, GraphQL::Types::ISO8601DateTime, null: true
     nilable_field :signature, Boolean, null: true
     nilable_field :sourceArtworkID,
-                  String,
-                  null: true,
-                  method: :source_artwork_id,
-                  description: "If this artwork exists in Gravity, its ID"
+      String,
+      null: true,
+      method: :source_artwork_id,
+      description: "If this artwork exists in Gravity, its ID"
     nilable_field :title, String, null: true
     nilable_field :user_agent, String, null: true
     nilable_field :user_id, String, null: false, default_value: -1

@@ -72,7 +72,7 @@ class OfferService
       consignable_states = [Submission::APPROVED, Submission::PUBLISHED]
       unless consignable_states.include?(offer.submission.state)
         raise OfferError,
-              "Cannot complete consignment on non-approved submission"
+          "Cannot complete consignment on non-approved submission"
       end
 
       offer.update!(consigned_at: Time.now.utc)

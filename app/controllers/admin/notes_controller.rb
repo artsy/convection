@@ -16,8 +16,8 @@ module Admin
         redirect_to path, notice: "Note has successfully been created."
       else
         redirect_to path,
-                    alert:
-                      "Could not create note: #{
+          alert:
+            "Could not create note: #{
                         note&.errors&.full_messages&.join(", ") ||
                           "User does not exist"
                       }"

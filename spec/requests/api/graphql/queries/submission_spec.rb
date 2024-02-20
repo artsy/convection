@@ -365,8 +365,8 @@ describe "submission query" do
       context "with a valid gravity partner id and some offers" do
         let(:partner_submission) do
           Fabricate :partner_submission,
-                    partner: partner,
-                    submission: submission
+            partner: partner,
+            submission: submission
         end
 
         let!(:offer) do

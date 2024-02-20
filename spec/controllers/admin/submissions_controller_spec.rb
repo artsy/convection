@@ -100,18 +100,18 @@ describe Admin::SubmissionsController, type: :controller do
         it "allows you to filter by state = approved" do
           get :index, params: {state: "approved"}
           expect(controller.submissions.pluck(:id)).to eq [
-               @submission5.id,
-               @submission4.id
-             ]
+            @submission5.id,
+            @submission4.id
+          ]
         end
 
         it "allows you to filter by state = submitted" do
           get :index, params: {state: "submitted"}
           expect(controller.submissions.pluck(:id)).to eq [
-               @submission3.id,
-               @submission2.id,
-               @submission1.id
-             ]
+            @submission3.id,
+            @submission2.id,
+            @submission1.id
+          ]
         end
 
         it "allows you to sort by user email" do
@@ -157,44 +157,44 @@ describe Admin::SubmissionsController, type: :controller do
 
         it "allows you to filter by state and sort by user email" do
           get :index,
-              params: {
-                sort: "users.email",
-                direction: "desc",
-                state: "submitted"
-              }
+            params: {
+              sort: "users.email",
+              direction: "desc",
+              state: "submitted"
+            }
           expect(controller.submissions.pluck(:id)).to eq [
-               @submission2.id,
-               @submission1.id,
-               @submission3.id
-             ]
+            @submission2.id,
+            @submission1.id,
+            @submission3.id
+          ]
         end
 
         it "allows you to filter by state, search for artist, and sort by ID" do
           get :index,
-              params: {
-                sort: "id",
-                direction: "desc",
-                state: "submitted",
-                artist: @artist[:id]
-              }
+            params: {
+              sort: "id",
+              direction: "desc",
+              state: "submitted",
+              artist: @artist[:id]
+            }
           expect(controller.submissions.pluck(:id)).to eq [
-               @submission3.id,
-               @submission2.id
-             ]
+            @submission3.id,
+            @submission2.id
+          ]
         end
 
         it "allows you to filter by state, search for user, and sort by ID" do
           get :index,
-              params: {
-                sort: "id",
-                direction: "desc",
-                state: "submitted",
-                user: @user1.id
-              }
+            params: {
+              sort: "id",
+              direction: "desc",
+              state: "submitted",
+              user: @user1.id
+            }
           expect(controller.submissions.pluck(:id)).to eq [
-               @submission2.id,
-               @submission1.id
-             ]
+            @submission2.id,
+            @submission1.id
+          ]
         end
       end
 
@@ -212,9 +212,9 @@ describe Admin::SubmissionsController, type: :controller do
           submissions = JSON.parse(response.body)
           expect(submissions.length).to eq 2
           expect(submissions.map { |sub| sub["id"] }).to eq [
-               @submission3.id,
-               @submission2.id
-             ]
+            @submission3.id,
+            @submission2.id
+          ]
         end
 
         it "merges in the thumbnail url" do
@@ -235,21 +235,21 @@ describe Admin::SubmissionsController, type: :controller do
     context "create submission" do
       it "with correct address" do
         post :create,
-             params: {
-               submission: {
-                 artist_id: "artistid",
-                 user:
-                   Fabricate(
-                     :user,
-                     gravity_user_id: "userid",
-                     email: "michael@bluth.com"
-                   ),
-                 title: "My Artwork",
-                 location_state: "Tokyo",
-                 location_country: "Japan",
-                 location_postal_code: "12345"
-               }
-             }
+          params: {
+            submission: {
+              artist_id: "artistid",
+              user:
+                Fabricate(
+                  :user,
+                  gravity_user_id: "userid",
+                  email: "michael@bluth.com"
+                ),
+              title: "My Artwork",
+              location_state: "Tokyo",
+              location_country: "Japan",
+              location_postal_code: "12345"
+            }
+          }
 
         expect(response.status).to eq 302
         submission = Submission.last

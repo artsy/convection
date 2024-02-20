@@ -5,7 +5,7 @@ module Admin
     include GraphqlHelper
 
     before_action :set_offer,
-                  only: %i[show edit update destroy undo_rejection undo_lapse]
+      only: %i[show edit update destroy undo_rejection undo_lapse]
 
     expose(:display_term) do
       if filters[:user].present?
@@ -137,7 +137,7 @@ module Admin
         )
 
       if params[:submission_id].present? && params[:partner_id].present? &&
-           params[:offer_type].present?
+          params[:offer_type].present?
         render "new_step_1"
       else
         flash.now[:error] = "Offer requires type, submission, and partner."
@@ -163,7 +163,8 @@ module Admin
       @artist_details = artists_names_query([@offer.submission.artist_id])
     end
 
-    def edit; end
+    def edit
+    end
 
     def destroy
       @offer.destroy

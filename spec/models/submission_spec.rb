@@ -107,7 +107,7 @@ describe Submission do
 
         expect(submission.artist_score).to eq other_standing_score.artist_score
         expect(submission.auction_score).to eq other_standing_score
-             .auction_score
+          .auction_score
       end
 
       it "does not re-calcuate when unrelated things change" do
@@ -124,7 +124,7 @@ describe Submission do
 
         expect(submission.artist_score).to eq artist_standing_score.artist_score
         expect(submission.auction_score).to eq artist_standing_score
-             .auction_score
+          .auction_score
       end
     end
 
@@ -134,7 +134,7 @@ describe Submission do
 
         expect(submission.artist_score).to eq artist_standing_score.artist_score
         expect(submission.auction_score).to eq artist_standing_score
-             .auction_score
+          .auction_score
       end
     end
   end

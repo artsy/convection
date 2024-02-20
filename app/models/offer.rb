@@ -8,19 +8,19 @@ class Offer < ApplicationRecord
   include Percentize
 
   pg_search_scope :search,
-                  against: %i[id reference_id],
-                  associated_against: {
-                    partner: %i[name]
-                  },
-                  using: {
-                    tsearch: {
-                      prefix: true
-                    },
-                    trigram: {
-                      only: %i[id reference_id],
-                      threshold: 0.9
-                    }
-                  }
+    against: %i[id reference_id],
+    associated_against: {
+      partner: %i[name]
+    },
+    using: {
+      tsearch: {
+        prefix: true
+      },
+      trigram: {
+        only: %i[id reference_id],
+        threshold: 0.9
+      }
+    }
 
   OFFER_TYPES = [
     AUCTION_CONSIGNMENT = "auction consignment",
@@ -59,10 +59,10 @@ class Offer < ApplicationRecord
   validates :state, inclusion: {in: STATES}
   validates :offer_type, inclusion: {in: OFFER_TYPES}, allow_nil: true
   validates :rejection_reason,
-            inclusion: {
-              in: REJECTION_REASONS
-            },
-            allow_nil: true
+    inclusion: {
+      in: REJECTION_REASONS
+    },
+    allow_nil: true
 
   before_validation :set_state, on: :create
   before_create :set_submission
@@ -70,9 +70,9 @@ class Offer < ApplicationRecord
   scope :sent, -> { where(state: "sent") }
 
   dollarize :price_cents,
-            :low_estimate_cents,
-            :high_estimate_cents,
-            :starting_bid_cents
+    :low_estimate_cents,
+    :high_estimate_cents,
+    :starting_bid_cents
 
   percentize :commission_percent
 

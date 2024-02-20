@@ -338,8 +338,8 @@ describe "admin/submissions/show.html.erb", type: :feature do
         expect(PartnerSubmission.count).to eq 0
         ActionMailer::Base.deliveries = []
         expect { PartnerSubmissionService.daily_digest }.to_not change {
-                        ActionMailer::Base.deliveries.length
-                      }
+                                                                  ActionMailer::Base.deliveries.length
+                                                                }
       end
 
       it "publishes a submission when the Publish button is clicked" do
@@ -464,7 +464,7 @@ describe "admin/submissions/show.html.erb", type: :feature do
           ActionMailer::Base.deliveries = []
           PartnerSubmissionService.daily_digest
           expect(ActionMailer::Base.deliveries.count).to eq partner_contacts
-               .count
+            .count
           email = ActionMailer::Base.deliveries.first
           expect(email.html_part.body).to include(submission2.title)
           expect(email.html_part.body).to_not include(@submission.title)

@@ -106,7 +106,8 @@ module Admin
       @artist_details = artists_names_query([@consignment.submission.artist_id])
     end
 
-    def edit; end
+    def edit
+    end
 
     def update
       if @consignment.update(consignment_params)

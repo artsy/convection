@@ -234,7 +234,7 @@ describe "admin/submissions/index.html.erb", type: :feature do
       end
 
       it "allows you to search by user email, filter by state, and sort by ID",
-         js: true do
+        js: true do
         select("approved", from: "state")
         page.all(:fillable_field, "term").last.set("percy")
         expect(page).to have_selector(".ui-autocomplete")

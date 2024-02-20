@@ -39,7 +39,7 @@ describe DemandCalculator do
       scores = DemandCalculator.score(artist_id, "Painting")
       expect(scores[:artist_score]).to eq duplicate_standing_score.artist_score
       expect(scores[:auction_score]).to eq duplicate_standing_score
-           .auction_score
+        .auction_score
     end
   end
 
@@ -48,7 +48,7 @@ describe DemandCalculator do
       scores = DemandCalculator.score(artist_id, "Print")
       expected_artist_score =
         artist_standing_score.artist_score *
-          DemandCalculator::CATEGORY_MODIFIERS["Print"]
+        DemandCalculator::CATEGORY_MODIFIERS["Print"]
       expect(scores[:artist_score]).to eq expected_artist_score
     end
 
@@ -56,7 +56,7 @@ describe DemandCalculator do
       scores = DemandCalculator.score(artist_id, "Photography")
       expected_artist_score =
         artist_standing_score.artist_score *
-          DemandCalculator::CATEGORY_MODIFIERS["Default"]
+        DemandCalculator::CATEGORY_MODIFIERS["Default"]
       expect(scores[:artist_score]).to eq expected_artist_score
     end
   end

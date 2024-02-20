@@ -5,15 +5,15 @@ module Admin
     include GraphqlHelper
 
     before_action :set_submission,
-                  only: %i[
-                    show
-                    edit
-                    update
-                    undo_approval
-                    undo_publish
-                    undo_rejection
-                    undo_close
-                  ]
+      only: %i[
+        show
+        edit
+        update
+        undo_approval
+        undo_publish
+        undo_rejection
+        undo_close
+      ]
     before_action :set_submission_artist, only: %i[show edit]
 
     expose(:submissions) do
@@ -88,7 +88,8 @@ module Admin
       @partner_name = @submission.consigned_partner_submission&.partner&.name
     end
 
-    def edit; end
+    def edit
+    end
 
     def update
       result =
@@ -230,10 +231,12 @@ module Admin
       ]
 
       permitted_params = params.require(:submission).permit(safelist)
-      permitted_params[:assigned_to] =
-        params.dig(:submission, :assigned_to) if params[:submission][
+      if params[:submission][
         :assigned_to
       ].present?
+        permitted_params[:assigned_to] =
+          params.dig(:submission, :assigned_to)
+      end
       permitted_params
     end
   end

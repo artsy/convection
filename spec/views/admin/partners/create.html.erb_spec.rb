@@ -45,8 +45,8 @@ describe "partners create", type: :feature do
         "$('.ui-menu-item:contains(\"Storefront\")').find('a').trigger('mouseenter').click()"
       )
       expect(page).to_not have_selector(
-                            "#partner-selections-form #partner-search-submit.disabled-button"
-                          )
+        "#partner-selections-form #partner-search-submit.disabled-button"
+      )
       click_button("Create Partner")
       expect(page).to have_content("Partner successfully created.")
       expect(Partner.count).to eq 5
@@ -65,8 +65,8 @@ describe "partners create", type: :feature do
         "$('.ui-menu-item:contains(\"Storefront\")').find('a').trigger('mouseenter').click()"
       )
       expect(page).to_not have_selector(
-                            "#partner-selections-form #partner-search-submit.disabled-button"
-                          )
+        "#partner-selections-form #partner-search-submit.disabled-button"
+      )
       find("#create-partner-close").click
       expect(page).to_not have_content("Partner successfully created.")
       expect(Partner.count).to eq 4

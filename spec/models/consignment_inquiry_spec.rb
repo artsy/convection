@@ -30,7 +30,6 @@ describe ConsignmentInquiry do
           message: "Is a valid message"
         )
       end.to raise_error "Validation failed: Name is required"
-      
     end
     it "requires message" do
       expect do
@@ -39,7 +38,6 @@ describe ConsignmentInquiry do
           name: "Valid Name"
         )
       end.to raise_error "Validation failed: Message is required"
-      
     end
   end
 end

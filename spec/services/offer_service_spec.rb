@@ -234,8 +234,8 @@ describe OfferService do
         )
         allow(Convection.config).to receive(:offer_response_form_url)
           .and_return(
-          "https://google.com/response_form?entry.1=SUBMISSION_NUMBER&entry.2=PARTNER_NAME"
-        )
+            "https://google.com/response_form?entry.1=SUBMISSION_NUMBER&entry.2=PARTNER_NAME"
+          )
         allow(Convection.config).to receive(:auction_offer_form_url).and_return(
           "https://google.com/offer_form?entry.1=SUBMISSION_NUMBER"
         )
@@ -314,8 +314,8 @@ describe OfferService do
           )
           expect(emails.first.html_part.body).to include("Happy Gallery")
           expect(emails.first.html_part.body).to_not include(
-                                                       "The work will be purchased directly from you by the partner"
-                                                     )
+            "The work will be purchased directly from you by the partner"
+          )
           expect(offer.state).to eq Offer::REVIEW
           expect(offer.review_started_at).to_not be_nil
         end
@@ -347,7 +347,7 @@ describe OfferService do
             expect(ps.state).to eq "open"
             expect(ps.accepted_offer).to eq consignable_offer
             expect(ps.partner_commission_percent).to eq consignable_offer
-                 .commission_percent
+              .commission_percent
             expect(
               ps.submission.consigned_partner_submission
             ).to eq consignable_offer.partner_submission
@@ -377,8 +377,8 @@ describe OfferService do
           )
           expect(email_body).to include("Happy Gallery")
           expect(email_body).to_not include(
-                                      "The work will be purchased directly from you by the partner"
-                                    )
+            "The work will be purchased directly from you by the partner"
+          )
           expect(email_body).to include(
             "https://google.com/offer_form?entry.1=#{submission.id}"
           )

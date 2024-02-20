@@ -39,7 +39,7 @@ Rails
     get "/match_artwork", to: "admin/submissions#match_artwork"
     get "/match_user", to: "admin/submissions#match_user"
     get "/match_user_by_contact_info",
-        to: "admin/submissions#match_user_by_contact_info"
+      to: "admin/submissions#match_user_by_contact_info"
     get "/match_partner", to: "admin/partners#match_partner"
     get "system/up"
 
@@ -59,8 +59,8 @@ Rails
 
     if Rails.env.development?
       mount GraphiQL::Rails::Engine,
-            at: "/graphiql",
-            graphql_path: "/api/graphql"
+        at: "/graphiql",
+        graphql_path: "/api/graphql"
     end
 
     mount ArtsyAuth::Engine => "/"

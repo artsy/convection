@@ -105,10 +105,10 @@ describe SubmissionEvent do
       expect(event.properties[:authenticity_certificate]).to eq true
       expect(event.properties[:thumbnail]).to eq "http://thumb2.jpg"
       expect(event.properties[:image_urls]).to match_array %w[
-                    http://foo1.jpg
-                    http://foo2.jpg
-                    http://foo3.jpg
-                  ]
+        http://foo1.jpg
+        http://foo2.jpg
+        http://foo3.jpg
+      ]
       expect(event.properties[:offer_link]).to eq "https://google.com/auction"
     end
 

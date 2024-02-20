@@ -89,8 +89,8 @@ describe "offers query" do
       end
       let!(:accepted_offer) do
         Fabricate :offer,
-                  partner_submission: consigned_partner_submission,
-                  state: "accepted"
+          partner_submission: consigned_partner_submission,
+          state: "accepted"
       end
 
       let(:query_inputs) do

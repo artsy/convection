@@ -12,9 +12,9 @@ describe "Show Submission" do
   describe "GET /submissions" do
     it "rejects unauthorized requests" do
       get "/api/submissions/foo",
-          headers: {
-            "Authorization" => "Bearer foo.bar.baz"
-          }
+        headers: {
+          "Authorization" => "Bearer foo.bar.baz"
+        }
       expect(response.status).to eq 401
     end
 

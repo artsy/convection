@@ -17,13 +17,13 @@ describe Admin::OffersController, type: :controller do
       it "redirects to the edit view on success" do
         expect {
           post :create,
-               params: {
-                 partner_id: partner.id,
-                 submission_id: submission.id,
-                 offer: {
-                   offer_type: "purchase"
-                 }
-               }
+            params: {
+              partner_id: partner.id,
+              submission_id: submission.id,
+              offer: {
+                offer_type: "purchase"
+              }
+            }
           expect(response).to redirect_to(admin_offer_url(Offer.last))
         }.to change(Offer, :count).by(1)
       end
@@ -31,12 +31,12 @@ describe Admin::OffersController, type: :controller do
       it "remains on the new view and shows an error on failure" do
         expect {
           post :create,
-               params: {
-                 partner_id: partner.id,
-                 offer: {
-                   offer_type: "purchase"
-                 }
-               }
+            params: {
+              partner_id: partner.id,
+              offer: {
+                offer_type: "purchase"
+              }
+            }
           expect(controller.flash[:error]).to include(
             "Couldn't find Submission without an ID"
           )
@@ -148,11 +148,11 @@ describe Admin::OffersController, type: :controller do
         it "allows you to filter by state = sent" do
           get :index, params: {state: "sent"}
           expect(controller.offers.pluck(:id)).to eq [
-               @offer4.id,
-               @offer3.id,
-               @offer2.id,
-               @offer1.id
-             ]
+            @offer4.id,
+            @offer3.id,
+            @offer2.id,
+            @offer1.id
+          ]
         end
 
         it "allows you to filter by state = rejected" do
@@ -162,84 +162,84 @@ describe Admin::OffersController, type: :controller do
 
         it "allows you to sort by user email" do
           get :index,
-              params: {
-                sort: "submissions.user_email",
-                direction: "asc"
-              }
+            params: {
+              sort: "submissions.user_email",
+              direction: "asc"
+            }
           expect(controller.offers.pluck(:id)).to eq [
-               @offer3.id,
-               @offer4.id,
-               @offer5.id,
-               @offer1.id,
-               @offer2.id
-             ]
+            @offer3.id,
+            @offer4.id,
+            @offer5.id,
+            @offer1.id,
+            @offer2.id
+          ]
         end
 
         it "allows you to sort by price_cents" do
           get :index, params: {sort: "price_cents", direction: "desc"}
           expect(controller.offers.pluck(:id)).to eq [
-               @offer4.id,
-               @offer5.id,
-               @offer3.id,
-               @offer2.id,
-               @offer1.id
-             ]
+            @offer4.id,
+            @offer5.id,
+            @offer3.id,
+            @offer2.id,
+            @offer1.id
+          ]
         end
 
         it "allows you to filter by state and sort by price_cents" do
           get :index,
-              params: {
-                sort: "price_cents",
-                direction: "desc",
-                state: "sent"
-              }
+            params: {
+              sort: "price_cents",
+              direction: "desc",
+              state: "sent"
+            }
           expect(controller.offers.pluck(:id)).to eq [
-               @offer4.id,
-               @offer3.id,
-               @offer2.id,
-               @offer1.id
-             ]
+            @offer4.id,
+            @offer3.id,
+            @offer2.id,
+            @offer1.id
+          ]
         end
 
         it "allows you to filter by state, search for partner, and sort by price_cents" do
           get :index,
-              params: {
-                sort: "price_cents",
-                direction: "desc",
-                state: "sent",
-                partner: @partner1.id
-              }
+            params: {
+              sort: "price_cents",
+              direction: "desc",
+              state: "sent",
+              partner: @partner1.id
+            }
           expect(controller.offers.pluck(:id)).to eq [
-               @offer3.id,
-               @offer2.id,
-               @offer1.id
-             ]
+            @offer3.id,
+            @offer2.id,
+            @offer1.id
+          ]
         end
 
         it "allows you to filter by state, search for artist, and sort by price_cents" do
           get :index,
-              params: {
-                sort: "price_cents",
-                direction: "desc",
-                state: "sent",
-                artist: @artist[:id]
-              }
+            params: {
+              sort: "price_cents",
+              direction: "desc",
+              state: "sent",
+              artist: @artist[:id]
+            }
           expect(controller.offers.pluck(:id)).to eq [@offer4.id, @offer2.id]
         end
 
         it "allows you to filter by state, search for partner, and sort by date" do
           get :index,
-              params: {
-                sort: "offers.created_at",
-                direction: "desc",
-                state: "sent",
-                partner: @partner1.id
-              }
+            params: {
+              sort: "offers.created_at",
+              direction: "desc",
+              state: "sent",
+              partner: @partner1.id
+            }
           expect(controller.offers.pluck(:id)).to eq [
-               @offer3.id,
-               @offer2.id,
-               @offer1.id
-             ]
+            @offer3.id,
+            @offer2.id,
+            @offer1.id
+          ]
         end
 
         describe "sent with response" do
@@ -257,11 +257,11 @@ describe Admin::OffersController, type: :controller do
             Fabricate(:offer_response, offer: @offer4)
 
             get :index,
-                params: {
-                  state: "sent with response",
-                  direction: "desc",
-                  partner: @partner1.id
-                }
+              params: {
+                state: "sent with response",
+                direction: "desc",
+                partner: @partner1.id
+              }
 
             expect(controller.offers.pluck(:id)).to eq [@offer2.id, @offer1.id]
           end
@@ -282,13 +282,13 @@ describe Admin::OffersController, type: :controller do
 
       it "redirects to the show view on success" do
         put :update,
-            params: {
-              id: offer.id,
-              offer: {
-                high_estimate_dollars: 300,
-                notes: "Adding some notes to the offer."
-              }
+          params: {
+            id: offer.id,
+            offer: {
+              high_estimate_dollars: 300,
+              notes: "Adding some notes to the offer."
             }
+          }
         expect(response).to redirect_to(admin_offer_url(offer))
         expect(offer.reload.high_estimate_cents).to eq 30_000
         expect(offer.notes).to eq "Adding some notes to the offer."
@@ -359,23 +359,23 @@ describe Admin::OffersController, type: :controller do
             insurance_info: "1000 or best offer"
           )
         put :update,
-            params: {
-              id: retail_offer.id,
-              offer: {
-                insurance_info: nil
-              }
+          params: {
+            id: retail_offer.id,
+            offer: {
+              insurance_info: nil
             }
+          }
         expect(retail_offer.reload.insurance_info).to eq ""
       end
 
       it "remains on the edit view and shows an error on failure" do
         put :update,
-            params: {
-              id: offer.id,
-              offer: {
-                offer_type: "bogus type"
-              }
+          params: {
+            id: offer.id,
+            offer: {
+              offer_type: "bogus type"
             }
+          }
         expect(response).to render_template(:edit)
         expect(controller.flash[:error]).to include(
           "Validation failed: Offer type is not included in the list"
@@ -402,12 +402,12 @@ describe Admin::OffersController, type: :controller do
 
       it "remains on the edit view and shows an error on failure" do
         put :update,
-            params: {
-              id: offer.id,
-              offer: {
-                offer_type: "bogus type"
-              }
+          params: {
+            id: offer.id,
+            offer: {
+              offer_type: "bogus type"
             }
+          }
         expect(response).to render_template(:edit)
         expect(controller.flash[:error]).to include(
           "Validation failed: Offer type is not included in the list"

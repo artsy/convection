@@ -13,8 +13,8 @@ describe Api::ConsignmentInquiriesController, type: :controller do
     it "creates a ConsignmentInquiry" do
       allow(Artsy::EventService).to receive(:post_event)
       expect {
-        post :create, 
-          params: { 
+        post :create,
+          params: {
             email: "user@email.com",
             name: "User Test",
             message: "This is the message"
@@ -24,11 +24,12 @@ describe Api::ConsignmentInquiriesController, type: :controller do
 
     it "posts events when created" do
       expect(Artsy::EventService).to receive(:post_event).with(
-                                                          hash_including(
-                                                            topic: ConsignmentInquiryEvent::TOPIC
-                                                          ))
-      post :create, 
-        params: { 
+        hash_including(
+          topic: ConsignmentInquiryEvent::TOPIC
+        )
+      )
+      post :create,
+        params: {
           email: "user@email.com",
           name: "User Test",
           message: "This is the message"

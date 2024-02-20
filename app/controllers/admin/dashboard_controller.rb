@@ -20,6 +20,7 @@ module Admin
       DashboardReportingQuery::Consignment.grouped_by_state_and_partner
     end
 
-    def index; end
+    def index
+    end
   end
 end

@@ -70,9 +70,9 @@ describe "Editing a submission", type: :feature do
       it "displays that admin on the submission detail page" do
         visit admin_submission_path(submission)
         expect(page).to_not have_select(
-                              "submission[assigned_to]",
-                              selected: "Alice"
-                            )
+          "submission[assigned_to]",
+          selected: "Alice"
+        )
 
         click_on "Edit", match: :first
         expect(page).to_not have_content "Assigned To:"
@@ -89,9 +89,9 @@ describe "Editing a submission", type: :feature do
       it "displays that admin on the submission detail page" do
         visit admin_submission_path(submission)
         expect(page).to_not have_select(
-                              "submission[assigned_to]",
-                              selected: "Alice"
-                            )
+          "submission[assigned_to]",
+          selected: "Alice"
+        )
 
         select "Agnieszka", from: "submission[assigned_to]"
         click_button "Update", match: :first

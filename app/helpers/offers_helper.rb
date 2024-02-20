@@ -6,11 +6,11 @@ module OffersHelper
   def reviewed_byline(offer)
     if offer.rejected?
       [
-          "Rejected by #{offer.rejected_by_user.try(:name)}. #{
+        "Rejected by #{offer.rejected_by_user.try(:name)}. #{
             offer.rejection_reason
           }",
-          offer.rejection_note
-        ].compact
+        offer.rejection_note
+      ].compact
         .reject(&:blank?)
         .join(": ")
         .strip

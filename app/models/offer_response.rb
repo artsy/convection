@@ -7,8 +7,8 @@ class OfferResponse < ApplicationRecord
 
   validates :intended_state, inclusion: {in: INTENDED_STATES}
   validates :rejection_reason,
-            inclusion: {
-              in: Offer::REJECTION_REASONS
-            },
-            allow_nil: true
+    inclusion: {
+      in: Offer::REJECTION_REASONS
+    },
+    allow_nil: true
 end

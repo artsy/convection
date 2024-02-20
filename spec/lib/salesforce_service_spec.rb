@@ -79,7 +79,7 @@ describe SalesforceService do
         ).and_return(OpenStruct.new({Id: "SF_User_ID"}))
 
         expect(restforce_double).to receive(:create!).with(
-          "Artwork__c", artwork_as_salesforce_representation,
+          "Artwork__c", artwork_as_salesforce_representation
         ).and_return("SF_Artwork_ID")
 
         described_class.add_artwork(submission.id)
@@ -95,11 +95,11 @@ describe SalesforceService do
             expect(restforce_double).to receive(:query).with(
               "select Id from Contact where Email = '#{submission.user_email}'"
             ).and_return([])
-  
+
             expect(restforce_double).to receive(:create!).with(
-              "Contact", contact_as_salesforce_representation,
+              "Contact", contact_as_salesforce_representation
             ).and_return("SF_Contact_ID")
-  
+
             expect(restforce_double).to receive(:select).with(
               "Artist__c", submission.artist_id, ["Id"], "Gravity_Artist_ID__c"
             ).and_return(OpenStruct.new({Id: "SF_Artist_ID"}))
@@ -111,11 +111,11 @@ describe SalesforceService do
             expect(restforce_double).to receive(:select).with(
               "User", submission.assigned_to, ["Id"], "Admin_User_ID__c"
             ).and_return(OpenStruct.new({Id: "SF_User_ID"}))
-  
+
             expect(restforce_double).to receive(:create!).with(
-              "Artwork__c", artwork_as_salesforce_representation,
+              "Artwork__c", artwork_as_salesforce_representation
             ).and_return("SF_Artwork_ID")
-  
+
             described_class.add_artwork(submission.id)
           end
         end
@@ -129,7 +129,7 @@ describe SalesforceService do
             expect(restforce_double).to receive(:query).with(
               "select Id from Contact where Email = '#{submission.user_email}'"
             ).and_return([OpenStruct.new({Id: "SF_Contact_ID"})])
-  
+
             expect(restforce_double).to receive(:select).with(
               "Artist__c", submission.artist_id, ["Id"], "Gravity_Artist_ID__c"
             ).and_return(OpenStruct.new({Id: "SF_Artist_ID"}))
@@ -141,11 +141,11 @@ describe SalesforceService do
             expect(restforce_double).to receive(:select).with(
               "User", submission.assigned_to, ["Id"], "Admin_User_ID__c"
             ).and_return(OpenStruct.new({Id: "SF_User_ID"}))
-  
+
             expect(restforce_double).to receive(:create!).with(
-              "Artwork__c", artwork_as_salesforce_representation,
+              "Artwork__c", artwork_as_salesforce_representation
             ).and_return("SF_Artwork_ID")
-  
+
             described_class.add_artwork(submission.id)
           end
         end
@@ -159,7 +159,7 @@ describe SalesforceService do
             expect(restforce_double).to receive(:query).with(
               "select Id from Contact where Email = '#{submission.user_email}'"
             ).and_return([OpenStruct.new({Id: "SF_Contact_ID"})])
-  
+
             expect(restforce_double).to receive(:select).with(
               "Artist__c", submission.artist_id, ["Id"], "Gravity_Artist_ID__c"
             ).and_return(OpenStruct.new({Id: "SF_Artist_ID"}))
@@ -171,11 +171,11 @@ describe SalesforceService do
             expect(restforce_double).to receive(:select).with(
               "User", submission.assigned_to, ["Id"], "Admin_User_ID__c"
             ).and_return(OpenStruct.new({Id: "SF_User_ID"}))
-  
+
             expect(restforce_double).to receive(:create!).with(
-              "Artwork__c", artwork_as_salesforce_representation,
+              "Artwork__c", artwork_as_salesforce_representation
             ).and_return("SF_Artwork_ID")
-  
+
             described_class.add_artwork(submission.id)
           end
         end
@@ -187,9 +187,9 @@ describe SalesforceService do
             ).and_return([])
 
             expect(restforce_double).to receive(:create!).with(
-              "Contact", contact_as_salesforce_representation,
+              "Contact", contact_as_salesforce_representation
             ).and_return("SF_Contact_ID")
-  
+
             expect(restforce_double).to receive(:select).with(
               "Artist__c", submission.artist_id, ["Id"], "Gravity_Artist_ID__c"
             ).and_return(OpenStruct.new({Id: "SF_Artist_ID"}))
@@ -201,11 +201,11 @@ describe SalesforceService do
             expect(restforce_double).to receive(:select).with(
               "User", submission.assigned_to, ["Id"], "Admin_User_ID__c"
             ).and_return(OpenStruct.new({Id: "SF_User_ID"}))
-  
+
             expect(restforce_double).to receive(:create!).with(
-              "Artwork__c", artwork_as_salesforce_representation,
+              "Artwork__c", artwork_as_salesforce_representation
             ).and_return("SF_Artwork_ID")
-  
+
             described_class.add_artwork(submission.id)
           end
         end
@@ -215,7 +215,7 @@ describe SalesforceService do
             expect(restforce_double).to receive(:query).with(
               "select Id from Contact where Email = '#{submission.user_email}'"
             ).and_return([OpenStruct.new({Id: "SF_Contact_ID"})])
-  
+
             expect(restforce_double).to receive(:select).with(
               "Artist__c", submission.artist_id, ["Id"], "Gravity_Artist_ID__c"
             ).and_return(OpenStruct.new({Id: "SF_Artist_ID"}))
@@ -227,11 +227,11 @@ describe SalesforceService do
             expect(restforce_double).to receive(:select).with(
               "User", submission.assigned_to, ["Id"], "Admin_User_ID__c"
             ).and_return(OpenStruct.new({Id: "SF_User_ID"}))
-  
+
             expect(restforce_double).to receive(:create!).with(
-              "Artwork__c", artwork_as_salesforce_representation.except(:OwnerId),
+              "Artwork__c", artwork_as_salesforce_representation.except(:OwnerId)
             ).and_return("SF_Artwork_ID")
-  
+
             described_class.add_artwork(submission.id)
           end
         end

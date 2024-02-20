@@ -7,7 +7,7 @@ Convection.unleash =
     url: Convection.config[:unleash_url],
     app_name: "convection",
     custom_http_headers: {
-      'Authorization': Convection.config[:unleash_token]
+      Authorization: Convection.config[:unleash_token]
     },
     disable_client: Convection.config[:unleash_url].blank?,
     instance_id: Socket.gethostname,

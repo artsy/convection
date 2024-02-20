@@ -80,6 +80,6 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.middleware.insert_after ActionDispatch::Static,
-                                 Rack::LiveReload,
-                                 live_reload_port: 5_003
+    Rack::LiveReload,
+    live_reload_port: 5_003
 end

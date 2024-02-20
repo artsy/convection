@@ -13,15 +13,15 @@ module Mutations
     argument :currency, String, required: false
     argument :depth, String, required: false
     argument :dimensions_metric,
-             String,
-             required: false,
-             prepare: ->(value, _context) { value.downcase }
+      String,
+      required: false,
+      prepare: ->(value, _context) { value.downcase }
     argument :edition, Boolean, required: false
     argument :edition_number, String, required: false
     argument :edition_size,
-             Integer,
-             required: false,
-             description: "Deprecated: Use edition_size_formatted field instead"
+      Integer,
+      required: false,
+      description: "Deprecated: Use edition_size_formatted field instead"
     argument :edition_size_formatted, String, required: false
     argument :height, String, required: false
     argument :location_city, String, required: false

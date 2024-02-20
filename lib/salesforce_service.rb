@@ -6,7 +6,7 @@ class SalesforceService
       return unless api_enabled?
 
       submission = Submission.find(submission_id)
-      
+
       sf_contact_id = find_contact_id(submission) || api.create!("Contact", map_submission_to_salesforce_contact(submission))
       sf_artist_id = api.select("Artist__c", submission.artist_id, ["Id"], "Gravity_Artist_ID__c").Id
 
@@ -88,7 +88,7 @@ class SalesforceService
       Convection.config.salesforce_client_id.present? &&
         Convection.config.salesforce_client_secret.present? &&
         Convection.config.salesforce_host.present? &&
-        Convection.config.salesforce_username.present? && 
+        Convection.config.salesforce_username.present? &&
         Convection.config.salesforce_password.present? &&
         Convection.config.salesforce_security_token.present?
     end

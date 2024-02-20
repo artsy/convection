@@ -31,15 +31,15 @@ class UpdateForeignKeys < ActiveRecord::Migration[5.2]
 
     remove_foreign_key "partner_submissions", column: "accepted_offer_id"
     add_foreign_key "partner_submissions",
-                    "offers",
-                    column: "accepted_offer_id",
-                    on_delete: :nullify
+      "offers",
+      column: "accepted_offer_id",
+      on_delete: :nullify
 
     remove_foreign_key "submissions", column: "consigned_partner_submission_id"
     add_foreign_key "submissions",
-                    "partner_submissions",
-                    column: "consigned_partner_submission_id",
-                    on_delete: :nullify
+      "partner_submissions",
+      column: "consigned_partner_submission_id",
+      on_delete: :nullify
   end
 
   def down
@@ -54,7 +54,7 @@ class UpdateForeignKeys < ActiveRecord::Migration[5.2]
 
     remove_foreign_key "submissions", column: "consigned_partner_submission_id"
     add_foreign_key "submissions",
-                    "partner_submissions",
-                    column: "consigned_partner_submission_id"
+      "partner_submissions",
+      column: "consigned_partner_submission_id"
   end
 end

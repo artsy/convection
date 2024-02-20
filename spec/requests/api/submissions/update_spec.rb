@@ -70,8 +70,8 @@ describe "PUT /api/submissions" do
 
       it "returns a 201 and updates that submission" do
         put "/api/submissions/#{submission.id}",
-            params: params,
-            headers: headers
+          params: params,
+          headers: headers
         expect(response.status).to eq 201
         body = JSON.parse(response.body)
         expect(body["id"]).to eq submission.id
@@ -84,8 +84,8 @@ describe "PUT /api/submissions" do
 
       it "returns a 401" do
         put "/api/submissions/#{submission.id}",
-            params: params,
-            headers: headers
+          params: params,
+          headers: headers
         expect(response.status).to eq 401
       end
     end
@@ -117,10 +117,10 @@ describe "PUT /api/submissions" do
         Fabricate(:image, submission: @submission)
 
         put "/api/submissions/#{@submission.id}",
-            params: {
-              state: "submitted"
-            },
-            headers: headers
+          params: {
+            state: "submitted"
+          },
+          headers: headers
 
         expect(response.status).to eq 201
         expect(@submission.reload.receipt_sent_at).to_not be_nil
@@ -143,10 +143,10 @@ describe "PUT /api/submissions" do
         @submission.update!(admin_receipt_sent_at: Time.now.utc)
 
         put "/api/submissions/#{@submission.id}",
-            params: {
-              state: "submitted"
-            },
-            headers: headers
+          params: {
+            state: "submitted"
+          },
+          headers: headers
         expect(ActionMailer::Base.deliveries.length).to eq 0
       end
     end
@@ -161,11 +161,11 @@ describe "PUT /api/submissions" do
             title: nil
           )
         put "/api/submissions/#{submission.id}",
-            params: {
-              artist_id: "kara-walker",
-              state: "submitted"
-            },
-            headers: headers
+          params: {
+            artist_id: "kara-walker",
+            state: "submitted"
+          },
+          headers: headers
 
         expect(response.status).to eq 400
         expect(JSON.parse(response.body)["error"]).to eq(

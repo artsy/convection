@@ -18,7 +18,7 @@ class ConsignmentInquiryEvent < Events::BaseEvent
       message: @object.message,
       name: @object.name,
       phone_number: @object.phone_number
-        
+
     }
-  end 
+  end
 end

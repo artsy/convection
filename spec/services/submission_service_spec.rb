@@ -702,8 +702,8 @@ describe SubmissionService do
         context "when source is not my_collection" do
           it "does not updates the My Collection artwork " do
             expect(SubmissionService).to_not receive(
-                                               :update_my_collection_artwork
-                                             )
+              :update_my_collection_artwork
+            )
 
             update_submission
           end
@@ -877,8 +877,8 @@ describe SubmissionService do
         expect(submission.partner_submissions.length).to eq 1
 
         expect { SubmissionService.undo_approval(submission) }.to_not change {
-                        ActionMailer::Base.deliveries.length
-                      }
+                                                                        ActionMailer::Base.deliveries.length
+                                                                      }
 
         submission.reload
         expect(submission.partner_submissions.length).to eq 0
@@ -920,8 +920,8 @@ describe SubmissionService do
         expect(submission.partner_submissions.length).to eq 1
 
         expect { SubmissionService.undo_publish(submission) }.to_not change {
-                        ActionMailer::Base.deliveries.length
-                      }
+                                                                       ActionMailer::Base.deliveries.length
+                                                                     }
 
         submission.reload
         expect(submission.partner_submissions.length).to eq 0
@@ -994,17 +994,17 @@ describe SubmissionService do
         emails = ActionMailer::Base.deliveries
         expect(emails.length).to eq 1
         expect(emails.first.html_part.body).to_not include(
-                                                     "find your artwork in"
-                                                   )
+          "find your artwork in"
+        )
         expect(submission.reload.receipt_sent_at).to_not be nil
       end
 
       it "does not send a receipt if one has already been sent" do
         submission.update!(receipt_sent_at: Time.now.utc)
         expect { SubmissionService.notify_user(submission.id) }.to_not change(
-                        ActionMailer::Base.deliveries,
-                        :count
-                      )
+          ActionMailer::Base.deliveries,
+          :count
+        )
       end
     end
 
@@ -1124,9 +1124,9 @@ describe SubmissionService do
     it "does not send an email if one has already been sent" do
       submission.update!(admin_receipt_sent_at: Time.now.utc)
       expect { SubmissionService.notify_admin(submission.id) }.to_not change(
-                      ActionMailer::Base.deliveries,
-                      :count
-                    )
+        ActionMailer::Base.deliveries,
+        :count
+      )
     end
   end
 

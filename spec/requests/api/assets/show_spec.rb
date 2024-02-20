@@ -12,9 +12,9 @@ describe "Show Asset" do
   describe "GET /assets/:id" do
     it "rejects unauthorized requests" do
       get "/api/assets/foo",
-          headers: {
-            "Authorization" => "Bearer foo.bar.baz"
-          }
+        headers: {
+          "Authorization" => "Bearer foo.bar.baz"
+        }
       expect(response.status).to eq 401
     end
 

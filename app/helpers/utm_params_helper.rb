@@ -5,17 +5,16 @@ module UtmParamsHelper
     initial.merge(transformed_args)
   end
 
-
   def offer_utm_params(offer)
     case offer.offer_type
     when Offer::AUCTION_CONSIGNMENT
-      utm_params(source: "sendgrid", campaign: "sell", term: "cx", content:"auction-offer")
+      utm_params(source: "sendgrid", campaign: "sell", term: "cx", content: "auction-offer")
     when Offer::NET_PRICE
-      utm_params(source: "sendgrid", campaign: "sell", term: "cx", content:"net-price-offer")
+      utm_params(source: "sendgrid", campaign: "sell", term: "cx", content: "net-price-offer")
     when Offer::RETAIL
-      utm_params(source: "sendgrid", campaign: "sell", term: "cx", content:"retail-offer")
+      utm_params(source: "sendgrid", campaign: "sell", term: "cx", content: "retail-offer")
     when Offer::PURCHASE
-      utm_params(source: "sendgrid", campaign: "sell", term: "cx", content:"purchase-offer")
+      utm_params(source: "sendgrid", campaign: "sell", term: "cx", content: "purchase-offer")
     else
       utm_params(source: "sendgrid", campaign: "sell")
     end

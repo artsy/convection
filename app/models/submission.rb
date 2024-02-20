@@ -11,16 +11,16 @@ class Submission < ApplicationRecord
   scope :not_deleted, -> { where(deleted_at: nil) }
 
   pg_search_scope :search,
-                  against: %i[id title],
-                  using: {
-                    tsearch: {
-                      prefix: true
-                    },
-                    trigram: {
-                      only: %i[id],
-                      threshold: 0.9
-                    }
-                  }
+    against: %i[id title],
+    using: {
+      tsearch: {
+        prefix: true
+      },
+      trigram: {
+        only: %i[id],
+        threshold: 0.9
+      }
+    }
 
   STATES = [
     DRAFT = "draft",
@@ -41,11 +41,11 @@ class Submission < ApplicationRecord
   ].freeze
 
   enum attribution_class: {
-         unique: 0,
-         limited_edition: 1,
-         open_edition: 2,
-         unknown_edition: 3
-       }
+    unique: 0,
+    limited_edition: 1,
+    open_edition: 2,
+    unknown_edition: 3
+  }
 
   REJECTION_REASONS = [
     "BSV",
@@ -92,10 +92,10 @@ class Submission < ApplicationRecord
   validates :source, inclusion: {in: SOURCES}, allow_nil: true
   validates :category, inclusion: {in: CATEGORIES}, allow_nil: true
   validates :dimensions_metric,
-            inclusion: {
-              in: DIMENSION_METRICS
-            },
-            allow_nil: true
+    inclusion: {
+      in: DIMENSION_METRICS
+    },
+    allow_nil: true
   validate :validate_primary_image
 
   before_validation :set_state, on: :create
@@ -106,7 +106,7 @@ class Submission < ApplicationRecord
   scope :draft, -> { where(state: "draft") }
   scope :submitted, -> { where(state: "submitted") }
   scope :available,
-        -> { where(state: PUBLISHED, consigned_partner_submission_id: nil) }
+    -> { where(state: PUBLISHED, consigned_partner_submission_id: nil) }
 
   dollarize :minimum_price_cents
 

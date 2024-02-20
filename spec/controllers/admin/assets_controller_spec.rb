@@ -48,10 +48,10 @@ describe Admin::AssetsController, type: :controller do
 
         expect {
           delete :destroy,
-                 params: {
-                   submission_id: @submission.id,
-                   id: asset.id
-                 }
+            params: {
+              submission_id: @submission.id,
+              id: asset.id
+            }
         }.to change(@submission.assets, :count).by(-1)
       end
     end
@@ -60,33 +60,33 @@ describe Admin::AssetsController, type: :controller do
       it "correctly adds the assets for a single token" do
         expect {
           post :multiple,
-               params: {
-                 gemini_tokens: "token1",
-                 submission_id: @submission.id,
-                 asset_type: "image"
-               }
+            params: {
+              gemini_tokens: "token1",
+              submission_id: @submission.id,
+              asset_type: "image"
+            }
         }.to change(@submission.assets, :count).by(1)
       end
 
       it "correctly adds the assets for multiple tokens" do
         expect {
           post :multiple,
-               params: {
-                 gemini_tokens: "token1 token2 token3 token4",
-                 submission_id: @submission.id,
-                 asset_type: "image"
-               }
+            params: {
+              gemini_tokens: "token1 token2 token3 token4",
+              submission_id: @submission.id,
+              asset_type: "image"
+            }
         }.to change(@submission.assets, :count).by(4)
       end
 
       it "creates no assets for a single token" do
         expect {
           post :multiple,
-               params: {
-                 gemini_tokens: "",
-                 submission_id: @submission.id,
-                 asset_type: "image"
-               }
+            params: {
+              gemini_tokens: "",
+              submission_id: @submission.id,
+              asset_type: "image"
+            }
         }.to_not change(@submission.assets, :count)
       end
     end

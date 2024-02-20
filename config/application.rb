@@ -13,7 +13,8 @@ Bundler.require(*Rails.groups)
 Warning[:deprecated] = false
 
 module Convection
-  class Application < Rails::Application # -- all .rb files in that directory are automatically loaded. # Application configuration should go into files in config/initializers # Settings in config/environments/* take precedence over those specified here.
+  # -- all .rb files in that directory are automatically loaded. # Application configuration should go into files in config/initializers # Settings in config/environments/* take precedence over those specified here.
+  class Application < Rails::Application
     config.paths.add "app", glob: "**/*.rb"
     config.load_defaults 6.0
 

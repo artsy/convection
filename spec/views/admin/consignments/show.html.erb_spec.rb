@@ -134,8 +134,8 @@ describe "admin/consignments/show.html.erb", type: :feature do
         expect(page).to have_selector('.partner-paid .toggle[data-state="no"]')
         page.find(".partner-paid .toggle").click
         expect(page).to_not have_selector(
-                              '.partner-paid .toggle[data-state="no"]'
-                            )
+          '.partner-paid .toggle[data-state="no"]'
+        )
         expect(page).to have_selector('.partner-paid .toggle[data-state="yes"]')
       end
 
@@ -145,8 +145,8 @@ describe "admin/consignments/show.html.erb", type: :feature do
         )
         page.find(".partner-invoiced .toggle").click
         expect(page).to_not have_selector(
-                              '.partner-invoiced .toggle[data-state="no"]'
-                            )
+          '.partner-invoiced .toggle[data-state="no"]'
+        )
         expect(page).to have_selector(
           '.partner-invoiced .toggle[data-state="yes"]'
         )

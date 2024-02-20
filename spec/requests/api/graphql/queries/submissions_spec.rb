@@ -174,9 +174,9 @@ describe "submissions query" do
         let(:partner_submission) { Fabricate(:partner_submission) }
         let!(:submission) do
           Fabricate :submission,
-                    user: user,
-                    state: "submitted",
-                    consigned_partner_submission: partner_submission
+            user: user,
+            state: "submitted",
+            consigned_partner_submission: partner_submission
         end
 
         it "returns limited set of fields allowed for loading" do
@@ -236,9 +236,9 @@ describe "submissions query" do
       let(:partner_submission) { Fabricate(:partner_submission) }
       let!(:submission) do
         Fabricate :submission,
-                  user: user,
-                  state: "submitted",
-                  consigned_partner_submission: partner_submission
+          user: user,
+          state: "submitted",
+          consigned_partner_submission: partner_submission
       end
 
       it "returns limited set of fields allowed for loading" do
@@ -365,8 +365,8 @@ describe "submissions query" do
 
       let!(:consigned_submission) do
         Fabricate :submission,
-                  state: "published",
-                  consigned_partner_submission_id: partner_submission.id
+          state: "published",
+          consigned_partner_submission_id: partner_submission.id
       end
 
       let(:query_inputs) { "available: true" }

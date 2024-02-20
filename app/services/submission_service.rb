@@ -16,10 +16,12 @@ class SubmissionService
       is_convection: true,
       current_user: nil
     )
-      submission_params[:edition_size] =
-        submission_params.delete(:edition_size_formatted) if submission_params[
+      if submission_params[
         :edition_size_formatted
       ]
+        submission_params[:edition_size] =
+          submission_params.delete(:edition_size_formatted)
+      end
 
       create_params = submission_params.clone
 
@@ -128,7 +130,7 @@ class SubmissionService
     def undo_approval(submission)
       if submission.offers.count.positive?
         raise SubmissionError,
-              "Undoing approval of a submission with offers is not allowed!"
+          "Undoing approval of a submission with offers is not allowed!"
       end
 
       return_to_submitted_state(submission)
@@ -138,7 +140,7 @@ class SubmissionService
     def undo_publish(submission)
       if submission.offers.count.positive?
         raise SubmissionError,
-              "Undoing publish of a submission with offers is not allowed!"
+          "Undoing publish of a submission with offers is not allowed!"
       end
 
       return_to_submitted_state(submission)
@@ -292,7 +294,7 @@ class SubmissionService
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
       rejection_reason_template = "nsv_bsv_submission_rejected"
-        
+
       UserMailer.send(
         rejection_reason_template,
         submission: submission,
