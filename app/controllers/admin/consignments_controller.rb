@@ -24,7 +24,7 @@ module Admin
         matching_consignments =
           matching_consignments
             .joins(:submission)
-            .where('submissions.assigned_to' => params[:assigned_to])
+            .where("submissions.assigned_to" => params[:assigned_to])
       end
 
       if term.present?
@@ -46,7 +46,7 @@ module Admin
         matching_consignments =
           matching_consignments
             .joins(:submission)
-            .where(submissions: { artist_id: params[:artist] })
+            .where(submissions: {artist_id: params[:artist]})
       end
 
       if params[:state].present?
@@ -54,14 +54,14 @@ module Admin
           matching_consignments.where(state: params[:state])
       end
 
-      sort = params[:sort].presence || 'id'
-      direction = params[:direction].presence || 'desc'
+      sort = params[:sort].presence || "id"
+      direction = params[:direction].presence || "desc"
       matching_consignments =
-        if sort.include?('partners')
+        if sort.include?("partners")
           matching_consignments
             .includes(:partner)
             .reorder("#{sort} #{direction}, partner_submissions.id desc")
-        elsif sort.include?('offers')
+        elsif sort.include?("offers")
           matching_consignments
             .joins(:accepted_offer)
             .reorder("#{sort} #{direction}, partner_submissions.id desc")
@@ -113,7 +113,7 @@ module Admin
         redirect_to admin_consignment_path(@consignment)
       else
         flash.now[:error] = @consignment.errors.full_messages
-        render 'edit'
+        render "edit"
       end
     end
 
@@ -132,7 +132,7 @@ module Admin
 
     def filtering_by_assigned_to?
       params.keys.map(&:to_sym).include?(:assigned_to) &&
-        params[:assigned_to] != 'all'
+        params[:assigned_to] != "all"
     end
 
     def consignment_params

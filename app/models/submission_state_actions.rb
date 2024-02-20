@@ -29,54 +29,54 @@ class SubmissionStateActions
   private
 
   def default_classes
-    ['btn btn-secondary btn-small btn-full-width']
+    ["btn btn-secondary btn-small btn-full-width"]
   end
 
   def approve_action
     {
-      class: default_classes << 'btn-approve',
+      class: default_classes << "btn-approve",
       confirm:
-        'No email will be sent to the consignor and this submission will be excluded from the digests.',
-      state: 'approved',
-      text: 'Approve without CMS'
+        "No email will be sent to the consignor and this submission will be excluded from the digests.",
+      state: "approved",
+      text: "Approve without CMS"
     }
   end
 
   def publish_action
     {
-      class: default_classes << 'btn-approve',
+      class: default_classes << "btn-approve",
       confirm:
-        'An email will be sent to the consignor, letting them know that their submission will be sent to our partner network and this work will appear in the digests and CMS. This action cannot be undone.',
-      state: 'published',
-      text: 'Publish'
+        "An email will be sent to the consignor, letting them know that their submission will be sent to our partner network and this work will appear in the digests and CMS. This action cannot be undone.",
+      state: "published",
+      text: "Publish"
     }
   end
 
   def reject_action
     {
-      class: default_classes << 'btn-delete',
+      class: default_classes << "btn-delete",
       confirm:
-        'An email will be sent to the consignor, letting them know that we are not accepting their submission. This action cannot be undone.',
-      state: 'rejected',
-      text: 'Reject'
+        "An email will be sent to the consignor, letting them know that we are not accepting their submission. This action cannot be undone.",
+      state: "rejected",
+      text: "Reject"
     }
   end
 
   def close_action
     {
-      class: default_classes << 'btn-delete',
-      confirm: 'No email will be sent.',
-      state: 'closed',
-      text: 'Close'
+      class: default_classes << "btn-delete",
+      confirm: "No email will be sent.",
+      state: "closed",
+      text: "Close"
     }
   end
 
   def hold_action
     {
-      class: default_classes << 'btn-delete',
-      confirm: 'No email will be sent to the consignor.',
-      state: 'hold',
-      text: 'Hold'
+      class: default_classes << "btn-delete",
+      confirm: "No email will be sent to the consignor.",
+      state: "hold",
+      text: "Hold"
     }
   end
 end

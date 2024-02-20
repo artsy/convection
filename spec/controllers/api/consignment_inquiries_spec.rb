@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 describe Api::ConsignmentInquiriesController, type: :controller do
   before do
@@ -9,7 +9,7 @@ describe Api::ConsignmentInquiriesController, type: :controller do
     )
   end
 
-  describe '#create' do
+  describe "#create" do
     it "creates a ConsignmentInquiry" do
       allow(Artsy::EventService).to receive(:post_event)
       expect {

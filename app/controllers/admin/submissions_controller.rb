@@ -66,7 +66,7 @@ module Admin
     def create
       @submission =
         SubmissionService.create_submission(
-          submission_params.merge(state: 'submitted'),
+          submission_params.merge(state: "submitted"),
           submission_params[:user_id],
           current_user: @current_user
         )
@@ -74,7 +74,7 @@ module Admin
     rescue SubmissionService::SubmissionError => e
       @submission = Submission.new(submission_params)
       flash.now[:error] = e.message
-      render 'new'
+      render "new"
     end
 
     def show
@@ -101,7 +101,7 @@ module Admin
       if result
         redirect_to admin_submission_path(@submission)
       else
-        render 'edit'
+        render "edit"
       end
     end
 
@@ -162,7 +162,7 @@ module Admin
         # Exclude anonymous submissions from the submissions with a matching email
         submissions =
           Submission
-            .where('user_email like ?', "%#{term}%")
+            .where("user_email like ?", "%#{term}%")
             .where
             .not(user_id: nil)
             .limit(1)

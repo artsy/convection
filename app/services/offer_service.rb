@@ -21,7 +21,7 @@ class OfferService
     )
       submission = Submission.find(submission_id)
       if [Submission::REJECTED].include? submission.state
-        raise OfferError, 'Invalid submission state for offer creation'
+        raise OfferError, "Invalid submission state for offer creation"
       end
 
       if [Submission::DRAFT, Submission::SUBMITTED].include? submission.state
@@ -42,7 +42,7 @@ class OfferService
         partner_submission.update!(notified_at: Time.now.utc)
       end
 
-      default_offer_attrs = { state: 'draft', created_by_id: current_user }
+      default_offer_attrs = {state: "draft", created_by_id: current_user}
       offer_attrs = default_offer_attrs.merge(offer_params)
       offer = partner_submission.offers.new(offer_attrs)
       offer.save!
@@ -72,7 +72,7 @@ class OfferService
       consignable_states = [Submission::APPROVED, Submission::PUBLISHED]
       unless consignable_states.include?(offer.submission.state)
         raise OfferError,
-              'Cannot complete consignment on non-approved submission'
+              "Cannot complete consignment on non-approved submission"
       end
 
       offer.update!(consigned_at: Time.now.utc)
@@ -83,7 +83,7 @@ class OfferService
       offer.partner_submission.update!(
         accepted_offer: offer,
         partner_commission_percent: offer.commission_percent,
-        state: 'open'
+        state: "open"
       )
     end
 
@@ -150,7 +150,7 @@ class OfferService
       offer = Offer.find(offer_id)
       return if offer.sent_at
 
-      raise 'User lacks email.' if offer.submission.email.blank?
+      raise "User lacks email." if offer.submission.email.blank?
 
       artist = Gravity.client.artist(id: offer.submission.artist_id)._get
 

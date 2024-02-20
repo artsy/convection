@@ -21,7 +21,7 @@ module Mutations
     argument :edition_size,
              Integer,
              required: false,
-             description: 'Deprecated: Use edition_size_formatted field instead'
+             description: "Deprecated: Use edition_size_formatted field instead"
     argument :edition_size_formatted, String, required: false
     argument :height, String, required: false
     argument :location_city, String, required: false

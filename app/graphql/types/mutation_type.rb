@@ -2,7 +2,7 @@
 
 module Types
   class MutationType < GraphQL::Schema::Object
-    description 'Mutation root for this schema'
+    description "Mutation root for this schema"
 
     field :add_asset_to_consignment_submission,
           mutation: Mutations::AddAssetToConsignmentSubmission

@@ -2,7 +2,7 @@
 
 module Types
   class JsonType < Types::BaseScalar
-    graphql_name 'JSON'
+    graphql_name "JSON"
 
     def self.coerce_input(value, _ctx)
       JSON.parse(value)

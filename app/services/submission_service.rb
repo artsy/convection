@@ -35,9 +35,9 @@ class SubmissionService
         )
       end
 
-      create_params.merge!(source: 'admin') if is_convection
+      create_params.merge!(source: "admin") if is_convection
 
-      unless is_convection || submission_params[:state]&.downcase == 'draft'
+      unless is_convection || submission_params[:state]&.downcase == "draft"
         create_params.merge!(
           reject_non_target_supply_artist(submission_params[:artist_id])
         )
@@ -45,7 +45,7 @@ class SubmissionService
 
       submission = Submission.create!(create_params)
 
-      if create_params[:state] == 'rejected'
+      if create_params[:state] == "rejected"
         delay_until(
           Convection.config.rejection_email_minutes_after.minutes.from_now
         ).deliver_rejection_notification(submission.id)
@@ -61,8 +61,8 @@ class SubmissionService
       params = {}
       unless artist[:target_supply]
         params = {
-          state: 'rejected',
-          rejection_reason: 'Not Target Supply',
+          state: "rejected",
+          rejection_reason: "Not Target Supply",
           rejected_at: Time.now.utc
         }
       end
@@ -105,22 +105,22 @@ class SubmissionService
     def create_or_update_my_collection_artwork(submission, access_token)
       if !submission.my_collection_artwork_id
         create_my_collection_artwork(submission, access_token)
-      elsif submission.source == 'my_collection'
+      elsif submission.source == "my_collection"
         update_my_collection_artwork(submission, access_token)
       end
     end
 
     def update_submission_state(submission, current_user)
       case submission.state
-      when 'submitted'
+      when "submitted"
         submit!(submission)
-      when 'approved'
+      when "approved"
         approve!(submission, current_user)
-      when 'published'
+      when "published"
         publish!(submission, current_user)
-      when 'rejected'
+      when "rejected"
         reject!(submission, current_user)
-      when 'closed'
+      when "closed"
         close!(submission)
       end
     end
@@ -128,7 +128,7 @@ class SubmissionService
     def undo_approval(submission)
       if submission.offers.count.positive?
         raise SubmissionError,
-              'Undoing approval of a submission with offers is not allowed!'
+              "Undoing approval of a submission with offers is not allowed!"
       end
 
       return_to_submitted_state(submission)
@@ -138,7 +138,7 @@ class SubmissionService
     def undo_publish(submission)
       if submission.offers.count.positive?
         raise SubmissionError,
-              'Undoing publish of a submission with offers is not allowed!'
+              "Undoing publish of a submission with offers is not allowed!"
       end
 
       return_to_submitted_state(submission)
@@ -155,7 +155,7 @@ class SubmissionService
 
     def return_to_submitted_state(submission)
       submission.update!(
-        state: 'submitted',
+        state: "submitted",
         approved_at: nil,
         approved_by: nil,
         rejected_at: nil,
@@ -166,7 +166,7 @@ class SubmissionService
 
     def submit!(submission)
       unless submission.can_submit?
-        raise ParamError, 'Missing fields for submission.'
+        raise ParamError, "Missing fields for submission."
       end
 
       notify_admin(submission.id)
@@ -244,9 +244,9 @@ class SubmissionService
       submission = Submission.find(submission_id)
       return if submission.receipt_sent_at || submission.images.count.positive?
 
-      raise 'User lacks email.' if submission.email.blank?
+      raise "User lacks email." if submission.email.blank?
 
-      email_args = { submission: submission }
+      email_args = {submission: submission}
 
       if submission.reminders_sent_count == 1
         UserMailer.second_upload_reminder(**email_args).deliver_now
@@ -258,9 +258,9 @@ class SubmissionService
 
     def deliver_submission_receipt(submission_id)
       submission = Submission.find(submission_id)
-      raise 'Still processing images.' unless submission.ready?
+      raise "Still processing images." unless submission.ready?
 
-      Rails.logger.warn 'User lacks email.' if submission.email.blank?
+      Rails.logger.warn "User lacks email." if submission.email.blank?
 
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
@@ -270,7 +270,7 @@ class SubmissionService
 
     def deliver_submission_notification(submission_id)
       submission = Submission.find(submission_id)
-      raise 'Still processing images.' unless submission.ready?
+      raise "Still processing images." unless submission.ready?
 
       user = submission.user
       artist = Gravity.client.artist(id: submission.artist_id)._get
@@ -291,7 +291,7 @@ class SubmissionService
       submission = Submission.find(submission_id)
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
-      rejection_reason_template = 'nsv_bsv_submission_rejected'
+      rejection_reason_template = "nsv_bsv_submission_rejected"
         
       UserMailer.send(
         rejection_reason_template,

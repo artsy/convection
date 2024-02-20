@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-require 'support/gravity_helper'
+require "rails_helper"
+require "support/gravity_helper"
 
-describe 'createConsignmentOfferResponse mutation' do
+describe "createConsignmentOfferResponse mutation" do
   let!(:offer) { Fabricate :offer }
 
   let(:token) do
     user_id = offer.submission.user.gravity_user_id
-    payload = { aud: 'gravity', sub: user_id, roles: 'user' }
+    payload = {aud: "gravity", sub: user_id, roles: "user"}
     JWT.encode(payload, Convection.config.jwt_secret)
   end
 
-  let(:headers) { { 'Authorization' => "Bearer #{token}" } }
+  let(:headers) { {"Authorization" => "Bearer #{token}"} }
 
   let(:mutation_inputs) { <<-INPUTS }
     {
@@ -31,20 +31,20 @@ describe 'createConsignmentOfferResponse mutation' do
     }
   GRAPHQL
 
-  describe 'invalid requests' do
-    context 'with an unauthorized request' do
-      let(:token) { 'foo.bar.baz' }
+  describe "invalid requests" do
+    context "with an unauthorized request" do
+      let(:token) { "foo.bar.baz" }
 
-      it 'returns an error for that request' do
-        post '/api/graphql', params: { query: mutation }, headers: headers
+      it "returns an error for that request" do
+        post "/api/graphql", params: {query: mutation}, headers: headers
 
         expect(response.status).to eq 200
         body = JSON.parse(response.body)
 
-        create_response = body['data']['createConsignmentOfferResponse']
+        create_response = body["data"]["createConsignmentOfferResponse"]
         expect(create_response).to eq nil
 
-        error_message = body['errors'][0]['message']
+        error_message = body["errors"][0]["message"]
         expect(
           error_message
         ).to eq "Can't access createConsignmentOfferResponse"
@@ -53,61 +53,61 @@ describe 'createConsignmentOfferResponse mutation' do
 
     context "with a request for someone else's offer" do
       let(:token) do
-        payload = { aud: 'gravity', sub: 'userid', roles: 'user' }
+        payload = {aud: "gravity", sub: "userid", roles: "user"}
         JWT.encode(payload, Convection.config.jwt_secret)
       end
 
-      it 'returns an error for that request' do
-        post '/api/graphql', params: { query: mutation }, headers: headers
+      it "returns an error for that request" do
+        post "/api/graphql", params: {query: mutation}, headers: headers
 
         expect(response.status).to eq 200
         body = JSON.parse(response.body)
 
-        create_response = body['data']['createConsignmentOfferResponse']
+        create_response = body["data"]["createConsignmentOfferResponse"]
         expect(create_response).to eq nil
 
-        error_message = body['errors'][0]['message']
-        expect(error_message).to eq 'Offer not found'
+        error_message = body["errors"][0]["message"]
+        expect(error_message).to eq "Offer not found"
       end
     end
 
-    context 'with a request missing an offer id' do
+    context "with a request missing an offer id" do
       let(:mutation_inputs) { <<-INPUTS }
         {
           intendedState: "accepted"
         }
       INPUTS
 
-      it 'returns an error for that request' do
-        post '/api/graphql', params: { query: mutation }, headers: headers
+      it "returns an error for that request" do
+        post "/api/graphql", params: {query: mutation}, headers: headers
 
         expect(response.status).to eq 200
         body = JSON.parse(response.body)
 
-        error_message = body['errors'][0]['message']
-        expect(error_message).to match 'is required'
+        error_message = body["errors"][0]["message"]
+        expect(error_message).to match "is required"
       end
     end
 
-    context 'with a request missing an intended state' do
+    context "with a request missing an intended state" do
       let(:mutation_inputs) { <<-INPUTS }
         {
           offerId: #{offer.id}
         }
       INPUTS
 
-      it 'returns an error for that request' do
-        post '/api/graphql', params: { query: mutation }, headers: headers
+      it "returns an error for that request" do
+        post "/api/graphql", params: {query: mutation}, headers: headers
 
         expect(response.status).to eq 200
         body = JSON.parse(response.body)
 
-        error_message = body['errors'][0]['message']
-        expect(error_message).to match 'is required'
+        error_message = body["errors"][0]["message"]
+        expect(error_message).to match "is required"
       end
     end
 
-    context 'with an invalid intended state' do
+    context "with an invalid intended state" do
       let(:mutation_inputs) { <<-INPUTS }
         {
           intendedState: "blah",
@@ -115,18 +115,18 @@ describe 'createConsignmentOfferResponse mutation' do
         }
       INPUTS
 
-      it 'returns an error for that request' do
-        post '/api/graphql', params: { query: mutation }, headers: headers
+      it "returns an error for that request" do
+        post "/api/graphql", params: {query: mutation}, headers: headers
 
         expect(response.status).to eq 200
         body = JSON.parse(response.body)
 
-        error_message = body['errors'][0]['message']
-        expect(error_message).to match 'has an invalid value'
+        error_message = body["errors"][0]["message"]
+        expect(error_message).to match "has an invalid value"
       end
     end
 
-    context 'with an invalid rejection reason' do
+    context "with an invalid rejection reason" do
       let(:mutation_inputs) { <<-INPUTS }
         {
           intendedState: REJECTED,
@@ -135,38 +135,38 @@ describe 'createConsignmentOfferResponse mutation' do
         }
       INPUTS
 
-      it 'returns an error for that request' do
-        post '/api/graphql', params: { query: mutation }, headers: headers
+      it "returns an error for that request" do
+        post "/api/graphql", params: {query: mutation}, headers: headers
 
         expect(response.status).to eq 200
         body = JSON.parse(response.body)
 
-        error_message = body['errors'][0]['message']
-        expect(error_message).to match 'Validation failed'
+        error_message = body["errors"][0]["message"]
+        expect(error_message).to match "Validation failed"
       end
     end
   end
 
-  describe 'valid requests' do
-    context 'with just the minimum' do
-      it 'creates an offer response' do
+  describe "valid requests" do
+    context "with just the minimum" do
+      it "creates an offer response" do
         expect {
-          post '/api/graphql', params: { query: mutation }, headers: headers
+          post "/api/graphql", params: {query: mutation}, headers: headers
         }.to change(OfferResponse, :count).by(1)
 
         expect(response.status).to eq 200
         body = JSON.parse(response.body)
-        create_response = body['data']['createConsignmentOfferResponse']
+        create_response = body["data"]["createConsignmentOfferResponse"]
 
         offer_response = OfferResponse.last
 
-        expect(create_response['consignmentOfferResponse']).to include(
-          { 'id' => offer_response.id.to_s }
+        expect(create_response["consignmentOfferResponse"]).to include(
+          {"id" => offer_response.id.to_s}
         )
       end
     end
 
-    context 'with more fields' do
+    context "with more fields" do
       let(:mutation_inputs) { <<-INPUTS }
         {
           offerId: "#{offer.id}",
@@ -177,19 +177,19 @@ describe 'createConsignmentOfferResponse mutation' do
         }
       INPUTS
 
-      it 'creates an offer response' do
+      it "creates an offer response" do
         expect {
-          post '/api/graphql', params: { query: mutation }, headers: headers
+          post "/api/graphql", params: {query: mutation}, headers: headers
         }.to change(OfferResponse, :count).by(1)
 
         expect(response.status).to eq 200
         body = JSON.parse(response.body)
-        create_response = body['data']['createConsignmentOfferResponse']
+        create_response = body["data"]["createConsignmentOfferResponse"]
 
         offer_response = OfferResponse.last
 
-        expect(create_response['consignmentOfferResponse']).to include(
-          { 'id' => offer_response.id.to_s }
+        expect(create_response["consignmentOfferResponse"]).to include(
+          {"id" => offer_response.id.to_s}
         )
       end
     end

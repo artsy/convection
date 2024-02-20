@@ -7,7 +7,7 @@ class SubmissionResolver < BaseResolver
     check_submission_presence!
 
     unless draft_in_progress?(submission, @arguments) || admin? || partner?
-      raise GraphQL::ExecutionError, 'Submission Not Found'
+      raise GraphQL::ExecutionError, "Submission Not Found"
     end
 
     submission

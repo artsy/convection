@@ -23,38 +23,38 @@
 
 class UpdateForeignKeys < ActiveRecord::Migration[5.2]
   def up
-    remove_foreign_key 'offers', 'partner_submissions'
-    add_foreign_key 'offers', 'partner_submissions', on_delete: :cascade
+    remove_foreign_key "offers", "partner_submissions"
+    add_foreign_key "offers", "partner_submissions", on_delete: :cascade
 
-    remove_foreign_key 'offers', 'submissions'
-    add_foreign_key 'offers', 'submissions', on_delete: :cascade
+    remove_foreign_key "offers", "submissions"
+    add_foreign_key "offers", "submissions", on_delete: :cascade
 
-    remove_foreign_key 'partner_submissions', column: 'accepted_offer_id'
-    add_foreign_key 'partner_submissions',
-                    'offers',
-                    column: 'accepted_offer_id',
+    remove_foreign_key "partner_submissions", column: "accepted_offer_id"
+    add_foreign_key "partner_submissions",
+                    "offers",
+                    column: "accepted_offer_id",
                     on_delete: :nullify
 
-    remove_foreign_key 'submissions', column: 'consigned_partner_submission_id'
-    add_foreign_key 'submissions',
-                    'partner_submissions',
-                    column: 'consigned_partner_submission_id',
+    remove_foreign_key "submissions", column: "consigned_partner_submission_id"
+    add_foreign_key "submissions",
+                    "partner_submissions",
+                    column: "consigned_partner_submission_id",
                     on_delete: :nullify
   end
 
   def down
-    remove_foreign_key 'offers', 'partner_submissions'
-    add_foreign_key 'offers', 'partner_submissions'
+    remove_foreign_key "offers", "partner_submissions"
+    add_foreign_key "offers", "partner_submissions"
 
-    remove_foreign_key 'offers', 'submissions'
-    add_foreign_key 'offers', 'submissions'
+    remove_foreign_key "offers", "submissions"
+    add_foreign_key "offers", "submissions"
 
-    remove_foreign_key 'partner_submissions', column: 'accepted_offer_id'
-    add_foreign_key 'partner_submissions', 'offers', column: 'accepted_offer_id'
+    remove_foreign_key "partner_submissions", column: "accepted_offer_id"
+    add_foreign_key "partner_submissions", "offers", column: "accepted_offer_id"
 
-    remove_foreign_key 'submissions', column: 'consigned_partner_submission_id'
-    add_foreign_key 'submissions',
-                    'partner_submissions',
-                    column: 'consigned_partner_submission_id'
+    remove_foreign_key "submissions", column: "consigned_partner_submission_id"
+    add_foreign_key "submissions",
+                    "partner_submissions",
+                    column: "consigned_partner_submission_id"
   end
 end

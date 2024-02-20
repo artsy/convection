@@ -1,74 +1,74 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-describe 'partners create', type: :feature do
-  context 'always', js: true do
+describe "partners create", type: :feature do
+  context "always", js: true do
     before do
       allow_any_instance_of(ApplicationController).to receive(
         :require_artsy_authentication
       )
-      Fabricate(:partner, name: 'Gagosian Gallery')
-      Fabricate(:partner, name: 'Alan Cristea Gallery')
-      Fabricate(:partner, name: 'Rosier Gallery')
-      Fabricate(:partner, name: 'Auction House')
+      Fabricate(:partner, name: "Gagosian Gallery")
+      Fabricate(:partner, name: "Alan Cristea Gallery")
+      Fabricate(:partner, name: "Rosier Gallery")
+      Fabricate(:partner, name: "Auction House")
 
       allow(Convection.config).to receive(:gravity_xapp_token).and_return(
-        'xapp_token'
+        "xapp_token"
       )
       gravql_match_partners_response = {
         data: {
-          match_partners: [{ id: 'partner1', given_name: 'Storefront' }]
+          match_partners: [{id: "partner1", given_name: "Storefront"}]
         }
       }
       stub_request(:post, "#{Convection.config.gravity_api_url}/graphql")
         .to_return(body: gravql_match_partners_response.to_json)
         .with(
           headers: {
-            'X-XAPP-TOKEN' => 'xapp_token',
-            'Content-Type' => 'application/json'
+            "X-XAPP-TOKEN" => "xapp_token",
+            "Content-Type" => "application/json"
           }
         )
 
-      page.visit '/admin/partners'
+      page.visit "/admin/partners"
     end
 
-    it 'allows you to create a partner' do
+    it "allows you to create a partner" do
       expect(Partner.count).to eq 4
-      click_link('Add Partner')
+      click_link("Add Partner")
       expect(page).to have_selector(
-        '#partner-selections-form #partner-search-submit.disabled-button'
+        "#partner-selections-form #partner-search-submit.disabled-button"
       ) # button is disabled at first
-      fill_in('gravity_partner', with: 'store')
-      expect(page).to have_selector('.ui-menu-item a')
+      fill_in("gravity_partner", with: "store")
+      expect(page).to have_selector(".ui-menu-item a")
       page.execute_script(
         "$('.ui-menu-item:contains(\"Storefront\")').find('a').trigger('mouseenter').click()"
       )
       expect(page).to_not have_selector(
-                            '#partner-selections-form #partner-search-submit.disabled-button'
+                            "#partner-selections-form #partner-search-submit.disabled-button"
                           )
-      click_button('Create Partner')
-      expect(page).to have_content('Partner successfully created.')
+      click_button("Create Partner")
+      expect(page).to have_content("Partner successfully created.")
       expect(Partner.count).to eq 5
-      expect(Partner.last.name).to eq 'Storefront'
+      expect(Partner.last.name).to eq "Storefront"
     end
 
-    it 'does not create a partner if the create partner button is not clicked' do
+    it "does not create a partner if the create partner button is not clicked" do
       expect(Partner.count).to eq 4
-      click_link('Add Partner')
+      click_link("Add Partner")
       expect(page).to have_selector(
-        '#partner-selections-form #partner-search-submit.disabled-button'
+        "#partner-selections-form #partner-search-submit.disabled-button"
       ) # button is disabled at first
-      fill_in('gravity_partner', with: 'store')
-      expect(page).to have_selector('.ui-menu-item a')
+      fill_in("gravity_partner", with: "store")
+      expect(page).to have_selector(".ui-menu-item a")
       page.execute_script(
         "$('.ui-menu-item:contains(\"Storefront\")').find('a').trigger('mouseenter').click()"
       )
       expect(page).to_not have_selector(
-                            '#partner-selections-form #partner-search-submit.disabled-button'
+                            "#partner-selections-form #partner-search-submit.disabled-button"
                           )
-      find('#create-partner-close').click
-      expect(page).to_not have_content('Partner successfully created.')
+      find("#create-partner-close").click
+      expect(page).to_not have_content("Partner successfully created.")
       expect(Partner.count).to eq 4
     end
   end

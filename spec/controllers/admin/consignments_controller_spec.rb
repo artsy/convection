@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 describe Admin::ConsignmentsController, type: :controller do
   before do
@@ -9,38 +9,38 @@ describe Admin::ConsignmentsController, type: :controller do
     )
   end
 
-  describe '#index' do
+  describe "#index" do
     before do
-      @artist = { id: 'artistId', name: 'Banksy' }
-      @partner1 = Fabricate(:partner, name: 'Gagosian Gallery')
-      partner2 = Fabricate(:partner, name: 'Heritage Auctions')
+      @artist = {id: "artistId", name: "Banksy"}
+      @partner1 = Fabricate(:partner, name: "Gagosian Gallery")
+      partner2 = Fabricate(:partner, name: "Heritage Auctions")
       @consignment1 =
         Fabricate(
           :partner_submission,
-          state: 'open',
+          state: "open",
           submission:
-            Fabricate(:submission, state: 'approved', artist_id: @artist[:id]),
+            Fabricate(:submission, state: "approved", artist_id: @artist[:id]),
           partner: @partner1,
           sale_price_cents: 100_000
         )
       @consignment2 =
         Fabricate(
           :partner_submission,
-          state: 'open',
+          state: "open",
           submission:
-            Fabricate(:submission, state: 'approved', artist_id: @artist[:id]),
+            Fabricate(:submission, state: "approved", artist_id: @artist[:id]),
           partner: @partner1,
           sale_price_cents: 200_000
         )
       @consignment3 =
         Fabricate(
           :partner_submission,
-          state: 'bought in',
+          state: "bought in",
           submission:
             Fabricate(
               :submission,
-              state: 'approved',
-              artist_id: 'someArtistId'
+              state: "approved",
+              artist_id: "someArtistId"
             ),
           partner: @partner1,
           sale_price_cents: 300_000
@@ -48,29 +48,29 @@ describe Admin::ConsignmentsController, type: :controller do
       @consignment4 =
         Fabricate(
           :partner_submission,
-          state: 'open',
-          submission: Fabricate(:submission, state: 'approved'),
+          state: "open",
+          submission: Fabricate(:submission, state: "approved"),
           partner: partner2
         )
       @consignment5 =
         Fabricate(
           :partner_submission,
-          state: 'open',
-          submission: Fabricate(:submission, state: 'approved'),
+          state: "open",
+          submission: Fabricate(:submission, state: "approved"),
           partner: partner2
         )
       @consignment6 =
         Fabricate(
           :partner_submission,
-          state: 'withdrawn - pre-launch',
-          submission: Fabricate(:submission, state: 'approved'),
+          state: "withdrawn - pre-launch",
+          submission: Fabricate(:submission, state: "approved"),
           partner: partner2
         )
       @consignment7 =
         Fabricate(
           :partner_submission,
-          state: 'withdrawn - post-launch',
-          submission: Fabricate(:submission, state: 'approved'),
+          state: "withdrawn - post-launch",
+          submission: Fabricate(:submission, state: "approved"),
           partner: partner2
         )
 
@@ -78,80 +78,80 @@ describe Admin::ConsignmentsController, type: :controller do
         accepted_offer:
           Fabricate(
             :offer,
-            state: 'sent',
+            state: "sent",
             partner_submission: @consignment1,
-            offer_type: 'purchase'
+            offer_type: "purchase"
           )
       )
       @consignment2.update!(
         accepted_offer:
           Fabricate(
             :offer,
-            state: 'sent',
+            state: "sent",
             partner_submission: @consignment1,
-            offer_type: 'purchase'
+            offer_type: "purchase"
           )
       )
       @consignment3.update!(
         accepted_offer:
           Fabricate(
             :offer,
-            state: 'sent',
+            state: "sent",
             partner_submission: @consignment1,
-            offer_type: 'net price'
+            offer_type: "net price"
           )
       )
       @consignment4.update!(
         accepted_offer:
           Fabricate(
             :offer,
-            state: 'sent',
+            state: "sent",
             partner_submission: @consignment1,
-            offer_type: 'auction consignment'
+            offer_type: "auction consignment"
           )
       )
       @consignment5.update!(
         accepted_offer:
           Fabricate(
             :offer,
-            state: 'sent',
+            state: "sent",
             partner_submission: @consignment1,
-            offer_type: 'retail'
+            offer_type: "retail"
           )
       )
       @consignment6.update!(
         accepted_offer:
           Fabricate(
             :offer,
-            state: 'sent',
+            state: "sent",
             partner_submission: @consignment1,
-            offer_type: 'purchase'
+            offer_type: "purchase"
           )
       )
       @consignment7.update!(
         accepted_offer:
           Fabricate(
             :offer,
-            state: 'sent',
+            state: "sent",
             partner_submission: @consignment1,
-            offer_type: 'purchase'
+            offer_type: "purchase"
           )
       )
     end
 
-    it 'returns the first two consignments on the first page' do
-      get :index, params: { page: 1, size: 2 }
+    it "returns the first two consignments on the first page" do
+      get :index, params: {page: 1, size: 2}
       expect(controller.consignments.count).to eq 2
     end
 
-    it 'paginates correctly' do
-      get :index, params: { page: 4, size: 2 }
+    it "paginates correctly" do
+      get :index, params: {page: 4, size: 2}
       expect(controller.consignments.count).to eq 1
     end
 
-    describe '#sorting and filtering' do
-      it 'allows you to filter by state = open' do
-        get :index, params: { state: 'open' }
+    describe "#sorting and filtering" do
+      it "allows you to filter by state = open" do
+        get :index, params: {state: "open"}
         expect(controller.consignments.pluck(:id)).to eq [
              @consignment5.id,
              @consignment4.id,
@@ -160,23 +160,23 @@ describe Admin::ConsignmentsController, type: :controller do
            ]
       end
 
-      it 'allows you to filter by state = bought in' do
-        get :index, params: { state: 'bought in' }
+      it "allows you to filter by state = bought in" do
+        get :index, params: {state: "bought in"}
         expect(controller.consignments.pluck(:id)).to eq [@consignment3.id]
       end
 
-      it 'allows you to filter by state = withdrawn - pre-launch' do
-        get :index, params: { state: 'withdrawn - pre-launch' }
+      it "allows you to filter by state = withdrawn - pre-launch" do
+        get :index, params: {state: "withdrawn - pre-launch"}
         expect(controller.consignments.pluck(:id)).to eq [@consignment6.id]
       end
 
-      it 'allows you to filter by state = withdrawn - post-launch' do
-        get :index, params: { state: 'withdrawn - post-launch' }
+      it "allows you to filter by state = withdrawn - post-launch" do
+        get :index, params: {state: "withdrawn - post-launch"}
         expect(controller.consignments.pluck(:id)).to eq [@consignment7.id]
       end
 
-      it 'allows you to sort by offer type' do
-        get :index, params: { sort: 'offers.offer_type', direction: 'asc' }
+      it "allows you to sort by offer type" do
+        get :index, params: {sort: "offers.offer_type", direction: "asc"}
         expect(controller.consignments.pluck(:id)).to eq(
           [
             @consignment4.id,
@@ -190,8 +190,8 @@ describe Admin::ConsignmentsController, type: :controller do
         )
       end
 
-      it 'allows you to sort by partner name' do
-        get :index, params: { sort: 'partners.name', direction: 'desc' }
+      it "allows you to sort by partner name" do
+        get :index, params: {sort: "partners.name", direction: "desc"}
         expect(controller.consignments.pluck(:id)).to eq(
           [
             @consignment7.id,
@@ -205,8 +205,8 @@ describe Admin::ConsignmentsController, type: :controller do
         )
       end
 
-      it 'allows you to sort by sale_price_cents' do
-        get :index, params: { sort: 'sale_price_cents', direction: 'desc' }
+      it "allows you to sort by sale_price_cents" do
+        get :index, params: {sort: "sale_price_cents", direction: "desc"}
         expect(controller.consignments.pluck(:id)).to eq(
           [
             @consignment4.id,
@@ -220,12 +220,12 @@ describe Admin::ConsignmentsController, type: :controller do
         )
       end
 
-      it 'allows you to filter by state and sort by sale_price_cents' do
+      it "allows you to filter by state and sort by sale_price_cents" do
         get :index,
             params: {
-              sort: 'sale_price_cents',
-              direction: 'desc',
-              state: 'open'
+              sort: "sale_price_cents",
+              direction: "desc",
+              state: "open"
             }
         expect(controller.consignments.pluck(:id)).to eq [
              @consignment4.id,
@@ -235,11 +235,11 @@ describe Admin::ConsignmentsController, type: :controller do
            ]
       end
 
-      it 'allows you to search for partner and sort by sale_price_cents' do
+      it "allows you to search for partner and sort by sale_price_cents" do
         get :index,
             params: {
-              sort: 'sale_price_cents',
-              direction: 'desc',
+              sort: "sale_price_cents",
+              direction: "desc",
               partner: @partner1.id
             }
         expect(controller.consignments.pluck(:id)).to eq [
@@ -249,11 +249,11 @@ describe Admin::ConsignmentsController, type: :controller do
            ]
       end
 
-      it 'allows you to search for artist and sort by sale_price_cents' do
+      it "allows you to search for artist and sort by sale_price_cents" do
         get :index,
             params: {
-              sort: 'sale_price_cents',
-              direction: 'desc',
+              sort: "sale_price_cents",
+              direction: "desc",
               artist: @artist[:id]
             }
         expect(controller.consignments.pluck(:id)).to eq [

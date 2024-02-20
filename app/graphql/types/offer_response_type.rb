@@ -2,9 +2,9 @@
 
 module Types
   class OfferResponseType < Types::BaseObject
-    description 'Consignment Offer Response'
+    description "Consignment Offer Response"
 
-    field :id, ID, 'Uniq ID for this offer response', null: false
+    field :id, ID, "Uniq ID for this offer response", null: false
     field :intended_state, Types::IntendedStateType, null: false
 
     field :phone_number, String, null: true

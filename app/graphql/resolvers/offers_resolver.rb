@@ -2,7 +2,7 @@
 
 class OffersResolver < BaseResolver
   BadArgumentError = GraphQL::ExecutionError.new("Can't find partner.")
-  InvalidSortError = GraphQL::ExecutionError.new('Invalid sort column.')
+  InvalidSortError = GraphQL::ExecutionError.new("Invalid sort column.")
 
   def valid?
     @error = compute_error
@@ -33,11 +33,11 @@ class OffersResolver < BaseResolver
   end
 
   def conditions
-    { state: @arguments[:states] }.compact
+    {state: @arguments[:states]}.compact
   end
 
   def sort_order
-    default_sort = { id: :desc }
+    default_sort = {id: :desc}
     return default_sort unless @arguments[:sort]
 
     @arguments[:sort]

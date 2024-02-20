@@ -5,7 +5,7 @@ class OfferResponse < ApplicationRecord
 
   belongs_to :offer, counter_cache: true
 
-  validates :intended_state, inclusion: { in: INTENDED_STATES }
+  validates :intended_state, inclusion: {in: INTENDED_STATES}
   validates :rejection_reason,
             inclusion: {
               in: Offer::REJECTION_REASONS

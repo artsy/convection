@@ -9,7 +9,7 @@ module Admin
 
     # GET /admin/admin_users
     def index
-      @admin_users = AdminUser.order('LOWER(name)').all
+      @admin_users = AdminUser.order("LOWER(name)").all
     end
 
     # GET /admin/admin_users/1
@@ -32,7 +32,7 @@ module Admin
 
       if @admin_user.save
         redirect_to admin_admin_users_path,
-                    notice: 'Admin was successfully created.'
+                    notice: "Admin was successfully created."
       else
         render :new
       end
@@ -42,7 +42,7 @@ module Admin
     def update
       if @admin_user.update(admin_user_params)
         redirect_to admin_admin_users_path,
-                    notice: 'Admin was successfully updated.'
+                    notice: "Admin was successfully updated."
       else
         render :edit
       end
@@ -52,7 +52,7 @@ module Admin
     def destroy
       @admin_user.destroy
       redirect_to admin_admin_users_url,
-                  notice: 'Admin was successfully destroyed.'
+                  notice: "Admin was successfully destroyed."
     end
 
     private

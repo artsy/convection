@@ -40,7 +40,7 @@ class UserMailerPreview < BasePreview
   def auction_consignment_offer
     UserMailer.offer(
       offer: auction_offer,
-      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol')
+      artist: OpenStruct.new(id: "artist_id", name: "Andy Warhol")
     )
   end
 
@@ -48,25 +48,25 @@ class UserMailerPreview < BasePreview
     UserMailer.offer(
       offer:
         OpenStruct.new(
-          id: '123',
-          offer_type: 'retail',
-          reference_id: '12345',
-          currency: 'USD',
-          rejection_reason: 'High shipping/marketing costs',
+          id: "123",
+          offer_type: "retail",
+          reference_id: "12345",
+          currency: "USD",
+          rejection_reason: "High shipping/marketing costs",
           price_cents: 12_300,
           commission_percent: 0.10,
           sale_period_start: Date.new(2_014, 1, 4),
           sale_period_end: Date.new(2_014, 10, 4),
-          notes: 'We would love to sell your work!',
+          notes: "We would love to sell your work!",
           partner_submission:
             OpenStruct.new(
               partner:
-                OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery')
+                OpenStruct.new(id: "partner_id", name: "Gagosian Gallery")
             ),
-          partner: OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery'),
+          partner: OpenStruct.new(id: "partner_id", name: "Gagosian Gallery"),
           submission: base_submission
         ),
-      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol')
+      artist: OpenStruct.new(id: "artist_id", name: "Andy Warhol")
     )
   end
 
@@ -74,22 +74,22 @@ class UserMailerPreview < BasePreview
     UserMailer.offer(
       offer:
         OpenStruct.new(
-          id: '123',
-          offer_type: 'purchase',
-          reference_id: '12345',
-          currency: 'USD',
-          rejection_reason: 'High shipping/marketing costs',
+          id: "123",
+          offer_type: "purchase",
+          reference_id: "12345",
+          currency: "USD",
+          rejection_reason: "High shipping/marketing costs",
           price_cents: 12_300,
-          notes: 'We would love to sell your work!',
+          notes: "We would love to sell your work!",
           partner_submission:
             OpenStruct.new(
               partner:
-                OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery')
+                OpenStruct.new(id: "partner_id", name: "Gagosian Gallery")
             ),
-          partner: OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery'),
+          partner: OpenStruct.new(id: "partner_id", name: "Gagosian Gallery"),
           submission: base_submission
         ),
-      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol')
+      artist: OpenStruct.new(id: "artist_id", name: "Andy Warhol")
     )
   end
 
@@ -97,24 +97,24 @@ class UserMailerPreview < BasePreview
     UserMailer.offer(
       offer:
         OpenStruct.new(
-          id: '123',
-          offer_type: 'net price',
-          reference_id: '12345',
-          currency: 'USD',
+          id: "123",
+          offer_type: "net price",
+          reference_id: "12345",
+          currency: "USD",
           sale_period_start: Date.new(2_014, 1, 4),
           sale_period_end: Date.new(2_014, 10, 4),
-          rejection_reason: 'High shipping/marketing costs',
+          rejection_reason: "High shipping/marketing costs",
           price_cents: 12_300,
-          notes: 'We would love to sell your work!',
+          notes: "We would love to sell your work!",
           partner_submission:
             OpenStruct.new(
               partner:
-                OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery')
+                OpenStruct.new(id: "partner_id", name: "Gagosian Gallery")
             ),
-          partner: OpenStruct.new(id: 'partner_id', name: 'Gagosian Gallery'),
+          partner: OpenStruct.new(id: "partner_id", name: "Gagosian Gallery"),
           submission: base_submission
         ),
-      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol')
+      artist: OpenStruct.new(id: "artist_id", name: "Andy Warhol")
     )
   end
 
@@ -123,11 +123,11 @@ class UserMailerPreview < BasePreview
   def receipt_mail_params
     {
       submission: base_submission,
-      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol')
+      artist: OpenStruct.new(id: "artist_id", name: "Andy Warhol")
     }
   end
 
   def reminder_mail_params
-    { submission: OpenStruct.new(id: '12', email: 'michael@bluth.com') }
+    {submission: OpenStruct.new(id: "12", email: "michael@bluth.com")}
   end
 end

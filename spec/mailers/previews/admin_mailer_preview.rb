@@ -11,13 +11,13 @@ class AdminMailerPreview < ActionMailer::Preview
     {
       submission:
         OpenStruct.new(
-          id: '12',
-          name: 'Michael Bluth',
-          email: 'michael@bluth.com',
+          id: "12",
+          name: "Michael Bluth",
+          email: "michael@bluth.com",
           processed_images: []
         ),
-      artist: OpenStruct.new(id: 'artist_id', name: 'Andy Warhol'),
-      user: OpenStruct.new(id: 'x', name: 'William Black')
+      artist: OpenStruct.new(id: "artist_id", name: "Andy Warhol"),
+      user: OpenStruct.new(id: "x", name: "William Black")
     }
   end
 end

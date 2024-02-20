@@ -41,7 +41,7 @@ class SubmissionMatch
         "LEFT OUTER JOIN offers on offers.submission_id = submissions.id AND offers.state IN ('#{Offer::ACCEPTED}', '#{Offer::REVIEW}')"
       )
       .distinct
-      .where(offers: { submission_id: nil })
+      .where(offers: {submission_id: nil})
   end
 
   def submissions_assigned_without_accepted_offer(submissions)
@@ -83,12 +83,12 @@ SQL
 
   def filtering_by_assigned_to?
     params.keys.map(&:to_sym).include?(:assigned_to) &&
-      params[:assigned_to] != 'all'
+      params[:assigned_to] != "all"
   end
 
   def filtering_by_cataloguer?
     params.keys.map(&:to_sym).include?(:cataloguer) &&
-      params[:cataloguer] != 'all'
+      params[:cataloguer] != "all"
   end
 
   def filtering_by_assigned_without_accepted_offer?
@@ -100,7 +100,7 @@ SQL
   end
 
   def sorting_by_users?
-    sort.include?('users')
+    sort.include?("users")
   end
 
   def order_by
@@ -112,11 +112,11 @@ SQL
   end
 
   def sort
-    params[:sort].presence || 'id'
+    params[:sort].presence || "id"
   end
 
   def direction
-    params[:direction].presence || 'desc'
+    params[:direction].presence || "desc"
   end
 
   def assigned_to

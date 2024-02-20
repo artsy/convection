@@ -24,7 +24,7 @@ module Api
         )
       end
 
-      render json: { result: 'ok' }, status: :created
+      render json: {result: "ok"}, status: :created
     end
   end
 end

@@ -15,23 +15,23 @@ class PartnerMailer < ApplicationMailer
     @partner_type = partner_type
     @utm_params =
       utm_params(
-        source: 'sendgrid',
-        campaign: 'sell',
-        term: 'cx',
-        content: 'sub-digest-auction'
+        source: "sendgrid",
+        campaign: "sell",
+        term: "cx",
+        content: "sub-digest-auction"
       )
     smtpapi category: %w[submission_digest],
             unique_args: {
               partner_name: partner_name
             }
 
-    current_date = Time.now.utc.strftime('%B %-d')
+    current_date = Time.now.utc.strftime("%B %-d")
     mail(
       to: email,
       from: Convection.config.admin_email_address,
       subject:
         "New Artsy Consignments #{current_date}: #{args[:submissions_count]} works"
-    ) { |format| format.html { render layout: 'mailer_no_footer' } }
+    ) { |format| format.html { render layout: "mailer_no_footer" } }
   end
 
   def offer_introduction(offer:, artist:, email:)
@@ -40,15 +40,15 @@ class PartnerMailer < ApplicationMailer
     @artist = artist
     @utm_params =
       utm_params(
-        source: 'consignment-offer-introduction',
-        campaign: 'consignment-offer'
+        source: "consignment-offer-introduction",
+        campaign: "consignment-offer"
       )
 
-    smtpapi category: %w[offer], unique_args: { offer_id: offer.id }
+    smtpapi category: %w[offer], unique_args: {offer_id: offer.id}
     mail(
       to: email,
       reply_to: reply_email(@submission.assigned_to),
-      subject: 'The consignor has expressed interest in your offer'
+      subject: "The consignor has expressed interest in your offer"
     )
   end
 
@@ -58,15 +58,15 @@ class PartnerMailer < ApplicationMailer
     @artist = artist
     @utm_params =
       utm_params(
-        source: 'consignment-offer-rejected',
-        campaign: 'consignment-offer'
+        source: "consignment-offer-rejected",
+        campaign: "consignment-offer"
       )
 
-    smtpapi category: %w[offer], unique_args: { offer_id: offer.id }
+    smtpapi category: %w[offer], unique_args: {offer_id: offer.id}
     mail(
       to: email,
       reply_to: reply_email(@submission.assigned_to),
-      subject: 'A response to your consignment offer'
+      subject: "A response to your consignment offer"
     )
   end
 

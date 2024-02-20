@@ -18,7 +18,7 @@ class OfferResolver < BaseResolver
     validate_offer_state(offer)
     offer
   rescue ActiveRecord::RecordNotFound
-    raise GraphQL::ExecutionError, 'Offer not found'
+    raise GraphQL::ExecutionError, "Offer not found"
   end
 
   private
@@ -32,14 +32,14 @@ class OfferResolver < BaseResolver
       offer.submission&.user&.gravity_user_id == @context[:current_user]
     return if matching_user || admin?
 
-    raise(GraphQL::ExecutionError, 'Offer not found')
+    raise(GraphQL::ExecutionError, "Offer not found")
   end
 
   def validate_offer_state(offer)
     return true if admin?
     return if offer.state != Offer::DRAFT
 
-    raise(GraphQL::ExecutionError, 'Offer not found')
+    raise(GraphQL::ExecutionError, "Offer not found")
   end
 
   def partner

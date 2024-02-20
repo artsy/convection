@@ -21,7 +21,7 @@ module Mutations
     argument :edition_size,
              Integer,
              required: false,
-             description: 'Deprecated: Use edition_size_formatted field instead'
+             description: "Deprecated: Use edition_size_formatted field instead"
     argument :edition_size_formatted, String, required: false
     argument :height, String, required: false
     argument :location_city, String, required: false
@@ -37,7 +37,7 @@ module Mutations
     argument :sourceArtworkID,
              String,
              required: false,
-             description: 'If this artwork exists in Gravity, its ID'
+             description: "If this artwork exists in Gravity, its ID"
     argument :state, Types::StateType, required: false
     argument :title, String, required: false
     argument :user_agent, String, required: false

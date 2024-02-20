@@ -11,11 +11,11 @@ class BaseResolver
   end
 
   def valid?
-    raise 'Implement in subclass'
+    raise "Implement in subclass"
   end
 
   def run
-    raise 'Implement in subclass'
+    raise "Implement in subclass"
   end
 
   private
@@ -47,7 +47,7 @@ class BaseResolver
       user = Gravity.client.user(id: @context[:current_user]).user_detail._get
       submission.user_email.downcase == user.email.downcase
     rescue StandardError
-      Rails.logger.info 'Unable to match user email with submission email'
+      Rails.logger.info "Unable to match user email with submission email"
       nil
     end
   end

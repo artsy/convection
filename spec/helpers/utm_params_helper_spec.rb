@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 describe UtmParamsHelper, type: :helper do
   describe "utm_params" do
@@ -10,8 +10,8 @@ describe UtmParamsHelper, type: :helper do
       )
     end
     it "correctly transforms additional args" do
-      expect(utm_params(source: "source", campaign: "campaign", one: "one", two: 'two')).to eq(
-        {utm_source: "source", utm_medium: "email", utm_campaign: "campaign", utm_one: "one", utm_two: 'two'}
+      expect(utm_params(source: "source", campaign: "campaign", one: "one", two: "two")).to eq(
+        {utm_source: "source", utm_medium: "email", utm_campaign: "campaign", utm_one: "one", utm_two: "two"}
       )
     end
   end

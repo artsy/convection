@@ -1,40 +1,40 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-require 'support/gravity_helper'
-require 'support/gravql_helper'
+require "rails_helper"
+require "support/gravity_helper"
+require "support/gravql_helper"
 
 describe PartnerSubmissionService do
   before do
-    @user = Fabricate(:user, gravity_user_id: 'userid')
-    @user2 = Fabricate(:user, gravity_user_id: 'userid2')
+    @user = Fabricate(:user, gravity_user_id: "userid")
+    @user2 = Fabricate(:user, gravity_user_id: "userid2")
     add_default_stubs
-    add_default_stubs(id: 'userid2')
+    add_default_stubs(id: "userid2")
 
     allow(Convection.config).to receive(:gravity_xapp_token).and_return(
-      'xapp_token'
+      "xapp_token"
     )
     stub_gravql_artists(
       body: {
         data: {
-          artists: [{ id: 'artistid', name: 'Andy Warhol' }]
+          artists: [{id: "artistid", name: "Andy Warhol"}]
         }
       }
     )
     stub_gravity_partner_communications
     stub_gravity_partner_contacts
     allow(Time).to receive(:now).and_return(
-      Time.new(2_017, 9, 27, 12).in_time_zone('UTC')
+      Time.new(2_017, 9, 27, 12).in_time_zone("UTC")
     ) # stub time for email subject lines
     allow(Convection.config).to receive(:auction_offer_form_url).and_return(
-      'https://google.com/auction'
+      "https://google.com/auction"
     )
   end
 
-  describe '#generate_for_new_partner' do
-    it 'generates partner submissions if the partner has no existing partner submissions' do
-      submission = Fabricate(:submission, state: 'published')
-      Fabricate(:submission, state: 'submitted')
+  describe "#generate_for_new_partner" do
+    it "generates partner submissions if the partner has no existing partner submissions" do
+      submission = Fabricate(:submission, state: "published")
+      Fabricate(:submission, state: "submitted")
       partner = Fabricate(:partner)
       PartnerSubmissionService.generate_for_new_partner(partner)
       expect(partner.partner_submissions.count).to eq 1
@@ -43,169 +43,169 @@ describe PartnerSubmissionService do
       ).to eq 1
     end
 
-    it 'generates new partner submissions' do
+    it "generates new partner submissions" do
       partner = Fabricate(:partner)
       submission =
         Fabricate(
           :submission,
-          state: 'submitted',
+          state: "submitted",
           user: @user,
-          artist_id: 'artistid'
+          artist_id: "artistid"
         )
       expect(NotificationService).to receive(:post_submission_event)
         .once
-        .with(submission.id, 'published')
-      SubmissionService.update_submission(submission, { state: 'published' })
+        .with(submission.id, "published")
+      SubmissionService.update_submission(submission, {state: "published"})
       expect(partner.partner_submissions.count).to eq 1
       expect(partner.partner_submissions.first.submission).to eq submission
-      Fabricate(:submission, state: 'published')
+      Fabricate(:submission, state: "published")
       PartnerSubmissionService.generate_for_new_partner(partner)
       expect(partner.partner_submissions.count).to eq 2
     end
   end
 
-  describe '#generate_for_all_partners' do
-    it 'generates a new partner submission for a single partner' do
-      submission = Fabricate(:submission, state: 'approved')
+  describe "#generate_for_all_partners" do
+    it "generates a new partner submission for a single partner" do
+      submission = Fabricate(:submission, state: "approved")
       partner = Fabricate(:partner)
       PartnerSubmissionService.generate_for_all_partners(submission.id)
       expect(partner.partner_submissions.count).to eq 1
     end
 
-    it 'does nothing if there are no partners' do
-      submission = Fabricate(:submission, state: 'approved')
+    it "does nothing if there are no partners" do
+      submission = Fabricate(:submission, state: "approved")
       expect {
         PartnerSubmissionService.generate_for_all_partners(submission.id)
       }.to_not change(PartnerSubmission, :count)
     end
   end
 
-  describe '#daily_digest' do
-    before { stub_gravity_partner(name: 'Juliens Auctions') }
+  describe "#daily_digest" do
+    before { stub_gravity_partner(name: "Juliens Auctions") }
 
-    it 'does not send any emails if there are no partner submissions' do
-      Fabricate(:partner, gravity_partner_id: 'partnerid')
-      Fabricate(:submission, state: 'approved')
+    it "does not send any emails if there are no partner submissions" do
+      Fabricate(:partner, gravity_partner_id: "partnerid")
+      Fabricate(:submission, state: "approved")
       PartnerSubmissionService.daily_digest
       expect(PartnerSubmission.count).to eq 0
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 0
     end
 
-    it 'does not send any emails if there are no partners' do
-      Fabricate(:submission, state: 'approved')
+    it "does not send any emails if there are no partners" do
+      Fabricate(:submission, state: "approved")
       PartnerSubmissionService.daily_digest
       expect(PartnerSubmission.count).to eq 0
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 0
     end
 
-    context 'with one submission with a minimum price' do
+    context "with one submission with a minimum price" do
       before do
-        @partner = Fabricate(:partner, gravity_partner_id: 'partnerid')
-        Fabricate(:submission, state: 'submitted')
+        @partner = Fabricate(:partner, gravity_partner_id: "partnerid")
+        Fabricate(:submission, state: "submitted")
         @approved1 =
           Fabricate(
             :submission,
-            state: 'submitted',
-            artist_id: 'artistid',
+            state: "submitted",
+            artist_id: "artistid",
             user: @user,
-            title: 'Approved artwork with minimum price',
-            year: '1992',
+            title: "Approved artwork with minimum price",
+            year: "1992",
             minimum_price_cents: 50_000_00,
-            currency: 'USD'
+            currency: "USD"
           )
         expect(NotificationService).to receive(:post_submission_event)
           .once
-          .with(@approved1.id, 'published')
-        SubmissionService.update_submission(@approved1, { state: 'published' })
+          .with(@approved1.id, "published")
+        SubmissionService.update_submission(@approved1, {state: "published"})
         PartnerSubmissionService.daily_digest
         @email = ActionMailer::Base.deliveries.last
       end
 
-      it 'properly formats the price' do
-        expect(@email.html_part.body).to include('Looking for: $50,000')
+      it "properly formats the price" do
+        expect(@email.html_part.body).to include("Looking for: $50,000")
       end
     end
 
-    context 'with one submission without a minimum price' do
+    context "with one submission without a minimum price" do
       before do
-        @partner = Fabricate(:partner, gravity_partner_id: 'partnerid')
-        Fabricate(:submission, state: 'submitted')
+        @partner = Fabricate(:partner, gravity_partner_id: "partnerid")
+        Fabricate(:submission, state: "submitted")
         @approved1 =
           Fabricate(
             :submission,
-            state: 'submitted',
-            artist_id: 'artistid',
+            state: "submitted",
+            artist_id: "artistid",
             user: @user,
-            title: 'Approved artwork with minimum price',
-            year: '1992'
+            title: "Approved artwork with minimum price",
+            year: "1992"
           )
         expect(NotificationService).to receive(:post_submission_event)
           .once
-          .with(@approved1.id, 'published')
-        SubmissionService.update_submission(@approved1, { state: 'published' })
+          .with(@approved1.id, "published")
+        SubmissionService.update_submission(@approved1, {state: "published"})
       end
 
-      it 'does not display any min price-related text' do
+      it "does not display any min price-related text" do
         PartnerSubmissionService.daily_digest
         email = ActionMailer::Base.deliveries.last
-        expect(email.html_part.body).to_not include('Looking for:')
+        expect(email.html_part.body).to_not include("Looking for:")
       end
     end
 
-    context 'with some submissions' do
+    context "with some submissions" do
       before do
-        @partner = Fabricate(:partner, gravity_partner_id: 'partnerid')
-        Fabricate(:submission, state: 'submitted')
+        @partner = Fabricate(:partner, gravity_partner_id: "partnerid")
+        Fabricate(:submission, state: "submitted")
         @approved1 =
           Fabricate(
             :submission,
-            state: 'submitted',
-            artist_id: 'artistid',
+            state: "submitted",
+            artist_id: "artistid",
             user: @user,
-            title: 'First approved artwork',
-            year: '1992'
+            title: "First approved artwork",
+            year: "1992"
           )
         @approved2 =
           Fabricate(
             :submission,
-            state: 'submitted',
-            artist_id: 'artistid',
+            state: "submitted",
+            artist_id: "artistid",
             user: @user2,
-            title: 'Second approved artwork',
-            year: '1993'
+            title: "Second approved artwork",
+            year: "1993"
           )
         @approved3 =
           Fabricate(
             :submission,
-            state: 'submitted',
-            artist_id: 'artistid',
+            state: "submitted",
+            artist_id: "artistid",
             user: @user,
-            title: 'Third approved artwork',
-            year: '1997'
+            title: "Third approved artwork",
+            year: "1997"
           )
-        Fabricate(:submission, state: 'rejected')
+        Fabricate(:submission, state: "rejected")
         expect(NotificationService).to receive(:post_submission_event)
           .once
-          .with(@approved1.id, 'published')
+          .with(@approved1.id, "published")
         expect(NotificationService).to receive(:post_submission_event)
           .once
-          .with(@approved2.id, 'published')
+          .with(@approved2.id, "published")
         expect(NotificationService).to receive(:post_submission_event)
           .once
-          .with(@approved3.id, 'published')
-        SubmissionService.update_submission(@approved1, { state: 'published' })
-        SubmissionService.update_submission(@approved2, { state: 'published' })
-        SubmissionService.update_submission(@approved3, { state: 'published' })
+          .with(@approved3.id, "published")
+        SubmissionService.update_submission(@approved1, {state: "published"})
+        SubmissionService.update_submission(@approved2, {state: "published"})
+        SubmissionService.update_submission(@approved3, {state: "published"})
         ActionMailer::Base.deliveries = []
         expect(@partner.partner_submissions.count).to eq 3
       end
 
-      context 'with no partner contacts' do
+      context "with no partner contacts" do
         before { stub_gravity_partner_contacts(override_body: []) }
 
-        it 'skips sending to partner if there are no partner contacts' do
+        it "skips sending to partner if there are no partner contacts" do
           PartnerSubmissionService.daily_digest
           emails = ActionMailer::Base.deliveries
           expect(emails.length).to eq 0
@@ -213,45 +213,45 @@ describe PartnerSubmissionService do
         end
       end
 
-      context 'with some partner contacts' do
-        it 'sends an email digest to a single partner with only approved submissions' do
+      context "with some partner contacts" do
+        it "sends an email digest to a single partner with only approved submissions" do
           PartnerSubmissionService.daily_digest
 
           emails = ActionMailer::Base.deliveries
           expect(emails.length).to eq 1
           email = emails.first
           expect(email.subject).to include(
-            'New Artsy Consignments September 27: 3 works'
+            "New Artsy Consignments September 27: 3 works"
           )
           expect(email.bcc).to eq(%w[consignments-archive@artsymail.com])
           expect(email.from).to eq(%w[sell@artsy.net])
           expect(email.html_part.body).to include(
-            '<i>First approved artwork</i><span>, 1992</span>'
+            "<i>First approved artwork</i><span>, 1992</span>"
           )
           expect(email.html_part.body).to include(
-            '<i>Second approved artwork</i><span>, 1993</span>'
+            "<i>Second approved artwork</i><span>, 1993</span>"
           )
           expect(email.html_part.body).to include(
-            '<i>Third approved artwork</i><span>, 1997</span>'
+            "<i>Third approved artwork</i><span>, 1997</span>"
           )
-          expect(email.html_part.body).to include('https://cms.artsy.net')
+          expect(email.html_part.body).to include("https://cms.artsy.net")
 
-          expect(emails.first.html_part.body).to include('utm_source=sendgrid')
-          expect(emails.first.html_part.body).to include('utm_medium=email')
-          expect(emails.first.html_part.body).to include('utm_campaign=sell')
+          expect(emails.first.html_part.body).to include("utm_source=sendgrid")
+          expect(emails.first.html_part.body).to include("utm_medium=email")
+          expect(emails.first.html_part.body).to include("utm_campaign=sell")
           expect(emails.first.html_part.body).to include(
-            'utm_content=sub-digest-auction'
+            "utm_content=sub-digest-auction"
           )
           expect(
             @partner.partner_submissions.map(&:notified_at).compact.length
           ).to eq 3
         end
 
-        it 'sends an email digest to multiple partner contacts with only approved submissions' do
+        it "sends an email digest to multiple partner contacts with only approved submissions" do
           stub_gravity_partner_contacts(
             override_body: [
-              { email: 'contact1@partner.com' },
-              { email: 'contact2@partner.com' }
+              {email: "contact1@partner.com"},
+              {email: "contact2@partner.com"}
             ]
           )
           PartnerSubmissionService.daily_digest
@@ -264,18 +264,18 @@ describe PartnerSubmissionService do
           )
         end
 
-        it 'sends a digest with the first processed image' do
+        it "sends a digest with the first processed image" do
           first_image = Fabricate(:image, submission: @approved1)
           PartnerSubmissionService.daily_digest
 
           emails = ActionMailer::Base.deliveries
           expect(emails.length).to eq 1
           expect(emails.first.html_part.body).to include(
-            first_image.image_urls['square']
+            first_image.image_urls["square"]
           )
         end
 
-        it 'sends a digest with the primary image' do
+        it "sends a digest with the primary image" do
           Fabricate(:image, submission: @approved1)
           second_image = Fabricate(:image, submission: @approved1)
           @approved1.update!(primary_image_id: second_image.id)
@@ -284,34 +284,34 @@ describe PartnerSubmissionService do
           emails = ActionMailer::Base.deliveries
           expect(emails.length).to eq 1
           expect(emails.first.html_part.body).to include(
-            second_image.image_urls['square']
+            second_image.image_urls["square"]
           )
         end
 
-        it 'includes links to additional images' do
+        it "includes links to additional images" do
           first_image = Fabricate(:image, submission: @approved1)
           Fabricate(
             :image,
             submission: @approved1,
             image_urls: {
-              'square' => 'http://square1.jpg',
-              'large' => 'http://foo1.jpg'
+              "square" => "http://square1.jpg",
+              "large" => "http://foo1.jpg"
             }
           )
           Fabricate(
             :image,
             submission: @approved1,
             image_urls: {
-              'square' => 'http://square2.jpg',
-              'large' => 'http://foo2.jpg'
+              "square" => "http://square2.jpg",
+              "large" => "http://foo2.jpg"
             }
           )
           Fabricate(
             :image,
             submission: @approved1,
             image_urls: {
-              'square' => 'http://square3.jpg',
-              'large' => 'http://foo3.jpg'
+              "square" => "http://square3.jpg",
+              "large" => "http://foo3.jpg"
             }
           )
           PartnerSubmissionService.daily_digest
@@ -319,7 +319,7 @@ describe PartnerSubmissionService do
           emails = ActionMailer::Base.deliveries
           expect(emails.length).to eq 1
           email_body = emails.first.html_part.body
-          expect(email_body).to include(first_image.image_urls['square'])
+          expect(email_body).to include(first_image.image_urls["square"])
           expect(email_body).to include(
             '<a href="http://foo1.jpg" style="color: #000001;">Image 2</a>'
           )
@@ -331,20 +331,20 @@ describe PartnerSubmissionService do
           )
         end
 
-        it 'displays the consignor information lines' do
+        it "displays the consignor information lines" do
           PartnerSubmissionService.daily_digest
           emails = ActionMailer::Base.deliveries
           email_body = emails.first.html_part.body
           expect(email_body.decoded.scan(/Consignor \d+/).size).to eq 2
-          expect(email_body).to include('2 works')
-          expect(email_body).to include('1 work')
+          expect(email_body).to include("2 works")
+          expect(email_body).to include("1 work")
         end
 
-        it 'sends an email digest to multiple partners' do
-          partner2 = Fabricate(:partner, gravity_partner_id: 'phillips')
+        it "sends an email digest to multiple partners" do
+          partner2 = Fabricate(:partner, gravity_partner_id: "phillips")
           PartnerSubmissionService.generate_for_new_partner(partner2)
-          stub_gravity_partner(name: 'Phillips Auctions', id: 'phillips')
-          stub_gravity_partner_contacts(partner_id: 'phillips')
+          stub_gravity_partner(name: "Phillips Auctions", id: "phillips")
+          stub_gravity_partner_contacts(partner_id: "phillips")
           PartnerSubmissionService.daily_digest
 
           expect(@approved1.partner_submissions.count).to eq 2
@@ -357,22 +357,22 @@ describe PartnerSubmissionService do
           expect(emails.length).to eq 2
           email = emails.first
           expect(email.html_part.body).to include(
-            '<i>First approved artwork</i><span>, 1992</span>'
+            "<i>First approved artwork</i><span>, 1992</span>"
           )
           expect(email.html_part.body).to include(
-            '<i>Second approved artwork</i><span>, 1993</span>'
+            "<i>Second approved artwork</i><span>, 1993</span>"
           )
           expect(email.html_part.body).to include(
-            '<i>Third approved artwork</i><span>, 1997</span>'
+            "<i>Third approved artwork</i><span>, 1997</span>"
           )
         end
 
-        it 'sends to only one partner if only one has partner contacts' do
+        it "sends to only one partner if only one has partner contacts" do
           contactless_partner =
-            Fabricate(:partner, gravity_partner_id: 'phillips')
-          stub_gravity_partner(name: 'Phillips Auctions', id: 'phillips')
+            Fabricate(:partner, gravity_partner_id: "phillips")
+          stub_gravity_partner(name: "Phillips Auctions", id: "phillips")
           stub_gravity_partner_contacts(
-            partner_id: 'phillips',
+            partner_id: "phillips",
             override_body: []
           )
           PartnerSubmissionService.daily_digest
@@ -387,28 +387,28 @@ describe PartnerSubmissionService do
           expect(emails.length).to eq 1
           email = emails.first
           expect(email.subject).to include(
-            'New Artsy Consignments September 27: 3 works'
+            "New Artsy Consignments September 27: 3 works"
           )
           expect(email.html_part.body).to include(
-            '<i>First approved artwork</i><span>, 1992</span>'
+            "<i>First approved artwork</i><span>, 1992</span>"
           )
           expect(email.html_part.body).to include(
-            '<i>Second approved artwork</i><span>, 1993</span>'
+            "<i>Second approved artwork</i><span>, 1993</span>"
           )
           expect(email.html_part.body).to include(
-            '<i>Third approved artwork</i><span>, 1997</span>'
+            "<i>Third approved artwork</i><span>, 1997</span>"
           )
         end
 
-        it 'sends to a gallery partner' do
-          gallery_partner = Fabricate(:partner, gravity_partner_id: 'gagosian')
+        it "sends to a gallery partner" do
+          gallery_partner = Fabricate(:partner, gravity_partner_id: "gagosian")
           stub_gravity_partner(
-            name: 'Gagosian Gallery',
-            id: 'gagosian',
-            type: 'Gallery'
+            name: "Gagosian Gallery",
+            id: "gagosian",
+            type: "Gallery"
           )
           stub_gravity_partner_contacts(
-            partner_id: 'gagosian',
+            partner_id: "gagosian",
             override_body: []
           )
           PartnerSubmissionService.generate_for_new_partner(gallery_partner)
@@ -420,20 +420,20 @@ describe PartnerSubmissionService do
           expect(emails.length).to eq 1
           email = emails.first
           expect(email.subject).to include(
-            'New Artsy Consignments September 27: 3 works'
+            "New Artsy Consignments September 27: 3 works"
           )
-          expect(email.html_part.body).to_not include('Submit Proposal')
+          expect(email.html_part.body).to_not include("Submit Proposal")
           expect(email.html_part.body).to include(
-            'Please respond directly to this email with your proposal, or if you have any questions'
-          )
-          expect(email.html_part.body).to include(
-            '<i>First approved artwork</i><span>, 1992</span>'
+            "Please respond directly to this email with your proposal, or if you have any questions"
           )
           expect(email.html_part.body).to include(
-            '<i>Second approved artwork</i><span>, 1993</span>'
+            "<i>First approved artwork</i><span>, 1992</span>"
           )
           expect(email.html_part.body).to include(
-            '<i>Third approved artwork</i><span>, 1997</span>'
+            "<i>Second approved artwork</i><span>, 1993</span>"
+          )
+          expect(email.html_part.body).to include(
+            "<i>Third approved artwork</i><span>, 1997</span>"
           )
         end
       end

@@ -2,9 +2,9 @@
 
 module Types
   class OfferType < Types::BaseObject
-    description 'Consignment Offer'
+    description "Consignment Offer"
 
-    field :id, ID, 'Uniq ID for this offer', null: false
+    field :id, ID, "Uniq ID for this offer", null: false
 
     field :commission_percent_whole, Integer, null: true
     field :created_at, GraphQL::Types::ISO8601DateTime, null: true

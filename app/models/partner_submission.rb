@@ -26,21 +26,21 @@ class PartnerSubmission < ApplicationRecord
   belongs_to :partner
   belongs_to :submission
   has_many :offers, dependent: :destroy
-  belongs_to :accepted_offer, class_name: 'Offer'
+  belongs_to :accepted_offer, class_name: "Offer"
 
   STATES = [
-    'open',
-    'sold',
-    'bought in',
-    'canceled',
-    'withdrawn - pre-launch',
-    'withdrawn - post-launch'
+    "open",
+    "sold",
+    "bought in",
+    "canceled",
+    "withdrawn - pre-launch",
+    "withdrawn - post-launch"
   ].freeze
 
   scope :group_by_day, -> { group("date_trunc('day', notified_at) ") }
   scope :consigned, -> { where.not(accepted_offer_id: nil) }
 
-  validates :state, inclusion: { in: STATES }, allow_nil: true
+  validates :state, inclusion: {in: STATES}, allow_nil: true
 
   before_validation :set_state, on: :create
 
@@ -49,6 +49,6 @@ class PartnerSubmission < ApplicationRecord
   percentize :partner_commission_percent, :artsy_commission_percent
 
   def set_state
-    self.state ||= 'open'
+    self.state ||= "open"
   end
 end

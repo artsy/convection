@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class ConsignmentInquiryEvent < Events::BaseEvent
-  TOPIC = 'consignments'
-  ACTION = 'created'
+  TOPIC = "consignments"
+  ACTION = "created"
 
   def subject
     {

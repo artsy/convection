@@ -8,7 +8,7 @@
 
 module Resolvers::Submissionable
   IdsNotPassed =
-    GraphQL::ExecutionError.new('Neither id nor externalId have been passed.')
+    GraphQL::ExecutionError.new("Neither id nor externalId have been passed.")
 
   def submission
     @submission ||=
@@ -23,7 +23,7 @@ module Resolvers::Submissionable
   end
 
   def check_submission_presence!
-    raise(GraphQL::ExecutionError, 'Submission Not Found') unless submission
+    raise(GraphQL::ExecutionError, "Submission Not Found") unless submission
   end
 
   private

@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-describe 'Submission Index' do
-  describe 'GET /' do
-    it 'returns the basic index page' do
+describe "Submission Index" do
+  describe "GET /" do
+    it "returns the basic index page" do
       allow(ArtsyAdminAuth).to receive(:valid?).and_return(true)
-      get '/'
+      get "/"
       expect(response.status).to eq 301
-      expect(response).to redirect_to '/admin'
+      expect(response).to redirect_to "/admin"
     end
   end
 end

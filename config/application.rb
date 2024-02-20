@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative 'boot'
+require_relative "boot"
 
-require 'rails/all'
-require_relative '../lib/jwt_middleware'
+require "rails/all"
+require_relative "../lib/jwt_middleware"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -14,20 +14,20 @@ Warning[:deprecated] = false
 
 module Convection
   class Application < Rails::Application # -- all .rb files in that directory are automatically loaded. # Application configuration should go into files in config/initializers # Settings in config/environments/* take precedence over those specified here.
-    config.paths.add 'app', glob: '**/*.rb'
+    config.paths.add "app", glob: "**/*.rb"
     config.load_defaults 6.0
 
     config.eager_load_paths +=
       %W[
         #{config.root}/lib
-        #{Rails.root.join('app', 'events')}
-        #{Rails.root.join('app', 'services')}
-        #{Rails.root.join('app', 'graphql')}
-        #{Rails.root.join('app', 'graphql', 'resolvers')}
-        #{Rails.root.join('app', 'graphql', 'resolvers', 'concerns')}
-        #{Rails.root.join('app', 'controllers', 'concerns')}
-        #{Rails.root.join('app', 'models', 'concerns')}
-        #{Rails.root.join('app', 'queries')}
+        #{Rails.root.join("app", "events")}
+        #{Rails.root.join("app", "services")}
+        #{Rails.root.join("app", "graphql")}
+        #{Rails.root.join("app", "graphql", "resolvers")}
+        #{Rails.root.join("app", "graphql", "resolvers", "concerns")}
+        #{Rails.root.join("app", "controllers", "concerns")}
+        #{Rails.root.join("app", "models", "concerns")}
+        #{Rails.root.join("app", "queries")}
       ]
 
     # include JWT middleware
@@ -35,8 +35,8 @@ module Convection
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins '*'
-        resource '*', headers: :any, methods: %i[get post put options]
+        origins "*"
+        resource "*", headers: :any, methods: %i[get post put options]
       end
     end
   end

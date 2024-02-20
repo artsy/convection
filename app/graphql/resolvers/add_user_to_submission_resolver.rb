@@ -8,12 +8,12 @@ class AddUserToSubmissionResolver < BaseResolver
 
     # check if user's email in Gravity matches the one on the submission
     unless matching_email(submission)
-      raise(GraphQL::ExecutionError, 'Submission not found for this user')
+      raise(GraphQL::ExecutionError, "Submission not found for this user")
     end
 
     #  make sure submission has no user
     if submission.user_id
-      raise(GraphQL::ExecutionError, 'Submission already has a user')
+      raise(GraphQL::ExecutionError, "Submission already has a user")
     end
 
     SubmissionService.add_user_to_submission(
@@ -23,6 +23,6 @@ class AddUserToSubmissionResolver < BaseResolver
     )
 
     # return submission
-    { consignment_submission: submission }
+    {consignment_submission: submission}
   end
 end

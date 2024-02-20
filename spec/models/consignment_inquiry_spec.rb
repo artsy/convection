@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 describe ConsignmentInquiry do
-  context 'Validations' do
-    it 'validates email format' do
+  context "Validations" do
+    it "validates email format" do
       expect do
         ConsignmentInquiry.create!(
           email: "emailisnotvalid",
@@ -13,7 +13,7 @@ describe ConsignmentInquiry do
         )
       end.to raise_error "Validation failed: Email is invalid"
     end
-    it 'validates recipient email format' do
+    it "validates recipient email format" do
       expect do
         ConsignmentInquiry.create!(
           email: "validemail@email.com",
@@ -23,7 +23,7 @@ describe ConsignmentInquiry do
         )
       end.to raise_error "Validation failed: Recipient email is invalid"
     end
-    it 'requires name' do
+    it "requires name" do
       expect do
         ConsignmentInquiry.create!(
           email: "email@email.com",
@@ -32,7 +32,7 @@ describe ConsignmentInquiry do
       end.to raise_error "Validation failed: Name is required"
       
     end
-    it 'requires message' do
+    it "requires message" do
       expect do
         ConsignmentInquiry.create!(
           email: "email@email.com",
