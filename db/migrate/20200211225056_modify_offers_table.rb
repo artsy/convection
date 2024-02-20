@@ -12,32 +12,32 @@ class ModifyOffersTable < ActiveRecord::Migration[5.2]
         :photography_info,
         :string,
         using:
-          'CASE WHEN (photography_info IS NOT NULL) ' \
+          "CASE WHEN (photography_info IS NOT NULL) " \
             "THEN format('%s %s', TRIM(to_char(photography_info / 100, '99999')), currency) END"
       )
       t.change(
         :shipping_info,
         :string,
         using:
-          'CASE WHEN (shipping_info IS NOT NULL) ' \
+          "CASE WHEN (shipping_info IS NOT NULL) " \
             "THEN format('%s %s', TRIM(to_char(shipping_info / 100, '99999')), currency) END"
       )
       t.change(
         :insurance_info,
         :string,
         using:
-          'CASE WHEN (insurance_info IS NOT NULL) ' \
+          "CASE WHEN (insurance_info IS NOT NULL) " \
             "THEN format('%s %s', TRIM(to_char(insurance_info / 100, '99999')), currency) " \
-            'WHEN (insurance_percent IS NOT NULL) ' \
+            "WHEN (insurance_percent IS NOT NULL) " \
             "THEN TRIM(TO_CHAR(insurance_percent * 100, '99D00%')) END"
       )
       t.change(
         :other_fees_info,
         :string,
         using:
-          'CASE WHEN (other_fees_info IS NOT NULL) ' \
+          "CASE WHEN (other_fees_info IS NOT NULL) " \
             "THEN format('%s %s', TRIM(to_char(other_fees_info / 100, '99999')), currency) " \
-            'WHEN (other_fees_percent IS NOT NULL) ' \
+            "WHEN (other_fees_percent IS NOT NULL) " \
             "THEN TRIM(TO_CHAR(other_fees_percent * 100, '99D00%')) END"
       )
 

@@ -2,22 +2,22 @@
 
 module Types
   class SubmissionType < Types::BaseObject
-    description 'Consignment Submission'
+    description "Consignment Submission"
 
     field :external_id,
-          ID,
-          null: false,
-          method: :uuid,
-          description: 'UUID visible to users'
-    field :id, ID, 'Uniq ID for this submission', null: false
+      ID,
+      null: false,
+      method: :uuid,
+      description: "UUID visible to users"
+    field :id, ID, "Uniq ID for this submission", null: false
     field :internalID, ID, null: true, method: :id
     field :state, Types::StateType, null: true
     field :rejection_reason, String, null: true
     field :sale_state, String, null: true
 
     nilable_field :additional_info, String, null: true
-    nilable_field :artist_id, String, null: false, default_value: ''
-    nilable_field :assets, [Types::AssetType, { null: true }], null: true
+    nilable_field :artist_id, String, null: false, default_value: ""
+    nilable_field :assets, [Types::AssetType, {null: true}], null: true
     nilable_field :attribution_class, Types::AttributionClassType, null: true
     nilable_field :authenticity_certificate, Boolean, null: true
     nilable_field :category, String, null: true
@@ -41,10 +41,10 @@ module Types
     nilable_field :published_at, GraphQL::Types::ISO8601DateTime, null: true
     nilable_field :signature, Boolean, null: true
     nilable_field :sourceArtworkID,
-                  String,
-                  null: true,
-                  method: :source_artwork_id,
-                  description: 'If this artwork exists in Gravity, its ID'
+      String,
+      null: true,
+      method: :source_artwork_id,
+      description: "If this artwork exists in Gravity, its ID"
     nilable_field :title, String, null: true
     nilable_field :user_agent, String, null: true
     nilable_field :user_id, String, null: false, default_value: -1
@@ -72,14 +72,14 @@ module Types
     end
 
     def sale_state
-      sale_state = object.is_a?(Hash) ? object['sale_state'] : object.sale_state
+      sale_state = object.is_a?(Hash) ? object["sale_state"] : object.sale_state
 
       return sale_state if sale_state
-      return nil unless object['consigned_partner_submission_id']
+      return nil unless object["consigned_partner_submission_id"]
 
       begin
         partner_submission =
-          PartnerSubmission.find(object['consigned_partner_submission_id'])
+          PartnerSubmission.find(object["consigned_partner_submission_id"])
 
         partner_submission&.state
       rescue Faraday::ResourceNotFound

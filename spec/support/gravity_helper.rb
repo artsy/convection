@@ -45,7 +45,7 @@ GRAVITY_ROOT = {
   }
 }.freeze
 
-HEADERS = { 'Content-Type' => 'application/json' }.freeze
+HEADERS = {"Content-Type" => "application/json"}.freeze
 
 def add_default_stubs(
   id: nil,
@@ -54,8 +54,8 @@ def add_default_stubs(
   artist_id: nil,
   artist_name: nil
 )
-  user_params = { id: id, name: name, email: email }.reject { |_k, v| v.nil? }
-  artist_params = { id: artist_id, name: artist_name }.reject { |_k, v| v.nil? }
+  user_params = {id: id, name: name, email: email}.reject { |_k, v| v.nil? }
+  artist_params = {id: artist_id, name: artist_name}.reject { |_k, v| v.nil? }
 
   stub_gravity_root
   stub_gravity_user(user_params)
@@ -65,7 +65,7 @@ def add_default_stubs(
 end
 
 def stub_gravity_root
-  stub_gravity_request('', GRAVITY_ROOT)
+  stub_gravity_request("", GRAVITY_ROOT)
 end
 
 def stub_gravity_request(gravity_resource, body, more_headers = {})
@@ -78,17 +78,17 @@ def stub_gravity_request(gravity_resource, body, more_headers = {})
 end
 
 def stub_gravity_artist(opts = {})
-  name = opts[:name] || 'Gob Bluth'
+  name = opts[:name] || "Gob Bluth"
   body =
-    { id: 'artistid', name: name, slug: name.parameterize }.deep_merge(opts)
+    {id: "artistid", name: name, slug: name.parameterize}.deep_merge(opts)
   stub_gravity_request("/artists/#{body[:id]}", body)
 end
 
 def stub_gravity_artists(opts = {})
-  name = opts[:term] || 'Gob Bluth'
-  id = opts[:id] || 'artist1'
+  name = opts[:term] || "Gob Bluth"
+  id = opts[:id] || "artist1"
 
-  artist = { id: id, name: name }.deep_merge(opts)
+  artist = {id: id, name: name}.deep_merge(opts)
   artist_items = opts.key?(:override_body) ? opts[:override_body] : [artist]
 
   body = {
@@ -104,17 +104,17 @@ def stub_gravity_artists(opts = {})
 end
 
 def stub_gravity_artwork(opts = {})
-  title = opts[:title] || 'Artwork'
+  title = opts[:title] || "Artwork"
   body =
-    { id: 'artworkid', title: title, slug: title.parameterize }.deep_merge(opts)
+    {id: "artworkid", title: title, slug: title.parameterize}.deep_merge(opts)
   stub_gravity_request("/artworks/#{body[:id]}", body)
 end
 
 def stub_gravity_artworks(opts = {})
-  title = opts[:term] || 'Artwork'
-  id = opts[:id] || 'artwork1'
+  title = opts[:term] || "Artwork"
+  id = opts[:id] || "artwork1"
 
-  artwork = { id: id, title: title }.deep_merge(opts)
+  artwork = {id: id, title: title}.deep_merge(opts)
   artwork_items = opts.key?(:override_body) ? opts[:override_body] : [artwork]
 
   body = {
@@ -130,11 +130,11 @@ def stub_gravity_artworks(opts = {})
 end
 
 def stub_gravity_user(opts = {})
-  id = opts[:id] || 'userid'
+  id = opts[:id] || "userid"
   body =
     {
       id: id,
-      name: 'Jon Jonson',
+      name: "Jon Jonson",
       _links: {
         user_detail: {
           href: "#{Convection.config.gravity_api_url}/user_details/#{id}"
@@ -147,26 +147,26 @@ end
 def stub_gravity_user_detail(opts = {})
   body =
     {
-      id: 'userid',
+      id: "userid",
       receive_sms: true,
-      phone: '847-593-7743',
-      email: 'user@example.com',
-      reset_password_token: 'xyz',
+      phone: "847-593-7743",
+      email: "user@example.com",
+      reset_password_token: "xyz",
       paddle_number: 1_234
     }.deep_merge(opts)
   stub_gravity_request("/user_details/#{body[:id]}", body)
 end
 
 def stub_gravity_partner(opts = {})
-  id = opts[:id] || 'partnerid'
-  body = { id: id, name: 'Phillips Auctions', type: 'Auction' }.deep_merge(opts)
+  id = opts[:id] || "partnerid"
+  body = {id: id, name: "Phillips Auctions", type: "Auction"}.deep_merge(opts)
   stub_gravity_request("/partners/#{body[:id]}", body)
 end
 
 def stub_gravity_partner_communications(opts = {})
-  name = opts[:name] || 'Consignment Submissions'
-  id = opts[:id] || 'pc1'
-  partner_id = opts[:partner_id] || 'partnerid'
+  name = opts[:name] || "Consignment Submissions"
+  id = opts[:id] || "pc1"
+  partner_id = opts[:partner_id] || "partnerid"
   communication =
     {
       id: id,
@@ -196,12 +196,12 @@ def stub_gravity_partner_communications(opts = {})
 end
 
 def stub_gravity_partner_contacts(opts = {})
-  communication_id = opts[:partner_communication_id] || 'pc1'
-  partner_id = opts[:partner_id] || 'partnerid'
+  communication_id = opts[:partner_communication_id] || "pc1"
+  partner_id = opts[:partner_id] || "partnerid"
   contact =
     {
-      id: 'partnercontact1',
-      email: 'contact@partner.com',
+      id: "partnercontact1",
+      email: "contact@partner.com",
       partner_id: partner_id
     }.deep_merge(opts)
   contact_items = opts.key?(:override_body) ? opts[:override_body] : [contact]

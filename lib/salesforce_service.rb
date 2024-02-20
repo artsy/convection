@@ -1,4 +1,4 @@
-require 'restforce'
+require "restforce"
 
 class SalesforceService
   class << self
@@ -6,18 +6,18 @@ class SalesforceService
       return unless api_enabled?
 
       submission = Submission.find(submission_id)
-      
-      sf_contact_id = find_contact_id(submission) || api.create!('Contact', map_submission_to_salesforce_contact(submission))
-      sf_artist_id = api.select('Artist__c', submission.artist_id, ['Id'], 'Gravity_Artist_ID__c').Id
 
-      api.create!('Artwork__c', map_submission_to_salesforce_artwork(submission, sf_contact_id, sf_artist_id))
+      sf_contact_id = find_contact_id(submission) || api.create!("Contact", map_submission_to_salesforce_contact(submission))
+      sf_artist_id = api.select("Artist__c", submission.artist_id, ["Id"], "Gravity_Artist_ID__c").Id
+
+      api.create!("Artwork__c", map_submission_to_salesforce_artwork(submission, sf_contact_id, sf_artist_id))
     end
 
     private
 
     def find_contact_id(submission)
       if submission.user.present?
-        api.select('Contact', submission.user.gravity_user_id, ['Id'], 'Partner_Contact_Ext_Id__c').Id
+        api.select("Contact", submission.user.gravity_user_id, ["Id"], "Partner_Contact_Ext_Id__c").Id
       else
         find_contact_id_by_email(submission.user_email)
       end
@@ -30,7 +30,7 @@ class SalesforceService
     end
 
     def find_sf_user_id(gravity_id)
-      api.select('User', gravity_id, ['Id'], 'Admin_User_ID__c').Id
+      api.select("User", gravity_id, ["Id"], "Admin_User_ID__c").Id
     rescue Restforce::NotFoundError
       nil
     end
@@ -66,7 +66,7 @@ class SalesforceService
         COA_by_Gallery__c: submission.coa_by_gallery || false,
         COA_by_Authenticating_Body__c: submission.coa_by_authenticating_body || false,
         Cataloguer__c: submission.cataloguer,
-        Primary_Image_URL__c: submission.primary_image&.image_urls&.dig('thumbnail'),
+        Primary_Image_URL__c: submission.primary_image&.image_urls&.dig("thumbnail"),
         Convection_ID__c: submission.id,
         Assigned_To__c: find_sf_user_id(submission.assigned_to)
         # Other fields we could sync in the future:
@@ -88,7 +88,7 @@ class SalesforceService
       Convection.config.salesforce_client_id.present? &&
         Convection.config.salesforce_client_secret.present? &&
         Convection.config.salesforce_host.present? &&
-        Convection.config.salesforce_username.present? && 
+        Convection.config.salesforce_username.present? &&
         Convection.config.salesforce_password.present? &&
         Convection.config.salesforce_security_token.present?
     end
@@ -101,7 +101,7 @@ class SalesforceService
         client_id: Convection.config.salesforce_client_id,
         client_secret: Convection.config.salesforce_client_secret,
         host: Convection.config.salesforce_host,
-        api_version: '41.0'
+        api_version: "41.0"
     end
   end
 end

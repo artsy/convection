@@ -3,20 +3,20 @@
 module Api
   class RestController < BaseController
     rescue_from RailsParam::Param::InvalidParameterError do |error|
-      payload = { error: error.message, param: error.param }
+      payload = {error: error.message, param: error.param}
       render json: payload, status: :bad_request
     end
 
     rescue_from ActiveRecord::RecordNotFound do
-      render json: { error: 'Not Found' }, status: :not_found
+      render json: {error: "Not Found"}, status: :not_found
     end
 
     rescue_from ApplicationController::NotAuthorized do
-      render json: { error: 'Unauthorized' }, status: :unauthorized
+      render json: {error: "Unauthorized"}, status: :unauthorized
     end
 
     rescue_from SubmissionService::ParamError do |error|
-      render json: { error: error.message }, status: :bad_request
+      render json: {error: error.message}, status: :bad_request
     end
 
     private
@@ -29,7 +29,7 @@ module Api
     def require_trusted_app
       has_trusted_app =
         current_app.present? && current_user.blank? &&
-          current_user_roles.include?(:trusted)
+        current_user_roles.include?(:trusted)
       return if has_trusted_app
 
       raise ApplicationController::NotAuthorized
@@ -38,7 +38,7 @@ module Api
     def ensure_trusted_app_or_user
       has_trusted_app =
         current_app.present? &&
-          (current_user_roles.include?(:trusted) || current_user)
+        (current_user_roles.include?(:trusted) || current_user)
       return if has_trusted_app
 
       raise ApplicationController::NotAuthorized

@@ -10,7 +10,7 @@ class UpdateSubmissionResolver < BaseResolver
              matching_user(submission, @arguments&.[](:session_id)) &&
                submission.draft?
            ) || admin?
-      raise(GraphQL::ExecutionError, 'Submission Not Found')
+      raise(GraphQL::ExecutionError, "Submission Not Found")
     end
 
     # I'm not clear if this is needed or not - there are no tests for it so I'm
@@ -26,7 +26,7 @@ class UpdateSubmissionResolver < BaseResolver
       access_token: @context[:jwt_token]
     )
 
-    { consignment_submission: submission }
+    {consignment_submission: submission}
   end
 
   def valid?

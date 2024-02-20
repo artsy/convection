@@ -52,11 +52,11 @@ module DashboardReportingQuery
 
       ActiveRecord::Base.connection.execute(query).map do |row|
         [
-          row['state'].to_sym,
+          row["state"].to_sym,
           {
-            total: row['total'],
-            artsy_curated: row['artsy_curated'],
-            auction_house: row['auction_house']
+            total: row["total"],
+            artsy_curated: row["artsy_curated"],
+            auction_house: row["auction_house"]
           }
         ]
       end.to_h

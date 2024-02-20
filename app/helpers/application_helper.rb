@@ -24,13 +24,13 @@ module ApplicationHelper
   def filter_by_assigned_to_options
     AdminUser.assignees.map do |admin|
       [admin.name, admin.gravity_user_id]
-    end.unshift(%w[all all], ['none', nil])
+    end.unshift(%w[all all], ["none", nil])
   end
 
   def filter_by_cataloguers_options
     AdminUser.cataloguers.map do |cataloguer|
       [cataloguer.name, cataloguer.gravity_user_id]
-    end.unshift(%w[all all], ['none', nil])
+    end.unshift(%w[all all], ["none", nil])
   end
 
   def super_admin_user?(user_id)

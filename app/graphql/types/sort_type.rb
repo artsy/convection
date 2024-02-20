@@ -8,7 +8,7 @@ module Types
       columns.sort.each do |column_name|
         asc_value, desc_value =
           DIRECTIONS.map do |direction|
-            [column_name, direction].join('_').upcase
+            [column_name, direction].join("_").upcase
           end
 
         value asc_value, "sort by #{column_name} in ascending order"
@@ -22,7 +22,7 @@ module Types
 
         match_data = sort.downcase.match(/(.*)_(asc|desc)/)
         column_name, direction = match_data.captures
-        { column_name => direction }
+        {column_name => direction}
       end
     end
   end

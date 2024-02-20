@@ -3,11 +3,9 @@
 module Extensions
   class NilableFieldExtension < GraphQL::Schema::FieldExtension
     def resolve(object:, arguments:, **_rest)
-      begin
-        yield(object, arguments, nil)
-      rescue StandardError
-        nil
-      end
+      yield(object, arguments, nil)
+    rescue
+      nil
     end
   end
 end

@@ -3,7 +3,7 @@
 Fabricator(:asset)
 
 Fabricator(:image, from: :asset) do
-  asset_type 'image'
+  asset_type "image"
   gemini_token { Fabricate.sequence(:gemini_token) { |i| "gemini-#{i}" } }
   image_urls do
     Fabricate.sequence(:gemini_token) do |i|
@@ -17,6 +17,6 @@ Fabricator(:image, from: :asset) do
 end
 
 Fabricator(:unprocessed_image, from: :asset) do
-  asset_type 'image'
+  asset_type "image"
   gemini_token { Fabricate.sequence(:gemini_token) { |i| "gemini-#{i}" } }
 end

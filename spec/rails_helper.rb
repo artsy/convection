@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-ENV['RAILS_ENV'] ||= 'test'
-require File.expand_path('../config/environment', __dir__)
+ENV["RAILS_ENV"] ||= "test"
+require File.expand_path("../config/environment", __dir__)
 if Rails.env.production?
-  abort('The Rails environment is running in production mode!')
+  abort("The Rails environment is running in production mode!")
 end
-require 'spec_helper'
-require 'rspec/rails'
-require 'sidekiq/testing'
-require 'webmock/rspec'
-require 'rack_session_access/capybara'
+require "spec_helper"
+require "rspec/rails"
+require "sidekiq/testing"
+require "webmock/rspec"
+require "rack_session_access/capybara"
 
 WebMock.disable_net_connect!(
   allow_localhost: true,
-  allow: 'chromedriver.storage.googleapis.com'
+  allow: "chromedriver.storage.googleapis.com"
 )
 
 ActiveRecord::Migration.maintain_test_schema!
@@ -37,20 +37,20 @@ RSpec.configure do |config|
   config.before(:each, type: :system) { driven_by :headless_chrome }
 end
 
-Capybara.server = :puma, { Silent: true }
+Capybara.server = :puma, {Silent: true}
 Capybara.configure do |config|
   config.javascript_driver =
-    ENV['NO_HEADLESS'] ? :selenium_chrome : :headless_chrome
+    ENV["NO_HEADLESS"] ? :selenium_chrome : :headless_chrome
   config.default_max_wait_time = 10
   config.ignore_hidden_elements = false
 end
 
 def prepare_chromedriver(selenium_driver_args)
-  if (driver_path = ENV['CHROMEDRIVER_PATH'])
+  if (driver_path = ENV["CHROMEDRIVER_PATH"])
     service = Selenium::WebDriver::Service.new(path: driver_path, port: 9_005)
     selenium_driver_args[:service] = service
   else
-    require 'webdrivers/chromedriver'
+    require "webdrivers/chromedriver"
   end
 end
 
@@ -58,16 +58,16 @@ Capybara.register_driver :headless_chrome do |app|
   caps =
     Selenium::WebDriver::Remote::Capabilities.chrome(
       loggingPrefs: {
-        browser: 'ALL'
+        browser: "ALL"
       }
     )
-  opts = Selenium::WebDriver::Chrome::Options.new(options: { 'w3c' => false })
+  opts = Selenium::WebDriver::Chrome::Options.new(options: {"w3c" => false})
 
-  opts.add_argument('--headless')
-  opts.add_argument('--no-sandbox')
-  opts.add_argument('--window-size=1440,900')
+  opts.add_argument("--headless")
+  opts.add_argument("--no-sandbox")
+  opts.add_argument("--window-size=1440,900")
 
-  args = { browser: :chrome, options: opts, desired_capabilities: caps }
+  args = {browser: :chrome, options: opts, desired_capabilities: caps}
 
   prepare_chromedriver(args)
 

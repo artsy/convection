@@ -1,7 +1,3 @@
 {
-  "recommendations": [
-    "castwide.solargraph", // intellisense
-    "kumar-harsh.graphql-for-vscode", // syntax highlighting
-    "rebornix.ruby", // ruby support
-  ]
+  "recommendations": ["shopify.ruby-lsp", "testdouble.vscode-standard-ruby"]
 }

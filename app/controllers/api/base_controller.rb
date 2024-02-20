@@ -14,24 +14,24 @@ module Api
     # If it has both 'aud' and 'sub', then it is user-scoped, with the user_id in 'sub'.
     # All authorization middleware should grant access as appropriate.
     def jwt_payload
-      @jwt_payload ||= request.env['JWT_PAYLOAD']
+      @jwt_payload ||= request.env["JWT_PAYLOAD"]
     end
 
     def current_app
-      @current_app ||= jwt_payload&.fetch('aud', nil)
+      @current_app ||= jwt_payload&.fetch("aud", nil)
     end
 
     def current_user
-      @current_user ||= jwt_payload&.fetch('sub', nil)
+      @current_user ||= jwt_payload&.fetch("sub", nil)
     end
 
     def current_user_roles
       @current_user_roles ||=
-        jwt_payload&.fetch('roles', nil)&.split(',')&.map(&:to_sym) || []
+        jwt_payload&.fetch("roles", nil)&.split(",")&.map(&:to_sym) || []
     end
 
     def jwt_token
-      @jwt_token ||= request.env['JWT_TOKEN']
+      @jwt_token ||= request.env["JWT_TOKEN"]
     end
   end
 end

@@ -97,7 +97,7 @@ class PartnerSubmissionService
 
     def generate_for_new_partner(partner)
       Submission
-        .where(state: 'published')
+        .where(state: "published")
         .each do |submission|
           partner.partner_submissions.find_or_create_by!(
             submission_id: submission.id
@@ -110,7 +110,7 @@ class PartnerSubmissionService
       return unless consignment
 
       price = sale_artwork.highest_bid.try(:amount_cents)
-      state = price ? 'sold' : 'bought in'
+      state = price ? "sold" : "bought in"
       consignment.assign_attributes(
         sale_price_cents: price || consignment.sale_price_cents,
         sale_lot_number: sale_artwork.lot_number,

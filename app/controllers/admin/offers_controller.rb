@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
-# rubocop:disable Naming/VariableNumber
-
 module Admin
   class OffersController < ApplicationController
     include GraphqlHelper
 
     before_action :set_offer,
-                  only: %i[show edit update destroy undo_rejection undo_lapse]
+      only: %i[show edit update destroy undo_rejection undo_lapse]
 
     expose(:display_term) do
       if filters[:user].present?
@@ -32,7 +30,7 @@ module Admin
         matching_offers =
           matching_offers
             .joins(:submission)
-            .where('submissions.assigned_to' => params[:assigned_to])
+            .where("submissions.assigned_to" => params[:assigned_to])
       end
 
       if params[:term].present?
@@ -53,29 +51,29 @@ module Admin
         matching_offers =
           matching_offers
             .joins(:submission)
-            .where(submissions: { artist_id: params[:artist] })
+            .where(submissions: {artist_id: params[:artist]})
       end
 
       if params[:state].present?
         matching_offers =
-          if params[:state] == 'sent with response'
+          if params[:state] == "sent with response"
             matching_offers
               .where(state: Offer::SENT)
-              .where('offer_responses_count > ?', 0)
+              .where("offer_responses_count > ?", 0)
           else
             matching_offers.where(state: params[:state])
           end
       end
 
-      sort = params[:sort].presence || 'id'
-      direction = params[:direction].presence || 'desc'
+      sort = params[:sort].presence || "id"
+      direction = params[:direction].presence || "desc"
       matching_offers =
-        if sort.include?('partners')
+        if sort.include?("partners")
           matching_offers
             .includes(:partner_submission)
             .includes(:partner)
             .reorder("#{sort} #{direction}")
-        elsif sort.include?('submissions')
+        elsif sort.include?("submissions")
           matching_offers.includes(:submission).reorder("#{sort} #{direction}")
         else
           matching_offers.reorder("#{sort} #{direction}")
@@ -121,7 +119,7 @@ module Admin
 
     def filtering_by_assigned_to?
       params.keys.map(&:to_sym).include?(:assigned_to) &&
-        params[:assigned_to] != 'all'
+        params[:assigned_to] != "all"
     end
 
     def new_step_0
@@ -139,11 +137,11 @@ module Admin
         )
 
       if params[:submission_id].present? && params[:partner_id].present? &&
-           params[:offer_type].present?
-        render 'new_step_1'
+          params[:offer_type].present?
+        render "new_step_1"
       else
-        flash.now[:error] = 'Offer requires type, submission, and partner.'
-        render 'new_step_0'
+        flash.now[:error] = "Offer requires type, submission, and partner."
+        render "new_step_0"
       end
     end
 
@@ -158,18 +156,19 @@ module Admin
       redirect_to admin_offer_path(@offer)
     rescue OfferService::OfferError => e
       flash.now[:error] = e.message
-      render 'new_step_1'
+      render "new_step_1"
     end
 
     def show
       @artist_details = artists_names_query([@offer.submission.artist_id])
     end
 
-    def edit; end
+    def edit
+    end
 
     def destroy
       @offer.destroy
-      flash[:success] = 'Offer deleted.'
+      flash[:success] = "Offer deleted."
       redirect_to admin_submission_path(@offer.submission)
     end
 
@@ -178,7 +177,7 @@ module Admin
       redirect_to admin_offer_path(@offer)
     rescue OfferService::OfferError => e
       flash.now[:error] = e.message
-      render 'edit'
+      render "edit"
     end
 
     def undo_rejection
@@ -186,7 +185,7 @@ module Admin
       redirect_to admin_offer_path(@offer)
     rescue OfferService::OfferError => e
       flash.now[:error] = e.message
-      render 'edit'
+      render "edit"
     end
 
     def undo_lapse
@@ -239,5 +238,3 @@ module Admin
     end
   end
 end
-
-# rubocop:enable Naming/VariableNumber

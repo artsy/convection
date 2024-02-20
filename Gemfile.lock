@@ -414,10 +414,9 @@ GEM
       unicode-display_width (>= 1.4.0, < 3.0)
     rubocop-ast (1.5.0)
       parser (>= 3.0.1.1)
-    rubocop-rails (2.10.1)
-      activesupport (>= 4.2.0)
-      rack (>= 1.1)
+    rubocop-performance (1.11.2)
       rubocop (>= 1.7.0, < 2.0)
+      rubocop-ast (>= 0.4.0)
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
     ruby_parser (3.15.1)
@@ -470,6 +469,9 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
+    standard (1.1.1)
+      rubocop (= 1.14.0)
+      rubocop-performance (= 1.11.2)
     temple (0.8.2)
     thor (1.2.1)
     tilt (2.0.10)
@@ -545,12 +547,12 @@ DEPENDENCIES
   redcarpet
   restforce
   rspec-rails
-  rubocop-rails
   sass-rails
   selenium-webdriver
   sentry-raven
   sidekiq
   solargraph
+  standard
   tzinfo-data
   uglifier
   unleash

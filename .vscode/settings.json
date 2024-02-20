@@ -1,9 +1,6 @@
 {
   "editor.formatOnSave": true,
-  "files.exclude": {
-    "**/.git": true,
-    "**/tmp": true
-  },
-  "ruby.intellisense": "rubyLocate",
-  "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "[ruby]": {
+    "editor.defaultFormatter": "testdouble.vscode-standard-ruby"
+  }
 }

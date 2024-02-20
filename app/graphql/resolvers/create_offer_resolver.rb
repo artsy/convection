@@ -14,7 +14,7 @@ class CreateOfferResolver < BaseResolver
     offer =
       OfferService.create_offer(submission_id, partner_id, offer_attributes)
 
-    { consignment_offer: offer }
+    {consignment_offer: offer}
   end
 
   private

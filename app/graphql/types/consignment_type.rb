@@ -2,14 +2,14 @@
 
 module Types
   class ConsignmentType < Types::BaseObject
-    description 'Consignment'
+    description "Consignment"
 
     field :submission_id, ID, null: false
     field :submissionID, ID, null: true, method: :submission_id # Alias for MPv2 compatability
     field :sale_date, String, null: true
     field :sale_name, String, null: true
     field :state, Types::ConsignmentStateType, null: true
-    field :id, ID, 'Uniq ID for this consignment', null: false
+    field :id, ID, "Uniq ID for this consignment", null: false
     field :currency, String, null: true
     field :internalID, ID, null: true, method: :id
     field :sale_price_cents, Integer, null: true

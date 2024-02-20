@@ -24,14 +24,18 @@ class SubmissionMatch
 
   def custom_filtered_submissions
     submissions = Submission
-    submissions =
-      submissions_assigned_without_accepted_offer(
-        submissions
-      ) if filtering_by_assigned_without_accepted_offer?
-    submissions =
-      submissions_approved_without_reviewed_or_accepted_offer(
-        submissions
-      ) if params[:state] == Submission::APPROVED
+    if filtering_by_assigned_without_accepted_offer?
+      submissions =
+        submissions_assigned_without_accepted_offer(
+          submissions
+        )
+    end
+    if params[:state] == Submission::APPROVED
+      submissions =
+        submissions_approved_without_reviewed_or_accepted_offer(
+          submissions
+        )
+    end
     submissions
   end
 
@@ -41,7 +45,7 @@ class SubmissionMatch
         "LEFT OUTER JOIN offers on offers.submission_id = submissions.id AND offers.state IN ('#{Offer::ACCEPTED}', '#{Offer::REVIEW}')"
       )
       .distinct
-      .where(offers: { submission_id: nil })
+      .where(offers: {submission_id: nil})
   end
 
   def submissions_assigned_without_accepted_offer(submissions)
@@ -75,20 +79,20 @@ SQL
       artist_id: params[:artist].presence,
       category: params[:category].presence
     }.compact
-    attributes.merge!(user_email: user_email) if filtering_by_user_email?
-    attributes.merge!(assigned_to: assigned_to) if filtering_by_assigned_to?
-    attributes.merge!(cataloguer: cataloguer) if filtering_by_cataloguer?
+    attributes[:user_email] = user_email if filtering_by_user_email?
+    attributes[:assigned_to] = assigned_to if filtering_by_assigned_to?
+    attributes[:cataloguer] = cataloguer if filtering_by_cataloguer?
     attributes
   end
 
   def filtering_by_assigned_to?
     params.keys.map(&:to_sym).include?(:assigned_to) &&
-      params[:assigned_to] != 'all'
+      params[:assigned_to] != "all"
   end
 
   def filtering_by_cataloguer?
     params.keys.map(&:to_sym).include?(:cataloguer) &&
-      params[:cataloguer] != 'all'
+      params[:cataloguer] != "all"
   end
 
   def filtering_by_assigned_without_accepted_offer?
@@ -100,7 +104,7 @@ SQL
   end
 
   def sorting_by_users?
-    sort.include?('users')
+    sort.include?("users")
   end
 
   def order_by
@@ -112,11 +116,11 @@ SQL
   end
 
   def sort
-    params[:sort].presence || 'id'
+    params[:sort].presence || "id"
   end
 
   def direction
-    params[:direction].presence || 'desc'
+    params[:direction].presence || "desc"
   end
 
   def assigned_to

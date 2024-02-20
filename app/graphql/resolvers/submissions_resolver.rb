@@ -3,18 +3,18 @@
 class SubmissionsResolver < BaseResolver
   AllSubmissionsError =
     GraphQL::ExecutionError.new(
-      'Only Admins and Partners can look at all submissions.'
+      "Only Admins and Partners can look at all submissions."
     )
 
   UserMismatchError =
     GraphQL::ExecutionError.new(
-      'Only Admins can use the user_id for another user.'
+      "Only Admins can use the user_id for another user."
     )
 
   NotAllowedSubmissionsError =
     GraphQL::ExecutionError.new("Can't load other people's submissions.")
 
-  InvalidSortError = GraphQL::ExecutionError.new('Invalid sort column.')
+  InvalidSortError = GraphQL::ExecutionError.new("Invalid sort column.")
 
   def valid?
     @error = compute_error
@@ -124,7 +124,7 @@ class SubmissionsResolver < BaseResolver
   end
 
   def sort_order
-    default_sort = { id: :desc }
+    default_sort = {id: :desc}
     return default_sort unless @arguments[:sort]
 
     @arguments[:sort]

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'yarjuf'
+require "yarjuf"
 
 RSpec.configure do |config|
   config.filter_run focus: true

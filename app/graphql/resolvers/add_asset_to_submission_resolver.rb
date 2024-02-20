@@ -7,15 +7,15 @@ class AddAssetToSubmissionResolver < BaseResolver
     check_submission_presence!
 
     unless matching_user(submission, @arguments&.[](:session_id)) || admin?
-      raise(GraphQL::ExecutionError, 'Submission Not Found')
+      raise(GraphQL::ExecutionError, "Submission Not Found")
     end
 
-    @arguments[:asset_type] ||= 'image'
+    @arguments[:asset_type] ||= "image"
 
     asset = submission.assets.create!(asset_params)
     SubmissionService.notify_user(submission.id) if submission.submitted?
 
-    { asset: asset }
+    {asset: asset}
   end
 
   private

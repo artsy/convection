@@ -6,12 +6,12 @@ module Currency
   SUPPORTED = %w[USD EUR GBP CAD HKD].freeze
 
   included do
-    validates :currency, inclusion: { in: SUPPORTED }, allow_nil: true
+    validates :currency, inclusion: {in: SUPPORTED}, allow_nil: true
 
     before_validation :set_currency
   end
 
   def set_currency
-    self.currency ||= 'USD'
+    self.currency ||= "USD"
   end
 end

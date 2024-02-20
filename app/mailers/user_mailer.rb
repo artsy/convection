@@ -9,10 +9,10 @@ class UserMailer < ApplicationMailer
 
     @utm_params =
       utm_params(
-        source: 'sendgrid',
-        campaign: 'sell',
-        term: 'cx',
-        content: 'received'
+        source: "sendgrid",
+        campaign: "sell",
+        term: "cx",
+        content: "received"
       )
 
     smtpapi category: %w[submission_receipt],
@@ -21,7 +21,7 @@ class UserMailer < ApplicationMailer
             }
     mail(
       to: submission.email,
-      subject: 'Thank you for submitting your artwork to Artsy',
+      subject: "Thank you for submitting your artwork to Artsy",
       bcc: Convection.config.bcc_email_address
     )
   end
@@ -30,8 +30,8 @@ class UserMailer < ApplicationMailer
     @submission = submission
     @utm_params =
       utm_params(
-        source: 'drip-consignment-reminder-e01',
-        campaign: 'consignment-complete'
+        source: "drip-consignment-reminder-e01",
+        campaign: "consignment-complete"
       )
 
     smtpapi category: %w[first_upload_reminder],
@@ -45,8 +45,8 @@ class UserMailer < ApplicationMailer
     @submission = submission
     @utm_params =
       utm_params(
-        source: 'drip-consignment-reminder-e02-v2',
-        campaign: 'consignment-complete'
+        source: "drip-consignment-reminder-e02-v2",
+        campaign: "consignment-complete"
       )
 
     smtpapi category: %w[second_upload_reminder],
@@ -54,7 +54,7 @@ class UserMailer < ApplicationMailer
               submission_id: submission.id
             }
     mail to: submission.email,
-         subject: 'Artsy Consignments - complete your submission'
+         subject: "Artsy Consignments - complete your submission"
   end
 
   def submission_approved(submission:, artist:)
@@ -62,10 +62,10 @@ class UserMailer < ApplicationMailer
     @artist = artist
     @utm_params =
       utm_params(
-        source: 'sendgrid',
-        campaign: 'sell',
-        term: 'cx',
-        content: 'approved'
+        source: "sendgrid",
+        campaign: "sell",
+        term: "cx",
+        content: "approved"
       )
 
     smtpapi category: %w[submission_approved],
@@ -74,7 +74,7 @@ class UserMailer < ApplicationMailer
             }
     mail(
       to: submission.email,
-      subject: 'Artsy Approved Submission | Next Steps'
+      subject: "Artsy Approved Submission | Next Steps"
     )
   end
 
@@ -83,17 +83,17 @@ class UserMailer < ApplicationMailer
     @artist = artist
     @utm_params =
       utm_params(
-        source: 'sendgrid',
-        campaign: 'sell',
-        term: 'cx',
-        content: 'artist-sub-rejection'
+        source: "sendgrid",
+        campaign: "sell",
+        term: "cx",
+        content: "artist-sub-rejection"
       )
 
     smtpapi category: %w[artist_submission_rejected],
             unique_args: {
               submission_id: submission.id
             }
-    mail(to: submission.email, subject: 'An update about your submission')
+    mail(to: submission.email, subject: "An update about your submission")
   end
 
   def fake_submission_rejected(submission:, artist:)
@@ -101,17 +101,17 @@ class UserMailer < ApplicationMailer
     @artist = artist
     @utm_params =
       utm_params(
-        source: 'sendgrid',
-        campaign: 'sell',
-        term: 'cx',
-        content: 'fake-rejection'
+        source: "sendgrid",
+        campaign: "sell",
+        term: "cx",
+        content: "fake-rejection"
       )
 
     smtpapi category: %w[fake_submission_rejected],
             unique_args: {
               submission_id: submission.id
             }
-    mail(to: submission.email, subject: 'Artsy Submission')
+    mail(to: submission.email, subject: "Artsy Submission")
   end
 
   def nsv_bsv_submission_rejected(submission:, artist:)
@@ -120,19 +120,19 @@ class UserMailer < ApplicationMailer
 
     @utm_params =
       utm_params(
-        source: 'sendgrid',
-        campaign: 'sell',
-        term: 'cx',
-        content: 'nsv-bsv-rejected'
+        source: "sendgrid",
+        campaign: "sell",
+        term: "cx",
+        content: "nsv-bsv-rejected"
       )
 
     smtpapi category: %w[nsv_bsv_submission_rejected],
             unique_args: {
               submission_id: submission.id
             }
-    title = submission.title || 'Unknown'
+    title = submission.title || "Unknown"
     artist_name = artist&.name
-    subject = "Update on \"#{title}\" #{artist_name ? "by #{artist_name}" : ''}"
+    subject = "Update on \"#{title}\" #{artist_name ? "by #{artist_name}" : ""}"
     mail(to: submission.email, subject: subject)
   end
 
@@ -142,17 +142,17 @@ class UserMailer < ApplicationMailer
 
     @utm_params =
       utm_params(
-        source: 'sendgrid',
-        campaign: 'sell',
-        term: 'cx',
-        content: 'non-ts-rejected'
+        source: "sendgrid",
+        campaign: "sell",
+        term: "cx",
+        content: "non-ts-rejected"
       )
 
     smtpapi category: %w[non_target_supply_artist_rejected],
             unique_args: {
               submission_id: submission.id
             }
-    mail(to: submission.email, subject: 'An update about your submission')
+    mail(to: submission.email, subject: "An update about your submission")
   end
 
   def other_submission_rejected(submission:, artist:)
@@ -160,17 +160,17 @@ class UserMailer < ApplicationMailer
     @artist = artist
     @utm_params =
       utm_params(
-        source: 'sendgrid',
-        campaign: 'sell',
-        term: 'cx',
-        content: 'other-rejected'
+        source: "sendgrid",
+        campaign: "sell",
+        term: "cx",
+        content: "other-rejected"
       )
 
     smtpapi category: %w[other_submission_rejected],
             unique_args: {
               submission_id: submission.id
             }
-    mail(to: submission.email, subject: 'An update about your submission')
+    mail(to: submission.email, subject: "An update about your submission")
   end
 
   def offer(offer:, artist:)
@@ -179,7 +179,7 @@ class UserMailer < ApplicationMailer
     @artist = artist
     @utm_params = offer_utm_params(offer)
 
-    smtpapi category: %w[offer], unique_args: { offer_id: offer.id }
-    mail(to: @submission.email, subject: 'An Offer for your Artwork')
+    smtpapi category: %w[offer], unique_args: {offer_id: offer.id}
+    mail(to: @submission.email, subject: "An Offer for your Artwork")
   end
 end

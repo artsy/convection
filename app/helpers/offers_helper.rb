@@ -6,34 +6,34 @@ module OffersHelper
   def reviewed_byline(offer)
     if offer.rejected?
       [
-          "Rejected by #{offer.rejected_by_user.try(:name)}. #{
+        "Rejected by #{offer.rejected_by_user.try(:name)}. #{
             offer.rejection_reason
           }",
-          offer.rejection_note
-        ].compact
+        offer.rejection_note
+      ].compact
         .reject(&:blank?)
-        .join(': ')
+        .join(": ")
         .strip
     elsif offer.lapsed?
-      'Offer lapsed.'
+      "Offer lapsed."
     end
   end
 
   def display_fields(offer)
     {
-      'Estimate' => estimate_display(offer),
-      'Starting Bid / Suggested Reserve price' => offer.starting_bid_display,
-      'Price' => price_display(offer.currency, offer.price_cents),
-      'Sale Period' => sale_period_display(offer),
-      'Sale Date' => sale_date_display(offer),
-      'Sale Name' => offer.sale_name,
-      'Sale Location' => offer.sale_location,
-      'Deadline' => offer.deadline_to_consign,
-      'Commission' => commission_display(offer),
-      'Shipping' => offer.shipping_info,
-      'Photography' => offer.photography_info,
-      'Insurance' => offer.insurance_info,
-      'Other fees' => offer.other_fees_info
+      "Estimate" => estimate_display(offer),
+      "Starting Bid / Suggested Reserve price" => offer.starting_bid_display,
+      "Price" => price_display(offer.currency, offer.price_cents),
+      "Sale Period" => sale_period_display(offer),
+      "Sale Date" => sale_date_display(offer),
+      "Sale Name" => offer.sale_name,
+      "Sale Location" => offer.sale_location,
+      "Deadline" => offer.deadline_to_consign,
+      "Commission" => commission_display(offer),
+      "Shipping" => offer.shipping_info,
+      "Photography" => offer.photography_info,
+      "Insurance" => offer.insurance_info,
+      "Other fees" => offer.other_fees_info
     }.select { |_key, value| value.present? }
   end
 
@@ -42,27 +42,27 @@ module OffersHelper
     when Offer::AUCTION_CONSIGNMENT
       offer.offer_type.capitalize
     when Offer::PURCHASE
-      'Outright purchase'
+      "Outright purchase"
     when Offer::RETAIL
-      'Private Sale: Retail Price'
+      "Private Sale: Retail Price"
     when Offer::NET_PRICE
-      'Private Sale: Net Price'
+      "Private Sale: Net Price"
     end
   end
 
   def offer_type_description(offer)
     case offer.offer_type
     when Offer::AUCTION_CONSIGNMENT
-      'This work will be offered in an auction. The work will sell if bidding meets the ' \
-        'minimum selling price that you and the auction house have agreed to. Please note ' \
-        'that the minimum selling price generally cannot be higher than the suggested low ' \
-        'estimate. You are responsible for shipping the work to the auction house unless ' \
-        'otherwise stated in the notes.'
+      "This work will be offered in an auction. The work will sell if bidding meets the " \
+        "minimum selling price that you and the auction house have agreed to. Please note " \
+        "that the minimum selling price generally cannot be higher than the suggested low " \
+        "estimate. You are responsible for shipping the work to the auction house unless " \
+        "otherwise stated in the notes."
     when Offer::PURCHASE
-      'The work will be purchased directly from you by the partner for the specified price.'
+      "The work will be purchased directly from you by the partner for the specified price."
     when Offer::RETAIL, Offer::NET_PRICE
-      'This work will be offered privately to a small group of collectors that the partner has ' \
-        'relationships with. The work will sell if a collector agrees to your price.'
+      "This work will be offered privately to a small group of collectors that the partner has " \
+        "relationships with. The work will sell if a collector agrees to your price."
     end
   end
 
@@ -74,7 +74,7 @@ module OffersHelper
       [offer.low_estimate_cents, offer.high_estimate_cents].compact
         .map do |amt|
         number_with_delimiter(amt / currency.subunit_to_unit.round)
-      end.join(' - ')
+      end.join(" - ")
     "#{offer.currency} #{currency.symbol}#{estimate}" if estimate.present?
   end
 
@@ -109,7 +109,7 @@ module OffersHelper
   end
 
   def formatted_date_offer(date)
-    date.strftime('%b %-d, %Y')
+    date.strftime("%b %-d, %Y")
   end
 
   def offer_artist(offer)

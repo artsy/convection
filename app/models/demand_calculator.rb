@@ -12,9 +12,9 @@ end
 
 class DemandCalculator
   CATEGORY_MODIFIERS = {
-    'Default' => 0.5,
-    'Painting' => 1,
-    'Print' => 0.75
+    "Default" => 0.5,
+    "Painting" => 1,
+    "Print" => 0.75
   }.freeze
 
   def self.score(artist_id, category)
@@ -33,7 +33,7 @@ class DemandCalculator
   end
 
   def score
-    { artist_score: artist_score, auction_score: auction_score }
+    {artist_score: artist_score, auction_score: auction_score}
   end
 
   private
@@ -50,7 +50,7 @@ class DemandCalculator
     return 0 unless base_score.positive?
 
     modifier =
-      CATEGORY_MODIFIERS.fetch(@category, CATEGORY_MODIFIERS['Default'])
+      CATEGORY_MODIFIERS.fetch(@category, CATEGORY_MODIFIERS["Default"])
     base_score * modifier
   end
 end
