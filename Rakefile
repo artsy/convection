@@ -8,10 +8,6 @@ Rails.application.load_tasks
 GraphQL::RakeTask.new(schema_name: "ConvectionSchema", idl_outfile: "_schema.graphql")
 
 if Rails.env.development? || Rails.env.test?
-  require "rubocop/rake_task"
-  desc "Run RuboCop"
-  RuboCop::RakeTask.new(:rubocop)
-
   desc "prints out the schema file"
   task print_schema: :environment do
     require "graphql/schema/printer"
@@ -24,6 +20,7 @@ if Rails.env.development? || Rails.env.test?
     abort "schema-check failed" unless $CHILD_STATUS.exitstatus.zero?
   end
 
+  require "standard/rake"
   Rake::Task[:default].clear
-  task default: %i[schema_check rubocop spec]
+  task default: %i[schema_check standard spec]
 end

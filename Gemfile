@@ -49,7 +49,7 @@ group :development, :test do
   gem "guard-rspec", require: false
   gem "pry-byebug"
   gem "rspec-rails"
-  gem "rubocop-rails"
+  gem "standard"
   gem "webdrivers"
 end
 
