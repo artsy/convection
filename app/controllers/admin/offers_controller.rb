@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Naming/VariableNumber
-
 module Admin
   class OffersController < ApplicationController
     include GraphqlHelper
@@ -239,5 +237,3 @@ module Admin
     end
   end
 end
-
-# rubocop:enable Naming/VariableNumber

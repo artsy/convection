@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Lint/RedundantCopDisableDirective
-# rubocop:disable Rails/SkipsModelValidations
-
 namespace :partner_submissions do
   desc 'Cancel all consignments that were open before a certain date'
   task :cancel_open, [:date] => :environment do |_task, args|
@@ -12,6 +9,3 @@ namespace :partner_submissions do
     PartnerSubmission.consigned.where("state = ? AND created_at < ?", "open", datetime).update_all(state: "canceled")
   end
 end
-
-# rubocop:enable Rails/SkipsModelValidations
-# rubocop:enable Lint/RedundantCopDisableDirective
