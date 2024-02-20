@@ -9,10 +9,10 @@ class AdminMailer < ApplicationMailer
     @artist = artist
     @utm_params =
       utm_params(
-        source: 'sendgrid',
-        campaign: 'sell',
-        term: 'cx',
-        content: 'received'
+        source: "sendgrid",
+        campaign: "sell",
+        term: "cx",
+        content: "received"
       )
 
     smtpapi category: %w[submission],
@@ -22,6 +22,6 @@ class AdminMailer < ApplicationMailer
     mail(
       to: Convection.config.admin_email_address,
       subject: "Submission ##{@submission.id}"
-    ) { |format| format.html { render layout: 'mailer_no_footer' } }
+    ) { |format| format.html { render layout: "mailer_no_footer" } }
   end
 end

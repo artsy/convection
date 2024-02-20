@@ -30,14 +30,14 @@ module Admin
           )
       end
       if partner&.save
-        flash[:notice] = 'Partner successfully created.'
+        flash[:notice] = "Partner successfully created."
         redirect_to admin_partners_path
       else
         flash.now[:error] =
           "Error creating gravity partner. #{
             partner&.errors&.full_messages&.to_sentence
           }"
-        render 'index'
+        render "index"
       end
     end
 

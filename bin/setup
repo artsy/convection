@@ -10,22 +10,11 @@ brew 'rabbitmq', restart_service: true
 brew 'redis', restart_service: true
 EOF
 
-echo "ruby install, if required..."
-ruby_version=`cat .ruby-version`
-if command -v rbenv >/dev/null; then # skip rbenv steps if not available (RVM user?)
-  if ! rbenv versions | grep -Fq "$ruby_version"; then
-    rbenv install -s "$ruby_version"
-  fi
-
-  eval "$(rbenv init - --no-rehash)"
-  rbenv shell "$ruby_version"
-fi
-
-if [ ! -z $NVM_DIR ]; then # skip nvm steps if not available
-  echo "Configuring Node 12"
-  source ~/.nvm/nvm.sh
-  nvm install
-  npm install -g yarn
+if command -v asdf >/dev/null; then
+  echo "Installing language dependencies with asdf"
+  asdf install
+else
+  echo "Skipping language dependencies installation (asdf not found)"
 fi
 
 echo "install the bundler version locked in Gemfile.lock, if any..."
@@ -47,8 +36,12 @@ fi
 echo "install project's gem dependencies..."
 bundle install > /dev/null
 
-echo "Installing javascript dependencies"
-yarn install
+if command -v yarn >/dev/null; then
+  echo "Yarn is already installed"
+else
+  echo "Installing yarn..."
+  npm install -g yarn
+fi
 
 echo "download .env.shared (common local dev config) from S3..."
 aws s3 cp s3://artsy-citadel/convection/.env.shared ./

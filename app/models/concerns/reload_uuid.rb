@@ -19,7 +19,7 @@ module ReloadUuid
     after_commit :reload_uuid, on: :create
 
     def reload_uuid
-      if attributes.has_key? 'uuid'
+      if attributes.has_key? "uuid"
         self[:uuid] = self.class.where(id: id).pick(:uuid)
       end
     end

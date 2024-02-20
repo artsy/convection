@@ -7,7 +7,7 @@ module Api
       param! :email, String, required: true
       email = params[:email]
       UserService.anonymize_email!(email)
-      render json: { result: 'ok' }, status: :created
+      render json: {result: "ok"}, status: :created
     end
   end
 end

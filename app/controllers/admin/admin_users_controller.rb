@@ -9,7 +9,7 @@ module Admin
 
     # GET /admin/admin_users
     def index
-      @admin_users = AdminUser.order('LOWER(name)').all
+      @admin_users = AdminUser.order("LOWER(name)").all
     end
 
     # GET /admin/admin_users/1
@@ -23,7 +23,8 @@ module Admin
     end
 
     # GET /admin/admin_users/1/edit
-    def edit; end
+    def edit
+    end
 
     # POST /admin/admin_users
     def create
@@ -32,7 +33,7 @@ module Admin
 
       if @admin_user.save
         redirect_to admin_admin_users_path,
-                    notice: 'Admin was successfully created.'
+          notice: "Admin was successfully created."
       else
         render :new
       end
@@ -42,7 +43,7 @@ module Admin
     def update
       if @admin_user.update(admin_user_params)
         redirect_to admin_admin_users_path,
-                    notice: 'Admin was successfully updated.'
+          notice: "Admin was successfully updated."
       else
         render :edit
       end
@@ -52,7 +53,7 @@ module Admin
     def destroy
       @admin_user.destroy
       redirect_to admin_admin_users_url,
-                  notice: 'Admin was successfully destroyed.'
+        notice: "Admin was successfully destroyed."
     end
 
     private
@@ -74,14 +75,12 @@ module Admin
     end
 
     def load_admin_email
-      begin
-        user =
-          Gravity.client.user(id: @admin_user.gravity_user_id).user_detail._get
+      user =
+        Gravity.client.user(id: @admin_user.gravity_user_id).user_detail._get
 
-        @admin_user.email = user.email if user
-      rescue Faraday::ResourceNotFound
-        nil
-      end
+      @admin_user.email = user.email if user
+    rescue Faraday::ResourceNotFound
+      nil
     end
   end
 end

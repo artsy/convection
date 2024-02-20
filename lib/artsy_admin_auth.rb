@@ -13,13 +13,13 @@ class ArtsyAdminAuth
       decoded_token = decode_token(token)
       return false if decoded_token.nil?
 
-      roles = decoded_token['roles']
-      roles.include?('consignments_manager')
+      roles = decoded_token["roles"]
+      roles.include?("consignments_manager")
     end
 
     def decode_user(token)
       decoded_token = decode_token(token)
-      decoded_token&.fetch('sub', nil)
+      decoded_token&.fetch("sub", nil)
     end
   end
 end

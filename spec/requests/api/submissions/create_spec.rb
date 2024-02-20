@@ -1,130 +1,130 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-require 'support/gravity_helper'
+require "rails_helper"
+require "support/gravity_helper"
 
-describe 'POST /api/submissions' do
+describe "POST /api/submissions" do
   let(:jwt_token) do
-    payload = { aud: 'gravity', sub: 'userid', roles: 'user' }
+    payload = {aud: "gravity", sub: "userid", roles: "user"}
     JWT.encode(payload, Convection.config.jwt_secret)
   end
 
-  let(:headers) { { 'Authorization' => "Bearer #{jwt_token}" } }
+  let(:headers) { {"Authorization" => "Bearer #{jwt_token}"} }
 
   before do
-    add_default_stubs(email: 'michael@bluth.com', artist_id: 'artistid')
+    add_default_stubs(email: "michael@bluth.com", artist_id: "artistid")
   end
 
-  context 'with an unauthorized submission' do
-    let(:headers) { { 'Authorization' => 'Bearer foo.bar.baz' } }
+  context "with an unauthorized submission" do
+    let(:headers) { {"Authorization" => "Bearer foo.bar.baz"} }
 
-    it 'returns a 401' do
-      params = { artist_id: 'artistid' }
-      post '/api/submissions', params: params, headers: headers
+    it "returns a 401" do
+      params = {artist_id: "artistid"}
+      post "/api/submissions", params: params, headers: headers
       expect(response.status).to eq 401
     end
   end
 
-  context 'without an artist id' do
-    it 'returns a 400 with an error message' do
+  context "without an artist id" do
+    it "returns a 400 with an error message" do
       params = {}
-      post '/api/submissions', params: params, headers: headers
+      post "/api/submissions", params: params, headers: headers
       expect(response.status).to eq 400
       response_json = JSON.parse(response.body)
-      expect(response_json['error']).to eq 'Parameter artist_id is required'
+      expect(response_json["error"]).to eq "Parameter artist_id is required"
     end
   end
 
-  context 'with an authorized submission and artist id' do
-    it 'returns a 201 and creates a submission' do
-      params = { title: 'my sartwork', artist_id: 'artistid' }
+  context "with an authorized submission and artist id" do
+    it "returns a 201 and creates a submission" do
+      params = {title: "my sartwork", artist_id: "artistid"}
 
       expect do
-        post '/api/submissions', params: params, headers: headers
+        post "/api/submissions", params: params, headers: headers
       end.to change { Submission.count }.by(1)
 
       expect(response.status).to eq 201
     end
   end
 
-  context 'with an editioned submission' do
-    it 'returns a 201 and creates a submission with edition fields' do
+  context "with an editioned submission" do
+    it "returns a 201 and creates a submission with edition fields" do
       params = {
-        artist_id: 'artistid',
-        category: 'Painting',
+        artist_id: "artistid",
+        category: "Painting",
         edition: true,
-        edition_number: '23a',
+        edition_number: "23a",
         edition_size: 100,
-        title: 'my sartwork'
+        title: "my sartwork"
       }
 
       expect do
-        post '/api/submissions', params: params, headers: headers
+        post "/api/submissions", params: params, headers: headers
       end.to change { Submission.count }.by(1)
 
       expect(response.status).to eq 201
 
       response_json = JSON.parse(response.body)
-      expect(response_json['edition_size']).to eq '100'
+      expect(response_json["edition_size"]).to eq "100"
     end
   end
 
-  context 'with a submission that includes a minimum price' do
-    it 'returns a 201 and creates a submission with that minimum price' do
+  context "with a submission that includes a minimum price" do
+    it "returns a 201 and creates a submission with that minimum price" do
       params = {
-        artist_id: 'artistid',
-        category: 'Painting',
-        currency: 'GBP',
+        artist_id: "artistid",
+        category: "Painting",
+        currency: "GBP",
         edition: true,
-        edition_number: '23a',
+        edition_number: "23a",
         edition_size: 100,
         minimum_price_dollars: 50_000,
-        title: 'my sartwork'
+        title: "my sartwork"
       }
 
-      eigen_headers = headers.merge('User-Agent' => 'Eigen')
+      eigen_headers = headers.merge("User-Agent" => "Eigen")
 
       expect do
-        post '/api/submissions', params: params, headers: eigen_headers
+        post "/api/submissions", params: params, headers: eigen_headers
       end.to change { Submission.count }.by(1)
 
       expect(response.status).to eq 201
 
       response_json = JSON.parse(response.body)
-      expect(response_json['edition_size']).to eq '100'
-      expect(response_json['minimum_price_dollars']).to eq 50_000
-      expect(response_json['currency']).to eq 'GBP'
-      expect(response_json['user_agent']).to eq 'Eigen'
+      expect(response_json["edition_size"]).to eq "100"
+      expect(response_json["minimum_price_dollars"]).to eq 50_000
+      expect(response_json["currency"]).to eq "GBP"
+      expect(response_json["user_agent"]).to eq "Eigen"
     end
   end
 
-  context 'with a submission that includes a edition_size_formatted' do
-    it 'returns a 201 and creates a submission with that edition_size_formatted' do
+  context "with a submission that includes a edition_size_formatted" do
+    it "returns a 201 and creates a submission with that edition_size_formatted" do
       params = {
-        artist_id: 'artistid',
-        category: 'Painting',
-        currency: 'GBP',
+        artist_id: "artistid",
+        category: "Painting",
+        currency: "GBP",
         edition: true,
-        edition_number: '23a',
+        edition_number: "23a",
         edition_size: 100,
-        edition_size_formatted: '120',
+        edition_size_formatted: "120",
         minimum_price_dollars: 50_000,
-        title: 'my sartwork'
+        title: "my sartwork"
       }
 
-      eigen_headers = headers.merge('User-Agent' => 'Eigen')
+      eigen_headers = headers.merge("User-Agent" => "Eigen")
 
       expect do
-        post '/api/submissions', params: params, headers: eigen_headers
+        post "/api/submissions", params: params, headers: eigen_headers
       end.to change { Submission.count }.by(1)
 
       expect(response.status).to eq 201
 
       response_json = JSON.parse(response.body)
-      expect(response_json['edition_size']).to eq '120'
-      expect(response_json['minimum_price_dollars']).to eq 50_000
-      expect(response_json['currency']).to eq 'GBP'
-      expect(response_json['user_agent']).to eq 'Eigen'
+      expect(response_json["edition_size"]).to eq "120"
+      expect(response_json["minimum_price_dollars"]).to eq 50_000
+      expect(response_json["currency"]).to eq "GBP"
+      expect(response_json["user_agent"]).to eq "Eigen"
     end
   end
 

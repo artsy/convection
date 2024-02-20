@@ -7,19 +7,19 @@ class AddAssetsToSubmissionResolver < BaseResolver
     check_submission_presence!
 
     unless matching_user(submission, @arguments&.[](:session_id)) || admin?
-      raise(GraphQL::ExecutionError, 'Submission Not Found')
+      raise(GraphQL::ExecutionError, "Submission Not Found")
     end
 
     assets = create_assets(@arguments[:gemini_tokens], @arguments[:asset_type])
     SubmissionService.notify_user(submission.id) if submission.submitted?
 
-    { assets: assets }
+    {assets: assets}
   end
 
   def create_assets(gemini_tokens, asset_type)
     gemini_tokens.map do |token|
       submission.assets.create(
-        asset_type: asset_type || 'image',
+        asset_type: asset_type || "image",
         gemini_token: token
       )
     end

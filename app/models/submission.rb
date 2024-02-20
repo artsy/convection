@@ -11,68 +11,68 @@ class Submission < ApplicationRecord
   scope :not_deleted, -> { where(deleted_at: nil) }
 
   pg_search_scope :search,
-                  against: %i[id title],
-                  using: {
-                    tsearch: {
-                      prefix: true
-                    },
-                    trigram: {
-                      only: %i[id],
-                      threshold: 0.9
-                    }
-                  }
+    against: %i[id title],
+    using: {
+      tsearch: {
+        prefix: true
+      },
+      trigram: {
+        only: %i[id],
+        threshold: 0.9
+      }
+    }
 
   STATES = [
-    DRAFT = 'draft',
-    SUBMITTED = 'submitted',
-    APPROVED = 'approved',
-    PUBLISHED = 'published',
-    REJECTED = 'rejected',
-    HOLD = 'hold',
-    CLOSED = 'closed'
+    DRAFT = "draft",
+    SUBMITTED = "submitted",
+    APPROVED = "approved",
+    PUBLISHED = "published",
+    REJECTED = "rejected",
+    HOLD = "hold",
+    CLOSED = "closed"
   ].freeze
 
   SOURCES = [
-    WEB_INBOUND = 'web_inbound',
-    APP_INBOUND = 'app_inbound',
-    ADMIN = 'admin',
-    PARTNER = 'partner',
-    MY_COLLECTION = 'my_collection'
+    WEB_INBOUND = "web_inbound",
+    APP_INBOUND = "app_inbound",
+    ADMIN = "admin",
+    PARTNER = "partner",
+    MY_COLLECTION = "my_collection"
   ].freeze
 
   enum attribution_class: {
-         unique: 0,
-         limited_edition: 1,
-         open_edition: 2,
-         unknown_edition: 3
-       }
+    unique: 0,
+    limited_edition: 1,
+    open_edition: 2,
+    unknown_edition: 3
+  }
 
   REJECTION_REASONS = [
-    'BSV',
-    'Fake',
-    'Artist Submission',
-    'NSV',
-    'Other'
+    "BSV",
+    "Fake",
+    "Artist Submission",
+    "NSV",
+    "Other"
   ].freeze
 
   DIMENSION_METRICS = %w[in cm].freeze
 
   CATEGORIES = [
-    'Painting',
-    'Sculpture',
-    'Photography',
-    'Print',
-    'Drawing, Collage or other Work on Paper',
-    'Mixed Media',
-    'Performance Art',
-    'Installation',
-    'Video/Film/Animation',
-    'Architecture',
-    'Fashion Design and Wearable Art',
-    'Jewelry',
-    'Design/Decorative Art',
-    'Textile Arts',
-    'Other'
+    "Painting",
+    "Sculpture",
+    "Photography",
+    "Print",
+    "Drawing, Collage or other Work on Paper",
+    "Mixed Media",
+    "Performance Art",
+    "Installation",
+    "Video/Film/Animation",
+    "Architecture",
+    "Fashion Design and Wearable Art",
+    "Jewelry",
+    "Design/Decorative Art",
+    "Textile Arts",
+    "Other"
   ].freeze
 
   REQUIRED_FIELDS_FOR_SUBMISSION = %w[artist_id title year].freeze
@@ -84,29 +84,29 @@ class Submission < ApplicationRecord
   has_many :offers, dependent: :destroy
   has_many :notes, dependent: :nullify
   belongs_to :user
-  belongs_to :admin, class_name: 'AdminUser'
-  belongs_to :primary_image, class_name: 'Asset'
-  belongs_to :consigned_partner_submission, class_name: 'PartnerSubmission'
+  belongs_to :admin, class_name: "AdminUser"
+  belongs_to :primary_image, class_name: "Asset"
+  belongs_to :consigned_partner_submission, class_name: "PartnerSubmission"
 
-  validates :state, inclusion: { in: STATES }
-  validates :source, inclusion: { in: SOURCES }, allow_nil: true
-  validates :category, inclusion: { in: CATEGORIES }, allow_nil: true
+  validates :state, inclusion: {in: STATES}
+  validates :source, inclusion: {in: SOURCES}, allow_nil: true
+  validates :category, inclusion: {in: CATEGORIES}, allow_nil: true
   validates :dimensions_metric,
-            inclusion: {
-              in: DIMENSION_METRICS
-            },
-            allow_nil: true
+    inclusion: {
+      in: DIMENSION_METRICS
+    },
+    allow_nil: true
   validate :validate_primary_image
 
   before_validation :set_state, on: :create
   before_create :calculate_demand_scores
   before_update :calculate_demand_scores, if: :worth_recalculating?
 
-  scope :completed, -> { where.not(state: 'draft') }
-  scope :draft, -> { where(state: 'draft') }
-  scope :submitted, -> { where(state: 'submitted') }
+  scope :completed, -> { where.not(state: "draft") }
+  scope :draft, -> { where(state: "draft") }
+  scope :submitted, -> { where(state: "submitted") }
   scope :available,
-        -> { where(state: PUBLISHED, consigned_partner_submission_id: nil) }
+    -> { where(state: PUBLISHED, consigned_partner_submission_id: nil) }
 
   dollarize :minimum_price_cents
 
@@ -133,7 +133,7 @@ class Submission < ApplicationRecord
     super(methods: :sale_state).merge(
       {
         # Added to save REST API behavior. Should be removed after migration MP to GraphQL query
-        'consignment_state' => sale_state
+        "consignment_state" => sale_state
       }
     )
   end
@@ -143,7 +143,7 @@ class Submission < ApplicationRecord
   end
 
   def set_state
-    self.state ||= 'draft'
+    self.state ||= "draft"
   end
 
   def finished_processing_images_for_email?
@@ -151,15 +151,15 @@ class Submission < ApplicationRecord
   end
 
   def processed_images
-    images.select { |image| image.image_urls['square'].present? }
+    images.select { |image| image.image_urls["square"].present? }
   end
 
   def large_images
-    images.select { |image| image.image_urls['large'].present? }
+    images.select { |image| image.image_urls["large"].present? }
   end
 
   def thumbnail
-    primary_image&.image_urls&.fetch('thumbnail', nil)
+    primary_image&.image_urls&.fetch("thumbnail", nil)
   end
 
   # defines methods submitted?, approved?, etc. for each possible submission state
@@ -205,9 +205,9 @@ class Submission < ApplicationRecord
   def validate_primary_image
     return if primary_image.blank?
 
-    return if primary_image.asset_type == 'image'
+    return if primary_image.asset_type == "image"
 
-    errors.add(:primary_image, 'Primary image must have asset_type=image')
+    errors.add(:primary_image, "Primary image must have asset_type=image")
   end
 
   def exchange_assigned_to_real_user!

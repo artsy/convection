@@ -7,7 +7,7 @@ module GraphqlHelper
     <<~GQL
       query artistsDetails($ids: [ID!]!){
         artists(ids: $ids){
-          #{[:id, *fields].join(', ')}
+          #{[:id, *fields].join(", ")}
         }
       }
     GQL
@@ -148,7 +148,7 @@ module GraphqlHelper
         }
       )
     if artist_details_response[:errors].present?
-      flash.now[:error] = 'Error fetching artist details.'
+      flash.now[:error] = "Error fetching artist details."
     end
     return if artist_details_response.try(:[], :data).try(:[], :artists).blank?
 
@@ -160,14 +160,14 @@ module GraphqlHelper
       Gravql::Schema.execute(
         query:
           artist_query_builder(
-            fields: ['name', 'is_p1: isP1', 'target_supply: targetSupply']
+            fields: ["name", "is_p1: isP1", "target_supply: targetSupply"]
           ),
         variables: {
           ids: artist_ids.compact.uniq
         }
       )
     if artist_details_response[:errors].present?
-      flash.now[:error] = 'Error fetching artist details.'
+      flash.now[:error] = "Error fetching artist details."
     end
 
     artist_details_response.try(:[], :data).try(:[], :artists).presence || {}
@@ -182,7 +182,7 @@ module GraphqlHelper
         }
       )
     if match_partners_response[:errors].present?
-      flash.now[:error] = 'Error fetching partner details.'
+      flash.now[:error] = "Error fetching partner details."
     end
     if match_partners_response.try(:[], :data).try(:[], :match_partners).blank?
       return
@@ -194,14 +194,14 @@ module GraphqlHelper
   def my_collection_create_artwork_mutation_params(submission)
     {
       submissionId: submission.id.to_s,
-      importSource: 'CONVECTION',
+      importSource: "CONVECTION",
       artistIds: [submission.artist_id],
       artworkLocation:
         [
           submission.location_city,
           submission.location_state,
           submission.location_country
-        ].delete_if(&:blank?).join(', '),
+        ].delete_if(&:blank?).join(", "),
       category: submission.category,
       date: submission.year,
       depth: submission.depth,
@@ -209,11 +209,11 @@ module GraphqlHelper
       editionSize: submission.edition_size,
       externalImageUrls:
         submission.images.map do |image|
-          CGI.unescape(image.original_image&.split('?')&.first)
+          CGI.unescape(image.original_image&.split("?")&.first)
         end,
       height: submission.height,
       attributionClass:
-        submission.attribution_class&.upcase || 'UNKNOWN_EDITION',
+        submission.attribution_class&.upcase || "UNKNOWN_EDITION",
       medium: submission.medium,
       provenance: submission.provenance,
       title: submission.title,

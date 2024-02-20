@@ -5,15 +5,15 @@ module Admin
     include GraphqlHelper
 
     before_action :set_submission,
-                  only: %i[
-                    show
-                    edit
-                    update
-                    undo_approval
-                    undo_publish
-                    undo_rejection
-                    undo_close
-                  ]
+      only: %i[
+        show
+        edit
+        update
+        undo_approval
+        undo_publish
+        undo_rejection
+        undo_close
+      ]
     before_action :set_submission_artist, only: %i[show edit]
 
     expose(:submissions) do
@@ -66,7 +66,7 @@ module Admin
     def create
       @submission =
         SubmissionService.create_submission(
-          submission_params.merge(state: 'submitted'),
+          submission_params.merge(state: "submitted"),
           submission_params[:user_id],
           current_user: @current_user
         )
@@ -74,7 +74,7 @@ module Admin
     rescue SubmissionService::SubmissionError => e
       @submission = Submission.new(submission_params)
       flash.now[:error] = e.message
-      render 'new'
+      render "new"
     end
 
     def show
@@ -88,7 +88,8 @@ module Admin
       @partner_name = @submission.consigned_partner_submission&.partner&.name
     end
 
-    def edit; end
+    def edit
+    end
 
     def update
       result =
@@ -101,7 +102,7 @@ module Admin
       if result
         redirect_to admin_submission_path(@submission)
       else
-        render 'edit'
+        render "edit"
       end
     end
 
@@ -162,7 +163,7 @@ module Admin
         # Exclude anonymous submissions from the submissions with a matching email
         submissions =
           Submission
-            .where('user_email like ?', "%#{term}%")
+            .where("user_email like ?", "%#{term}%")
             .where
             .not(user_id: nil)
             .limit(1)
@@ -230,10 +231,12 @@ module Admin
       ]
 
       permitted_params = params.require(:submission).permit(safelist)
-      permitted_params[:assigned_to] =
-        params.dig(:submission, :assigned_to) if params[:submission][
+      if params[:submission][
         :assigned_to
       ].present?
+        permitted_params[:assigned_to] =
+          params.dig(:submission, :assigned_to)
+      end
       permitted_params
     end
   end

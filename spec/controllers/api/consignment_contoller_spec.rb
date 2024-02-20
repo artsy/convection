@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 describe Api::ConsignmentsController, type: :controller do
   before do
@@ -9,20 +9,20 @@ describe Api::ConsignmentsController, type: :controller do
     )
   end
 
-  describe '#update' do
-    let(:partner) { Fabricate(:partner, name: 'Gagosian Gallery') }
+  describe "#update" do
+    let(:partner) { Fabricate(:partner, name: "Gagosian Gallery") }
     let(:submission) do
       Fabricate(
         :submission,
-        state: 'approved',
-        artist_id: 'artistId',
+        state: "approved",
+        artist_id: "artistId",
         consigned_partner_submission_id: consignment.id
       )
     end
     let(:consignment) do
       Fabricate(
         :partner_submission,
-        state: 'open',
+        state: "open",
         partner: partner,
         sale_price_cents: 50
       )
@@ -30,9 +30,9 @@ describe Api::ConsignmentsController, type: :controller do
     let(:offer) do
       Fabricate(
         :offer,
-        state: 'sent',
+        state: "sent",
         partner_submission: consignment,
-        offer_type: 'purchase'
+        offer_type: "purchase"
       )
     end
   end

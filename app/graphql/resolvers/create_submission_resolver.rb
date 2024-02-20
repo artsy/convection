@@ -9,6 +9,6 @@ class CreateSubmissionResolver < BaseResolver
         is_convection: false
       )
 
-    { consignment_submission: submission }
+    {consignment_submission: submission}
   end
 end

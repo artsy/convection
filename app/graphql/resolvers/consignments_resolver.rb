@@ -2,7 +2,7 @@
 
 class ConsignmentsResolver < BaseResolver
   BadArgumentError = GraphQL::ExecutionError.new("Can't find partner.")
-  InvalidSortError = GraphQL::ExecutionError.new('Invalid sort column.')
+  InvalidSortError = GraphQL::ExecutionError.new("Invalid sort column.")
 
   def valid?
     @error = compute_error
@@ -33,11 +33,11 @@ class ConsignmentsResolver < BaseResolver
   end
 
   def conditions
-    { state: ['sold', 'bought in'] }
+    {state: ["sold", "bought in"]}
   end
 
   def sort_order
-    default_sort = { id: :desc }
+    default_sort = {id: :desc}
     return default_sort unless @arguments[:sort]
 
     @arguments[:sort]

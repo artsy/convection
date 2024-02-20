@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-require 'support/gravity_helper'
+require "rails_helper"
+require "support/gravity_helper"
 
-describe 'removeAssetFromConsignmentSubmission mutation' do
-  let(:user) { Fabricate(:user, gravity_user_id: 'userid') }
+describe "removeAssetFromConsignmentSubmission mutation" do
+  let(:user) { Fabricate(:user, gravity_user_id: "userid") }
   let(:submission) { Fabricate(:submission, user: user) }
   let(:asset) do
-    Fabricate(:asset, id: 1, submission: submission, asset_type: 'image')
+    Fabricate(:asset, id: 1, submission: submission, asset_type: "image")
   end
 
   let(:token) do
-    payload = { aud: 'gravity', sub: user.gravity_user_id, roles: 'user' }
+    payload = {aud: "gravity", sub: user.gravity_user_id, roles: "user"}
     JWT.encode(payload, Convection.config.jwt_secret)
   end
 
-  let(:headers) { { 'Authorization' => "Bearer #{token}" } }
+  let(:headers) { {"Authorization" => "Bearer #{token}"} }
 
   let(:create_mutation_inputs) do
     "{ clientMutationId: \"test\", submissionID: #{
@@ -51,16 +51,16 @@ describe 'removeAssetFromConsignmentSubmission mutation' do
       }
   GRAPHQL
 
-  describe 'valid requests' do
-    it 'removes an asset from submission successfully' do
+  describe "valid requests" do
+    it "removes an asset from submission successfully" do
       expect {
-        post '/api/graphql', params: { query: createMutation }, headers: headers
+        post "/api/graphql", params: {query: createMutation}, headers: headers
       }.to change(Asset, :count).by(1)
 
       expect(Asset.count).to eq 1
 
       expect {
-        post '/api/graphql', params: { query: removeMutation }, headers: headers
+        post "/api/graphql", params: {query: removeMutation}, headers: headers
       }.to change(Asset, :count).by(-1)
 
       expect(Asset.count).to eq 0

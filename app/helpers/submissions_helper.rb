@@ -13,7 +13,7 @@ module SubmissionsHelper
       submission.location_state,
       submission.location_country,
       submission.location_postal_code
-    ].select(&:present?).join(', ')
+    ].select(&:present?).join(", ")
   end
 
   def formatted_dimensions(submission)
@@ -21,7 +21,7 @@ module SubmissionsHelper
       [submission.height, submission.width, submission.depth].select(&:present?)
     return if values.empty?
 
-    "#{values.join('x')}#{submission.dimensions_metric.try(:downcase)}"
+    "#{values.join("x")}#{submission.dimensions_metric.try(:downcase)}"
   end
 
   def formatted_dimensions_inch_cm(submission)
@@ -31,15 +31,15 @@ module SubmissionsHelper
     return [] if values.empty?
 
     case submission.dimensions_metric.try(:downcase)
-    when 'cm'
+    when "cm"
       %W[
-        #{values.join(' x ')}\ cm
-        #{values.map { |dimension| convert_cm_to_inch(dimension) }.join(' x ')}\ in
+        #{values.join(" x ")}\ cm
+        #{values.map { |dimension| convert_cm_to_inch(dimension) }.join(" x ")}\ in
       ]
-    when 'in'
+    when "in"
       %W[
-        #{values.join(' x ')}\ in
-        #{values.map { |dimension| convert_inch_to_cm(dimension) }.join(' x ')}\ cm
+        #{values.join(" x ")}\ in
+        #{values.map { |dimension| convert_inch_to_cm(dimension) }.join(" x ")}\ cm
       ]
     else
       []
@@ -55,7 +55,7 @@ module SubmissionsHelper
   end
 
   def formatted_category(submission)
-    [submission.category, submission.medium].select(&:present?).join(', ')
+    [submission.category, submission.medium].select(&:present?).join(", ")
   end
 
   def formatted_editions(submission)
@@ -73,7 +73,7 @@ module SubmissionsHelper
       submission.medium.try(:truncate, 100),
       formatted_dimensions(submission),
       edition_text
-    ].compact.join(', ')
+    ].compact.join(", ")
   end
 
   def reviewer_byline(submission)
@@ -83,13 +83,13 @@ module SubmissionsHelper
       if submission.reviewed_by_user
         "Rejected by #{submission.reviewed_by_user.try(:name)}"
       else
-        'Rejected automatically'
+        "Rejected automatically"
       end
     end
   end
 
   def formatted_date(date)
-    date.strftime('%-m/%-d/%Y')
+    date.strftime("%-m/%-d/%Y")
   end
 
   def preferred_image(submission)
@@ -97,22 +97,22 @@ module SubmissionsHelper
       submission.primary_image.presence ||
         submission.processed_images.min_by(&:id)
     ).image_urls[
-      'square'
+      "square"
     ]
   end
 
   def formatted_current_time
     Time
       .now
-      .in_time_zone('Eastern Time (US & Canada)')
-      .strftime('%l:%M %Z %B %-d, %Y')
+      .in_time_zone("Eastern Time (US & Canada)")
+      .strftime("%l:%M %Z %B %-d, %Y")
   end
 
   def formatted_minimum_price(submission)
     if submission.minimum_price_cents.present?
       "Yes, #{submission.minimum_price_display}"
     else
-      'No'
+      "No"
     end
   end
 
@@ -120,13 +120,13 @@ module SubmissionsHelper
     if submission.minimum_price_cents.present?
       "Looking for: #{submission.minimum_price_display}"
     else
-      ''
+      ""
     end
   end
 
   def artist_supply_priority(is_p1: false, target_supply: false, **)
-    return 'P1' if is_p1
-    return 'P2' if target_supply
+    return "P1" if is_p1
+    return "P2" if target_supply
   end
 
   def assignable_admin?(user)

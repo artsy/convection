@@ -2,5 +2,5 @@
 
 Fabricator(:offer_response) do
   offer { Fabricate(:offer) }
-  intended_state 'accepted'
+  intended_state "accepted"
 end

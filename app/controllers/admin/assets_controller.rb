@@ -9,7 +9,7 @@ module Admin
       @original_image = @asset.original_image
     rescue Asset::GeminiHttpException
       @original_image = nil
-      flash.now[:error] = 'Error fetching Gemini image'
+      flash.now[:error] = "Error fetching Gemini image"
     end
 
     def new

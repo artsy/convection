@@ -2,8 +2,8 @@
 
 module Types
   class DateType < Types::BaseScalar
-    description 'Date in YYYY-MM-DD format'
-    DATE_FORMAT = '%Y-%m-%d'
+    description "Date in YYYY-MM-DD format"
+    DATE_FORMAT = "%Y-%m-%d"
 
     def self.coerce_input(input_value, _context)
       # Parse the incoming object into a DateTime

@@ -23,13 +23,6 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@prettier/plugin-ruby@1.5.3":
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/@prettier/plugin-ruby/-/plugin-ruby-1.5.3.tgz#04c1058fce59651c38c02ace39faa7a0daa4264b"
-  integrity sha512-YXXf0PGsUOMk40UlfnjDeF3NuRmKE4ddN4L2drFaskhqcB/P9jNGabz5FsGJdJt+ibPxfRsqx05gfxGLZo1wHg==
-  dependencies:
-    prettier ">=1.10"
-
 "@types/parse-json@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
@@ -492,7 +485,7 @@ please-upgrade-node@^3.2.0:
   dependencies:
     semver-compare "^1.0.0"
 
-prettier@2.2.1, prettier@>=1.10:
+prettier@2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.2.1.tgz#795a1a78dd52f073da0cd42b21f9c91381923ff5"
   integrity sha512-PqyhM2yCjg/oKkFPtTGUojv7gnZAoG80ttl45O6x2Ug/rMJw4wcc9k6aaf2hibP7BGVCCM33gZoGjyvt9mm16Q==

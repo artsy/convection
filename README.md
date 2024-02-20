@@ -25,7 +25,6 @@ Convection accepts PRs from branches on the main artsy/convection repo. PRs from
   ```
   $ cat bin/setup
   $ bin/setup
-  $ nvm use
   ```
 
 - Shared Configuration for Local Development
@@ -58,7 +57,7 @@ $ bundle exec rake spec
 $ hokusai test
 ```
 
-Note: the default rake task is setup to run tests and RuboCop.
+Note: the default rake task is setup to run tests and Standard Ruby.
 
 ## Did You Change the GraphQL Schema?
 

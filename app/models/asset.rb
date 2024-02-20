@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require 'net/http'
+require "net/http"
 class Asset < ApplicationRecord
   GeminiHttpException = Class.new(StandardError)
 
   TYPES = %w[image].freeze
   belongs_to :submission
 
-  validates :asset_type, inclusion: { in: TYPES }
+  validates :asset_type, inclusion: {in: TYPES}
 
-  scope :images, -> { where(asset_type: 'image') }
+  scope :images, -> { where(asset_type: "image") }
 
   def update_image_urls!(params = {})
     version = params[:image_url].keys.first
@@ -20,7 +20,7 @@ class Asset < ApplicationRecord
       .where(id: id)
       .update_all(
         [
-          'image_urls = jsonb_set(image_urls, ?, ?)',
+          "image_urls = jsonb_set(image_urls, ?, ?)",
           "{#{version}}",
           "\"#{url}\""
         ]
@@ -39,14 +39,14 @@ class Asset < ApplicationRecord
     req =
       Net::HTTP::Get.new(
         "#{uri.path}?#{uri.query}",
-        'Content-Type' => 'application/json'
+        "Content-Type" => "application/json"
       )
     req.basic_auth Convection.config.gemini_account_key, nil
     response = http.request(req)
-    unless response.code == '302'
+    unless response.code == "302"
       raise GeminiHttpException, "#{response.code}: #{response.body}"
     end
 
-    response['location']
+    response["location"]
   end
 end

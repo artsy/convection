@@ -8,47 +8,47 @@ class Offer < ApplicationRecord
   include Percentize
 
   pg_search_scope :search,
-                  against: %i[id reference_id],
-                  associated_against: {
-                    partner: %i[name]
-                  },
-                  using: {
-                    tsearch: {
-                      prefix: true
-                    },
-                    trigram: {
-                      only: %i[id reference_id],
-                      threshold: 0.9
-                    }
-                  }
+    against: %i[id reference_id],
+    associated_against: {
+      partner: %i[name]
+    },
+    using: {
+      tsearch: {
+        prefix: true
+      },
+      trigram: {
+        only: %i[id reference_id],
+        threshold: 0.9
+      }
+    }
 
   OFFER_TYPES = [
-    AUCTION_CONSIGNMENT = 'auction consignment',
-    NET_PRICE = 'net price',
-    RETAIL = 'retail',
-    PURCHASE = 'purchase'
+    AUCTION_CONSIGNMENT = "auction consignment",
+    NET_PRICE = "net price",
+    RETAIL = "retail",
+    PURCHASE = "purchase"
   ].freeze
 
   STATES = [
-    DRAFT = 'draft',
-    SENT = 'sent',
-    SAVED = 'saved',
-    ACCEPTED = 'accepted',
-    REJECTED = 'rejected',
-    LAPSED = 'lapsed',
-    REVIEW = 'review'
+    DRAFT = "draft",
+    SENT = "sent",
+    SAVED = "saved",
+    ACCEPTED = "accepted",
+    REJECTED = "rejected",
+    LAPSED = "lapsed",
+    REVIEW = "review"
   ].freeze
 
   REJECTION_REASONS = [
-    'Low estimate',
-    'High commission',
-    'High shipping/marketing costs',
-    'Took competing offer',
-    'No longer interested in selling',
-    'Inconvenient partner location',
-    'Only interested in Private Sale',
-    'Sold Independently',
-    'Other'
+    "Low estimate",
+    "High commission",
+    "High shipping/marketing costs",
+    "Took competing offer",
+    "No longer interested in selling",
+    "Inconvenient partner location",
+    "Only interested in Private Sale",
+    "Sold Independently",
+    "Other"
   ].freeze
 
   belongs_to :partner_submission
@@ -56,28 +56,28 @@ class Offer < ApplicationRecord
   has_one :partner, through: :partner_submission
   has_many :offer_responses, dependent: :destroy
 
-  validates :state, inclusion: { in: STATES }
-  validates :offer_type, inclusion: { in: OFFER_TYPES }, allow_nil: true
+  validates :state, inclusion: {in: STATES}
+  validates :offer_type, inclusion: {in: OFFER_TYPES}, allow_nil: true
   validates :rejection_reason,
-            inclusion: {
-              in: REJECTION_REASONS
-            },
-            allow_nil: true
+    inclusion: {
+      in: REJECTION_REASONS
+    },
+    allow_nil: true
 
   before_validation :set_state, on: :create
   before_create :set_submission
 
-  scope :sent, -> { where(state: 'sent') }
+  scope :sent, -> { where(state: "sent") }
 
   dollarize :price_cents,
-            :low_estimate_cents,
-            :high_estimate_cents,
-            :starting_bid_cents
+    :low_estimate_cents,
+    :high_estimate_cents,
+    :starting_bid_cents
 
   percentize :commission_percent
 
   def set_state
-    self.state ||= 'draft'
+    self.state ||= "draft"
   end
 
   # defines methods sent?, accepted?, etc. for each possible offer state
@@ -95,7 +95,7 @@ class Offer < ApplicationRecord
     submission.consigned_partner_submission_id.present? &&
       submission.consigned_partner_submission.accepted_offer_id != id &&
       !submission.consigned_partner_submission.state.in?(
-        ['canceled', 'bought in']
+        ["canceled", "bought in"]
       )
   end
 

@@ -8,7 +8,7 @@ class User < ApplicationRecord
   has_many :submissions, dependent: :nullify
   has_many :notes, dependent: :nullify
 
-  pg_search_scope :search, against: :email, using: { tsearch: { prefix: true } }
+  pg_search_scope :search, against: :email, using: {tsearch: {prefix: true}}
 
   def gravity_user
     return @gravity_user if defined?(@gravity_user)
@@ -16,13 +16,13 @@ class User < ApplicationRecord
 
     @gravity_user =
       gravity_user_id &&
-        (
-          begin
-            Gravity.client.user(id: gravity_user_id)._get
-          rescue Faraday::ResourceNotFound
-            nil
-          end
-        )
+      (
+        begin
+          Gravity.client.user(id: gravity_user_id)._get
+        rescue Faraday::ResourceNotFound
+          nil
+        end
+      )
   end
 
   def name
@@ -48,7 +48,7 @@ class User < ApplicationRecord
   end
 
   def self.anonymous
-    User.find_or_create_by(gravity_user_id: 'anonymous')
+    User.find_or_create_by(gravity_user_id: "anonymous")
   end
 
   def set_gravity_user_id

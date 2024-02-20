@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
 class SubmissionEvent < Events::BaseEvent
-  TOPIC = 'consignments'
+  TOPIC = "consignments"
 
   ACTIONS = [
-    APPROVED = 'approved',
-    PUBLISHED = 'published',
-    SUBMITTED = 'submitted'
+    APPROVED = "approved",
+    PUBLISHED = "published",
+    SUBMITTED = "submitted"
   ].freeze
 
   def object
-    { id: @object.id, display: "#{@object.id} (#{@object.state})" }
+    {id: @object.id, display: "#{@object.id} (#{@object.state})"}
   end
 
   def subject
@@ -51,6 +51,6 @@ class SubmissionEvent < Events::BaseEvent
   end
 
   def large_image_urls
-    @object.large_images&.map { |img| img.image_urls['large'] }
+    @object.large_images&.map { |img| img.image_urls["large"] }
   end
 end

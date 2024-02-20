@@ -15,13 +15,13 @@ class CreateOfferResponseResolver < BaseResolver
     matching_user =
       offer.submission&.user&.gravity_user_id == @context[:current_user]
 
-    raise GraphQL::ExecutionError, 'Offer not found' unless matching_user
+    raise GraphQL::ExecutionError, "Offer not found" unless matching_user
 
     offer_response = offer.offer_responses.create!(offer_response_attributes)
 
-    { consignment_offer_response: offer_response }
+    {consignment_offer_response: offer_response}
   rescue ActiveRecord::RecordNotFound
-    raise GraphQL::ExecutionError, 'Offer not found'
+    raise GraphQL::ExecutionError, "Offer not found"
   rescue ActiveRecord::RecordInvalid => e
     raise GraphQL::ExecutionError, e.message
   end

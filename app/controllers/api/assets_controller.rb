@@ -21,7 +21,7 @@ module Api
     end
 
     def create
-      param! :asset_type, String, default: 'image'
+      param! :asset_type, String, default: "image"
       param! :gemini_token, String, required: true
       param! :submission_id, String, required: true
 
