@@ -77,7 +77,7 @@ describe SubmissionService do
       expect(new_submission.reload.state).to eq "rejected"
     end
 
-    it "delivers rejection email to user for non-target supply artist submissions" do
+    it "delivers authenticated rejection email to user for non-target supply artist submissions" do
       new_submission =
         SubmissionService.create_submission(
           params,
@@ -92,9 +92,28 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
-        "Unfortunately, we don’t have a selling opportunity for this work right now"
+        "Unfortunately, we don’t have a selling opportunity for this work right now. However, we have uploaded it to "
       )
     end
+    
+    it "delivers unauthenticated rejection email to user for non-target supply artist submissions" do
+      new_submission =
+        SubmissionService.create_submission(
+          params,
+          "",
+          is_convection: false
+        )
+      expect(new_submission.reload.state).to eq "rejected"
+
+      emails = ActionMailer::Base.deliveries
+      expect(emails.length).to eq 1
+      expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
+      expect(emails.first.to).to eq(%w[michael@bluth.com])
+      expect(emails.first.from).to eq(%w[sell@artsy.net])
+      expect(emails.first.html_part.body).to include(
+        "Unfortunately, we don’t have a selling opportunity for this work right now. We recommend uploading it to My Collection to help you track demand in the future."
+      )
+    end    
 
     it "does not reject a submission automatically, when created by Convection" do
       new_submission =
