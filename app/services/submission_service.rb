@@ -291,13 +291,15 @@ class SubmissionService
     def deliver_rejection_notification(submission_id)
       submission = Submission.find(submission_id)
       artist = Gravity.client.artist(id: submission.artist_id)._get
+      logged_in = submission.user_id.present?
 
       rejection_reason_template = "nsv_bsv_submission_rejected"
 
       UserMailer.send(
         rejection_reason_template,
         submission: submission,
-        artist: artist
+        artist: artist,
+        logged_in: logged_in
       ).deliver_now
     end
 

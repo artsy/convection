@@ -114,9 +114,10 @@ class UserMailer < ApplicationMailer
     mail(to: submission.email, subject: "Artsy Submission")
   end
 
-  def nsv_bsv_submission_rejected(submission:, artist:)
+  def nsv_bsv_submission_rejected(submission:, artist:, logged_in:)
     @submission = submission
     @artist = artist
+    @logged_in = logged_in
 
     @utm_params =
       utm_params(

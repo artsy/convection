@@ -16,9 +16,16 @@
             <% else %>
               <p>Hi there,</p>
             <% end %>
+
             <p>Thank you for submitting <%= @submission.title || 'Unknown' %> <%= @artist&.name ? "by #{@artist.name} " : "" %>to us for evaluation. </p>
-            <p>Unfortunately, we don’t have a selling opportunity for this work right now. However, we have uploaded it to <%= link_to 'My Collection', artsy_formatted_url('my-collection', @utm_params), target: :_blank %> in Artsy to help you track demand.</p>
-            <p>My Collection is your personal space to manage your collection, track demand for your artwork and see updates about the artist. To find this artwork in My Collection, use this email address when you sign up or log in to Artsy.</p>
+            <% if @logged_in %>
+              <p>Unfortunately, we don’t have a selling opportunity for this work right now. However, we have uploaded it to <%= link_to 'My Collection', artsy_formatted_url('my-collection', @utm_params), target: :_blank %> in Artsy to help you track demand.</p>
+              <p>My Collection is your personal space to manage your collection, track demand for your artwork and see updates about the artist. To find this artwork in My Collection, use this email address when you sign up or log in to Artsy.</p>
+            <% else %>
+              <p>Unfortunately, we don’t have a selling opportunity for this work right now. We recommend uploading it to My Collection to help you track demand in the future.</p>
+              <p>My Collection is your personal space to manage your collection, track demand for your artwork and see updates about the artist. You can upload your work by following <%= link_to 'these steps', 'https://support.artsy.net/s/article/How-do-I-upload-artworks-to-My-Collection', target: :_blank %>.</p>
+            <% end %>
+
             <p>We will be in touch if there is an opportunity to sell this work with us in the future. If you have other works you are looking to buy or sell, or have questions about managing your collection, please don’t hesitate to reach out to our team directly at <%= link_to 'sell@artsy.net', 'mailto:sell@artsy.net', target: :_blank %>.</p>
             <p>
               All the best, 
