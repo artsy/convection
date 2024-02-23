@@ -95,7 +95,7 @@ describe SubmissionService do
         "Unfortunately, we don’t have a selling opportunity for this work right now. However, we have uploaded it to "
       )
     end
-    
+
     it "delivers unauthenticated rejection email to user for non-target supply artist submissions" do
       new_submission =
         SubmissionService.create_submission(
@@ -113,7 +113,7 @@ describe SubmissionService do
       expect(emails.first.html_part.body).to include(
         "Unfortunately, we don’t have a selling opportunity for this work right now. We recommend uploading it to My Collection to help you track demand in the future."
       )
-    end    
+    end
 
     it "does not reject a submission automatically, when created by Convection" do
       new_submission =
