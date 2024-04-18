@@ -38,7 +38,7 @@ describe "createConsignmentSubmission mutation" do
     context "with an unauthorized request" do
       let(:token) { "foo.bar.baz" }
 
-      it "create user with gravity_auser_id eq nil if contact information is not provided" do
+      it "create user with gravity_user_id eq nil if contact information is not provided" do
         post "/api/graphql", params: {query: mutation}, headers: headers
 
         expect(User.last).to eq nil

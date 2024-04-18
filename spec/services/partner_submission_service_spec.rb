@@ -234,7 +234,7 @@ describe PartnerSubmissionService do
           expect(email.html_part.body).to include(
             "<i>Third approved artwork</i><span>, 1997</span>"
           )
-          expect(email.html_part.body).to include("https://cms.artsy.net")
+          expect(email.html_part.body).to include("https://cms-staging.artsy.net")
 
           expect(emails.first.html_part.body).to include("utm_source=sendgrid")
           expect(emails.first.html_part.body).to include("utm_medium=email")

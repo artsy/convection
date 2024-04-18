@@ -10,7 +10,7 @@ Convection.config =
     admin_names: (ENV["ADMIN_NAMES"] || "Alice Betty Cindy").split,
     admin_email_address: ENV["ADMIN_EMAIL_ADDRESS"] || "sell@artsy.net",
     artsy_url: ENV["ARTSY_URL"] || "https://staging.artsy.net",
-    artsy_cms_url: "https://cms.artsy.net",
+    artsy_cms_url: ENV["ARTSY_CMS_URL"] || "https://cms-staging.artsy.net",
     auction_offer_form_url: ENV["AUCTION_OFFER_FORM_URL"] || "https://foo.com",
     offer_response_form_url:
       ENV["OFFER_RESPONSE_FORM_URL"] || "https://foo.com",
@@ -26,6 +26,7 @@ Convection.config =
     datadog_trace_agent_hostname: ENV["DATADOG_TRACE_AGENT_HOSTNAME"],
     datadog_debug: ENV["DATADOG_DEBUG"] == "true",
     debug_email_address: ENV["DEBUG_EMAIL_ADDRESS"] || "sarah@artsymail.com",
+    forque_url: ENV["FORQUE_URL"] || "https://tools-staging.artsy.net",
     gemini_account_key: ENV["GEMINI_ACCOUNT_KEY"] || "convection-staging",
     gemini_app: ENV["GEMINI_APP"] || "https://media.artsy.net",
     metaphysics_api_url:
