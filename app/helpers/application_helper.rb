@@ -36,4 +36,28 @@ module ApplicationHelper
   def super_admin_user?(user_id)
     AdminUser.exists?(gravity_user_id: user_id, super_admin: true)
   end
+
+  def creator_label(submission)
+    content_tag(:span, title: creator_title(submission)) { creator_icon(submission) }
+  end
+
+  def creator_icon(submission)
+    if submission.admin
+      "🛡️"
+    elsif submission.user
+      "👤"
+    else
+      "✉️"
+    end
+  end
+
+  def creator_title(submission)
+    if submission.admin
+      "Administrator"
+    elsif submission.user
+      "User"
+    else
+      "Visitor"
+    end
+  end
 end

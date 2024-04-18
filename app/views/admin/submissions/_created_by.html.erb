@@ -1,19 +1,12 @@
 <div class='overview-section'>
   <div class='bold-label'>Created By</div>
   <div class='single-padding-top'>
+    <%= creator_icon(@submission) %>
+    <%= creator_title(@submission) %>
     <% if @submission.admin %>
-      <div class="consigned-partner-name">
-        Admin
-      </div>
-      <% if @submission.admin.email.present? %>   
-        <div class="consigned-partner-name">
-          Email: <%= @submission.admin.email%>
-        </div>
-      <% end %>
-     <% else %>
-     <div class="consigned-partner-name">
-        User
-      </div>
+      <%= mail_to @submission.admin.email, @submission.admin.email, class: "smaller-sidebar-link" %>
+    <% elsif @submission.user&.gravity_user_id.present? %>
+      <%= link_to @submission.user&.gravity_user_id, user_management_url(@submission.user&.gravity_user_id), class: "smaller-sidebar-link" %>
     <% end %>
   </div>
 </div>

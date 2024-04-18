@@ -10,7 +10,7 @@
     <%= submission.state %>
   </div>
   <div class='list-group-item-info'>
-    <%= submission.admin ? 'Admin' : 'User' %>
+    <%= creator_label(submission) %>
   </div>
   <div class='list-group-item-info list-group-item-info--id'>
     <%= submission.id %>
