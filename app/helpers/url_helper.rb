@@ -31,6 +31,10 @@ module UrlHelper
     url.gsub("PARTNER_NAME", partner_name)
   end
 
+  def user_management_url(gravity_user_id)
+    "#{Convection.config.forque_url}/users/#{gravity_user_id}"
+  end
+
   private
 
   def utm_url(url, utm_params)
