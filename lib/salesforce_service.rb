@@ -68,7 +68,9 @@ class SalesforceService
         Cataloguer__c: submission.cataloguer,
         Primary_Image_URL__c: submission.primary_image&.image_urls&.dig("thumbnail"),
         Convection_ID__c: submission.id,
-        Assigned_To__c: find_sf_user_id(submission.assigned_to)
+        Assigned_To__c: find_sf_user_id(submission.assigned_to),
+        Size_of_edition__c: submission.edition_size,
+        Available_works__c: submission.edition_number
         # Other fields we could sync in the future:
         # Artwork_Status__c: submission.state,
         # Materials: ???

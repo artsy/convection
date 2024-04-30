@@ -49,7 +49,9 @@ describe SalesforceService do
           Primary_Image_URL__c: submission.primary_image&.image_urls&.dig("thumbnail"),
           Convection_ID__c: submission.id,
           OwnerId: "SF_User_ID",
-          Assigned_To__c: "SF_User_ID"
+          Assigned_To__c: "SF_User_ID",
+          Size_of_edition__c: submission.edition_size,
+          Available_works__c: submission.edition_number
         }
       end
       let(:contact_as_salesforce_representation) do
