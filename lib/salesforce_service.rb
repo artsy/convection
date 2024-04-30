@@ -53,7 +53,8 @@ class SalesforceService
         Artwork_Year__c: submission.year,
         CurrencyIsoCode: submission.currency,
         Price_Listed__c: submission.minimum_price_cents,
-        Medium__c: submission.medium,
+        Medium__c: submission.category,
+        Materials__c: submission.medium,
         Height__c: submission.height,
         Width__c: submission.width,
         Depth__c: submission.depth,
@@ -66,9 +67,11 @@ class SalesforceService
         COA_by_Gallery__c: submission.coa_by_gallery || false,
         COA_by_Authenticating_Body__c: submission.coa_by_authenticating_body || false,
         Cataloguer__c: submission.cataloguer,
-        Primary_Image_URL__c: submission.primary_image&.image_urls&.dig("thumbnail"),
+        Primary_Image_URL__c: submission.primary_image&.image_urls&.dig("large"),
         Convection_ID__c: submission.id,
-        Assigned_To__c: find_sf_user_id(submission.assigned_to)
+        Assigned_To__c: find_sf_user_id(submission.assigned_to),
+        Size_of_edition__c: submission.edition_size,
+        Available_works__c: submission.edition_number
         # Other fields we could sync in the future:
         # Artwork_Status__c: submission.state,
         # Materials: ???

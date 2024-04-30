@@ -33,7 +33,8 @@ describe SalesforceService do
           Artwork_Year__c: submission.year,
           CurrencyIsoCode: submission.currency,
           Price_Listed__c: submission.minimum_price_cents,
-          Medium__c: submission.medium,
+          Medium__c: submission.category,
+          Materials__c: submission.medium,
           Height__c: submission.height,
           Width__c: submission.width,
           Depth__c: submission.depth,
@@ -46,10 +47,12 @@ describe SalesforceService do
           COA_by_Gallery__c: submission.coa_by_gallery || false,
           COA_by_Authenticating_Body__c: submission.coa_by_authenticating_body || false,
           Cataloguer__c: submission.cataloguer,
-          Primary_Image_URL__c: submission.primary_image&.image_urls&.dig("thumbnail"),
+          Primary_Image_URL__c: submission.primary_image&.image_urls&.dig("large"),
           Convection_ID__c: submission.id,
           OwnerId: "SF_User_ID",
-          Assigned_To__c: "SF_User_ID"
+          Assigned_To__c: "SF_User_ID",
+          Size_of_edition__c: submission.edition_size,
+          Available_works__c: submission.edition_number
         }
       end
       let(:contact_as_salesforce_representation) do
