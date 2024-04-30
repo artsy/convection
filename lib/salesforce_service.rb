@@ -66,7 +66,7 @@ class SalesforceService
         COA_by_Gallery__c: submission.coa_by_gallery || false,
         COA_by_Authenticating_Body__c: submission.coa_by_authenticating_body || false,
         Cataloguer__c: submission.cataloguer,
-        Primary_Image_URL__c: submission.primary_image&.image_urls&.dig("thumbnail"),
+        Primary_Image_URL__c: submission.primary_image&.image_urls&.dig("large"),
         Convection_ID__c: submission.id,
         Assigned_To__c: find_sf_user_id(submission.assigned_to)
         # Other fields we could sync in the future:
