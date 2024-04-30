@@ -46,7 +46,7 @@ describe SalesforceService do
           COA_by_Gallery__c: submission.coa_by_gallery || false,
           COA_by_Authenticating_Body__c: submission.coa_by_authenticating_body || false,
           Cataloguer__c: submission.cataloguer,
-          Primary_Image_URL__c: submission.primary_image&.image_urls&.dig("thumbnail"),
+          Primary_Image_URL__c: submission.primary_image&.image_urls&.dig("large"),
           Convection_ID__c: submission.id,
           OwnerId: "SF_User_ID",
           Assigned_To__c: "SF_User_ID",
