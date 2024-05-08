@@ -241,4 +241,34 @@ class Submission < ApplicationRecord
     created_at.to_i % 100_000 + (user_id || id) +
       (count_submissions_of_user || 0)
   end
+
+  def to_listing_params
+    {
+      title: title,
+      artists: [artist_id],
+      category: category,
+      medium: medium,
+      date: year,
+      height: height,
+      width: width,
+      depth: depth,
+      metric: dimensions_metric,
+      signed_by_artist: signature,
+      certificate_of_authenticity: authenticity_certificate,
+      provenance: provenance,
+      # location_city, location_state, location_country
+      additional_information: additional_info,
+      # edition, edition_number, edition_size
+      attribution_class: attribution_class&.humanize&.downcase,
+      publisher: publisher,
+      # artist_proofs
+      literature: literature,
+      exhibition_history: exhibition,
+      condition_description: condition_report,
+      signature: signature_detail,
+      coa_by_authenticating_body: coa_by_authenticating_body,
+      coa_by_gallery: coa_by_gallery,
+      # import_source / external_id (set to streamline Gravity's listed_artwork_ids?)
+    }
+  end
 end

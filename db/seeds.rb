@@ -6,3 +6,7 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+Submission.create([
+  {artist_id: "4dc98ef49a96300001003179", title: "Foo", category: "Print", state: "submitted"},
+])

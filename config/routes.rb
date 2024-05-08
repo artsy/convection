@@ -11,6 +11,7 @@ Rails
           put "undo_publish"
           put "undo_rejection"
           put "undo_close"
+          put "list_artwork"
         end
         resources :assets do
           post :multiple, on: :collection

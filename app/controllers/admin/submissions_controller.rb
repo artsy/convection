@@ -13,6 +13,7 @@ module Admin
         undo_publish
         undo_rejection
         undo_close
+        list_artwork
       ]
     before_action :set_submission_artist, only: %i[show edit]
 
@@ -129,6 +130,15 @@ module Admin
 
     def undo_close
       SubmissionService.undo_close(@submission)
+      redirect_to admin_submission_path(@submission)
+    end
+
+    def list_artwork
+      artwork = SubmissionService.list_artwork(@submission, session[:access_token])
+      flash[:success] = "Created artwork #{artwork["_id"]}"
+      redirect_to admin_submission_path(@submission)
+    rescue SubmissionService::SubmissionError => e
+      flash[:error] = e.message
       redirect_to admin_submission_path(@submission)
     end
 

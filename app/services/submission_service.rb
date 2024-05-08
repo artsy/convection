@@ -327,5 +327,40 @@ class SubmissionService
 
       submission
     end
+
+    def list_artwork(submission, access_token)
+      # TODO: Validate/prompt for partner
+      # Validate artist is set and public
+      raise SubmissionError, "Must have an artist to list" if submission.artist_id.blank?
+      artist = GravityV1.get("/api/v1/artist/#{submission.artist_id}")
+      raise SubmissionError, "Artist must be public" unless artist["public"]
+
+      # TODO: Source additional data from Salesforce artwork as desired
+
+      # Create artwork
+      artwork = GravityV1.post("/api/v1/artwork", params: submission.to_listing_params, token: access_token)
+
+      # TODO: add edition sets if applicable
+
+      # Add images, primary image first
+      submission.assets.
+        sort_by.with_index {|a, i| submission.primary_image && a == submission.primary_image ? -1 : i }.
+        map {|a| a.original_image }.
+        each do |url|
+        GravityV1.post("/api/v1/artwork/#{artwork["_id"]}/image",
+          params: {
+            remote_image_url: url,
+            low_priority: true
+          },
+          token: access_token
+        )
+      end
+
+      # Record newly listed artwork
+      submission.listed_artwork_ids << artwork["_id"]
+      submission.save!
+
+      artwork
+    end
   end
 end
