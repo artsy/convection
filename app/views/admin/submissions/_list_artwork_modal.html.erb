@@ -1,0 +1,27 @@
+<div class='modal remodal smaller-modal' data-remodal-id='list-artwork-modal'
+  data-remodal-options="hashTracking: false">
+  <div class='modal-header'>
+    <h3>
+      Please select a partner
+    </h3>
+  </div>
+  <div class='modal-close'>
+    <%= link_to '' , '#' , id: 'list-artwork-close' %>
+  </div>
+  <div class='modal-content'>
+    <div class='single-padding-top'>
+      <p>A new artwork listing will be created in the partner's inventory.</p>
+      <div class='col-sm-12' id='partner-selections-form'>
+        <%= form_tag list_artwork_admin_submission_path, method: 'put' do %>
+          <div class='form-group'>
+            <%= text_field_tag 'gravity_partner', '', class: 'form-control', id: 'partner-search' %>
+            <%= hidden_field_tag 'gravity_partner_id' %>
+            <div class='single-padding-top'>
+              <%= submit_tag 'Create Artwork', class: 'btn btn-primary btn-full-width', id: 'partner-search-submit' %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
