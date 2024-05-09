@@ -343,11 +343,12 @@ class SubmissionService
       # TODO: add edition sets if applicable
 
       # Add images, primary image first
-      submission.assets.
-        sort_by.with_index {|a, i| submission.primary_image && a == submission.primary_image ? -1 : i }.
-        map {|a| a.original_image }.
-        each do |url|
-        GravityV1.post("/api/v1/artwork/#{artwork["_id"]}/image",
+      submission.assets
+        .sort_by.with_index { |a, i| submission.primary_image && a == submission.primary_image ? -1 : i }
+        .map { |a| a.original_image }
+        .each do |url|
+        GravityV1.post(
+          "/api/v1/artwork/#{artwork["_id"]}/image",
           params: {
             remote_image_url: url,
             low_priority: true
