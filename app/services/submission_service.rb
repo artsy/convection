@@ -339,10 +339,15 @@ class SubmissionService
 
       # Create artwork
       artwork = GravityV1.post("/api/v1/artwork",
-        params: submission.to_listing_params.merge(partner: gravity_partner_id),
+        params: submission.to_artwork_params.merge(partner: gravity_partner_id),
         token: access_token)
 
-      # TODO: add edition sets if applicable
+      # Add edition set if applicable
+      if submission.edition?
+        GravityV1.post("/api/v1/artwork/#{artwork["_id"]}/edition_set",
+          params: submission.to_edition_set_params,
+          token: access_token)
+      end
 
       # Add images, primary image first
       submission.assets

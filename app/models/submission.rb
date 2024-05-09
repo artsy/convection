@@ -242,7 +242,7 @@ class Submission < ApplicationRecord
       (count_submissions_of_user || 0)
   end
 
-  def to_listing_params
+  def to_artwork_params
     {
       title: title,
       artists: [artist_id],
@@ -256,12 +256,9 @@ class Submission < ApplicationRecord
       signed_by_artist: signature,
       certificate_of_authenticity: authenticity_certificate,
       provenance: provenance,
-      # location_city, location_state, location_country
       additional_information: additional_info,
-      # edition, edition_number, edition_size
       attribution_class: attribution_class&.humanize&.downcase,
       publisher: publisher,
-      # artist_proofs
       literature: literature,
       exhibition_history: exhibition,
       condition_description: condition_report,
@@ -270,6 +267,18 @@ class Submission < ApplicationRecord
       coa_by_gallery: coa_by_gallery,
       import_source: "convection",
       external_id: id
+    }
+  end
+
+  def to_edition_set_params
+    {
+      edition_size: edition_size,
+      available_editions: [edition_number],
+      artist_proofs: artist_proofs,
+      height: height,
+      width: width,
+      depth: depth,
+      metric: dimensions_metric
     }
   end
 end
