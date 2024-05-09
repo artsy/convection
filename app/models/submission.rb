@@ -268,7 +268,8 @@ class Submission < ApplicationRecord
       signature: signature_detail,
       coa_by_authenticating_body: coa_by_authenticating_body,
       coa_by_gallery: coa_by_gallery,
-      # import_source / external_id (set to streamline Gravity's listed_artwork_ids?)
+      import_source: "convection",
+      external_id: id
     }
   end
 end
