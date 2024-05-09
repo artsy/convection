@@ -137,7 +137,7 @@ module Admin
       artwork = SubmissionService.list_artwork(@submission, params[:gravity_partner_id], session[:access_token])
       flash[:success] = "Created artwork #{artwork["_id"]}"
       redirect_to admin_submission_path(@submission)
-    rescue SubmissionService::SubmissionError => e
+    rescue SubmissionService::SubmissionError, GravityV1::GravityError => e
       flash[:error] = e.message
       redirect_to admin_submission_path(@submission)
     end
