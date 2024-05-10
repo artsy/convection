@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_02_151711) do
+ActiveRecord::Schema.define(version: 2024_05_08_215653) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -236,6 +236,7 @@ ActiveRecord::Schema.define(version: 2023_03_02_151711) do
     t.string "source"
     t.string "location_postal_code"
     t.string "location_country_code"
+    t.string "listed_artwork_ids", default: [], null: false, array: true
     t.index ["consigned_partner_submission_id"], name: "index_submissions_on_consigned_partner_submission_id"
     t.index ["ext_user_id"], name: "index_submissions_on_ext_user_id"
     t.index ["primary_image_id"], name: "index_submissions_on_primary_image_id"

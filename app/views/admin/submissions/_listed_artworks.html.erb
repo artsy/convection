@@ -1,0 +1,10 @@
+<% if @submission.listed_artwork_ids.any? %>
+  <div class='overview-section'>
+    <div class='bold-label'>Listed Artworks</div>
+    <% @submission.listed_artwork_ids.each do |artwork_id| %>
+      <div class='single-padding-top smaller-sidebar-link'>
+        <%= link_to artwork_id, artwork_url(artwork_id) %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

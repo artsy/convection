@@ -2,6 +2,6 @@
 
 module Types
   class SubmissionSortType < SortType
-    generate_values(Submission.column_names)
+    generate_values(Submission.column_names - ["listed_artwork_ids"])
   end
 end
