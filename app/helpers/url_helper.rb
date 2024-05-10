@@ -35,6 +35,10 @@ module UrlHelper
     "#{Convection.config.forque_url}/users/#{gravity_user_id}"
   end
 
+  def artwork_url(artwork_id)
+    "#{Convection.config.artsy_url}/artwork/#{artwork_id}"
+  end
+
   private
 
   def utm_url(url, utm_params)

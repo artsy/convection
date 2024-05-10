@@ -2,6 +2,9 @@
   <div class='bold-label'>Actions</div>
     <% if @submission.approved? || @submission.published? %>
       <%= link_to 'Create Offer', new_step_0_admin_offers_path(submission_id: @submission.id), class: 'btn btn-primary btn-small btn-full-width' %>
+      <div class='single-padding-top'>
+        <%= link_to 'List Artwork', '#', class: 'btn btn-secondary btn-small btn-full-width', data: { 'remodal-target' => 'list-artwork-modal' } %>
+      </div>
     <% end %>
     <% @actions.each do |action| %>
       <div class='single-padding-top'>

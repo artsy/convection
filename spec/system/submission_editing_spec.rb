@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "rails_helper"
 require "support/gravity_helper"
 require "support/gravql_helper"
