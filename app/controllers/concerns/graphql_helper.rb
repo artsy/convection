@@ -173,6 +173,77 @@ module GraphqlHelper
     artist_details_response.try(:[], :data).try(:[], :artists).presence || {}
   end
 
+  def artwork_details_query(artwork_id, access_token)
+    query = <<~GQL
+      query artworkDetails($id: String!) {
+        artwork(id: $id){
+          artist {
+            name
+            targetSupply {
+              isP1
+              isTargetSupply
+            }
+          }
+
+          title
+          signature
+          mediumType {
+            name
+          }
+          medium
+
+          editionSize
+          editionNumber
+
+          dimensions {
+            in
+            cm
+          }
+
+          date
+          provenance
+
+          hasCertificateOfAuthenticity
+          certificateOfAuthenticity {
+            details
+          }
+
+          # These two are not exposed via MP:
+          # coa_by_authenticating_body
+          # coa_by_gallery
+
+          # location  - there is artworkLocation field which seems to not be exposed via MP. Wondering if we will be able to use `location` after Ole's fix.
+
+          # pricePaid - there are no submission with my_collection_artwork_id and this field both at the same time. Thus not yet confirmed if we can use this:
+          pricePaid {
+            display
+          }
+
+          images {
+            isDefault
+            resized(version: "square") {
+              url
+            }
+          }
+        }
+      }
+    GQL
+
+    response = Metaql::Schema.execute(
+      query: query,
+      access_token: access_token,
+      variables: {
+        id: artwork_id
+      }
+    )
+
+    if response[:errors].present?
+      flash.now[:warning] = "Error fetching artwork details."
+    end
+
+    response.try(:[], :data).try(:[], :artwork).presence || {}
+  end
+
   def match_partners_query(term)
     match_partners_response =
       Gravql::Schema.execute(

@@ -1,25 +1,41 @@
 <div class='row'>
   <div class='col-sm-12'>
     <div class='col-md-8'>
+      <div style="margin-bottom: 10px;">
+        <span class='switch-views' style="cursor:pointer;color:#6E1FFF;">Toggle My Collection backed data</span>
+      </div>
       <div class='col-md-12'>
         <div class='watt-overview'>
           <div class='overview-section'>
             <div class='overview-section-title--inline'>
               Details
-              <span class='overview-section-title--inline__link'>
+              <span class='overview-section-title--inline__link old-submission-details' style="display:inline;">
                 <%= link_to 'Edit', edit_admin_submission_path(@submission) %>
               </span>
+              <span class='overview-section-title--inline__link new-submission-details' style="display:none;">
+                <%= link_to 'Edit', "https://artsy.net/collector-profile/my-collection/artworks/#{@submission.my_collection_artwork_id}/edit" %>
+              </span>
             </div>
-            <%= render 'submission_details', submission: @submission, artist: @artist %>
+            <div class="old-submission-details" style="display:block;">
+              <%= render 'submission_details', submission: @submission, artist: @artist %>
+            </div>
+            <div class="new-submission-details" style="display:none;">
+              <%= render 'new_submission_details', submission: @submission, artwork_details: @artwork_details %>
+            </div>
           </div>
           <div class='overview-section'>
             <div class='overview-section-title--inline'>
               Assets
-              <span class='overview-section-title--inline__link'>
+              <span class='overview-section-title--inline__link old-submission-details' style="display:inline;">
                 <%= link_to 'Add New', new_admin_submission_asset_path(@submission) %>
               </span>
             </div>
-            <%= render @submission.assets %>
+            <span class='overview-section-title--inline__link old-submission-details' style="display:block;">
+              <%= render @submission.assets %>
+            </span>
+            <span class='overview-section-title--inline__link new-submission-details' style="display:none;">
+              <%= render 'assets', submission: @submission, artwork_details: @artwork_details %>
+            </span>
           </div>
           <%= render 'admin/consignments/consignment_section', consignment: @submission.consigned_partner_submission, artist: @artist&.[](:name) %>
           <%= render 'admin/offers/offers_section', offers: @offers, truncated: true %>
@@ -172,4 +188,9 @@
             edit.style.display = 'none'
         }
     }
+
+    $('.switch-views').on('click', function() {
+      $('.old-submission-details').toggle()
+      $('.new-submission-details').toggle()
+    })
 </script>

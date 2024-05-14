@@ -1,0 +1,27 @@
+<div class="col-md-12">
+  <div class="row">
+    <div class="col-md-12">
+      You can manage images directly from the user's My Collection artwork page:
+      <%= link_to 'My Collection Artwork', "https://artsy.net/collector-profile/my-collection/artworks/#{@submission.my_collection_artwork_id}" %>
+    </div>
+  </div>
+
+  <div class="row">
+    <% @artwork_details.images&.map do |image| %>
+      <div class='list-group-item list-group-item--asset'>
+        <div class='list-group-item-content'>
+          <div class='asset-thumb'>
+            <%= image_tag image.url %>
+          </div>
+        </div>
+        <div class='asset-controls'>
+          <% if image.default %>
+            <div class='primary-image-label'>
+              Default
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

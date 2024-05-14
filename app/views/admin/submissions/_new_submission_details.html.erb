@@ -1,0 +1,176 @@
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Artist/Designer
+  </div>
+  <div class='overview-item-value'>
+    <%= @artwork_details.artist_name&.upcase %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Title
+  </div>
+  <div class='overview-item-value'>
+    <em><%= @artwork_details.title %></em>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Signature
+  </div>
+  <div class='overview-item-value'>
+    <%= @artwork_details.signature %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Category
+  </div>
+  <div class='overview-item-value'>
+    <%= @artwork_details.category %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Medium
+  </div>
+  <div class='overview-item-value'>
+    <%= @artwork_details.medium %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Edition Size
+  </div>
+  <div class='overview-item-value'>
+    <%= @artwork_details.edition_size %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Edition Number
+  </div>
+  <div class='overview-item-value'>
+    <%= @artwork_details.edition_number %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Dimensions
+  </div>
+  <div class='overview-item-value'>
+    <div><%= @artwork_details.dimensions_in %></div>
+    <div><%= @artwork_details.dimensions_cm %></div>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Year
+  </div>
+  <div class='overview-item-value'>
+    <%= @artwork_details.year %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Provenance
+  </div>
+  <div class='overview-item-value'>
+    <strong><%= @artwork_details.provenance %></strong>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Certificate of auth.
+  </div>
+  <div class='overview-item-value'>
+    <%= @artwork_details.has_certificate_of_authenticity %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    COA by authenticating body (Not supported yet)
+  </div>
+  <div class='overview-item-value'>
+    <%= @artwork_details.coa_by_authenticating_body ? 'Yes' : 'No' %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    COA by gallery (Not supported yet)
+  </div>
+  <div class='overview-item-value'>
+    <%= @artwork_details.coa_by_gallery ? 'Yes' : 'No' %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Location (Not supported yet)
+  </div>
+  <div class='overview-item-value'>
+    <%= @artwork_details.location %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Price in mind
+  </div>
+  <div class='overview-item-value minimum-price'>
+    <% if @artwork_details.price_in_mind %>
+      <%= "Yes, #{@artwork_details.price_in_mind}" %>
+    <% else %>
+      No
+    <% end %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Supply Priority
+  </div>
+  <div class='overview-item-value supply-priority'>
+    <%#= @artwork_details && artist_supply_priority(@artwork_details.is_p1, @artwork_details.target_supply) %>
+    <%= @artwork_details && artist_supply_priority(**@artwork_details.to_h) %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Auction Score
+  </div>
+  <div class='overview-item-value auction-score'>
+    <%= formatted_score(@submission.auction_score) %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Artist Score
+  </div>
+  <div class='overview-item-value artist-score'>
+    <%= formatted_score(@submission.artist_score) %>
+  </div>
+</div>
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Created At
+  </div>
+  <div class='overview-item-value'>
+    <%= @submission.created_at&.strftime('%b %-d @ %l:%M %p %Z') %>
+  </div>
+</div>
