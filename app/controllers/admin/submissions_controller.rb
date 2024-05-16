@@ -79,7 +79,12 @@ module Admin
     end
 
     def show
-      set_artwork_details!
+      if Convection.unleash.enabled?(
+        'onyx-mp-backed-artwork-details',
+        Unleash::Context.new(user_id: @current_user) # current_user is a User#gravity_user_id for some reason
+      )
+        set_artwork_details!
+      end
 
       notified_partner_submissions =
         @submission.partner_submissions.where.not(notified_at: nil)
@@ -222,9 +227,9 @@ module Admin
         provenance: response.try(:[], :provenance),
         has_certificate_of_authenticity: response.try(:[], :hasCertificateOfAuthenticity) || "No",
         certificate_of_authenticity_details: response.try(:[], :certificateOfAuthenticity).try(:[], :details),
-        coa_by_authenticating_body: false, # TODO: Not yet supported
-        coa_by_gallery: false, # TODO: Not yet supported
-        location: "-", # Not yet supported
+        coa_by_authenticating_body: "N/A", # Not yet supported
+        coa_by_gallery: "N/A", # Not yet supported
+        location: "N/A", # Not yet supported
         price_in_mind: response.try(:[], :pricePaid).try(:[], :display),
         is_p1: response.try(:[], :artist).try(:[], :targetSupply).try(:[], :isP1),
         target_supply: response.try(:[], :artist).try(:[], :targetSupply).try(:[], :isTargetSupply),

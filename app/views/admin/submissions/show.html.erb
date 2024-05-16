@@ -1,9 +1,14 @@
 <div class='row'>
   <div class='col-sm-12'>
     <div class='col-md-8'>
-      <div style="margin-bottom: 10px;">
-        <span class='switch-views' style="cursor:pointer;color:#6E1FFF;">Toggle My Collection backed data</span>
-      </div>
+      <% if @artwork_details %>
+        <div style="margin-bottom: 10px;">
+          <div class='switch-views'>
+            <span class="new-submission-details" style="cursor:pointer;color:#6E1FFF;display:none;">See artwork details backed by submission data</span>
+            <span class="old-submission-details" style="cursor:pointer;color:#6E1FFF;display:inline;">See artwork details backed by MyC artwork</span>
+          </div>
+        </div>
+      <% end %>
       <div class='col-md-12'>
         <div class='watt-overview'>
           <div class='overview-section'>
