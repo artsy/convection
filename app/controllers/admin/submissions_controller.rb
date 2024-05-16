@@ -80,7 +80,7 @@ module Admin
 
     def show
       if Convection.unleash.enabled?(
-        'onyx-mp-backed-artwork-details',
+        "onyx-mp-backed-artwork-details",
         Unleash::Context.new(user_id: @current_user) # current_user is a User#gravity_user_id for some reason
       )
         set_artwork_details!
@@ -234,7 +234,7 @@ module Admin
         is_p1: response.try(:[], :artist).try(:[], :targetSupply).try(:[], :isP1),
         target_supply: response.try(:[], :artist).try(:[], :targetSupply).try(:[], :isTargetSupply),
         images: response.try(:[], :images)&.map do |image|
-          OpenStruct.new( url: image.try(:[], :resized).try(:[], :url), default: image.try(:[], :isDefault) )
+          OpenStruct.new(url: image.try(:[], :resized).try(:[], :url), default: image.try(:[], :isDefault))
         end
       )
     end
