@@ -55,7 +55,7 @@
           <%= render 'state_actions' %>
           <%= render 'listed_artworks' %>
           <%= render 'rejection_reasons_modal'%>
-          <%= render 'list_artwork_modal'%>
+          <%= render 'list_artwork_modal' if @submission.approved? || @submission.published? %>
           <div class='overview-section'>
             <div class='bold-label'>State</div>
             <div class='single-padding-top'>
