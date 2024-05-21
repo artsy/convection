@@ -13,6 +13,62 @@ class SalesforceService
       api.create!("Artwork__c", map_submission_to_salesforce_artwork(submission, sf_contact_id, sf_artist_id))
     end
 
+    def salesforce_artwork_for_submission(submission)
+      return unless api_enabled? && submission
+
+      # TODO: Re-add Medium_Type__c once reflected in staging sandbox
+      api.query(
+        <<~SQL
+          select Id, Primary_Artist__c, CurrencyIsoCode, Depth__c, Artwork_Title__c, Artwork_Year__c, Diameter__c, Width__c, Height__c, Medium__c, Ecommerce__c, Price_Listed__c, Price_Hidden__c, Certificate_of_Authenticity__c, COA_by_Authenticating_Body__c, COA_by_Gallery__c, Condition_Notes__c, Edition_Information__c, Framed__c, Metric__c, Primary_Image_URL__c, Provenance__c, Signature_Description__c, Signed_by_Artist__c, Signed_in_Plate__c, Signed_Other__c, Not_Signed__c, Artwork_Price_Min__c, Artwork_Price_Max__c, Literature__c, Exhibition_History__c, Edition_Number__c
+          from Artwork__c
+          where Convection_ID__c = '#{submission.id}'
+        SQL
+      ).first
+    end
+
+    # TODO: Edition_Number__c is unused due to its poor formatting
+    # TODO: Consider Size_of_edition__c and Available_works__c once reflected in staging sandbox
+    def salesforce_artwork_to_artwork_params(salesforce_artwork)
+      return unless salesforce_artwork
+
+      {
+        artists: [find_artist(salesforce_artwork.Primary_Artist__c)&.Gravity_Artist_ID__c].compact,
+        price_currency: salesforce_artwork.CurrencyIsoCode.presence,
+        depth: salesforce_artwork.Depth__c.presence,
+        title: salesforce_artwork.Artwork_Title__c.presence,
+        year: salesforce_artwork.Artwork_Year__c.presence,
+        diameter: salesforce_artwork.Diameter__c.presence,
+        width: salesforce_artwork.Width__c.presence,
+        height: salesforce_artwork.Height__c.presence,
+        category: salesforce_artwork.Medium_Type__c.presence,
+        medium: salesforce_artwork.Medium__c.presence,
+        ecommerce: salesforce_artwork.Ecommerce__c,
+        price_listed: salesforce_artwork.Price_Listed__c,
+        price_hidden: salesforce_artwork.Price_Hidden__c,
+        certificate_of_authenticity: salesforce_artwork.Certificate_of_Authenticity__c,
+        coa_by_authenticating_body: salesforce_artwork.COA_by_Authenticating_Body__c,
+        coa_by_gallery: salesforce_artwork.COA_by_Gallery__c,
+        condition_description: salesforce_artwork.Condition_Notes__c.presence,
+        attribution_class: salesforce_artwork.Edition_Information__c.presence,
+        framed: salesforce_artwork.Framed__c,
+        metric: salesforce_artwork.Metric__c.presence,
+        provenance: salesforce_artwork.Provenance__c.presence,
+        signature: salesforce_artwork.Signature_Description__c.presence,
+        signed_by_artist: salesforce_artwork.Signed_by_Artist__c,
+        signed_in_plate: salesforce_artwork.Signed_in_Plate__c,
+        signed_other: salesforce_artwork.Signed_Other__c,
+        not_signed: salesforce_artwork.Not_Signed__c,
+        price_min: salesforce_artwork.Artwork_Price_Min__c.presence,
+        price_max: salesforce_artwork.Artwork_Price_Max__c.presence,
+        literature: salesforce_artwork.Literature__c.presence,
+        exhibition_history: salesforce_artwork.Exhibition_History__c.presence
+      }
+    end
+
+    def salesforce_artwork_to_image_urls(salesforce_artwork)
+      [salesforce_artwork&.Primary_Image_URL__c].compact
+    end
+
     private
 
     def find_contact_id(submission)
@@ -31,6 +87,13 @@ class SalesforceService
 
     def find_sf_user_id(gravity_id)
       api.select("User", gravity_id, ["Id"], "Admin_User_ID__c").Id
+    rescue Restforce::NotFoundError
+      nil
+    end
+
+    def find_artist(salesforce_artist_id)
+      return if salesforce_artist_id.blank?
+      api.find("Artist__c", salesforce_artist_id)
     rescue Restforce::NotFoundError
       nil
     end

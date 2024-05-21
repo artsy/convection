@@ -1,3 +1,8 @@
+<%
+  submission_artwork_params = @submission.to_artwork_params || {}
+  salesforce_artwork_params = SalesforceService.salesforce_artwork_to_artwork_params(@submission.salesforce_artwork) || {}
+  fields = submission_artwork_params.keys | salesforce_artwork_params.keys
+%>
 <div class='modal remodal smaller-modal' data-remodal-id='list-artwork-modal'
   data-remodal-options="hashTracking: false">
   <div class='modal-header'>
@@ -16,6 +21,24 @@
           <div class='form-group'>
             <%= text_field_tag 'gravity_partner', '', class: 'form-control', id: 'partner-search' %>
             <%= hidden_field_tag 'gravity_partner_id' %>
+
+            <div style="text-align:right;">
+              <a onclick='$("#artwork_source_data").toggle(); return false;'><em>View source data</em></a>
+              <table class='table table-striped' id="artwork_source_data" style="display: none;">
+                <tr>
+                  <th>Field</th>
+                  <th>Submission Data</th>
+                  <th>Salesforce Data</th>
+                </tr>
+                <% fields.each do |field| %>
+                  <tr>
+                    <td><%= field %></td>
+                    <td><%= submission_artwork_params[field] %></td>
+                    <td><%= salesforce_artwork_params[field] %></td>
+                  </tr>
+                <% end %>
+              </table>
+            </div>
             <div class='single-padding-top'>
               <%= submit_tag 'Create Artwork', class: 'btn btn-primary btn-full-width', id: 'partner-search-submit' %>
             </div>
