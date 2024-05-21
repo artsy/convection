@@ -281,4 +281,8 @@ class Submission < ApplicationRecord
       metric: dimensions_metric
     }
   end
+
+  def salesforce_artwork
+    @salesforce_artwork ||= SalesforceService.salesforce_artwork_for_submission(self)
+  end
 end
