@@ -1,7 +1,11 @@
 <%
   submission_artwork_params = @submission.to_artwork_params || {}
   salesforce_artwork_params = SalesforceService.salesforce_artwork_to_artwork_params(@submission.salesforce_artwork) || {}
-  fields = submission_artwork_params.keys | salesforce_artwork_params.keys
+  artwork_fields = submission_artwork_params.keys | salesforce_artwork_params.keys
+
+  submission_edition_set_params = @submission.to_edition_set_params || {}
+  salesforce_edition_set_params = SalesforceService.salesforce_artwork_to_edition_set_params(@submission.salesforce_artwork) || {}
+  edition_set_fields = submission_edition_set_params.keys | salesforce_edition_set_params.keys
 %>
 <div class='modal remodal smaller-modal' data-remodal-id='list-artwork-modal'
   data-remodal-options="hashTracking: false">
@@ -30,13 +34,39 @@
                   <th>Submission Data</th>
                   <th>Salesforce Data</th>
                 </tr>
-                <% fields.each do |field| %>
+
+                <!-- artwork fields -->
+                <% artwork_fields.each do |field| %>
                   <tr>
                     <td><%= field %></td>
                     <td><%= submission_artwork_params[field] %></td>
                     <td><%= salesforce_artwork_params[field] %></td>
                   </tr>
                 <% end %>
+
+                <!-- edition set fields -->
+                <% edition_set_fields.each do |field| %>
+                  <tr>
+                    <td><%= field %></td>
+                    <td><%= submission_edition_set_params[field] %></td>
+                    <td><%= salesforce_edition_set_params[field] %></td>
+                  </tr>
+                <% end %>
+
+                <!-- images -->
+                <tr>
+                  <td>Images</td>
+                  <td>
+                    <% @submission.sorted_images.each do |image| %>
+                      <%= image_tag image.image_urls["thumbnail"], style: 'max-width: 100px; max-height: 100px;' %>
+                    <% end %>
+                  </td>
+                  <td>
+                    <% SalesforceService.salesforce_artwork_to_image_urls(@submission.salesforce_artwork).each do |image_url| %>
+                      <%= image_tag image_url, style: 'max-width: 100px; max-height: 100px;' %>
+                    <% end %>
+                  </td>
+                </tr>
               </table>
             </div>
             <div class='single-padding-top'>

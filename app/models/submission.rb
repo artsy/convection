@@ -114,6 +114,10 @@ class Submission < ApplicationRecord
     consigned_partner_submission&.state
   end
 
+  def sorted_images
+    images.sort_by.with_index { |a, i| a == primary_image ? -1 : i }
+  end
+
   def as_json(options = {})
     if options[:properties] == :short
       return(
@@ -245,7 +249,7 @@ class Submission < ApplicationRecord
   def to_artwork_params
     {
       title: title,
-      artists: [artist_id],
+      artists: [artist_id.presence].compact,
       category: category,
       medium: medium,
       date: year,
@@ -273,7 +277,7 @@ class Submission < ApplicationRecord
   def to_edition_set_params
     {
       edition_size: edition_size,
-      available_editions: [edition_number],
+      available_editions: [edition_number.presence].compact,
       artist_proofs: artist_proofs,
       height: height,
       width: width,

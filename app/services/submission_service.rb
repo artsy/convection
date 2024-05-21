@@ -350,8 +350,7 @@ class SubmissionService
       end
 
       # Add images, primary image first
-      submission.assets
-        .sort_by.with_index { |a, i| submission.primary_image && a == submission.primary_image ? -1 : i }
+      submission.sorted_images
         .map { |a| a.original_image }
         .each do |url|
         GravityV1.post("/api/v1/artwork/#{artwork["_id"]}/image",
