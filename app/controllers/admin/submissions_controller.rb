@@ -22,6 +22,8 @@ module Admin
       matching_submissions.page(page).per(size)
     end
 
+    before_action :build_listing_fields, only: %i[show list_artwork]
+
     expose(:artist_details) do
       artists_names_query(submissions.map(&:artist_id))
     end
@@ -134,7 +136,41 @@ module Admin
     end
 
     def list_artwork
-      artwork = SubmissionService.list_artwork(@submission, params[:gravity_partner_id], session[:access_token])
+      artwork_params = {
+        partner: params[:gravity_partner_id],
+        import_source: "convection",
+        external_id: @submission.id
+      }.with_indifferent_access
+
+      params[:artwork_sources].each do |key, value|
+        if value == "submission"
+          artwork_params[key] = @submission_artwork_params[key.to_sym]
+        elsif value == "salesforce"
+          artwork_params[key] = @salesforce_artwork_params[key.to_sym]
+        end
+      end
+
+      edition_set_params = {}.with_indifferent_access
+      if @submission.edition?
+        params[:edition_set_sources].each do |key, value|
+          if value == "submission"
+            edition_set_params[key] = @submission_edition_set_params[key.to_sym]
+          elsif value == "salesforce"
+            edition_set_params[key] = @salesforce_edition_set_params[key.to_sym]
+          end
+        end
+      end
+
+      images_or_urls = []
+      Array(params[:image_ids]).each do |image_id|
+        images_or_urls << @submission.images.find(image_id)
+      end
+      Array(params[:salesforce_image_urls]).each do |image_url|
+        images_or_urls << image_url
+      end
+
+      artwork = SubmissionService.list_artwork(@submission, session[:access_token], artwork_params, edition_set_params, images_or_urls)
+
       flash[:success] = "Created artwork #{artwork["_id"]}"
       redirect_to admin_submission_path(@submission)
     rescue SubmissionService::SubmissionError, GravityV1::GravityError => e
@@ -248,6 +284,19 @@ module Admin
           params.dig(:submission, :assigned_to)
       end
       permitted_params
+    end
+
+    def build_listing_fields
+      @submission_artwork_params = @submission.to_artwork_params || {}
+      @salesforce_artwork_params = (SalesforceService.salesforce_artwork_to_artwork_params(@submission.salesforce_artwork) || {}).compact
+      @artwork_fields = @submission_artwork_params.keys | @salesforce_artwork_params.keys
+
+      @submission_edition_set_params = (@submission.to_edition_set_params || {}).compact
+      @salesforce_edition_set_params = (SalesforceService.salesforce_artwork_to_edition_set_params(@submission.salesforce_artwork) || {}).compact
+      @edition_set_fields = @submission_edition_set_params.keys | @salesforce_edition_set_params.keys
+
+      @artwork_sources = Hash.new("submission")
+      @edition_set_sources = Hash.new("submission")
     end
   end
 end

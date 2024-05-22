@@ -268,9 +268,7 @@ class Submission < ApplicationRecord
       condition_description: condition_report,
       signature: signature_detail,
       coa_by_authenticating_body: coa_by_authenticating_body,
-      coa_by_gallery: coa_by_gallery,
-      import_source: "convection",
-      external_id: id
+      coa_by_gallery: coa_by_gallery
     }
   end
 
