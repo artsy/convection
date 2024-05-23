@@ -30,8 +30,8 @@ class AdminMailerPreview < ActionMailer::Preview
 
     {
       submission: Submission.submitted.where.not(assigned_to: nil).last,
-      user_data: { id: submission.user.gravity_user_id, email: submission.user_email },
-      artwork_data: { id: submission.my_collection_artwork_id },
+      user_data: {id: submission.user.gravity_user_id, email: submission.user_email},
+      artwork_data: {id: submission.my_collection_artwork_id},
       changes: {
         title: ["Happy Cho", "Happy Choppers"],
         category: ["Photography", "Painting"],
