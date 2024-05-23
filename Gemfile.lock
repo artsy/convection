@@ -572,7 +572,6 @@ DEPENDENCIES
   rails-controller-testing
   rails_param
   redcarpet
-  redis
   restforce
   rspec-rails
   sass-rails
