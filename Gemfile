@@ -41,6 +41,7 @@ gem "restforce"
 gem "sass-rails"
 gem "sentry-raven" # for error reporting
 gem "sidekiq"
+gem "sneakers" # RabbitMQ consumer workers
 gem "tzinfo-data" # overrides system time zone data
 gem "uglifier"
 gem "unleash"

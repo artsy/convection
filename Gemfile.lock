@@ -458,12 +458,21 @@ GEM
       rubyzip (>= 1.2.2)
     sentry-raven (3.1.2)
       faraday (>= 1.0)
+    serverengine (2.0.7)
+      sigdump (~> 0.2.2)
     sexp_processor (4.15.2)
     shellany (0.0.1)
     sidekiq (6.5.10)
       connection_pool (>= 2.2.5, < 3)
       rack (~> 2.0)
       redis (>= 4.5.0, < 5)
+    sigdump (0.2.5)
+    sneakers (2.11.0)
+      bunny (~> 2.12)
+      concurrent-ruby (~> 1.0)
+      rake
+      serverengine (~> 2.0.5)
+      thor
     solargraph (0.40.4)
       backport (~> 1.1)
       benchmark
@@ -563,12 +572,14 @@ DEPENDENCIES
   rails-controller-testing
   rails_param
   redcarpet
+  redis
   restforce
   rspec-rails
   sass-rails
   selenium-webdriver
   sentry-raven
   sidekiq
+  sneakers
   solargraph
   standard
   tzinfo-data

@@ -16,4 +16,5 @@ Datadog.configure do |c|
   c.use :redis, service_name: "convection.redis"
   c.use :http, service_name: "convection.http", distributed_tracing: true
   c.use :sidekiq, service_name: "convection.sidekiq"
+  c.use :sneakers, service_name: "convection.sneakers"
 end

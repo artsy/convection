@@ -2,6 +2,7 @@
 
 require_relative "config/application"
 require "graphql/rake_task"
+require "sneakers/tasks"
 
 Rails.application.load_tasks
 
