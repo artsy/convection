@@ -34,6 +34,7 @@ describe SalesforceService do
           CurrencyIsoCode: submission.currency,
           Price_Listed__c: submission.minimum_price_cents,
           Medium__c: submission.category,
+          Medium_Type__c: submission.category,
           Materials__c: submission.medium,
           Height__c: submission.height,
           Width__c: submission.width,
