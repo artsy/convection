@@ -1,0 +1,26 @@
+
+<p>User <%= link_to "##{@user_id}", user_management_url(@submission.user.gravity_user_id) %> (<%= @user_email %>) updated their My Collection artwork associated with the submission you are assigned.</p>
+<p>You can find the updated artwork by following <%= link_to "this link", my_collection_artwork_url(@artwork_id) %>.</p>
+
+<table style="border: 1px solid black; width:100%; border-collapse: collapse">
+  <tr>
+    <th></th>
+    <th style="text-align: right; padding: 10px 0px 10px 10px;">Previous state</th>
+    <th style="text-align: right; padding: 10px 0px 10px 10px;">Current state</th>
+  </tr>
+  <% @changes.each_with_index do |(key, value), index| %>
+    <% if index.even? %>
+      <tr style="background-color: #F7F7F7;">
+    <% else %>
+      <tr>
+    <% end %>
+      <td style="padding-left: 10px; padding: 5px 0px 5px 10px;"><%= key %></td>
+      <td style="text-align: right; padding: 5px 10px 5px 0px;"><%= value[0] || 'N/A' %></td>
+      <td style="text-align: right; padding: 5px 10px 5px 0px;"><%= value[1] || 'N/A' %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p>
+  <%= link_to('View Submission In Admin', "#{Convection.config.convection_url}/admin/submissions/#{@submission.id}") %>
+</p>

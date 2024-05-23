@@ -39,6 +39,10 @@ module UrlHelper
     "#{Convection.config.artsy_url}/artwork/#{artwork_id}"
   end
 
+  def my_collection_artwork_url(artwork_id)
+    "#{Convection.config.artsy_url}/my-collection/artworks/#{artwork_id}/edit"
+  end
+
   private
 
   def utm_url(url, utm_params)
