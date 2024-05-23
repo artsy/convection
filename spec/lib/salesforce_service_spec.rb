@@ -3,8 +3,8 @@ require "rails_helper"
 describe SalesforceService do
   describe ".add_artwork" do
     let(:submission) { Fabricate(:submission, title: "reallylongtitlemorethan80charsreallylongtitlemorethan80charsreallylongtitlemorethan80chars") }
-    let(:primary_image) { Fabricate(:image, submission: submission, image_urls: { large: "https://example.com/primary.png" }) }
-    let!(:additional_image) { Fabricate(:image, submission: submission, image_urls: { large: "https://example.com/image.png" }) }
+    let(:primary_image) { Fabricate(:image, submission: submission, image_urls: {large: "https://example.com/primary.png"}) }
+    let!(:additional_image) { Fabricate(:image, submission: submission, image_urls: {large: "https://example.com/image.png"}) }
 
     context "when the integration is not enabled" do
       it "does not call the Salesforce api" do
