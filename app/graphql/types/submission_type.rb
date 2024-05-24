@@ -53,6 +53,7 @@ module Types
     nilable_field :user_phone, String, null: true
     nilable_field :width, String, null: true
     nilable_field :year, String, null: true
+    nilable_field :source, Types::SubmissionSourceType, null: true
     nilable_field :utm_source, String, null: true
     nilable_field :utm_medium, String, null: true
     nilable_field :utm_term, String, null: true
