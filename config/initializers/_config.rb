@@ -26,6 +26,7 @@ Convection.config =
     datadog_trace_agent_hostname: ENV["DATADOG_TRACE_AGENT_HOSTNAME"],
     datadog_debug: ENV["DATADOG_DEBUG"] == "true",
     debug_email_address: ENV["DEBUG_EMAIL_ADDRESS"] || "sarah@artsymail.com",
+    enable_myc_artwork_updated_email: ENV["ENABLE_MYC_ARTWORK_UPDATED_EMAIL"] == "true",
     forque_url: ENV["FORQUE_URL"] || "https://tools-staging.artsy.net",
     gemini_account_key: ENV["GEMINI_ACCOUNT_KEY"] || "convection-staging",
     gemini_app: ENV["GEMINI_APP"] || "https://media.artsy.net",

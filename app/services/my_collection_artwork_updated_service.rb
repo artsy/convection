@@ -9,7 +9,7 @@ class MyCollectionArtworkUpdatedService
   end
 
   def notify_admin!
-    return if ENV["ENABLE_MYC_ARTWORK_UPDATED_EMAIL"] != "true"
+    return if Convection.config.enable_myc_artwork_updated_email
 
     if !submission.assigned_to
       Rails.logger.info("[MyCollectionArtworkUpdatedService] No admin assigned to the submission #{submission.id}.")
