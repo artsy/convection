@@ -9,6 +9,8 @@ class MyCollectionArtworkUpdatedService
   end
 
   def notify_admin!
+    return if ENV["ENABLE_MYC_ARTWORK_UPDATED_EMAIL"] != "true"
+
     if !submission.assigned_to
       Rails.logger.info("[MyCollectionArtworkUpdatedService] No admin assigned to the submission #{submission.id}.")
       return

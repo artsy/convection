@@ -26,7 +26,7 @@ class AdminMailer < ApplicationMailer
   end
 
   def artwork_updated(submission:, user_data:, artwork_data:, changes:)
-    _assigned_admin = AdminUser.find_by(gravity_user_id: submission.assigned_to)
+    assigned_admin = AdminUser.find_by(gravity_user_id: submission.assigned_to)
 
     @submission = submission
     @user_id = submission.user.gravity_user_id
@@ -40,7 +40,7 @@ class AdminMailer < ApplicationMailer
             }
 
     mail(
-      to: "nikita.skalkin@artsymail.com", # assigned_admin.email,
+      to: assigned_admin.email,
       subject: "Submission ##{@submission.id} artwork updated by a user"
     ) { |format| format.html { render layout: "mailer_no_footer" } }
   end
