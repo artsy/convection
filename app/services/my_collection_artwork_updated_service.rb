@@ -1,11 +1,11 @@
 class MyCollectionArtworkUpdatedService
-  attr_accessor :submission, :subject, :object, :changes
+  attr_accessor :submission, :object, :changes, :image_added
 
   def initialize(payload)
     @submission = Submission.find(payload[:object][:submission_id])
-    @subject = payload[:subject]
     @object = payload[:object]
     @changes = payload[:properties][:changes]
+    @image_added = payload[:properties][:image_added]
   end
 
   def notify_admin!
@@ -21,6 +21,6 @@ class MyCollectionArtworkUpdatedService
       return
     end
 
-    AdminMailer.artwork_updated(submission: submission, user_data: subject, artwork_data: object, changes: changes).deliver_now
+    AdminMailer.artwork_updated(submission: submission, artwork_data: object, changes: changes, image_added: image_added).deliver_now
   end
 end

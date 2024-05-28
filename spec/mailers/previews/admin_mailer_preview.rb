@@ -30,12 +30,23 @@ class AdminMailerPreview < ActionMailer::Preview
 
     {
       submission: Submission.submitted.where.not(assigned_to: nil).last,
-      user_data: {id: submission.user.gravity_user_id, email: submission.user_email},
       artwork_data: {id: submission.my_collection_artwork_id},
       changes: {
         title: ["Happy Cho", "Happy Choppers"],
         category: ["Photography", "Painting"],
         certificate_of_authenticity: [nil, true]
+      },
+      image_added: {
+        :square => "https://d32dm0rphc51dk.cloudfront.net/mr2x4lvjp1QycYooPibQjw/square.jpg",
+        "large_rectangle" => "https://d32dm0rphc51dk.cloudfront.net/mr2x4lvjp1QycYooPibQjw/large_rectangle.jpg",
+        "medium_rectangle" => "https://d32dm0rphc51dk.cloudfront.net/mr2x4lvjp1QycYooPibQjw/medium_rectangle.jpg",
+        "small" => "https://d32dm0rphc51dk.cloudfront.net/mr2x4lvjp1QycYooPibQjw/small.jpg",
+        "tall" => "https://d32dm0rphc51dk.cloudfront.net/mr2x4lvjp1QycYooPibQjw/tall.jpg",
+        "large" => "https://d32dm0rphc51dk.cloudfront.net/mr2x4lvjp1QycYooPibQjw/large.jpg",
+        "larger" => "https://d32dm0rphc51dk.cloudfront.net/mr2x4lvjp1QycYooPibQjw/larger.jpg",
+        "normalized" => "https://d32dm0rphc51dk.cloudfront.net/mr2x4lvjp1QycYooPibQjw/normalized.jpg",
+        "main" => "https://d32dm0rphc51dk.cloudfront.net/mr2x4lvjp1QycYooPibQjw/main.jpg",
+        "medium" => "https://d32dm0rphc51dk.cloudfront.net/mr2x4lvjp1QycYooPibQjw/medium.jpg"
       }
     }
   end
