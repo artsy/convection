@@ -143,8 +143,6 @@ spec:
           envFrom:
           - configMapRef:
               name: convection-environment
-          - secretRef:
-              name: convection
           image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/convection:staging
           imagePullPolicy: Always
           args: ["bundle", "exec", "rake", "sneakers:run"]
