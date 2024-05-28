@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AdminMailer < ApplicationMailer
-  helper :submissions
+  helper :submissions, :url
 
   def submission(submission:, user:, artist:)
     @submission = submission
@@ -22,6 +22,26 @@ class AdminMailer < ApplicationMailer
     mail(
       to: Convection.config.admin_email_address,
       subject: "Submission ##{@submission.id}"
+    ) { |format| format.html { render layout: "mailer_no_footer" } }
+  end
+
+  def artwork_updated(submission:, user_data:, artwork_data:, changes:)
+    assigned_admin = AdminUser.find_by(gravity_user_id: submission.assigned_to)
+
+    @submission = submission
+    @user_id = submission.user.gravity_user_id
+    @user_email = submission.user.email
+    @artwork_id = artwork_data[:id]
+    @changes = changes
+
+    smtpapi category: %w[submission],
+            unique_args: {
+              submission_id: submission.id
+            }
+
+    mail(
+      to: assigned_admin.email,
+      subject: "Submission ##{@submission.id} artwork updated by a user"
     ) { |format| format.html { render layout: "mailer_no_footer" } }
   end
 end

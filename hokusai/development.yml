@@ -12,7 +12,24 @@ services:
       - ../:/app
     depends_on:
       - convection-postgres
+  convection-sneakers:
+{% include 'templates/docker-compose-service-dev.yml.j2' %}
+    command: ["bundle", "exec", "rake", "sneakers:run"]
+    env_file:
+      - ../.env.development
+      - ../.env.shared
+      - ../.env
+    depends_on:
+      - convection-rabbitmq
+      - convection-postgres
+    volumes:
+      - ../:/app
   convection-postgres:
     image: postgres:12.5-alpine
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
+  convection-rabbitmq:
+    image: rabbitmq:3.6.6-management-alpine
+    ports:
+      - "${CONVECTION_RABBIT_PORT:-}:5672"
+      - "${CONVECTION_RABBIT_UI_PORT:-}:15672"

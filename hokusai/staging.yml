@@ -100,6 +100,88 @@ spec:
                 operator: In
                 values:
                 - foreground
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: convection-sneakers
+  namespace: default
+  labels:
+    app: convection
+    component: sneakers
+    layer: application
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: convection
+      component: sneakers
+      layer: application
+  template:
+    metadata:
+      labels:
+        app: convection
+        component: sneakers
+        layer: application
+      name: convection-sneakers
+    spec:
+      containers:
+        - name: convection-sneakers
+          env:
+          - name: DATADOG_TRACE_AGENT_HOSTNAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: MALLOC_ARENA_MAX
+            value: "2"
+          envFrom:
+          - configMapRef:
+              name: convection-environment
+          image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/convection:staging
+          imagePullPolicy: Always
+          args: ["bundle", "exec", "rake", "sneakers:run"]
+          resources:
+            requests:
+              cpu: 100m
+              memory: 768Mi
+            limits:
+              memory: 1Gi
+          livenessProbe:
+            exec:
+              command:
+                - pgrep
+                - -f
+                - sneakers
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 3
+          volumeMounts:
+            - mountPath: /tmp
+              name: tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+      dnsPolicy: ClusterFirst
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: tier
+                operator: In
+                values:
+                - background
+
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler

@@ -3,6 +3,8 @@ require "rails_helper"
 describe SalesforceService do
   describe ".add_artwork" do
     let(:submission) { Fabricate(:submission, title: "reallylongtitlemorethan80charsreallylongtitlemorethan80charsreallylongtitlemorethan80chars") }
+    let(:primary_image) { Fabricate(:image, submission: submission, image_urls: {large: "https://example.com/primary.png"}) }
+    let!(:additional_image) { Fabricate(:image, submission: submission, image_urls: {large: "https://example.com/image.png"}) }
 
     context "when the integration is not enabled" do
       it "does not call the Salesforce api" do
@@ -22,6 +24,7 @@ describe SalesforceService do
         allow(Convection.config).to receive(:salesforce_client_secret).and_return("secret")
         allow(Convection.config).to receive(:salesforce_host).and_return("host")
         allow(described_class).to receive(:api).and_return(restforce_double)
+        submission.update!(primary_image: primary_image)
       end
 
       let(:artwork_as_salesforce_representation) do
@@ -34,6 +37,7 @@ describe SalesforceService do
           CurrencyIsoCode: submission.currency,
           Price_Listed__c: submission.minimum_price_cents,
           Medium__c: submission.category,
+          Medium_Type__c: submission.category,
           Materials__c: submission.medium,
           Height__c: submission.height,
           Width__c: submission.width,
@@ -47,7 +51,8 @@ describe SalesforceService do
           COA_by_Gallery__c: submission.coa_by_gallery || false,
           COA_by_Authenticating_Body__c: submission.coa_by_authenticating_body || false,
           Cataloguer__c: submission.cataloguer,
-          Primary_Image_URL__c: submission.primary_image&.image_urls&.dig("large"),
+          Primary_Image_URL__c: "https://example.com/primary.png",
+          Additional_Images__c: "https://example.com/image.png,https://example.com/primary.png",
           Convection_ID__c: submission.id,
           OwnerId: "SF_User_ID",
           Assigned_To__c: "SF_User_ID",
