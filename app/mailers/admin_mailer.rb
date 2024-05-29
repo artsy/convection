@@ -25,7 +25,7 @@ class AdminMailer < ApplicationMailer
     ) { |format| format.html { render layout: "mailer_no_footer" } }
   end
 
-  def artwork_updated(submission:, user_data:, artwork_data:, changes:)
+  def artwork_updated(submission:, artwork_data:, changes: nil, image_added: nil)
     assigned_admin = AdminUser.find_by(gravity_user_id: submission.assigned_to)
 
     @submission = submission
@@ -33,6 +33,7 @@ class AdminMailer < ApplicationMailer
     @user_email = submission.user.email
     @artwork_id = artwork_data[:id]
     @changes = changes
+    @image_added = image_added
 
     smtpapi category: %w[submission],
             unique_args: {

@@ -40,7 +40,7 @@ module UrlHelper
   end
 
   def my_collection_artwork_url(artwork_id)
-    "#{Convection.config.artsy_url}/my-collection/artworks/#{artwork_id}/edit"
+    "#{Convection.config.artsy_url}/collector-profile/my-collection/artwork/#{artwork_id}"
   end
 
   private
