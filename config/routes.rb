@@ -7,6 +7,7 @@ Rails
     namespace :admin do
       resources :submissions do
         member do
+          get "salesforce_sync"
           put "undo_approval"
           put "undo_publish"
           put "undo_rejection"

@@ -14,8 +14,9 @@ module Admin
         undo_rejection
         undo_close
         list_artwork
+        salesforce_sync
       ]
-    before_action :set_submission_artist, only: %i[show edit]
+    before_action :set_submission_artist, only: %i[show edit salesforce_sync]
 
     expose(:submissions) do
       matching_submissions = SubmissionMatch.find_all(params)
@@ -188,6 +189,15 @@ module Admin
         end
       end
       respond_to { |format| format.json { render json: users || [] } }
+    end
+
+    def salesforce_sync
+      @actions = SubmissionStateActions.for(@submission)
+      notified_partner_submissions =
+        @submission.partner_submissions.where.not(notified_at: nil)
+      @partner_submissions_count =
+        notified_partner_submissions.group_by_day.count
+      @partner_name = @submission.consigned_partner_submission&.partner&.name
     end
 
     private

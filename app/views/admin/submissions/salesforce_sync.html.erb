@@ -1,0 +1,154 @@
+<div class='row'>
+  <div class='col-sm-12'>
+    <div class='col-md-8'>
+      <div class='col-md-12'>
+        <div class='watt-overview'>
+          <div class='overview-section'>
+            <div class='overview-section-title--inline'>
+              Details
+              <span class='overview-section-title--inline__link'>
+                <%= link_to 'Edit', edit_admin_submission_path(@submission) %>
+              </span>
+            </div>
+            <%= render 'salesforce_sync_form', submission: @submission, artist: @artist %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class='col-md-4'>
+      <div class='col-md-12'>
+        <div class='watt-overview'>
+          <div class='overview-section'>
+            <div class='overview-section-title--inline'>
+              Submission #<%= @submission.id %> <%= "(Deleted)" if @submission.deleted? %>
+            </div>
+            <div>
+              <% if @submission.deleted? %>
+                <%= link_to 'Undelete submission', admin_submission_path(@submission, submission: { deleted_at: nil }), method: :put, class: 'sidebar-link' %>
+              <% else %>
+                <%= link_to 'Delete submission', admin_submission_path(@submission, submission: { deleted_at: Time.current }), method: :put, class: 'sidebar-link' %>
+              <% end %>
+            </div>
+          </div>
+          <%= render 'state_actions' %>
+          <%= render 'listed_artworks' %>
+          <%= render 'rejection_reasons_modal'%>
+          <%= render 'list_artwork_modal' if @submission.approved? || @submission.published? %>
+          <div class='overview-section'>
+            <div class='bold-label'>State</div>
+            <div class='single-padding-top'>
+              <%= @submission.state %>
+            </div>
+            <div>
+              <% if @submission.rejected? %>
+                <div class='bold-label single-padding-top'>Rejection reason:</div>
+                <div class='single-padding-top'>
+                  <div id="update_rejection_reason" style="display: <%= @submission.rejection_reason.nil? ? 'block' : 'none' %>">
+                    <p>Sellers will not be notified of changes to rejection reasons.</p>
+                    <%= form_with model: [:admin, @submission] do |f| %>
+                      <div class="col-md-9">
+                        <%= f.select :rejection_reason, Submission::REJECTION_REASONS, {}, class: 'form-control'%>
+                      </div>
+                      <div class="col-md-3">
+                        <%= f.submit 'Update', id: 'update_rejection_reason', style: "height: 36px", onclick:"switchVisible('update_rejection_reason', 'edit_rejection_reason')"%>
+                      </div>
+                    <% end %>
+                  </div>
+                  <div id="edit_rejection_reason" style="display: <%= @submission.rejection_reason.nil? ? 'none' : 'block' %>">
+                    <%= render 'admin/submissions/rejection_reason'%>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+            <div class='bold-label single-padding-top'>Source</div>
+            <div class='single-padding-top'>
+              <div>
+                <%= @submission.utm_source %>
+              </div>
+              <div>
+                <%= @submission.utm_medium %>
+              </div>
+              <div>
+                <%= @submission.utm_term %>
+              </div>
+            </div>
+            <div class='bold-label single-padding-top'>Assigned To:</div>
+            <div class='single-padding-top'>
+              <div id="update" style="display: <%= @submission.assigned_to.nil? ? 'block' : 'none' %>">
+                <%= form_with model: [:admin, @submission] do |f| %>
+                  <% options = [['Please select one', '']] + AdminUser.assignees.map { |admin| [admin.name, admin.gravity_user_id] } %>
+                  <div class="col-md-9">
+                    <%= f.select :assigned_to, options, {}, class: 'form-control'%>
+                  </div>
+                  <div class="col-md-3">
+                    <%= f.submit 'Update', id: 'update', style: "height: 36px", onclick:"switchVisible('update', 'edit')"%>
+                  </div>
+                <% end %>
+              </div>
+              <div id="edit" style="display: <%= @submission.assigned_to.nil? ? 'none' : 'block' %>">
+                <%= render 'admin/submissions/assigned_to'%>
+              </div>
+            </div>
+            <div class='bold-label single-padding-top'>Cataloguer:</div>
+            <div class='single-padding-top'>
+              <div id="update_cataloguer" style="display: <%= @submission.cataloguer.nil? ? 'block' : 'none' %>">
+                <%= form_with model: [:admin, @submission] do |f| %>
+                  <% options = [['Please select one']] + AdminUser.cataloguers.map { |cataloguer| [cataloguer.name, cataloguer.gravity_user_id] } %>
+                  <div class="col-md-9">
+                    <%= f.select :cataloguer, options, {}, class: 'form-control'%>
+                  </div>
+                  <div class="col-md-3">
+                    <%= f.submit 'Update', id: 'update_cataloguer', style: "height: 36px", onclick:"switchVisible('update_cataloguer', 'edit_cataloguer')"%>
+                  </div>
+                <% end %>
+              </div>
+              <div id="edit_cataloguer" style="display: <%= @submission.cataloguer.nil? ? 'none' : 'block' %>">
+                <%= render 'admin/submissions/cataloguer'%>
+              </div>
+            </div>
+            <div class='single-padding-top'>
+              <% if @submission.state == Submission::APPROVED %>
+                <%= link_to 'Undo approval', undo_approval_admin_submission_path(@submission), method: :put, class: 'sidebar-link' %>
+              <% end %>
+              <% if @submission.state == Submission::PUBLISHED %>
+                <%= link_to 'Undo publish', undo_publish_admin_submission_path(@submission), method: :put, class: 'sidebar-link' %>
+              <% end %>
+              <% if @submission.state == Submission::REJECTED %>
+                <%= link_to 'Undo rejection', undo_rejection_admin_submission_path(@submission), method: :put, class: 'sidebar-link' %>
+              <% end %>
+              <% if @submission.state == Submission::CLOSED %>
+                <%= link_to 'Undo close', undo_close_admin_submission_path(@submission), method: :put, class: 'sidebar-link' %>
+              <% end %>
+            </div>
+          </div>
+          <%= render 'collector_info', submission: @submission %>
+          <%= render 'created_by', submission: @submission %>
+          <div class='overview-section'>
+            <div class='bold-label'>Partner Interest</div>
+            <div class='single-padding-top'>
+              <% @partner_submissions_count.each do |date, count| %>
+                <%= "#{count} partners notified on #{date.strftime('%Y-%m-%d')}" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function switchVisible(update_element_id, edit_element_id) {
+    let update = document.getElementById(update_element_id)
+    let edit = document.getElementById(edit_element_id)
+
+    if (getComputedStyle(update).display === 'block') {
+      update.style.display = 'none'
+      edit.style.display = 'block'
+    } else {
+      update.style.display = 'block'
+      edit.style.display = 'none'
+    }
+  }
+</script>

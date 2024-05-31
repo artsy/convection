@@ -1,0 +1,49 @@
+<%= form_with url: "/test", mathod: :patch do |f| %>
+  <div class="row" style="margin-bottom: 20px;">
+    <div class="col-md-12">
+      <table style="border: 1px solid black; width:100%; border-collapse: collapse">
+        <tr>
+          <th></th>
+          <th style="text-align: right; padding: 10px 10px 10px 0px;">My Collection Artwork</th>
+          <th style="text-align: right; padding: 10px 10px 10px 0px;">Salesforce data</th>
+          <th style="padding: 5px 5px 5px 0px;">
+            <input type="checkbox" class="sync-all" />
+          </th>
+        </tr>
+
+        <tr style="background-color: #F7F7F7;">
+          <td style="padding-left: 10px; padding: 5px 0px 5px 10px;">Title</td>
+          <td style="text-align: right; padding: 5px 10px 5px 0px;">Happy Choppers</td>
+          <td style="text-align: right; padding: 5px 10px 5px 0px;">Happy ch</td>
+          <td style="padding: 5px 5px 5px 5px;">
+            <input type="checkbox" name="salesforce[title]" />
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding-left: 10px; padding: 5px 0px 5px 10px;">COA by Gallery</td>
+          <td style="text-align: right; padding: 5px 10px 5px 0px;">N/A</td>
+          <td style="text-align: right; padding: 5px 10px 5px 0px;">Yes</td>
+          <td style="padding: 5px 5px 5px 5px;">
+            <input type="checkbox" name="salesforce[title]" />
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <%= f.button "Sync", class: "col-md-3 btn btn-primary" %>
+    </div>
+  </div>
+<% end %>
+
+<script>
+  $(document).ready(function() {
+    $('.sync-all').on('change', function() {
+      var checked = $(this).prop('checked');
+      $('input[type="checkbox"]').prop('checked', checked);
+    })
+  })
+</script>
