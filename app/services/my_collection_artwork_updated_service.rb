@@ -16,7 +16,7 @@ class MyCollectionArtworkUpdatedService
       return
     end
 
-    if submission.state != "submitted"
+    if submission.state != "approved"
       Rails.logger.info("[MyCollectionArtworkUpdatedService] Submission #{submission.id} is not in submitted state - skipping notification.")
       return
     end
