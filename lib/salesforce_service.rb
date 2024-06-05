@@ -18,7 +18,7 @@ class SalesforceService
 
       api.query(
         <<~SQL
-          select Id, Primary_Artist__c, CurrencyIsoCode, Depth__c, Artwork_Title__c, Artwork_Year__c, Diameter__c, Width__c, Height__c, Medium__c, Ecommerce__c, Price_Listed__c, Price_Hidden__c, Certificate_of_Authenticity__c, COA_by_Authenticating_Body__c, COA_by_Gallery__c, Condition_Notes__c, Edition_Information__c, Framed__c, Metric__c, Primary_Image_URL__c, Provenance__c, Signature_Description__c, Signed_by_Artist__c, Signed_in_Plate__c, Signed_Other__c, Not_Signed__c, Artwork_Price_Min__c, Artwork_Price_Max__c, Literature__c, Exhibition_History__c, Edition_Number__c, Medium_Type__c, Size_of_edition__c, Available_works__c
+          select Id, Primary_Artist__c, CurrencyIsoCode, Depth__c, Artwork_Title__c, Artwork_Year__c, Diameter__c, Width__c, Height__c, Medium_Type__c, Materials__c, Ecommerce__c, Price_Listed__c, Price_Hidden__c, Certificate_of_Authenticity__c, COA_by_Authenticating_Body__c, COA_by_Gallery__c, Condition_Notes__c, Edition_Information__c, Framed__c, Metric__c, Primary_Image_URL__c, Provenance__c, Signature_Description__c, Signed_by_Artist__c, Signed_in_Plate__c, Signed_Other__c, Not_Signed__c, Artwork_Price_Min__c, Artwork_Price_Max__c, Literature__c, Exhibition_History__c, Edition_Number__c, Size_of_edition__c, Available_works__c
           from Artwork__c
           where Convection_ID__c = '#{submission.id}'
         SQL
@@ -38,7 +38,7 @@ class SalesforceService
         width: salesforce_artwork.Width__c.presence,
         height: salesforce_artwork.Height__c.presence,
         category: salesforce_artwork.Medium_Type__c.presence,
-        medium: salesforce_artwork.Medium__c.presence,
+        medium: salesforce_artwork.Materials__c.presence,
         ecommerce: salesforce_artwork.Ecommerce__c,
         price_listed: salesforce_artwork.Price_Listed__c,
         price_hidden: salesforce_artwork.Price_Hidden__c,
