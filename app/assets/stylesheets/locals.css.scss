@@ -358,3 +358,23 @@ a.make-primary-link {
     height: 500px !important;
   }
 }
+
+#artwork_source_data {
+  tr:nth-child(odd) {
+    background-color: #f9f9f9;
+  }
+
+  label {
+    display: inline-block;
+
+    span,
+    img {
+      padding: 5px;
+    }
+
+    span:has(+input:checked),
+    img:has(+input:checked) {
+      background-color: #eef;
+    }
+  }
+}

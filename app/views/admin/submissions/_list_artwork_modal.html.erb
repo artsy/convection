@@ -1,8 +1,3 @@
-<%
-  submission_artwork_params = @submission.to_artwork_params || {}
-  salesforce_artwork_params = SalesforceService.salesforce_artwork_to_artwork_params(@submission.salesforce_artwork) || {}
-  fields = submission_artwork_params.keys | salesforce_artwork_params.keys
-%>
 <div class='modal remodal smaller-modal' data-remodal-id='list-artwork-modal'
   data-remodal-options="hashTracking: false">
   <div class='modal-header'>
@@ -23,20 +18,74 @@
             <%= hidden_field_tag 'gravity_partner_id' %>
 
             <div style="text-align:right;">
-              <a onclick='$("#artwork_source_data").toggle(); return false;'><em>View source data</em></a>
+              <a onclick='$("#artwork_source_data").toggle(); return false;'><em>Select source data</em></a>
               <table class='table table-striped' id="artwork_source_data" style="display: none;">
                 <tr>
-                  <th>Field</th>
-                  <th>Submission Data</th>
-                  <th>Salesforce Data</th>
+                  <th>Field sources:</th>
+                  <th>Submission</th>
+                  <th>Salesforce</th>
                 </tr>
-                <% fields.each do |field| %>
+
+                <!-- artwork fields -->
+                <% @artwork_fields.each do |field| %>
                   <tr>
-                    <td><%= field %></td>
-                    <td><%= submission_artwork_params[field] %></td>
-                    <td><%= salesforce_artwork_params[field] %></td>
+                    <td><%= field.to_s.humanize %></td>
+                    <td>
+                      <%= label_tag do %>
+                        <span><%= @submission_artwork_params[field] %></span>
+                        <%= radio_button_tag "artwork_sources[#{field}]", "submission", @artwork_sources[field] == "submission" %>
+                      <% end %>
+                    </td>
+                    <td>
+                      <%= label_tag do %>
+                        <span><%= @salesforce_artwork_params[field] %></span>
+                        <%= radio_button_tag "artwork_sources[#{field}]", "salesforce", @artwork_sources[field] == "salesforce" %>
+                      <% end %>
+                    </td>
                   </tr>
                 <% end %>
+
+                <!-- edition set fields -->
+                <% if @submission.edition? %>
+                  <% @edition_set_fields.each do |field| %>
+                    <tr>
+                      <td><%= field.to_s.humanize %></td>
+                      <td>
+                        <%= label_tag do %>
+                          <span><%= @submission_edition_set_params[field] %></span>
+                          <%= radio_button_tag "edition_set_sources[#{field}]", "submission", @edition_set_sources[field] == "submission" %>
+                        <% end %>
+                      </td>
+                      <td>
+                        <%= label_tag do %>
+                          <span><%= @salesforce_edition_set_params[field] %></span>
+                          <%= radio_button_tag "edition_set_sources[#{field}]", "salesforce", @edition_set_sources[field] == "salesforce" %>
+                        <% end %>
+                      </td>
+                    </tr>
+                  <% end %>
+                <% end %>
+
+                <!-- images -->
+                <tr>
+                  <td>Images</td>
+                  <td>
+                    <% @submission.sorted_images.each do |image| %>
+                      <%= label_tag do %>
+                        <%= image_tag image.image_urls["thumbnail"] || "", style: 'max-width: 100px; max-height: 100px;' %>
+                        <%= check_box_tag "image_ids[]", image.id, true %>
+                      <% end %>
+                    <% end %>
+                  </td>
+                  <td>
+                    <% SalesforceService.salesforce_artwork_to_image_urls(@submission.salesforce_artwork).each do |image_url| %>
+                      <%= label_tag do %>
+                        <%= image_tag image_url, style: 'max-width: 100px; max-height: 100px;' %>
+                        <%= check_box_tag "salesforce_image_urls[]", "TODO", false %>
+                      <% end %>
+                    <% end %>
+                  </td>
+                </tr>
               </table>
             </div>
             <div class='single-padding-top'>

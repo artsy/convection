@@ -328,32 +328,23 @@ class SubmissionService
       submission
     end
 
-    def list_artwork(submission, gravity_partner_id, access_token)
-      raise SubmissionError, "Partner is required" unless gravity_partner_id.present?
+    def list_artwork(submission, access_token, artwork_params, edition_set_params, images_or_urls)
       # Validate artist is set and public
-      raise SubmissionError, "Must have an artist to list" if submission.artist_id.blank?
-      artist = GravityV1.get("/api/v1/artist/#{submission.artist_id}")
+      raise SubmissionError, "Must have an artist to list" if artwork_params[:artists].empty?
+      artist = GravityV1.get("/api/v1/artist/#{artwork_params[:artists].first}")
       raise SubmissionError, "Artist must be public" unless artist["public"]
 
-      # TODO: Source data from Salesforce or MyCollection artworks as desired
-
       # Create artwork
-      artwork = GravityV1.post("/api/v1/artwork",
-        params: submission.to_artwork_params.merge(partner: gravity_partner_id),
-        token: access_token)
+      artwork = GravityV1.post("/api/v1/artwork", params: artwork_params, token: access_token)
 
       # Add edition set if applicable
-      if submission.edition?
-        GravityV1.post("/api/v1/artwork/#{artwork["_id"]}/edition_set",
-          params: submission.to_edition_set_params,
-          token: access_token)
+      if edition_set_params.any?
+        GravityV1.post("/api/v1/artwork/#{artwork["_id"]}/edition_set", params: edition_set_params, token: access_token)
       end
 
-      # Add images, primary image first
-      submission.assets
-        .sort_by.with_index { |a, i| submission.primary_image && a == submission.primary_image ? -1 : i }
-        .map { |a| a.original_image }
-        .each do |url|
+      # Add images
+      images_or_urls.each do |image_or_url|
+        url = image_or_url.respond_to?(:original_image) ? image_or_url.original_image : image_or_url
         GravityV1.post("/api/v1/artwork/#{artwork["_id"]}/image",
           params: {remote_image_url: url, low_priority: true},
           token: access_token)
