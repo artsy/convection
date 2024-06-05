@@ -284,6 +284,10 @@ class Submission < ApplicationRecord
     }
   end
 
+  def likely_edition?
+    edition? || edition_size.present? || edition_number.present?
+  end
+
   def salesforce_artwork
     @salesforce_artwork ||= SalesforceService.salesforce_artwork_for_submission(self)
   end

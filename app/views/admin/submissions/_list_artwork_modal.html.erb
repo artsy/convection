@@ -46,7 +46,7 @@
                 <% end %>
 
                 <!-- edition set fields -->
-                <% if @submission.edition? %>
+                <% if @submission.likely_edition? %>
                   <% @edition_set_fields.each do |field| %>
                     <tr>
                       <td><%= field.to_s.humanize %></td>
