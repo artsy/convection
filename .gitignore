@@ -11,3 +11,4 @@ latest.dump
 node_modules/
 public
 yarn-error.log
+.ruby-version

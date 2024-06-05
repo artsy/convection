@@ -12,6 +12,8 @@ Sneakers.configure(
   log: Rails.logger,
   daemonize: false,
   pid_path: "tmp/pids/sneakers.pid",
-  workers: 1
+  workers: 1,
+  threads: ENV.fetch("RAILS_MAX_THREADS", 5), # match default database pool size.
+  prefetch: ENV.fetch("RAILS_MAX_THREADS", 5) # match threads size (docs recommend this)
 )
 Sneakers.logger.level = Logger::INFO
