@@ -129,6 +129,34 @@ describe "submission query" do
           )
         end
       end
+
+      context "myCollectionArtworkID" do
+        let(:token) { "foo.bar.baz" }
+        let(:submission) { Fabricate :submission, session_id: "session", my_collection_artwork_id: "artwork-id" }
+        let(:query_inputs) { "id: #{submission.id}, sessionID: \"session\"" }
+
+        it "returns correct myCollectionArtworkID field" do
+          query = <<-GRAPHQL
+            query {
+              submission(#{query_inputs}) {
+                myCollectionArtworkID
+              }
+            }
+          GRAPHQL
+
+          post "/api/graphql", params: {query: query}, headers: headers
+
+          expect(response.status).to eq 200
+          body = JSON.parse(response.body)
+
+          submission_response = body["data"]["submission"]
+          expect(submission_response).to match(
+            {
+              "myCollectionArtworkID" => "artwork-id"
+            }
+          )
+        end
+      end
     end
 
     context "with a request from a submission owner" do
