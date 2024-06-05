@@ -151,7 +151,7 @@ module Admin
       end
 
       edition_set_params = {}.with_indifferent_access
-      if @submission.edition?
+      if @submission.likely_edition?
         params[:edition_set_sources].each do |key, value|
           if value == "submission"
             edition_set_params[key] = @submission_edition_set_params[key.to_sym]
