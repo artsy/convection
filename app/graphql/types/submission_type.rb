@@ -36,6 +36,7 @@ module Types
     nilable_field :location_country_code, String, null: true
     nilable_field :medium, String, null: true
     nilable_field :minimum_price_dollars, Integer, null: true
+    nilable_field :myCollectionArtworkID, String, null: true, method: :my_collection_artwork_id
     nilable_field :primary_image, Types::AssetType, null: true
     nilable_field :provenance, String, null: true
     nilable_field :published_at, GraphQL::Types::ISO8601DateTime, null: true
