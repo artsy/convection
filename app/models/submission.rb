@@ -114,6 +114,10 @@ class Submission < ApplicationRecord
     consigned_partner_submission&.state
   end
 
+  def sorted_images
+    images.sort_by.with_index { |a, i| a == primary_image ? -1 : i }
+  end
+
   def as_json(options = {})
     if options[:properties] == :short
       return(
@@ -245,7 +249,7 @@ class Submission < ApplicationRecord
   def to_artwork_params
     {
       title: title,
-      artists: [artist_id],
+      artists: [artist_id.presence].compact,
       category: category,
       medium: medium,
       date: year,
@@ -264,22 +268,24 @@ class Submission < ApplicationRecord
       condition_description: condition_report,
       signature: signature_detail,
       coa_by_authenticating_body: coa_by_authenticating_body,
-      coa_by_gallery: coa_by_gallery,
-      import_source: "convection",
-      external_id: id
+      coa_by_gallery: coa_by_gallery
     }
   end
 
   def to_edition_set_params
     {
       edition_size: edition_size,
-      available_editions: [edition_number],
+      available_editions: [edition_number.presence].compact,
       artist_proofs: artist_proofs,
       height: height,
       width: width,
       depth: depth,
       metric: dimensions_metric
     }
+  end
+
+  def likely_edition?
+    edition? || edition_size.present? || edition_number.present?
   end
 
   def salesforce_artwork
