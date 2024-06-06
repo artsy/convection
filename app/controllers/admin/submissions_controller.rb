@@ -81,6 +81,13 @@ module Admin
     end
 
     def show
+      if Convection.unleash.enabled?(
+        "onyx-mp-backed-artwork-details",
+        Unleash::Context.new(user_id: @current_user) # current_user is a User#gravity_user_id for some reason
+      )
+        set_artwork_details!
+      end
+
       notified_partner_submissions =
         @submission.partner_submissions.where.not(notified_at: nil)
       @partner_submissions_count =
@@ -234,6 +241,38 @@ module Admin
 
     def set_submission_artist
       @artist = artists_details_query([@submission.artist_id]).first
+    end
+
+    def set_artwork_details!
+      return unless @submission.my_collection_artwork_id
+
+      response = artwork_details_query(@submission.my_collection_artwork_id, session[:access_token])
+      return unless response
+
+      @artwork_details = OpenStruct.new(
+        artist_name: response.try(:[], :artist).try(:[], :name),
+        title: response.try(:[], :title),
+        signature: response.try(:[], :signature),
+        category: response.try(:[], :mediumType).try(:[], :name),
+        medium: response.try(:[], :medium),
+        edition_size: response.try(:[], :editionSize),
+        edition_number: response.try(:[], :editionNumber),
+        dimensions_in: response.try(:[], :dimensions).try(:[], :in),
+        dimensions_cm: response.try(:[], :dimensions).try(:[], :cm),
+        year: response.try(:[], :date),
+        provenance: response.try(:[], :provenance),
+        has_certificate_of_authenticity: response.try(:[], :hasCertificateOfAuthenticity) || "No",
+        certificate_of_authenticity_details: response.try(:[], :certificateOfAuthenticity).try(:[], :details),
+        coa_by_authenticating_body: "N/A", # Not yet supported
+        coa_by_gallery: "N/A", # Not yet supported
+        location: "N/A", # Not yet supported
+        price_in_mind: response.try(:[], :pricePaid).try(:[], :display),
+        is_p1: response.try(:[], :artist).try(:[], :targetSupply).try(:[], :isP1),
+        target_supply: response.try(:[], :artist).try(:[], :targetSupply).try(:[], :isTargetSupply),
+        images: response.try(:[], :images)&.map do |image|
+          OpenStruct.new(url: image.try(:[], :resized).try(:[], :url), default: image.try(:[], :isDefault))
+        end
+      )
     end
 
     def submission_params
