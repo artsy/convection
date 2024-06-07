@@ -39,6 +39,10 @@ module UrlHelper
     "#{Convection.config.artsy_url}/artwork/#{artwork_id}"
   end
 
+  def edit_artwork_url(artwork_id)
+    "#{Convection.config.artsy_cms_url}/artworks/#{artwork_id}/edit?update_current_partner=1"
+  end
+
   def my_collection_artwork_url(artwork_id)
     "#{Convection.config.artsy_url}/collector-profile/my-collection/artwork/#{artwork_id}"
   end
