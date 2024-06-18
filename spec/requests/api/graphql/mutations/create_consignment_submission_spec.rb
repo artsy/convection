@@ -168,5 +168,24 @@ describe "createConsignmentSubmission mutation" do
         expect(submission.location_country_code).to eq "us"
       end
     end
+
+    context "when creating submission from My Collection artwork" do
+      let(:mutation_inputs) do
+        '{ sourceFromMyCollectionArtwork: true, myCollectionArtworkID: "my-collection-artwork-id" }'
+      end
+
+      it "creates a submission with correct address" do
+        post "/api/graphql", params: {query: mutation}, headers: headers
+
+        expect(response.status).to eq 200
+        submission = Submission.first
+
+        # TODO: Expect grqphql artwork query to have been called
+
+        expect(submission.title).to eq "my-collection-title"
+        expect(submission.my_collection_artwork_id).to eq "my-collection-artwork-id"
+        expect(submission.location_country_code).to eq "us"
+      end
+    end
   end
 end

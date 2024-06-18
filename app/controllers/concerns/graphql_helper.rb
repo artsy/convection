@@ -3,6 +3,45 @@
 module GraphqlHelper
   extend ActiveSupport::Concern
 
+  def artwork_query_builder
+    <<~GQL
+      query artworkDetails($id: ID!){
+        artwork(id: $id) {
+          artist {
+            internalID
+            name
+          }
+          consignmentSubmission {
+            internalID
+          }
+          mediumType {
+            name
+          }
+          date
+          title
+          medium
+          attributionClass {
+            name
+          }
+          editionNumber
+          editionSize
+          height
+          width
+          depth
+          metric
+          provenance
+          collectorLocation {
+            city
+            state
+            country
+            countryCode
+            postalCode
+          }
+        }
+      }
+    GQL
+  end
+
   def artist_query_builder(fields: [])
     <<~GQL
       query artistsDetails($ids: [ID!]!){
@@ -171,6 +210,23 @@ module GraphqlHelper
     end
 
     artist_details_response.try(:[], :data).try(:[], :artists).presence || {}
+  end
+
+  def artwork_details_query(artwork_id)
+    artwork_details_response =
+      Gravql::Schema.execute(
+        query:
+          artwork_query_builder,
+        variables: {
+          id: artwork_id
+        }
+      )
+
+    if artwork_details_response[:errors].present?
+      flash.now[:error] = "Error fetching artwork details."
+    end
+
+    artwork_details_response.try(:[], :data).try(:[], :artwork).presence || {}
   end
 
   def match_partners_query(term)
