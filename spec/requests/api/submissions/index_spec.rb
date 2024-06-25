@@ -31,6 +31,24 @@ describe "Show Submission" do
       expect(body).to eq []
     end
 
+
+    fit "returns only draft submissions when state is draft" do
+      submission = Fabricate(:submission, user: user, state: "draft")
+      Fabricate(:submission, user: user, state: "approved")
+      Fabricate(:submission, user: user, state: "submitted")
+
+      get "/api/submissions",
+        params: {
+          state: "draft"
+        },
+        headers: headers
+
+      expect(response.status).to eq 200
+      body = JSON.parse(response.body)
+      expect(body.length).to eq 1
+      expect(body[0]["id"]).to eq submission.id
+    end
+
     it "returns your own submissions" do
       submission = Fabricate(:submission, user: user, state: "approved")
       Fabricate(
