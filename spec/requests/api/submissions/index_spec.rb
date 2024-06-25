@@ -57,6 +57,18 @@ describe "Show Submission" do
       expect(body.first["id"]).to eq submission.id
     end
 
+    fit "returns total count when total_count param is present" do
+      Fabricate(:submission, user: user, state: "approved")
+      Fabricate(:submission, user: user, state: "draft")
+      Fabricate(:submission, user: user, state: "approved")
+
+      get "/api/submissions?total_count=true&size=1", headers: headers
+      expect(response.status).to eq 200
+      body = JSON.parse(response.body)
+      expect(body.length).to eq 1
+      expect(response.headers["X-Total-Count"]).to eq 3
+    end
+
     describe "filtering" do
       it "defaults to all types of submissions submissions" do
         Fabricate(:submission, user: user, state: "approved")
