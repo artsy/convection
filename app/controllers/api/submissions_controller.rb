@@ -24,10 +24,6 @@ module Api
     end
 
     def index
-      # Return x-total-count header if total_count param is present
-      if params[:total_count].present?
-        headers["X-Total-Count"] = Submission.count
-      end
       param! :completed, :boolean, default: nil
 
       user = User.where(gravity_user_id: current_user).first
@@ -38,6 +34,12 @@ module Api
       end
 
       submissions = submissions.order(created_at: :desc).page(page).per(size)
+
+      # Return x-total-count header if total_count param is present. Keep this last
+      if params[:total_count].present?
+        headers["X-Total-Count"] = Submission.count
+      end
+
       render json: submissions.to_json, status: :ok
     end
 
