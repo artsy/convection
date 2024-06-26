@@ -28,6 +28,11 @@ module Api
 
       user = User.where(gravity_user_id: current_user).first
       submissions = Submission.where(user: user)
+
+      if params.include? :state
+        submissions = submissions.where(state: params[:state])
+      end
+
       if params.include? :completed
         submissions =
           params[:completed] ? submissions.completed : submissions.draft
