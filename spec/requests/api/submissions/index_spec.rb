@@ -45,6 +45,7 @@ describe "Show Submission" do
       expect(response.status).to eq 200
       body = JSON.parse(response.body)
       expect(body.length).to eq 2
+      expect(body.map { |submission| submission["state"]}).to eq ["submitted", "draft"]
     end
 
     it "returns your own submissions" do
