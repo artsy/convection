@@ -233,7 +233,7 @@ describe "updateConsignmentSubmission mutation" do
           expect(update_response).to eq nil
 
           error_message = body["errors"][0]["message"]
-          expect(error_message).to eq "Submission Not Found"
+          expect(error_message).to eq "Cannot update a submission that is not in draft state."
         end
       end
     end
