@@ -62,10 +62,10 @@ describe "Show Submission" do
       Fabricate(:submission, user: user, state: "draft")
       Fabricate(:submission, user: user, state: "approved")
 
-      get "/api/submissions?total_count=true&size=1", headers: headers
+      get "/api/submissions?total_count=true&size=10", headers: headers
       expect(response.status).to eq 200
       body = JSON.parse(response.body)
-      expect(body.length).to eq 1
+      expect(body.length).to eq 3
       expect(response.headers["X-Total-Count"]).to eq 3
     end
 
