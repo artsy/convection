@@ -17,15 +17,15 @@ describe "addUserToSubmission mutation" do
     allow(Convection.config).to receive(:send_new_receipt_email).and_return(true)
   end
 
-  it "associates a user with an unclaimed draft submission" do
+  it "associates a user with an unclaimed draft submission, referenced by UUID" do
     submission = Fabricate(:submission, user: nil)
 
     mutation = <<-GRAPHQL
         mutation {
-          addUserToSubmission(input: { id: \"#{submission.id}\" }) {
+          addUserToSubmission(input: { id: \"#{submission.uuid}\" }) {
             clientMutationId
             consignmentSubmission {
-              internalID
+              externalId
             }
           }
         }
@@ -38,7 +38,7 @@ describe "addUserToSubmission mutation" do
     expect(response.status).to eq 200
     body = JSON.parse(response.body)
 
-    expect(body["data"]["addUserToSubmission"]["consignmentSubmission"]["internalID"]).to eq submission.id.to_s
+    expect(body["data"]["addUserToSubmission"]["consignmentSubmission"]["externalId"]).to eq submission.uuid
   end
 
   it "no-ops and returns the submission if the current user is already associated with the submission" do
@@ -46,10 +46,10 @@ describe "addUserToSubmission mutation" do
 
     mutation = <<-GRAPHQL
         mutation {
-          addUserToSubmission(input: { id: \"#{submission.id}\" }) {
+          addUserToSubmission(input: { id: \"#{submission.uuid}\" }) {
             clientMutationId
             consignmentSubmission {
-              internalID
+              externalId
             }
           }
         }
@@ -60,7 +60,7 @@ describe "addUserToSubmission mutation" do
     expect(response.status).to eq 200
     body = JSON.parse(response.body)
 
-    expect(body["data"]["addUserToSubmission"]["consignmentSubmission"]["internalID"]).to eq submission.id.to_s
+    expect(body["data"]["addUserToSubmission"]["consignmentSubmission"]["externalId"]).to eq submission.uuid
   end
 
   it "returns an error if the submission has already been claimed by a different user" do
@@ -68,10 +68,10 @@ describe "addUserToSubmission mutation" do
 
     mutation = <<-GRAPHQL
         mutation {
-          addUserToSubmission(input: { id: \"#{submission.id}\" }) {
+          addUserToSubmission(input: { id: \"#{submission.uuid}\" }) {
             clientMutationId
             consignmentSubmission {
-              internalID
+              externalId
             }
           }
         }
@@ -94,10 +94,10 @@ describe "addUserToSubmission mutation" do
 
     mutation = <<-GRAPHQL
         mutation {
-          addUserToSubmission(input: { id: \"#{submission.id}\" }) {
+          addUserToSubmission(input: { id: \"#{submission.uuid}\" }) {
             clientMutationId
             consignmentSubmission {
-              internalID
+              externalId
             }
           }
         }
@@ -113,5 +113,28 @@ describe "addUserToSubmission mutation" do
 
     error_message = body["errors"][0]["message"]
     expect(error_message).to eq "Submission must be in a draft state to claim"
+  end
+
+  it "returns an error if trying to query and claim a submission by sequential internal ID" do
+    submission = Fabricate(:submission, user: nil)
+
+    mutation = <<-GRAPHQL
+        mutation {
+          addUserToSubmission(input: { id: \"#{submission.id}\" }) {
+            clientMutationId
+            consignmentSubmission {
+              externalId
+            }
+          }
+        }
+    GRAPHQL
+
+    post "/api/graphql", params: {query: mutation}, headers: headers
+
+    expect(response.status).to eq 200
+    body = JSON.parse(response.body)
+
+    error_message = body["errors"][0]["message"]
+    expect(error_message).to eq "Submission Not Found"
   end
 end

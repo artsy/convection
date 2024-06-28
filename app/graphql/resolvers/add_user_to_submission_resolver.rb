@@ -27,4 +27,8 @@ class AddUserToSubmissionResolver < BaseResolver
 
     {consignment_submission: submission}
   end
+
+  def submission
+    @submission ||= Submission.find_by(uuid: submission_id)
+  end
 end
