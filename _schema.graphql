@@ -1387,6 +1387,10 @@ type Submission {
   userEmail: String
   userId: String!
   userName: String
+
+  """
+  Deprecated: Use userPhoneNumber interface field instead
+  """
   userPhone: String
   utmMedium: String
   utmSource: String

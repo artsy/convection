@@ -51,7 +51,7 @@ module Types
     nilable_field :user_id, String, null: false, default_value: -1
     nilable_field :user_name, String, null: true
     nilable_field :user_email, String, null: true
-    nilable_field :user_phone, String, null: true
+    nilable_field :user_phone, String, null: true, description: "Deprecated: Use userPhoneNumber interface field instead"
     nilable_field :width, String, null: true
     nilable_field :year, String, null: true
     nilable_field :source, Types::SubmissionSourceType, null: true
