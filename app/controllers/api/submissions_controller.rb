@@ -39,6 +39,12 @@ module Api
       end
 
       submissions = submissions.order(created_at: :desc).page(page).per(size)
+
+      # Return x-total-count header if total_count param is present. Keep this last
+      if params[:total_count].present?
+        headers["X-Total-Count"] = submissions.count
+      end
+
       render json: submissions.to_json, status: :ok
     end
 
