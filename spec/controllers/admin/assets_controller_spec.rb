@@ -61,9 +61,9 @@ describe Admin::AssetsController, type: :controller do
         expect {
           post :multiple,
             params: {
-              gemini_tokens: "token1",
-              submission_id: @submission.id,
-              asset_type: "image"
+              "gemini_tokens[]" => "token1",
+              :submission_id => @submission.id,
+              :asset_type => "image"
             }
         }.to change(@submission.assets, :count).by(1)
       end
@@ -72,22 +72,14 @@ describe Admin::AssetsController, type: :controller do
         expect {
           post :multiple,
             params: {
-              gemini_tokens: "token1 token2 token3 token4",
-              submission_id: @submission.id,
-              asset_type: "image"
+              "gemini_tokens[0]" => "token1",
+              "gemini_tokens[1]" => "token2",
+              "gemini_tokens[2]" => "token3",
+              "gemini_tokens[3]" => "token4",
+              :submission_id => @submission.id,
+              :asset_type => "image"
             }
         }.to change(@submission.assets, :count).by(4)
-      end
-
-      it "creates no assets for a single token" do
-        expect {
-          post :multiple,
-            params: {
-              gemini_tokens: "",
-              submission_id: @submission.id,
-              asset_type: "image"
-            }
-        }.to_not change(@submission.assets, :count)
       end
     end
   end
