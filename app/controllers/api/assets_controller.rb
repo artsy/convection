@@ -3,7 +3,7 @@
 module Api
   class AssetsController < RestController
     before_action :require_authentication
-    before_action :set_submission_and_asset, only: %i[show, download]
+    before_action :set_submission_and_asset, only: %i[show download]
     before_action :set_submission, only: %i[create index]
     before_action :require_authorized_submission
 
@@ -31,16 +31,15 @@ module Api
     end
 
     def download
-      param! :id
+      param! :id, String, required: true
 
       return unless @asset.asset_type == "additional_file"
 
       user = User.find_by(gravity_user_id: current_user)
       return head :unauthorized unless user.can?(:download, @asset)
 
-      aws_client = Aws::S3::Client.new(region: 'us-east-1', access_key_id: Convection.config[:aws_access_key_id], secret_access_key: Convection.config[:aws_secret_access_key])
-      object = aws_client.get_object(bucket: asset.s3_bucket, key: asset.s3_path)
-      send_data object.body.read, filename: File.basename(asset.filename), disposition: 'attachment'
+      downloader = AssetDownloader.new(@asset)
+      send_data downloader.data, filename: @asset.filename, disposition: "attachment"
     rescue Aws::S3::Errors::NoSuchKey
       head :not_found
     rescue Aws::S3::Errors::AccessDenied

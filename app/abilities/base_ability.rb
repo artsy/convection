@@ -11,4 +11,3 @@ class BaseAbility
     original_can?(action.to_sym, subject, *extra_args)
   end
 end
-
