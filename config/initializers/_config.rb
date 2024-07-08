@@ -12,6 +12,9 @@ Convection.config =
     artsy_url: ENV["ARTSY_URL"] || "https://staging.artsy.net",
     artsy_cms_url: ENV["ARTSY_CMS_URL"] || "https://cms-staging.artsy.net",
     auction_offer_form_url: ENV["AUCTION_OFFER_FORM_URL"] || "https://foo.com",
+    aws_access_key_id: ENV.fetch("AWS_ACCESS_KEY_ID", nil),
+    aws_secret_access_key: ENV.fetch("AWS_SECRET_ACCESS_KEY", nil),
+    aws_upload_bucket: ENV.fetch("AWS_UPLOAD_BUCKET", nil),
     offer_response_form_url:
       ENV["OFFER_RESPONSE_FORM_URL"] || "https://foo.com",
     bcc_email_address:

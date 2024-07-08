@@ -14,6 +14,7 @@ gem "watt", watt_gem_spec # artsy bootstrap
 
 gem "artsy-auth"
 gem "artsy-eventservice" # for posting events to artsy event stream
+gem 'aws-sdk-s3'
 gem "bootsnap", require: false # Speed up boot time by caching expensive operations.
 gem "bootstrap-sass" # required for watt
 gem "bourbon", "4.2.3" # required for watt

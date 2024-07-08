@@ -4,7 +4,7 @@ require "net/http"
 class Asset < ApplicationRecord
   GeminiHttpException = Class.new(StandardError)
 
-  TYPES = %w[image].freeze
+  TYPES = %w[image additional_file].freeze
   belongs_to :submission
 
   validates :asset_type, inclusion: {in: TYPES}
@@ -48,5 +48,11 @@ class Asset < ApplicationRecord
     end
 
     response["location"]
+  end
+
+  def document_path
+    return unless asset_type == "additional_file"
+
+    Rails.application.routes.url_helpers.download_api_asset_url(Asset.last, host: Convection.config.convection_url)
   end
 end

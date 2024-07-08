@@ -1,0 +1,12 @@
+<% signer = S3UploadSigner.new.as_json %>
+
+<form action=<%="https://#{Convection.config[:aws_upload_bucket]}.s3.amazonaws.com"%> enctype='multipart/form-data' method='post' class='single-padding-top' }>
+  <input type='hidden' name='key' value=<%= signer[:policy_document]["conditions"][1][2] + "/${filename}"%> />
+  <input type='hidden' name='AWSAccessKeyId' value=<%= signer[:credentials] %> />
+  <input type='hidden' name='acl' value=<%= signer[:policy_document]["conditions"][2]["acl"] %> />
+  <input type='hidden' name='success_action_status' value=<%= signer[:policy_document]["conditions"][3]["success_action_status"] %> />
+  <input type='hidden' name='policy' value=<%= signer[:policy_encoded] %> />
+  <input type='hidden' name='Content-Type' />
+  <input type='hidden' name='signature' value=<%= signer[:signature] %> />
+  <input type='file' name='file' id='s3-input' accept=<%= accept %> <%= multiple && 'multiple' %>/>
+</form>

@@ -15,6 +15,7 @@ Rails
         end
         resources :assets do
           post :multiple, on: :collection
+          get :download, on: :member
         end
       end
       resources :notes, only: %i[create]
@@ -48,7 +49,9 @@ Rails
 
     namespace :api do
       resources :submissions, only: %i[create update show index]
-      resources :assets, only: %i[create show index destroy]
+      resources :assets, only: %i[create show index destroy] do
+        get :download, on: :member
+      end
       resources :consignment_inquiries, only: %i[create]
       namespace :consignments do
         put "update_sale_info"

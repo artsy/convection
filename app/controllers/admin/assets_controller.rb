@@ -3,7 +3,7 @@
 module Admin
   class AssetsController < ApplicationController
     before_action :set_submission
-    before_action :set_asset, only: %i[show destroy]
+    before_action :set_asset, only: %i[show destroy download]
 
     def show
       @original_image = @asset.original_image
@@ -17,15 +17,24 @@ module Admin
     end
 
     def multiple
-      return unless params[:gemini_tokens]
+      return if !params[:gemini_tokens] && !params[:additional_file_keys]
 
-      gemini_tokens = params[:gemini_tokens].split
-      gemini_tokens.each do |token|
+      (params[:gemini_tokens] || []).each do |token|
         @submission.assets.create(
           asset_type: params[:asset_type],
           gemini_token: token
         )
       end
+
+      (params[:additional_file_keys] || []).each do |index, value|
+        @submission.assets.create(
+          filename: params[:additional_file_names][index],
+          asset_type: params[:asset_type],
+          s3_bucket: Convection.config[:aws_upload_bucket],
+          s3_path: value
+        )
+      end
+
       redirect_to admin_submission_path(@submission)
     end
 
@@ -33,6 +42,16 @@ module Admin
       @asset.destroy
 
       redirect_to admin_submission_path(@submission)
+    end
+
+    def download
+      aws_client = Aws::S3::Client.new(region: 'us-east-1', access_key_id: Convection.config[:aws_access_key_id], secret_access_key: Convection.config[:aws_secret_access_key])
+      object = aws_client.get_object(bucket: @asset.s3_bucket, key: @asset.s3_path)
+      send_data object.body.read, filename: File.basename(@asset.filename), disposition: 'attachment'
+    rescue Aws::S3::Errors::NoSuchKey
+      head :not_found
+    rescue Aws::S3::Errors::AccessDenied
+      head :unauthorized
     end
 
     private
