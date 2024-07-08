@@ -6,6 +6,7 @@ class Asset < ApplicationRecord
 
   TYPES = %w[image additional_file].freeze
   belongs_to :submission
+  has_one :user, through: :submission
 
   validates :asset_type, inclusion: {in: TYPES}
 

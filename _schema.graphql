@@ -90,6 +90,11 @@ type Asset {
   assetType: String!
 
   """
+  path to document
+  """
+  documentPath: String
+
+  """
   original image name
   """
   filename: String

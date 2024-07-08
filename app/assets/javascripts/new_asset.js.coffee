@@ -116,7 +116,6 @@ $ ->
   #  - gemini tokens, additional file keys, so that we don't submit them
   #  - uploading files list (progress bars, errors)
   $('#asset_type').change ->
-    # TODO: remove inputs
     $('#gemini_tokens').empty()
     $('#addition_file_keys').empty()
     $('#addition_file_names').empty()

@@ -34,7 +34,9 @@ module Api
       param! :id
 
       return unless @asset.asset_type == "additional_file"
-      # TODO: return head :unauthorized unless current_user.can?(:download, @asset)
+
+      user = User.find_by(gravity_user_id: current_user)
+      return head :unauthorized unless user.can?(:download, @asset)
 
       aws_client = Aws::S3::Client.new(region: 'us-east-1', access_key_id: Convection.config[:aws_access_key_id], secret_access_key: Convection.config[:aws_secret_access_key])
       object = aws_client.get_object(bucket: asset.s3_bucket, key: asset.s3_path)
