@@ -44,15 +44,6 @@ module Admin
       redirect_to admin_submission_path(@submission)
     end
 
-    def download
-      downloader = AssetDownloader.new(@asset)
-      send_data downloader.data, filename: asset.filename, disposition: "attachment"
-    rescue Aws::S3::Errors::NoSuchKey
-      head :not_found
-    rescue Aws::S3::Errors::AccessDenied
-      head :unauthorized
-    end
-
     private
 
     def set_submission

@@ -81,6 +81,30 @@ describe Admin::AssetsController, type: :controller do
             }
         }.to change(@submission.assets, :count).by(4)
       end
+
+      context "additional files" do
+        it "correctly adds files" do
+          expect {
+            post :multiple,
+              params: {
+                "additional_file_keys[0]" => "PATH/KEY",
+                "additional_file_keys[1]" => "PATH/KEY2",
+                "additional_file_names[0]" => "file.pdf",
+                "additional_file_names[1]" => "another_file.png",
+                :submission_id => @submission.id,
+                :asset_type => "additional_file"
+              }
+          }.to change(@submission.assets, :count).by(2)
+
+          asset = @submission.assets.first
+          expect(asset.s3_bucket).to eq(Convection.config[:aws_upload_bucket])
+          expect(asset.s3_path).to eq("PATH/KEY")
+
+          asset = @submission.assets.last
+          expect(asset.s3_bucket).to eq(Convection.config[:aws_upload_bucket])
+          expect(asset.s3_path).to eq("PATH/KEY2")
+        end
+      end
     end
   end
 end

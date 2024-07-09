@@ -63,5 +63,52 @@ describe "addAssetsToConsignmentSubmission mutation" do
         end
       end
     end
+
+    context "allows s3 path and bucket inputs" do
+      let!(:mutation_inputs) do
+        "{ clientMutationId: \"test\", externalSubmissionId: \"#{
+          submission.uuid
+        }\", s3Paths: [\"PATH1\", \"PATH2\"], s3Buckets: [\"BUCKET1\", \"BUCKET2\"] }"
+      end
+
+      let!(:mutation) { <<-GRAPHQL }
+        mutation {
+          addAssetsToConsignmentSubmission(input: #{mutation_inputs}){
+            clientMutationId
+            assets {
+              id
+              submissionId
+              s3Path
+              s3Bucket
+            }
+          }
+        }
+      GRAPHQL
+
+      it "creates assets" do
+        s3_double = double(object: double(size: "150"))
+        allow(S3).to receive(:new).and_return(s3_double)
+
+        expect {
+          post "/api/graphql", params: {query: mutation}, headers: headers
+        }.to change(Asset, :count).by(2)
+
+        body = JSON.parse(response.body)
+
+        asset_response = body["data"]["addAssetsToConsignmentSubmission"]["assets"]
+
+        asset = Asset.find(asset_response[0]["id"])
+        expect(asset.submission).to eq(submission)
+        expect(asset_response[0]["s3Path"]).to eq("PATH1")
+        expect(asset_response[0]["s3Bucket"]).to eq("BUCKET1")
+        expect(asset.size).to eq("150")
+
+        asset = Asset.find(asset_response[1]["id"])
+        expect(asset.submission).to eq(submission)
+        expect(asset_response[1]["s3Path"]).to eq("PATH2")
+        expect(asset_response[1]["s3Bucket"]).to eq("BUCKET2")
+        expect(asset.size).to eq("150")
+      end
+    end
   end
 end

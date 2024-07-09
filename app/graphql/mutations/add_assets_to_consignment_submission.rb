@@ -2,13 +2,15 @@
 
 module Mutations
   class AddAssetsToConsignmentSubmission < Mutations::BaseMutation
-    argument :gemini_tokens, [String], required: true
+    argument :gemini_tokens, [String], required: false
     argument :submissionID, ID, required: false
     argument :external_submission_id, ID, required: false
     argument :sessionID, String, required: false
     argument :asset_type, String, required: false
     argument :filename, String, required: false
     argument :size, String, required: false
+    argument :s3_buckets, [String], required: false
+    argument :s3_paths, [String], required: false
 
     field :assets, [Types::AssetType], null: true
 

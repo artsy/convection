@@ -10,17 +10,6 @@ class User < ApplicationRecord
 
   pg_search_scope :search, against: :email, using: {tsearch: {prefix: true}}
 
-  def ability
-    @ability ||= UserAbility.new(self)
-  end
-
-  delegate :can?, to: :ability, prefix: false
-  delegate :cannot?, to: :ability, prefix: false
-
-  def admin?
-    AdminUser.exists?(gravity_user_id: gravity_user_id)
-  end
-
   def gravity_user
     return @gravity_user if defined?(@gravity_user)
     return nil unless gravity_user_id

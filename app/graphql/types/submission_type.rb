@@ -17,7 +17,9 @@ module Types
 
     nilable_field :additional_info, String, null: true
     nilable_field :artist_id, String, null: false, default_value: ""
-    nilable_field :assets, [Types::AssetType, {null: true}], null: true
+    nilable_field :assets, [Types::AssetType, {null: true}], null: true do
+      argument :asset_type, [Types::AssetTypeType], required: false, default_value: []
+    end
     nilable_field :attribution_class, Types::AttributionClassType, null: true
     nilable_field :authenticity_certificate, Boolean, null: true
     nilable_field :category, String, null: true
@@ -87,6 +89,12 @@ module Types
       rescue Faraday::ResourceNotFound
         nil
       end
+    end
+
+    def assets(asset_type:)
+      asset_type = "image" if asset_type.blank?
+
+      object.assets.where(asset_type: asset_type)
     end
   end
 end

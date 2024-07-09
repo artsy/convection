@@ -13,5 +13,7 @@ module Types
     field :size, String, null: true
     field :submission_id, ID, null: false
     field :submissionID, ID, null: true, method: :submission_id # Alias for MPv2 compatability
+    field :s3_path, String, null: true
+    field :s3_bucket, String, null: true
   end
 end

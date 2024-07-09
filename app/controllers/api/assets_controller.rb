@@ -3,7 +3,7 @@
 module Api
   class AssetsController < RestController
     before_action :require_authentication
-    before_action :set_submission_and_asset, only: %i[show download]
+    before_action :set_submission_and_asset, only: %i[show]
     before_action :set_submission, only: %i[create index]
     before_action :require_authorized_submission
 
@@ -28,22 +28,6 @@ module Api
       asset = @submission.assets.create!(asset_params)
       SubmissionService.notify_user(@submission.id) if @submission.submitted?
       render json: asset.to_json, status: :created
-    end
-
-    def download
-      param! :id, String, required: true
-
-      return unless @asset.asset_type == "additional_file"
-
-      user = User.find_by(gravity_user_id: current_user)
-      return head :unauthorized unless user.can?(:download, @asset)
-
-      downloader = AssetDownloader.new(@asset)
-      send_data downloader.data, filename: @asset.filename, disposition: "attachment"
-    rescue Aws::S3::Errors::NoSuchKey
-      head :not_found
-    rescue Aws::S3::Errors::AccessDenied
-      head :unauthorized
     end
 
     private

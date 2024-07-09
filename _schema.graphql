@@ -10,7 +10,9 @@ input AddAssetToConsignmentSubmissionInput {
   clientMutationId: String
   externalSubmissionId: ID
   filename: String
-  geminiToken: String!
+  geminiToken: String
+  s3Bucket: String
+  s3Path: String
   sessionID: String
   size: String
   submissionID: ID
@@ -40,7 +42,9 @@ input AddAssetsToConsignmentSubmissionInput {
   clientMutationId: String
   externalSubmissionId: ID
   filename: String
-  geminiTokens: [String!]!
+  geminiTokens: [String!]
+  s3Buckets: [String!]
+  s3Paths: [String!]
   sessionID: String
   size: String
   submissionID: ID
@@ -113,9 +117,16 @@ type Asset {
   known image urls
   """
   imageUrls: JSON
+  s3Bucket: String
+  s3Path: String
   size: String
   submissionID: ID
   submissionId: ID!
+}
+
+enum AssetType {
+  ADDITIONAL_FILE
+  IMAGE
 }
 
 enum AttributionClass {
@@ -1342,7 +1353,7 @@ Consignment Submission
 type Submission {
   additionalInfo: String
   artistId: String!
-  assets: [Asset]
+  assets(assetType: [AssetType!] = []): [Asset]
   attributionClass: AttributionClass
   authenticityCertificate: Boolean
   category: String

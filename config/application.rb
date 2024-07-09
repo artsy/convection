@@ -21,7 +21,6 @@ module Convection
     config.eager_load_paths +=
       %W[
         #{config.root}/lib
-        #{Rails.root.join("app", "abilities")}
         #{Rails.root.join("app", "events")}
         #{Rails.root.join("app", "services")}
         #{Rails.root.join("app", "workers")}
