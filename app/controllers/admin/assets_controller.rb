@@ -17,15 +17,24 @@ module Admin
     end
 
     def multiple
-      return unless params[:gemini_tokens]
+      return if !params[:gemini_tokens] && !params[:additional_file_keys]
 
-      gemini_tokens = params[:gemini_tokens].split
-      gemini_tokens.each do |token|
+      (params[:gemini_tokens] || []).each do |token|
         @submission.assets.create(
           asset_type: params[:asset_type],
           gemini_token: token
         )
       end
+
+      (params[:additional_file_keys] || []).each do |index, value|
+        @submission.assets.create(
+          filename: params[:additional_file_names][index],
+          asset_type: params[:asset_type],
+          s3_bucket: Convection.config[:aws_upload_bucket],
+          s3_path: value
+        )
+      end
+
       redirect_to admin_submission_path(@submission)
     end
 
