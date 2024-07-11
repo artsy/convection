@@ -3,7 +3,7 @@
 module Admin
   class AssetsController < ApplicationController
     before_action :set_submission
-    before_action :set_asset, only: %i[show destroy download]
+    before_action :set_asset, only: %i[show destroy]
 
     def show
       @original_image = @asset.original_image

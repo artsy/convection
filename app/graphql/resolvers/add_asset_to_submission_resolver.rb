@@ -31,6 +31,14 @@ class AddAssetToSubmissionResolver < BaseResolver
   end
 
   def asset_params
+    # remove session_id and external_submission_id from arguments
+    # and remap source[:bucket] to s3_bucket and source[:key] to s3_path
     @arguments.except(:session_id, :external_submission_id)
+      .tap do |params|
+        if (source = params.delete(:source))
+          params[:s3_bucket] = source[:bucket]
+          params[:s3_path] = source[:key]
+        end
+      end
   end
 end

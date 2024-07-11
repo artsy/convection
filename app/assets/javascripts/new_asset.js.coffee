@@ -37,7 +37,7 @@ addProgressLine = (e, data) ->
   $('#uploading_files').append("<div class='uploading_file' data-uid=#{uid}><div class='uploading-file-meta clearfix'><div class='uploading-file-name pull-left'>#{fileName } <em><span class='upload_percentage'>0</span>%</em></div></div>#{uploadPercent}</div>")
 
 onFailedUpload = () ->
-  $('#uploading_failed').html('Failed to upload image.')
+  $('#uploading_failed').html('Failed to upload file.')
 
 onProgressUpdate = (e, data) ->
   uid = data.uid

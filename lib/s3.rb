@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class S3
   DEFAULT_EXPIRES_IN = 180 # seconds
 

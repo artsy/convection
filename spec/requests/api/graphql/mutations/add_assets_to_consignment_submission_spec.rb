@@ -68,7 +68,7 @@ describe "addAssetsToConsignmentSubmission mutation" do
       let!(:mutation_inputs) do
         "{ clientMutationId: \"test\", externalSubmissionId: \"#{
           submission.uuid
-        }\", s3Paths: [\"PATH1\", \"PATH2\"], s3Buckets: [\"BUCKET1\", \"BUCKET2\"] }"
+        }\", sources: { keys: [\"PATH1\", \"PATH2\"], buckets: [\"BUCKET1\", \"BUCKET2\"] } }"
       end
 
       let!(:mutation) { <<-GRAPHQL }
