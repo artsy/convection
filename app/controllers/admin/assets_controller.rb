@@ -19,7 +19,7 @@ module Admin
     def multiple
       return if !params[:gemini_tokens] && !params[:additional_file_keys]
 
-      (params[:gemini_tokens] || []).each do |token|
+      (params[:gemini_tokens] || []).each do |_, token|
         @submission.assets.create(
           asset_type: params[:asset_type],
           gemini_token: token
