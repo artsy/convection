@@ -142,6 +142,8 @@ describe "updateConsignmentSubmission mutation" do
 
         update_response = body["data"]["updateConsignmentSubmission"]
         expect(update_response).to_not eq nil
+        expect(submission1.versions.size).to eq(2)
+        expect(submission1.versions.last.whodunnit).to eq("userid4")
       end
     end
 

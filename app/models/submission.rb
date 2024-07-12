@@ -6,6 +6,8 @@ class Submission < ApplicationRecord
   include PgSearch::Model
   include ReloadUuid
 
+  has_paper_trail
+
   alias_attribute :deleted?, :deleted_at
 
   scope :not_deleted, -> { where(deleted_at: nil) }

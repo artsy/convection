@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
 
   before_action :set_current_user
   before_action :set_raven_context
+  before_action :set_paper_trail_whodunnit
 
   NotAuthorized = Class.new(StandardError)
 
@@ -28,5 +29,9 @@ class ApplicationController < ActionController::Base
 
   def set_raven_context
     Raven.user_context(id: @current_user)
+  end
+
+  def user_for_paper_trail
+    @current_user
   end
 end
