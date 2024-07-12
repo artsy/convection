@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_08_215653) do
+ActiveRecord::Schema.define(version: 2024_07_05_092437) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -49,6 +49,8 @@ ActiveRecord::Schema.define(version: 2024_05_08_215653) do
     t.integer "submission_id"
     t.string "filename"
     t.string "size"
+    t.string "s3_bucket"
+    t.string "s3_path"
     t.index ["submission_id", "asset_type"], name: "index_assets_on_submission_id_and_asset_type"
     t.index ["submission_id"], name: "index_assets_on_submission_id"
   end

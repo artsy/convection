@@ -4,10 +4,14 @@ require "net/http"
 class Asset < ApplicationRecord
   GeminiHttpException = Class.new(StandardError)
 
-  TYPES = %w[image].freeze
+  TYPES = %w[image additional_file].freeze
+
   belongs_to :submission
+  has_one :user, through: :submission
 
   validates :asset_type, inclusion: {in: TYPES}
+
+  before_create :set_filesize
 
   scope :images, -> { where(asset_type: "image") }
 
@@ -48,5 +52,21 @@ class Asset < ApplicationRecord
     end
 
     response["location"]
+  end
+
+  def document_path
+    return unless asset_type == "additional_file"
+
+    S3.new.presigned_url(bucket: s3_bucket, object_path: s3_path)
+  end
+
+  private
+
+  def set_filesize
+    return unless asset_type == "additional_file"
+    return if !s3_bucket || !s3_path
+
+    size = S3.new.object(bucket: s3_bucket, object_path: s3_path).size
+    self.size = size
   end
 end

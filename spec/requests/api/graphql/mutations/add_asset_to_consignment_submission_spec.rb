@@ -65,6 +65,47 @@ describe "addAssetToConsignmentSubmission mutation" do
         end
       end
     end
+
+    context "allows s3 path and bucket inputs" do
+      let!(:mutation_inputs) do
+        "{ clientMutationId: \"test\", externalSubmissionId: \"#{
+          submission.uuid
+        }\", filename: \"1.pdf\", source: { key: \"PATH1\", bucket: \"BUCKET1\" } }"
+      end
+
+      let!(:mutation) { <<-GRAPHQL }
+        mutation {
+          addAssetToConsignmentSubmission(input: #{mutation_inputs}){
+            clientMutationId
+            asset {
+              id
+              submissionId
+              s3Path
+              s3Bucket
+            }
+          }
+        }
+      GRAPHQL
+
+      it "creates asset" do
+        s3_double = double(object: double(size: "150"))
+        allow(S3).to receive(:new).and_return(s3_double)
+
+        expect {
+          post "/api/graphql", params: {query: mutation}, headers: headers
+        }.to change(Asset, :count).by(1)
+
+        body = JSON.parse(response.body)
+
+        asset_response = body["data"]["addAssetToConsignmentSubmission"]["asset"]
+        asset = Asset.find(asset_response["id"])
+
+        expect(asset.filename).to eq "1.pdf"
+        expect(asset.submission).to eq(submission)
+        expect(asset_response["s3Path"]).to eq("PATH1")
+        expect(asset_response["s3Bucket"]).to eq("BUCKET1")
+      end
+    end
   end
 
   describe "requests with a wrong userID and sessionId" do

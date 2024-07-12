@@ -20,3 +20,10 @@ Fabricator(:unprocessed_image, from: :asset) do
   asset_type "image"
   gemini_token { Fabricate.sequence(:gemini_token) { |i| "gemini-#{i}" } }
 end
+
+Fabricator(:additional_file, from: :asset) do
+  asset_type "additional_file"
+  s3_bucket "bucket"
+  s3_path "path"
+  filename "filename.pdf"
+end

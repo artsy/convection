@@ -61,9 +61,9 @@ describe Admin::AssetsController, type: :controller do
         expect {
           post :multiple,
             params: {
-              gemini_tokens: "token1",
-              submission_id: @submission.id,
-              asset_type: "image"
+              "gemini_tokens[]" => "token1",
+              :submission_id => @submission.id,
+              :asset_type => "image"
             }
         }.to change(@submission.assets, :count).by(1)
       end
@@ -72,22 +72,38 @@ describe Admin::AssetsController, type: :controller do
         expect {
           post :multiple,
             params: {
-              gemini_tokens: "token1 token2 token3 token4",
-              submission_id: @submission.id,
-              asset_type: "image"
+              "gemini_tokens[0]" => "token1",
+              "gemini_tokens[1]" => "token2",
+              "gemini_tokens[2]" => "token3",
+              "gemini_tokens[3]" => "token4",
+              :submission_id => @submission.id,
+              :asset_type => "image"
             }
         }.to change(@submission.assets, :count).by(4)
       end
 
-      it "creates no assets for a single token" do
-        expect {
-          post :multiple,
-            params: {
-              gemini_tokens: "",
-              submission_id: @submission.id,
-              asset_type: "image"
-            }
-        }.to_not change(@submission.assets, :count)
+      context "additional files" do
+        it "correctly adds files" do
+          expect {
+            post :multiple,
+              params: {
+                "additional_file_keys[0]" => "PATH/KEY",
+                "additional_file_keys[1]" => "PATH/KEY2",
+                "additional_file_names[0]" => "file.pdf",
+                "additional_file_names[1]" => "another_file.png",
+                :submission_id => @submission.id,
+                :asset_type => "additional_file"
+              }
+          }.to change(@submission.assets, :count).by(2)
+
+          asset = @submission.assets.first
+          expect(asset.s3_bucket).to eq(Convection.config[:aws_upload_bucket])
+          expect(asset.s3_path).to eq("PATH/KEY")
+
+          asset = @submission.assets.last
+          expect(asset.s3_bucket).to eq(Convection.config[:aws_upload_bucket])
+          expect(asset.s3_path).to eq("PATH/KEY2")
+        end
       end
     end
   end
