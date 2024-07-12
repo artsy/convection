@@ -10,10 +10,6 @@ class UpdateSubmissionResolver < BaseResolver
       unless matching_user(submission, @arguments&.[](:session_id))
         raise(GraphQL::ExecutionError, "Submission Not Found")
       end
-
-      unless submission.draft?
-        raise(GraphQL::ExecutionError, "Cannot update a submission that is not in draft state.")
-      end
     end
 
     # I'm not clear if this is needed or not - there are no tests for it so I'm
