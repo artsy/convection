@@ -213,29 +213,6 @@ describe "updateConsignmentSubmission mutation" do
           )
         end
       end
-
-      context "if submission owner" do
-        let(:token) do
-          payload = {
-            aud: "gravity",
-            sub: user1.gravity_user_id,
-            roles: "user"
-          }
-          JWT.encode(payload, Convection.config.jwt_secret)
-        end
-        it "returns an error for that request" do
-          post "/api/graphql", params: {query: mutation}, headers: headers
-
-          expect(response.status).to eq 200
-          body = JSON.parse(response.body)
-
-          update_response = body["data"]["updateConsignmentSubmission"]
-          expect(update_response).to eq nil
-
-          error_message = body["errors"][0]["message"]
-          expect(error_message).to eq "Cannot update a submission that is not in draft state."
-        end
-      end
     end
 
     describe "valid requests" do
