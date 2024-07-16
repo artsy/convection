@@ -198,9 +198,12 @@ module GraphqlHelper
       artistIds: [submission.artist_id],
       artworkLocation:
         [
+          submission.location_address,
+          submission.location_address2,
           submission.location_city,
           submission.location_state,
-          submission.location_country
+          submission.location_country,
+          submission.location_postal_code
         ].delete_if(&:blank?).join(", "),
       category: submission.category,
       date: submission.year,

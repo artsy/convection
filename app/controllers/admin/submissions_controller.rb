@@ -256,6 +256,8 @@ module Admin
         edition_size_formatted
         exhibition
         height
+        location_address
+        location_address2
         location_city
         location_country
         location_state

@@ -24,6 +24,8 @@ module Mutations
       description: "Deprecated: Use edition_size_formatted field instead"
     argument :edition_size_formatted, String, required: false
     argument :height, String, required: false
+    argument :location_address, String, required: false
+    argument :location_address2, String, required: false
     argument :location_city, String, required: false
     argument :location_country, String, required: false
     argument :location_state, String, required: false

@@ -13,6 +13,8 @@ Fabricator(:submission) do
   dimensions_metric "in"
   signature false
   authenticity_certificate false
+  location_address "123 Fake St"
+  location_address2 "Apt 2"
   location_city "New York"
   location_state "New York"
   location_country "USA"
