@@ -31,6 +31,8 @@ module Types
     nilable_field :edition_number, String, null: true
     nilable_field :edition_size, String, null: true
     nilable_field :height, String, null: true
+    nilable_field :location_address, String, null: true
+    nilable_field :location_address2, String, null: true
     nilable_field :location_city, String, null: true
     nilable_field :location_country, String, null: true
     nilable_field :location_state, String, null: true

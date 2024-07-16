@@ -48,6 +48,8 @@ class BasePreview < ActionMailer::Preview
           "\"Accomplice” characters from KAWS are appropriately branded with the artist's trademark \"X\" " \
           "to replace each of the figure's original eyes. The black example is from an edition of 500 " \
           "and the pink example is from an edition of 1000",
+      location_address: "123 Fake St",
+      location_address2: "Apt 2",
       location_city: "New York",
       location_state: "NY",
       location_country: "USA",
