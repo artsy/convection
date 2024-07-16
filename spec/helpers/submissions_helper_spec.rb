@@ -45,7 +45,7 @@ describe SubmissionsHelper, type: :helper do
           location_state: "Tokyo",
           location_country: "Japan"
         )
-      expect(helper.formatted_location(submission)).to eq("Tokyo, Japan")
+      expect(helper.formatted_location(submission)).to eq("Tokyo, Japan, 123 Fake St, Apt 2")
     end
   end
 
