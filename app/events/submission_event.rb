@@ -27,6 +27,8 @@ class SubmissionEvent < Events::BaseEvent
       artist_id: @object.artist_id,
       state: @object.state,
       year: @object.year,
+      location_address: @object.location_address,
+      location_address2: @object.location_address2,
       location_city: @object.location_city,
       location_state: @object.location_state,
       location_country: @object.location_country,

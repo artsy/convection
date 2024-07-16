@@ -12,7 +12,9 @@ module SubmissionsHelper
       submission.location_city,
       submission.location_state,
       submission.location_country,
-      submission.location_postal_code
+      submission.location_postal_code,
+      submission.location_address,
+      submission.location_address2
     ].select(&:present?).join(", ")
   end
 

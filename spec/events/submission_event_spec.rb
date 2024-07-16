@@ -16,6 +16,8 @@ describe SubmissionEvent do
       width: "14",
       depth: "2",
       dimensions_metric: "in",
+      location_address: "123 Fake St",
+      location_address2: "Apt 2",
       location_city: "New York",
       location_state: "NY",
       location_country: "US",
@@ -91,6 +93,8 @@ describe SubmissionEvent do
       expect(event.properties[:artist_id]).to eq "artistid"
       expect(event.properties[:state]).to eq "submitted"
       expect(event.properties[:year]).to eq "1992"
+      expect(event.properties[:location_address]).to eq "123 Fake St"
+      expect(event.properties[:location_address2]).to eq "Apt 2"
       expect(event.properties[:location_city]).to eq "New York"
       expect(event.properties[:location_state]).to eq "NY"
       expect(event.properties[:location_country]).to eq "US"

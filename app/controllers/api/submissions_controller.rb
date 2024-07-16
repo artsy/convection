@@ -69,6 +69,8 @@ module Api
           :edition_size,
           :edition_size_formatted,
           :height,
+          :location_address,
+          :location_address2,
           :location_city,
           :location_country,
           :location_state,

@@ -11,6 +11,8 @@ describe SubmissionsHelper, type: :helper do
       submission =
         Fabricate(
           :submission,
+          location_address: "123 Fake St",
+          location_address2: "Apt 2",
           location_city: "Brooklyn",
           location_state: "New York",
           location_country: "USA",
@@ -18,13 +20,15 @@ describe SubmissionsHelper, type: :helper do
         )
       expect(
         helper.formatted_location(submission)
-      ).to eq "Brooklyn, New York, USA, 12345"
+      ).to eq "Brooklyn, New York, USA, 12345, 123 Fake St, Apt 2"
     end
 
     it "returns empty string when location values are nil" do
       submission =
         Fabricate(
           :submission,
+          location_address: "",
+          location_address2: "",
           location_city: "",
           location_state: "",
           location_country: "",
@@ -41,7 +45,7 @@ describe SubmissionsHelper, type: :helper do
           location_state: "Tokyo",
           location_country: "Japan"
         )
-      expect(helper.formatted_location(submission)).to eq("Tokyo, Japan")
+      expect(helper.formatted_location(submission)).to eq("Tokyo, Japan, 123 Fake St, Apt 2")
     end
   end
 
