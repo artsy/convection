@@ -6,14 +6,10 @@ class SubmissionResolver < BaseResolver
   def run
     check_submission_presence!
 
-    unless draft_in_progress?(submission, @arguments) || admin? || partner?
+    unless matching_user(submission, @arguments&.[](:session_id)) || admin? || partner?
       raise GraphQL::ExecutionError, "Submission Not Found"
     end
 
     submission
-  end
-
-  def draft_in_progress?(submission, arguments)
-    submission.draft? && matching_user(submission, arguments&.[](:session_id))
   end
 end
