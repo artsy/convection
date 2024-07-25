@@ -26,6 +26,7 @@ class Submission < ApplicationRecord
     DRAFT = "draft",
     SUBMITTED = "submitted",
     APPROVED = "approved",
+    RESUBMITTED = "resubmitted",
     PUBLISHED = "published",
     REJECTED = "rejected",
     HOLD = "hold",
@@ -105,6 +106,7 @@ class Submission < ApplicationRecord
   scope :completed, -> { where.not(state: "draft") }
   scope :draft, -> { where(state: "draft") }
   scope :submitted, -> { where(state: "submitted") }
+  scope :resubmitted, -> { where(state: "resubmitted") }
   scope :available,
     -> { where(state: PUBLISHED, consigned_partner_submission_id: nil) }
 

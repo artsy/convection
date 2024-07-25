@@ -14,7 +14,7 @@ module DashboardReportingQuery
         COUNT(assigned_to IS NULL OR NULL) AS unassigned,
         COUNT(assigned_to = '#{user}' OR NULL) AS self_assigned
         FROM submissions
-        WHERE state = 'submitted' AND deleted_at IS NULL
+        WHERE state in ('submitted', 'resubmitted') AND deleted_at IS NULL
       SQL
 
       ActiveRecord::Base.connection.execute(query).first.symbolize_keys

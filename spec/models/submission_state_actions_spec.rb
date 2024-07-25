@@ -25,6 +25,16 @@ describe SubmissionStateActions do
     end
   end
 
+  context "with a resubmitted submission" do
+    let(:state) { "resubmitted" }
+
+    it "returns publish, hold, reject and close actions" do
+      actions = SubmissionStateActions.for(submission)
+      states = actions.pluck(:state)
+      expect(states).to eq %w[published hold rejected closed]
+    end
+  end
+
   context "with an approved submission" do
     let(:state) { "approved" }
 

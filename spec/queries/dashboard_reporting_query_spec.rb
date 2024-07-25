@@ -23,6 +23,7 @@ describe DashboardReportingQuery::Submission do
     before do
       Fabricate(:submission, state: Submission::APPROVED, assigned_to: nil)
       Fabricate(:submission, state: Submission::SUBMITTED, assigned_to: nil)
+      Fabricate(:submission, state: Submission::RESUBMITTED, assigned_to: nil)
       Fabricate(:submission, state: Submission::DRAFT, assigned_to: "user_id")
       Fabricate(
         :submission,
@@ -35,11 +36,22 @@ describe DashboardReportingQuery::Submission do
         assigned_to: "user_id",
         deleted_at: Time.now.utc
       )
+      Fabricate(
+        :submission,
+        state: Submission::RESUBMITTED,
+        assigned_to: "user_id"
+      )
+      Fabricate(
+        :submission,
+        state: Submission::RESUBMITTED,
+        assigned_to: "user_id",
+        deleted_at: Time.now.utc
+      )
     end
 
     describe "grouped_by_state" do
       subject { DashboardReportingQuery::Submission.grouped_by_state }
-      it { is_expected.to include({draft: 1, approved: 1, submitted: 2}) }
+      it { is_expected.to include({draft: 1, approved: 1, submitted: 2, resubmitted: 2}) }
     end
 
     describe "unreviewed_user_submissions" do
@@ -49,7 +61,7 @@ describe DashboardReportingQuery::Submission do
         )
       end
       it do
-        is_expected.to include({total: 2, unassigned: 1, self_assigned: 1})
+        is_expected.to include({total: 4, unassigned: 2, self_assigned: 2})
       end
     end
   end
