@@ -39,6 +39,7 @@ describe "admin/submissions/index.html.erb", type: :feature do
       within(:css, "#submission-filter-form") do
         expect(page).to have_content("all")
         expect(page).to have_content("submitted")
+        expect(page).to have_content("resubmitted")
         expect(page).to have_content("draft")
         expect(page).to have_content("approved")
         expect(page).to have_content("rejected")
