@@ -35,6 +35,22 @@ RSpec.configure do |config|
   end
 
   config.before(:each, type: :system) { driven_by :headless_chrome }
+
+  if Bullet.enable?
+    config.before do |example|
+      bullet_start_request_block = proc do
+        Bullet.start_request
+      end
+
+      hooks = example.send(:hooks)
+      hooks.register(:append, :before, :each, &bullet_start_request_block)
+    end
+
+    config.after do
+      Bullet.perform_out_of_channel_notifications if Bullet.notification?
+      Bullet.end_request
+    end
+  end
 end
 
 Capybara.server = :puma, {Silent: true}
