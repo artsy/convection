@@ -16,7 +16,7 @@ class SubmissionStateActions
     when Submission::DRAFT, Submission::SUBMITTED
       [approve_action, publish_action, hold_action, reject_action, close_action]
     when Submission::RESUBMITTED
-      [publish_action, hold_action, reject_action, close_action]
+      [hold_action, reject_action, close_action]
     when Submission::APPROVED
       [publish_action, hold_action, close_action]
     when Submission::PUBLISHED
