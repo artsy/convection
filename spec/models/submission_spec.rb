@@ -15,6 +15,7 @@ describe Submission do
       expect(Submission.new(state: "blah")).not_to be_valid
       expect(Submission.new(state: "approved")).to be_valid
       expect(Submission.new(state: "submitted")).to be_valid
+      expect(Submission.new(state: "resubmitted")).to be_valid
     end
   end
 

@@ -48,6 +48,7 @@ gem "uglifier"
 gem "unleash"
 
 group :development, :test do
+  gem "bullet"
   gem "guard-rspec", require: false
   gem "pry-byebug"
   gem "rspec-rails"
