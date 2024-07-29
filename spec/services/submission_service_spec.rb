@@ -18,6 +18,7 @@ describe SubmissionService do
       title: "My Artwork"
     )
   end
+  let(:access_token) { "access_token" }
 
   before { add_default_stubs }
 
@@ -64,6 +65,31 @@ describe SubmissionService do
             is_convection: false
           )
         expect(new_submission.reload.source).to eq nil
+      end
+
+      it "does not update the My Collection artwork" do
+        expect(SubmissionService).not_to receive(:update_my_collection_artwork)
+
+        SubmissionService.create_submission(
+          params,
+          "userid",
+          is_convection: false
+          )
+      end
+    end
+
+    context "when the submission has a My Colleciton artwork" do
+      let(:params_with_source) { params.merge({source: "my_collection", my_collection_artwork_id: "artwork-id" }) }
+
+      it "updates the My Collection artwork to set the submission ID" do
+        expect(SubmissionService).to receive(:update_my_collection_artwork)
+
+        SubmissionService.create_submission(
+          params_with_source,
+          "userid",
+          is_convection: false,
+          access_token: access_token
+        )
       end
     end
 
