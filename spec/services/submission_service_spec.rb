@@ -74,12 +74,12 @@ describe SubmissionService do
           params,
           "userid",
           is_convection: false
-          )
+        )
       end
     end
 
     context "when the submission has a My Colleciton artwork" do
-      let(:params_with_source) { params.merge({source: "my_collection", my_collection_artwork_id: "artwork-id" }) }
+      let(:params_with_source) { params.merge({source: "my_collection", my_collection_artwork_id: "artwork-id"}) }
 
       it "updates the My Collection artwork to set the submission ID" do
         expect(SubmissionService).to receive(:update_my_collection_artwork)
