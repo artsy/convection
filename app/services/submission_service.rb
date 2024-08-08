@@ -14,7 +14,8 @@ class SubmissionService
       submission_params,
       gravity_user_id,
       is_convection: true,
-      current_user: nil
+      current_user: nil,
+      access_token: nil
     )
       if submission_params[
         :edition_size_formatted
@@ -45,6 +46,12 @@ class SubmissionService
       end
 
       submission = Submission.create!(create_params)
+
+      unless is_convection
+        if submission.user && !access_token.nil? && submission.my_collection_artwork_id && submission.source == "my_collection"
+          update_my_collection_artwork(submission, access_token)
+        end
+      end
 
       if create_params[:state] == "rejected"
         delay_until(
@@ -93,7 +100,7 @@ class SubmissionService
           submission.assign_attributes(
             reject_non_target_supply_artist(submission.artist_id)
           )
-          if !submission.draft? && submission.user && !access_token.nil?
+          if submission.user && !access_token.nil?
             create_or_update_my_collection_artwork(submission, access_token)
           end
         end
