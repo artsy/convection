@@ -28,10 +28,10 @@ describe SubmissionStateActions do
   context "with a resubmitted submission" do
     let(:state) { "resubmitted" }
 
-    it "returns hold, reject and close actions" do
+    it "returns published, hold and close actions" do
       actions = SubmissionStateActions.for(submission)
       states = actions.pluck(:state)
-      expect(states).to eq %w[hold rejected closed]
+      expect(states).to eq %w[published hold closed]
     end
   end
 
