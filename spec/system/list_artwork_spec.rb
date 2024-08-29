@@ -17,6 +17,9 @@ describe "Listing a new artwork", type: :feature do
     allow_any_instance_of(ApplicationController).to receive(
       :require_artsy_authentication
     )
+    allow_any_instance_of(Admin::SubmissionsController).to receive(
+      :authorize_submission
+    )
 
     # Set current user
     stub_jwt_header(admin_id)

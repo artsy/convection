@@ -4,6 +4,11 @@ module Admin
   class AssetsController < ApplicationController
     before_action :set_submission
     before_action :set_asset, only: %i[show destroy]
+    before_action :authorize_submission
+
+    def authorized_artsy_token?(token)
+      ArtsyAdminAuth.valid?(token, [ArtsyAdminAuth::CONSIGNMENTS_REPRESENTATIVE])
+    end
 
     def show
       @original_image = @asset.original_image
@@ -48,6 +53,12 @@ module Admin
 
     def set_submission
       @submission = Submission.find(params[:submission_id])
+    end
+
+    def authorize_submission
+      if !ArtsyAdminAuth.consignments_manager?(session[:access_token]) && @submission.assigned_to != @current_user
+        raise ApplicationController::NotAuthorized
+      end
     end
 
     def set_asset

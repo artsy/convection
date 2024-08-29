@@ -8,6 +8,9 @@ describe Admin::SubmissionsController, type: :controller do
       allow_any_instance_of(Admin::SubmissionsController).to receive(
         :require_artsy_authentication
       )
+      allow_any_instance_of(Admin::SubmissionsController).to receive(
+        :authorize_submission
+      )
       allow(Convection.config).to receive(:gravity_xapp_token).and_return(
         "xapp_token"
       )

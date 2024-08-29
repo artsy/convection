@@ -2,20 +2,22 @@
 
 module Admin
   class SubmissionsController < ApplicationController
+    SUBMISSION_ACTIONS = %i[
+      show
+      edit
+      update
+      undo_approval
+      undo_publish
+      undo_rejection
+      undo_close
+      list_artwork
+    ]
+
     include GraphqlHelper
 
-    before_action :set_submission,
-      only: %i[
-        show
-        edit
-        update
-        undo_approval
-        undo_publish
-        undo_rejection
-        undo_close
-        list_artwork
-      ]
+    before_action :set_submission, only: SUBMISSION_ACTIONS
     before_action :set_submission_artist, only: %i[show edit]
+    before_action :authorize_submission, only: SUBMISSION_ACTIONS
 
     expose(:submissions) do
       matching_submissions = SubmissionMatch.find_all(params)
@@ -47,6 +49,10 @@ module Admin
         user_email: params[:user_email],
         direction: params[:direction]
       }
+    end
+
+    def authorized_artsy_token?(token)
+      ArtsyAdminAuth.valid?(token, [ArtsyAdminAuth::CONSIGNMENTS_REPRESENTATIVE])
     end
 
     def index
@@ -230,6 +236,12 @@ module Admin
 
     def set_submission
       @submission = Submission.find(params[:id])
+    end
+
+    def authorize_submission
+      if !ArtsyAdminAuth.consignments_manager?(session[:access_token]) && @submission.assigned_to != @current_user
+        raise ApplicationController::NotAuthorized
+      end
     end
 
     def set_submission_artist

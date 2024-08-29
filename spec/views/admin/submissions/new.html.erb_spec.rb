@@ -10,6 +10,9 @@ describe "admin/submissions/new.html.erb", type: :feature do
       allow_any_instance_of(Admin::SubmissionsController).to receive(
         :require_artsy_authentication
       )
+      allow_any_instance_of(Admin::SubmissionsController).to receive(
+        :authorize_submission
+      )
       page.visit "/admin/submissions/new"
     end
 
