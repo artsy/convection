@@ -105,7 +105,7 @@ class SubmissionService
           end
         end
 
-        update_submission_state(submission, current_user)
+        update_submission_state(submission, current_user, is_convection)
       end
       submission.save!
     end
@@ -118,18 +118,18 @@ class SubmissionService
       end
     end
 
-    def update_submission_state(submission, current_user)
+    def update_submission_state(submission, current_user, is_convection)
       case submission.state
       when "submitted"
         submit!(submission)
       when "approved"
-        approve!(submission, current_user)
+        approve!(submission, current_user, is_convection)
       when "published"
-        publish!(submission, current_user)
+        publish!(submission, current_user, is_convection)
       when "rejected"
         reject!(submission, current_user)
       when "closed"
-        close!(submission)
+        close!(submission, is_convection)
       end
     end
 
@@ -185,7 +185,9 @@ class SubmissionService
         .notify_user(submission.id)
     end
 
-    def approve!(submission, current_user)
+    def approve!(submission, current_user, is_convection)
+      raise SubmissionError, "Invalid state update (#{submission.state})." unless is_convection
+
       submission.update!(approved_by: current_user, approved_at: Time.now.utc)
 
       SalesforceService.delay.add_artwork(submission.id)
@@ -195,7 +197,9 @@ class SubmissionService
       )
     end
 
-    def publish!(submission, current_user)
+    def publish!(submission, current_user, is_convection)
+      raise SubmissionError, "Invalid state update (#{submission.state})." unless is_convection
+
       SalesforceService.delay.add_artwork(submission.id) unless submission.approved_at
 
       submission.update!(
@@ -218,7 +222,9 @@ class SubmissionService
       delay.deliver_rejection_notification(submission.id)
     end
 
-    def close!(submission)
+    def close!(submission, is_convection)
+      raise SubmissionError, "Invalid state update (#{submission.state})." unless is_convection
+
       # noop
     end
 
