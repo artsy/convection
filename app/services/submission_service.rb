@@ -202,6 +202,17 @@ class SubmissionService
       )
         delay.deliver_approval_notification(submission.id)
       end
+
+      if submission.assigned_to
+        assigned_admin = AdminUser.find_by(gravity_user_id: submission.assigned_to)
+
+        if assigned_admin && Convection.unleash.enabled?(
+          "onyx-admin-submission-approved-email",
+          Unleash::Context.new(user_id: assigned_admin.gravity_user_id.to_s)
+        )
+          delay.deliver_admin_submission_approved_notification(submission.id)
+        end
+      end
     end
 
     def publish!(submission, current_user, is_convection)
@@ -305,6 +316,14 @@ class SubmissionService
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
       UserMailer.submission_approved(submission: submission, artist: artist)
+        .deliver_now
+    end
+
+    def deliver_admin_submission_approved_notification(submission_id)
+      submission = Submission.find(submission_id)
+      artist = Gravity.client.artist(id: submission.artist_id)._get
+
+      AdminMailer.submission_approved(submission: submission, artist: artist)
         .deliver_now
     end
 
