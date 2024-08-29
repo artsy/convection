@@ -412,10 +412,10 @@ describe SubmissionService do
       )
     end
 
-    it "does not allow a submission to be approved or published by users" do
+    it "does not allow a submission to be approved, published, or closed by users" do
       stub_gravity_artist(target_supply: true)
 
-      ["approved", "published"].each do |state|
+      ["approved", "published", "close"].each do |state|
         expect do
           SubmissionService.update_submission(
             submission,

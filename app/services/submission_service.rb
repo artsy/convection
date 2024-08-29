@@ -127,7 +127,7 @@ class SubmissionService
       when "published"
         publish!(submission, current_user, is_convection)
       when "rejected"
-        reject!(submission, current_user, is_convection)
+        reject!(submission, current_user)
       when "closed"
         close!(submission, is_convection)
       end
@@ -217,7 +217,7 @@ class SubmissionService
       PartnerSubmissionService.delay.generate_for_all_partners(submission.id)
     end
 
-    def reject!(submission, current_user, is_convection)
+    def reject!(submission, current_user)
       submission.update!(rejected_by: current_user, rejected_at: Time.now.utc)
       delay.deliver_rejection_notification(submission.id)
     end
@@ -368,10 +368,6 @@ class SubmissionService
       submission.save!
 
       artwork
-    end
-
-    def allowed_user_states
-      ["submitted", "resubmitted"]
     end
   end
 end
