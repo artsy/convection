@@ -195,6 +195,13 @@ class SubmissionService
         submission.id,
         SubmissionEvent::APPROVED
       )
+
+      if Convection.unleash.enabled?(
+        "onyx-collector-submission-approved-tier-2-email",
+        Unleash::Context.new(user_id: submission&.user&.gravity_user_id.to_s)
+      )
+        delay.deliver_approval_notification(submission.id)
+      end
     end
 
     def publish!(submission, current_user, is_convection)
