@@ -9,6 +9,9 @@ describe Admin::AssetsController, type: :controller do
       allow_any_instance_of(Admin::AssetsController).to receive(
         :require_artsy_authentication
       )
+      allow_any_instance_of(Admin::AssetsController).to receive(
+        :authorize_submission
+      )
       add_default_stubs
       @submission =
         Fabricate(

@@ -17,6 +17,12 @@ describe "admin/submissions/show.html.erb", type: :feature do
       allow_any_instance_of(ApplicationController).to receive(
         :require_artsy_authentication
       )
+      allow_any_instance_of(Admin::SubmissionsController).to receive(
+        :authorize_submission
+      )
+      allow_any_instance_of(Admin::AssetsController).to receive(
+        :authorize_submission
+      )
       allow(Convection.config).to receive(:auction_offer_form_url).and_return(
         "https://google.com/auction"
       )
