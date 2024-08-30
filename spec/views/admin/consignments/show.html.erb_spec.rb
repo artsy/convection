@@ -39,6 +39,9 @@ describe "admin/consignments/show.html.erb", type: :feature do
       allow_any_instance_of(ApplicationController).to receive(
         :require_artsy_authentication
       )
+      allow_any_instance_of(Admin::SubmissionsController).to receive(
+        :authorize_submission
+      )
 
       stub_jwt_header("userid")
       add_default_stubs(

@@ -5,6 +5,10 @@ class AdminMailerPreview < ActionMailer::Preview
     AdminMailer.submission(**receipt_mail_params)
   end
 
+  def submission_approved
+    AdminMailer.submission_approved(**submission_approved_params)
+  end
+
   def artwork_updated
     AdminMailer.artwork_updated(**artwork_updated_params)
   end
@@ -22,6 +26,13 @@ class AdminMailerPreview < ActionMailer::Preview
         ),
       artist: OpenStruct.new(id: "artist_id", name: "Andy Warhol"),
       user: OpenStruct.new(id: "x", name: "William Black")
+    }
+  end
+
+  def submission_approved_params
+    {
+      submission: Submission.submitted.where.not(assigned_to: nil).last,
+      artist: OpenStruct.new(id: "artist_id", name: "Damien Hirst")
     }
   end
 

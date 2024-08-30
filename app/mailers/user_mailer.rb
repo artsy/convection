@@ -68,6 +68,11 @@ class UserMailer < ApplicationMailer
         content: "approved"
       )
 
+    @tier_2_template_enabled = Convection.unleash.enabled?(
+      "onyx-collector-submission-approved-tier-2-email",
+      Unleash::Context.new(user_id: submission&.user&.gravity_user_id.to_s)
+    )
+
     smtpapi category: %w[submission_approved],
             unique_args: {
               submission_id: submission.id

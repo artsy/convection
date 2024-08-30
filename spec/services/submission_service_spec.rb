@@ -392,7 +392,8 @@ describe SubmissionService do
       SubmissionService.update_submission(
         submission,
         {state: "approved"},
-        current_user: "userid"
+        current_user: "userid",
+        is_convection: true
       )
       expect(ActionMailer::Base.deliveries.length).to eq 0
       expect(partner1.partner_submissions.length).to eq 0
@@ -406,8 +407,53 @@ describe SubmissionService do
       SubmissionService.update_submission(
         submission,
         {state: "approved"},
-        current_user: "userid"
+        current_user: "userid",
+        is_convection: true
       )
+    end
+
+    it "does not allow a submission to be approved, published, or closed by users" do
+      stub_gravity_artist(target_supply: true)
+
+      ["approved", "published", "close"].each do |state|
+        expect do
+          SubmissionService.update_submission(
+            submission,
+            {state: state},
+            current_user: "userid",
+            is_convection: false
+          )
+        end.to raise_error
+      end
+    end
+
+    it "does allow all state updates by admins" do
+      allow(NotificationService).to receive(:post_submission_event)
+      allow(SalesforceService).to receive(:add_artwork).with(submission.id)
+
+      ["approved", "rejected", "published", "submitted", "resubmitted"].each do |state|
+        expect do
+          SubmissionService.update_submission(
+            submission,
+            {state: state},
+            current_user: "userid",
+            is_convection: true
+          )
+        end.not_to raise_error
+      end
+    end
+
+    it "does allow users to submit or resubmit submissions" do
+      ["submitted", "resubmitted"].each do |state|
+        expect do
+          SubmissionService.update_submission(
+            submission,
+            {state: state},
+            current_user: "userid",
+            is_convection: false
+          )
+        end.not_to raise_error
+      end
     end
 
     it "generates partner submissions on publish" do
