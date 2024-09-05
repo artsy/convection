@@ -207,9 +207,9 @@ describe SubmissionService do
       context "create_submission" do
         it "adds contact information to the user record" do
           new_submission = SubmissionService.create_submission(params, nil)
-          expect(new_submission.user_name).to eq "michael"
-          expect(new_submission.user_email).to eq "michael@bluth.com"
-          expect(new_submission.user_phone).to eq "555-5555"
+          expect(new_submission.name).to eq "michael"
+          expect(new_submission.email).to eq "michael@bluth.com"
+          expect(new_submission.phone).to eq "555-5555"
           expect(new_submission.count_submissions_of_user).to eq 1
           expect(new_submission.user).to eq nil
         end
