@@ -1,8 +1,9 @@
 require "rails_helper"
+require "support/gravity_helper"
 
 describe SalesforceService do
   describe ".add_artwork" do
-    let(:submission) { Fabricate(:submission, title: "reallylongtitlemorethan80charsreallylongtitlemorethan80charsreallylongtitlemorethan80chars") }
+    let(:submission) { Fabricate(:submission, user_name: "Test User", user_email: "test@example.com", user_phone: "+1 (555) 320-8888", title: "reallylongtitlemorethan80charsreallylongtitlemorethan80charsreallylongtitlemorethan80chars") }
     let(:primary_image) { Fabricate(:image, submission: submission, image_urls: {large: "https://example.com/primary.png"}) }
     let!(:additional_image) { Fabricate(:image, submission: submission, image_urls: {large: "https://example.com/image.png"}) }
 
@@ -62,10 +63,10 @@ describe SalesforceService do
       end
       let(:contact_as_salesforce_representation) do
         {
-          LastName: submission.user_name,
-          Email: submission.user_email,
+          LastName: submission.name,
+          Email: submission.email,
           Partner_Contact_Ext_Id__c: submission.user&.gravity_user_id,
-          Phone: submission.user_phone
+          Phone: submission.phone
         }
       end
 
@@ -101,7 +102,7 @@ describe SalesforceService do
             ).and_raise(Restforce::NotFoundError, "TestError")
 
             expect(restforce_double).to receive(:query).with(
-              "select Id from Contact where Email = '#{submission.user_email}'"
+              "select Id from Contact where Email = '#{submission.email}'"
             ).and_return([])
 
             expect(restforce_double).to receive(:create!).with(
@@ -135,7 +136,7 @@ describe SalesforceService do
             ).and_raise(Restforce::NotFoundError, "TestError")
 
             expect(restforce_double).to receive(:query).with(
-              "select Id from Contact where Email = '#{submission.user_email}'"
+              "select Id from Contact where Email = '#{submission.email}'"
             ).and_return([OpenStruct.new({Id: "SF_Contact_ID"})])
 
             expect(restforce_double).to receive(:select).with(
@@ -165,7 +166,7 @@ describe SalesforceService do
         context "when the salesforce contact is found by email" do
           it "assigns it to the artwork when creating it" do
             expect(restforce_double).to receive(:query).with(
-              "select Id from Contact where Email = '#{submission.user_email}'"
+              "select Id from Contact where Email = '#{submission.email}'"
             ).and_return([OpenStruct.new({Id: "SF_Contact_ID"})])
 
             expect(restforce_double).to receive(:select).with(
@@ -191,7 +192,7 @@ describe SalesforceService do
         context "when the salesforce contact is not found by email" do
           it "creates a contact in Salesforce, then assigns it to the artwork when creating it" do
             expect(restforce_double).to receive(:query).with(
-              "select Id from Contact where Email = '#{submission.user_email}'"
+              "select Id from Contact where Email = '#{submission.email}'"
             ).and_return([])
 
             expect(restforce_double).to receive(:create!).with(
@@ -221,7 +222,7 @@ describe SalesforceService do
         context "when there is no owner found in SF" do
           it "does not send the owner key in the artwork representation" do
             expect(restforce_double).to receive(:query).with(
-              "select Id from Contact where Email = '#{submission.user_email}'"
+              "select Id from Contact where Email = '#{submission.email}'"
             ).and_return([OpenStruct.new({Id: "SF_Contact_ID"})])
 
             expect(restforce_double).to receive(:select).with(

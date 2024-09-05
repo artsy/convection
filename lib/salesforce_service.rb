@@ -85,10 +85,10 @@ class SalesforceService
       if submission.user.present?
         api.select("Contact", submission.user.gravity_user_id, ["Id"], "Partner_Contact_Ext_Id__c").Id
       else
-        find_contact_id_by_email(submission.user_email)
+        find_contact_id_by_email(submission.email)
       end
     rescue Restforce::NotFoundError
-      find_contact_id_by_email(submission.user_email)
+      find_contact_id_by_email(submission.email)
     end
 
     def find_contact_id_by_email(user_email)
@@ -110,10 +110,10 @@ class SalesforceService
 
     def map_submission_to_salesforce_contact(submission)
       {
-        LastName: submission.user_name,
-        Email: submission.user_email,
+        LastName: submission.name,
+        Email: submission.email,
         Partner_Contact_Ext_Id__c: submission.user&.gravity_user_id,
-        Phone: submission.user_phone
+        Phone: submission.phone
       }
     end
 

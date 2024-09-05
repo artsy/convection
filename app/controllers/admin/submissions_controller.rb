@@ -224,7 +224,7 @@ module Admin
         else
           user = {
             id: submissions.first.user_id,
-            email: submissions.first.user_email
+            email: submissions.first.email
           }
           users = [user]
         end
