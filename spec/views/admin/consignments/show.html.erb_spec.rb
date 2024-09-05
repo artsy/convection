@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require "support/graphql_helper"
 require "support/gravity_helper"
 require "support/jwt_helper"
 
@@ -69,6 +70,8 @@ describe "admin/consignments/show.html.erb", type: :feature do
             "Content-Type" => "application/json"
           }
         )
+
+      stub_graphql_artwork_request(submission.my_collection_artwork_id)
       page.visit admin_consignment_path(partner_submission)
     end
 

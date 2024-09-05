@@ -22,6 +22,7 @@ module Convection
       %W[
         #{config.root}/lib
         #{Rails.root.join("app", "events")}
+        #{Rails.root.join("app", "presenters")}
         #{Rails.root.join("app", "services")}
         #{Rails.root.join("app", "workers")}
         #{Rails.root.join("app", "workers", "sneakers")}

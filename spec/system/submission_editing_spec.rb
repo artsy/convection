@@ -1,4 +1,5 @@
 require "rails_helper"
+require "support/graphql_helper"
 require "support/gravity_helper"
 require "support/gravql_helper"
 require "support/jwt_helper"
@@ -64,6 +65,8 @@ describe "Editing a submission", type: :feature do
         }
       }
     )
+
+    stub_graphql_artwork_request(submission.my_collection_artwork_id)
   end
 
   context "adding an admin to a submission" do

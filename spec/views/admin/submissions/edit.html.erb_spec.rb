@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require "support/graphql_helper"
 require "support/gravity_helper"
 require "support/gravql_helper"
 
@@ -40,6 +41,8 @@ describe "admin/submissions/edit.html.erb", type: :feature do
           }
         }
       )
+
+      stub_graphql_artwork_request(@submission.my_collection_artwork_id)
 
       page.visit "/admin/submissions/#{@submission.id}/edit"
     end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require "support/graphql_helper"
 require "support/gravity_helper"
 require "support/gravql_helper"
 
@@ -52,12 +53,13 @@ describe "admin/submissions/index.html.erb", type: :feature do
         stub_gravity_user(id: "userid")
         stub_gravity_user_detail(id: "userid")
         3.times do
-          Fabricate(
+          submission = Fabricate(
             :submission,
             user: user,
             artist_id: "artistid",
             state: "submitted"
           )
+          stub_graphql_artwork_request(submission.my_collection_artwork_id)
         end
         page.visit admin_submissions_path
       end
@@ -110,28 +112,32 @@ describe "admin/submissions/index.html.erb", type: :feature do
             title: "blah"
           )
         end
-        @submission =
+        [
+          @submission =
+            Fabricate(
+              :submission,
+              user: @user2,
+              artist_id: "artistid2",
+              state: "approved",
+              title: "my work"
+            ),
           Fabricate(
             :submission,
             user: @user2,
-            artist_id: "artistid2",
-            state: "approved",
-            title: "my work"
+            artist_id: "artistid4",
+            state: "rejected",
+            title: "title"
+          ),
+          Fabricate(
+            :submission,
+            user: @user2,
+            artist_id: "artistid4",
+            state: "draft",
+            title: "blah blah"
           )
-        Fabricate(
-          :submission,
-          user: @user2,
-          artist_id: "artistid4",
-          state: "rejected",
-          title: "title"
-        )
-        Fabricate(
-          :submission,
-          user: @user2,
-          artist_id: "artistid4",
-          state: "draft",
-          title: "blah blah"
-        )
+        ].each do |submission|
+          stub_graphql_artwork_request(submission.my_collection_artwork_id)
+        end
 
         @artists = [
           {id: "artistid", name: "Andy Warhol"},

@@ -30,7 +30,7 @@
             <%= render @notes %>
             <div class='new-note'>
               <h4>New note</h4>
-              <%= render 'admin/notes/form', note: Note.new(submission: @submission) %>
+              <%= render 'admin/notes/form', note: Note.new(submission: @submission.__getobj__) %>
             </div>
           </div>
         </div>

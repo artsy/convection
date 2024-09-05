@@ -3,6 +3,7 @@
 Fabricator(:submission) do
   user { Fabricate(:user) }
   artist_id { Fabricate.sequence(:artist_id) }
+  my_collection_artwork_id { Fabricate.sequence(:my_collection_artwork_id) }
   uuid { SecureRandom.uuid }
   title { Fabricate.sequence(:title) { |i| "The Last Supper #{i}" } }
   year 2_010
