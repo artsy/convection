@@ -119,15 +119,6 @@
 
 <div class='overview-item'>
   <div class='overview-item-title'>
-    Location
-  </div>
-  <div class='overview-item-value'>
-    <%= formatted_location(@submission) %>
-  </div>
-</div>
-
-<div class='overview-item'>
-  <div class='overview-item-title'>
     Price in mind
   </div>
   <div class='overview-item-value minimum-price'>
@@ -168,5 +159,54 @@
   </div>
   <div class='overview-item-value'>
     <%= @submission.created_at&.strftime('%b %-d @ %l:%M %p %Z') %>
+  </div>
+</div>
+
+<hr />
+
+<div class='overview-item'>
+  <div class='overview-item-title'>
+    Shipping Location
+  </div>
+  <div class='overview-item-value'>
+    <%= formatted_location(@submission) %>
+  </div>
+</div>
+
+<div class='overview-item condition'>
+  <div class='overview-item-title'>
+    Condition
+  </div>
+  <div class='overview-item-value'>
+    <%= @submission.condition %>
+  </div>
+</div>
+
+<div class='overview-item condition-description'>
+  <div class='overview-item-title'>
+    Condition Description
+  </div>
+  <div class='overview-item-value'>
+    <%= @submission.condition_description %>
+  </div>
+</div>
+
+<div class='overview-item is-framed'>
+  <div class='overview-item-title'>
+    Is Framed?
+  </div>
+  <div class='overview-item-value'>
+    <%= @submission.is_framed? %>
+  </div>
+</div>
+
+<div class='overview-item framed-dimensions'>
+  <div class='overview-item-title'>
+    Framed Dimensions
+  </div>
+  <div class='overview-item-value'>
+    <% formatted_dimensions_inch_cm(@submission, framed: true).map do |formatted_dimension| %>
+      <div><%= formatted_dimension %></div>
+    <% end %>
   </div>
 </div>

@@ -26,13 +26,14 @@ module SubmissionsHelper
     "#{values.join("x")}#{submission.dimensions_metric.try(:downcase)}"
   end
 
-  def formatted_dimensions_inch_cm(submission)
-    values =
+  def formatted_dimensions_inch_cm(submission, framed: false)
+    values = framed ?
+      [submission.framed_height, submission.framed_width, submission.framed_depth].select(&:present?) :
       [submission.height, submission.width, submission.depth].select(&:present?)
 
     return [] if values.empty?
 
-    case submission.dimensions_metric.try(:downcase)
+    case (framed ? submission.framed_metric : submission.dimensions_metric).try(:downcase)
     when "cm"
       %W[
         #{values.join(" x ")}\ cm

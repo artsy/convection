@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require "support/graphql_helper"
 require "support/gravity_helper"
 require "support/gravql_helper"
 require "support/jwt_helper"
@@ -11,7 +12,8 @@ describe "admin/offers/show.html.erb", type: :feature do
       Fabricate(
         :submission,
         state: Submission::APPROVED,
-        user: Fabricate(:user, email: "user@example.com")
+        user: Fabricate(:user, email: "user@example.com"),
+        my_collection_artwork_id: "my-collection-artwork-id"
       )
     end
     let(:partner) { Fabricate(:partner) }
@@ -71,6 +73,7 @@ describe "admin/offers/show.html.erb", type: :feature do
           }
         }
       )
+      stub_graphql_artwork_request(submission.my_collection_artwork_id)
       page.visit "/admin/offers/#{offer.id}"
     end
 

@@ -18,7 +18,7 @@ describe "addUserToSubmission mutation" do
   end
 
   it "associates a user with an unclaimed draft submission, referenced by UUID" do
-    submission = Fabricate(:submission, user: nil)
+    submission = Fabricate(:submission, user: nil, my_collection_artwork_id: nil)
 
     mutation = <<-GRAPHQL
         mutation {

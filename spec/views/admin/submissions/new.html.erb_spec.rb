@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require "support/graphql_helper"
 require "support/gravity_helper"
 require "support/gravql_helper"
 
@@ -13,6 +14,7 @@ describe "admin/submissions/new.html.erb", type: :feature do
       allow_any_instance_of(Admin::SubmissionsController).to receive(
         :authorize_submission
       )
+      stub_graphql_artwork_request
       page.visit "/admin/submissions/new"
     end
 

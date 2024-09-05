@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require "support/graphql_helper"
 require "support/gravity_helper"
 
 describe SubmissionService do
@@ -14,13 +15,17 @@ describe SubmissionService do
     Fabricate(
       :submission,
       artist_id: "artistid",
+      my_collection_artwork_id: nil,
       user: user,
       title: "My Artwork"
     )
   end
   let(:access_token) { "access_token" }
 
-  before { add_default_stubs }
+  before do
+    add_default_stubs
+    stub_graphql_artwork_request(submission.my_collection_artwork_id)
+  end
 
   context "create_submission" do
     let(:params) do
@@ -78,7 +83,7 @@ describe SubmissionService do
       end
     end
 
-    context "when the submission has a My Colleciton artwork" do
+    context "when the submission has a My Collection artwork" do
       let(:params_with_source) { params.merge({source: "my_collection", my_collection_artwork_id: "artwork-id"}) }
 
       it "updates the My Collection artwork to set the submission ID" do
@@ -255,6 +260,7 @@ describe SubmissionService do
         state: "submitted",
         artist_id: "artistid",
         user_id: nil,
+        my_collection_artwork_id: nil,
         user: nil,
         title: "My Artwork",
         user_name: "michael",
