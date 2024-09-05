@@ -235,7 +235,7 @@ module Admin
     private
 
     def set_submission
-      @submission = Submission.find(params[:id])
+      @submission = SubmissionPresenter.new(Submission.find(params[:id]), session[:access_token])
     end
 
     def authorize_submission

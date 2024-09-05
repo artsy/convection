@@ -1,4 +1,5 @@
 require "rails_helper"
+require "support/graphql_helper"
 require "support/gravity_helper"
 require "support/gravql_helper"
 require "support/jwt_helper"
@@ -39,6 +40,7 @@ describe "Listing a new artwork", type: :feature do
         }
       }
     )
+    stub_graphql_artwork_request(submission.my_collection_artwork_id)
   end
 
   it "lists artwork" do

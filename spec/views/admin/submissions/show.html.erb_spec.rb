@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require "support/graphql_helper"
 require "support/gravity_helper"
 require "support/gravql_helper"
 require "support/jwt_helper"
@@ -62,6 +63,7 @@ describe "admin/submissions/show.html.erb", type: :feature do
       )
 
       stub_jwt_header("userid")
+      stub_graphql_artwork_request(@submission.my_collection_artwork_id)
       page.visit "/admin/submissions/#{@submission.id}"
     end
 
@@ -211,6 +213,16 @@ describe "admin/submissions/show.html.erb", type: :feature do
 
     it "displays supply priority" do
       within(".supply-priority") { expect(page).to have_content("P2") }
+    end
+
+    it "displays condition" do
+      within(".overview-item.condition") { expect(page).to have_content("Excellent") }
+      within(".overview-item.condition-description") { expect(page).to have_content("Like new") }
+    end
+
+    it "displays framed_dimensions" do
+      within(".overview-item.is-framed") { expect(page).to have_content("Yes") }
+      within(".overview-item.framed-dimensions") { expect(page).to have_content("30 x 30 cm") }
     end
 
     context "notes" do
