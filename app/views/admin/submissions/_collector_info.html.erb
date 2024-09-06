@@ -7,7 +7,11 @@
       </div>
     <% end %>
     <div>
-      <%= submission.name %>
+      <% if submission.user %>
+        <%= link_to submission.name.presence || submission.user.gravity_user_id, user_management_url(submission.user.gravity_user_id), class: "smaller-sidebar-link" %>
+      <% else %>
+        <%= submission.name %>
+      <% end %>
     </div>
     <div class="smaller-sidebar-link" >
       <%= link_to "#{submission.count_submissions_of_user} submissions made", admin_submissions_path(user: submission.user_id, user_email: submission.email) %>
