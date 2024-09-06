@@ -103,6 +103,7 @@ table.bordered-email {
 
   .artsy-logo {
     text-align: left;
+
     img {
       max-width: 100px;
       width: 100px;
@@ -235,6 +236,7 @@ table.bordered-email {
   .email-content-small-image {
     text-align: left;
     padding-left: 30px;
+
     img {
       height: 73px;
       max-height: 73px;
@@ -316,7 +318,8 @@ table.bordered-email {
 
   .upload-photo-button,
   .submit-proposal-button,
-  .offer-response-button {
+  .offer-response-button,
+  .add-additional-info-button {
     background-color: black;
     padding-top: 15px;
     padding-bottom: 15px;
@@ -368,6 +371,7 @@ table.bordered-email {
       .footer-icon {
         width: 40px;
         padding-left: 20px;
+
         img {
           height: 20px;
           max-height: 20px;
@@ -423,6 +427,7 @@ table.bordered-email {
 
       .specialist-contacts {
         padding-left: 20px;
+
         p {
           color: white;
         }
@@ -581,6 +586,7 @@ table.bordered-email {
 
       .submission-image {
         margin-bottom: 15px;
+
         img {
           width: 150px;
           max-width: 150px;
@@ -654,6 +660,7 @@ table.bordered-email {
     .first-column {
       width: 100% !important;
       max-width: 230px !important;
+
       img {
         width: 100% !important;
         max-width: none !important;
