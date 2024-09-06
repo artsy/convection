@@ -17,6 +17,22 @@
             <%= render "submission_approved_tier_2" if @tier_2_template_enabled %>
           </td>
         </tr>
+        <% if @tier_2_template_enabled %>
+        <tr>
+          <td>
+            <table class='full-width-button'>
+              <tr>
+                  <td class='add-additional-info-button'>
+                    <%= link_to('Add Additional Information', artsy_formatted_url("collector-profile/my-collection/artwork/#{@submission.my_collection_artwork_id}", @utm_params)) %>
+                  </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td class='spacer'></td>
+        </tr>
+        <% end %>
         <tr>
           <td>
             <%= render 'shared/email/submission_block', submission: @submission %>
