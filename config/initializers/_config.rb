@@ -55,6 +55,7 @@ Convection.config =
     salesforce_password: ENV["SALESFORCE_PASSWORD"],
     salesforce_security_token: ENV["SALESFORCE_SECURITY_TOKEN"],
     salesforce_username: ENV["SALESFORCE_USERNAME"],
+    salesforce_url: ENV["SALESFORCE_URL"],
     sentry_dsn: ENV["SENTRY_DSN"],
     sidekiq_username: ENV["SIDEKIQ_USERNAME"] || "admin",
     sidekiq_password: ENV["SIDEKIQ_PASSWORD"] || "replace-me",
