@@ -6,7 +6,7 @@
     <% if @submission.admin %>
       <%= mail_to @submission.admin.email, @submission.admin.email, class: "smaller-sidebar-link" %>
     <% elsif @submission.user&.gravity_user_id.present? %>
-      <%= link_to @submission.user&.gravity_user_id, user_management_url(@submission.user&.gravity_user_id), class: "smaller-sidebar-link" %>
+      <%= link_to @submission.name.presence || @submission.user&.gravity_user_id, user_management_url(@submission.user&.gravity_user_id), class: "smaller-sidebar-link" %>
     <% end %>
   </div>
 </div>
