@@ -3,7 +3,7 @@
     Artist/Designer
   </div>
   <div class='overview-item-value'>
-    <%= @artist&.[](:name)&.upcase %>
+    <%= link_to @artist&.[](:name)&.upcase, artist_url(@artist&.[](:slug)), class: "make-primary-link"  %>
   </div>
 </div>
 

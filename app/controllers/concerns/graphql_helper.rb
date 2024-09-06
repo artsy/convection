@@ -160,7 +160,7 @@ module GraphqlHelper
       Gravql::Schema.execute(
         query:
           artist_query_builder(
-            fields: ["name", "is_p1: isP1", "target_supply: targetSupply"]
+            fields: ["name", "slug", "is_p1: isP1", "target_supply: targetSupply"]
           ),
         variables: {
           ids: artist_ids.compact.uniq
