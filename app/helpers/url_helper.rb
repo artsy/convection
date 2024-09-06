@@ -35,12 +35,20 @@ module UrlHelper
     "#{Convection.config.forque_url}/users/#{gravity_user_id}"
   end
 
+  def artist_url(artist_id)
+    "#{Convection.config.artsy_url}/artist/#{artist_id}"
+  end
+
   def artwork_url(artwork_id)
     "#{Convection.config.artsy_url}/artwork/#{artwork_id}"
   end
 
   def edit_artwork_url(artwork_id)
     "#{Convection.config.artsy_cms_url}/artworks/#{artwork_id}/edit?update_current_partner=1"
+  end
+
+  def salesforce_url(object_id)
+    "#{Convection.config.salesforce_url}/#{object_id}"
   end
 
   def my_collection_artwork_url(artwork_id)

@@ -145,6 +145,7 @@
           </div>
           <%= render 'collector_info', submission: @submission %>
           <%= render 'created_by', submission: @submission %>
+          <%= render 'salesforce', submission: @submission if @submission.salesforce_artwork.present? %>
           <div class='overview-section'>
             <div class='bold-label'>Partner Interest</div>
             <div class='single-padding-top'>
