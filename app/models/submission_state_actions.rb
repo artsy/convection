@@ -14,15 +14,15 @@ class SubmissionStateActions
   def run
     case submission.state
     when Submission::DRAFT, Submission::SUBMITTED
-      [approve_action, publish_action, hold_action, reject_action, close_action]
+      [approve_action, hold_action, reject_action, close_action]
     when Submission::RESUBMITTED
-      [publish_action, hold_action, close_action]
+      [hold_action, close_action]
     when Submission::APPROVED
-      [publish_action, hold_action, close_action]
+      [hold_action, close_action]
     when Submission::PUBLISHED
       [close_action]
     when Submission::HOLD
-      [approve_action, publish_action, reject_action, close_action]
+      [approve_action, reject_action, close_action]
     else
       []
     end
@@ -38,19 +38,9 @@ class SubmissionStateActions
     {
       class: default_classes << "btn-approve",
       confirm:
-        "No email will be sent to the consignor and this submission will be excluded from the digests.",
+        "An email will be sent to the consignor, letting them know that their submission has been accepted and prompt for additional (tier 2) information.",
       state: "approved",
       text: "Approve without CMS"
-    }
-  end
-
-  def publish_action
-    {
-      class: default_classes << "btn-approve",
-      confirm:
-        "An email will be sent to the consignor, letting them know that their submission will be sent to our partner network and this work will appear in the digests and CMS. This action cannot be undone.",
-      state: "published",
-      text: "Publish"
     }
   end
 

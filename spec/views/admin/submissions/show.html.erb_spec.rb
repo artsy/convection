@@ -330,9 +330,8 @@ describe "admin/submissions/show.html.erb", type: :feature do
     end
 
     context "unreviewed submission" do
-      it "displays buttons to approve/publish/reject if the submission is not yet reviewed" do
+      it "displays buttons to approve/reject if the submission is not yet reviewed" do
         expect(page).to have_content("Approve")
-        expect(page).to have_content("Publish")
         expect(page).to have_content("Reject")
       end
 
@@ -358,26 +357,6 @@ describe "admin/submissions/show.html.erb", type: :feature do
         expect { PartnerSubmissionService.daily_digest }.to_not change {
                                                                   ActionMailer::Base.deliveries.length
                                                                 }
-      end
-
-      it "publishes a submission when the Publish button is clicked" do
-        expect(NotificationService).to receive(:post_submission_event)
-          .once
-          .with(@submission.id, "published")
-        expect(page).to_not have_content("Create Offer")
-        expect(page).to have_content("submitted")
-
-        click_link "Publish"
-
-        emails = ActionMailer::Base.deliveries
-        expect(emails.length).to eq 1
-        expect(emails.first.html_part.body).to include(
-          "We are delighted to work with you to sell your work through"
-        )
-        expect(page).to have_content "Approved by Jon Jonson"
-        expect(page).to_not have_content "Reject"
-        expect(page).to have_content("published")
-        expect(page).to have_content("Create Offer")
       end
 
       it "rejects a submission when the Reject button is clicked" do
@@ -458,34 +437,6 @@ describe "admin/submissions/show.html.erb", type: :feature do
           expect(page).to have_content "Approve"
           expect(page).to have_content "submitted"
           expect(@submission.partner_submissions.count).to eq 0
-        end
-
-        it "removes the work from the digest when Undo publish is clicked" do
-          expect(NotificationService).to receive(:post_submission_event)
-            .once
-            .with(@submission.id, "published")
-          expect(NotificationService).to receive(:post_submission_event)
-            .once
-            .with(submission2.id, "published")
-          SubmissionService.update_submission(@submission, {state: "published"})
-          SubmissionService.update_submission(submission2, {state: "published"})
-          expect(@submission.partner_submissions.count).to eq Partner.count
-          expect(submission2.partner_submissions.count).to eq Partner.count
-          page.visit "/admin/submissions/#{@submission.id}"
-
-          click_link "Undo publish"
-
-          expect(page).to have_content "Publish"
-          expect(page).to have_content "submitted"
-          expect(@submission.partner_submissions.count).to eq 0
-
-          ActionMailer::Base.deliveries = []
-          PartnerSubmissionService.daily_digest
-          expect(ActionMailer::Base.deliveries.count).to eq partner_contacts
-            .count
-          email = ActionMailer::Base.deliveries.first
-          expect(email.html_part.body).to include(submission2.title)
-          expect(email.html_part.body).to_not include(@submission.title)
         end
       end
     end
