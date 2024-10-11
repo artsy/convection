@@ -8,40 +8,40 @@ describe SubmissionStateActions do
   context "with a draft submission" do
     let(:state) { "draft" }
 
-    it "returns approve, publish, hold, reject and close actions" do
+    it "returns approve, hold, reject and close actions" do
       actions = SubmissionStateActions.for(submission)
       states = actions.pluck(:state)
-      expect(states).to eq %w[approved published hold rejected closed]
+      expect(states).to eq %w[approved hold rejected closed]
     end
   end
 
   context "with a submitted submission" do
     let(:state) { "submitted" }
 
-    it "returns approve, publish, hold, reject and close actions" do
+    it "returns approve, hold, reject and close actions" do
       actions = SubmissionStateActions.for(submission)
       states = actions.pluck(:state)
-      expect(states).to eq %w[approved published hold rejected closed]
+      expect(states).to eq %w[approved hold rejected closed]
     end
   end
 
   context "with a resubmitted submission" do
     let(:state) { "resubmitted" }
 
-    it "returns published, hold and close actions" do
+    it "returns hold and close actions" do
       actions = SubmissionStateActions.for(submission)
       states = actions.pluck(:state)
-      expect(states).to eq %w[published hold closed]
+      expect(states).to eq %w[hold closed]
     end
   end
 
   context "with an approved submission" do
     let(:state) { "approved" }
 
-    it "returns the publish, hold and close actions" do
+    it "returns the hold and close actions" do
       actions = SubmissionStateActions.for(submission)
       states = actions.pluck(:state)
-      expect(states).to eq %w[published hold closed]
+      expect(states).to eq %w[hold closed]
     end
   end
 
@@ -58,10 +58,10 @@ describe SubmissionStateActions do
   context "with an on hold submission" do
     let(:state) { "hold" }
 
-    it "returns approve, publish, reject and close actions" do
+    it "returns approve, reject and close actions" do
       actions = SubmissionStateActions.for(submission)
       states = actions.pluck(:state)
-      expect(states).to eq %w[approved published rejected closed]
+      expect(states).to eq %w[approved rejected closed]
     end
   end
 
