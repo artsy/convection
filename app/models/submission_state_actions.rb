@@ -38,7 +38,7 @@ class SubmissionStateActions
     {
       class: default_classes << "btn-approve",
       confirm:
-        "No email will be sent to the consignor and this submission will be excluded from the digests.",
+        "An email will be sent to the consignor, letting them know that their submission has been accepted and prompt for additional (tier 2) information.",
       state: "approved",
       text: "Approve without CMS"
     }
