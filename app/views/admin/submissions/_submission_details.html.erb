@@ -131,7 +131,9 @@
     Supply Priority
   </div>
   <div class='overview-item-value supply-priority'>
-    <%= @artist && artist_supply_priority(**@artist) %>
+    <a href="https://artsy.net/artist/<%= @artist.id %>">
+      <%= @artist && artist_supply_priority(**@artist) %>
+    </a>
   </div>
 </div>
 
