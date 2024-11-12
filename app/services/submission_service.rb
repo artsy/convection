@@ -193,7 +193,7 @@ class SubmissionService
       SalesforceService.delay.add_artwork(submission.id)
       NotificationService.delay.post_submission_event(
         submission.id,
-        SubmissionEvent::APPROVED
+        Submission::APPROVED
       )
 
       if Convection.unleash.enabled?(
@@ -228,7 +228,7 @@ class SubmissionService
 
       NotificationService.delay.post_submission_event(
         submission.id,
-        SubmissionEvent::PUBLISHED
+        Submission::PUBLISHED
       )
 
       delay.deliver_approval_notification(submission.id)
@@ -253,7 +253,7 @@ class SubmissionService
       delay_until(5.minutes.from_now).deliver_submission_notification(submission.id)
       NotificationService.delay.post_submission_event(
         submission_id,
-        SubmissionEvent::SUBMITTED
+        Submission::SUBMITTED
       )
       submission.update!(admin_receipt_sent_at: Time.now.utc)
     end
