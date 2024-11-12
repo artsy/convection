@@ -192,7 +192,7 @@ class SubmissionService
         assigned_admin = AdminUser.find_by(gravity_user_id: submission.assigned_to)
 
         if assigned_admin && Convection.unleash.enabled?(
-          "onyx-admin-submission-approved-email",
+          "onyx-admin-submission-resubmitted-email",
           Unleash::Context.new(user_id: assigned_admin.gravity_user_id.to_s)
         )
           delay.deliver_admin_submission_resubmitted_notification(submission.id)
@@ -336,9 +336,8 @@ class SubmissionService
 
     def deliver_admin_submission_resubmitted_notification(submission_id)
       submission = Submission.find(submission_id)
-      artist = Gravity.client.artist(id: submission.artist_id)._get
 
-      AdminMailer.submission_resubmitted(submission: submission, artist: artist)
+      AdminMailer.submission_resubmitted(submission: submission)
         .deliver_now
     end
 
