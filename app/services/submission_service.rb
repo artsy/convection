@@ -122,6 +122,8 @@ class SubmissionService
       case submission.state
       when "submitted"
         submit!(submission)
+      when "resubmitted"
+        resubmit!(submission)
       when "approved"
         approve!(submission, current_user, is_convection)
       when "published"
@@ -183,6 +185,19 @@ class SubmissionService
 
       delay_until(Convection.config.second_reminder_days_after.days.from_now)
         .notify_user(submission.id)
+    end
+
+    def resubmit!(submission)
+      if submission.assigned_to
+        assigned_admin = AdminUser.find_by(gravity_user_id: submission.assigned_to)
+
+        if assigned_admin && Convection.unleash.enabled?(
+          "onyx-admin-submission-resubmitted-email",
+          Unleash::Context.new(user_id: assigned_admin.gravity_user_id.to_s)
+        )
+          delay.deliver_admin_submission_resubmitted_notification(submission.id)
+        end
+      end
     end
 
     def approve!(submission, current_user, is_convection)
@@ -316,6 +331,13 @@ class SubmissionService
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
       UserMailer.submission_approved(submission: submission, artist: artist)
+        .deliver_now
+    end
+
+    def deliver_admin_submission_resubmitted_notification(submission_id)
+      submission = Submission.find(submission_id)
+
+      AdminMailer.submission_resubmitted(submission: submission)
         .deliver_now
     end
 

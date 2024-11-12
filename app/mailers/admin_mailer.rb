@@ -43,6 +43,23 @@ class AdminMailer < ApplicationMailer
     ) { |format| format.html { render layout: "mailer_no_footer" } }
   end
 
+  def submission_resubmitted(submission:)
+    @submission = submission
+    @user = submission.user
+
+    assigned_admin = AdminUser.find_by(gravity_user_id: submission.assigned_to)
+
+    smtpapi category: %w[submission],
+            unique_args: {
+              submission_id: submission.id
+            }
+
+    mail(
+      to: assigned_admin.email,
+      subject: "Submission ##{@submission.id} resubmitted"
+    ) { |format| format.html { render layout: "mailer_no_footer" } }
+  end
+
   def artwork_updated(submission:, artwork_data:, changes: nil, image_added: nil)
     assigned_admin = AdminUser.find_by(gravity_user_id: submission.assigned_to)
 
