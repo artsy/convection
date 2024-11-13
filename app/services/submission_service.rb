@@ -122,6 +122,8 @@ class SubmissionService
       case submission.state
       when "submitted"
         submit!(submission)
+      when "resubmitted"
+        resubmit!(submission)
       when "approved"
         approve!(submission, current_user, is_convection)
       when "published"
@@ -185,6 +187,19 @@ class SubmissionService
         .notify_user(submission.id)
     end
 
+    def resubmit!(submission)
+      if submission.assigned_to
+        assigned_admin = AdminUser.find_by(gravity_user_id: submission.assigned_to)
+
+        if assigned_admin && Convection.unleash.enabled?(
+          "onyx-admin-submission-resubmitted-email",
+          Unleash::Context.new(user_id: assigned_admin.gravity_user_id.to_s)
+        )
+          delay.deliver_admin_submission_resubmitted_notification(submission.id)
+        end
+      end
+    end
+
     def approve!(submission, current_user, is_convection)
       raise SubmissionError, "Invalid state update (#{submission.state})." unless is_convection
 
@@ -193,7 +208,7 @@ class SubmissionService
       SalesforceService.delay.add_artwork(submission.id)
       NotificationService.delay.post_submission_event(
         submission.id,
-        SubmissionEvent::APPROVED
+        Submission::APPROVED
       )
 
       if Convection.unleash.enabled?(
@@ -228,7 +243,7 @@ class SubmissionService
 
       NotificationService.delay.post_submission_event(
         submission.id,
-        SubmissionEvent::PUBLISHED
+        Submission::PUBLISHED
       )
 
       delay.deliver_approval_notification(submission.id)
@@ -253,7 +268,7 @@ class SubmissionService
       delay_until(5.minutes.from_now).deliver_submission_notification(submission.id)
       NotificationService.delay.post_submission_event(
         submission_id,
-        SubmissionEvent::SUBMITTED
+        Submission::SUBMITTED
       )
       submission.update!(admin_receipt_sent_at: Time.now.utc)
     end
@@ -316,6 +331,13 @@ class SubmissionService
       artist = Gravity.client.artist(id: submission.artist_id)._get
 
       UserMailer.submission_approved(submission: submission, artist: artist)
+        .deliver_now
+    end
+
+    def deliver_admin_submission_resubmitted_notification(submission_id)
+      submission = Submission.find(submission_id)
+
+      AdminMailer.submission_resubmitted(submission: submission)
         .deliver_now
     end
 

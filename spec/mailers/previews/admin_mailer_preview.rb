@@ -5,6 +5,10 @@ class AdminMailerPreview < ActionMailer::Preview
     AdminMailer.submission(**receipt_mail_params)
   end
 
+  def submission_resubmitted
+    AdminMailer.submission_resubmitted(**submission_resubmitted_params)
+  end
+
   def submission_approved
     AdminMailer.submission_approved(**submission_approved_params)
   end
@@ -33,6 +37,12 @@ class AdminMailerPreview < ActionMailer::Preview
     {
       submission: Submission.submitted.where.not(assigned_to: nil).last,
       artist: OpenStruct.new(id: "artist_id", name: "Damien Hirst")
+    }
+  end
+
+  def submission_resubmitted_params
+    {
+      submission: Submission.submitted.where.not(assigned_to: nil).last
     }
   end
 

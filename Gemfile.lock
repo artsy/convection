@@ -75,7 +75,7 @@ GEM
       omniauth-oauth2
       omniauth-rails_csrf_protection (>= 1.0.0)
       rails (>= 4.2.0)
-    artsy-eventservice (1.0.9)
+    artsy-event_publisher (0.1.0)
       bunny
     ast (2.4.2)
     autoprefixer-rails (10.2.4.0)
@@ -556,7 +556,7 @@ PLATFORMS
 
 DEPENDENCIES
   artsy-auth
-  artsy-eventservice
+  artsy-event_publisher
   aws-sdk-s3
   bootsnap
   bootstrap-sass

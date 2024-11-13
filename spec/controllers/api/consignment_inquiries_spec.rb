@@ -11,7 +11,7 @@ describe Api::ConsignmentInquiriesController, type: :controller do
 
   describe "#create" do
     it "creates a ConsignmentInquiry" do
-      allow(Artsy::EventService).to receive(:post_event)
+      allow(Artsy::EventPublisher).to receive(:publish)
       expect {
         post :create,
           params: {
@@ -23,10 +23,10 @@ describe Api::ConsignmentInquiriesController, type: :controller do
     end
 
     it "posts events when created" do
-      expect(Artsy::EventService).to receive(:post_event).with(
-        hash_including(
-          topic: ConsignmentInquiryEvent::TOPIC
-        )
+      expect(Artsy::EventPublisher).to receive(:publish).with(
+        "consignments",
+        "consignmentinquiry.created",
+        anything
       )
       post :create,
         params: {
