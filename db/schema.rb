@@ -16,7 +16,6 @@ ActiveRecord::Schema.define(version: 2024_07_16_094023) do
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
-  enable_extension "unaccent"
 
   create_table "admin_users", force: :cascade do |t|
     t.string "name"
@@ -232,9 +231,9 @@ ActiveRecord::Schema.define(version: 2024_07_16_094023) do
     t.string "user_name"
     t.string "user_phone"
     t.string "session_id"
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.bigint "admin_id"
     t.string "my_collection_artwork_id"
-    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.string "source"
     t.string "location_postal_code"
     t.string "location_country_code"
