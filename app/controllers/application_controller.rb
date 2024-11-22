@@ -27,6 +27,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_sentry_context
-    Sentry.set_user(user_id: @current_user&.id)
+    # Heads up! @current_user is the user's id as a string not an object
+    Sentry.set_user(user_id: @current_user)
   end
 end
