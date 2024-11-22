@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   helper Watt::Engine.helpers
 
   before_action :set_current_user
-  before_action :set_raven_context
+  before_action :set_sentry_context
 
   NotAuthorized = Class.new(StandardError)
 
@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
     @current_user = ArtsyAdminAuth.decode_user(session[:access_token])
   end
 
-  def set_raven_context
-    Raven.user_context(id: @current_user)
+  def set_sentry_context
+    Sentry.set_user(user_id: @current_user&.id)
   end
 end
