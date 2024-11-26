@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-Raven.configure do |config|
+Sentry.init do |config|
   config.dsn = Convection.config.sentry_dsn if Convection.config.sentry_dsn
-  config.processors -= [Raven::Processor::PostData]
 end
