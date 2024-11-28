@@ -8,8 +8,8 @@
               <table class="contents">
                 <tr>
                   <td>
-                    <% if @submission.processed_images.length > 0 %>
-                      <%= image_tag(@submission.processed_images.first.image_urls['square'], id: 'first-image') %>
+                    <% if submission.processed_images.length > 0 %>
+                      <%= image_tag(submission.processed_images.first.image_urls['square'], id: 'first-image') %>
                     <% else %>
                       <%= image_tag(image_url('missing_image.png'), id: 'first-image') %>
                     <% end %>
@@ -27,32 +27,32 @@
               <table class='submission-metadata info'>
                 <tr>
                   <td class='artist-name'>
-                    <%= @artist.name %>
+                    <%= artist.name %>
                   </td>
                 </tr>
                 <tr>
                   <td class='artwork-title'>
-                    <i><%= @submission.title %></i><span><%= ", #{@submission.year}" %></span>
+                    <i><%= submission.title %></i><span><%= ", #{submission.year}" %></span>
                   </td>
                 </tr>
                 <tr>
                   <td class='artwork-category-medium'>
-                    <%= formatted_category(@submission) %>, <%= formatted_dimensions(submission) %>
+                    <%= formatted_category(submission) %>, <%= formatted_dimensions(submission) %>
                   </td>
                 </tr>
                 <tr>
                   <td class='artwork-location'>
-                    <%= formatted_location(@submission) %>
+                    <%= formatted_location(submission) %>
                   </td>
                 </tr>
                 <tr>
                   <td class='num-uploaded-images'>
-                    <%= "#{pluralize(@submission.images.count, 'photo')} uploaded" %>
+                    <%= "#{pluralize(submission.images.count, 'photo')} uploaded" %>
                   </td>
                 </tr>
                 <tr>
                   <td class='submission-block-id'>
-                    <%= "Submission ##{@submission.id}" %>
+                    <%= "Submission ##{submission.id}" %>
                   </td>
                 </tr>
               </table>
