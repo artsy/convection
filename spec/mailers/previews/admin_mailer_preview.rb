@@ -42,7 +42,8 @@ class AdminMailerPreview < ActionMailer::Preview
 
   def submission_resubmitted_params
     {
-      submission: Submission.submitted.where.not(assigned_to: nil).last
+      submission: Submission.submitted.where.not(assigned_to: nil).last,
+      artist: OpenStruct.new(id: "artist_id", name: "Damien Hirst")
     }
   end
 
