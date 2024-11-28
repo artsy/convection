@@ -10,14 +10,20 @@
           </td>
         </tr>
         <tr>
-          <td class='email-sub-title'>
+          <td class='email-content-serif'>
             <p>Dear <%= @submission.name %>,</p>
-            <p>We are delighted to work with you to sell your work through <%= link_to 'Artsy', artsy_formatted_url('', @utm_params), target: :_blank %>.</p>
-            <p>Next, our team of specialists will provide auction estimates and potential sale dates and get back to you in 3-5 business days.</p>
-            <%= render "submission_approved_tier_2" if @tier_2_template_enabled %>
+            <p>Thank you again for submitting your work to Sell With Artsy! As part of our review process, please submit the requested information through the link below.</p>
+            <ul>
+              <li>Shipping location of artwork</li>
+              <li>Frame information and dimensions</li>
+              <li>Additional documents</li>
+              <li>Notes on condition</li>
+            </ul>
+            <p>Once we’ve received this, our team of specialists will confirm if we can move forward with consigning your work to one of our selling channels.</p>
+            <p>Thank you,</p>
+            <p>Emma</p>
           </td>
         </tr>
-        <% if @tier_2_template_enabled %>
         <tr>
           <td>
             <table class='full-width-button'>
@@ -32,7 +38,6 @@
         <tr>
           <td class='spacer'></td>
         </tr>
-        <% end %>
         <tr>
           <td>
             <%= render 'shared/email/submission_block', submission: @submission %>
