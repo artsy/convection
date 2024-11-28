@@ -336,8 +336,9 @@ class SubmissionService
 
     def deliver_admin_submission_resubmitted_notification(submission_id)
       submission = Submission.find(submission_id)
+      artist = Gravity.client.artist(id: submission.artist_id)._get
 
-      AdminMailer.submission_resubmitted(submission: submission)
+      AdminMailer.submission_resubmitted(submission: submission, artist: artist)
         .deliver_now
     end
 

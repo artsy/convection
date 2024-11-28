@@ -43,8 +43,9 @@ class AdminMailer < ApplicationMailer
     ) { |format| format.html { render layout: "mailer_no_footer" } }
   end
 
-  def submission_resubmitted(submission:)
+  def submission_resubmitted(submission:, artist:)
     @submission = submission
+    @artist = artist
     @user = submission.user
 
     assigned_admin = AdminUser.find_by(gravity_user_id: submission.assigned_to)
