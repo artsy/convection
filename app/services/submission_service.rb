@@ -208,7 +208,7 @@ class SubmissionService
         Submission::APPROVED
       )
 
-        delay.deliver_approval_notification(submission.id)
+      delay.deliver_approval_notification(submission.id)
 
       if submission.assigned_to
         assigned_admin = AdminUser.find_by(gravity_user_id: submission.assigned_to)

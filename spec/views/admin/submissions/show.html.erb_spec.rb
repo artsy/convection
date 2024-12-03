@@ -350,7 +350,7 @@ describe "admin/submissions/show.html.erb", type: :feature do
         expect(page).to have_content("Create Offer")
 
         emails = ActionMailer::Base.deliveries
-        expect(emails.length).to eq 0
+        expect(emails.length).to eq 1
         expect(page).to have_content "Approved by Jon Jonson"
         expect(PartnerSubmission.count).to eq 0
         ActionMailer::Base.deliveries = []
