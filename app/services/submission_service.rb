@@ -191,10 +191,7 @@ class SubmissionService
       if submission.assigned_to
         assigned_admin = AdminUser.find_by(gravity_user_id: submission.assigned_to)
 
-        if assigned_admin && Convection.unleash.enabled?(
-          "onyx-admin-submission-resubmitted-email",
-          Unleash::Context.new(user_id: assigned_admin.gravity_user_id.to_s)
-        )
+        if assigned_admin
           delay.deliver_admin_submission_resubmitted_notification(submission.id)
         end
       end
@@ -211,20 +208,12 @@ class SubmissionService
         Submission::APPROVED
       )
 
-      if Convection.unleash.enabled?(
-        "onyx-collector-submission-approved-tier-2-email",
-        Unleash::Context.new(user_id: submission&.user&.gravity_user_id.to_s)
-      )
-        delay.deliver_approval_notification(submission.id)
-      end
+      delay.deliver_approval_notification(submission.id)
 
       if submission.assigned_to
         assigned_admin = AdminUser.find_by(gravity_user_id: submission.assigned_to)
 
-        if assigned_admin && Convection.unleash.enabled?(
-          "onyx-admin-submission-approved-email",
-          Unleash::Context.new(user_id: assigned_admin.gravity_user_id.to_s)
-        )
+        if assigned_admin
           delay.deliver_admin_submission_approved_notification(submission.id)
         end
       end
