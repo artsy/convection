@@ -381,7 +381,7 @@ describe SubmissionService do
         {state: "approved"},
         current_user: "userid"
       )
-      expect(ActionMailer::Base.deliveries.length).to eq 0
+      expect(ActionMailer::Base.deliveries.length).to eq 1
       expect(submission.state).to eq "approved"
       expect(submission.approved_by).to eq "userid"
       expect(submission.approved_at).to_not be_nil
@@ -401,7 +401,7 @@ describe SubmissionService do
         current_user: "userid",
         is_convection: true
       )
-      expect(ActionMailer::Base.deliveries.length).to eq 0
+      expect(ActionMailer::Base.deliveries.length).to eq 1
       expect(partner1.partner_submissions.length).to eq 0
       expect(partner2.partner_submissions.length).to eq 0
     end
