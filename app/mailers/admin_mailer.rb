@@ -16,9 +16,9 @@ class AdminMailer < ApplicationMailer
       )
 
     smtpapi category: %w[submission],
-            unique_args: {
-              submission_id: submission.id
-            }
+      unique_args: {
+        submission_id: submission.id
+      }
     mail(
       to: Convection.config.admin_email_address,
       subject: "Submission ##{@submission.id}"
@@ -33,9 +33,9 @@ class AdminMailer < ApplicationMailer
     assigned_admin = AdminUser.find_by(gravity_user_id: submission.assigned_to)
 
     smtpapi category: %w[submission],
-            unique_args: {
-              submission_id: submission.id
-            }
+      unique_args: {
+        submission_id: submission.id
+      }
 
     mail(
       to: assigned_admin.email,
@@ -51,9 +51,9 @@ class AdminMailer < ApplicationMailer
     assigned_admin = AdminUser.find_by(gravity_user_id: submission.assigned_to)
 
     smtpapi category: %w[submission],
-            unique_args: {
-              submission_id: submission.id
-            }
+      unique_args: {
+        submission_id: submission.id
+      }
 
     mail(
       to: assigned_admin.email,
@@ -72,9 +72,9 @@ class AdminMailer < ApplicationMailer
     @image_added = image_added
 
     smtpapi category: %w[submission],
-            unique_args: {
-              submission_id: submission.id
-            }
+      unique_args: {
+        submission_id: submission.id
+      }
 
     mail(
       to: assigned_admin.email,
