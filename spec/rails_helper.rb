@@ -13,8 +13,7 @@ require "webmock/rspec"
 require "rack_session_access/capybara"
 
 WebMock.disable_net_connect!(
-  allow_localhost: true,
-  allow: "chromedriver.storage.googleapis.com"
+  allow_localhost: true
 )
 
 ActiveRecord::Migration.maintain_test_schema!
@@ -61,26 +60,16 @@ Capybara.configure do |config|
   config.ignore_hidden_elements = false
 end
 
-# def prepare_chromedriver(selenium_driver_args)
-#   if (driver_path = ENV["CHROMEDRIVER_PATH"])
-#     service = Selenium::WebDriver::Service.new(path: driver_path, port: 9_005)
-#     selenium_driver_args[:service] = service
-#   else
-#     require "webdrivers/chromedriver"
-#   end
-# end
-
 Capybara.register_driver :headless_chrome do |app|
   opts = Selenium::WebDriver::Chrome::Options.new
 
   opts.add_argument("--headless")
   opts.add_argument("--no-sandbox")
   opts.add_argument("--window-size=1440,900")
+  opts.add_argument("--disable-dev-shm-usage")
   opts.add_preference(:loggingPrefs, {browser: "ALL"})
 
   args = {browser: :chrome, options: opts}
-
-  # prepare_chromedriver(args)
 
   Capybara::Selenium::Driver.new(app, **args)
 end
