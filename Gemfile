@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-ruby "3.0.2"
+ruby "3.1.6"
 
 gem "rails", "6.1.7.7"
 
@@ -31,6 +31,7 @@ gem "haml-rails" # required for watt layouts
 gem "hyperclient" # consume Gravity's v2 API
 gem "jquery-rails"
 gem "kaminari" # for pagination
+gem "matrix"
 gem "money" # for currency/money formatting
 gem "neat", "1.7.2" # required for watt
 gem "pg_search" # for searching within convection's database
