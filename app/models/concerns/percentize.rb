@@ -9,15 +9,15 @@ module Percentize
   class_methods do
     def percentize(*method_names)
       method_names.each do |method_name|
-        attribute "#{method_name}_whole".to_sym
+        attribute :"#{method_name}_whole"
 
-        define_method "#{method_name}_whole" do
+        define_method :"#{method_name}_whole" do
           return if self[method_name].blank?
 
           (self[method_name] * 100).round(2)
         end
 
-        define_method "#{method_name}_whole=" do |percent_whole|
+        define_method :"#{method_name}_whole=" do |percent_whole|
           if percent_whole.blank?
             self[method_name] = nil
           else
