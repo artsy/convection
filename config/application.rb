@@ -4,6 +4,7 @@ require_relative "boot"
 
 require "rails/all"
 require_relative "../lib/jwt_middleware"
+require "ostruct"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
