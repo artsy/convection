@@ -37,7 +37,7 @@ module Resolvers::Submissionable
   end
 
   def compute_error
-    return IdsNotPassed unless ids_passed?
+    IdsNotPassed unless ids_passed?
   end
 
   def ids_passed?

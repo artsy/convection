@@ -117,7 +117,7 @@ class Submission < ApplicationRecord
   end
 
   def sorted_images
-    images.sort_by.with_index { |a, i| a == primary_image ? -1 : i }
+    images.sort_by.with_index { |a, i| (a == primary_image) ? -1 : i }
   end
 
   def as_json(options = {})
@@ -170,7 +170,7 @@ class Submission < ApplicationRecord
 
   # defines methods submitted?, approved?, etc. for each possible submission state
   STATES.each do |method|
-    define_method "#{method}?".to_sym do
+    define_method :"#{method}?" do
       state == method
     end
   end

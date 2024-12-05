@@ -16,9 +16,9 @@ class UserMailer < ApplicationMailer
       )
 
     smtpapi category: %w[submission_receipt],
-            unique_args: {
-              submission_id: submission.id
-            }
+      unique_args: {
+        submission_id: submission.id
+      }
     mail(
       to: submission.email,
       subject: "Thank you for submitting your artwork to Artsy",
@@ -35,9 +35,9 @@ class UserMailer < ApplicationMailer
       )
 
     smtpapi category: %w[first_upload_reminder],
-            unique_args: {
-              submission_id: submission.id
-            }
+      unique_args: {
+        submission_id: submission.id
+      }
     mail to: submission.email, subject: "You're Almost Done"
   end
 
@@ -50,11 +50,11 @@ class UserMailer < ApplicationMailer
       )
 
     smtpapi category: %w[second_upload_reminder],
-            unique_args: {
-              submission_id: submission.id
-            }
+      unique_args: {
+        submission_id: submission.id
+      }
     mail to: submission.email,
-         subject: "Artsy Consignments - complete your submission"
+      subject: "Artsy Consignments - complete your submission"
   end
 
   def submission_approved(submission:, artist:)
@@ -69,9 +69,9 @@ class UserMailer < ApplicationMailer
       )
 
     smtpapi category: %w[submission_approved],
-            unique_args: {
-              submission_id: submission.id
-            }
+      unique_args: {
+        submission_id: submission.id
+      }
     mail(
       to: submission.email,
       subject: "Artsy Approved Submission | Next Steps"
@@ -90,9 +90,9 @@ class UserMailer < ApplicationMailer
       )
 
     smtpapi category: %w[artist_submission_rejected],
-            unique_args: {
-              submission_id: submission.id
-            }
+      unique_args: {
+        submission_id: submission.id
+      }
     mail(to: submission.email, subject: "An update about your submission")
   end
 
@@ -108,9 +108,9 @@ class UserMailer < ApplicationMailer
       )
 
     smtpapi category: %w[fake_submission_rejected],
-            unique_args: {
-              submission_id: submission.id
-            }
+      unique_args: {
+        submission_id: submission.id
+      }
     mail(to: submission.email, subject: "Artsy Submission")
   end
 
@@ -128,9 +128,9 @@ class UserMailer < ApplicationMailer
       )
 
     smtpapi category: %w[nsv_bsv_submission_rejected],
-            unique_args: {
-              submission_id: submission.id
-            }
+      unique_args: {
+        submission_id: submission.id
+      }
     title = submission.title || "Unknown"
     artist_name = artist&.name
     subject = "Update on \"#{title}\" #{artist_name ? "by #{artist_name}" : ""}"
@@ -150,9 +150,9 @@ class UserMailer < ApplicationMailer
       )
 
     smtpapi category: %w[non_target_supply_artist_rejected],
-            unique_args: {
-              submission_id: submission.id
-            }
+      unique_args: {
+        submission_id: submission.id
+      }
     mail(to: submission.email, subject: "An update about your submission")
   end
 
@@ -168,9 +168,9 @@ class UserMailer < ApplicationMailer
       )
 
     smtpapi category: %w[other_submission_rejected],
-            unique_args: {
-              submission_id: submission.id
-            }
+      unique_args: {
+        submission_id: submission.id
+      }
     mail(to: submission.email, subject: "An update about your submission")
   end
 

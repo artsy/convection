@@ -24,7 +24,7 @@ class OfferResolver < BaseResolver
   private
 
   def compute_error
-    return BadArgumentError unless admin? || partner? || user?
+    BadArgumentError unless admin? || partner? || user?
   end
 
   def validate_user(offer)
