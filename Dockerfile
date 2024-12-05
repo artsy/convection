@@ -39,5 +39,5 @@ RUN bundle exec rake assets:precompile && \
 
 USER deploy
 
-ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+ENTRYPOINT ["/usr/bin/dumb-init", "./scripts/load_secrets_and_run.sh"]
 CMD ["bundle", "exec", "puma", "-C", "config/puma.config"]
