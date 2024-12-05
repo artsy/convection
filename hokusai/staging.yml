@@ -174,52 +174,52 @@ spec:
         - name: secrets
           mountPath: /secrets
       containers:
-        - name: convection-sneakers
-          env:
-          - name: DATADOG_TRACE_AGENT_HOSTNAME
-            valueFrom:
-              fieldRef:
-                fieldPath: spec.nodeName
-          - name: MALLOC_ARENA_MAX
-            value: "2"
-          envFrom:
-          - configMapRef:
-              name: secrets-config
-          - configMapRef:
-              name: convection-environment
-          volumeMounts:
-          - name: secrets
-            mountPath: /secrets
-            readOnly: true
-          image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/convection:staging
-          imagePullPolicy: Always
-          args: ["bundle", "exec", "rake", "sneakers:run"]
-          resources:
-            requests:
-              cpu: 100m
-              memory: 768Mi
-            limits:
-              memory: 1Gi
-          livenessProbe:
-            exec:
-              command:
-                - pgrep
-                - -f
-                - sneakers
-            initialDelaySeconds: 30
-            periodSeconds: 30
-            timeoutSeconds: 3
-          volumeMounts:
-            - mountPath: /tmp
-              name: tmp
+      - name: convection-sneakers
+        env:
+        - name: DATADOG_TRACE_AGENT_HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: MALLOC_ARENA_MAX
+          value: "2"
+        envFrom:
+        - configMapRef:
+            name: secrets-config
+        - configMapRef:
+            name: convection-environment
+        volumeMounts:
+        - name: secrets
+          mountPath: /secrets
+          readOnly: true
+        image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/convection:staging
+        imagePullPolicy: Always
+        args: ["bundle", "exec", "rake", "sneakers:run"]
+        resources:
+          requests:
+            cpu: 100m
+            memory: 768Mi
+          limits:
+            memory: 1Gi
+        livenessProbe:
+          exec:
+            command:
+            - pgrep
+            - -f
+            - sneakers
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 3
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp
       volumes:
-        - name: tmp
-          emptyDir: {}
+      - name: tmp
+        emptyDir: {}
       dnsPolicy: ClusterFirst
       dnsConfig:
         options:
-          - name: ndots
-            value: "1"
+        - name: ndots
+          value: "1"
       serviceAccountName: convection
       affinity:
         nodeAffinity:
