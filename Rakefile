@@ -21,7 +21,6 @@ if Rails.env.development? || Rails.env.test?
     abort "schema-check failed" unless $CHILD_STATUS.exitstatus.zero?
   end
 
-  require "standard/rake"
   Rake::Task[:default].clear
   task default: %i[schema_check standard spec]
 end
