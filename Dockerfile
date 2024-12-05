@@ -18,8 +18,6 @@ RUN apk update && apk --no-cache --quiet add \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
   && adduser -D -g '' deploy
 
-ENV CHROMEDRIVER_PATH=/usr/bin/chromedriver
-
 RUN gem install bundler && \
   bundle config --global frozen 1
 
