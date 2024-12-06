@@ -22,7 +22,7 @@ describe "addUserToSubmission mutation" do
 
     mutation = <<-GRAPHQL
         mutation {
-          addUserToSubmission(input: { id: \"#{submission.uuid}\" }) {
+          addUserToSubmission(input: { id: "#{submission.uuid}" }) {
             clientMutationId
             consignmentSubmission {
               externalId
@@ -46,7 +46,7 @@ describe "addUserToSubmission mutation" do
 
     mutation = <<-GRAPHQL
         mutation {
-          addUserToSubmission(input: { id: \"#{submission.uuid}\" }) {
+          addUserToSubmission(input: { id: "#{submission.uuid}" }) {
             clientMutationId
             consignmentSubmission {
               externalId
@@ -68,7 +68,7 @@ describe "addUserToSubmission mutation" do
 
     mutation = <<-GRAPHQL
         mutation {
-          addUserToSubmission(input: { id: \"#{submission.uuid}\" }) {
+          addUserToSubmission(input: { id: "#{submission.uuid}" }) {
             clientMutationId
             consignmentSubmission {
               externalId
@@ -94,7 +94,7 @@ describe "addUserToSubmission mutation" do
 
     mutation = <<-GRAPHQL
         mutation {
-          addUserToSubmission(input: { id: \"#{submission.uuid}\" }) {
+          addUserToSubmission(input: { id: "#{submission.uuid}" }) {
             clientMutationId
             consignmentSubmission {
               externalId
@@ -120,7 +120,7 @@ describe "addUserToSubmission mutation" do
 
     mutation = <<-GRAPHQL
         mutation {
-          addUserToSubmission(input: { id: \"#{submission.id}\" }) {
+          addUserToSubmission(input: { id: "#{submission.id}" }) {
             clientMutationId
             consignmentSubmission {
               externalId
