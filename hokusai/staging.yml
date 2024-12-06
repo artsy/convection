@@ -212,9 +212,6 @@ spec:
         volumeMounts:
         - mountPath: /tmp
           name: tmp
-      volumes:
-      - name: tmp
-        emptyDir: {}
       dnsPolicy: ClusterFirst
       dnsConfig:
         options:
@@ -231,6 +228,8 @@ spec:
                 values:
                 - background
       volumes:
+      - name: tmp
+        emptyDir: {}
       - name: secrets
         emptyDir: {}
 
