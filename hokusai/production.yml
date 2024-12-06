@@ -328,7 +328,7 @@ spec:
           containers:
           - name: convection-partners-update
             image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/convection:production
-            command:
+            args:
             - rake
             - partners:update
             imagePullPolicy: Always
@@ -391,7 +391,7 @@ spec:
           containers:
           - name: convection-partners-daily-digest
             image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/convection:production
-            command:
+            args:
             - rake
             - partners:daily_digest
             imagePullPolicy: Always
