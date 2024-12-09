@@ -181,13 +181,13 @@ class SubmissionService
 
       notify_admin(submission.id)
       notify_user(submission.id)
-      return if submission.images.count.positive?
-
-      delay_until(Convection.config.second_reminder_days_after.days.from_now)
-        .notify_user(submission.id)
     end
 
     def resubmit!(submission)
+      unless submission.can_submit?
+        raise ParamError, "Missing fields for submission."
+      end
+
       if submission.assigned_to
         assigned_admin = AdminUser.find_by(gravity_user_id: submission.assigned_to)
 

@@ -145,7 +145,7 @@ class Submission < ApplicationRecord
   end
 
   def can_submit?
-    REQUIRED_FIELDS_FOR_SUBMISSION.all? { |attr| self[attr].present? }
+    REQUIRED_FIELDS_FOR_SUBMISSION.all? { |attr| self[attr].present? } && images.any?
   end
 
   def set_state
