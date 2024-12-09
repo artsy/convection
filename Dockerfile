@@ -18,8 +18,6 @@ RUN apk update && apk --no-cache --quiet add \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
   && adduser -D -g '' deploy
 
-ENV CHROMEDRIVER_PATH=/usr/bin/chromedriver
-
 RUN gem install bundler && \
   bundle config --global frozen 1
 
@@ -39,5 +37,5 @@ RUN bundle exec rake assets:precompile && \
 
 USER deploy
 
-ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+ENTRYPOINT ["/usr/bin/dumb-init", "./scripts/load_secrets_and_run.sh"]
 CMD ["bundle", "exec", "puma", "-C", "config/puma.config"]

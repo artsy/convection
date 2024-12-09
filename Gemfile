@@ -55,7 +55,6 @@ group :development, :test do
   gem "pry-byebug"
   gem "rspec-rails"
   gem "standard"
-  gem "webdrivers"
 end
 
 group :development do
