@@ -12,9 +12,7 @@ require "sidekiq/testing"
 require "webmock/rspec"
 require "rack_session_access/capybara"
 
-WebMock.disable_net_connect!(
-  allow_localhost: true
-)
+WebMock.disable_net_connect!(allow_localhost: true, allow: ["selenium", "127.0.0.1"])
 
 ActiveRecord::Migration.maintain_test_schema!
 
