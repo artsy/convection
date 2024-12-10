@@ -33,6 +33,18 @@ RSpec.configure do |config|
 
   config.before(:each, type: :system) { driven_by :headless_chrome }
 
+  config.before(:each, type: :feature) do
+    Capybara.reset_sessions!
+    page.set_rack_session(access_token: "test_token") unless Capybara.current_driver == :selenium
+  end
+
+  config.before(:each, type: :feature, js: true) do
+    Capybara.reset_sessions!
+    page.driver.browser.manage.delete_all_cookies
+    # Explicitly load session access only for non-Selenium Rack requests
+    page.set_rack_session(access_token: "test_token")
+  end
+
   if Bullet.enable?
     config.before do |example|
       bullet_start_request_block = proc do

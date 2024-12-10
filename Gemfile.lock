@@ -108,7 +108,7 @@ GEM
     bourbon (4.2.3)
       sass (~> 3.4)
       thor
-    builder (3.2.4)
+    builder (3.3.0)
     bullet (7.2.0)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
@@ -558,7 +558,7 @@ GEM
     uniform_notifier (1.16.0)
     unleash (4.0.0)
       murmurhash3 (~> 0.1.6)
-    webmock (3.24.0)
+    webmock (3.14.0)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
@@ -621,7 +621,7 @@ DEPENDENCIES
   restforce
   rspec-rails
   sass-rails
-  selenium-webdriver (= 4.19.0)
+  selenium-webdriver
   sentry-rails
   sentry-ruby
   sentry-sidekiq

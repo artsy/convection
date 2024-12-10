@@ -70,7 +70,7 @@ group :test do
   gem "fabrication"
   gem "rack_session_access"
   gem "rails-controller-testing"
-  gem "selenium-webdriver", "4.19.0"
-  gem "webmock", "3.14.0" # mock or forbid external network requests
+  gem "selenium-webdriver"
+  gem "webmock" # mock or forbid external network requests
   gem "yarjuf" # formatting for test reports on CircleCI
 end
