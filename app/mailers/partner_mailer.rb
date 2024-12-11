@@ -21,9 +21,9 @@ class PartnerMailer < ApplicationMailer
         content: "sub-digest-auction"
       )
     smtpapi category: %w[submission_digest],
-            unique_args: {
-              partner_name: partner_name
-            }
+      unique_args: {
+        partner_name: partner_name
+      }
 
     current_date = Time.now.utc.strftime("%B %-d")
     mail(
