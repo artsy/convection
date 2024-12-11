@@ -188,6 +188,8 @@ spec:
         - configMapRef:
             name: convection-environment
         volumeMounts:
+        - name: tmp
+          mountPath: /tmp
         - name: secrets
           mountPath: /secrets
           readOnly: true
@@ -209,9 +211,6 @@ spec:
           initialDelaySeconds: 30
           periodSeconds: 30
           timeoutSeconds: 3
-        volumeMounts:
-        - mountPath: /tmp
-          name: tmp
       dnsPolicy: ClusterFirst
       dnsConfig:
         options:
