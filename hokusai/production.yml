@@ -28,6 +28,22 @@ spec:
         app.kubernetes.io/version: production
       name: convection-web
     spec:
+      initContainers:
+      - name: setenv
+        image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/fortress:production
+        imagePullPolicy: Always
+        command:
+        - python
+        - src/load/load.py
+        - kubernetes
+        - production
+        - convection
+        envFrom:
+        - configMapRef:
+            name: secrets-config
+        volumeMounts:
+        - name: secrets
+          mountPath: /secrets
       containers:
       - name: convection-web
         env:
@@ -57,7 +73,13 @@ spec:
               fieldPath: metadata.labels['app.kubernetes.io/version']
         envFrom:
         - configMapRef:
+            name: secrets-config
+        - configMapRef:
             name: convection-environment
+        volumeMounts:
+        - name: secrets
+          mountPath: /secrets
+          readOnly: true
         image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/convection:production
         imagePullPolicy: Always
         ports:
@@ -91,6 +113,7 @@ spec:
         options:
         - name: ndots
           value: '1'
+      serviceAccountName: convection
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -100,6 +123,9 @@ spec:
                 operator: In
                 values:
                 - foreground
+      volumes:
+      - name: secrets
+        emptyDir: {}
 
 ---
 apiVersion: apps/v1
@@ -131,6 +157,22 @@ spec:
         layer: application
       name: convection-sneakers
     spec:
+      initContainers:
+      - name: setenv
+        image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/fortress:production
+        imagePullPolicy: Always
+        command:
+        - python
+        - src/load/load.py
+        - kubernetes
+        - production
+        - convection
+        envFrom:
+        - configMapRef:
+            name: secrets-config
+        volumeMounts:
+        - name: secrets
+          mountPath: /secrets
       containers:
         - name: convection-sneakers
           env:
@@ -142,7 +184,15 @@ spec:
             value: "2"
           envFrom:
           - configMapRef:
+              name: secrets-config
+          - configMapRef:
               name: convection-environment
+          volumeMounts:
+          - name: tmp
+            mountPath: /tmp
+          - name: secrets
+            mountPath: /secrets
+            readOnly: true
           image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/convection:production
           imagePullPolicy: Always
           args: ["bundle", "exec", "rake", "sneakers:run"]
@@ -162,17 +212,12 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 30
             timeoutSeconds: 3
-          volumeMounts:
-            - mountPath: /tmp
-              name: tmp
-      volumes:
-        - name: tmp
-          emptyDir: {}
       dnsPolicy: ClusterFirst
       dnsConfig:
         options:
           - name: ndots
             value: "1"
+      serviceAccountName: convection
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -182,6 +227,11 @@ spec:
                 operator: In
                 values:
                 - background
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: secrets
+        emptyDir: {}
 
 ---
 apiVersion: autoscaling/v1
@@ -197,6 +247,7 @@ spec:
   minReplicas: 2
   maxReplicas: 6
   targetCPUUtilizationPercentage: 70
+
 ---
 apiVersion: v1
 kind: Service
@@ -218,6 +269,7 @@ spec:
     layer: application
     component: web
   type: ClusterIP
+
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -238,6 +290,7 @@ spec:
             name: convection-web-internal
             port:
               name: http
+
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -254,17 +307,40 @@ spec:
           annotations:
             cluster-autoscaler.kubernetes.io/safe-to-evict: 'false'
         spec:
+          initContainers:
+          - name: setenv
+            image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/fortress:production
+            imagePullPolicy: Always
+            command:
+            - python
+            - src/load/load.py
+            - kubernetes
+            - production
+            - convection
+            envFrom:
+            - configMapRef:
+                name: secrets-config
+            volumeMounts:
+            - name: secrets
+              mountPath: /secrets
           containers:
           - name: convection-partners-update
             image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/convection:production
-            command:
+            args:
             - rake
             - partners:update
             imagePullPolicy: Always
             envFrom:
             - configMapRef:
+                name: secrets-config
+            - configMapRef:
                 name: convection-environment
+            volumeMounts:
+            - name: secrets
+              mountPath: /secrets
+              readOnly: true
           restartPolicy: Never
+          serviceAccountName: convection
           affinity:
             nodeAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
@@ -274,6 +350,10 @@ spec:
                     operator: In
                     values:
                     - background
+          volumes:
+          - name: secrets
+            emptyDir: {}
+
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -290,17 +370,40 @@ spec:
           annotations:
             cluster-autoscaler.kubernetes.io/safe-to-evict: 'false'
         spec:
+          initContainers:
+          - name: setenv
+            image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/fortress:production
+            imagePullPolicy: Always
+            command:
+            - python
+            - src/load/load.py
+            - kubernetes
+            - production
+            - convection
+            envFrom:
+            - configMapRef:
+                name: secrets-config
+            volumeMounts:
+            - name: secrets
+              mountPath: /secrets
           containers:
           - name: convection-partners-daily-digest
             image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/convection:production
-            command:
+            args:
             - rake
             - partners:daily_digest
             imagePullPolicy: Always
             envFrom:
             - configMapRef:
+                name: secrets-config
+            - configMapRef:
                 name: convection-environment
+            volumeMounts:
+            - name: secrets
+              mountPath: /secrets
+              readOnly: true
           restartPolicy: Never
+          serviceAccountName: convection
           affinity:
             nodeAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
@@ -310,6 +413,10 @@ spec:
                     operator: In
                     values:
                     - background
+          volumes:
+          - name: secrets
+            emptyDir: {}
+
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
@@ -324,6 +431,7 @@ spec:
   minReplicas: 1
   maxReplicas: 4
   targetCPUUtilizationPercentage: 80
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -355,6 +463,22 @@ spec:
       name: convection-sidekiq
       namespace: default
     spec:
+      initContainers:
+      - name: setenv
+        image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/fortress:production
+        imagePullPolicy: Always
+        command:
+        - python
+        - src/load/load.py
+        - kubernetes
+        - production
+        - convection
+        envFrom:
+        - configMapRef:
+            name: secrets-config
+        volumeMounts:
+        - name: secrets
+          mountPath: /secrets
       containers:
       - name: convection-sidekiq
         env:
@@ -370,7 +494,13 @@ spec:
               fieldPath: metadata.labels['app.kubernetes.io/version']
         envFrom:
         - configMapRef:
+            name: secrets-config
+        - configMapRef:
             name: convection-environment
+        volumeMounts:
+        - name: secrets
+          mountPath: /secrets
+          readOnly: true
         image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/convection:production
         imagePullPolicy: Always
         args:
@@ -397,6 +527,7 @@ spec:
         options:
         - name: ndots
           value: '1'
+      serviceAccountName: convection
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -406,6 +537,10 @@ spec:
                 operator: In
                 values:
                 - background
+      volumes:
+      - name: secrets
+        emptyDir: {}
+
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -422,6 +557,22 @@ spec:
           annotations:
             cluster-autoscaler.kubernetes.io/safe-to-evict: 'false'
         spec:
+          initContainers:
+          - name: setenv
+            image: 585031190124.dkr.ecr.us-east-1.amazonaws.com/fortress:production
+            imagePullPolicy: Always
+            command:
+            - python
+            - src/load/load.py
+            - kubernetes
+            - production
+            - convection
+            envFrom:
+            - configMapRef:
+                name: secrets-config
+            volumeMounts:
+            - name: secrets
+              mountPath: /secrets
           containers:
           - name: convection-data-export
             image: artsy/pg-data-sync:12
@@ -431,12 +582,19 @@ spec:
               value: convection
             envFrom:
             - configMapRef:
+                name: secrets-config
+            - configMapRef:
                 name: convection-environment
+            volumeMounts:
+            - name: secrets
+              mountPath: /secrets
+              readOnly: true
             args:
             - sh
             - ./export-db.sh
             - production
           restartPolicy: Never
+          serviceAccountName: convection
           affinity:
             nodeAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
@@ -446,3 +604,6 @@ spec:
                     operator: In
                     values:
                     - background
+          volumes:
+          - name: secrets
+            emptyDir: {}
