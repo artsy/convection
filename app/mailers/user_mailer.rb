@@ -74,6 +74,7 @@ class UserMailer < ApplicationMailer
             }
     mail(
       to: submission.email,
+      from: "Artsy <no-reply@artsy.net>",
       subject: "Artsy Approved Submission | Next Steps"
     )
   end
