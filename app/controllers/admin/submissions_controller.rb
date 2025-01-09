@@ -52,6 +52,7 @@ module Admin
     end
 
     def authorized_artsy_token?(token)
+      # Allow access on edit/destructive actions to consignment reps (default: read-only).
       ArtsyAdminAuth.valid?(token, [ArtsyAdminAuth::CONSIGNMENTS_REPRESENTATIVE])
     end
 
