@@ -17,7 +17,7 @@ module Admin
 
     before_action :set_submission, only: SUBMISSION_ACTIONS
     before_action :set_submission_artist, only: %i[show edit]
-    before_action :authorize_submission, only: SUBMISSION_ACTIONS
+    before_action :authorize_submission, only: SUBMISSION_ACTIONS - %i[show]
 
     expose(:submissions) do
       matching_submissions = SubmissionMatch.find_all(params)

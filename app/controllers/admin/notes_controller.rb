@@ -24,6 +24,10 @@ module Admin
       end
     end
 
+    def authorized_artsy_token?(token)
+      ArtsyAdminAuth.valid?(token, [ArtsyAdminAuth::CONSIGNMENTS_REPRESENTATIVE])
+    end
+
     private
 
     def note_params
