@@ -17,6 +17,10 @@ class ApplicationController < ActionController::Base
 
   expose(:size) { (params[:size] || 100).to_i }
 
+  rescue_from ApplicationController::NotAuthorized do
+    head(:forbidden)
+  end
+
   # override application to decode token and allow only users with `admin` role
   def authorized_artsy_token?(token)
     # Additionally allow read-only access to consignment reps.
