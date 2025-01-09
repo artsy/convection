@@ -4,9 +4,10 @@ module Admin
   class AssetsController < ApplicationController
     before_action :set_submission
     before_action :set_asset, only: %i[show destroy]
-    before_action :authorize_submission
+    before_action :authorize_submission, only: %i[new create destroy]
 
     def authorized_artsy_token?(token)
+      # Allow access on edit/destructive actions to consignment reps (default: read-only).
       ArtsyAdminAuth.valid?(token, [ArtsyAdminAuth::CONSIGNMENTS_REPRESENTATIVE])
     end
 

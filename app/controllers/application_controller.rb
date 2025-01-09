@@ -19,7 +19,12 @@ class ApplicationController < ActionController::Base
 
   # override application to decode token and allow only users with `admin` role
   def authorized_artsy_token?(token)
-    ArtsyAdminAuth.valid?(token)
+    # Additionally allow read-only access to consignment reps.
+    if %w[index show].include?(action_name)
+      ArtsyAdminAuth.valid?(token, [ArtsyAdminAuth::CONSIGNMENTS_REPRESENTATIVE])
+    else
+      ArtsyAdminAuth.valid?(token)
+    end
   end
 
   def set_current_user

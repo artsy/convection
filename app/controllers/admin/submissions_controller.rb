@@ -3,7 +3,6 @@
 module Admin
   class SubmissionsController < ApplicationController
     SUBMISSION_ACTIONS = %i[
-      show
       edit
       update
       undo_approval
@@ -15,7 +14,7 @@ module Admin
 
     include GraphqlHelper
 
-    before_action :set_submission, only: SUBMISSION_ACTIONS
+    before_action :set_submission, only: SUBMISSION_ACTIONS + %i[show]
     before_action :set_submission_artist, only: %i[show edit]
     before_action :authorize_submission, only: SUBMISSION_ACTIONS
 
@@ -52,6 +51,7 @@ module Admin
     end
 
     def authorized_artsy_token?(token)
+      # Allow access on edit/destructive actions to consignment reps (default: read-only).
       ArtsyAdminAuth.valid?(token, [ArtsyAdminAuth::CONSIGNMENTS_REPRESENTATIVE])
     end
 
