@@ -181,6 +181,12 @@ class SubmissionService
 
       notify_admin(submission.id)
       notify_user(submission.id)
+
+      # Delay auto-reject all incoming submissions
+      delay_until(
+        Convection.config.rejection_email_minutes_after.minutes.from_now
+      ).delayed_reject!(submission.id)
+
       return if submission.images.count.positive?
 
       delay_until(Convection.config.second_reminder_days_after.days.from_now)
@@ -240,8 +246,19 @@ class SubmissionService
     end
 
     def reject!(submission, current_user)
-      submission.update!(rejected_by: current_user, rejected_at: Time.now.utc)
+      submission.update!(
+        rejected_at: Time.now.utc,
+        rejected_by: current_user,
+        rejection_reason: "Submissions suspended"
+      )
       delay.deliver_rejection_notification(submission.id)
+    end
+
+    # Look up submission by ID and reject right away
+    def delayed_reject!(submission_id)
+      submission = Submission.find(submission_id)
+      submission.update!(state: Submission::REJECTED, rejected_at: Time.now.utc)
+      deliver_rejection_notification(submission.id)
     end
 
     def close!(submission, is_convection)
