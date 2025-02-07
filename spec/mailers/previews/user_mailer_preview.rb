@@ -25,8 +25,12 @@ class UserMailerPreview < BasePreview
     UserMailer.fake_submission_rejected(**receipt_mail_params)
   end
 
-  def nsv_bsv_submission_rejected
-    UserMailer.nsv_bsv_submission_rejected(**receipt_mail_params)
+  def nsv_bsv_submission_rejected_logged_out
+    UserMailer.nsv_bsv_submission_rejected(**receipt_mail_params.merge(logged_in: false))
+  end
+
+  def nsv_bsv_submission_rejected_logged_in
+    UserMailer.nsv_bsv_submission_rejected(**receipt_mail_params.merge(logged_in: true))
   end
 
   def non_target_supply_artist_rejected
