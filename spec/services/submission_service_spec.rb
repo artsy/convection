@@ -108,6 +108,20 @@ describe SubmissionService do
       expect(new_submission.reload.state).to eq "rejected"
     end
 
+    it "also rejects submissions when artist is in target supply, while consignments are suspended" do
+      stub_gravity_artist(target_supply: true)
+      new_submission =
+        SubmissionService.create_submission(
+          params,
+          "userid",
+          is_convection: false
+        )
+      expect(new_submission.reload.state).to eq "rejected"
+      email = ActionMailer::Base.deliveries.last
+      expect(email.subject).to match(/Update on /)
+      expect(email.html_part.body).to include("Unfortunately, we don’t have a selling opportunity for this work right now.")
+    end
+
     it "delivers authenticated rejection email to user for non-target supply artist submissions" do
       new_submission =
         SubmissionService.create_submission(
@@ -419,6 +433,7 @@ describe SubmissionService do
     end
 
     it "does not allow a submission to be approved, published, or closed by users" do
+      pending "consignments temporarily suspended"
       stub_gravity_artist(target_supply: true)
 
       ["approved", "published", "close"].each do |state|
@@ -647,6 +662,7 @@ describe SubmissionService do
     end
 
     it "updates submission to Rejected state when submission state changed and artist is not in target supply" do
+      pending "consignments temporarily suspended"
       stub_gravity_artist({name: "some nonTarget artist"})
 
       SubmissionService.update_submission(
@@ -707,6 +723,7 @@ describe SubmissionService do
 
         expect(submission.state).to eq "rejected"
         expect(submission.my_collection_artwork_id).to eq "1"
+        pending "consignments temporarily suspended"
         expect(submission.rejection_reason).to eq "Not Target Supply"
       end
 
@@ -719,7 +736,7 @@ describe SubmissionService do
           access_token: access_token
         )
 
-        expect(submission.state).to eq "submitted"
+        expect(submission.state).to eq "rejected" # submissions suspended
         expect(submission.my_collection_artwork_id).to eq "1"
       end
 
@@ -747,6 +764,7 @@ describe SubmissionService do
           access_token: access_token
         )
 
+        pending "consignments temporarily suspended"
         expect(submission.state).to eq "submitted"
         expect(submission.my_collection_artwork_id).to eq nil
       end
@@ -762,6 +780,7 @@ describe SubmissionService do
           access_token: access_token
         )
 
+        pending "consignments temporarily suspended"
         expect(submission.state).to eq "submitted"
         expect(submission.my_collection_artwork_id).to eq nil
       end
@@ -782,6 +801,7 @@ describe SubmissionService do
         it "does not create a My Collection artwork" do
           update_submission
 
+          pending "consignments temporarily suspended"
           expect(submission.state).to eq "submitted"
           expect(submission.my_collection_artwork_id).to eq "2"
         end
@@ -832,10 +852,10 @@ describe SubmissionService do
             is_convection: false,
             access_token: access_token
           )
-
-          expect(submission.state).to eq "submitted"
           expect(submission.my_collection_artwork_id).to eq nil
           allow(Rails.logger).to receive(:error).at_least(:once)
+          pending "consignments temporarily suspended"
+          expect(submission.state).to eq "submitted"
         end
 
         it "logs an error if gravity return GraphQL error" do
@@ -861,14 +881,16 @@ describe SubmissionService do
             access_token: access_token
           )
 
-          expect(submission.state).to eq "submitted"
           expect(submission.my_collection_artwork_id).to eq nil
           allow(Rails.logger).to receive(:error).at_least(:once)
+          pending "consignments temporarily suspended"
+          expect(submission.state).to eq "submitted"
         end
       end
     end
 
-    it "updates submission to Submitted state when submission state changed and artist is in target supply" do
+    it "rejects submission even when artist is in target supply, while consignments are suspended" do
+      pending "consignments temporarily suspended"
       stub_gravity_artist(target_supply: true)
 
       expect(NotificationService).to receive(:post_submission_event)
@@ -882,8 +904,11 @@ describe SubmissionService do
         is_convection: false
       )
 
-      expect(submission.state).to eq "submitted"
-      expect(submission.rejection_reason).to eq nil
+      expect(submission.reload.state).to eq "rejected"
+      expect(submission.rejection_reason).to eq("Submissions suspended")
+      email = ActionMailer::Base.deliveries.last
+      expect(email.subject).to match(/Update on /)
+      expect(email.html_part.body).to include("Unfortunately, we don’t have a selling opportunity for this work right now.")
     end
 
     it "updates submission to Submitted state when submission state changed in Convection and artist is not in target supply" do
@@ -930,6 +955,7 @@ describe SubmissionService do
           is_convection: false
         )
 
+        pending "consignments temporarily suspended"
         expect(submission.state).to eq "submitted"
       end
     end

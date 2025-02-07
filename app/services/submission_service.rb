@@ -41,7 +41,9 @@ class SubmissionService
 
       unless is_convection || submission_params[:state]&.downcase == "draft"
         create_params.merge!(
-          reject_non_target_supply_artist(submission_params[:artist_id])
+          state: "rejected",
+          rejection_reason: "Submissions suspended",
+          rejected_at: Time.now.utc
         )
       end
 
@@ -98,7 +100,9 @@ class SubmissionService
       if submission.state_changed?
         unless is_convection
           submission.assign_attributes(
-            reject_non_target_supply_artist(submission.artist_id)
+            state: "rejected",
+            rejection_reason: "Submissions suspended",
+            rejected_at: Time.now.utc
           )
           if submission.user && !access_token.nil?
             create_or_update_my_collection_artwork(submission, access_token)
