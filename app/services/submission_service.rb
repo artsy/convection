@@ -181,15 +181,16 @@ class SubmissionService
 
       notify_admin(submission.id)
       notify_user(submission.id)
-      return if submission.images.count.positive?
-
-      delay_until(Convection.config.second_reminder_days_after.days.from_now)
-        .notify_user(submission.id)
 
       # Delay auto-reject all incoming submissions
       delay_until(
         Convection.config.rejection_email_minutes_after.minutes.from_now
       ).delayed_reject!(submission.id)
+
+      return if submission.images.count.positive?
+
+      delay_until(Convection.config.second_reminder_days_after.days.from_now)
+        .notify_user(submission.id)
     end
 
     def resubmit!(submission)
