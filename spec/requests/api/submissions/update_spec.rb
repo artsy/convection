@@ -139,6 +139,8 @@ describe "PUT /api/submissions" do
       end
 
       it "does not resend notifications" do
+        expect(NotificationService).not_to receive(:post_submission_event)
+        allow(SubmissionService).to receive(:deliver_rejection_notification)
         @submission.update!(receipt_sent_at: Time.now.utc)
         @submission.update!(admin_receipt_sent_at: Time.now.utc)
 
