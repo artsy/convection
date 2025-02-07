@@ -190,7 +190,7 @@ describe "Submission Flow" do
       expect(response.status).to eq 201
       expect(submission.reload.state).to eq "submitted"
       emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 2
+      expect(emails.length).to eq 3
       expect(emails[1].html_part.body).to include("https://new-image.jpg")
 
       # GET to retrieve the image url for the submission

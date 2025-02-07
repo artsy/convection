@@ -338,7 +338,7 @@ describe SubmissionService do
       Fabricate(:image, submission: submission)
       SubmissionService.update_submission(submission, {state: "submitted"})
       emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 2
+      expect(emails.length).to eq 3
     end
 
     it "sends no emails if the state is not being changed" do
