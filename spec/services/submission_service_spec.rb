@@ -328,7 +328,7 @@ describe SubmissionService do
         .with(submission.id, "submitted")
       SubmissionService.update_submission(submission, {state: "submitted"})
       emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 3
+      expect(emails.length).to eq 4
     end
 
     it "sends no reminders if the submission has images" do
@@ -616,7 +616,7 @@ describe SubmissionService do
         "Unfortunately, we don’t have a selling opportunity for this work right now."
       )
       expect(submission.state).to eq "rejected"
-      expect(submission.rejection_reason).to eq "NSV"
+      expect(submission.rejection_reason).to eq "Submissions suspended"
       expect(submission.rejected_by).to eq "userid"
       expect(submission.rejected_at).to_not be_nil
       expect(submission.approved_by).to be_nil
@@ -657,7 +657,7 @@ describe SubmissionService do
       )
 
       expect(submission.state).to eq "rejected"
-      expect(submission.rejection_reason).to eq "Not Target Supply"
+      expect(submission.rejection_reason).to eq "Submissions suspended"
 
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
@@ -707,7 +707,7 @@ describe SubmissionService do
 
         expect(submission.state).to eq "rejected"
         expect(submission.my_collection_artwork_id).to eq "1"
-        expect(submission.rejection_reason).to eq "Not Target Supply"
+        expect(submission.rejection_reason).to eq "Submissions suspended"
       end
 
       it "create my collection artwork if artwork submitted" do
