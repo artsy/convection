@@ -123,7 +123,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
-        "Unfortunately, we don’t have a selling opportunity for this work right now. However, we have uploaded it to "
+        "Unfortunately, we’re not accepting consignments right now. However, we have uploaded it to "
       )
     end
 
@@ -142,7 +142,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
-        "Unfortunately, we don’t have a selling opportunity for this work right now. We recommend uploading it to My Collection to help you track demand in the future."
+        "Unfortunately, we’re not accepting consignments right now. We recommend uploading it to My Collection to help you track demand in the future."
       )
     end
 
@@ -545,7 +545,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
-        "Unfortunately, we don’t have a selling opportunity for this work right now"
+        "Unfortunately, we’re not accepting consignments right now."
       )
       expect(submission.state).to eq "rejected"
       expect(submission.rejected_by).to eq "userid"
@@ -567,7 +567,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
-        "Unfortunately, we don’t have a selling opportunity for this work right now"
+        "Unfortunately, we’re not accepting consignments right now."
       )
       expect(submission.state).to eq "rejected"
       expect(submission.rejected_by).to eq "userid"
@@ -589,7 +589,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
-        "Unfortunately, we don’t have a selling opportunity for this work right now"
+        "Unfortunately, we’re not accepting consignments right now."
       )
       expect(submission.state).to eq "rejected"
       expect(submission.rejected_by).to eq "userid"
@@ -613,7 +613,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
-        "Unfortunately, we don’t have a selling opportunity for this work right now."
+        "Unfortunately, we’re not accepting consignments right now."
       )
       expect(submission.state).to eq "rejected"
       expect(submission.rejection_reason).to eq "Submissions suspended"
@@ -665,7 +665,7 @@ describe SubmissionService do
       expect(emails.first.to).to eq(%w[michael@bluth.com])
       expect(emails.first.from).to eq(%w[sell@artsy.net])
       expect(emails.first.html_part.body).to include(
-        "Unfortunately, we don’t have a selling opportunity for this work right now"
+        "Unfortunately, we’re not accepting consignments right now."
       )
     end
 
