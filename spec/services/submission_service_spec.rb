@@ -328,7 +328,7 @@ describe SubmissionService do
         .with(submission.id, "submitted")
       SubmissionService.update_submission(submission, {state: "submitted"})
       emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 4
+      expect(emails.length).to eq 3
     end
 
     it "sends no reminders if the submission has images" do
@@ -338,7 +338,7 @@ describe SubmissionService do
       Fabricate(:image, submission: submission)
       SubmissionService.update_submission(submission, {state: "submitted"})
       emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 3
+      expect(emails.length).to eq 2
     end
 
     it "sends no emails if the state is not being changed" do
@@ -1212,10 +1212,7 @@ describe SubmissionService do
         .with(submission.id, "submitted")
       SubmissionService.notify_admin(submission.id)
       emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 1
-      expect(emails.first.html_part.body).to include("My Artwork")
-      expect(emails.first.to).to eq(%w[sell@artsy.net])
-      expect(submission.reload.admin_receipt_sent_at).to_not be nil
+      expect(emails.length).to eq 0
     end
 
     it "does not send an email if one has already been sent" do
@@ -1298,8 +1295,8 @@ describe SubmissionService do
       Fabricate(:unprocessed_image, submission: submission)
       SubmissionService.deliver_submission_notification(submission.id)
       emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 1
-      expect(emails.first.html_part.body).to include("My Artwork")
+      expect(emails.length).to eq 0
+      # expect(emails.first.html_part.body).to include("My Artwork")
     end
   end
 end

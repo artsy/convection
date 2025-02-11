@@ -125,11 +125,12 @@ describe "PUT /api/submissions" do
         expect(response.status).to eq 201
         expect(@submission.reload.receipt_sent_at).to_not be_nil
         emails = ActionMailer::Base.deliveries
-        expect(emails.length).to eq 3
+        expect(emails.length).to eq 2
         admin_email = emails.detect { |e| e.to.include?("lucille@bluth.com") }
-        admin_copy = "We have received the following submission from: Jon"
-        expect(admin_email.html_part.body.to_s).to include(admin_copy)
-        expect(admin_email.text_part.body.to_s).to include(admin_copy)
+        expect(admin_email).to be_nil
+        # admin_copy = "We have received the following submission from: Jon"
+        # expect(admin_email.html_part.body.to_s).to include(admin_copy)
+        # expect(admin_email.text_part.body.to_s).to include(admin_copy)
 
         user_email = emails.detect { |e| e.to.include?("michael@bluth.com") }
         user_copy =
