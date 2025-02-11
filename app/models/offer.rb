@@ -82,7 +82,7 @@ class Offer < ApplicationRecord
 
   # defines methods sent?, accepted?, etc. for each possible offer state
   STATES.each do |method|
-    define_method "#{method}?".to_sym do
+    define_method :"#{method}?" do
       state == method
     end
   end

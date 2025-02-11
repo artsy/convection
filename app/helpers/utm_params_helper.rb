@@ -1,7 +1,7 @@
 module UtmParamsHelper
   def utm_params(source:, campaign:, **args)
     initial = {utm_campaign: campaign, utm_medium: "email", utm_source: source}
-    transformed_args = args.each_with_object({}) { |(key, value), obj| obj["utm_#{key}".to_sym] = value }
+    transformed_args = args.each_with_object({}) { |(key, value), obj| obj[:"utm_#{key}"] = value }
     initial.merge(transformed_args)
   end
 
