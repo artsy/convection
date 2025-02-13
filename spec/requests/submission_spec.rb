@@ -51,10 +51,10 @@ describe "Submission Flow" do
     expect(submission.reload.state).to eq "submitted"
 
     emails = ActionMailer::Base.deliveries
-    expect(emails.length).to eq 4
-    expect(emails[1].to).to eq(%w[michael@bluth.com])
-    expect(emails[1].subject).to include("You're Almost Done")
-    expect(emails[2].to).to eq(%w[michael@bluth.com]) # sidekiq flushes everything at once
+    expect(emails.length).to eq 3
+    expect(emails[0].to).to eq(%w[michael@bluth.com])
+    expect(emails[0].subject).to include("You're Almost Done")
+    expect(emails[1].to).to eq(%w[michael@bluth.com]) # sidekiq flushes everything at once
     expect(emails.map(&:subject)).to include(
       "Artsy Consignments - complete your submission"
     )
@@ -97,10 +97,10 @@ describe "Submission Flow" do
       expect(response.status).to eq 201
       expect(@submission.reload.state).to eq "submitted"
       emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 4
-      expect(emails[1].to).to eq(%w[michael@bluth.com])
-      expect(emails[1].subject).to include("You're Almost Done")
-      expect(emails[2].to).to eq(%w[michael@bluth.com]) # sidekiq flushes everything at once
+      expect(emails.length).to eq 3
+      expect(emails[0].to).to eq(%w[michael@bluth.com])
+      expect(emails[0].subject).to include("You're Almost Done")
+      expect(emails[1].to).to eq(%w[michael@bluth.com]) # sidekiq flushes everything at once
       expect(emails.map(&:subject)).to include(
         "Artsy Consignments - complete your submission"
       )
@@ -190,8 +190,8 @@ describe "Submission Flow" do
       expect(response.status).to eq 201
       expect(submission.reload.state).to eq "submitted"
       emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 3
-      expect(emails[1].html_part.body).to include("https://new-image.jpg")
+      expect(emails.length).to eq 1
+      # expect(emails[0].html_part.body).to include("https://new-image.jpg")
 
       # GET to retrieve the image url for the submission
       get "/api/assets",

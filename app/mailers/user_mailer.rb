@@ -4,26 +4,28 @@ class UserMailer < ApplicationMailer
   helper :url, :submissions, :offers
 
   def submission_receipt(submission:, artist:)
-    @submission = submission
-    @artist = artist
+    Rails.logger.warn "[Consignments suspended] Declining to deliver user email for Submission #{submission&.id}"
 
-    @utm_params =
-      utm_params(
-        source: "sendgrid",
-        campaign: "sell",
-        term: "cx",
-        content: "received"
-      )
-
-    smtpapi category: %w[submission_receipt],
-            unique_args: {
-              submission_id: submission.id
-            }
-    mail(
-      to: submission.email,
-      subject: "Thank you for submitting your artwork to Artsy",
-      bcc: Convection.config.bcc_email_address
-    )
+    # @submission = submission
+    # @artist = artist
+    #
+    # @utm_params =
+    #   utm_params(
+    #     source: "sendgrid",
+    #     campaign: "sell",
+    #     term: "cx",
+    #     content: "received"
+    #   )
+    #
+    # smtpapi category: %w[submission_receipt],
+    #         unique_args: {
+    #           submission_id: submission.id
+    #         }
+    # mail(
+    #   to: submission.email,
+    #   subject: "Thank you for submitting your artwork to Artsy",
+    #   bcc: Convection.config.bcc_email_address
+    # )
   end
 
   def first_upload_reminder(submission:)
