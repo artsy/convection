@@ -243,28 +243,12 @@ describe OfferService do
 
       context "sending an offer" do
         it "sends an email to a user with offer information" do
+          # Disable all consignment emails - except rejection (ONYX-1546)
+          expect(Rails.logger).to receive(:warn).with(/Declining to deliver user email `offer`/)
+
           OfferService.update_offer(offer, "userid", state: Offer::SENT)
           emails = ActionMailer::Base.deliveries
-          expect(emails.length).to eq 1
-          expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
-          expect(emails.first.to).to eq(%w[michael@bluth.com])
-          expect(emails.first.from).to eq(%w[sell@artsy.net])
-          expect(emails.first.subject).to eq("An Offer for your Artwork")
-
-          email_body = emails.first.html_part.body
-          expect(email_body).to include(
-            "We are delighted to share an offer to sell your artwork."
-          )
-          expect(email_body).to include(
-            "The work will be purchased directly from you by the partner"
-          )
-          expect(email_body).to include("Happy Gallery")
-          expect(email_body).to include(
-            "https://google.com/response_form?entry.1=#{
-              submission.id
-            }&amp;entry.2=Happy%20Gallery"
-          )
-          expect(email_body).to include("Marrakesh, Morocco")
+          expect(emails.length).to eq 0
 
           offer.reload
 

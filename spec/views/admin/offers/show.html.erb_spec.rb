@@ -127,6 +127,9 @@ describe "admin/offers/show.html.erb", type: :feature do
       end
 
       it "allows you to save the offer" do
+        # Disable all consignment emails - except rejection (ONYX-1546)
+        expect(Rails.logger).to receive(:warn).with(/Declining to deliver user email `offer`/)
+
         stub_gravity_artist(id: submission.artist_id)
         offer.update!(state: "draft")
         page.visit "/admin/offers/#{offer.id}"
@@ -135,10 +138,7 @@ describe "admin/offers/show.html.erb", type: :feature do
         expect(page).to_not have_content("Save & Send")
 
         emails = ActionMailer::Base.deliveries
-        expect(emails.length).to eq 1
-        expect(emails.first.to).to eq(%w[user@example.com])
-        expect(emails.first.from).to eq(%w[sell@artsy.net])
-        expect(emails.first.subject).to eq("An Offer for your Artwork")
+        expect(emails.length).to eq 0
       end
     end
 
