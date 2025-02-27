@@ -323,22 +323,39 @@ describe SubmissionService do
     end
 
     it "sends a reminder if the submission has no images" do
+      # Disable all consignment emails - except rejection (ONYX-1546)
+      expect(Rails.logger).to receive(:warn).with(/Declining to deliver user email `first_upload_reminder`/)
+      expect(Rails.logger).to receive(:warn).with(/Declining to deliver user email `second_upload_reminder`/)
+      expect(Rails.logger).to receive(:warn).with(/Declining to deliver admin email `submission`/)
+
       expect(NotificationService).to receive(:post_submission_event)
         .once
         .with(submission.id, "submitted")
       SubmissionService.update_submission(submission, {state: "submitted"})
+
       emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 3
+      expect(emails.length).to eq 1
+      expect(emails.first.html_part.body).to include(
+        "Unfortunately, we’re not accepting consignments right now."
+      )
     end
 
     it "sends no reminders if the submission has images" do
+      # Disable all consignment emails - except rejection (ONYX-1546)
+      expect(Rails.logger).to receive(:warn).with(/Declining to deliver admin email `submission`/)
+      expect(Rails.logger).to receive(:warn).with(/Declining to deliver user email `submission_receipt`/)
+
       expect(NotificationService).to receive(:post_submission_event)
         .once
         .with(submission.id, "submitted")
       Fabricate(:image, submission: submission)
       SubmissionService.update_submission(submission, {state: "submitted"})
+
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 1
+      expect(emails.first.html_part.body).to include(
+        "Unfortunately, we’re not accepting consignments right now."
+      )
     end
 
     it "sends no emails if the state is not being changed" do
@@ -373,6 +390,9 @@ describe SubmissionService do
     end
 
     it "sends an approval notification if the submission state is changed to approved" do
+      # Disable all consignment emails - except rejection (ONYX-1546)
+      expect(Rails.logger).to receive(:warn).with(/Declining to deliver user email `submission_approved`/)
+
       expect(NotificationService).to receive(:post_submission_event)
         .once
         .with(submission.id, "approved")
@@ -381,7 +401,6 @@ describe SubmissionService do
         {state: "approved"},
         current_user: "userid"
       )
-      expect(ActionMailer::Base.deliveries.length).to eq 1
       expect(submission.state).to eq "approved"
       expect(submission.approved_by).to eq "userid"
       expect(submission.approved_at).to_not be_nil
@@ -391,6 +410,9 @@ describe SubmissionService do
     end
 
     it "does not generate partner submissions on an approval" do
+      # Disable all consignment emails - except rejection (ONYX-1546)
+      expect(Rails.logger).to receive(:warn).with(/Declining to deliver user email `submission_approved`/)
+
       allow(NotificationService).to receive(:post_submission_event)
       partner1 = Fabricate(:partner, gravity_partner_id: "partner1")
       partner2 = Fabricate(:partner, gravity_partner_id: "partner2")
@@ -401,7 +423,6 @@ describe SubmissionService do
         current_user: "userid",
         is_convection: true
       )
-      expect(ActionMailer::Base.deliveries.length).to eq 1
       expect(partner1.partner_submissions.length).to eq 0
       expect(partner2.partner_submissions.length).to eq 0
     end
@@ -463,6 +484,9 @@ describe SubmissionService do
     end
 
     it "generates partner submissions on publish" do
+      # Disable all consignment emails - except rejection (ONYX-1546)
+      expect(Rails.logger).to receive(:warn).with(/Declining to deliver user email `submission_approved`/)
+
       expect(NotificationService).to receive(:post_submission_event)
         .once
         .with(submission.id, "published")
@@ -475,7 +499,6 @@ describe SubmissionService do
         current_user: "userid"
       )
 
-      expect(ActionMailer::Base.deliveries.length).to eq 1
       expect(partner1.partner_submissions.length).to eq 1
       expect(partner2.partner_submissions.length).to eq 1
       expect(partner1.partner_submissions.first.notified_at).to be_nil
@@ -1107,40 +1130,24 @@ describe SubmissionService do
 
     describe "without assets" do
       it "sends the first reminder if no reminders have been sent yet" do
+        # Disable all consignment emails - except rejection (ONYX-1546)
+        expect(Rails.logger).to receive(:warn).with(/Declining to deliver user email `first_upload_reminder`/)
+
         SubmissionService.notify_user(submission.id)
         emails = ActionMailer::Base.deliveries
-        expect(emails.length).to eq 1
-        expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
-        expect(emails.first.html_part.body).to include("your submission")
-        expect(emails.first.html_part.body).to include(
-          "utm_campaign=consignment-complete"
-        )
-        expect(emails.first.html_part.body).to include(
-          "utm_source=drip-consignment-reminder-e01"
-        )
-        expect(emails.first.to).to eq(%w[michael@bluth.com])
-        expect(emails.first.from).to eq(%w[sell@artsy.net])
+        expect(emails.length).to eq 0
         expect(submission.reload.receipt_sent_at).to be nil
         expect(submission.reload.reminders_sent_count).to eq 1
       end
 
       it "sends the second reminder if one reminder has been sent" do
+        # Disable all consignment emails - except rejection (ONYX-1546)
+        expect(Rails.logger).to receive(:warn).with(/Declining to deliver user email `second_upload_reminder`/)
+
         submission.update!(reminders_sent_count: 1)
         SubmissionService.notify_user(submission.id)
         emails = ActionMailer::Base.deliveries
-        expect(emails.length).to eq 1
-        expect(emails.first.bcc).to eq(%w[consignments-archive@artsymail.com])
-        expect(emails.first.html_part.body).to include(
-          "We're unable to complete your submission"
-        )
-        expect(emails.first.html_part.body).to include(
-          "utm_campaign=consignment-complete"
-        )
-        expect(emails.first.html_part.body).to include(
-          "utm_source=drip-consignment-reminder-e02-v2"
-        )
-        expect(emails.first.to).to eq(%w[michael@bluth.com])
-        expect(emails.first.from).to eq(%w[sell@artsy.net])
+        expect(emails.length).to eq 0
         expect(submission.reload.receipt_sent_at).to be nil
         expect(submission.reload.reminders_sent_count).to eq 2
       end
@@ -1205,15 +1212,15 @@ describe SubmissionService do
 
   context "notify_admin" do
     it "sends an email if one has not been sent" do
+      # Disable all consignment emails - except rejection (ONYX-1546)
+      expect(Rails.logger).to receive(:warn).with(/Declining to deliver admin email `submission`/)
+
       expect(NotificationService).to receive(:post_submission_event)
         .once
         .with(submission.id, "submitted")
       SubmissionService.notify_admin(submission.id)
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 0
-      # expect(emails.first.html_part.body).to include("My Artwork")
-      # expect(emails.first.to).to eq(%w[sell@artsy.net])
-      # expect(submission.reload.admin_receipt_sent_at).to_not be nil
     end
 
     it "does not send an email if one has already been sent" do
@@ -1241,6 +1248,9 @@ describe SubmissionService do
     end
 
     it "sends an email if the enough time has passed since the initial attempt" do
+      # Disable all consignment emails - except rejection (ONYX-1546)
+      expect(Rails.logger).to receive(:warn).with(/Declining to deliver user email `submission_receipt`/)
+
       allow(Convection.config).to receive(:processing_grace_seconds).and_return(
         600
       )
@@ -1252,21 +1262,6 @@ describe SubmissionService do
       submission.update!(receipt_sent_at: Time.now.utc - 20.minutes)
       Fabricate(:unprocessed_image, submission: submission)
       SubmissionService.deliver_submission_receipt(submission.id)
-      emails = ActionMailer::Base.deliveries
-
-      expect(emails.length).to eq 0
-      # expect(emails.first.bcc).to include("consignments-archive@artsymail.com")
-      # expect(emails.first.html_part.body).to include(
-      #   "Thank you for submitting an artwork"
-      # )
-      # expect(emails.first.html_part.body).to include(
-      #   "Our team of specialists will review your work to evaluate whether we currently have a suitable market for it"
-      # )
-
-      # expect(emails.first.html_part.body).to include("utm_source=sendgrid")
-      # expect(emails.first.html_part.body).to include("utm_medium=email")
-      # expect(emails.first.html_part.body).to include("utm_campaign=sell")
-      # expect(emails.first.html_part.body).to include("utm_content=received")
     end
   end
 
@@ -1286,6 +1281,9 @@ describe SubmissionService do
     end
 
     it "sends an email if the enough time has passed since the initial attempt" do
+      # Disable all consignment emails - except rejection (ONYX-1546)
+      expect(Rails.logger).to receive(:warn).with(/Declining to deliver admin email `submission`/)
+
       allow(Convection.config).to receive(:processing_grace_seconds).and_return(
         600
       )
@@ -1297,7 +1295,6 @@ describe SubmissionService do
       SubmissionService.deliver_submission_notification(submission.id)
       emails = ActionMailer::Base.deliveries
       expect(emails.length).to eq 0
-      # expect(emails.first.html_part.body).to include("My Artwork")
     end
   end
 end
