@@ -51,14 +51,10 @@ describe "Submission Flow" do
     expect(submission.reload.state).to eq "submitted"
 
     emails = ActionMailer::Base.deliveries
-    expect(emails.length).to eq 3
-    expect(emails[0].to).to eq(%w[michael@bluth.com])
-    expect(emails[0].subject).to include("You're Almost Done")
-    expect(emails[1].to).to eq(%w[michael@bluth.com]) # sidekiq flushes everything at once
-    expect(emails.map(&:subject)).to include(
-      "Artsy Consignments - complete your submission"
+    expect(emails.length).to eq 1
+    expect(emails.first.html_part.body).to include(
+      "Unfortunately, we’re not accepting consignments right now."
     )
-    expect(emails.last.to).to eq(%w[michael@bluth.com])
   end
 
   describe "Creating a submission without a photo initially" do
@@ -97,14 +93,10 @@ describe "Submission Flow" do
       expect(response.status).to eq 201
       expect(@submission.reload.state).to eq "submitted"
       emails = ActionMailer::Base.deliveries
-      expect(emails.length).to eq 3
-      expect(emails[0].to).to eq(%w[michael@bluth.com])
-      expect(emails[0].subject).to include("You're Almost Done")
-      expect(emails[1].to).to eq(%w[michael@bluth.com]) # sidekiq flushes everything at once
-      expect(emails.map(&:subject)).to include(
-        "Artsy Consignments - complete your submission"
+      expect(emails.length).to eq 1
+      expect(emails.first.html_part.body).to include(
+        "Unfortunately, we’re not accepting consignments right now."
       )
-      expect(emails.last.to).to eq(%w[michael@bluth.com])
     end
   end
 
