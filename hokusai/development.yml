@@ -25,7 +25,7 @@ services:
     volumes:
       - ../:/app
   convection-postgres:
-    image: postgres:13.20-alpine
+    image: postgres:14.17-alpine
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
   convection-rabbitmq:
