@@ -448,7 +448,7 @@ spec:
               mountPath: /secrets
           containers:
           - name: convection-data-import
-            image: artsy/pg-data-sync:12
+            image: artsy/pg-data-sync:14.12
             imagePullPolicy: Always
             env:
             - name: APP_NAME
