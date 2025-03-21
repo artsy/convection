@@ -5,7 +5,7 @@ set -e
 
 echo "brew bundle install...(run script again if it fails at rabbitmq)"
 brew bundle --file=- <<EOF
-brew 'postgresql@12', restart_service: true
+brew 'postgresql@14', restart_service: true
 brew 'rabbitmq', restart_service: true
 brew 'redis', restart_service: true
 EOF
