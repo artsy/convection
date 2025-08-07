@@ -8,7 +8,7 @@ Convection is the application that powers our consignments workflow, enabling us
 - **Production:** [https://convection.artsy.net][production] | [Kubernetes][production_k8]
 - **Staging:** [https://convection-staging.artsy.net][staging] | [Kubernetes][staging_k8]
 - **GitHub:** [https://github.com/artsy/convection](https://github.com/artsy/convection)
-- **Point People:** [@jonallured]
+- **Point People:** [@dblandin](https://github.com/dblandin)
 - **CI/Deploys:** [CircleCi](https://circleci.com/gh/artsy/convection); PRs merged to `artsy/convection#main` are automatically deployed to staging; PRs from `staging` to `release` are automatically deployed to production. Create such a PR with [`deploy_pr`][deploy_pr] or [this handy link][deploy].
 - **Cron Tasks:** A daily digest is sent to partners at 10am EST. The production database is exported Sunday mornings at 12am EST, and imported to staging Sunday mornings at 1am EST.
 
