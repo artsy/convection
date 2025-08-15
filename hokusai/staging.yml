@@ -273,11 +273,11 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: convection
+  name: convection-2025
   annotations:
     nginx.ingress.kubernetes.io/whitelist-source-range: {{ cloudflareIpSourceRanges|join(',') }}
 spec:
-  ingressClassName: nginx
+  ingressClassName: external-nginx
   rules:
   - host: convection-staging.artsy.net
     http:
