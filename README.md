@@ -1,3 +1,5 @@
+**THIS PROJECT IS ARCHIVED AS OF SEPTEMBER 2025**
+
 # Convection
 
 Convection is the application that powers our consignments workflow, enabling users to submit works to consign through Artsy partners. For now, it encapsulates logic from [rothko-api] and [rothko-web-public].
